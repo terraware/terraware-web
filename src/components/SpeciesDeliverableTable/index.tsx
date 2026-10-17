@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { TableColumnType, TableRowType } from '@terraware/web-components';
@@ -9,13 +9,12 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesDeliverableSearch } from 'src/providers/Participant/useSpeciesDeliverableSearch';
-import { requestListAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectAcceleratorProjectSpeciesListRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetSpeciesForProjectQuery } from 'src/queries/generated/acceleratorProjectSpecies';
 import strings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 import AddSpeciesModal from './AddSpeciesModal';
+import RejectSpeciesDialogProvider from './RejectSpeciesDialog';
 import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
@@ -38,26 +37,22 @@ type SpeciesDeliverableTableProps = {
 };
 
 const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps): JSX.Element => {
-  const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { goToAcceleratorProjectSpecies } = useNavigateTo();
-  const {
-    hasActiveDeliverable,
-    hasRecentDeliverable,
-    reload: reloadSpeciesDeliverableSearch,
-  } = useSpeciesDeliverableSearch();
+  const { hasActiveDeliverable, hasRecentDeliverable } = useSpeciesDeliverableSearch();
 
-  const acceleratorProjectSpecies = useAppSelector(selectAcceleratorProjectSpeciesListRequest(deliverable.projectId));
+  const { currentData: speciesForProjectData } = useGetSpeciesForProjectQuery(deliverable.projectId);
+  const acceleratorProjectSpecies = speciesForProjectData?.speciesForParticipantProjects;
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [openedAddSpeciesModal, setOpenedAddSpeciesModal] = useState(false);
 
   const rows = useMemo(() => {
-    return (acceleratorProjectSpecies?.data || []).map((value) => ({
+    return (acceleratorProjectSpecies ?? []).map((value) => ({
       ...value,
       species_scientificName: value.species.scientificName,
       species_commonName: value.species.commonName,
@@ -69,24 +64,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
 
   const isAllowedUpdateDeliverable = isAllowed('UPDATE_DELIVERABLE');
 
-  useEffect(() => {
-    void dispatch(requestListAcceleratorProjectSpecies(deliverable.projectId));
-  }, [deliverable.projectId, dispatch]);
-
-  const reload = useCallback(() => {
-    void dispatch(requestListAcceleratorProjectSpecies(deliverable.projectId));
-    reloadSpeciesDeliverableSearch();
-  }, [deliverable.projectId, dispatch, reloadSpeciesDeliverableSearch]);
-
-  const onCloseRemoveSpecies = useCallback(
-    (_reload?: boolean) => {
-      setShowConfirmDialog(false);
-      if (_reload) {
-        reload();
-      }
-    },
-    [reload]
-  );
+  const onCloseRemoveSpecies = useCallback(() => setShowConfirmDialog(false), []);
 
   const onAcceleratorSpeciesClick = useCallback(
     (row: any) => {
@@ -110,8 +88,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
           {openedAddSpeciesModal && (
             <AddSpeciesModal
               onClose={closeAddSpeciesModal}
-              acceleratorProjectSpecies={acceleratorProjectSpecies?.data || []}
-              reload={reload}
+              acceleratorProjectSpecies={acceleratorProjectSpecies ?? []}
               projectId={deliverable.projectId}
               hasActiveDeliverable={hasActiveDeliverable}
               hasRecentDeliverable={hasRecentDeliverable}
@@ -142,29 +119,30 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
             )}
           </Box>
 
-          <Table
-            columns={isAcceleratorRoute && isAllowedUpdateDeliverable ? consoleUpdateColumns : columns}
-            emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
-            id='species-deliverable-table'
-            orderBy='speciesScientificName'
-            Renderer={TableCellRenderer}
-            rows={rows}
-            selectedRows={selectedRows}
-            setSelectedRows={setSelectedRows}
-            showCheckbox={!isAcceleratorRoute}
-            showTopBar={true}
-            topBarButtons={[
-              {
-                buttonText: strings.REMOVE,
-                buttonType: 'destructive',
-                onButtonClick: () => setShowConfirmDialog(true),
-                icon: 'iconTrashCan',
-              },
-            ]}
-            isClickable={() => false}
-            reloadData={reload}
-            onSelect={onAcceleratorSpeciesClick}
-          />
+          <RejectSpeciesDialogProvider>
+            <Table
+              columns={isAcceleratorRoute && isAllowedUpdateDeliverable ? consoleUpdateColumns : columns}
+              emptyTableMessage={strings.THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET}
+              id='species-deliverable-table'
+              orderBy='speciesScientificName'
+              Renderer={TableCellRenderer}
+              rows={rows}
+              selectedRows={selectedRows}
+              setSelectedRows={setSelectedRows}
+              showCheckbox={!isAcceleratorRoute}
+              showTopBar={true}
+              topBarButtons={[
+                {
+                  buttonText: strings.REMOVE,
+                  buttonType: 'destructive',
+                  onButtonClick: () => setShowConfirmDialog(true),
+                  icon: 'iconTrashCan',
+                },
+              ]}
+              isClickable={() => false}
+              onSelect={onAcceleratorSpeciesClick}
+            />
+          </RejectSpeciesDialogProvider>
         </>
       )}
     </>
