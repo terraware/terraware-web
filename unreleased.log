@@ -1,3 +1,4 @@
+ac8cb357 SW-9129 Exiting edit views does not bring user back to the expected page (#6812)
 6298dc9d SW-9127 In edit mode, breadcrumbs should be disabled (#6810)
 8b0eba24 SW-9125 Planting Date Withdrawal Request: Covered showing "Partially Covered" instead of "Covered" (#6809)
 ce911d11 Update dependency simple-git to v4 [SECURITY] (#6696)
