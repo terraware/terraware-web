@@ -25,6 +25,7 @@ export type PageProps = {
   contentStyle?: Record<string, string | number>;
   titleContainerStyle?: SxProps<Theme>;
   crumbs?: Crumb[];
+  disabledCrumbs?: boolean;
   hierarchicalCrumbs?: boolean;
   isLoading?: boolean;
   primaryButton?: PrimaryButtonType;
@@ -52,6 +53,7 @@ export default function Page({
   titleStyle,
   titleContainerStyle,
   crumbs,
+  disabledCrumbs,
   hierarchicalCrumbs,
   isLoading,
   primaryButton,
@@ -92,7 +94,11 @@ export default function Page({
         elevated={stickyHeaderElevated}
         nextElement={firstRowEl}
       >
-        <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
+        <>
+          {crumbs && (
+            <BreadCrumbs crumbs={crumbs} disabled={disabledCrumbs} hierarchical={hierarchicalCrumbs ?? true} />
+          )}
+        </>
         <Grid
           container
           justifyContent='space-between'

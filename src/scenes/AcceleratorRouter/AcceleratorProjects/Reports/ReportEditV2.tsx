@@ -137,6 +137,7 @@ const ReportEditV2 = (): JSX.Element => {
   return (
     <Page
       crumbs={pageCrumbs}
+      disabledCrumbs
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
       stickyHeader

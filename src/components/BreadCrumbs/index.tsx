@@ -1,6 +1,7 @@
 import React, { type JSX, MouseEvent, SyntheticEvent } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 import BackToLink from 'src/components/common/BackToLink';
 import Link from 'src/components/common/Link';
@@ -14,9 +15,10 @@ export type Crumb = {
 export type BreadCrumbsProps = {
   hierarchical?: boolean; // if true, the 'to' paths are hierarchical and concantenated, default is false (each 'to' is a fully qualified path)
   crumbs: Crumb[];
+  disabled?: boolean;
 };
 
-export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps): JSX.Element {
+export default function BreadCrumbs({ hierarchical, crumbs, disabled }: BreadCrumbsProps): JSX.Element {
   const theme = useTheme();
   const breadCrumbs: Crumb[] =
     hierarchical !== true
@@ -34,7 +36,26 @@ export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps):
     <Box display='inline-flex' alignItems='center' flexWrap='wrap'>
       {breadCrumbs.map((crumb: Crumb, index: number) => (
         <Box key={index} display='inline-flex' alignItems='center'>
-          {index === 0 ? (
+          {disabled ? (
+            <Typography
+              alignItems='center'
+              color={theme.palette.TwClrTxtBrand}
+              display='flex'
+              fontSize='14px'
+              fontWeight={500}
+              id={`crumb_${index}`}
+              lineHeight='21px'
+            >
+              {index === 0 && (
+                <Icon
+                  name='caretLeft'
+                  size='small'
+                  style={{ fill: theme.palette.TwClrIcnBrand, marginRight: theme.spacing(1) }}
+                />
+              )}
+              {crumb.name}
+            </Typography>
+          ) : index === 0 ? (
             <BackToLink id={`crumb_${index}`} to={crumb.to} onClick={crumb.onClick} name={crumb.name} />
           ) : (
             <Link id={`crumb_${index}`} to={crumb.to} onClick={crumb.onClick}>
