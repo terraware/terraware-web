@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useRef } from 'react';
 import { useMatch, useSearchParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -173,30 +173,66 @@ const ObservationListViewContent = (): JSX.Element => {
     }
   }, [isMobile, navigate, scheduleObservationEnabled, selectedPlantingSiteId, strings.SCHEDULE_OBSERVATION]);
 
-  const headerActions = useMemo(
+  const headerIcons = useMemo(
     () => (
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          flexWrap: 'wrap',
-          gap: theme.spacing(2),
-          justifyContent: { md: 'flex-end', xs: 'flex-start' },
-        }}
-      >
-        {scheduleObservationButton}
-        <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(2) }}>
-          <ScheduledObservationsMenu
-            canReschedule={isAdmin(selectedOrganization)}
-            plantingSiteId={selectedPlantingSiteId}
-          />
-          {typeof selectedPlantingSiteId === 'number' && (
-            <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
-          )}
-        </Box>
+      <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(isMobile ? 1 : 2) }}>
+        <ScheduledObservationsMenu
+          canReschedule={isAdmin(selectedOrganization)}
+          plantingSiteId={selectedPlantingSiteId}
+        />
+        {typeof selectedPlantingSiteId === 'number' && (
+          <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
+        )}
       </Box>
     ),
-    [scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
+    [isMobile, selectedOrganization, selectedPlantingSiteId, theme]
+  );
+
+  const headerActions = useMemo(
+    () =>
+      isMobile ? (
+        scheduleObservationButton && <Box sx={{ display: 'flex' }}>{scheduleObservationButton}</Box>
+      ) : (
+        <Box
+          sx={{
+            alignItems: 'center',
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: theme.spacing(2),
+            justifyContent: { md: 'flex-end', xs: 'flex-start' },
+          }}
+        >
+          {scheduleObservationButton}
+          {headerIcons}
+        </Box>
+      ),
+    [headerIcons, isMobile, scheduleObservationButton, theme]
+  );
+
+  const pageTitle = useMemo(
+    () =>
+      isMobile ? (
+        <Box
+          sx={{
+            alignItems: 'center',
+            columnGap: theme.spacing(1),
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            marginBottom: theme.spacing(2),
+            paddingLeft: theme.spacing(3),
+            rowGap: theme.spacing(2),
+          }}
+        >
+          <Typography sx={{ color: theme.palette.TwClrBaseGray800, fontSize: '24px', fontWeight: 600 }}>
+            {strings.OBSERVATIONS}
+          </Typography>
+          {headerIcons}
+        </Box>
+      ) : (
+        strings.OBSERVATIONS
+      ),
+    [headerIcons, isMobile, strings.OBSERVATIONS, theme]
   );
 
   const countedPlotType: PlotType = observationType === 'Biomass Measurements' ? 'adHoc' : plotType;
@@ -249,13 +285,14 @@ const ObservationListViewContent = (): JSX.Element => {
   return (
     <Page
       collapsibleHeader={isDesktop}
+      leftComponentGridSize={isMobile ? 0 : undefined}
       rightComponent={headerActions}
       rightComponentGridSize={6}
       stickyHeader={isDesktop}
       subHeader={
         <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
       }
-      title={strings.OBSERVATIONS}
+      title={pageTitle}
     >
       {viewMode !== 'list' && observationMapCard}
       {viewMode !== 'map' &&
