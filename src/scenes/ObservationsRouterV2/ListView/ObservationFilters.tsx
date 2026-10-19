@@ -47,63 +47,85 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
     [strings.AD_HOC_PLOTS, strings.ASSIGNED_PLOTS]
   );
 
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(2) }}>
-      <Box
+  const filtersToggle = (
+    <Box
+      sx={{
+        alignItems: isMobile ? 'stretch' : 'center',
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        gap: theme.spacing(isMobile ? 2 : 1),
+      }}
+    >
+      <Badge
+        badgeContent={activeFilterCount}
+        id='active-filter-count'
         sx={{
-          alignItems: isMobile ? 'stretch' : 'center',
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          flexWrap: 'wrap',
-          gap: theme.spacing(2),
+          '& .MuiBadge-badge': {
+            background: theme.palette.TwClrBgBrand,
+            color: theme.palette.TwClrTxtInverse,
+            fontWeight: 600,
+          },
         }}
       >
-        {plantingSiteSelector}
-        <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
-        {isTablet && <Box sx={{ flexBasis: '100%' }} />}
+        <Button
+          disabled={emptyState === 'noObservations'}
+          icon='filter'
+          id='toggle-observation-filters'
+          label={panelOpen ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
+          onClick={() => setFiltersExpanded(!filtersExpanded)}
+          priority='secondary'
+          size='medium'
+          sx={isMobile ? { margin: 0, width: '100%' } : undefined}
+          type='passive'
+        />
+      </Badge>
+      {activeFilterCount > 0 && (
+        <Link fontSize='16px' id='clear-observation-filters' onClick={clearFilters}>
+          {strings.CLEAR_ALL_FILTERS}
+        </Link>
+      )}
+    </Box>
+  );
+
+  const viewModeToggle = !isMobile && (
+    <Box sx={{ marginLeft: 'auto' }}>
+      <ViewModeToggle />
+    </Box>
+  );
+
+  const rowStyles = { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) } as const;
+
+  const plotTypeControl = (
+    <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
+  );
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(2) }}>
+      {isTablet ? (
+        <>
+          <Box sx={rowStyles}>
+            {plantingSiteSelector}
+            {plotTypeControl}
+          </Box>
+          <Box sx={rowStyles}>
+            {filtersToggle}
+            {viewModeToggle}
+          </Box>
+        </>
+      ) : (
         <Box
           sx={{
+            ...rowStyles,
             alignItems: isMobile ? 'stretch' : 'center',
-            display: 'flex',
             flexDirection: isMobile ? 'column' : 'row',
-            gap: theme.spacing(isMobile ? 2 : 1),
           }}
         >
-          <Badge
-            badgeContent={activeFilterCount}
-            id='active-filter-count'
-            sx={{
-              '& .MuiBadge-badge': {
-                background: theme.palette.TwClrBgBrand,
-                color: theme.palette.TwClrTxtInverse,
-                fontWeight: 600,
-              },
-            }}
-          >
-            <Button
-              disabled={emptyState === 'noObservations'}
-              icon='filter'
-              id='toggle-observation-filters'
-              label={panelOpen ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
-              onClick={() => setFiltersExpanded(!filtersExpanded)}
-              priority='secondary'
-              size='medium'
-              sx={isMobile ? { margin: 0, width: '100%' } : undefined}
-              type='passive'
-            />
-          </Badge>
-          {activeFilterCount > 0 && (
-            <Link fontSize='16px' id='clear-observation-filters' onClick={clearFilters}>
-              {strings.CLEAR_ALL_FILTERS}
-            </Link>
-          )}
+          {plantingSiteSelector}
+          {plotTypeControl}
+          {filtersToggle}
+          {viewModeToggle}
         </Box>
-        {!isMobile && (
-          <Box sx={{ marginLeft: 'auto' }}>
-            <ViewModeToggle />
-          </Box>
-        )}
-      </Box>
+      )}
       {panelOpen && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
       {plantingSiteId !== 'all' && !isMobile && <ObservationTimeline plantingSiteId={plantingSiteId} />}
     </Box>
