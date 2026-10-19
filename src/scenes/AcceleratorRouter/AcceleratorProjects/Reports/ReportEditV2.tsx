@@ -19,13 +19,13 @@ import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import useScrollRestoration from 'src/hooks/useScrollRestoration';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ReportInternalComment from './ReportInternalComment';
+import useExitReportsEdit from './useExitReportsEdit';
 
 const ReportEditV2 = (): JSX.Element => {
   const theme = useTheme();
@@ -38,21 +38,16 @@ const ReportEditV2 = (): JSX.Element => {
 
   const { report } = useOneAcceleratorReport(reportId);
 
-  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const { isLoading: saving, reviewIndicators, reviewReport } = useAcceleratorReportActions(reportId);
 
   const { remember } = useScrollRestoration(reportId, report !== undefined);
+  const exitReportsEdit = useExitReportsEdit(projectId);
 
   const goToReport = useCallback(() => {
     remember();
-    navigate(
-      APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(
-        ':projectId',
-        `${projectId}`
-      )
-    );
-  }, [navigate, projectId, remember, reportId]);
+    exitReportsEdit('reports', reportId);
+  }, [exitReportsEdit, remember, reportId]);
 
   const [edits, setEdits] = useState<Partial<AcceleratorReportPayload>>({});
   const [validate, setValidate] = useState(false);
