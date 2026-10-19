@@ -1,3 +1,7 @@
+c9e6bd9e SW-8975 Delete the accelerator project species slice and service (#6664)
+04bea774 SW-8975 Serve the project species pages from RTK Query (#6663)
+e127e504 SW-8975 Serve the species deliverable table from RTK Query (#6662)
+04fe7462 SW-8975 Generate the accelerator project species API (#6661)
 ac8cb357 SW-9129 Exiting edit views does not bring user back to the expected page (#6812)
 6298dc9d SW-9127 In edit mode, breadcrumbs should be disabled (#6810)
 8b0eba24 SW-9125 Planting Date Withdrawal Request: Covered showing "Partially Covered" instead of "Covered" (#6809)

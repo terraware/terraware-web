@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.7% </span>
+                <span class="strong">3.07% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/74</span>
+                <span class='fraction'>2/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/56</span>
+                <span class='fraction'>0/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">2.81% </span>
+                <span class="strong">3.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/71</span>
+                <span class='fraction'>2/62</span>
             </div>
         
             
@@ -295,19 +295,7 @@
 <a name='L230'></a><a href='#L230'>230</a>
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a>
-<a name='L239'></a><a href='#L239'>239</a>
-<a name='L240'></a><a href='#L240'>240</a>
-<a name='L241'></a><a href='#L241'>241</a>
-<a name='L242'></a><a href='#L242'>242</a>
-<a name='L243'></a><a href='#L243'>243</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L233'></a><a href='#L233'>233</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -364,25 +352,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -556,10 +536,8 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization, useOrganization } from 'src/providers';
-import { requestGetProjectsForSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectProjectsForSpeciesRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLocalization } from 'src/providers';
+import { useGetProjectsForSpeciesQuery } from 'src/queries/generated/acceleratorProjectSpecies';
 import strings from 'src/strings';
 import { AcceleratorProjectForSpecies } from 'src/types/AcceleratorProjectSpecies';
 import { Project } from 'src/types/Project';
@@ -604,32 +582,24 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   removedProjectsIds,
 }: SpeciesProjectsTableProps): JSX.Element {
   const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
   const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
   const { availableProjects: allProjects } = <span class="cstat-no" title="statement not covered" >useProjects();</span>
 &nbsp;
-  const [requestId, setRequestId] = <span class="cstat-no" title="statement not covered" >useState('');</span>
-  const projectsForSpeciesRequest = <span class="cstat-no" title="statement not covered" >useAppSelector(selectProjectsForSpeciesRequest(requestId));</span>
-&nbsp;
-  const [searchResults, setSearchResults] = <span class="cstat-no" title="statement not covered" >useState&lt;AcceleratorProjectForSpecies[] | null&gt;();</span>
+  const {
+    currentData: projectsForSpeciesData,
+    isError: projectsForSpeciesFailed,
+    refetch: refetchProjectsForSpecies,
+  } = <span class="cstat-no" title="statement not covered" >useGetProjectsForSpeciesQuery(speciesId);</span>
+  const searchResults = <span class="cstat-no" title="statement not covered" >projectsForSpeciesData?.participantProjectsForSpecies;</span>
   const [selectedRows, setSelectedRows] = <span class="cstat-no" title="statement not covered" >useState&lt;TableRowType[]&gt;([]);</span>
   const [showRemoveDialog, setShowRemoveDialog] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [reload, setReload] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-    const request = <span class="cstat-no" title="statement not covered" >dispatch(requestGetProjectsForSpecies({ speciesId }));</span>
-<span class="cstat-no" title="statement not covered" >    setRequestId(request.requestId);</span>
-  }, [dispatch, selectedOrganization, reload, speciesId]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (projectsForSpeciesRequest?.status === 'success') {</span>
-<span class="cstat-no" title="statement not covered" >      setSearchResults(projectsForSpeciesRequest.data);</span>
-    } else <span class="cstat-no" title="statement not covered" >if (projectsForSpeciesRequest?.status === 'error') {</span>
+<span class="cstat-no" title="statement not covered" >    if (projectsForSpeciesFailed) {</span>
 <span class="cstat-no" title="statement not covered" >      snackbar.toastError(strings.GENERIC_ERROR);</span>
     }
-  }, [projectsForSpeciesRequest, snackbar]);
+  }, [projectsForSpeciesFailed, snackbar]);
 &nbsp;
   const filteredResults = <span class="cstat-no" title="statement not covered" >useMemo&lt;AcceleratorProjectForSpecies[]&gt;(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
     let updatedResults = <span class="cstat-no" title="statement not covered" >searchResults ?? [];</span>
@@ -712,14 +682,14 @@ export default function <span class="fstat-no" title="function not covered" >Spe
   const onCloseRemoveProjects = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(shouldReload?: boolean) =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    setShowRemoveDialog(false);</span>
 <span class="cstat-no" title="statement not covered" >    if (shouldReload) {</span>
-<span class="cstat-no" title="statement not covered" >      setReload(true);</span>
+<span class="cstat-no" title="statement not covered" >      void refetchProjectsForSpecies();</span>
     }
   };
 &nbsp;
   const onCloseAddToProject = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(shouldReload?: boolean) =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    setOpenedAddToProjectModal(false);</span>
 <span class="cstat-no" title="statement not covered" >    if (shouldReload) {</span>
-<span class="cstat-no" title="statement not covered" >      setReload(true);</span>
+<span class="cstat-no" title="statement not covered" >      void refetchProjectsForSpecies();</span>
     }
   };
 &nbsp;
@@ -796,7 +766,7 @@ export default function <span class="fstat-no" title="function not covered" >Spe
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-19T20:38:42.662Z
+                at 2026-10-19T22:55:35.747Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

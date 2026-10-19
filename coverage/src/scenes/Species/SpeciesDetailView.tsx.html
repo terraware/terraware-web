@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.65% </span>
+                <span class="strong">75.32% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>115/152</span>
+                <span class='fraction'>116/154</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.11% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>23/45</span>
+                <span class='fraction'>23/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.86% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>115/144</span>
+                <span class='fraction'>116/145</span>
             </div>
         
             
@@ -786,9 +786,7 @@
 <a name='L721'></a><a href='#L721'>721</a>
 <a name='L722'></a><a href='#L722'>722</a>
 <a name='L723'></a><a href='#L723'>723</a>
-<a name='L724'></a><a href='#L724'>724</a>
-<a name='L725'></a><a href='#L725'>725</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L724'></a><a href='#L724'>724</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -913,16 +911,16 @@
 <span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-yes">103x</span>
+<span class="cline-any cline-yes">103x</span>
+<span class="cline-any cline-yes">103x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">103x</span>
+<span class="cline-any cline-yes">103x</span>
+<span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">103x</span>
@@ -1531,19 +1529,18 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
 import {
+  CreateParticipantProjectSpeciesPayload,
+  useCreateParticipantProjectSpeciesMutation,
+  useDeleteParticipantProjectSpeciesMutation,
+} from 'src/queries/generated/acceleratorProjectSpecies';
+import {
   useAssignSpeciesToProjectsMutation,
   useDeleteSpeciesMutation,
   useLazyGetSpeciesQuery,
   useUnassignSpeciesFromProjectsMutation,
   useUpdateSpeciesMutation,
 } from 'src/queries/generated/species';
-import {
-  requestAddManyAcceleratorProjectSpecies,
-  requestDeleteManyAcceleratorProjectSpecies,
-} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
-import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 import strings from 'src/strings';
 import {
   Species,
@@ -1634,6 +1631,8 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
   const species = speciesData?.species;
 &nbsp;
   const [deleteSpecies, { isLoading: isDeleting }] = useDeleteSpeciesMutation();
+  const [createParticipantProjectSpecies] = useCreateParticipantProjectSpeciesMutation();
+  const [deleteParticipantProjectSpecies] = useDeleteParticipantProjectSpeciesMutation();
   const [updateSpecies] = useUpdateSpeciesMutation();
   const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
   const [unassignSpeciesFromProjects] = useUnassignSpeciesFromProjectsMutation();
@@ -1646,8 +1645,6 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
   const [removedProjectIds, setRemovedProjectIds] = useState&lt;number[]&gt;([]);
   const [addedProjectsSpecies, setAddedProjectsSpecies] = useState&lt;ProjectSpecies[]&gt;();
   const [removedProjectsIds, setRemovedProjectsIds] = useState&lt;number[]&gt;();
-&nbsp;
-  const dispatch = useAppDispatch();
 &nbsp;
   const reloadSpecies = useCallback(() =&gt; {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (selectedOrganization &amp;&amp; speciesId) {
@@ -1809,7 +1806,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
       // These accelerator project species mutations are awaited too, so a failure lands in the catch
       // below with the staged changes still intact for the user to retry.
       <span class="missing-if-branch" title="if path not taken" >I</span>if (removedProjectsIds?.length) {
-<span class="cstat-no" title="statement not covered" >        await dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds)).unwrap();</span>
+<span class="cstat-no" title="statement not covered" >        await deleteParticipantProjectSpecies({ participantProjectSpeciesIds: removedProjectsIds }).unwrap();</span>
       }
       <span class="missing-if-branch" title="if path not taken" >I</span>if (addedProjectsSpecies?.length &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >speciesId)</span> {
         const createRequests = addedProjectsSpecies.map(
@@ -1818,9 +1815,9 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
               projectId: aPS.project.id,
               speciesId: Number(speciesId),
               speciesNativeCategory: aPS.nativeCategory,
-            }) as CreateAcceleratorProjectSpeciesRequestPayload
+            }) as CreateParticipantProjectSpeciesPayload
         );
-<span class="cstat-no" title="statement not covered" >        await dispatch(requestAddManyAcceleratorProjectSpecies(createRequests)).unwrap();</span>
+<span class="cstat-no" title="statement not covered" >        await Promise.all(createRequests.map(<span class="fstat-no" title="function not covered" >(request) =&gt; <span class="cstat-no" title="statement not covered" >createParticipantProjectSpecies(request).unwrap())</span></span>);</span>
       }
     } catch (e) {
       // Keep the staged edits and stay in edit mode so nothing is lost and the user can retry.
@@ -2242,7 +2239,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-19T20:38:42.662Z
+                at 2026-10-19T22:55:35.747Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
