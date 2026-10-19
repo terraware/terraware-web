@@ -54,18 +54,26 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
 
   const inProjectTab = onSelectReport !== undefined;
 
-  const goToQuarterlyHighlights = useCallback(() => {
-    const projectViewPath = APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`);
+  const goToQuarterlyHighlights = useCallback(
+    (quarter?: string) => {
+      const projectViewPath = APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`);
+      const params = new URLSearchParams(cleanUpTabsEnabled && inProjectTab ? location.search : '');
 
-    if (!cleanUpTabsEnabled) {
-      navigate(`${projectViewPath}?tab=activityLog&showHighlights=true`);
-      return;
-    }
+      if (cleanUpTabsEnabled) {
+        params.set('tab', 'quarterlyHighlights');
+      } else {
+        params.set('tab', 'activityLog');
+        params.set('showHighlights', 'true');
+      }
 
-    const params = new URLSearchParams(inProjectTab ? location.search : '');
-    params.set('tab', 'quarterlyHighlights');
-    navigate(getLocation(projectViewPath, location, `?${params.toString()}`));
-  }, [cleanUpTabsEnabled, inProjectTab, location, navigate, projectId]);
+      if (quarter) {
+        params.set('highlightsQuarter', quarter);
+      }
+
+      navigate(getLocation(projectViewPath, location, `?${params.toString()}`));
+    },
+    [cleanUpTabsEnabled, inProjectTab, location, navigate, projectId]
+  );
 
   const selectReport = useCallback(
     (reportId: number, replace = false) => {

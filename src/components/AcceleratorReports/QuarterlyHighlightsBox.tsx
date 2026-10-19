@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -11,7 +11,7 @@ import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 
 type QuarterlyHighlightsBoxProps = {
-  onViewHighlights: () => void;
+  onViewHighlights: (quarter?: string) => void;
   projectId: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
 };
@@ -22,8 +22,14 @@ const QuarterlyHighlightsBox = ({ onViewHighlights, projectId, report }: Quarter
 
   const quarterLabel = useMemo(() => {
     const year = report?.endDate?.split('-')[0];
-    return report?.quarter ? `${report.quarter} ${year}` : year;
-  }, [report]);
+    if (year === undefined) {
+      return undefined;
+    }
+
+    return report?.quarter
+      ? strings.formatString(strings.QUARTER_YEAR, report.quarter.substring(1), year).toString()
+      : year;
+  }, [report, strings]);
 
   const coverPhotoUrl = useMemo(() => {
     const fileId = report?.photos?.[0]?.fileId;
@@ -37,6 +43,8 @@ const QuarterlyHighlightsBox = ({ onViewHighlights, projectId, report }: Quarter
           .replace('{fileId}', `${fileId}`)
       : API_PATHS.FUNDER_REPORT_PHOTO.replace('{reportId}', `${report.reportId}`).replace('{fileId}', `${fileId}`);
   }, [projectId, report]);
+
+  const onClick = useCallback(() => onViewHighlights(quarterLabel), [onViewHighlights, quarterLabel]);
 
   return (
     <Box padding={2} {...{ [SCROLL_ANCHOR]: 'quarterlyHighlights' }}>
@@ -74,7 +82,7 @@ const QuarterlyHighlightsBox = ({ onViewHighlights, projectId, report }: Quarter
         <Button
           id='viewQuarterlyHighlights'
           label={strings.VIEW_QUARTERLY_HIGHLIGHTS}
-          onClick={onViewHighlights}
+          onClick={onClick}
           priority='secondary'
           size='medium'
           sx={{ marginLeft: 'auto' }}

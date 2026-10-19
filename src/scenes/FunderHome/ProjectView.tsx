@@ -49,11 +49,19 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
 
   const hasHighlights = activities.length > 0;
 
-  const goToQuarterlyHighlights = useCallback(() => {
-    const params = new URLSearchParams(location.search);
-    params.set('tab', 'quarterlyHighlights');
-    navigate(getLocation(location.pathname, location, `?${params.toString()}`));
-  }, [location, navigate]);
+  const goToQuarterlyHighlights = useCallback(
+    (quarter?: string) => {
+      const params = new URLSearchParams(location.search);
+      params.set('tab', 'quarterlyHighlights');
+
+      if (quarter) {
+        params.set('highlightsQuarter', quarter);
+      }
+
+      navigate(getLocation(location.pathname, location, `?${params.toString()}`));
+    },
+    [location, navigate]
+  );
 
   const projectDetailsDealName = projectDetails?.dealName;
 
