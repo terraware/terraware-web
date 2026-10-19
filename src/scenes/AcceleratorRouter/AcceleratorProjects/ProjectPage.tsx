@@ -427,6 +427,7 @@ const ProjectPage = () => {
         crumbs={projectData.crumbs}
         hierarchicalCrumbs={false}
         rightComponent={rightComponent}
+        stickyHeader
       >
         {projectData.isLoading && <BusySpinner />}
 
