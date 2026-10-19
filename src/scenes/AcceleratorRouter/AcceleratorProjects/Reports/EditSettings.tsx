@@ -67,11 +67,20 @@ export default function EditSettings(): JSX.Element {
     }
   }, [updateReportConfigResponse, goToProjectReports, snackbar]);
 
-  const [newConfig, , onChange, onChangeCallback] = useForm<NewAcceleratorReportConfig>({
-    reportingStartDate: projectReportConfig?.reportingStartDate || '',
-    reportingEndDate: projectReportConfig?.reportingEndDate || '',
-    logframeUrl: projectReportConfig?.logframeUrl,
+  const [newConfig, setNewConfig, onChange, onChangeCallback] = useForm<NewAcceleratorReportConfig>({
+    reportingStartDate: '',
+    reportingEndDate: '',
   });
+
+  useEffect(() => {
+    if (projectReportConfig) {
+      setNewConfig({
+        reportingStartDate: projectReportConfig.reportingStartDate,
+        reportingEndDate: projectReportConfig.reportingEndDate,
+        logframeUrl: projectReportConfig.logframeUrl,
+      });
+    }
+  }, [projectReportConfig, setNewConfig]);
 
   const saveReportConfig = useCallback(() => {
     if (projectReportConfig) {
