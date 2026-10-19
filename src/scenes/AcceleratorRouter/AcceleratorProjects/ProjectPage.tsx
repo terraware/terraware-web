@@ -92,7 +92,7 @@ const ProjectPage = () => {
     const _activityId = query.get('activityId');
     return _activityId ? Number(_activityId) : undefined;
   }, [query]);
-  const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
+  const [highlightsModalOpen, setHighlightsModalOpen] = useState(query.get('showHighlights') === 'true');
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
   const { currentData: projectApplicationsData } = useListApplicationsQuery({ projectId: projectData.projectId });

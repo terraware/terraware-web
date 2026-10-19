@@ -12,6 +12,7 @@ import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSu
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import IndicatorProgressSection from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
+import QuarterlyHighlightsBox from 'src/components/AcceleratorReports/QuarterlyHighlightsBox';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import ReportMessages from 'src/components/AcceleratorReports/ReportMessages';
@@ -26,6 +27,7 @@ import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ReportActions from './ReportActions';
 import ReportInternalComment from './ReportInternalComment';
@@ -45,8 +47,25 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const navigate = useSyncNavigate();
 
+  const location = useStateLocation();
+
   const projectId = Number(pathParams.projectId);
   const currentReportId = onSelectReport ? selectedReportId : Number(pathParams.reportId) || undefined;
+
+  const inProjectTab = onSelectReport !== undefined;
+
+  const goToQuarterlyHighlights = useCallback(() => {
+    const projectViewPath = APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`);
+
+    if (!cleanUpTabsEnabled) {
+      navigate(`${projectViewPath}?tab=activityLog&showHighlights=true`);
+      return;
+    }
+
+    const params = new URLSearchParams(inProjectTab ? location.search : '');
+    params.set('tab', 'quarterlyHighlights');
+    navigate(getLocation(projectViewPath, location, `?${params.toString()}`));
+  }, [cleanUpTabsEnabled, inProjectTab, location, navigate, projectId]);
 
   const selectReport = useCallback(
     (reportId: number, replace = false) => {
@@ -158,6 +177,12 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
           <FinancialSummariesBox projectId={projectId} report={selectedReport} />
 
           <AdditionalCommentsBox projectId={projectId} report={selectedReport} />
+
+          <QuarterlyHighlightsBox
+            onViewHighlights={goToQuarterlyHighlights}
+            projectId={projectId}
+            report={selectedReport}
+          />
         </>
       )}
     </Card>

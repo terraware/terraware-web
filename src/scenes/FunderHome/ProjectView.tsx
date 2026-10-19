@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, Tabs } from '@terraware/web-components';
@@ -9,10 +9,12 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { FunderProjectDetails } from 'src/types/FunderProject';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ProjectProfileView from '../AcceleratorRouter/AcceleratorProjects/ProjectProfileView';
@@ -31,6 +33,8 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { strings } = useLocalization();
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
   const { currentData: funderActivitiesData, isFetching } = useFunderListActivitiesQuery({
     projectId: projectDetails.projectId,
     includeMedia: true,
@@ -42,6 +46,14 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   );
 
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
+
+  const hasHighlights = activities.length > 0;
+
+  const goToQuarterlyHighlights = useCallback(() => {
+    const params = new URLSearchParams(location.search);
+    params.set('tab', 'quarterlyHighlights');
+    navigate(getLocation(location.pathname, location, `?${params.toString()}`));
+  }, [location, navigate]);
 
   const projectDetailsDealName = projectDetails?.dealName;
 
@@ -65,9 +77,14 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
       {
         id: 'report',
         label: strings.REPORT,
-        children: <FunderReportTabV2 selectedProjectId={projectDetails.projectId} />,
+        children: (
+          <FunderReportTabV2
+            onViewQuarterlyHighlights={hasHighlights ? goToQuarterlyHighlights : undefined}
+            selectedProjectId={projectDetails.projectId}
+          />
+        ),
       },
-      ...(activities.length > 0
+      ...(hasHighlights
         ? [
             {
               id: 'quarterlyHighlights',
@@ -90,7 +107,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
           ]
         : []),
     ];
-  }, [projectDetails, publishedReports, strings, activities]);
+  }, [activities, goToQuarterlyHighlights, hasHighlights, projectDetails, publishedReports, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',

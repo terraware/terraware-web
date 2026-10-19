@@ -1739,6 +1739,7 @@ QUANTITY_TO_PLANT_TOOLTIP,Nombre de plants prévus pour être plantés à cette 
 QUARTER_YEAR,T{0} {1},637ce0a5
 QUARTERLY,Trimestriel,f69e32e0
 QUARTERLY_HIGHLIGHTS,Faits saillants trimestriels,863a818b
+QUARTERLY_HIGHLIGHTS_SUMMARY,"Photos, récits et mises à jour de terrain du {0}.",c0d5ba32
 QUESTION,Question,84cf257d
 RARE,Rare,c114e991
 RATIONALE,Justification,4e68d88e
@@ -2650,6 +2651,7 @@ VIEW_ON_MAP,Voir sur la carte,fb873a55
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4
+VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
 VIEW_SESSION,Voir la session,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une carte.",f4d62997
