@@ -220,7 +220,56 @@
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
 <a name='L157'></a><a href='#L157'>157</a>
-<a name='L158'></a><a href='#L158'>158</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -368,55 +417,75 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { components, operations } from 'src/api/types/generated-schema';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { operations } from 'src/api/types/generated-schema';
+import {
+  AppendValueOperationPayload,
+  DeleteValueOperationPayload,
+  ListVariableValuesResponsePayload,
+  NewDateValuePayload,
+  NewEmailValuePayload,
+  NewLinkValuePayload,
+  NewNumberValuePayload,
+  NewSectionTextValuePayload,
+  NewSectionVariableValuePayload,
+  NewSelectValuePayload,
+  NewTextValuePayload,
+  ReplaceValuesOperationPayload,
+  UpdateValueOperationPayload,
+  UpdateVariableValuesRequestPayload,
+} from 'src/queries/generated/documentProducerValues';
+import {
+  ExistingDateValuePayload,
+  ExistingDeletedValuePayload,
+  ExistingEmailValuePayload,
+  ExistingImageValuePayload,
+  ExistingLinkValuePayload,
+  ExistingNumberValuePayload,
+  ExistingSectionTextValuePayload,
+  ExistingSectionVariableValuePayload,
+  ExistingSelectValuePayload,
+  ExistingTableValuePayload,
+  ExistingTextValuePayload,
+} from 'src/queries/generated/documentProducerVariables';
 &nbsp;
-export type VariableValuesListResponse = components['schemas']['ListVariableValuesResponsePayload'];
+export type VariableValuesListResponse = ListVariableValuesResponsePayload;
 &nbsp;
 export type VariableValue = VariableValuesListResponse['values'][0];
 &nbsp;
 export type VariableValueValue = VariableValuesListResponse['values'][0]['values'][0];
 &nbsp;
-export type DateVariableValue = components['schemas']['ExistingDateValuePayload'];
+export type DateVariableValue = ExistingDateValuePayload;
 export const isDateVariableValue = <span class="fstat-no" title="function not covered" >(input: unknown): input is DateVariableValue =&gt;</span>
 <span class="cstat-no" title="statement not covered" >  !!(input as DateVariableValue)?.dateValue;</span>
 &nbsp;
-export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
+export type DeletedVariableValue = ExistingDeletedValuePayload;
 &nbsp;
-type EmailVariableValue = components['schemas']['ExistingEmailValuePayload'];
+type EmailVariableValue = ExistingEmailValuePayload;
 &nbsp;
-export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
+export type ImageVariableValue = ExistingImageValuePayload;
 &nbsp;
-export type LinkVariableValue = components['schemas']['ExistingLinkValuePayload'];
+export type LinkVariableValue = ExistingLinkValuePayload;
 export const isLinkVariableValue = <span class="fstat-no" title="function not covered" >(input: unknown): input is LinkVariableValue =&gt; <span class="cstat-no" title="statement not covered" >!!(input as LinkVariableValue)?.url;</span></span>
 &nbsp;
-export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
+export type NumberVariableValue = ExistingNumberValuePayload;
 export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =&gt;
   (input as NumberVariableValue)?.numberValue !== undefined;
 &nbsp;
-export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
+export type SectionTextVariableValue = ExistingSectionTextValuePayload;
 export const isSectionTextVariableValue = (input: unknown): input is SectionTextVariableValue =&gt;
   (input as SectionTextVariableValue)?.type === 'SectionText';
 &nbsp;
-export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
+export type SectionVariableVariableValue = ExistingSectionVariableValuePayload;
 export const isSectionVariableVariableValue = (input: unknown): input is SectionVariableVariableValue =&gt;
   (input as SectionVariableVariableValue)?.type === 'SectionVariable';
 &nbsp;
-export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
+export type SelectVariableValue = ExistingSelectValuePayload;
 export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =&gt;
   !!(input as SelectVariableValue)?.optionValues;
 &nbsp;
-export type TableVariableValue = components['schemas']['ExistingTableValuePayload'];
+export type TableVariableValue = ExistingTableValuePayload;
 &nbsp;
-export type TextVariableValue = components['schemas']['ExistingTextValuePayload'];
+export type TextVariableValue = ExistingTextValuePayload;
 export const isTextVariableValue = (input: unknown): input is TextVariableValue =&gt;
   !!(input as TextVariableValue)?.textValue;
 &nbsp;
@@ -464,49 +533,35 @@ export type CombinedInjectedValue = {
   usageType?: 'Injection' | 'Reference';
 };
 &nbsp;
-export type VariableValueTextValue = components['schemas']['ExistingTextValuePayload'];
+export type VariableValueTextValue = ExistingTextValuePayload;
 &nbsp;
-export type VariableValueNumberValue = components['schemas']['ExistingNumberValuePayload'];
+export type VariableValueNumberValue = ExistingNumberValuePayload;
 &nbsp;
-export type VariableValueImageValue = components['schemas']['ExistingImageValuePayload'];
+export type VariableValueImageValue = ExistingImageValuePayload;
 &nbsp;
-export type VariableValueTableValue = components['schemas']['ExistingTableValuePayload'];
+export type VariableValueTableValue = ExistingTableValuePayload;
 &nbsp;
-export type UpdateVariableValueOperation = components['schemas']['UpdateValueOperationPayload'];
+export type UpdateVariableValueOperation = UpdateValueOperationPayload &amp; { existingValueId: number };
 &nbsp;
-export type VariableValueSelectValue = components['schemas']['ExistingSelectValuePayload'];
+export type VariableValueSelectValue = ExistingSelectValuePayload;
 &nbsp;
-export type VariableValueDateValue = components['schemas']['ExistingDateValuePayload'];
+export type VariableValueDateValue = ExistingDateValuePayload;
 &nbsp;
-export type VariableValueEmailValue = components['schemas']['ExistingEmailValuePayload'];
+export type VariableValueEmailValue = ExistingEmailValuePayload;
 &nbsp;
-export type VariableValueLinkValue = components['schemas']['ExistingLinkValuePayload'];
-&nbsp;
-export type NewTextValuePayload = components['schemas']['NewTextValuePayload'];
-&nbsp;
-export type NewNumberValuePayload = components['schemas']['NewNumberValuePayload'];
-&nbsp;
-export type NewSelectValuePayload = components['schemas']['NewSelectValuePayload'];
-&nbsp;
-export type NewDateValuePayload = components['schemas']['NewDateValuePayload'];
-&nbsp;
-export type NewEmailValuePayload = components['schemas']['NewEmailValuePayload'];
-&nbsp;
-export type NewLinkValuePayload = components['schemas']['NewLinkValuePayload'];
+export type VariableValueLinkValue = ExistingLinkValuePayload;
 &nbsp;
 export type UpdateVariableValuesRequestWithProjectId = UpdateVariableValuesRequestPayload &amp; {
   projectId: number;
 };
 &nbsp;
-export type DeleteVariableValueOperation = components['schemas']['DeleteValueOperationPayload'];
-&nbsp;
-export type UpdateVariableValuesRequestPayload = components['schemas']['UpdateVariableValuesRequestPayload'];
+export type DeleteVariableValueOperation = DeleteValueOperationPayload &amp; { existingValueId: number };
 &nbsp;
 export type Operation =
-  | components['schemas']['AppendValueOperationPayload']
-  | components['schemas']['DeleteValueOperationPayload']
-  | components['schemas']['ReplaceValuesOperationPayload']
-  | components['schemas']['UpdateValueOperationPayload'];
+  | AppendValueOperationPayload
+  | DeleteVariableValueOperation
+  | ReplaceValuesOperationPayload
+  | UpdateVariableValueOperation;
 &nbsp;
 type OriginalUploadImageValue = Required&lt;
   operations['uploadProjectImageValue']
@@ -519,20 +574,25 @@ export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueReques
   projectId: number;
 };
 &nbsp;
-export type AppendVariableValueOperation = Omit&lt;components['schemas']['AppendValueOperationPayload'], 'value'&gt; &amp; {
+export type AppendVariableValueOperation = Omit&lt;AppendValueOperationPayload, 'value'&gt; &amp; {
   value: NewNonSectionValuePayloadUnion;
 };
 &nbsp;
-export type NewSectionTextValuePayload = components['schemas']['NewSectionTextValuePayload'];
-&nbsp;
-export type NewSectionVariableValuePayload = components['schemas']['NewSectionVariableValuePayload'];
-&nbsp;
-export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit&lt;
-  components['schemas']['ReplaceValuesOperationPayload'],
-  'values'
-&gt; &amp; {
+export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit&lt;ReplaceValuesOperationPayload, 'values'&gt; &amp; {
   projectId: number;
   values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
+};
+&nbsp;
+export type {
+  NewTextValuePayload,
+  NewNumberValuePayload,
+  NewSelectValuePayload,
+  NewDateValuePayload,
+  NewEmailValuePayload,
+  NewLinkValuePayload,
+  UpdateVariableValuesRequestPayload,
+  NewSectionTextValuePayload,
+  NewSectionVariableValuePayload,
 };
 &nbsp;</pre></td></tr></table></pre>
 
@@ -541,7 +601,7 @@ export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit&lt;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-16T20:28:10.765Z
+                at 2026-10-19T15:44:03.371Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

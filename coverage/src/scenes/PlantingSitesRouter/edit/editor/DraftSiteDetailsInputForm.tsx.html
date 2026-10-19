@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/39</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/40</span>
+                <span class='fraction'>0/38</span>
             </div>
         
             
@@ -221,24 +221,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -248,9 +240,17 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -319,17 +319,16 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { useLazySearchDraftPlantingSitesQuery } from 'src/queries/search/draftPlantingSites';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazySearchPlantingSiteNamesQuery } from 'src/queries/search/plantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 &nbsp;
 export type DraftSiteDetailsInputFormProps = {
   onChange: (id: string, value: unknown) =&gt; void;
+  onLoadingChange?: (isLoading: boolean) =&gt; void;
   onValidate?: (hasErrors: boolean) =&gt; void;
   record: DraftPlantingSite;
   setRecord: (setFn: (previousValue: DraftPlantingSite) =&gt; DraftPlantingSite) =&gt; void;
@@ -337,6 +336,7 @@ export type DraftSiteDetailsInputFormProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >DraftSiteDetailsInputForm(</span>{
   onChange,
+  onLoadingChange,
   onValidate,
   record,
   setRecord,
@@ -344,17 +344,22 @@ export default function <span class="fstat-no" title="function not covered" >Dra
   const [validateInput, setValidateInput] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
   const [nameError, setNameError] = <span class="cstat-no" title="statement not covered" >useState('');</span>
   const { availableProjects } = <span class="cstat-no" title="statement not covered" >useProjects(record);</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const plantingSites = <span class="cstat-no" title="statement not covered" >useAppSelector(selectPlantingSites);</span>
-  const [searchDraftPlantingSites, { currentData: draftSites }] = <span class="cstat-no" title="statement not covered" >useLazySearchDraftPlantingSitesQuery();</span>
+  const [searchPlantingSiteNames, { currentData: plantingSites, isFetching: isFetchingPlantingSites }] =
+<span class="cstat-no" title="statement not covered" >    useLazySearchPlantingSiteNamesQuery();</span>
+  const [searchDraftPlantingSites, { currentData: draftSites, isFetching: isFetchingDraftSites }] =
+<span class="cstat-no" title="statement not covered" >    useLazySearchDraftPlantingSitesQuery();</span>
 &nbsp;
   const usedNames = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-    const allSites = <span class="cstat-no" title="statement not covered" >[...(plantingSites || []), ...(draftSites || [])];</span>
-    const otherSiteNames = allSites.filter(<span class="fstat-no" title="function not covered" >(site) =&gt; <span class="cstat-no" title="statement not covered" >Number(site.id) !== record.id)</span></span>.map(<span class="fstat-no" title="function not covered" >(site) =&gt; <span class="cstat-no" title="statement not covered" >site.name)</span></span>;
-<span class="cstat-no" title="statement not covered" >    return new Set(otherSiteNames);</span>
+    const otherDraftSites = (draftSites || []).filter(<span class="fstat-no" title="function not covered" >(site) =&gt; <span class="cstat-no" title="statement not covered" >Number(site.id) !== record.id)</span></span>;
+<span class="cstat-no" title="statement not covered" >    return new Set([...(plantingSites || []), ...otherDraftSites].map(<span class="fstat-no" title="function not covered" >(site) =&gt; <span class="cstat-no" title="statement not covered" >site.name)</span></span>);</span>
   }, [draftSites, plantingSites, record.id]);
+&nbsp;
+  const isLoading = <span class="cstat-no" title="statement not covered" >isFetchingPlantingSites || isFetchingDraftSites || !plantingSites || !draftSites;</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    onLoadingChange?.(isLoading);</span>
+  }, [isLoading, onLoadingChange]);
 &nbsp;
   const checkErrors = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (!record.name) {</span>
@@ -370,16 +375,11 @@ export default function <span class="fstat-no" title="function not covered" >Dra
   }, [record.name, usedNames]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (!plantingSites &amp;&amp; selectedOrganization) {</span>
-<span class="cstat-no" title="statement not covered" >      void dispatch(requestPlantingSites(selectedOrganization.id));</span>
-    }
-  }, [activeLocale, dispatch, plantingSites, selectedOrganization]);
-&nbsp;
-<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization) {</span>
+<span class="cstat-no" title="statement not covered" >      void searchPlantingSiteNames(selectedOrganization.id, true);</span>
 <span class="cstat-no" title="statement not covered" >      void searchDraftPlantingSites({ organizationId: selectedOrganization.id }, true);</span>
     }
-  }, [searchDraftPlantingSites, selectedOrganization]);
+  }, [searchDraftPlantingSites, searchPlantingSiteNames, selectedOrganization]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (!onValidate) {</span>
@@ -442,7 +442,7 @@ export default function <span class="fstat-no" title="function not covered" >Dra
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-16T20:28:10.765Z
+                at 2026-10-19T15:44:03.371Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
