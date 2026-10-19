@@ -16,10 +16,11 @@ import { useListPublishedReportsQuery } from 'src/queries/generated/publishedRep
 import useQuery from 'src/utils/useQuery';
 
 type FunderReportTabV2Props = {
+  onViewQuarterlyHighlights?: () => void;
   selectedProjectId: number;
 };
 
-const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.Element => {
+const FunderReportTabV2 = ({ onViewQuarterlyHighlights, selectedProjectId }: FunderReportTabV2Props): JSX.Element => {
   const theme = useTheme();
   const trackEvent = useTrackEvent();
   const query = useQuery();
@@ -100,6 +101,7 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
           </Box>
         }
         indicators={indicators}
+        onViewQuarterlyHighlights={onViewQuarterlyHighlights}
         projectId={selectedProjectId}
         report={selectedReport}
       />

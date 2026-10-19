@@ -89,6 +89,13 @@ const ActivityHighlightsContent = ({
       .sort((a, b) => b.label.localeCompare(a.label, activeLocale || undefined));
   }, [activeLocale, groupedActivities]);
 
+  const requestedQuarter = query.get('highlightsQuarter') ?? undefined;
+
+  const clearRequestedQuarter = useCallback(() => {
+    query.delete('highlightsQuarter');
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+  }, [location, navigate, query]);
+
   const handleClose = useCallback(() => {
     query.delete('highlightActivityId');
     navigate(getLocation(location.pathname, location, query.toString()));
@@ -123,6 +130,15 @@ const ActivityHighlightsContent = ({
   // set initial selected quarter when data has loaded
   useEffect(() => {
     if (dropdownOptions.length > 0 && !selectedQuarter && !busy && !isLoadingReports) {
+      if (requestedQuarter) {
+        clearRequestedQuarter();
+
+        if (dropdownOptions.some((option) => option.value === requestedQuarter)) {
+          setSelectedQuarter(requestedQuarter);
+          return;
+        }
+      }
+
       let defaultQuarter = dropdownOptions[0].value;
       let latestReportQuarter: string | undefined;
 
@@ -143,10 +159,12 @@ const ActivityHighlightsContent = ({
   }, [
     acceleratorReports,
     busy,
+    clearRequestedQuarter,
     dropdownOptions,
     getLatestReportQuarter,
     isLoadingReports,
     publishedReports,
+    requestedQuarter,
     selectedQuarter,
   ]);
 

@@ -9,6 +9,7 @@ import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSu
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
+import QuarterlyHighlightsBox from 'src/components/AcceleratorReports/QuarterlyHighlightsBox';
 import { ProgressIndicator } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
@@ -19,11 +20,18 @@ export type FunderReportContentV2Props = {
   /** the report selector in the funder portal, or a static report name in the console preview */
   header?: ReactNode;
   indicators: ProgressIndicator[];
+  onViewQuarterlyHighlights?: () => void;
   projectId: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
 };
 
-const FunderReportContentV2 = ({ header, indicators, projectId, report }: FunderReportContentV2Props): JSX.Element => {
+const FunderReportContentV2 = ({
+  header,
+  indicators,
+  onViewQuarterlyHighlights,
+  projectId,
+  report,
+}: FunderReportContentV2Props): JSX.Element => {
   const theme = useTheme();
 
   // the highlights box holds its own copy of the text, so it is remounted when the report changes
@@ -54,6 +62,10 @@ const FunderReportContentV2 = ({ header, indicators, projectId, report }: Funder
       <FinancialSummariesBox projectId={projectId} report={report} />
 
       <AdditionalCommentsBox projectId={projectId} report={report} />
+
+      {onViewQuarterlyHighlights && (
+        <QuarterlyHighlightsBox onViewHighlights={onViewQuarterlyHighlights} projectId={projectId} report={report} />
+      )}
     </Card>
   );
 };
