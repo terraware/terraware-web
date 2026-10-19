@@ -2099,7 +2099,6 @@ SITE_BOUNDARY_UPLOAD_TUTORIAL,[Vea un tutorial] sobre cómo dibujar límites de 
 SITE_BOUNDARY_UPLOADED_DESCRIPTION,Defina un límite de Sitio de Plantación que contenga todas las áreas plantables del proyecto. Puede editar el límite del sitio. Utilice la herramienta de dibujo {0} para trazar formas adicionales. [Vea un tutorial] sobre cómo dibujar límites de sitios.,aaddab79
 SITE_BOUNDING_AREA_TOO_LARGE,El área delimitada de aproximadamente {0} hectáreas es demasiado grande.,eb3c9a60
 SITE_DETAIL,Detalle del sitio,c7f1672e
-SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Esta función solo está disponible desde la aplicación de escritorio.,1c4eb37d
 SITE_EDITOR_USE_TABLET_LANDSCAPE,Esta función solo está disponible en la vista horizontal en una tableta.,8710d7e6
 SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,"Defina las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares. Estas áreas serán excluidas de los cálculos de superficie plantable y de las Observaciones. Utilice la herramienta de dibujo {0} para trazar formas dentro o superpuestas al límite del sitio. Omita este paso si no hay áreas que excluir. [Vea un tutorial] sobre cómo dibujar áreas de exclusión.",d22ed290

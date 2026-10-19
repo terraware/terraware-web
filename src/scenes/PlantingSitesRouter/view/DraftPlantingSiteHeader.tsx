@@ -5,7 +5,6 @@ import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import BackToLink from 'src/components/common/BackToLink';
-import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
@@ -26,14 +25,12 @@ const continueSetupLabel = (step: SiteEditStep): string => {
 };
 
 export type DraftPlantingSiteHeaderProps = {
-  editDisabled: boolean;
   onDelete: () => void;
   onEdit: () => void;
   plantingSite: DraftPlantingSite;
 };
 
 export default function DraftPlantingSiteHeader({
-  editDisabled,
   onDelete,
   onEdit,
   plantingSite,
@@ -53,25 +50,21 @@ export default function DraftPlantingSiteHeader({
         </Typography>
         {isAdmin(selectedOrganization) && (
           <Box display='flex' alignItems='center' gap={theme.spacing(1.5)} marginLeft='auto'>
-            {!editDisabled && (
-              <Button
-                icon='iconTrashCan'
-                id='delete-draft-planting-site'
-                label={isMobile ? undefined : strings.DELETE_DRAFT}
-                onClick={onDelete}
-                priority='secondary'
-                size='medium'
-                type='destructive'
-              />
-            )}
-            <TooltipButton
-              disabled={editDisabled}
+            <Button
+              icon='iconTrashCan'
+              id='delete-draft-planting-site'
+              label={isMobile ? undefined : strings.DELETE_DRAFT}
+              onClick={onDelete}
+              priority='secondary'
+              size='medium'
+              type='destructive'
+            />
+            <Button
               id='continue-draft-planting-site-setup'
               label={continueSetupLabel(plantingSite.siteEditStep)}
+              onClick={onEdit}
               priority='primary'
               size='medium'
-              tooltip={editDisabled ? strings.SITE_EDIT_DISABLED_TOOLTIP : undefined}
-              onClick={onEdit}
             />
           </Box>
         )}

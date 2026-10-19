@@ -22,6 +22,7 @@ const PlantingSitesList = () => {
   const query = useQuery();
   const { selectedOrganization } = useOrganization();
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
+  const canViewDrafts = isAdmin(selectedOrganization);
 
   const [countSites, { data: sitesCount, isLoading: sitesCountLoading }] = useLazyCountPlantingSitesQuery();
   const [countDraftSites, { data: draftSitesCount, isLoading: draftSitesCountLoading }] =
@@ -30,9 +31,11 @@ const PlantingSitesList = () => {
   useEffect(() => {
     if (selectedOrganization) {
       void countSites(selectedOrganization.id, true);
-      void countDraftSites(selectedOrganization.id, true);
+      if (canViewDrafts) {
+        void countDraftSites(selectedOrganization.id, true);
+      }
     }
-  }, [countDraftSites, countSites, selectedOrganization]);
+  }, [canViewDrafts, countDraftSites, countSites, selectedOrganization]);
 
   useEffect(() => {
     if (query.get('new')) {
@@ -41,6 +44,10 @@ const PlantingSitesList = () => {
   }, [query]);
 
   const tabs = useMemo(() => {
+    if (!canViewDrafts) {
+      return [];
+    }
+
     return [
       {
         id: 'plantingSites',
@@ -53,7 +60,7 @@ const PlantingSitesList = () => {
         children: <PlantingSitesListTab isDraft />,
       },
     ];
-  }, [strings]);
+  }, [canViewDrafts, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'plantingSites',
@@ -80,12 +87,12 @@ const PlantingSitesList = () => {
   }, [isMobile, strings]);
 
   const isLoading = useMemo(() => {
-    return sitesCountLoading || draftSitesCountLoading;
-  }, [draftSitesCountLoading, sitesCountLoading]);
+    return sitesCountLoading || (canViewDrafts && draftSitesCountLoading);
+  }, [canViewDrafts, draftSitesCountLoading, sitesCountLoading]);
 
   const hasSites = useMemo(() => {
-    return (sitesCount ?? 0) + (draftSitesCount ?? 0) > 0;
-  }, [draftSitesCount, sitesCount]);
+    return (sitesCount ?? 0) + (canViewDrafts ? (draftSitesCount ?? 0) : 0) > 0;
+  }, [canViewDrafts, draftSitesCount, sitesCount]);
 
   if (!isLoading && !hasSites) {
     return <EmptyStatePage pageName={'PlantingSites'} />;
@@ -118,7 +125,11 @@ const PlantingSitesList = () => {
           },
         }}
       >
-        <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+        {canViewDrafts ? (
+          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+        ) : (
+          <PlantingSitesListTab isDraft={false} />
+        )}
       </Box>
     </Page>
   );

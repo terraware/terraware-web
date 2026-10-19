@@ -8,7 +8,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization, useUser } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { useUpdateDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import DeleteDraftPlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal';
 import DraftSiteDetailsModal from 'src/scenes/PlantingSitesRouter/edit/DraftSiteDetailsModal';
@@ -25,7 +25,6 @@ import DraftPlantingSiteHeader from './DraftPlantingSiteHeader';
 
 export default function PlantingSiteDraftView(): JSX.Element {
   const theme = useTheme();
-  const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
@@ -35,8 +34,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const [detailsModalOpen, setDetailsModalOpen] = useState<boolean>(false);
   const [updateDraftPlantingSite, { isLoading: isUpdating }] = useUpdateDraftPlantingSiteMutation();
 
-  const editDisabled = !user || plantingSite?.createdBy !== user.id;
-  const canEditDetails = isAdmin(selectedOrganization) && !editDisabled;
+  const canEditDetails = isAdmin(selectedOrganization);
 
   const goToEditDraftPlantingSite = useCallback(() => {
     if (plantingSiteId) {
@@ -99,7 +97,6 @@ export default function PlantingSiteDraftView(): JSX.Element {
         />
       )}
       <DraftPlantingSiteHeader
-        editDisabled={editDisabled}
         onDelete={openDeleteModal}
         onEdit={goToEditDraftPlantingSite}
         plantingSite={plantingSite}
