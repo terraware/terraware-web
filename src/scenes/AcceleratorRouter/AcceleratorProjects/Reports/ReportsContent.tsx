@@ -12,6 +12,12 @@ import ReportsSettings from './ReportsSettings';
 
 export type ReportsSegment = 'reports' | 'targets' | 'indicators';
 
+export const SEGMENT_PATHS: Record<ReportsSegment, string> = {
+  reports: '',
+  targets: '/targets',
+  indicators: '/indicators',
+};
+
 type ReportsContentProps = {
   onChangeSegment: (segment: ReportsSegment) => void;
   onSelectReport?: (reportId: number, replace?: boolean) => void;

@@ -10,8 +10,6 @@ import Card from 'src/components/common/Card';
 import Checkbox from 'src/components/common/Checkbox';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import {
   NewIndicatorPayload,
@@ -27,23 +25,22 @@ import {
   indicatorComponentOptions,
   indicatorTypeOptions,
 } from './EditCommonIndicatorModal';
+import useExitReportsEdit from './useExitReportsEdit';
 
 type IndicatorKind = 'common' | 'project';
 
 export default function NewIndicator(): JSX.Element {
   const theme = useTheme();
-  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
+  const exitReportsEdit = useExitReportsEdit(projectId);
   const [validate, setValidate] = useState(false);
   const [indicatorKind, setIndicatorKind] = useState<IndicatorKind>('common');
 
-  const goToProjectReports = useCallback(() => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}/indicators`);
-  }, [navigate, projectId]);
+  const goToProjectReports = useCallback(() => exitReportsEdit('indicators'), [exitReportsEdit]);
 
   const [createCommonIndicator, createCommonIndicatorResponse] = useCreateCommonIndicatorMutation();
   const [createProjectIndicator, createProjectIndicatorResponse] = useCreateProjectIndicatorMutation();

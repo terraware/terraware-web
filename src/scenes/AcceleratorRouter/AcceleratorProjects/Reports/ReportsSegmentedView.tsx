@@ -7,16 +7,10 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
-import ReportsContent, { ReportsSegment } from './ReportsContent';
+import ReportsContent, { ReportsSegment, SEGMENT_PATHS } from './ReportsContent';
 
 type ReportsSegmentedViewProps = {
   tab?: string;
-};
-
-const SEGMENT_PATHS: Record<ReportsSegment, string> = {
-  reports: '',
-  targets: '/targets',
-  indicators: '/indicators',
 };
 
 const ReportsSegmentedView = ({ tab }: ReportsSegmentedViewProps) => {

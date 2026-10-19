@@ -10,8 +10,6 @@ import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TextField from 'src/components/common/Textfield/Textfield';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import {
   useCreateAcceleratorReportConfigMutation,
@@ -22,13 +20,15 @@ import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import useExitReportsEdit from './useExitReportsEdit';
+
 export default function EditSettings(): JSX.Element {
   const theme = useTheme();
-  const navigate = useSyncNavigate();
   const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
+  const exitReportsEdit = useExitReportsEdit(projectId);
 
   const [listReportConfigs, listReportConfigResponse] = useLazyListAcceleratorReportConfigQuery();
   const [createReportConfig, createReportConfigResponse] = useCreateAcceleratorReportConfigMutation();
@@ -36,9 +36,7 @@ export default function EditSettings(): JSX.Element {
 
   const snackbar = useSnackbar();
 
-  const goToProjectReports = useCallback(() => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}/indicators`);
-  }, [navigate, projectId]);
+  const goToProjectReports = useCallback(() => exitReportsEdit('indicators'), [exitReportsEdit]);
 
   useEffect(() => {
     if (projectId) {
