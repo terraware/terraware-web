@@ -1,3 +1,4 @@
+ae102191 SW-9124 Remove usage of strata for simple planting sites (#6800)
 c9e6bd9e SW-8975 Delete the accelerator project species slice and service (#6664)
 04bea774 SW-8975 Serve the project species pages from RTK Query (#6663)
 e127e504 SW-8975 Serve the species deliverable table from RTK Query (#6662)
