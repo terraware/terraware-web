@@ -832,6 +832,8 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       ref={mapRefCallback}
       scrollZoom={!disableZoom && focused}
       style={{
+        // Keeps the controls' and markers' z-indexes inside the map, under page menus that open over it.
+        isolation: 'isolate',
         width: 'auto',
         height: isDesktop || fillContainerHeight ? 'auto' : '80vh',
         flexGrow: isDesktop || fillContainerHeight ? 1 : undefined,
