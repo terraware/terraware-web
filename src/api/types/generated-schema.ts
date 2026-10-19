@@ -384,7 +384,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Import a list of deliverables metadata.  */
+        /** Import a list of deliverables metadata. */
         post: operations["importDeliverables"];
         delete?: never;
         options?: never;
@@ -590,7 +590,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Import a list of modules.  */
+        /** Import a list of modules. */
         post: operations["importModules"];
         delete?: never;
         options?: never;
@@ -5302,7 +5302,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets overall score for a single project.  */
+        /** Gets overall score for a single project. */
         get: operations["getProjectOverallScore"];
         /** Updates overall score for a single project. */
         put: operations["upsertProjectScores"];
@@ -5928,13 +5928,15 @@ export interface components {
             successStories?: string;
             sustainableDevelopmentGoals: components["schemas"]["GoalProgressPayloadV1"][];
         };
-        /** @description Operation that appends a new value to a variable. If the variable does not have an existing value, creates the value with list position 0.
+        /**
+         * @description Operation that appends a new value to a variable. If the variable does not have an existing value, creates the value with list position 0.
          *
          *     If the variable has an existing value and it is NOT a list, replaces the existing value. In this case, the new list position will be 0.
          *
          *     If the variable has existing values and it IS a list, creates the value with a list position 1 greater than the currently-highest position, that is, appends the value to the list.
          *
-         *     If the variable is a table column and no rowValueId is specified, associates the new value with the most recently appended row. You MUST append a row value before appending the values of the columns. */
+         *     If the variable is a table column and no rowValueId is specified, associates the new value with the most recently appended row. You MUST append a row value before appending the values of the columns.
+         */
         AppendValueOperationPayload: Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
             /**
              * Format: int64
@@ -7334,7 +7336,7 @@ export interface components {
         DeleteProjectVotesRequestPayload: {
             /** @enum {string} */
             phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
-            /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase.  */
+            /** @description A safeguard flag that must be set to `true` for deleting all voters in a project phase. */
             phaseDelete?: boolean;
             /**
              * Format: int64
@@ -7342,11 +7344,13 @@ export interface components {
              */
             userId?: number;
         };
-        /** @description Operation that deletes a value from a variable. Deletion is non-destructive; this actually creates a new value with its own value ID, where the new value is marked as deleted. This "is deleted" value is included in incremental value query results.
+        /**
+         * @description Operation that deletes a value from a variable. Deletion is non-destructive; this actually creates a new value with its own value ID, where the new value is marked as deleted. This "is deleted" value is included in incremental value query results.
          *
          *     If the variable is a list and there are other values with higher list positions, the remaining items will be renumbered such that the list remains contiguously numbered starting at 0.
          *
-         *     If the variable is a table, or in other words if the value is a table row, any values associated with the row are also deleted. The row itself gets a new value that is marked as deleted, and the new values that are created to delete the row's contents are associated with this newly-created deleted row value. */
+         *     If the variable is a table, or in other words if the value is a table row, any values associated with the row are also deleted. The row itself gets a new value that is marked as deleted, and the new values that are created to delete the row's contents are associated with this newly-created deleted row value.
+         */
         DeleteValueOperationPayload: Omit<WithRequired<components["schemas"]["ValueOperationPayload"], "existingValueId">, "operation"> & {
             /** Format: int64 */
             valueId: number;
@@ -11345,13 +11349,15 @@ export interface components {
             removedMonitoringPlotIds: number[];
             status: components["schemas"]["SuccessOrError"];
         };
-        /** @description Operation that replaces all the values of a variable with new ones. This is an "upsert" operation: it replaces any existing values, or creates new values if there weren't already any.
+        /**
+         * @description Operation that replaces all the values of a variable with new ones. This is an "upsert" operation: it replaces any existing values, or creates new values if there weren't already any.
          *
          *     This operation may not be used with table variables.
          *
          *     If the variable is a list and previously had more values than are included in this payload, the existing values with higher-numbered list positions are deleted.
          *
-         *     If the variable is not a list, it is invalid for this payload to include more than one value. */
+         *     If the variable is not a list, it is invalid for this payload to include more than one value.
+         */
         ReplaceValuesOperationPayload: Omit<components["schemas"]["ValueOperationPayload"], "operation"> & {
             /**
              * Format: int64
@@ -12881,11 +12887,13 @@ export interface components {
              */
             timeZone?: string;
         };
-        /** @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
+        /**
+         * @description Operation that replaces a single existing value with a new one. The new value will have the same list position as the existing one.
          *
          *     This operation may not be used with table variables.
          *
-         *     If the variable is a table column, the new value will be contained in the same row as the existing one. */
+         *     If the variable is a table column, the new value will be contained in the same row as the existing one.
+         */
         UpdateValueOperationPayload: Omit<WithRequired<components["schemas"]["ValueOperationPayload"], "existingValueId">, "operation"> & {
             value: components["schemas"]["NewDateValuePayload"] | components["schemas"]["NewEmailValuePayload"] | components["schemas"]["NewImageValuePayload"] | components["schemas"]["NewLinkValuePayload"] | components["schemas"]["NewNumberValuePayload"] | components["schemas"]["NewSectionTextValuePayload"] | components["schemas"]["NewSectionVariableValuePayload"] | components["schemas"]["NewSelectValuePayload"] | components["schemas"]["NewTableValuePayload"] | components["schemas"]["NewTextValuePayload"];
             /** Format: int64 */
