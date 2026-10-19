@@ -68,6 +68,10 @@ export enum QueryTagTypes {
   TrackingStats = 'TrackingStats',
   UserPreferences = 'UserPreferences',
   Users = 'Users',
+  VariableOwners = 'VariableOwners',
+  VariableValues = 'VariableValues',
+  VariableWorkflowHistory = 'VariableWorkflowHistory',
+  Variables = 'Variables',
   ViabilityTests = 'ViabilityTests',
 }
 

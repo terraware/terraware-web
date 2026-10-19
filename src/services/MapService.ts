@@ -292,7 +292,7 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
       }
       return geom;
     })
-    .filter((geom) => !!geom) as number[][][][];
+    .filter((geom) => !!geom);
 
   return multiPolygons;
 };
@@ -353,7 +353,7 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, sit
   const numericId = siteNameForId
     ? Math.abs(siteNameForId.split('').reduce((a: number, b: string, i: number) => a + b.charCodeAt(0) * (i + 1), 0)) ||
       (siteIndex ?? 0)
-    : siteIndex ?? 0;
+    : (siteIndex ?? 0);
 
   return {
     properties: {

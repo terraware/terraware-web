@@ -210,7 +210,7 @@ export default function PlantsDashboardHeader({
   const isRolledUpView = isProjectSelected && selectedPlantingSiteId === ALL_PLANTING_SITES;
   const displayAreaHa = isRolledUpView
     ? totalArea
-    : plantingSites.find((site) => site.id === selectedPlantingSiteId)?.areaHa ?? 0;
+    : (plantingSites.find((site) => site.id === selectedPlantingSiteId)?.areaHa ?? 0);
 
   const title = isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD;
   const singleSiteMode = isAcceleratorRoute && plantingSiteOptions.length === 1;

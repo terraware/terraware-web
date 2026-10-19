@@ -28,7 +28,7 @@ export function toMultiPolygon(geometry: Geometry): MultiPolygon | null {
 export function unionMultiPolygons(featureCollection: FeatureCollection): MultiPolygon | null {
   const polyArray: MultiPolygon[] = _.cloneDeep(featureCollection)
     .features.map((feature: Feature) => toMultiPolygon(feature.geometry))
-    .filter((poly: MultiPolygon | null) => poly !== null) as MultiPolygon[];
+    .filter((poly: MultiPolygon | null) => poly !== null);
 
   if (!polyArray.length) {
     return null;

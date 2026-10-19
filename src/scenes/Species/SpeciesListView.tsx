@@ -789,7 +789,7 @@ export default function SpeciesListView(): JSX.Element {
         open={speciesCheckOpen}
         onClose={() => setSpeciesCheckOpen(false)}
         species={species}
-        projects={hasMultipleProjects ? availableProjects ?? [] : []}
+        projects={hasMultipleProjects ? (availableProjects ?? []) : []}
         entry={speciesCheckEntry}
         reloadSpecies={reloadData}
       />

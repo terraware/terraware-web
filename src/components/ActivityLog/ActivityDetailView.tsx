@@ -434,13 +434,14 @@ const ActivityDetailView = ({
   const obsPlantDensity =
     funderObsPayload !== undefined
       ? funderObsPayload.plantDensity
-      : observationResultsData?.observation.plantingDensity ??
-        observationResultsData?.observation.adHocPlot?.plantingDensity;
+      : (observationResultsData?.observation.plantingDensity ??
+        observationResultsData?.observation.adHocPlot?.plantingDensity);
 
   const obsSurvivalRate =
     funderObsPayload !== undefined
       ? funderObsPayload.survivalRate
-      : observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
+      : (observationResultsData?.observation.survivalRate ??
+        observationResultsData?.observation.adHocPlot?.survivalRate);
 
   const obsSurvivalRatePending =
     funderObsPayload === undefined &&

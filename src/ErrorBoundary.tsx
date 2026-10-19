@@ -19,7 +19,7 @@ const ErrorBoundary = (props: Props) => {
   const { isDesktop } = useDeviceInfo();
 
   const handleError = useCallback(
-    (error: Error, info: ErrorInfo) => {
+    (error: unknown, info: ErrorInfo) => {
       addReactError(error, info);
       props.setShowNavBar?.(false);
     },

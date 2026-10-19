@@ -31,13 +31,11 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: ListBotanicalCountriesApiResponse) =>
         response.results
           .filter((result) => !!result.botanicalCountry?.code && !!result.country?.code)
-          .map(
-            (result): BotanicalCountry => ({
-              code: result.botanicalCountry?.code as string,
-              name: (result.botanicalCountry?.name as string) || (result.botanicalCountry?.code as string),
-              countryCode: result.country?.code as string,
-            })
-          ),
+          .map((result): BotanicalCountry => ({
+            code: result.botanicalCountry?.code as string,
+            name: (result.botanicalCountry?.name as string) || (result.botanicalCountry?.code as string),
+            countryCode: result.country?.code as string,
+          })),
     }),
   }),
 });

@@ -6,11 +6,7 @@ import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import strings from 'src/strings';
 import { captureRequests, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
 
-// jsdom does not implement object URLs; PhotoChooser calls URL.createObjectURL to preview each
-// added file. Provide a stub so attaching a photo does not throw.
 beforeAll(() => {
-  URL.createObjectURL = () => 'blob:stub';
-  URL.revokeObjectURL = () => undefined;
   // The purpose step renders truncated text areas that observe their own size; jsdom has no
   // ResizeObserver, so provide a no-op to keep the form from crashing.
   if (typeof globalThis.ResizeObserver === 'undefined') {

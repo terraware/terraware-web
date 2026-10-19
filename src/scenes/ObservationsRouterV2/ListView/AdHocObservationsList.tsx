@@ -262,7 +262,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     async (filteredRows: AdHocRow[], hasTableFilters: boolean) => {
       const siteName =
         typeof plantingSiteId === 'number'
-          ? plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
+          ? (plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES)
           : strings.ALL_PLANTING_SITES;
       const visibleIds = new Set(filteredRows.map((row) => row.observationId));
       const monitoringResults = observations

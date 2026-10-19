@@ -20,3 +20,9 @@ global.IntersectionObserver = class {
     return [];
   }
 };
+
+// jsdom implements no object URLs, and components that preview chosen files call them while
+// rendering. Each URL is distinct, like a real one, because previews use the URL as a React key.
+let objectUrlCount = 0;
+URL.createObjectURL = () => `blob:stub-${++objectUrlCount}`;
+URL.revokeObjectURL = () => undefined;

@@ -468,20 +468,18 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
         .flatMap((plot): MapMarker[] => {
           if (plot.plants) {
             const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-            return filteredPlants.map(
-              (plant): MapMarker => ({
-                id: `plants/${plant.id}`,
-                longitude: plant.gpsCoordinates.coordinates[0],
-                latitude: plant.gpsCoordinates.coordinates[1],
-                onClick: selectPlant(plot.monitoringPlotId, latestObservationResult.observationId, plant),
-                selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-                properties: {
-                  monitoringPlotId: plot.monitoringPlotId,
-                  observationId: latestObservationResult.observationId,
-                  plant,
-                },
-              })
-            );
+            return filteredPlants.map((plant): MapMarker => ({
+              id: `plants/${plant.id}`,
+              longitude: plant.gpsCoordinates.coordinates[0],
+              latitude: plant.gpsCoordinates.coordinates[1],
+              onClick: selectPlant(plot.monitoringPlotId, latestObservationResult.observationId, plant),
+              selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+              properties: {
+                monitoringPlotId: plot.monitoringPlotId,
+                observationId: latestObservationResult.observationId,
+                plant,
+              },
+            }));
           } else {
             return [];
           }
@@ -736,12 +734,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
         const points = site.boundary.coordinates
           .flat()
           .flat()
-          .map(
-            ([lng, lat]): MapPoint => ({
-              lat,
-              lng,
-            })
-          );
+          .map(([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          }));
 
         const bbox = getBoundingBoxFromPoints(points);
         const latitude = (bbox.maxLat + bbox.minLat) / 2;
@@ -766,12 +762,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
       const points = plantingSiteHistory.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       if (points.length) {
         const bbox = getBoundingBoxFromPoints(points);
@@ -781,12 +775,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
       const points = plantingSite.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       if (points.length) {
         const bbox = getBoundingBoxFromPoints(points);
@@ -797,12 +789,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
         .flatMap((site) => site.boundary?.coordinates ?? [])
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       if (points.length) {
         const bbox = getBoundingBoxFromPoints(points);

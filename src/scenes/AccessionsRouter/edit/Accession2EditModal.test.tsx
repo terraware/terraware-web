@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { afterAll, beforeAll } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import strings from 'src/strings';
@@ -21,17 +20,6 @@ const ACCESSION_ID = 42;
 const SEED_BANK_ID = 101;
 const ACCESSION_URL = `/api/v2/seedbank/accessions/${ACCESSION_ID}`;
 const PHOTO_URL = '/api/v1/seedbank/accessions/:id/photos/:photoFilename';
-
-const originalCreateObjectURL = URL.createObjectURL.bind(URL);
-const originalRevokeObjectURL = URL.revokeObjectURL.bind(URL);
-beforeAll(() => {
-  URL.createObjectURL = () => 'blob:stub';
-  URL.revokeObjectURL = () => undefined;
-});
-afterAll(() => {
-  URL.createObjectURL = originalCreateObjectURL;
-  URL.revokeObjectURL = originalRevokeObjectURL;
-});
 
 const buildAccession = (overrides: Partial<Accession> = {}): Accession => ({
   accessionNumber: '24-1-001',

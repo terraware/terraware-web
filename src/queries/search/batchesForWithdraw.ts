@@ -76,20 +76,18 @@ const injectedRtkApi = api.injectEndpoints({
       },
       providesTags: [{ type: QueryTagTypes.NurseryBatches, id: 'LIST' }],
       transformResponse: (response: BatchSearchResponse): BatchForWithdraw[] =>
-        response.results.map(
-          (result): BatchForWithdraw => ({
-            batchId: Number(result.id),
-            batchNumber: result.batchNumber,
-            facilityId: Number(result.facility_id),
-            facilityName: result.facility_name,
-            speciesId: Number(result.species_id),
-            scientificName: result.species_scientificName,
-            commonName: result.species_commonName,
-            readyQuantity: Number(result['readyQuantity(raw)'] ?? 0),
-            projectId: result.project_id ? Number(result.project_id) : undefined,
-            projectName: result.project_name,
-          })
-        ),
+        response.results.map((result): BatchForWithdraw => ({
+          batchId: Number(result.id),
+          batchNumber: result.batchNumber,
+          facilityId: Number(result.facility_id),
+          facilityName: result.facility_name,
+          speciesId: Number(result.species_id),
+          scientificName: result.species_scientificName,
+          commonName: result.species_commonName,
+          readyQuantity: Number(result['readyQuantity(raw)'] ?? 0),
+          projectId: result.project_id ? Number(result.project_id) : undefined,
+          projectName: result.project_name,
+        })),
     }),
   }),
 });

@@ -423,7 +423,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
             speciesId={row.speciesId}
             season={season}
             available={row.available}
-            backgroundColor={index % 2 === 0 ? theme.palette.TwClrBgSecondary ?? 'transparent' : 'transparent'}
+            backgroundColor={index % 2 === 0 ? (theme.palette.TwClrBgSecondary ?? 'transparent') : 'transparent'}
             activeLocale={activeLocale}
             isFirst={seasonIndex === 0}
           />

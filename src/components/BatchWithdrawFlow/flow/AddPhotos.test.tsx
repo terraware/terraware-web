@@ -7,14 +7,6 @@ import AddPhotos from 'src/components/BatchWithdrawFlow/flow/AddPhotos';
 import strings from 'src/strings';
 import { renderWithProviders } from 'src/test-utils';
 
-// jsdom does not implement object URLs; PhotoChooser calls URL.createObjectURL to preview each
-// newly added file, inside the same effect that reports the selection to the parent. Without a stub
-// that call throws before the selection is surfaced.
-beforeAll(() => {
-  URL.createObjectURL = () => 'blob:stub';
-  URL.revokeObjectURL = () => undefined;
-});
-
 // The uploader (SelectPhotos -> PhotoChooser -> FileChooser) renders a hidden file input with no
 // label or test id, so it can only be reached through the DOM.
 const selectPhoto = async (

@@ -36,10 +36,8 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
-import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
+import { useListVariablesQuery } from 'src/queries/generated/documentProducerVariables';
 import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
 import {
   ProjectsWithVariablesSearchResult,
@@ -74,14 +72,15 @@ type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
 
 const MatrixView = () => {
   const [requestId, setRequestId] = useState<string>('');
-  const [requestVarsId, setRequestVarsId] = useState<string>('');
   const result = useAppSelector(selectProjectsWithVariables(requestId));
-  const allVariablesResponse = useAppSelector(selectAllVariables(requestVarsId));
+  const { currentData: allVariablesData } = useListVariablesQuery({});
   const [projects, setProjects] = useState<ProjectsWithVariablesSearchResult[]>([]);
   const [showColumnsModal, setShowColumnsModal] = useState(false);
-  const [allVariables, setAllVariables] = useState<VariableUnion[]>();
-  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
-  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+  const allVariables = useMemo<VariableUnion[] | undefined>(
+    () => allVariablesData?.variables.filter((v) => v.type !== 'Table' && v.type !== 'Image'),
+    [allVariablesData]
+  );
+  const [updateProjectVariableValues, updateVariableValuesResult] = useUpdateProjectVariableValuesMutation();
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -141,18 +140,6 @@ const MatrixView = () => {
   useEffect(() => {
     saveToLocalStorage(STORAGE_KEYS.COLUMN_ORDER, columnOrder);
   }, [columnOrder]);
-
-  useEffect(() => {
-    if (allVariablesResponse?.status === 'success') {
-      const noTablePhotoVariables = allVariablesResponse.data?.filter((v) => v.type !== 'Table' && v.type !== 'Image');
-      setAllVariables(noTablePhotoVariables);
-    }
-  }, [allVariablesResponse]);
-
-  useEffect(() => {
-    const request = dispatch(requestListAllVariables());
-    setRequestVarsId(request.requestId);
-  }, [dispatch]);
 
   const uniqueVariableIds = useMemo(
     () =>
@@ -234,32 +221,30 @@ const MatrixView = () => {
       if (newValue) {
         setLoading(true);
         if (valueIdToUpdate.toString() !== '-1') {
-          const request = dispatch(
-            requestUpdateVariableValues({
+          void updateProjectVariableValues({
+            projectId,
+            updateVariableValuesRequestPayload: {
               operations: [
                 { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
               ],
-              projectId,
               updateStatuses: false,
-            })
-          );
-          setUpdateVariableValuesRequestId(request.requestId);
+            },
+          });
         } else {
           const varId = variable.id;
           if (varId) {
-            const request = dispatch(
-              requestUpdateVariableValues({
+            void updateProjectVariableValues({
+              projectId,
+              updateVariableValuesRequestPayload: {
                 operations: [{ operation: 'Append', variableId: Number(varId), value: newValue }],
-                projectId,
                 updateStatuses: false,
-              })
-            );
-            setUpdateVariableValuesRequestId(request.requestId);
+              },
+            });
           }
         }
       }
     },
-    [dispatch]
+    [updateProjectVariableValues]
   );
 
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
@@ -1130,14 +1115,14 @@ const MatrixView = () => {
   }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility, currentView]);
 
   useEffect(() => {
-    if (updateVariableValuesRequest?.status === 'success') {
+    if (updateVariableValuesResult.isSuccess) {
       reloadTable();
     }
-    if (updateVariableValuesRequest?.status === 'error') {
+    if (updateVariableValuesResult.isError) {
       snackbar.toastError();
       setLoading(false);
     }
-  }, [reloadTable, snackbar, updateVariableValuesRequest]);
+  }, [reloadTable, snackbar, updateVariableValuesResult.isError, updateVariableValuesResult.isSuccess]);
 
   useEffect(() => {
     reloadTable();

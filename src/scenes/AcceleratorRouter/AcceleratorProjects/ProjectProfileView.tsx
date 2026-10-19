@@ -53,6 +53,7 @@ type ProjectProfileViewProps = {
   phaseVotes?: PhaseVotes | undefined;
   funderView?: boolean;
   publishedReports: PublishedReportPayload[];
+  reportsPath?: string;
 };
 
 const ProjectProfileView = ({
@@ -64,6 +65,7 @@ const ProjectProfileView = ({
   projectScore,
   phaseVotes,
   funderView,
+  reportsPath,
   publishedReports,
 }: ProjectProfileViewProps) => {
   const dispatch = useAppDispatch();
@@ -420,7 +422,8 @@ const ProjectProfileView = ({
                 value={
                   funderView
                     ? `${APP_PATHS.FUNDER_HOME}?tab=report`
-                    : APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
+                    : reportsPath ??
+                      APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
                         ':projectId',
                         (projectDetails?.projectId || '').toString()
                       )
@@ -582,7 +585,9 @@ const ProjectProfileView = ({
                 )}
                 {project && (
                   <ProjectFieldLink
-                    value={APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())}
+                    value={
+                      reportsPath ?? APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', project.id.toString())
+                    }
                     label={strings.REPORTS}
                   />
                 )}

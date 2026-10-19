@@ -61,7 +61,7 @@ export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Crea
 
 const mapCanvas = (page: Page) => page.locator('.mapboxgl-canvas');
 
-export const polygonTool = (page: Page) => page.getByRole('button', { name: 'Polygon tool (p)' });
+export const polygonTool = (page: Page) => page.getByRole('button', { name: /^Polygon tool/ });
 
 export const expectActiveStep = async (page: Page, label: string) => {
   await expect(page.locator('.MuiStepLabel-label.Mui-active')).toHaveText(label);

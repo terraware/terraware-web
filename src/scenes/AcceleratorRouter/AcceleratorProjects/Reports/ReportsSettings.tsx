@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -9,6 +9,7 @@ import { MRT_Cell } from 'material-react-table';
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
+import { useFeatureEnabled } from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
@@ -25,14 +26,18 @@ import { useListAcceleratorReportConfigQuery } from 'src/queries/generated/accel
 import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditProjectIndicatorModal from './EditProjectIndicatorModal';
 
-export default function ReportsSettings(): JSX.Element {
+type ReportsSettingsProps = {
+  header?: ReactNode;
+};
+
+export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { strings } = useLocalization();
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
-  const { goToAcceleratorEditReportSettings } = useNavigateTo();
+  const { goToAcceleratorEditReportSettings, goToNewIndicator } = useNavigateTo();
   const [selectedProjectIndicator, setSelectedProjectIndicator] = useState<ExistingProjectIndicatorPayload>();
   const [selectedCommonIndicator, setSelectedCommonIndicator] = useState<ExistingCommonIndicatorPayload>();
   const [editProjectIndicatorModalOpened, , openEditProjectIndicatorModal, closeEditProjectIndicatorModal] =
@@ -40,6 +45,7 @@ export default function ReportsSettings(): JSX.Element {
   const [editCommonIndicatorModalOpened, , openEditCommonIndicatorModal, closeEditCommonIndicatorModal] =
     useBoolean(false);
   const { isAllowed } = useUser();
+  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
 
   const listProjectReportConfigResponse = useListAcceleratorReportConfigQuery(projectId);
   const projectReportConfig = useMemo(
@@ -83,6 +89,14 @@ export default function ReportsSettings(): JSX.Element {
   const goToEditSettings = useCallback(() => {
     goToAcceleratorEditReportSettings(projectId.toString());
   }, [goToAcceleratorEditReportSettings, projectId]);
+
+  const editSettingsButton = isAllowed('UPDATE_REPORTS_SETTINGS') && (
+    <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' label={strings.EDIT_SETTINGS} />
+  );
+
+  const goToAddIndicator = useCallback(() => {
+    goToNewIndicator(projectId.toString());
+  }, [goToNewIndicator, projectId]);
 
   type IndicatorRow = {
     id: string;
@@ -382,13 +396,21 @@ export default function ReportsSettings(): JSX.Element {
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
-        title={strings.SETTINGS}
-        rightComponent={
-          isAllowed('UPDATE_REPORTS_SETTINGS') && (
-            <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' label={strings.EDIT_SETTINGS} />
-          )
-        }
+        title={cleanUpTabsEnabled ? undefined : strings.SETTINGS}
+        rightComponent={header ? undefined : editSettingsButton}
       >
+        {header && (
+          <Box
+            alignItems='center'
+            display='flex'
+            justifyContent='space-between'
+            marginBottom={theme.spacing(2)}
+            minHeight='42px'
+          >
+            {header}
+            {editSettingsButton}
+          </Box>
+        )}
         <Grid container sx={gridStyle}>
           {data.map((datum, index) => (
             <Grid key={index} item xs={gridSize} marginTop={2}>
@@ -418,6 +440,11 @@ export default function ReportsSettings(): JSX.Element {
             </Box>
           </Grid>
         </Grid>
+        {cleanUpTabsEnabled && isAllowed('UPDATE_REPORTS_SETTINGS') && (
+          <Box display='flex' justifyContent='flex-end' marginBottom={theme.spacing(2)}>
+            <Button icon='plus' label={strings.ADD_INDICATOR} onClick={goToAddIndicator} priority='secondary' />
+          </Box>
+        )}
         <EditableTable
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
           columns={indicatorColumns}

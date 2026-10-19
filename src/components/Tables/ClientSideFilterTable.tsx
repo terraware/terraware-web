@@ -88,14 +88,12 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
     // Apply search field to search API payload
     if (debouncedSearchTerm && fuzzySearchColumns) {
       const { type, values } = parseSearchTerm(debouncedSearchTerm);
-      const fuzzySearchValueChildren = fuzzySearchColumns.map(
-        (field: string): FieldNodePayload => ({
-          field,
-          operation: 'field',
-          type,
-          values,
-        })
-      );
+      const fuzzySearchValueChildren = fuzzySearchColumns.map((field: string): FieldNodePayload => ({
+        field,
+        operation: 'field',
+        type,
+        values,
+      }));
 
       searchNodeChildren.push({
         operation: 'or',

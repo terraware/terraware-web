@@ -11,8 +11,7 @@ import { VariableValue } from 'src/types/documentProducer/VariableValue';
 import Metadata from './Metadata';
 
 const DocumentTab = (): JSX.Element => {
-  const { allVariables, documentId, documentVariables, projectId, reload, variablesOwners, reloadVariables } =
-    useDocumentProducerData();
+  const { allVariables, documentId, documentVariables, projectId, variablesOwners } = useDocumentProducerData();
   const { isAllowed } = useUser();
   const [metadataDisabled, setMetadataDisabled] = useState(!isAllowed('UPDATE_DELIVERABLE'));
 
@@ -40,8 +39,6 @@ const DocumentTab = (): JSX.Element => {
             status={firstVariableValueStatus || 'Incomplete'}
             variableId={section.id}
             projectId={projectId}
-            reload={reload}
-            reloadVariables={reloadVariables}
             ownerId={getVariableOwner(section.id)}
           />
         );
@@ -54,7 +51,6 @@ const DocumentTab = (): JSX.Element => {
             projectId={projectId}
             section={section}
             allVariables={allVariables ?? []}
-            onUpdate={reloadVariables}
             onEdit={(editing) => setMetadataDisabled(editing)}
           />
         );
@@ -68,7 +64,7 @@ const DocumentTab = (): JSX.Element => {
       }
       return sectionsToRender;
     },
-    [allVariables, reload, reloadVariables, documentId, getVariableOwner, projectId]
+    [allVariables, documentId, getVariableOwner, projectId]
   );
 
   const renderVariable = useCallback(

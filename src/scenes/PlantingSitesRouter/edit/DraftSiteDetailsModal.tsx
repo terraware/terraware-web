@@ -30,6 +30,7 @@ const DraftSiteDetailsModal = ({
 }: DraftSiteDetailsModalProps): JSX.Element => {
   const [record, setRecord, onChange] = useForm<DraftPlantingSite>(site);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>();
+  const [isLoadingNames, setIsLoadingNames] = useState(true);
 
   const validateThen = useCallback(
     (save: (site: DraftPlantingSite) => void) => {
@@ -70,7 +71,7 @@ const DraftSiteDetailsModal = ({
         ...(onSaveAndClose
           ? [
               <Button
-                disabled={busy}
+                disabled={busy || isLoadingNames}
                 id='save-and-close-draft-site-details'
                 key='save-and-close'
                 label={strings.SAVE_AND_CLOSE}
@@ -79,11 +80,23 @@ const DraftSiteDetailsModal = ({
               />,
             ]
           : []),
-        <Button disabled={busy} id='save-draft-site-details' key='save' label={saveLabel} onClick={handleSave} />,
+        <Button
+          disabled={busy || isLoadingNames}
+          id='save-draft-site-details'
+          key='save'
+          label={saveLabel}
+          onClick={handleSave}
+        />,
       ]}
     >
       <Box textAlign='left'>
-        <DraftSiteDetailsInputForm onChange={onChange} onValidate={onValidate} record={record} setRecord={setRecord} />
+        <DraftSiteDetailsInputForm
+          onChange={onChange}
+          onLoadingChange={setIsLoadingNames}
+          onValidate={onValidate}
+          record={record}
+          setRecord={setRecord}
+        />
       </Box>
     </DialogBox>
   );
