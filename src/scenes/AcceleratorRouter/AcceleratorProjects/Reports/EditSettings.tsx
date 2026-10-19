@@ -51,6 +51,8 @@ export default function EditSettings(): JSX.Element {
     [listReportConfigResponse.data?.configs]
   );
 
+  const loadingConfig = listReportConfigResponse.isUninitialized || listReportConfigResponse.isLoading;
+
   useEffect(() => {
     if (createReportConfigResponse.isError) {
       snackbar.toastError();
@@ -110,6 +112,7 @@ export default function EditSettings(): JSX.Element {
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <PageForm
+        busy={loadingConfig}
         cancelID='cancelReportConfig'
         saveID='saveReportConfig'
         onCancel={goToProjectReports}
@@ -136,6 +139,7 @@ export default function EditSettings(): JSX.Element {
               <Grid item xs={12}>
                 <DatePicker
                   id='reportingStartDate'
+                  disabled={loadingConfig}
                   label={strings.START_DATE}
                   aria-label='reportingStartDate'
                   onDateChange={onDateChangeCallback('reportingStartDate')}
@@ -145,6 +149,7 @@ export default function EditSettings(): JSX.Element {
               <Grid item xs={12}>
                 <DatePicker
                   id='reportingEndDate'
+                  disabled={loadingConfig}
                   label={strings.END_DATE}
                   aria-label='reportingEndDate'
                   onDateChange={onDateChangeCallback('reportingEndDate')}
@@ -154,6 +159,7 @@ export default function EditSettings(): JSX.Element {
               <Grid item xs={12}>
                 <TextField
                   id='logframe'
+                  disabled={loadingConfig}
                   label={strings.LOG_FRAME_AND_ME_PLAN_URL}
                   type='text'
                   onChange={onChangeCallback('logframeUrl')}
