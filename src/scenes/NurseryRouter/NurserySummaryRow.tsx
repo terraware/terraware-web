@@ -17,15 +17,20 @@ const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Elem
   const theme = useTheme();
   const { strings } = useLocalization();
 
+  const remaining = useMemo(
+    () => Math.max(0, species.requestedQuantity - species.withdrawnQuantity),
+    [species.requestedQuantity, species.withdrawnQuantity]
+  );
+
   const coverage: Coverage = useMemo(() => {
-    if (species.requestedQuantity - species.withdrawnQuantity <= 0) {
+    if (remaining <= 0) {
       return 'NOT_NEEDED';
     }
     if (ready === 0) {
       return 'NOT_COVERED';
     }
-    return ready >= species.requestedQuantity ? 'COVERED' : 'PARTIALLY_COVERED';
-  }, [ready, species.requestedQuantity, species.withdrawnQuantity]);
+    return ready >= remaining ? 'COVERED' : 'PARTIALLY_COVERED';
+  }, [ready, remaining]);
 
   const coverageColor =
     coverage === 'NOT_NEEDED'
@@ -61,7 +66,7 @@ const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Elem
         {ready.toLocaleString()}
       </Typography>
       <Typography fontSize='16px' textAlign='right' color={theme.palette.TwClrTxt}>
-        {Math.max(0, species.requestedQuantity - species.withdrawnQuantity).toLocaleString()}
+        {remaining.toLocaleString()}
       </Typography>
       <Typography
         fontSize='16px'
