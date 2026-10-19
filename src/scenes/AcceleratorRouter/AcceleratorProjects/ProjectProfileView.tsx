@@ -422,11 +422,11 @@ const ProjectProfileView = ({
                 value={
                   funderView
                     ? `${APP_PATHS.FUNDER_HOME}?tab=report`
-                    : reportsPath ??
+                    : (reportsPath ??
                       APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(
                         ':projectId',
                         (projectDetails?.projectId || '').toString()
-                      )
+                      ))
                 }
                 label={strings.VIEW_REPORTS}
               />

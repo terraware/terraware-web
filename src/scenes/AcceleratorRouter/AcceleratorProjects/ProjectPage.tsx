@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
+import { BusySpinner, Button, Dropdown, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import ActivityHighlightsContent from 'src/components/ActivityLog/ActivityHighlightsContent';
+import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/ActivityLog/ActivityHighlightsContent';
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -93,6 +93,7 @@ const ProjectPage = () => {
     return _activityId ? Number(_activityId) : undefined;
   }, [query]);
   const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
+  const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
   const { currentData: projectApplicationsData } = useListApplicationsQuery({ projectId: projectData.projectId });
   const projectApplication = projectApplicationsData?.applications[0];
@@ -174,7 +175,9 @@ const ProjectPage = () => {
             <ActivityHighlightsContent
               activities={activities}
               busy={activitiesFetching}
+              onDropdownDataReady={setQuarterDropdownData}
               projectId={projectData.projectId}
+              showDropdownInline={false}
             />
           ),
         },
@@ -249,8 +252,13 @@ const ProjectPage = () => {
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
   const openActivityHighlightsPreview = useCallback(() => {
+    if (cleanUpTabsEnabled) {
+      onChangeTab('quarterlyHighlights');
+      return;
+    }
+
     setHighlightsModalOpen(true);
-  }, []);
+  }, [cleanUpTabsEnabled, onChangeTab]);
 
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
@@ -355,6 +363,17 @@ const ProjectPage = () => {
             </Box>
           )}
 
+          {activeTab === 'quarterlyHighlights' &&
+            quarterDropdownData &&
+            quarterDropdownData.dropdownOptions.length > 0 && (
+              <Dropdown
+                label=''
+                onChange={quarterDropdownData.onChangeQuarter}
+                options={quarterDropdownData.dropdownOptions}
+                selectedValue={quarterDropdownData.selectedQuarter}
+              />
+            )}
+
           {activeTab === 'documents' && (
             <Button
               icon='plus'
@@ -383,6 +402,7 @@ const ProjectPage = () => {
       isMobile,
       onOptionItemClick,
       openActivityHighlightsPreview,
+      quarterDropdownData,
       strings,
       theme,
     ]
