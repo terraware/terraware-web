@@ -1,3 +1,4 @@
+import { DraftStratumPayload } from 'src/queries/generated/draftPlantingSites';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
 
@@ -170,18 +171,23 @@ const strata: MinimalStratum[] = [
   },
 ];
 
-// Gen 1 persisted zones: modern strata with the original key names, so the migrated
-// result is expected to equal the `strata` fixture above.
-const legacyPlantingZones = strata.map(({ initialPlantingDensity, substrata, ...stratum }) => ({
-  ...stratum,
-  plantingSubzones: substrata,
-  targetPlantingDensity: initialPlantingDensity,
+const strataPayload: DraftStratumPayload[] = strata.map((stratum) => ({
+  boundary: stratum.boundary,
+  id: stratum.id,
+  initialPlantingDensity: stratum.initialPlantingDensity,
+  name: stratum.name,
+  substrata: stratum.substrata.map((substratum) => ({
+    boundary: substratum.boundary,
+    id: substratum.id,
+    name: substratum.name,
+  })),
 }));
 
-// Gen 2 persisted strata: modern substrata, but density under the original key name.
-const legacyTargetDensityStrata = strata.map(({ initialPlantingDensity, ...stratum }) => ({
-  ...stratum,
-  targetPlantingDensity: initialPlantingDensity,
+const strataPayloadWithoutIds: DraftStratumPayload[] = strata.map((stratum) => ({
+  boundary: stratum.boundary,
+  initialPlantingDensity: stratum.initialPlantingDensity,
+  name: stratum.name,
+  substrata: stratum.substrata.map((substratum) => ({ boundary: substratum.boundary, name: substratum.name })),
 }));
 
 describe('fromDraft', () => {
@@ -196,21 +202,16 @@ describe('fromDraft', () => {
     };
 
     expect(fromDraft(draft)).toStrictEqual({
-      createdBy: 5,
+      boundary: undefined,
+      boundarySource: undefined,
       description: undefined,
-      data: {
-        boundary: undefined,
-        exclusion: undefined,
-        strata: undefined,
-        siteEditStep: 'site_boundary',
-        siteType: 'simple',
-      },
-      id: 1,
+      exclusion: undefined,
       name: 'draft site',
-      numStrata: undefined,
-      numSubstrata: undefined,
       organizationId: 3,
       projectId: undefined,
+      siteEditStep: 'site_boundary',
+      siteType: 'Simple',
+      strata: undefined,
       timeZone: undefined,
     });
   });
@@ -218,6 +219,7 @@ describe('fromDraft', () => {
   test('should convert a draft with polygons to payload', () => {
     const draft: DraftPlantingSite = {
       boundary,
+      boundarySource: 'uploaded',
       exclusion,
       createdBy: 5,
       description: 'lorem ipsum...',
@@ -232,23 +234,33 @@ describe('fromDraft', () => {
     };
 
     expect(fromDraft(draft)).toStrictEqual({
-      createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        strata,
-        siteEditStep: 'substratum_boundaries',
-        siteType: 'detailed',
-      },
+      boundary,
+      boundarySource: 'uploaded',
       description: 'lorem ipsum...',
-      id: 1,
+      exclusion,
       name: 'draft site',
-      numStrata: 2,
-      numSubstrata: 4,
       organizationId: 3,
       projectId: 6,
+      siteEditStep: 'substratum_boundaries',
+      siteType: 'Detailed',
+      strata: strataPayloadWithoutIds,
       timeZone: 'America/Puerto_Rico',
     });
+  });
+
+  test('should omit strata for a simple site', () => {
+    const draft: DraftPlantingSite = {
+      boundary,
+      createdBy: 5,
+      id: 1,
+      name: 'draft site',
+      organizationId: 3,
+      strata,
+      siteEditStep: 'exclusion_areas',
+      siteType: 'simple',
+    };
+
+    expect(fromDraft(draft).strata).toBeUndefined();
   });
 });
 
@@ -256,20 +268,12 @@ describe('toDraft', () => {
   test('should convert a payload with no polygons to draft', () => {
     const payload: DraftPlantingSitePayload = {
       createdBy: 5,
-      data: {
-        boundary: undefined,
-        exclusion: undefined,
-        strata: undefined,
-        siteEditStep: 'site_boundary',
-        siteType: 'simple',
-      },
       id: 1,
       name: 'draft site',
-      numStrata: undefined,
-      numSubstrata: undefined,
       organizationId: 3,
-      projectId: undefined,
-      timeZone: undefined,
+      siteEditStep: 'site_boundary',
+      siteType: 'Simple',
+      strata: [],
     };
 
     expect(toDraft(payload)).toStrictEqual({
@@ -290,26 +294,26 @@ describe('toDraft', () => {
 
   test('should convert a payload with polygons to draft', () => {
     const payload: DraftPlantingSitePayload = {
+      boundary,
+      boundarySource: 'drawn',
       createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        strata,
-        siteEditStep: 'substratum_boundaries',
-        siteType: 'detailed',
-      },
       description: 'lorem ipsum...',
+      exclusion,
       id: 1,
       name: 'draft site',
-      numStrata: 4,
-      numSubstrata: 2,
+      numStrata: 2,
+      numSubstrata: 4,
       organizationId: 3,
       projectId: 6,
+      siteEditStep: 'substratum_boundaries',
+      siteType: 'Detailed',
+      strata: strataPayload,
       timeZone: 'America/Puerto_Rico',
     };
 
     expect(toDraft(payload)).toStrictEqual({
       boundary,
+      boundarySource: 'drawn',
       exclusion,
       createdBy: 5,
       description: 'lorem ipsum...',
@@ -324,284 +328,16 @@ describe('toDraft', () => {
     });
   });
 
-  test('should convert a legacy payload with planting zones to a draft with strata', () => {
+  test('should default to the site boundary step when the payload has no edit step', () => {
     const payload: DraftPlantingSitePayload = {
       createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        plantingZones: legacyPlantingZones,
-        plantingSeasons: [{ endDate: '2024-03-01', startDate: '2024-01-01' }],
-        siteEditStep: 'subzone_boundaries',
-        siteType: 'detailed',
-      },
-      description: 'lorem ipsum...',
-      id: 1,
-      name: 'draft site',
-      numStrata: 2,
-      numSubstrata: 4,
-      organizationId: 3,
-      projectId: 6,
-      timeZone: 'America/Puerto_Rico',
-    };
-
-    expect(toDraft(payload)).toStrictEqual({
-      boundary,
-      exclusion,
-      createdBy: 5,
-      description: 'lorem ipsum...',
       id: 1,
       name: 'draft site',
       organizationId: 3,
-      strata,
-      projectId: 6,
-      siteEditStep: 'substratum_boundaries',
-      siteType: 'detailed',
-      timeZone: 'America/Puerto_Rico',
-    });
-  });
-
-  test('should convert a legacy zone boundaries edit step to stratum boundaries', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        plantingZones: legacyPlantingZones,
-        siteEditStep: 'zone_boundaries',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).siteEditStep).toStrictEqual('stratum_boundaries');
-  });
-
-  test('should convert a legacy subzone boundaries edit step to substratum boundaries', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        plantingZones: legacyPlantingZones,
-        siteEditStep: 'subzone_boundaries',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).siteEditStep).toStrictEqual('substratum_boundaries');
-  });
-
-  test('should convert legacy target planting density to initial planting density', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        strata: legacyTargetDensityStrata,
-        siteEditStep: 'substratum_boundaries',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      numStrata: 2,
-      numSubstrata: 4,
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).strata).toStrictEqual(strata);
-  });
-
-  test('should keep initial planting density on a payload that already uses modern keys', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        strata,
-        siteEditStep: 'substratum_boundaries',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      numStrata: 2,
-      numSubstrata: 4,
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).strata).toStrictEqual(strata);
-    expect(toDraft(payload).strata?.map((stratum) => stratum.initialPlantingDensity)).toStrictEqual([1500, 2500]);
-  });
-
-  test('should leave strata undefined when the payload has neither strata nor planting zones', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        siteEditStep: 'site_boundary',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).strata).toStrictEqual(undefined);
-  });
-
-  test('should pass through an edit step that is not a legacy edit step', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        siteEditStep: 'exclusion_areas',
-        siteType: 'simple',
-      },
-      id: 1,
-      name: 'draft site',
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).siteEditStep).toStrictEqual('exclusion_areas');
-  });
-
-  test('should map the retired details edit step to the site boundary step', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        siteEditStep: 'details',
-        siteType: 'simple',
-      },
-      id: 1,
-      name: 'draft site',
-      organizationId: 3,
+      siteType: 'Detailed',
+      strata: [],
     };
 
     expect(toDraft(payload).siteEditStep).toStrictEqual('site_boundary');
-  });
-
-  // `MinimalStratum.initialPlantingDensity` is a required number, so a blob saved without any
-  // density has to be defaulted rather than passed through as undefined.
-  test('should default initial planting density to 1500 when the persisted stratum has no density', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        strata: [
-          {
-            boundary: stratum1,
-            id: 1,
-            name: 'stratum with no density',
-            substrata: [
-              {
-                boundary: substratum11,
-                fullName: 'substratum11',
-                id: 1,
-                name: 'substratum11',
-                plantingCompleted: false,
-              },
-            ],
-          },
-        ],
-        siteEditStep: 'substratum_boundaries',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      numStrata: 1,
-      numSubstrata: 1,
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).strata).toStrictEqual([
-      {
-        boundary: stratum1,
-        id: 1,
-        initialPlantingDensity: 1500,
-        name: 'stratum with no density',
-        substrata: [
-          {
-            boundary: substratum11,
-            fullName: 'substratum11',
-            id: 1,
-            name: 'substratum11',
-            plantingCompleted: false,
-          },
-        ],
-      },
-    ]);
-  });
-
-  test('should default substrata to an empty array when the persisted stratum has neither substrata nor planting subzones', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        strata: [
-          {
-            boundary: stratum1,
-            id: 1,
-            initialPlantingDensity: 2500,
-            name: 'stratum with no substrata',
-          },
-        ],
-        siteEditStep: 'stratum_boundaries',
-        siteType: 'detailed',
-      },
-      id: 1,
-      name: 'draft site',
-      numStrata: 1,
-      organizationId: 3,
-    };
-
-    expect(toDraft(payload).strata?.[0].substrata).toStrictEqual([]);
-  });
-});
-
-describe('toDraft and fromDraft round trip', () => {
-  test('should persist a legacy payload back with modern keys only', () => {
-    const payload: DraftPlantingSitePayload = {
-      createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        plantingZones: legacyPlantingZones,
-        plantingSeasons: [{ endDate: '2024-03-01', startDate: '2024-01-01' }],
-        siteEditStep: 'subzone_boundaries',
-        siteType: 'detailed',
-      },
-      description: 'lorem ipsum...',
-      id: 1,
-      name: 'draft site',
-      numStrata: 2,
-      numSubstrata: 4,
-      organizationId: 3,
-      projectId: 6,
-      timeZone: 'America/Puerto_Rico',
-    };
-
-    const roundTripped = fromDraft(toDraft(payload));
-
-    expect(roundTripped).toStrictEqual({
-      createdBy: 5,
-      data: {
-        boundary,
-        exclusion,
-        strata,
-        siteEditStep: 'substratum_boundaries',
-        siteType: 'detailed',
-      },
-      description: 'lorem ipsum...',
-      id: 1,
-      name: 'draft site',
-      numStrata: 2,
-      numSubstrata: 4,
-      organizationId: 3,
-      projectId: 6,
-      timeZone: 'America/Puerto_Rico',
-    });
-    expect(roundTripped.data.plantingZones).toStrictEqual(undefined);
   });
 });

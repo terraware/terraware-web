@@ -28,7 +28,8 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
-export type CreateDraftPlantingSiteApiResponse = /** status 200 OK */ CreateDraftPlantingSiteResponsePayload;
+export type CreateDraftPlantingSiteApiResponse =
+  /** status 200 The requested operation succeeded. */ CreateDraftPlantingSiteResponsePayload;
 export type CreateDraftPlantingSiteApiArg = CreateDraftPlantingSiteRequestPayload;
 export type ParseDraftPlantingSiteBoundaryApiResponse =
   /** status 200 The file was processed. Check status for a parsed boundary or content validation problems. */ ParseDraftPlantingSiteBoundaryResponsePayload;
@@ -39,7 +40,8 @@ export type DeleteDraftPlantingSiteApiResponse = /** status 200 OK */ SimpleSucc
 export type DeleteDraftPlantingSiteApiArg = number;
 export type GetDraftPlantingSiteApiResponse = /** status 200 OK */ GetDraftPlantingSiteResponsePayload;
 export type GetDraftPlantingSiteApiArg = number;
-export type UpdateDraftPlantingSiteApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type UpdateDraftPlantingSiteApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type UpdateDraftPlantingSiteApiArg = {
   id: number;
   updateDraftPlantingSiteRequestPayload: UpdateDraftPlantingSiteRequestPayload;
@@ -49,22 +51,34 @@ export type CreateDraftPlantingSiteResponsePayload = {
   id: number;
   status: SuccessOrError;
 };
-export type CreateDraftPlantingSiteRequestPayload = {
-  /** In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
-  data: {
-    [key: string]: any;
-  };
-  description?: string;
-  name: string;
-  /** If the user has started defining strata, the number of strata defined so far. */
-  numStrata?: number;
-  /** If the user has started defining substrata, the number of substrata defined so far. */
-  numSubstrata?: number;
-  organizationId: number;
-  /** If the draft is associated with a project, its ID. */
-  projectId?: number;
-  /** Time zone name in IANA tz database format */
-  timeZone?: string;
+export type ErrorDetails = {
+  message: string;
+};
+export type PlantingSiteValidationProblemPayload = {
+  /** If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
+  conflictsWith?: string[];
+  problemType:
+    | 'DuplicateSubstratumName'
+    | 'DuplicateStratumName'
+    | 'ExclusionWithoutBoundary'
+    | 'SiteTooLarge'
+    | 'SubstratumBoundaryOverlaps'
+    | 'SubstratumInExclusionArea'
+    | 'SubstratumNotInStratum'
+    | 'StratumBoundaryOverlaps'
+    | 'StratumHasNoSubstrata'
+    | 'StratumNotInSite'
+    | 'StratumTooSmall'
+    | 'StrataWithoutSiteBoundary';
+  /** If the problem relates to a particular stratum, its name. */
+  stratum?: string;
+  /** If the problem relates to a particular substratum, its name. If this is present, stratum will also be present and will be the name of the stratum that contains this substratum. */
+  substratum?: string;
+};
+export type DraftPlantingSiteMapInvalidResponsePayload = {
+  error: ErrorDetails;
+  problems: PlantingSiteValidationProblemPayload[];
+  status: SuccessOrError;
 };
 export type CrsProperties = {
   /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system for GeoJSON. */
@@ -78,6 +92,65 @@ export type GeometryBase = {
   crs?: Crs;
   type: 'Point' | 'LineString' | 'Polygon' | 'MultiPoint' | 'MultiLineString' | 'MultiPolygon' | 'GeometryCollection';
 };
+export type MultiPolygon = {
+  type: 'MultiPolygon';
+} & GeometryBase & {
+    coordinates: number[][][][];
+    type: 'MultiPolygon';
+  };
+export type Polygon = {
+  type: 'Polygon';
+} & GeometryBase & {
+    coordinates: number[][][];
+    type: 'Polygon';
+  };
+export type DraftSubstratumPayload = {
+  boundary: MultiPolygon | Polygon;
+  id?: number;
+  name: string;
+};
+export type DraftStratumPayload = {
+  boundary: MultiPolygon | Polygon;
+  id?: number;
+  initialPlantingDensity: number;
+  name: string;
+  substrata: DraftSubstratumPayload[];
+};
+export type CreateDraftPlantingSiteRequestPayload = {
+  /** Boundary of the site. Polygons are stored as MultiPolygons. Not allowed if data is supplied. */
+  boundary?: MultiPolygon | Polygon;
+  /** Not allowed if data is supplied. */
+  boundarySource?: string;
+  /** In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. If this is supplied, the typed map fields must be omitted and the map is saved without validation. */
+  data?: {
+    [key: string]: any;
+  };
+  description?: string;
+  /** Exclusion area. Not allowed if data is supplied. */
+  exclusion?: MultiPolygon | Polygon;
+  name: string;
+  /** Ignored; the server computes this. */
+  numStrata?: number;
+  /** Ignored; the server computes this. */
+  numSubstrata?: number;
+  organizationId: number;
+  /** If the draft is associated with a project, its ID. */
+  projectId?: number;
+  /** Not allowed if data is supplied. */
+  siteEditStep?: string;
+  /** Required if data is not supplied. */
+  siteType?: 'Simple' | 'Detailed';
+  /** Strata and substrata. Not allowed if data is supplied. Must be empty or omitted for Simple sites. */
+  strata?: DraftStratumPayload[];
+  /** Time zone name in IANA tz database format */
+  timeZone?: string;
+};
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: Geometry[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -96,30 +169,12 @@ export type MultiPoint = {
     coordinates: number[][];
     type: 'MultiPoint';
   };
-export type MultiPolygon = {
-  type: 'MultiPolygon';
-} & GeometryBase & {
-    coordinates: number[][][][];
-    type: 'MultiPolygon';
-  };
 export type Point = {
   type: 'Point';
 } & GeometryBase & {
     /** A single position consisting of X, Y, and optional Z values in the coordinate system specified by the crs field. */
     coordinates: number[];
     type: 'Point';
-  };
-export type Polygon = {
-  type: 'Polygon';
-} & GeometryBase & {
-    coordinates: number[][][];
-    type: 'Polygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type GeometryFileErrorCode =
@@ -149,9 +204,6 @@ export type ParseDraftPlantingSiteBoundaryResponsePayload = {
   problems?: BoundaryFileProblemPayload[];
   status: SuccessOrError;
 };
-export type ErrorDetails = {
-  message: string;
-};
 export type SimpleErrorResponsePayload = {
   error: ErrorDetails;
   status: SuccessOrError;
@@ -160,24 +212,30 @@ export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;
 };
 export type DraftPlantingSitePayload = {
+  boundary?: MultiPolygon | Polygon;
+  boundarySource?: string;
   /** ID of the user who created this draft. Only that user is allowed to modify or delete the draft. */
   createdBy: number;
   createdTime: string;
-  /** In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+  /** In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. */
   data: {
     [key: string]: any;
   };
   description?: string;
+  exclusion?: MultiPolygon | Polygon;
   id: number;
   modifiedTime: string;
   name: string;
-  /** If the user has started defining strata, the number of strata defined so far. */
+  /** Number of strata in the draft. */
   numStrata?: number;
-  /** If the user has started defining substrata, the number of substrata defined so far. */
+  /** Number of substrata in the draft. */
   numSubstrata?: number;
   organizationId: number;
   /** If the draft is associated with a project, its ID. */
   projectId?: number;
+  siteEditStep?: string;
+  siteType: 'Simple' | 'Detailed';
+  strata: DraftStratumPayload[];
   /** Time zone name in IANA tz database format */
   timeZone?: string;
 };
@@ -186,18 +244,30 @@ export type GetDraftPlantingSiteResponsePayload = {
   status: SuccessOrError;
 };
 export type UpdateDraftPlantingSiteRequestPayload = {
-  /** In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
-  data: {
+  /** Boundary of the site. Polygons are stored as MultiPolygons. Not allowed if data is supplied. If data is not supplied, the typed map fields replace the stored map entirely, so omitted fields are cleared. */
+  boundary?: MultiPolygon | Polygon;
+  /** Not allowed if data is supplied. */
+  boundarySource?: string;
+  /** In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. If this is supplied, the typed map fields must be omitted and the map is saved without validation. */
+  data?: {
     [key: string]: any;
   };
   description?: string;
+  /** Exclusion area. Not allowed if data is supplied. */
+  exclusion?: MultiPolygon | Polygon;
   name: string;
-  /** If the user has started defining strata, the number of strata defined so far. */
+  /** Ignored; the server computes this. */
   numStrata?: number;
-  /** If the user has started defining substrata, the number of substrata defined so far. */
+  /** Ignored; the server computes this. */
   numSubstrata?: number;
   /** If the draft is associated with a project, its ID. */
   projectId?: number;
+  /** Not allowed if data is supplied. */
+  siteEditStep?: string;
+  /** Not allowed if data is supplied. If omitted, the stored site type is kept. The site type of an existing draft cannot be changed. */
+  siteType?: 'Simple' | 'Detailed';
+  /** Strata and substrata. Not allowed if data is supplied. Existing strata and substrata are matched by ID; those that are omitted are deleted. */
+  strata?: DraftStratumPayload[];
   /** Time zone name in IANA tz database format */
   timeZone?: string;
 };

@@ -1,27 +1,47 @@
+import { DraftStratumPayload } from 'src/queries/generated/draftPlantingSites';
 import {
   BoundarySource,
+  CreateDraftPlantingSiteRequestPayload,
   CreatePlantingSiteRequestPayload,
   DraftPlantingSite,
   DraftPlantingSitePayload,
   SiteEditStep,
-  SiteType,
 } from 'src/types/PlantingSite';
-import { MinimalStratum, MinimalSubstratum, MultiPolygon } from 'src/types/Tracking';
+import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
 
-/**
- * Utils to convert from DraftPlantingSitePayload `data` JSON
- * to `DraftPlantingSite` properties and vice-versa.
- */
+const toStratumPayload = ({
+  boundary,
+  initialPlantingDensity,
+  name,
+  substrata,
+}: MinimalStratum): DraftStratumPayload => ({
+  boundary,
+  initialPlantingDensity,
+  name,
+  substrata: substrata.map((substratum) => ({ boundary: substratum.boundary, name: substratum.name })),
+});
+
+const toStratum = ({ boundary, id, initialPlantingDensity, name, substrata }: DraftStratumPayload): MinimalStratum => ({
+  boundary: boundary as MultiPolygon,
+  id: id ?? 0,
+  initialPlantingDensity,
+  name,
+  substrata: substrata.map((substratum) => ({
+    boundary: substratum.boundary as MultiPolygon,
+    fullName: substratum.name,
+    id: substratum.id ?? 0,
+    name: substratum.name,
+    plantingCompleted: false,
+  })),
+});
 
 // convert from client representation to BE representation
-export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => {
+export const fromDraft = (site: DraftPlantingSite): CreateDraftPlantingSiteRequestPayload => {
   const {
     boundary,
     boundarySource,
-    createdBy,
     description,
     exclusion,
-    id,
     name,
     organizationId,
     strata,
@@ -31,91 +51,52 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
     timeZone,
   } = site;
 
-  // as typed in BE, to support any types of data the client wants to persist
-  const data: Record<string, any> = {
-    boundary,
-    ...(boundarySource ? { boundarySource } : {}),
-    exclusion,
-    strata,
-    siteEditStep,
-    siteType,
-  };
-
-  const numStrata = strata?.length;
-  const numSubstrata = strata?.flatMap((stratum) => stratum.substrata)?.length;
-
   return {
-    createdBy,
-    data,
+    boundary,
+    boundarySource,
     description,
-    id,
+    exclusion,
     name,
-    numStrata,
-    numSubstrata,
     organizationId,
     projectId,
+    siteEditStep,
+    siteType: siteType === 'simple' ? 'Simple' : 'Detailed',
+    strata: siteType === 'detailed' ? strata?.map(toStratumPayload) : undefined,
     timeZone,
-  };
-};
-
-/**
- * The BE stores `data` as an opaque client-owned blob, so the zone -> stratum and
- * target -> initial planting density renames never migrated the drafts already saved under
- * the old key names. Read every generation below and let `fromDraft` upgrade the blob in
- * place on the next save.
- */
-type PersistedStratum = Omit<MinimalStratum, 'initialPlantingDensity' | 'substrata'> & {
-  initialPlantingDensity?: number;
-  plantingSubzones?: MinimalSubstratum[];
-  substrata?: MinimalSubstratum[];
-  targetPlantingDensity?: number;
-};
-
-// matches the fallback the site boundary editor uses when a stratum has no density yet
-const DEFAULT_INITIAL_PLANTING_DENSITY = 1500;
-
-const LEGACY_SITE_EDIT_STEPS: Record<string, SiteEditStep> = {
-  details: 'site_boundary',
-  subzone_boundaries: 'substratum_boundaries',
-  zone_boundaries: 'stratum_boundaries',
-};
-
-const toStratum = (stratum: PersistedStratum): MinimalStratum => {
-  const { initialPlantingDensity, plantingSubzones, substrata, targetPlantingDensity, ...rest } = stratum;
-
-  return {
-    ...rest,
-    initialPlantingDensity: initialPlantingDensity ?? targetPlantingDensity ?? DEFAULT_INITIAL_PLANTING_DENSITY,
-    substrata: substrata ?? plantingSubzones ?? [],
   };
 };
 
 // convert from BE representation to client representation
 export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite => {
-  const { createdBy, data, description, id, name, organizationId, projectId, timeZone } = payload;
-
-  const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
-  const boundarySource: BoundarySource | undefined = data.boundarySource as BoundarySource | undefined;
-  const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
-  const persistedStrata = (data.strata ?? data.plantingZones) as PersistedStratum[] | undefined;
-  const strata: MinimalStratum[] | undefined = persistedStrata?.map(toStratum);
-  const persistedSiteEditStep = data.siteEditStep as SiteEditStep;
-  const siteEditStep: SiteEditStep = LEGACY_SITE_EDIT_STEPS[persistedSiteEditStep] ?? persistedSiteEditStep;
-  const siteType: SiteType = data.siteType as SiteType;
-
-  return {
+  const {
     boundary,
-    ...(boundarySource ? { boundarySource } : {}),
+    boundarySource,
     createdBy,
     description,
     exclusion,
     id,
     name,
     organizationId,
-    strata,
     projectId,
     siteEditStep,
     siteType,
+    strata,
+    timeZone,
+  } = payload;
+
+  return {
+    boundary: boundary as MultiPolygon | undefined,
+    ...(boundarySource ? { boundarySource: boundarySource as BoundarySource } : {}),
+    createdBy,
+    description,
+    exclusion: exclusion as MultiPolygon | undefined,
+    id,
+    name,
+    organizationId,
+    strata: strata.length ? strata.map(toStratum) : undefined,
+    projectId,
+    siteEditStep: (siteEditStep ?? 'site_boundary') as SiteEditStep,
+    siteType: siteType === 'Simple' ? 'simple' : 'detailed',
     timeZone,
   };
 };
