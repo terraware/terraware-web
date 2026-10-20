@@ -1,5 +1,11 @@
 import React, { type JSX } from 'react';
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
+
+import { BusySpinner } from '@terraware/web-components';
+
+import { APP_PATHS } from 'src/constants';
+import { useOrganization } from 'src/providers';
+import { isAdmin } from 'src/utils/organization';
 
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
@@ -20,6 +26,16 @@ export default function PlantingSites(): JSX.Element {
 }
 
 function PlantingSitesDraftRouter(): JSX.Element {
+  const { selectedOrganization } = useOrganization();
+
+  if (!selectedOrganization) {
+    return <BusySpinner withSkrim={true} />;
+  }
+
+  if (!isAdmin(selectedOrganization)) {
+    return <Navigate to={APP_PATHS.PLANTING_SITES} replace />;
+  }
+
   return (
     <Routes>
       <Route path={'/:plantingSiteId/edit'} element={<PlantingSiteDraftEdit />} />
