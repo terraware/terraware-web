@@ -10,8 +10,10 @@ import { useValidatePlantingSiteMutation } from 'src/queries/generated/plantingS
 import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
-import { fromDraft, fromDraftToCreate, toDraft } from 'src/utils/draftPlantingSiteUtils';
+import { fromDraft, fromDraftToCreate, getDraftMapProblems, toDraft } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
+
+import usePlantingSiteProblemsToast from './usePlantingSiteProblemsToast';
 
 /**
  * Data type for request and response in hook functions.
@@ -49,6 +51,7 @@ export type Response = {
 export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const showProblems = usePlantingSiteProblemsToast();
 
   const [pendingRefetch, setPendingRefetch] = useState<PendingRefetch | undefined>();
 
@@ -84,14 +87,19 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
           } else {
             setPendingRefetch({ request, requestIdBeforeSave });
           }
-        } catch {
-          snackbar.toastError(strings.GENERIC_ERROR);
+        } catch (error) {
+          const problems = getDraftMapProblems(error);
+          if (problems?.length) {
+            showProblems(problems);
+          } else {
+            snackbar.toastError(strings.GENERIC_ERROR);
+          }
         }
       };
 
       void update();
     },
-    [currentData, navigate, snackbar, updateDraftPlantingSite, validatePlantingSite]
+    [currentData, navigate, showProblems, snackbar, updateDraftPlantingSite, validatePlantingSite]
   );
 
   // continue from the copy refetched after saving so new strata carry the IDs the server assigned
