@@ -36,6 +36,7 @@ import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
 import ReportActions from './Reports/ReportActions';
 import ReportsContent, { ReportsSegment } from './Reports/ReportsContent';
+import useResolvedReportId from './Reports/useResolvedReportId';
 
 const ProjectPage = () => {
   const { strings } = useLocalization();
@@ -69,6 +70,8 @@ const ProjectPage = () => {
     const reportId = query.get('reportId');
     return reportId ? Number(reportId) : undefined;
   }, [query]);
+
+  const resolvedReportId = useResolvedReportId(projectData.projectId, selectedReportId);
 
   const onSelectReport = useCallback(
     (reportId: number, replace = false) => setQueryParam('reportId', `${reportId}`, replace),
@@ -364,8 +367,8 @@ const ProjectPage = () => {
             </Box>
           )}
 
-          {activeTab === 'reports' && reportsSegment === 'reports' && selectedReportId !== undefined && (
-            <ReportActions projectId={projectData.projectId} reportId={selectedReportId} />
+          {activeTab === 'reports' && reportsSegment === 'reports' && resolvedReportId !== undefined && (
+            <ReportActions projectId={projectData.projectId} reportId={resolvedReportId} />
           )}
 
           {activeTab === 'quarterlyHighlights' &&
@@ -410,7 +413,7 @@ const ProjectPage = () => {
       projectData.projectId,
       quarterDropdownData,
       reportsSegment,
-      selectedReportId,
+      resolvedReportId,
       strings,
       theme,
     ]

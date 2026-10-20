@@ -30,6 +30,7 @@ import { useListPublishedReportsQuery } from 'src/queries/generated/publishedRep
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ReportInternalComment from './ReportInternalComment';
+import useResolvedReportId from './useResolvedReportId';
 
 type ReportTabV2Props = {
   active?: boolean;
@@ -99,10 +100,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
     [listReportsData]
   );
 
-  const resolvedReportId = useMemo(
-    () => reports.find((report) => report.reportId === currentReportId)?.reportId ?? reports[0]?.reportId,
-    [currentReportId, reports]
-  );
+  const resolvedReportId = useResolvedReportId(projectId, currentReportId);
 
   // the reports path has no report of its own, so send it to the latest one
   useEffect(() => {
