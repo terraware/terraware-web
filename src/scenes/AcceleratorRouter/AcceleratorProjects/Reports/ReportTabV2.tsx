@@ -29,8 +29,8 @@ import { useListAcceleratorReportsQuery } from 'src/queries/generated/accelerato
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import ReportActions from './ReportActions';
 import ReportInternalComment from './ReportInternalComment';
+import useResolvedReportId from './useResolvedReportId';
 
 type ReportTabV2Props = {
   active?: boolean;
@@ -100,10 +100,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
     [listReportsData]
   );
 
-  const resolvedReportId = useMemo(
-    () => reports.find((report) => report.reportId === currentReportId)?.reportId ?? reports[0]?.reportId,
-    [currentReportId, reports]
-  );
+  const resolvedReportId = useResolvedReportId(projectId, currentReportId);
 
   // the reports path has no report of its own, so send it to the latest one
   useEffect(() => {
@@ -156,9 +153,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
             <Box alignItems='center' display='flex' justifyContent='space-between'>
               <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
-              {cleanUpTabsEnabled
-                ? resolvedReportId !== undefined && <ReportActions projectId={projectId} reportId={resolvedReportId} />
-                : selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
+              {!cleanUpTabsEnabled && selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
             </Box>
 
             {lastPublished && (

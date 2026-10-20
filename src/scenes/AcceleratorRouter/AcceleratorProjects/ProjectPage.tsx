@@ -34,7 +34,9 @@ import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
+import ReportActions from './Reports/ReportActions';
 import ReportsContent, { ReportsSegment } from './Reports/ReportsContent';
+import useResolvedReportId from './Reports/useResolvedReportId';
 
 const ProjectPage = () => {
   const { strings } = useLocalization();
@@ -68,6 +70,8 @@ const ProjectPage = () => {
     const reportId = query.get('reportId');
     return reportId ? Number(reportId) : undefined;
   }, [query]);
+
+  const resolvedReportId = useResolvedReportId(projectData.projectId, selectedReportId);
 
   const onSelectReport = useCallback(
     (reportId: number, replace = false) => setQueryParam('reportId', `${reportId}`, replace),
@@ -364,6 +368,10 @@ const ProjectPage = () => {
             </Box>
           )}
 
+          {activeTab === 'reports' && reportsSegment === 'reports' && resolvedReportId !== undefined && (
+            <ReportActions projectId={projectData.projectId} reportId={resolvedReportId} />
+          )}
+
           {activeTab === 'quarterlyHighlights' &&
             quarterDropdownData &&
             quarterDropdownData.dropdownOptions.length > 0 && (
@@ -403,7 +411,10 @@ const ProjectPage = () => {
       isMobile,
       onOptionItemClick,
       openActivityHighlightsPreview,
+      projectData.projectId,
       quarterDropdownData,
+      reportsSegment,
+      resolvedReportId,
       strings,
       theme,
     ]
@@ -427,7 +438,9 @@ const ProjectPage = () => {
         title={projectViewTitle}
         crumbs={projectData.crumbs}
         hierarchicalCrumbs={false}
+        leftComponentGridSize={0}
         rightComponent={rightComponent}
+        rightComponentGridSize={6}
         stickyHeader
       >
         {projectData.isLoading && <BusySpinner />}
