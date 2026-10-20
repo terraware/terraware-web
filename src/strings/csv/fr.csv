@@ -2098,7 +2098,6 @@ SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner l
 SITE_BOUNDARY_UPLOADED_DESCRIPTION,Définissez une limite de site de plantation qui englobe toutes les zones plantables du projet. Vous pouvez modifier la limite du site. Utilisez l’outil de dessin {0} pour ajouter d’autres formes. [Regardez un tutoriel] sur la délimitation des sites de plantation.,aaddab79
 SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est trop grande.,eb3c9a60
 SITE_DETAIL,Détail du site,c7f1672e
-SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
 SITE_EDITOR_USE_TABLET_LANDSCAPE,Cette fonctionnalité est uniquement disponible en mode paysage sur une tablette.,8710d7e6
 SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,"Définissez les zones à l’intérieur de la limite du site qui ne sont pas plantables, telles que les routes, plans d’eau et bâtiments annexes. Elles seront exclues des calculs de surface plantable et des Observations. Utilisez l’outil de dessin {0} pour tracer des formes à l’intérieur ou en chevauchement avec la limite du site. Passez cette étape s’il n’y a aucune zone à exclure. [Regardez un tutoriel] sur la délimitation des zones d’exclusion.",d22ed290
