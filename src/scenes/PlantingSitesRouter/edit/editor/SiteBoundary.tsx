@@ -187,7 +187,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     const sentences =
-      site.siteType === 'detailed'
+      site.siteType === 'Detailed'
         ? [strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_TUTORIAL]
         : [
             strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION,
@@ -280,7 +280,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       if (numPolygons > 1) {
         const combinedMessage = strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
         snackbar.toastInfo(
-          site.siteType === 'simple'
+          site.siteType === 'Simple'
             ? `${combinedMessage} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
             : combinedMessage,
           undefined,

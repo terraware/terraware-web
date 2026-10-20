@@ -290,7 +290,7 @@ describe('SiteBoundary', () => {
       geometry: GEOMETRY,
       numPolygons: 2,
     });
-    const { user } = renderSiteBoundary(buildDraftPlantingSite({ siteType: 'simple' }));
+    const { user } = renderSiteBoundary(buildDraftPlantingSite({ siteType: 'Simple' }));
 
     await uploadBoundaryFile(user, 'site.geojson');
 

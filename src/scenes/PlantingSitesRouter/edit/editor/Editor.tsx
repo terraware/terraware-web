@@ -125,7 +125,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     }
   }, [updatedDraft, onFinishUpdate]);
 
-  const isSimpleSite = useMemo<boolean>(() => siteType === 'simple', [siteType]);
+  const isSimpleSite = useMemo<boolean>(() => siteType === 'Simple', [siteType]);
 
   const steps = useMemo<PlantingSiteStep[]>(() => {
     if (!activeLocale) {

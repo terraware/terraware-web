@@ -9,7 +9,7 @@ import {
 
 import { MinimalPlantingSite, MultiPolygon } from './Tracking';
 
-export type SiteType = 'simple' | 'detailed';
+export type SiteType = DraftPlantingSitePayloadRaw['siteType'];
 export type SiteEditStep = 'site_boundary' | 'exclusion_areas' | 'stratum_boundaries' | 'substratum_boundaries';
 export type OptionalSiteEditStep = Exclude<SiteEditStep, 'site_boundary'>;
 

@@ -60,8 +60,8 @@ export const fromDraft = (site: DraftPlantingSite): CreateDraftPlantingSiteReque
     organizationId,
     projectId,
     siteEditStep,
-    siteType: siteType === 'simple' ? 'Simple' : 'Detailed',
-    strata: siteType === 'detailed' ? strata?.map(toStratumPayload) : undefined,
+    siteType,
+    strata: siteType === 'Detailed' ? strata?.map(toStratumPayload) : undefined,
     timeZone,
   };
 };
@@ -96,7 +96,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
     strata: strata.length ? strata.map(toStratum) : undefined,
     projectId,
     siteEditStep: (siteEditStep ?? 'site_boundary') as SiteEditStep,
-    siteType: siteType === 'Simple' ? 'simple' : 'detailed',
+    siteType,
     timeZone,
   };
 };
