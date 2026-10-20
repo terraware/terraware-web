@@ -97,7 +97,7 @@ export default fixupConfigRules([
 
       '@typescript-eslint/ban-ts-comment': 'error',
 
-      '@typescript-eslint/ban-types': [
+      '@typescript-eslint/no-restricted-types': [
         'error',
         {
           types: {
@@ -133,23 +133,6 @@ export default fixupConfigRules([
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
 
-      '@typescript-eslint/indent': 'off', // Conflict with prettier
-
-      '@typescript-eslint/member-delimiter-style': [
-        'error',
-        {
-          multiline: {
-            delimiter: 'semi',
-            requireLast: true,
-          },
-
-          singleline: {
-            delimiter: 'semi',
-            requireLast: false,
-          },
-        },
-      ],
-
       '@typescript-eslint/naming-convention': [
         'error',
         {
@@ -170,7 +153,6 @@ export default fixupConfigRules([
       '@typescript-eslint/no-misused-new': 'error',
       '@typescript-eslint/no-namespace': 'error',
       '@typescript-eslint/no-non-null-asserted-optional-chain': 'error',
-      '@typescript-eslint/no-parameter-properties': 'off',
 
       '@typescript-eslint/no-shadow': [
         'error',
@@ -183,7 +165,7 @@ export default fixupConfigRules([
       '@typescript-eslint/no-unnecessary-type-constraint': 'error',
       '@typescript-eslint/no-unsafe-declaration-merging': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { caughtErrors: 'none' }],
       '@typescript-eslint/no-use-before-define': 'off',
       '@typescript-eslint/no-var-requires': 'error',
       '@typescript-eslint/prefer-as-const': 'error',
@@ -191,7 +173,7 @@ export default fixupConfigRules([
       '@typescript-eslint/prefer-function-type': 'error',
       '@typescript-eslint/prefer-namespace-keyword': 'error',
 
-      '@typescript-eslint/quotes': [
+      '@stylistic/js/quotes': [
         'error',
         'single',
         {
@@ -200,7 +182,7 @@ export default fixupConfigRules([
       ],
 
       '@typescript-eslint/require-await': 'error',
-      '@typescript-eslint/semi': ['error', 'always'],
+      '@stylistic/js/semi': ['error', 'always'],
 
       '@typescript-eslint/triple-slash-reference': [
         'error',
@@ -219,6 +201,9 @@ export default fixupConfigRules([
       '@typescript-eslint/no-unsafe-return': 'off',
       '@typescript-eslint/no-unsafe-call': 'off',
       '@typescript-eslint/no-unsafe-member-access': 'off',
+      '@typescript-eslint/no-base-to-string': 'off',
+      '@typescript-eslint/prefer-promise-reject-errors': 'off',
+      '@typescript-eslint/no-unnecessary-type-assertion': 'off',
 
       'arrow-parens': ['error', 'always'],
       'brace-style': ['off', 'off'],

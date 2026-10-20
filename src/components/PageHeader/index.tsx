@@ -76,7 +76,7 @@ export default function PageHeader({
         )}
         <Grid item xs={12} sx={{ display: 'flex' }}>
           <Box sx={{ width: '100%' }}>
-            <Box padding={theme.spacing(0, 3, children?.some((el) => el) ? 3 : 0, 3)}>
+            <Box padding={theme.spacing(0, 3, children?.some((el) => !!el) ? 3 : 0, 3)}>
               <Box display='flex' justifyContent='space-between' alignItems='center'>
                 <Typography
                   id='title'

@@ -117,7 +117,9 @@ beforeEach(() => {
   intersectionCallback = undefined;
   observed = [];
 
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   originalWindowScrollTo = window.scrollTo;
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   originalRequestAnimationFrame = window.requestAnimationFrame;
   window.scrollTo = windowScrollTo as unknown as typeof window.scrollTo;
   // run the frame callback inline: the real one fires on a timer, which would make this racy

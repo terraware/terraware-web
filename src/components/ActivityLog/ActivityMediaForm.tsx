@@ -207,7 +207,7 @@ const ActivityPhotoPreview = ({
   }, [onHiddenOnMapChange, isHiddenOnMap]);
 
   const onMoveUp = useCallback(
-    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (currentPosition > 1) {
         onPositionChange(currentPosition - 1);
         event?.currentTarget?.blur();
@@ -217,7 +217,7 @@ const ActivityPhotoPreview = ({
   );
 
   const onMoveDown = useCallback(
-    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       if (currentPosition < maxPosition) {
         onPositionChange(currentPosition + 1);
         event?.currentTarget?.blur();

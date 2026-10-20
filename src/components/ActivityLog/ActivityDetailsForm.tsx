@@ -551,7 +551,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   );
 
   const onChangeDate = useCallback(
-    (value?: DateTime<boolean> | undefined): void => {
+    (value?: DateTime<boolean>): void => {
       onChange('date', value?.toFormat('yyyy-MM-dd'));
     },
     [onChange]

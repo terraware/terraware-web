@@ -21,7 +21,7 @@ export default function MapLayerSelect({
   const theme = useTheme();
   const mapPortalContainer = useMapPortalContainer();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+  const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(event?.currentTarget ?? null);
   };
 

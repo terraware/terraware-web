@@ -43,7 +43,7 @@ export default function CollectedReceivedDate2({
   };
 
   const validateDate = useCallback(
-    (newValue?: string | undefined) => {
+    (newValue?: string) => {
       onDateError('');
       if (!newValue) {
         const required = validate && newValue === undefined;

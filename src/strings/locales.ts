@@ -17,9 +17,7 @@ export const supportedLocales: LocaleDetails[] = [
   { id: 'gx', name: 'Gibberish', loadModule: () => import('./strings-gx'), inDevelopment: true },
 ];
 
-const supportedLocaleIds = supportedLocales.map((locale: LocaleDetails) => locale.id);
-
-export type SupportedLocaleId = (typeof supportedLocaleIds)[number];
+export type SupportedLocaleId = LocaleDetails['id'];
 
 export const useSupportedLocales = (): LocaleDetails[] => {
   const { isProduction } = useEnvironment();
