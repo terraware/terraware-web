@@ -52,7 +52,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
       try {
         await updateDraftPlantingSite({
           id: draft.id,
-          updateDraftPlantingSiteRequestPayload: fromDraft(draft),
+          updateDraftPlantingSiteRequestPayload: fromDraft(draft, plantingSite),
         }).unwrap();
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
         return true;
@@ -61,7 +61,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
         return false;
       }
     },
-    [snackbar, updateDraftPlantingSite]
+    [plantingSite, snackbar, updateDraftPlantingSite]
   );
 
   const saveDetailsAndClose = useCallback(

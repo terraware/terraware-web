@@ -248,6 +248,32 @@ describe('fromDraft', () => {
     });
   });
 
+  test('should only send stratum and substratum IDs that exist on the persisted site', () => {
+    const draft: DraftPlantingSite = {
+      boundary,
+      createdBy: 5,
+      id: 1,
+      name: 'draft site',
+      organizationId: 3,
+      strata,
+      siteEditStep: 'substratum_boundaries',
+      siteType: 'Detailed',
+    };
+    const persistedSite: DraftPlantingSite = {
+      ...draft,
+      strata: [{ ...strata[0], substrata: [strata[0].substrata[0]] }],
+    };
+
+    expect(fromDraft(draft, persistedSite).strata).toStrictEqual([
+      {
+        ...strataPayloadWithoutIds[0],
+        id: 1,
+        substrata: [{ ...strataPayloadWithoutIds[0].substrata[0], id: 1 }, strataPayloadWithoutIds[0].substrata[1]],
+      },
+      strataPayloadWithoutIds[1],
+    ]);
+  });
+
   test('should omit strata for a simple site', () => {
     const draft: DraftPlantingSite = {
       boundary,

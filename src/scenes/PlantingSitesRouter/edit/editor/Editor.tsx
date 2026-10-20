@@ -81,7 +81,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
-  const startOverDraft = useRef<DraftPlantingSite>(undefined);
+  const isStartingOver = useRef(false);
   const [startOverCount, setStartOverCount] = useState(0);
   const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
@@ -106,7 +106,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   /**
    * set up hooks to update a draft and also to create a planting site from draft
    */
-  const { onFinishUpdate, updateDraft, isUpdating, updatedDraft } = useDraftPlantingSiteUpdate();
+  const { onFinishUpdate, updateDraft, isUpdating, updatedDraft } = useDraftPlantingSiteUpdate(site.id);
   const { finalize, isPending } = useDraftPlantingSiteFinalize(onFinalizeSuccess, onFinalizeError);
 
   // update local state when draft is updated
@@ -118,7 +118,8 @@ export default function Editor(props: EditorProps): JSX.Element {
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
       }
-      if (updatedDraft.draft === startOverDraft.current) {
+      if (isStartingOver.current) {
+        isStartingOver.current = false;
         setStartOverCount((count) => count + 1);
       }
       onFinishUpdate();
@@ -271,7 +272,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
     const optionalSteps = initializeOptionalStepsStatus(draft);
 
-    startOverDraft.current = draft;
+    isStartingOver.current = true;
     updateDraft({ draft, nextStep, optionalSteps }, redirect);
     setShowStartOver(false);
   }, [plantingSite, updateDraft]);
