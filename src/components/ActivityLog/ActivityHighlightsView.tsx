@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, SxProps, Theme, Typography, useTheme } from '@mui/material';
@@ -90,7 +90,11 @@ const carouselSlideCardMetadataStyles: SxProps<Theme> = (theme: Theme) => ({
 
 const HEIGHT_OFFSET_PX = 204;
 
+const HEIGHT_OFFSET_FUNDER_PX = 256;
+
 const HEIGHT_OFFSET_MOBILE_PX = 240;
+
+const BOTTOM_GAP_PX = 32;
 
 const getReportIndicators = (strings: any, numberFormatter: ReturnType<typeof useNumberFormatter>) => [
   {
@@ -103,6 +107,7 @@ const getReportIndicators = (strings: any, numberFormatter: ReturnType<typeof us
 
 type ActivityHighlightsViewProps = {
   activities: TypedActivity[];
+  fitToWindow?: boolean;
   projectId: number;
   selectedQuarter?: string;
 };
@@ -116,11 +121,17 @@ type ActivityHighlightSlide = {
   title: string;
 };
 
-const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: ActivityHighlightsViewProps) => {
+const ActivityHighlightsView = ({
+  activities,
+  fitToWindow,
+  projectId,
+  selectedQuarter,
+}: ActivityHighlightsViewProps) => {
   const { activeLocale, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const reportIndicators = useMemo(() => getReportIndicators(strings, numberFormatter), [numberFormatter, strings]);
   const theme = useTheme();
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
   const query = useQuery();
@@ -130,6 +141,32 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
   const { fitBounds, getCurrentViewState, jumpTo } = useMapUtils(mapRef);
 
   const { isFunderRoute } = useFunderPortal();
+
+  const [measuredOffsetPx, setMeasuredOffsetPx] = useState<number>();
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!fitToWindow || !container) {
+      return;
+    }
+
+    const measure = () => {
+      const top = container.getBoundingClientRect().top + window.scrollY;
+      setMeasuredOffsetPx(top > 0 ? top + BOTTOM_GAP_PX : undefined);
+    };
+
+    measure();
+    window.addEventListener('resize', measure);
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(measure);
+    observer?.observe(document.body);
+
+    return () => {
+      window.removeEventListener('resize', measure);
+      observer?.disconnect();
+    };
+  }, [fitToWindow]);
+
+  const heightOffsetPx = measuredOffsetPx ?? (isFunderRoute ? HEIGHT_OFFSET_FUNDER_PX : HEIGHT_OFFSET_PX);
 
   const listReportsResponse = useListAcceleratorReportsQuery({ projectId }, { skip: isFunderRoute });
   const listPublishedReportsResponse = useListPublishedReportsQuery(projectId, { skip: !isFunderRoute });
@@ -370,6 +407,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
 
   return (
     <Box
+      ref={containerRef}
       sx={{
         '& .map-drawer': {
           ...(isFunderRoute && { background: 'none' }),
@@ -385,7 +423,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
         activities={highlightActivityId && shownActivity ? [shownActivity] : activitiesVisibleOnMap}
         activityMarkerHighlighted={activityMarkerHighlighted}
         drawerRef={mapDrawerRef}
-        heightOffsetPx={isFunderRoute ? 256 : HEIGHT_OFFSET_PX}
+        heightOffsetPx={heightOffsetPx}
         mapRef={mapRef}
         onActivityMarkerClick={onActivityMarkerClick}
         projectId={projectId}
@@ -408,7 +446,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                   ? undefined
                   : {
                       xs: `calc(100vh - ${HEIGHT_OFFSET_MOBILE_PX}px)`,
-                      md: `calc(100vh - ${HEIGHT_OFFSET_PX}px)`,
+                      md: `calc(100vh - ${heightOffsetPx}px)`,
                     },
               },
             ]}

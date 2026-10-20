@@ -175,6 +175,7 @@ const ProjectPage = () => {
             <ActivityHighlightsContent
               activities={activities}
               busy={activitiesFetching}
+              fitToWindow
               onDropdownDataReady={setQuarterDropdownData}
               projectId={projectData.projectId}
               showDropdownInline={false}

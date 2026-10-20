@@ -25,6 +25,7 @@ export type QuarterDropdownData = {
 type ActivityHighlightsContentProps = {
   activities: TypedActivity[];
   busy: boolean;
+  fitToWindow?: boolean;
   projectId: number;
   showCloseButton?: boolean;
   onClose?: () => void;
@@ -36,6 +37,7 @@ type ActivityHighlightsContentProps = {
 const ActivityHighlightsContent = ({
   activities,
   busy,
+  fitToWindow,
   projectId,
   showCloseButton = false,
   onClose,
@@ -229,6 +231,7 @@ const ActivityHighlightsContent = ({
       ) : (
         <ActivityHighlightsView
           activities={selectedGroup?.activities || []}
+          fitToWindow={fitToWindow}
           projectId={projectId}
           selectedQuarter={selectedQuarter}
         />
