@@ -1,3 +1,4 @@
+10f40e7e SW-9131 Height of quarterly highlights should fit perfectly in window so that no scrolling is possible (#6816)
 3d90c88b SW-9128 “Edit Settings” has empty fields instead of being prefilled with current values (#6811)
 ea84c679 Update dependency msw to v3 (#6618)
 39100daf Update eslint monorepo to v9.39.5 (#6803)
