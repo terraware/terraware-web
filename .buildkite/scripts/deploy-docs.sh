@@ -31,47 +31,67 @@ else
     git log HEAD --oneline > docs/unreleased.log
 fi
 
-# This section is a port of GHA's github-pages-deploy-action.
-
-echo "--- :github: Prepare files for deployment"
+# This section is a port of GHA's github-pages-deploy-action, with retries for when
+# another build pushes to the deploy branch while this one is running.
 
 DEPLOY_DIR="docs"
 DEPLOY_BRANCH="gh-pages"
 DEPLOY_USER="terraformation-deploy"
+MAX_ATTEMPTS=3
 
 REPO_URL=${BUILDKITE_REPO/github.com/$DEPLOY_USER:$GITHUB_TOKEN@github.com}
 
-# Set up a temporary directory for the gh-pages branch
+# A newer build will deploy its own docs, so there's no need to deploy stale ones.
+exit_if_superseded() {
+    local main_commit
+    main_commit=$(git ls-remote "$REPO_URL" refs/heads/main | cut -f1)
+
+    if [[ "$main_commit" != "$BUILDKITE_COMMIT" ]]; then
+        echo "main has moved to ${main_commit:0:12}; skipping docs deploy."
+        exit 0
+    fi
+}
+
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-git clone --branch "$DEPLOY_BRANCH" --single-branch --depth 1 \
-    "$REPO_URL" \
-    "$TEMP_DIR" || {
-        # If gh-pages doesn't exist yet, create it as an orphan
-        git init "$TEMP_DIR"
-        cd "$TEMP_DIR"
-        git checkout --orphan "$DEPLOY_BRANCH"
-        git remote add origin "$REPO_URL"
-        cd -
-    }
+for ATTEMPT in $(seq 1 "$MAX_ATTEMPTS"); do
+    echo "--- :github: Deploy to GitHub Pages (attempt $ATTEMPT)"
 
-# Sync docs into the deploy directory
-rsync -a --exclude=.git --delete "$DEPLOY_DIR/" "$TEMP_DIR/"
+    exit_if_superseded
 
-cd "$TEMP_DIR"
-git add -A
+    CLONE_DIR="$TEMP_DIR/$ATTEMPT"
 
-if git diff --cached --quiet; then
-    echo "No changes to deploy."
-    exit 0
-fi
+    git clone --branch "$DEPLOY_BRANCH" --single-branch --depth 1 \
+        "$REPO_URL" \
+        "$CLONE_DIR" || {
+            # If gh-pages doesn't exist yet, create it as an orphan
+            git init "$CLONE_DIR"
+            git -C "$CLONE_DIR" checkout --orphan "$DEPLOY_BRANCH"
+            git -C "$CLONE_DIR" remote add origin "$REPO_URL"
+        }
 
-echo "--- :github: Deploy to GitHub Pages"
+    rsync -a --exclude=.git --delete "$DEPLOY_DIR/" "$CLONE_DIR/"
 
-git config user.name "Buildkite CI"
-git config user.email "nobody@terraformation.com"
-git commit -m "Deploy docs from ${BUILDKITE_COMMIT:0:12}"
-git push origin "$DEPLOY_BRANCH"
+    git -C "$CLONE_DIR" add -A
 
-echo "Docs deployed to GitHub Pages."
+    if git -C "$CLONE_DIR" diff --cached --quiet; then
+        echo "No changes to deploy."
+        exit 0
+    fi
+
+    git -C "$CLONE_DIR" config user.name "Buildkite CI"
+    git -C "$CLONE_DIR" config user.email "nobody@terraformation.com"
+    git -C "$CLONE_DIR" commit -m "Deploy docs from ${BUILDKITE_COMMIT:0:12}"
+
+    if git -C "$CLONE_DIR" push origin "$DEPLOY_BRANCH"; then
+        echo "Docs deployed to GitHub Pages."
+        exit 0
+    fi
+
+    echo "Push failed; retrying."
+    sleep $((ATTEMPT * 5))
+done
+
+echo "Failed to deploy docs after $MAX_ATTEMPTS attempts."
+exit 1
