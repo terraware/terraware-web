@@ -1,7 +1,7 @@
 import React, { type ReactNode, useMemo } from 'react';
 
 import { screen } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import type { ProvidedOrganizationData } from 'src/providers/DataTypes';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';

@@ -103,7 +103,7 @@ mockError('get', '/api/v1/species'); // 500 with an error envelope
 
 Handlers reset between tests. For anything the helpers don't cover — asserting on a request body,
 returning different responses across calls, a non-enveloped endpoint — reach for `server.use` with
-`http` from `msw` directly, or use `captureRequests`:
+`http` from `msw/http` directly, or use `captureRequests`:
 
 ```ts
 const requests = captureRequests('post', '/api/v1/species', { id: 7 });
@@ -116,7 +116,7 @@ expect(await requests[0].json()).toMatchObject({ scientificName: 'Acacia koa' })
 recorded and thrown in `afterEach`, naming the method and URL. Mock it rather than working around
 the check — a test that silently fetches nothing is worse than no test.
 
-Note that `onUnhandledRequest: 'error'` alone would _not_ do this. MSW turns an unhandled request
+Note that `onUnhandledFrame: 'error'` alone would _not_ do this. MSW turns an unhandled request
 into a rejected fetch, and RTK Query stores that as ordinary error state, so a test that doesn't
 assert on the affected query would stay green. The `afterEach` check is what makes the guarantee
 real: add an endpoint to a component and every test rendering it fails until the mock exists.

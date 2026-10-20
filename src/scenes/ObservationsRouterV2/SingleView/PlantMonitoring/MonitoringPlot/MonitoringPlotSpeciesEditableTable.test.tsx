@@ -2,7 +2,7 @@ import React from 'react';
 
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
 import { mockGet, renderWithProviders, server } from 'src/test-utils';

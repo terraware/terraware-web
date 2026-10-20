@@ -2,7 +2,7 @@ import React from 'react';
 
 import { rstest } from '@rstest/core';
 import { screen, waitFor } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import { AppStore } from 'src/redux/store';
 import strings from 'src/strings';

@@ -3,7 +3,7 @@ import React from 'react';
 import { rstest } from '@rstest/core';
 import * as webComponents from '@terraware/web-components' with { rstest: 'importActual' };
 import { screen, within } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import { EventLogEntryPayload, RecordedTreeSubjectPayload } from 'src/queries/generated/events';
 import strings from 'src/strings';

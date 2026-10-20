@@ -31,7 +31,7 @@ globalThis.Request = OriginRelativeRequest;
 /**
  * Requests that reached the network with no handler registered for them.
  *
- * `onUnhandledRequest: 'error'` alone is not enough to fail a test. MSW turns an unhandled request
+ * `onUnhandledFrame: 'error'` alone is not enough to fail a test. MSW turns an unhandled request
  * into a rejected fetch, and RTK Query catches that and stores it as ordinary error state — so a
  * test that doesn't assert on the affected query stays green while silently exercising nothing.
  * Recording them here and failing in `afterEach` is what actually holds the line: add an endpoint
@@ -44,7 +44,7 @@ const unhandledRequests: string[] = [];
  * server.
  */
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'error' });
+  server.listen({ onUnhandledFrame: 'error' });
   server.events.on('request:unhandled', ({ request }) => {
     unhandledRequests.push(`${request.method} ${request.url}`);
   });

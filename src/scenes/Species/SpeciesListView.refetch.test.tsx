@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { act, screen } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import { baseApi } from 'src/queries/baseApi';
 import { api as speciesApi } from 'src/queries/generated/species';

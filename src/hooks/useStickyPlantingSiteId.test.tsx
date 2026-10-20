@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { buildOrganization, captureRequests, renderWithProviders, server } from 'src/test-utils';

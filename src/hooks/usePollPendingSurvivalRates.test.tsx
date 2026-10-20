@@ -2,7 +2,8 @@ import React from 'react';
 
 import { rs } from '@rstest/core';
 import { act, screen, waitFor } from '@testing-library/react';
-import { HttpResponse, delay, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
+import { delay } from 'msw/utils/delay';
 
 import { API_PULL_INTERVAL } from 'src/constants';
 import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
