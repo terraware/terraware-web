@@ -31,47 +31,67 @@ else
     git log HEAD --oneline > docs/unreleased.log
 fi
 
-# This section is a port of GHA's github-pages-deploy-action.
-
-echo "--- :github: Prepare files for deployment"
+# This section is a port of GHA's github-pages-deploy-action, with retries for when
+# another build pushes to the deploy branch while this one is running.
 
 DEPLOY_DIR="docs"
 DEPLOY_BRANCH="gh-pages"
 DEPLOY_USER="terraformation-deploy"
+MAX_ATTEMPTS=3
 
 REPO_URL=${BUILDKITE_REPO/github.com/$DEPLOY_USER:$GITHUB_TOKEN@github.com}
 
-# Set up a temporary directory for the gh-pages branch
+# A newer build will deploy its own docs, so there's no need to deploy stale ones.
+exit_if_superseded() {
+    local main_commit
+    main_commit=$(git ls-remote "$REPO_URL" refs/heads/main | cut -f1)
+
+    if [[ "$main_commit" != "$BUILDKITE_COMMIT" ]]; then
+        echo "main has moved to ${main_commit:0:12}; skipping docs deploy."
+        exit 0
+    fi
+}
+
 TEMP_DIR=$(mktemp -d)
 trap 'rm -rf "$TEMP_DIR"' EXIT
 
-git clone --branch "$DEPLOY_BRANCH" --single-branch --depth 1 \
-    "$REPO_URL" \
-    "$TEMP_DIR" || {
-        # If gh-pages doesn't exist yet, create it as an orphan
-        git init "$TEMP_DIR"
-        cd "$TEMP_DIR"
-        git checkout --orphan "$DEPLOY_BRANCH"
-        git remote add origin "$REPO_URL"
-        cd -
-    }
+echo "--- :github: Clone $DEPLOY_BRANCH"
 
-# Sync docs into the deploy directory
-rsync -a --exclude=.git --delete "$DEPLOY_DIR/" "$TEMP_DIR/"
+git clone --branch "$DEPLOY_BRANCH" --single-branch --depth 1 "$REPO_URL" "$TEMP_DIR"
 
-cd "$TEMP_DIR"
-git add -A
+git -C "$TEMP_DIR" config user.name "Buildkite CI"
+git -C "$TEMP_DIR" config user.email "nobody@terraformation.com"
 
-if git diff --cached --quiet; then
-    echo "No changes to deploy."
-    exit 0
-fi
+for ATTEMPT in $(seq 1 "$MAX_ATTEMPTS"); do
+    echo "--- :github: Deploy to GitHub Pages (attempt $ATTEMPT)"
 
-echo "--- :github: Deploy to GitHub Pages"
+    exit_if_superseded
 
-git config user.name "Buildkite CI"
-git config user.email "nobody@terraformation.com"
-git commit -m "Deploy docs from ${BUILDKITE_COMMIT:0:12}"
-git push origin "$DEPLOY_BRANCH"
+    if [[ "$ATTEMPT" -gt 1 ]]; then
+        # Discard the rejected commit and start over from the latest remote state.
+        git -C "$TEMP_DIR" fetch --depth 1 origin "$DEPLOY_BRANCH"
+        git -C "$TEMP_DIR" reset --hard FETCH_HEAD
+    fi
 
-echo "Docs deployed to GitHub Pages."
+    rsync -a --exclude=.git --delete "$DEPLOY_DIR/" "$TEMP_DIR/"
+
+    git -C "$TEMP_DIR" add -A
+
+    if git -C "$TEMP_DIR" diff --cached --quiet; then
+        echo "No changes to deploy."
+        exit 0
+    fi
+
+    git -C "$TEMP_DIR" commit -m "Deploy docs from ${BUILDKITE_COMMIT:0:12}"
+
+    if git -C "$TEMP_DIR" push origin "$DEPLOY_BRANCH"; then
+        echo "Docs deployed to GitHub Pages."
+        exit 0
+    fi
+
+    echo "Push failed; retrying."
+    sleep $((ATTEMPT * 5))
+done
+
+echo "Failed to deploy docs after $MAX_ATTEMPTS attempts."
+exit 1
