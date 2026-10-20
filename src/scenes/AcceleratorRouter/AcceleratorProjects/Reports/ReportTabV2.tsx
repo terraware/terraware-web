@@ -29,7 +29,6 @@ import { useListAcceleratorReportsQuery } from 'src/queries/generated/accelerato
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import ReportActions from './ReportActions';
 import ReportInternalComment from './ReportInternalComment';
 
 type ReportTabV2Props = {
@@ -156,9 +155,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
             <Box alignItems='center' display='flex' justifyContent='space-between'>
               <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
-              {cleanUpTabsEnabled
-                ? resolvedReportId !== undefined && <ReportActions projectId={projectId} reportId={resolvedReportId} />
-                : selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
+              {!cleanUpTabsEnabled && selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
             </Box>
 
             {lastPublished && (

@@ -7,6 +7,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
+import ReportActions from './ReportActions';
 import ReportsContent, { ReportsSegment, SEGMENT_PATHS } from './ReportsContent';
 
 type ReportsSegmentedViewProps = {
@@ -17,7 +18,9 @@ const ReportsSegmentedView = ({ tab }: ReportsSegmentedViewProps) => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const navigate = useSyncNavigate();
   const { strings } = useLocalization();
-  const pathParams = useParams<{ projectId: string }>();
+  const pathParams = useParams<{ projectId: string; reportId?: string }>();
+
+  const selectedReportId = Number(pathParams.reportId) || undefined;
 
   // the routes predate the segment control, so 'settings' is the indicators segment
   const segment: ReportsSegment = tab === 'targets' ? 'targets' : tab === 'settings' ? 'indicators' : 'reports';
@@ -44,6 +47,11 @@ const ReportsSegmentedView = ({ tab }: ReportsSegmentedViewProps) => {
     <Page
       hierarchicalCrumbs={false}
       crumbs={pageCrumbs}
+      rightComponent={
+        segment === 'reports' && selectedReportId !== undefined ? (
+          <ReportActions projectId={Number(pathParams.projectId)} reportId={selectedReportId} />
+        ) : undefined
+      }
       rightComponentGridSize={6}
       stickyHeader
       title={strings.REPORTS}

@@ -34,6 +34,7 @@ import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
+import ReportActions from './Reports/ReportActions';
 import ReportsContent, { ReportsSegment } from './Reports/ReportsContent';
 
 const ProjectPage = () => {
@@ -363,6 +364,10 @@ const ProjectPage = () => {
             </Box>
           )}
 
+          {activeTab === 'reports' && reportsSegment === 'reports' && selectedReportId !== undefined && (
+            <ReportActions projectId={projectData.projectId} reportId={selectedReportId} />
+          )}
+
           {activeTab === 'quarterlyHighlights' &&
             quarterDropdownData &&
             quarterDropdownData.dropdownOptions.length > 0 && (
@@ -402,7 +407,10 @@ const ProjectPage = () => {
       isMobile,
       onOptionItemClick,
       openActivityHighlightsPreview,
+      projectData.projectId,
       quarterDropdownData,
+      reportsSegment,
+      selectedReportId,
       strings,
       theme,
     ]
@@ -426,7 +434,9 @@ const ProjectPage = () => {
         title={projectViewTitle}
         crumbs={projectData.crumbs}
         hierarchicalCrumbs={false}
+        leftComponentGridSize={0}
         rightComponent={rightComponent}
+        rightComponentGridSize={6}
         stickyHeader
       >
         {projectData.isLoading && <BusySpinner />}
