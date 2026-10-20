@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router';
 
 import { screen, waitFor } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import { FacilityPayload } from 'src/queries/generated/organizations';

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { rs } from '@rstest/core';
 import { waitFor } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import { buildOrganization, buildUser, mockGet, renderWithProviders, server } from 'src/test-utils';
 

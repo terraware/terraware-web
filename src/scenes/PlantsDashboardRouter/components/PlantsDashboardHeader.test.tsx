@@ -2,7 +2,7 @@ import React from 'react';
 
 import { rstest } from '@rstest/core';
 import { waitFor } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import PlantsDashboardHeader from 'src/scenes/PlantsDashboardRouter/components/PlantsDashboardHeader';

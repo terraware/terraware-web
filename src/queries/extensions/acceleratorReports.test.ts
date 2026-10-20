@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@rstest/core';
 import { waitFor } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import { api } from 'src/queries/generated/acceleratorReports';
 import { makeStore } from 'src/redux/store';

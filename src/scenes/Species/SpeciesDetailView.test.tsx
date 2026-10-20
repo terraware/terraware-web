@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Routes, useLocation } from 'react-router';
 
 import { screen, waitFor, within } from '@testing-library/react';
-import { HttpResponse, http } from 'msw';
+import { HttpResponse, http } from 'msw/http';
 
 import SpeciesDetailView from 'src/scenes/Species/SpeciesDetailView';
 import strings from 'src/strings';
