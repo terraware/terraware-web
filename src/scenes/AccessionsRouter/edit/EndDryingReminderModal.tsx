@@ -78,7 +78,7 @@ function EndDryingReminderModalForm({ accession, open, onClose }: EndDryingRemin
     }
   };
 
-  const validateDate = (newValue?: string | number | undefined) => {
+  const validateDate = (newValue?: string | number) => {
     setDateError('');
 
     // Invalid dates or blank entries will remove the reminder date

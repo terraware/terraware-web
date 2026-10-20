@@ -178,7 +178,7 @@ const ActivityMediaItem = ({
   );
 
   const onClickDownload = useCallback(
-    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event?.stopPropagation();
 
       const baseUrl = activity.type === 'funder' ? API_PATHS.FUNDER_ACTIVITY_MEDIA_FILE : API_PATHS.ACTIVITY_MEDIA_FILE;

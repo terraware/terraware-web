@@ -13,7 +13,7 @@ export default function ColorKeyControl(): JSX.Element | null {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const { strings } = useLocalization();
 
-  const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+  const handleClick = (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(event?.currentTarget ?? null);
   };
 

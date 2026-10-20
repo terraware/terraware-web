@@ -7,10 +7,10 @@ import { ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Acces
  * Service for accessions related functionality
  */
 
-const VIABILITY_TESTS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
+type ViabilityTestsEndpoint = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
 
 export type ViabilityTestPostRequest =
-  paths[typeof VIABILITY_TESTS_ENDPOINT]['post']['requestBody']['content']['application/json'];
+  paths[ViabilityTestsEndpoint]['post']['requestBody']['content']['application/json'];
 
 /**
  * Get allowed transition-to states from current state

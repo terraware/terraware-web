@@ -150,7 +150,7 @@ const MediaItem = ({
   );
 
   const onClickDownload = useCallback(
-    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
+    (event?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
       event?.stopPropagation();
 
       if (onDownload) {
