@@ -15,6 +15,14 @@ const hasSameId = (location1: PartialSubLocation, location2: PartialSubLocation)
 const isRenamed = (location1: PartialSubLocation, location2: PartialSubLocation) =>
   location1.id === location2.id && location1.name !== location2.name;
 
+const settleAll = async (writes: Promise<unknown>[]) => {
+  const results = await Promise.allSettled(writes);
+  const failure = results.find((result): result is PromiseRejectedResult => result.status === 'rejected');
+  if (failure) {
+    throw failure.reason;
+  }
+};
+
 export const useSaveSubLocations = () => {
   const [listSubLocations] = useLazyListSubLocationsQuery();
   const [createSubLocation] = useCreateSubLocationMutation();
@@ -29,22 +37,28 @@ export const useSaveSubLocations = () => {
       const toCreate = _.differenceWith(editedSubLocations, subLocations, hasSameId);
       const toRename = _.intersectionWith(editedSubLocations, subLocations, isRenamed);
 
-      await Promise.all([
-        ...toDelete.map((location) => deleteSubLocation({ facilityId, subLocationId: location.id }).unwrap()),
-        ...toRename.map((location) =>
+      await settleAll(
+        toDelete.map((location) => deleteSubLocation({ facilityId, subLocationId: location.id }).unwrap())
+      );
+
+      await settleAll(
+        toRename.map((location) =>
           updateSubLocation({
             facilityId,
             subLocationId: location.id as number,
             updateSubLocationRequestPayload: { name: location.name as string },
           }).unwrap()
-        ),
-        ...toCreate.map((location) =>
+        )
+      );
+
+      await settleAll(
+        toCreate.map((location) =>
           createSubLocation({
             facilityId,
             createSubLocationRequestPayload: { name: location.name as string },
           }).unwrap()
-        ),
-      ]);
+        )
+      );
     },
     [listSubLocations, createSubLocation, updateSubLocation, deleteSubLocation]
   );
