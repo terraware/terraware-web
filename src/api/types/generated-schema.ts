@@ -6811,6 +6811,27 @@ export interface components {
             treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
             treatmentNotes?: string;
         };
+        CreateBiomassSpeciesOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /** @description Common name of the species. */
+            commonName?: string;
+            /** @description Whether the species is invasive. */
+            isInvasive: boolean;
+            /** @description Whether the species is threatened. */
+            isThreatened: boolean;
+            /** @description Scientific name of species to add. Exactly one of this or speciesId must be specified. */
+            scientificName?: string;
+            /**
+             * Format: int64
+             * @description ID of species to add. Exactly one of this or scientificName must be specified.
+             */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "CreateBiomassSpecies";
+        };
         CreateCommonIndicatorRequestPayload: {
             indicator: components["schemas"]["NewIndicatorPayload"];
         };
@@ -7180,6 +7201,71 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        CreateQuadratSpeciesOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /**
+             * Format: int32
+             * @description Abundance count, from 0 through 25.
+             */
+            abundance: number;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @description Name of species to add. Exactly one of this or speciesId must be specified. */
+            scientificName?: string;
+            /**
+             * Format: int64
+             * @description ID of species to add. Exactly one of this or scientificName must be specified.
+             */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "CreateQuadratSpecies";
+        };
+        /** @description Creates a recorded tree. The server assigns the recorded-tree ID and tree number. */
+        CreateRecordedTreeOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /** @description Measured in meters. Not allowed for Shrubs. */
+            boleHeight?: number;
+            /** @description Additional notes about the recorded tree. */
+            description?: string;
+            /** @description Measured in centimeters. Required for Tree growth forms; not allowed for Shrubs. */
+            diameterAtBreastHeight?: number;
+            /** @description Measured in meters. Required for Tree growth forms; not allowed for Shrubs. */
+            height?: number;
+            /** @description Whether the recorded tree is dead. */
+            isDead: boolean;
+            /** @description Measured in meters. Required for Tree growth forms; not allowed for Shrubs. */
+            pointOfMeasurement?: number;
+            /** @description Exactly one of speciesId and scientificName must be specified. */
+            scientificName?: string;
+            /**
+             * Format: int32
+             * @description Measured in centimeters. Required for Shrubs; not allowed for Trees.
+             */
+            shrubDiameter?: number;
+            /**
+             * Format: int64
+             * @description Exactly one of speciesId and scientificName must be specified.
+             */
+            speciesId?: number;
+            /**
+             * Format: int32
+             * @description Measured in centimeters. Only valid for Tree growth forms.
+             */
+            treeCrownDiameter?: number;
+            /**
+             * @description Only Tree and Shrub growth forms are allowed.
+             * @enum {string}
+             */
+            treeGrowthForm: "Tree" | "Shrub";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "CreateRecordedTree";
+        };
         CreateSavedDocumentVersionRequestPayload: {
             isSubmitted?: boolean;
             name: string;
@@ -7324,6 +7410,21 @@ export interface components {
              */
             type: "Date";
         };
+        DeleteBiomassSpeciesOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /** @description Name of species to delete. Exactly one of this or speciesId must be specified. */
+            scientificName?: string;
+            /**
+             * Format: int64
+             * @description ID of species to delete. Exactly one of this or scientificName must be specified.
+             */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "DeleteBiomassSpecies";
+        };
         DeleteFundersRequestPayload: {
             userIds: number[];
         };
@@ -7343,6 +7444,37 @@ export interface components {
              * @description If set to `null`, all voters in the phase will be removed.
              */
             userId?: number;
+        };
+        DeleteQuadratSpeciesOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @description Name of species to delete. Exactly one of this or speciesId must be specified. */
+            scientificName?: string;
+            /**
+             * Format: int64
+             * @description ID of species to delete. Exactly one of this or scientificName must be specified.
+             */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "DeleteQuadratSpecies";
+        };
+        /** @description Deletes one recorded-tree record, which represents one trunk. */
+        DeleteRecordedTreeOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            /**
+             * Format: int64
+             * @description ID of the recorded-tree record to delete.
+             */
+            recordedTreeId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "DeleteRecordedTree";
         };
         /**
          * @description Operation that deletes a value from a variable. Deletion is non-destructive; this actually creates a new value with its own value ID, where the new value is marked as deleted. This "is deleted" value is included in incremental value query results.
@@ -7590,7 +7722,7 @@ export interface components {
         DraftPlantingSitePayload: {
             /**
              * Format: int64
-             * @description ID of the user who created this draft. Only that user is allowed to modify or delete the draft.
+             * @description ID of the user who created this draft.
              */
             createdBy: number;
             /** Format: date-time */
@@ -8172,7 +8304,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
+            geometries: components["schemas"]["Geometry"][];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -9663,6 +9795,8 @@ export interface components {
         NurserySummaryPayload: {
             /** Format: int64 */
             activeGrowthQuantity: number;
+            /** Format: int32 */
+            batchesWithInventory: number;
             /** Format: int64 */
             germinatingQuantity: number;
             /** Format: int32 */
@@ -9680,6 +9814,8 @@ export interface components {
             readyQuantity: number;
             /** @description Species currently present in the nursery. */
             species: components["schemas"]["NurserySummarySpeciesPayload"][];
+            /** Format: int32 */
+            speciesWithInventory: number;
             /**
              * Format: int64
              * @description Total number of plants that have been withdrawn due to death.
@@ -10302,6 +10438,8 @@ export interface components {
         OrganizationNurserySummaryPayload: {
             /** Format: int64 */
             activeGrowthQuantity: number;
+            /** Format: int32 */
+            batchesWithInventory: number;
             /** Format: int64 */
             germinatingQuantity: number;
             /** Format: int32 */
@@ -10317,6 +10455,8 @@ export interface components {
             notReadyQuantity: number;
             /** Format: int64 */
             readyQuantity: number;
+            /** Format: int32 */
+            speciesWithInventory: number;
             /**
              * Format: int64
              * @description Total number of plants that have been withdrawn due to death.
@@ -11320,11 +11460,18 @@ export interface components {
              * @description ID of tree to update.
              */
             recordedTreeId: number;
+            /** @description Optional. If set, changes the species of every trunk of this tree. At most one of speciesId and scientificName may be specified. */
+            scientificName?: string;
             /**
              * Format: int32
              * @description Only valid for Shrub growth form.
              */
             shrubDiameter?: number;
+            /**
+             * Format: int64
+             * @description Optional. If set, changes the species of every trunk of this tree. At most one of speciesId and scientificName may be specified.
+             */
+            speciesId?: number;
             /**
              * Format: int32
              * @description Only valid for Tree and Trunk growth forms.
@@ -12593,7 +12740,7 @@ export interface components {
         };
         UpdateObservationRequestPayload: {
             /** @description List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */
-            updates: (components["schemas"]["BiomassSpeciesUpdateOperationPayload"] | components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["MonitoringSpeciesUpdateOperationPayload"] | components["schemas"]["ObservationPlotUpdateOperationPayload"] | components["schemas"]["QuadratSpeciesUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"] | components["schemas"]["RecordedTreeUpdateOperationPayload"])[];
+            updates: (components["schemas"]["BiomassSpeciesUpdateOperationPayload"] | components["schemas"]["BiomassUpdateOperationPayload"] | components["schemas"]["CreateBiomassSpeciesOperationPayload"] | components["schemas"]["CreateQuadratSpeciesOperationPayload"] | components["schemas"]["CreateRecordedTreeOperationPayload"] | components["schemas"]["DeleteBiomassSpeciesOperationPayload"] | components["schemas"]["DeleteQuadratSpeciesOperationPayload"] | components["schemas"]["DeleteRecordedTreeOperationPayload"] | components["schemas"]["MonitoringSpeciesUpdateOperationPayload"] | components["schemas"]["ObservationPlotUpdateOperationPayload"] | components["schemas"]["QuadratSpeciesUpdateOperationPayload"] | components["schemas"]["QuadratUpdateOperationPayload"] | components["schemas"]["RecordedTreeUpdateOperationPayload"])[];
         };
         UpdateOrganizationInternalTagsRequestPayload: {
             tagIds: number[];

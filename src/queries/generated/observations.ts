@@ -935,6 +935,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: Geometry[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -958,12 +964,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -1042,6 +1042,80 @@ export type BiomassUpdateOperationPayload = {
     tideTime?: string | null;
     waterDepth?: number | null;
   };
+export type CreateBiomassSpeciesOperationPayload = {
+  type: 'CreateBiomassSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    /** Common name of the species. */
+    commonName?: string;
+    /** Whether the species is invasive. */
+    isInvasive: boolean;
+    /** Whether the species is threatened. */
+    isThreatened: boolean;
+    /** Scientific name of species to add. Exactly one of this or speciesId must be specified. */
+    scientificName?: string;
+    /** ID of species to add. Exactly one of this or scientificName must be specified. */
+    speciesId?: number;
+  };
+export type CreateQuadratSpeciesOperationPayload = {
+  type: 'CreateQuadratSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    /** Abundance count, from 0 through 25. */
+    abundance: number;
+    position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+    /** Name of species to add. Exactly one of this or speciesId must be specified. */
+    scientificName?: string;
+    /** ID of species to add. Exactly one of this or scientificName must be specified. */
+    speciesId?: number;
+  };
+export type CreateRecordedTreeOperationPayload = {
+  type: 'CreateRecordedTree';
+} & ObservationUpdateOperationPayloadBase & {
+    /** Measured in meters. Not allowed for Shrubs. */
+    boleHeight?: number;
+    /** Additional notes about the recorded tree. */
+    description?: string;
+    /** Measured in centimeters. Required for Tree growth forms; not allowed for Shrubs. */
+    diameterAtBreastHeight?: number;
+    /** Measured in meters. Required for Tree growth forms; not allowed for Shrubs. */
+    height?: number;
+    /** Whether the recorded tree is dead. */
+    isDead: boolean;
+    /** Measured in meters. Required for Tree growth forms; not allowed for Shrubs. */
+    pointOfMeasurement?: number;
+    /** Exactly one of speciesId and scientificName must be specified. */
+    scientificName?: string;
+    /** Measured in centimeters. Required for Shrubs; not allowed for Trees. */
+    shrubDiameter?: number;
+    /** Exactly one of speciesId and scientificName must be specified. */
+    speciesId?: number;
+    /** Measured in centimeters. Only valid for Tree growth forms. */
+    treeCrownDiameter?: number;
+    /** Only Tree and Shrub growth forms are allowed. */
+    treeGrowthForm: 'Tree' | 'Shrub';
+  };
+export type DeleteBiomassSpeciesOperationPayload = {
+  type: 'DeleteBiomassSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    /** Name of species to delete. Exactly one of this or speciesId must be specified. */
+    scientificName?: string;
+    /** ID of species to delete. Exactly one of this or scientificName must be specified. */
+    speciesId?: number;
+  };
+export type DeleteQuadratSpeciesOperationPayload = {
+  type: 'DeleteQuadratSpecies';
+} & ObservationUpdateOperationPayloadBase & {
+    position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+    /** Name of species to delete. Exactly one of this or speciesId must be specified. */
+    scientificName?: string;
+    /** ID of species to delete. Exactly one of this or scientificName must be specified. */
+    speciesId?: number;
+  };
+export type DeleteRecordedTreeOperationPayload = {
+  type: 'DeleteRecordedTree';
+} & ObservationUpdateOperationPayloadBase & {
+    /** ID of the recorded-tree record to delete. */
+    recordedTreeId: number;
+  };
 export type MonitoringSpeciesUpdateOperationPayload = {
   type: 'MonitoringSpecies';
 } & ObservationUpdateOperationPayloadBase & {
@@ -1110,8 +1184,12 @@ export type RecordedTreeUpdateOperationPayload = {
     pointOfMeasurement?: number;
     /** ID of tree to update. */
     recordedTreeId: number;
+    /** Optional. If set, changes the species of every trunk of this tree. At most one of speciesId and scientificName may be specified. */
+    scientificName?: string;
     /** Only valid for Shrub growth form. */
     shrubDiameter?: number;
+    /** Optional. If set, changes the species of every trunk of this tree. At most one of speciesId and scientificName may be specified. */
+    speciesId?: number;
     /** Only valid for Tree and Trunk growth forms. */
     treeCrownDiameter?: number;
   };
@@ -1120,6 +1198,12 @@ export type UpdateObservationRequestPayload = {
   updates: (
     | BiomassSpeciesUpdateOperationPayload
     | BiomassUpdateOperationPayload
+    | CreateBiomassSpeciesOperationPayload
+    | CreateQuadratSpeciesOperationPayload
+    | CreateRecordedTreeOperationPayload
+    | DeleteBiomassSpeciesOperationPayload
+    | DeleteQuadratSpeciesOperationPayload
+    | DeleteRecordedTreeOperationPayload
     | MonitoringSpeciesUpdateOperationPayload
     | ObservationPlotUpdateOperationPayload
     | QuadratSpeciesUpdateOperationPayload
