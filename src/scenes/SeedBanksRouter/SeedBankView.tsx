@@ -42,7 +42,7 @@ const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
   JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
 export default function SeedBankView(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, isFetchingOrganizations } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
@@ -66,6 +66,7 @@ export default function SeedBankView(): JSX.Element {
     connectionState: 'Not Connected',
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
+  const waitingForOrganizations = !!seedBankId && isFetchingOrganizations;
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = isMobile ? 12 : 4;
@@ -237,7 +238,7 @@ export default function SeedBankView(): JSX.Element {
         type='passive'
       />
       <Button
-        disabled={!isDirty || saving}
+        disabled={!isDirty || saving || waitingForOrganizations}
         id='saveCreateSeedBank'
         label={strings.SAVE}
         onClick={() => void saveSeedBank()}
@@ -248,7 +249,7 @@ export default function SeedBankView(): JSX.Element {
 
   return (
     <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={isDirty} title={title}>
-      {saving && <BusySpinner withSkrim={true} />}
+      {(saving || waitingForOrganizations) && <BusySpinner withSkrim={true} />}
       <Box
         sx={{
           backgroundColor: theme.palette.TwClrBg,

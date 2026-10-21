@@ -89,6 +89,7 @@ export default function SeedBankDetailsView(): JSX.Element {
               priority='primary'
               size='medium'
               onClick={goToEditSeedBank}
+              disabled={isFetchingOrganizations}
             />
           )}
         </Grid>

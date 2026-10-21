@@ -87,6 +87,7 @@ export default function NurseryDetailsView(): JSX.Element {
               priority='primary'
               size='medium'
               onClick={goToEditNursery}
+              disabled={isFetchingOrganizations}
             />
           )}
         </Grid>
