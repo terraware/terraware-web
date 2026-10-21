@@ -42,7 +42,7 @@ import {
   activityStatusTagLabel,
   activityTypeLabel,
 } from 'src/types/Activity';
-import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
+import { FieldOptionsMap, SearchNodePayload, getFieldNodeValues } from 'src/types/Search';
 import { groupActivitiesByQuarter, isObservationActivity } from 'src/utils/activityUtils';
 import { CsvData } from 'src/utils/csv';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -269,7 +269,7 @@ const ActivitiesListView = ({
     const searchNodeChildren: SearchNodePayload[] = [];
     if (Object.keys(filters).length > 0) {
       const filterValueChildren = Object.keys(filters)
-        .filter((field: string) => (filters[field]?.values || []).length > 0)
+        .filter((field: string) => (getFieldNodeValues(filters[field]) || []).length > 0)
         .map((field: string): SearchNodePayload => filters[field]);
 
       searchNodeChildren.push({
@@ -384,7 +384,7 @@ const ActivitiesListView = ({
 
   const onFilterChange = useCallback(
     (key: string, filter: SearchNodePayload) => {
-      if (filter.values.length) {
+      if (getFieldNodeValues(filter)?.length) {
         setFilters({ ...filters, [key]: filter });
         setCurrentPage(1);
       } else {
@@ -557,7 +557,7 @@ const ActivitiesListView = ({
     return Object.keys(filters)
       .map((key): PillListItem<string> | false => {
         // If there are no values, there should be no pill
-        if (!filters[key] || (filters[key].values || []).length === 0) {
+        if (!filters[key] || (getFieldNodeValues(filters[key]) || []).length === 0) {
           return false;
         }
 
@@ -571,8 +571,8 @@ const ActivitiesListView = ({
         }
 
         const pillValue = filterConfig.pillValueRenderer
-          ? filterConfig.pillValueRenderer(filters[key].values)
-          : defaultPillValueRenderer(filters[key].values);
+          ? filterConfig.pillValueRenderer(getFieldNodeValues(filters[key]) ?? [])
+          : defaultPillValueRenderer(getFieldNodeValues(filters[key]) ?? []);
         const label = filterConfig.label;
 
         const removeFilter = (k: string) => {
@@ -695,7 +695,7 @@ const ActivitiesListView = ({
                 onChange={onChangeDateRange}
                 onDelete={onDeleteDateRange}
                 rightComponent={filterPillData.length ? <PillList data={filterPillData} /> : undefined}
-                values={filters.date?.values ?? []}
+                values={getFieldNodeValues(filters.date) ?? []}
               />
               {(!groupedActivities || groupedActivities.length === 0) && initialized && !busy ? (
                 <Typography

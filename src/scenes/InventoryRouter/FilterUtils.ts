@@ -1,6 +1,6 @@
 import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import { Organization } from 'src/types/Organization';
-import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
+import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
 import { getAllNurseries } from 'src/utils/organization';
 
 export const getNurseryName = (facilityId: number, organization: Organization) => {
@@ -34,7 +34,7 @@ export const convertFilterGroupToMap = (filterGroupFilters: Record<string, Searc
   Object.keys(filterGroupFilters).reduce(
     (acc, curr) => ({
       ...acc,
-      [curr]: filterGroupFilters[curr].values,
+      [curr]: getFieldNodeValues(filterGroupFilters[curr]),
     }),
     {} as InventoryFiltersType
   );

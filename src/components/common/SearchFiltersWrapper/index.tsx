@@ -7,7 +7,7 @@ import { Option } from '@terraware/web-components/components/table/types';
 import { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import strings from 'src/strings';
-import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload, getFieldNodeValues } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ExportTableComponent, { ExportTableProps } from './ExportTableComponent';
@@ -106,7 +106,7 @@ export default function SearchFiltersWrapper({
               filtersProps.setFilters(result);
             };
 
-            const values = filtersProps.filters[key]?.values ?? [];
+            const values = getFieldNodeValues(filtersProps.filters[key]) ?? [];
             let pillValue: string | undefined = values.join(', ');
             let label = filtersProps.filterColumns.find((f) => key === f.name)?.label ?? '';
 

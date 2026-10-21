@@ -1,5 +1,5 @@
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import { FieldNodePayload, SearchRequestPayload } from 'src/types/Search';
+import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { MergeOtherSpeciesPayload, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -93,49 +93,33 @@ const resolveSpeciesUpload = async (uploadId: number, overwriteExisting: boolean
  * Search species for selectors
  */
 const suggestSpecies = async (organizationId: number, query: string): Promise<SuggestedSpecies[] | null> => {
+  const children: SearchNodePayload[] = [
+    {
+      operation: 'field',
+      field: 'organization_id',
+      type: 'Exact',
+      values: [organizationId.toString()],
+    },
+  ];
+
+  if (query) {
+    const { type, values } = parseSearchTerm(query);
+    children.push({
+      operation: 'or',
+      children: [
+        { operation: 'field', field: 'scientificName', type, values },
+        { operation: 'field', field: 'commonName', type, values },
+      ],
+    });
+  }
+
   const params: SearchRequestPayload = {
     prefix: 'species',
     fields: ['scientificName', 'commonName', 'id'],
     sortOrder: [{ field: 'scientificName', direction: 'Ascending' }],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-      ],
-    },
+    search: { operation: 'and', children },
     count: 0,
   };
-
-  if (query) {
-    const searchValueChildren: FieldNodePayload[] = [];
-    const { type, values } = parseSearchTerm(query);
-
-    const nameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'scientificName',
-      type,
-      values,
-    };
-    searchValueChildren.push(nameNode);
-
-    const commonNameNode: FieldNodePayload = {
-      operation: 'field',
-      field: 'commonName',
-      type,
-      values,
-    };
-    searchValueChildren.push(commonNameNode);
-
-    params.search.children.push({
-      operation: 'or',
-      children: searchValueChildren,
-    });
-  }
 
   return await SearchService.search(params);
 };

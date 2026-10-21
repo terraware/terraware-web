@@ -28,7 +28,7 @@ import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils'
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
-import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
+import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllNurseries } from 'src/utils/organization';
@@ -787,7 +787,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                                   const converted = convertFilterGroupToMap(_filterGroupFilters);
                                   const newFilters: InventoryFiltersUnion = { ...filters, ...converted };
                                   if (_filterGroupFilters.facilityIds) {
-                                    newFilters.facilityIds = (_filterGroupFilters.facilityIds.values as string[])
+                                    newFilters.facilityIds = (
+                                      getFieldNodeValues(_filterGroupFilters.facilityIds) as string[]
+                                    )
                                       .filter(Boolean)
                                       .map(Number);
                                   } else {

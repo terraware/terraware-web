@@ -7,7 +7,15 @@ import Divisor from 'src/components/common/Divisor';
 import Dropdown from 'src/components/common/Dropdown';
 import TextField from 'src/components/common/TextField';
 import strings from 'src/strings';
-import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  OrNodePayload,
+  SearchNodePayload,
+  getFieldNodeValues,
+  isAndNodePayload,
+  isFieldNodePayload,
+} from 'src/types/Search';
 import { weightUnits } from 'src/units';
 
 type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
@@ -41,10 +49,11 @@ export default function FilterCountWeight(props: Props): JSX.Element {
   const [weightUnit, setWeightUnit] = React.useState(defaultWeightUnit);
 
   React.useEffect(() => {
-    const quantity = props.payloads.find((p) => p.operation === 'and')?.children[1].values;
+    const fieldPayloads = props.payloads.filter(isFieldNodePayload);
+    const quantity = getFieldNodeValues(props.payloads.find(isAndNodePayload)?.children[1]);
 
-    const grams = props.payloads.find((p) => p.field === fields[1] && p.type === 'Range')?.values;
-    const newEmptyFields = props.payloads.find((p) => p.type === 'Exact')?.values;
+    const grams = fieldPayloads.find((p) => p.field === fields[1] && p.type === 'Range')?.values;
+    const newEmptyFields = fieldPayloads.find((p) => p.type === 'Exact')?.values;
 
     if (quantity) {
       setSeedCount(Boolean(quantity));
@@ -57,7 +66,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
     }
     setWeightMinValue((grams && grams[0]?.split(' ')[0]) || null);
     setWeightMaxValue((grams && grams[1]?.split(' ')[0]) || null);
-    setWeightUnit((grams && grams[0]?.split(' ')[1]) ?? defaultWeightUnit);
+    setWeightUnit(((grams && grams[0]?.split(' ')[1]) as Unit | undefined) ?? defaultWeightUnit);
 
     setEmptyFields(Boolean(newEmptyFields));
   }, [fields, props.payloads]);
