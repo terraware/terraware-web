@@ -5,7 +5,6 @@ import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import documentProducerReducers from './features/documentProducer';
-import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import gisReducers from './features/gis/gisSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
@@ -22,7 +21,6 @@ const reducers = {
   ...acceleratorReducers,
   ...documentProducerReducers,
   ...funderProjectsReducers,
-  ...fundingEntitiesReducers,
   ...gisReducers,
   ...messageReducers,
   ...matrixViewReducers,

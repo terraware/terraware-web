@@ -17,6 +17,14 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
       ],
     },
+    getProjectFundingEntities: {
+      providesTags: (results) => [
+        ...(results
+          ? results.fundingEntities.map((entity) => ({ type: QueryTagTypes.FundingEntities, id: entity.id }))
+          : []),
+        { type: QueryTagTypes.FundingEntities, id: 'LIST' },
+      ],
+    },
     getFundingEntity1: {
       providesTags: (result) => (result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),
     },
