@@ -6,7 +6,7 @@ import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-compone
 import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
-import { useSubLocationsForFacilities } from 'src/components/common/SubLocations/useFacilitySubLocations';
+import { useSubLocationsForFacilities } from 'src/components/common/SubLocations/useSubLocationsForFacilities';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
