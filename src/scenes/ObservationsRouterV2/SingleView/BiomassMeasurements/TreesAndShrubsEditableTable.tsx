@@ -281,14 +281,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       if (row.original.treeGrowthForm === 'Shrub') {
         return <>{row.original.shrubDiameter ?? ''}</>;
       }
-      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
+      return <>{forestType === 'Mangrove' ? (row.original.treeCrownDiameter ?? '') : ''}</>;
     },
     [forestType]
   );
 
   const BoleHeightCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? (row.original.boleHeight ?? '') : ''}</>
     ),
     [forestType]
   );
@@ -494,7 +494,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         return {
           ...merged,
           speciesName: merged.speciesId
-            ? findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName
+            ? (findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName)
             : merged.speciesName,
         };
       });
