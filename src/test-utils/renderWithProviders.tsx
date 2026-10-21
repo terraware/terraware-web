@@ -94,6 +94,7 @@ const buildOrganizationContext = (overrides: Partial<ProvidedOrganizationData> =
     setSelectedOrganization: () => undefined,
     redirectAndNotify: () => undefined,
     reloadOrganizations: () => Promise.resolve(),
+    isFetchingOrganizations: false,
     ...overrides,
   };
 };

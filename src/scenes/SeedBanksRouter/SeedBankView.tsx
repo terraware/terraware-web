@@ -42,7 +42,7 @@ const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
   JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
 export default function SeedBankView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
@@ -177,7 +177,6 @@ export default function SeedBankView(): JSX.Element {
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
           type: record.type,
         }).unwrap();
-        await reloadOrganizations(selectedOrganization.id);
         snackbar.toastSuccess(strings.SEED_BANK_ADDED);
         id = response.id;
       }

@@ -42,7 +42,7 @@ const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
   JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
 export default function NurseryView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [validateDates, setValidateDates] = useState(false);
@@ -201,7 +201,6 @@ export default function NurseryView(): JSX.Element {
         id = response.id;
       }
 
-      await reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       setNavigateToNursery({ navigate: true, id });
     } catch {
