@@ -11,7 +11,7 @@ import ProjectEntitySearch, {
   PillListItemWithEmptyValue,
 } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import {
-  ProjectEntityFilters,
+  ProjectEntitySearchArgs,
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import Card from 'src/components/common/Card';
@@ -24,7 +24,7 @@ import strings from 'src/strings';
 import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
 import { stateName } from 'src/types/Accession';
 import { CreateProjectRequest } from 'src/types/Project';
-import { SearchCriteria, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchCriteria, SearchResponseElement } from 'src/types/Search';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -119,21 +119,20 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
   const [searchAccessions] = useLazySearchAccessionsQuery();
 
   const getSearchResults = useCallback(
-    async (
-      organizationId: number,
-      searchFields: SearchNodePayload[],
-      searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntityFilters
-    ) => {
-      const searchCriteria: SearchCriteria = searchFields.reduce(
-        (acc, curr) => ({
-          ...acc,
-          [curr.operation]: curr,
-        }),
-        {} as SearchCriteria
-      );
+    async ({ organizationId, sortOrder, filters: searchFilters, searchTerm }: ProjectEntitySearchArgs) => {
+      const searchCriteria: SearchCriteria = {
+        or: {
+          operation: 'or',
+          children: ['accessionNumber', 'speciesName'].map((field) => ({
+            operation: 'field',
+            field,
+            type: 'Fuzzy',
+            values: [searchTerm ?? ''],
+          })),
+        },
+      };
 
-      const searchStatuses = searchFilters?.statuses || [];
+      const searchStatuses = searchFilters.statuses || [];
       if (searchStatuses.length > 0) {
         searchCriteria.state = {
           field: 'state',
@@ -143,7 +142,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
         };
       }
 
-      const searchProjectIds = searchFilters?.projectIds || [];
+      const searchProjectIds = searchFilters.projectIds || [];
       if (searchProjectIds.length > 0) {
         searchCriteria.project_id = {
           field: 'project_id',
@@ -158,7 +157,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
           organizationId,
           fields: SEARCH_FIELDS_ACCESSIONS as string[],
           searchCriteria,
-          sortOrder: searchSortOrder,
+          sortOrder,
         }).unwrap();
         return data as SearchResponseAccession[];
       } catch {
@@ -166,21 +165,6 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
       }
     },
     [searchAccessions]
-  );
-
-  const getSearchFields = useCallback(
-    (debouncedSearchTerm: string): SearchNodePayload[] => [
-      {
-        operation: 'or',
-        children: ['accessionNumber', 'speciesName'].map((field: string) => ({
-          operation: 'field',
-          field,
-          type: 'Fuzzy',
-          values: [debouncedSearchTerm],
-        })),
-      },
-    ],
-    []
   );
 
   const {
@@ -199,7 +183,6 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
     setProjectEntities: setProjectAccessions,
     onNext,
     getSearchResults,
-    getSearchFields,
   });
 
   const renderer = useCallback(

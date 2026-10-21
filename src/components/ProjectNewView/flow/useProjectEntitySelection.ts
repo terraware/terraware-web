@@ -4,7 +4,7 @@ import { FlowStates } from 'src/components/ProjectNewView';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { AccessionState } from 'src/types/Accession';
-import { FieldNodePayload, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
@@ -14,18 +14,18 @@ interface UseProjectEntitySelectionProps<T extends SearchResponseElement> {
   setHasEntities: (value: boolean) => void;
   setProjectEntities: (value: T[]) => void;
   onNext: () => void;
-  getSearchResults: (
-    organizationId: number,
-    searchFields: (FieldNodePayload | SearchNodePayload)[],
-    searchSortOrder?: SearchSortOrder,
-    filters?: ProjectEntityFilters,
-    searchTerm?: string
-  ) => Promise<T[] | null>;
-  getSearchFields: (debouncedSearchTerm: string) => (FieldNodePayload | SearchNodePayload)[];
+  getSearchResults: (args: ProjectEntitySearchArgs) => Promise<T[] | null>;
 }
 
+export type ProjectEntitySearchArgs = {
+  organizationId: number;
+  sortOrder?: SearchSortOrder;
+  filters: ProjectEntityFilters;
+  searchTerm?: string;
+};
+
 export type ProjectEntityFilters = {
-  projectIds?: number[];
+  projectIds?: (number | null)[];
   statuses?: AccessionState[];
   nurseryIds?: number[];
 };
@@ -37,7 +37,6 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   setProjectEntities,
   onNext,
   getSearchResults,
-  getSearchFields,
 }: UseProjectEntitySelectionProps<T>) => {
   const { selectedOrganization } = useOrganization();
 
@@ -54,13 +53,12 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
   useEffect(() => {
     if (selectedOrganization) {
       const populate = async () => {
-        const searchResponse = await getSearchResults(
-          selectedOrganization.id,
-          getSearchFields(debouncedSearchTerm || ''),
-          searchSortOrder,
+        const searchResponse = await getSearchResults({
+          organizationId: selectedOrganization.id,
+          sortOrder: searchSortOrder,
           filters,
-          debouncedSearchTerm || undefined
-        );
+          searchTerm: debouncedSearchTerm || undefined,
+        }).catch(() => null);
 
         if (searchResponse) {
           setEntities(searchResponse);
@@ -79,7 +77,6 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
       void populate();
     }
   }, [
-    getSearchFields,
     debouncedSearchTerm,
     getSearchResults,
     setHasEntities,
