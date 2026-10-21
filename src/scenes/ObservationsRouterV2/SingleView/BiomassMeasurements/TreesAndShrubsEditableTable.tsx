@@ -47,6 +47,15 @@ type DraftTree = {
 
 const SPECIES_SCOPED_FIELDS = ['speciesId', 'speciesName', 'isInvasive', 'isThreatened'] as const;
 
+const WHOLE_NUMBER_FIELDS: DraftMeasurementField[] = ['shrubDiameter', 'treeCrownDiameter'];
+
+const isMeasurement = (value: string | undefined, field: DraftMeasurementField): boolean => {
+  if (value === undefined || value.trim() === '' || !(Number(value) >= 0)) {
+    return false;
+  }
+  return !WHOLE_NUMBER_FIELDS.includes(field) || Number.isInteger(Number(value));
+};
+
 const speciesStateOf = (edits: Partial<TreeRow> = {}): Partial<TreeRow> =>
   Object.fromEntries(SPECIES_SCOPED_FIELDS.filter((field) => edits[field] !== undefined).map((f) => [f, edits[f]]));
 
@@ -60,10 +69,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
   const [pendingMeasurement, setPendingMeasurement] = useState<{
-    fieldId: string;
-    row: TreeRow;
-    value: string;
+    keep: () => void;
     label: string;
+    value: string;
   }>();
 
   const measurementRanges = useMemo<Record<string, { max: number; label: string }>>(
@@ -133,7 +141,11 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
       const range = measurementRanges[fieldId];
       if (range && Number(value) > range.max) {
-        setPendingMeasurement({ fieldId, row, value: String(value), label: range.label });
+        setPendingMeasurement({
+          keep: () => commitRecordedTree(fieldId, row, value, optimisticValue),
+          label: range.label,
+          value: String(value),
+        });
         return;
       }
       commitRecordedTree(fieldId, row, value, optimisticValue);
@@ -204,11 +216,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     if (!draft?.species || !draft.treeGrowthForm) {
       return false;
     }
-    const required =
-      draft.treeGrowthForm === 'Shrub'
-        ? [draft.shrubDiameter]
-        : [draft.diameterAtBreastHeight, draft.pointOfMeasurement, draft.height];
-    return required.every((value) => value !== undefined && value.trim() !== '' && Number(value) >= 0);
+    const required: DraftMeasurementField[] =
+      draft.treeGrowthForm === 'Shrub' ? ['shrubDiameter'] : ['diameterAtBreastHeight', 'pointOfMeasurement', 'height'];
+    if (!required.every((field) => isMeasurement(draft[field], field))) {
+      return false;
+    }
+    return draft.treeCrownDiameter === undefined || draft.treeCrownDiameter.trim() === ''
+      ? true
+      : isMeasurement(draft.treeCrownDiameter, 'treeCrownDiameter');
   }, [draft]);
 
   const startAdding = useCallback((table: MRT_TableInstance<TreeRow>) => {
@@ -244,11 +259,27 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           ? { treeCrownDiameter: Number(draft.treeCrownDiameter) }
           : {}),
       };
-      setDraft(undefined);
-      table.setCreatingRow(null);
-      void updateObservation({ updates: [payload] });
+      const send = async () => {
+        if (await updateObservation({ updates: [payload] })) {
+          setDraft(undefined);
+          table.setCreatingRow(null);
+        }
+      };
+
+      const outlier = (Object.keys(measurementRanges) as DraftMeasurementField[])
+        .filter((field) => draft[field] !== undefined && draft[field] !== '')
+        .find((field) => Number(draft[field]) > measurementRanges[field].max);
+      if (outlier) {
+        setPendingMeasurement({
+          keep: () => void send(),
+          label: measurementRanges[outlier].label,
+          value: String(draft[outlier]),
+        });
+        return;
+      }
+      void send();
     },
-    [draft, isCrownDiameterEditable, isDraftValid, updateObservation]
+    [draft, isCrownDiameterEditable, isDraftValid, measurementRanges, updateObservation]
   );
 
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
@@ -621,6 +652,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         accessorKey: 'description',
         header: strings.NOTES,
         Cell: DescriptionCell,
+        enableEditing: (row) => row.id !== DRAFT_ROW_ID,
         editConfig: {
           onSave: (row, value) => saveRecordedTree('description', row, value),
         },
@@ -751,7 +783,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
               label={strings.KEEP_VALUE}
               type={'destructive'}
               onClick={() => {
-                commitRecordedTree(pendingMeasurement.fieldId, pendingMeasurement.row, pendingMeasurement.value);
+                pendingMeasurement.keep();
                 setPendingMeasurement(undefined);
               }}
             />,

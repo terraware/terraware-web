@@ -546,6 +546,58 @@ describe('TreesAndShrubsEditableTable adding', () => {
     });
   });
 
+  it('asks about an unexpected measurement before recording the plant', async () => {
+    const { user, requests } = setupTrunks();
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    // A height of 450 m is far outside the expected range.
+    await fill(user, [12, 1.3, 450]);
+
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+    expect(
+      screen.getByText(strings.formatString(strings.UNEXPECTED_BIOMASS_MEASUREMENT, '450', strings.HEIGHT_M) as string)
+    ).toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+
+    await user.click(screen.getByRole('button', { name: strings.KEEP_VALUE }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+  });
+
+  it('will not record a diameter the server cannot store as whole centimeters', async () => {
+    const { user, requests } = setupTrunks();
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.SHRUB);
+    await fill(user, [1.5]);
+
+    expect(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB })).toBeDisabled();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('keeps the draft when the plant could not be recorded', async () => {
+    const { user, requests } = setupTrunks({ updateFails: () => true });
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await fill(user, [12, 1.3, 8]);
+
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    // Nothing was recorded, so what was typed has to still be there to retry.
+    expect(screen.getByPlaceholderText(strings.SEARCH_SPECIES)).toBeInTheDocument();
+  });
+
+  it('does not offer notes on the plant being added', async () => {
+    const { user } = setupTrunks();
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+
+    const draftRow = screen.getAllByRole('row').at(-1) as HTMLElement;
+    const notesCell = within(draftRow).getAllByRole('cell')[11];
+    await user.dblClick(notesCell);
+    expect(within(notesCell).queryByRole('textbox')).not.toBeInTheDocument();
+    expect(within(notesCell).queryByRole('button')).not.toBeInTheDocument();
+  });
+
   it('abandons the new plant when the add is cancelled', async () => {
     const { user, requests } = setupTrunks();
     await startAdd(user);
