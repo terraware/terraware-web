@@ -26,6 +26,11 @@ type TreeRow = ExistingTreePayload & {
 
 const REMOVE_BUTTON_CLASS = 'recordedTreeRemove';
 
+const SPECIES_SCOPED_FIELDS = ['speciesId', 'speciesName', 'isInvasive', 'isThreatened'] as const;
+
+const speciesStateOf = (edits: Partial<TreeRow> = {}): Partial<TreeRow> =>
+  Object.fromEntries(SPECIES_SCOPED_FIELDS.filter((field) => edits[field] !== undefined).map((f) => [f, edits[f]]));
+
 /** Trunks of a multi-trunk tree are numbered within the tree, as in 5_2. */
 const getTreeLabel = (row: TreeRow): string =>
   row.treeGrowthForm === 'Trunk' ? `${row.treeNumber}_${row.trunkNumber}` : String(row.treeNumber);
@@ -186,6 +191,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     const { row, species } = pendingSpeciesChange;
     setPendingSpeciesChange(undefined);
     const changed = row.treeGrowthForm === 'Shrub' ? [row] : trunksOfTree(row);
+    const speciesBefore = new Map(changed.map((tree) => [tree.id, speciesStateOf(optimisticValues[tree.id])]));
     setOptimisticValues((previous) =>
       changed.reduce(
         (next, tree) => ({
@@ -204,13 +210,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       setOptimisticValues((previous) =>
         changed.reduce((next, tree) => {
           const keptEdits = { ...next[tree.id] };
-          delete keptEdits.speciesId;
-          delete keptEdits.speciesName;
-          return { ...next, [tree.id]: keptEdits };
+          SPECIES_SCOPED_FIELDS.forEach((field) => delete keptEdits[field]);
+          return { ...next, [tree.id]: { ...keptEdits, ...speciesBefore.get(tree.id) } };
         }, previous)
       );
     }
-  }, [pendingSpeciesChange, trunksOfTree, updateObservation]);
+  }, [optimisticValues, pendingSpeciesChange, trunksOfTree, updateObservation]);
 
   const SpeciesCellEditor = useCallback(
     ({ row, table }: { row: { original: TreeRow }; table: { setEditingCell: (cell: null) => void } }) => (
@@ -281,14 +286,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       if (row.original.treeGrowthForm === 'Shrub') {
         return <>{row.original.shrubDiameter ?? ''}</>;
       }
-      return <>{forestType === 'Mangrove' ? (row.original.treeCrownDiameter ?? '') : ''}</>;
+      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
     },
     [forestType]
   );
 
   const BoleHeightCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? (row.original.boleHeight ?? '') : ''}</>
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
     ),
     [forestType]
   );
@@ -494,7 +499,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         return {
           ...merged,
           speciesName: merged.speciesId
-            ? (findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName)
+            ? findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName
             : merged.speciesName,
         };
       });
