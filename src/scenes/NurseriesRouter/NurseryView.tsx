@@ -7,13 +7,14 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import { useSaveSubLocations } from 'src/components/common/SubLocations/useSaveSubLocations';
 import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
-import { FacilityService, SubLocationService } from 'src/services';
+import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -52,6 +53,7 @@ export default function NurseryView(): JSX.Element {
   const snackbar = useSnackbar();
   const [createFacility] = useCreateFacilityMutation();
   const [updateFacility] = useUpdateFacilityMutation();
+  const saveSubLocations = useSaveSubLocations();
   const theme = useTheme();
   const [navigateToNursery, setNavigateToNursery] = useState<NavigateToFacilityObject>({
     navigate: false,
@@ -190,7 +192,7 @@ export default function NurseryView(): JSX.Element {
           updateFacilityRequestPayload: facilityPayload,
         }).unwrap();
         if (editedSubLocations) {
-          await SubLocationService.saveEditedSubLocations(selectedNursery.id, editedSubLocations);
+          await saveSubLocations(selectedNursery.id, editedSubLocations);
         }
       } else {
         const response = await createFacility({

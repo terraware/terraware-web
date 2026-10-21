@@ -7,6 +7,7 @@ import { BusySpinner, Button } from '@terraware/web-components';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import { useSaveSubLocations } from 'src/components/common/SubLocations/useSaveSubLocations';
 import TextField from 'src/components/common/Textfield/Textfield';
 import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
@@ -14,7 +15,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
-import { FacilityService, SubLocationService } from 'src/services';
+import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -53,6 +54,7 @@ export default function SeedBankView(): JSX.Element {
   const snackbar = useSnackbar();
   const [createFacility] = useCreateFacilityMutation();
   const [updateFacility] = useUpdateFacilityMutation();
+  const saveSubLocations = useSaveSubLocations();
   const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToFacilityObject>({
     navigate: false,
     id: undefined,
@@ -168,7 +170,7 @@ export default function SeedBankView(): JSX.Element {
           updateFacilityRequestPayload: facilityPayload,
         }).unwrap();
         if (editedSubLocations) {
-          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
+          await saveSubLocations(selectedSeedBank.id, editedSubLocations);
         }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
