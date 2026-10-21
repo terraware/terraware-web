@@ -179,7 +179,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [results]
   );
 
-  const confirmSpeciesChange = useCallback(() => {
+  const confirmSpeciesChange = useCallback(async () => {
     if (!pendingSpeciesChange) {
       return;
     }
@@ -188,7 +188,10 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     const changed = row.treeGrowthForm === 'Shrub' ? [row] : trunksOfTree(row);
     setOptimisticValues((previous) =>
       changed.reduce(
-        (next, tree) => ({ ...next, [tree.id]: { ...next[tree.id], speciesId: species.id, speciesName: undefined } }),
+        (next, tree) => ({
+          ...next,
+          [tree.id]: { ...next[tree.id], speciesId: species.id, speciesName: species.scientificName },
+        }),
         previous
       )
     );
@@ -197,7 +200,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       recordedTreeId: row.id,
       speciesId: species.id,
     };
-    updateObservation({ updates: [payload] });
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setOptimisticValues((previous) =>
+        changed.reduce((next, tree) => {
+          const keptEdits = { ...next[tree.id] };
+          delete keptEdits.speciesId;
+          delete keptEdits.speciesName;
+          return { ...next, [tree.id]: keptEdits };
+        }, previous)
+      );
+    }
   }, [pendingSpeciesChange, trunksOfTree, updateObservation]);
 
   const SpeciesCellEditor = useCallback(
@@ -269,14 +281,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       if (row.original.treeGrowthForm === 'Shrub') {
         return <>{row.original.shrubDiameter ?? ''}</>;
       }
-      return <>{forestType === 'Mangrove' ? (row.original.treeCrownDiameter ?? '') : ''}</>;
+      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
     },
     [forestType]
   );
 
   const BoleHeightCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? (row.original.boleHeight ?? '') : ''}</>
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
     ),
     [forestType]
   );
@@ -478,13 +490,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     return results?.biomassMeasurements?.trees
       ?.filter((tree) => !removedTreeIds.includes(tree.id))
       .map((tree) => {
-        const optimistic = optimisticValues[tree.id] ?? {};
+        const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };
         return {
-          ...tree,
-          ...optimistic,
-          speciesName: tree.speciesId
-            ? (findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName)
-            : tree.speciesName,
+          ...merged,
+          speciesName: merged.speciesId
+            ? findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName
+            : merged.speciesName,
         };
       });
   }, [findSpeciesById, results, optimisticValues, removedTreeIds]);
@@ -531,7 +542,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
           message={speciesChangeMessage(pendingSpeciesChange.row, pendingSpeciesChange.species)}
           onClose={() => setPendingSpeciesChange(undefined)}
-          onConfirm={confirmSpeciesChange}
+          onConfirm={() => void confirmSpeciesChange()}
           title={strings.CHANGE_SPECIES_CONFIRMATION}
         />
       )}

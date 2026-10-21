@@ -156,7 +156,7 @@ const detailsText = (...parts: string[]) => parts.join(strings.LIST_SEPARATOR);
 
 const ABUTILON = { id: 103, scientificName: 'Abutilon incanum' };
 
-const setupTrunks = (trunkCount = 2) => {
+const setupTrunks = (trunkCount = 2, updatesFail = false) => {
   mockGet('/api/v1/species', { species: [ABUTILON] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
@@ -181,7 +181,7 @@ const setupTrunks = (trunkCount = 2) => {
   server.use(
     http.patch(UPDATE_URL, ({ request }) => {
       requests.push(request.clone());
-      return HttpResponse.json({ status: 'ok' });
+      return updatesFail ? new HttpResponse(null, { status: 500 }) : HttpResponse.json({ status: 'ok' });
     })
   );
   const { user } = renderWithProviders(<TreesAndShrubsEditableTable />, {
@@ -218,6 +218,8 @@ describe('TreesAndShrubsEditableTable species change', () => {
     expect(await requests[0].json()).toEqual({
       updates: [{ type: 'RecordedTree', recordedTreeId: 101, speciesId: ABUTILON.id }],
     });
+    await waitFor(() => expect(screen.getAllByRole('cell', { name: ABUTILON.scientificName })).toHaveLength(2));
+    expect(screen.queryByRole('cell', { name: 'Eucalyptus dalveenica' })).not.toBeInTheDocument();
   });
 
   it('does not mention trunks for a tree that has only one', async () => {
@@ -230,6 +232,16 @@ describe('TreesAndShrubsEditableTable species change', () => {
         strings.formatString(strings.CHANGE_TREE_SPECIES_MESSAGE, '5', ABUTILON.scientificName) as string
       )
     ).toBeInTheDocument();
+  });
+
+  it('puts the old species back when the change fails', async () => {
+    const { user, requests, pickSpecies } = setupTrunks(2, true);
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    await waitFor(() => expect(screen.getAllByRole('cell', { name: 'Eucalyptus dalveenica' })).toHaveLength(2));
   });
 
   it('leaves the species alone when the change is cancelled', async () => {
