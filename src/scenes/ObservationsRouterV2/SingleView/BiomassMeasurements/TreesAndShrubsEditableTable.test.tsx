@@ -598,6 +598,79 @@ describe('TreesAndShrubsEditableTable adding', () => {
     expect(within(notesCell).queryByRole('button')).not.toBeInTheDocument();
   });
 
+  it('ignores a value the chosen growth form does not record', async () => {
+    const { user } = setupTrunks({ forestType: 'Mangrove' });
+    await startAdd(user);
+
+    await chooseGrowthForm(user, strings.TREE);
+    await user.type(screen.getAllByRole('spinbutton')[3], '1.5');
+    await chooseGrowthForm(user, strings.SHRUB);
+    await fill(user, [40]);
+
+    expect(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB })).toBeEnabled();
+  });
+
+  it('does not warn about an outlier the chosen growth form does not record', async () => {
+    const { user, requests } = setupTrunks();
+    await startAdd(user);
+
+    await chooseGrowthForm(user, strings.TREE);
+    await fill(user, [12, 1.3, 450]);
+    await chooseGrowthForm(user, strings.SHRUB);
+    await fill(user, [40]);
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+
+    expect(screen.queryByRole('button', { name: strings.KEEP_VALUE })).not.toBeInTheDocument();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        {
+          type: 'CreateRecordedTree',
+          speciesId: ABUTILON.id,
+          treeGrowthForm: 'Shrub',
+          isDead: false,
+          shrubDiameter: 40,
+        },
+      ],
+    });
+  });
+
+  it('records the plant once however many times the button is clicked', async () => {
+    const { user, requests, releaseFirstUpdate } = setupTrunks({ holdFirstUpdate: true });
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await fill(user, [12, 1.3, 8]);
+
+    const submit = screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB });
+    await user.click(submit);
+
+    await waitFor(() => expect(submit).toBeDisabled());
+
+    releaseFirstUpdate();
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
+    expect(requests).toHaveLength(1);
+  });
+
+  it('leaves a newly started draft alone when an earlier create finishes', async () => {
+    const { user, requests, releaseFirstUpdate } = setupTrunks({ holdFirstUpdate: true });
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await fill(user, [12, 1.3, 8]);
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.SHRUB);
+    await fill(user, [40]);
+
+    releaseFirstUpdate();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(screen.getByPlaceholderText(strings.SEARCH_SPECIES)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB })).toBeEnabled();
+  });
+
   it('abandons the new plant when the add is cancelled', async () => {
     const { user, requests } = setupTrunks();
     await startAdd(user);

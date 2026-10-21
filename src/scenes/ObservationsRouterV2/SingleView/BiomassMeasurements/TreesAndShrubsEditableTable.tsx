@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
@@ -36,6 +36,7 @@ type DraftMeasurementField =
   'diameterAtBreastHeight' | 'height' | 'pointOfMeasurement' | 'shrubDiameter' | 'treeCrownDiameter';
 
 type DraftTree = {
+  id: number;
   diameterAtBreastHeight?: string;
   height?: string;
   pointOfMeasurement?: string;
@@ -97,6 +98,13 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const [removedTreeIds, setRemovedTreeIds] = useState<number[]>([]);
   const [pendingSpeciesChange, setPendingSpeciesChange] = useState<{ row: TreeRow; species: Species }>();
   const [draft, setDraft] = useState<DraftTree>();
+  const [savingDraftId, setSavingDraftId] = useState<number>();
+  const draftIdRef = useRef(0);
+
+  const updateDraft = useCallback(
+    (changes: Partial<DraftTree>) => setDraft((previous) => (previous ? { ...previous, ...changes } : previous)),
+    []
+  );
 
   const dismissMeasurementWarning = useCallback(() => {
     setPendingMeasurement(undefined);
@@ -212,26 +220,38 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [forestType]
   );
 
+  const draftFields = useMemo((): { optional: DraftMeasurementField[]; required: DraftMeasurementField[] } => {
+    if (draft?.treeGrowthForm === 'Shrub') {
+      return { optional: [], required: ['shrubDiameter'] };
+    }
+    if (draft?.treeGrowthForm === 'Tree') {
+      return {
+        optional: isCrownDiameterEditable('Tree') ? ['treeCrownDiameter'] : [],
+        required: ['diameterAtBreastHeight', 'pointOfMeasurement', 'height'],
+      };
+    }
+    return { optional: [], required: [] };
+  }, [draft?.treeGrowthForm, isCrownDiameterEditable]);
+
   const isDraftValid = useMemo(() => {
     if (!draft?.species || !draft.treeGrowthForm) {
       return false;
     }
-    const required: DraftMeasurementField[] =
-      draft.treeGrowthForm === 'Shrub' ? ['shrubDiameter'] : ['diameterAtBreastHeight', 'pointOfMeasurement', 'height'];
-    if (!required.every((field) => isMeasurement(draft[field], field))) {
-      return false;
-    }
-    return draft.treeCrownDiameter === undefined || draft.treeCrownDiameter.trim() === ''
-      ? true
-      : isMeasurement(draft.treeCrownDiameter, 'treeCrownDiameter');
-  }, [draft]);
+    const given = (field: DraftMeasurementField) => draft[field] !== undefined && draft[field].trim() !== '';
+    return (
+      draftFields.required.every((field) => isMeasurement(draft[field], field)) &&
+      draftFields.optional.every((field) => !given(field) || isMeasurement(draft[field], field))
+    );
+  }, [draft, draftFields]);
 
   const startAdding = useCallback((table: MRT_TableInstance<TreeRow>) => {
-    setDraft({});
+    draftIdRef.current += 1;
+    setDraft({ id: draftIdRef.current });
     table.setCreatingRow(createRow(table));
   }, []);
 
   const cancelAdding = useCallback((table: MRT_TableInstance<TreeRow>) => {
+    draftIdRef.current += 1;
     setDraft(undefined);
     table.setCreatingRow(null);
   }, []);
@@ -239,7 +259,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const submitAdding = useCallback(
     (table: MRT_TableInstance<TreeRow>) => {
       const species = draft?.species;
-      if (!species || !draft?.treeGrowthForm || !isDraftValid) {
+      if (!species || !draft?.treeGrowthForm || !isDraftValid || savingDraftId === draft.id) {
         return;
       }
       const isShrub = draft.treeGrowthForm === 'Shrub';
@@ -259,14 +279,18 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           ? { treeCrownDiameter: Number(draft.treeCrownDiameter) }
           : {}),
       };
+      const draftId = draft.id;
       const send = async () => {
-        if (await updateObservation({ updates: [payload] })) {
+        setSavingDraftId(draftId);
+        const saved = await updateObservation({ updates: [payload] });
+        setSavingDraftId(undefined);
+        if (saved && draftIdRef.current === draftId) {
           setDraft(undefined);
           table.setCreatingRow(null);
         }
       };
 
-      const outlier = (Object.keys(measurementRanges) as DraftMeasurementField[])
+      const outlier = [...draftFields.required, ...draftFields.optional]
         .filter((field) => draft[field] !== undefined && draft[field] !== '')
         .find((field) => Number(draft[field]) > measurementRanges[field].max);
       if (outlier) {
@@ -279,7 +303,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       }
       void send();
     },
-    [draft, isCrownDiameterEditable, isDraftValid, measurementRanges, updateObservation]
+    [draft, draftFields, isCrownDiameterEditable, isDraftValid, measurementRanges, savingDraftId, updateObservation]
   );
 
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
@@ -332,7 +356,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       row.id === DRAFT_ROW_ID ? (
         <SpeciesSearchSelect
           id='addTreeSpecies'
-          onChange={(species) => setDraft((previous) => ({ ...previous, species }))}
+          onChange={(species) => updateDraft({ species })}
           placeholder={strings.SEARCH_SPECIES}
         />
       ) : (
@@ -348,7 +372,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           placeholder={row.original.speciesName ?? strings.SEARCH_SPECIES}
         />
       ),
-    [strings.SEARCH_SPECIES]
+    [strings.SEARCH_SPECIES, updateDraft]
   );
 
   const GrowthFormEditor = useCallback(
@@ -357,9 +381,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         <TextField
           fullWidth
           id='addTreeGrowthForm'
-          onChange={(event) =>
-            setDraft((previous) => ({ ...previous, treeGrowthForm: event.target.value as DraftGrowthForm }))
-          }
+          onChange={(event) => updateDraft({ treeGrowthForm: event.target.value as DraftGrowthForm })}
           select
           size='small'
           SelectProps={{ displayEmpty: true }}
@@ -374,7 +396,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       ) : (
         <></>
       ),
-    [draft?.treeGrowthForm, strings.SELECT, strings.SHRUB, strings.TREE]
+    [draft?.treeGrowthForm, strings.SELECT, strings.SHRUB, strings.TREE, updateDraft]
   );
 
   /** Only the measurements the chosen growth form uses can be filled in. */
@@ -394,7 +416,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           fullWidth
           id={`addTree-${fieldId}`}
           inputProps={{ min: 0 }}
-          onChange={(event) => setDraft((previous) => ({ ...previous, [fieldId]: event.target.value }))}
+          onChange={(event) => updateDraft({ [fieldId]: event.target.value })}
           placeholder={required ? strings.REQUIRED : ''}
           size='small'
           type='number'
@@ -402,7 +424,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         />
       );
     },
-    [draft, isCrownDiameterEditable, strings.REQUIRED]
+    [draft, isCrownDiameterEditable, strings.REQUIRED, updateDraft]
   );
 
   const measurementEditor = useCallback(
@@ -736,7 +758,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             type='passive'
           />
           <Button
-            disabled={!isDraftValid}
+            disabled={!isDraftValid || savingDraftId === draft.id}
             id='confirmAddTreeOrShrub'
             label={strings.ADD_TREE_OR_SHRUB}
             onClick={() => submitAdding(table)}
@@ -744,7 +766,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           />
         </Box>
       ),
-    [cancelAdding, draft, isDraftValid, startAdding, strings.ADD_TREE_OR_SHRUB, strings.CANCEL, submitAdding]
+    [
+      cancelAdding,
+      draft,
+      isDraftValid,
+      savingDraftId,
+      startAdding,
+      strings.ADD_TREE_OR_SHRUB,
+      strings.CANCEL,
+      submitAdding,
+    ]
   );
 
   const treesWithData = useMemo(() => {
