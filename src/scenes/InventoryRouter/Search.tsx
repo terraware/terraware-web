@@ -6,13 +6,11 @@ import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-compone
 import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
+import { useSubLocationsForFacilities } from 'src/components/common/SubLocations/useFacilitySubLocations';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
-import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { convertFilterGroupToMap, getNurseryName } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -80,7 +78,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
     pillListPortalEl,
   } = props;
 
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -94,10 +91,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
     [selectedOrganization]
   );
   const [availableSpecies, setAvailableSpecies] = useState<Species[]>([]);
-
-  useEffect(() => {
-    void dispatch(requestSubLocations(filters.facilityIds ?? []));
-  }, [filters.facilityIds, dispatch]);
 
   useEffect(() => {
     if (origin !== 'Nursery' || !species.length) {
@@ -114,7 +107,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
     }
   }, [getResultsSpeciesNames, origin, species]);
 
-  const subLocations = useAppSelector(selectSubLocations);
+  const subLocations = useSubLocationsForFacilities(filters.facilityIds);
 
   const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
   const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);

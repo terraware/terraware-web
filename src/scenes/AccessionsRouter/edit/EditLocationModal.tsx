@@ -1,19 +1,19 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import { useFacilitySubLocations } from 'src/components/common/SubLocations/useFacilitySubLocations';
 import Button from 'src/components/common/button/Button';
 import useAccession from 'src/hooks/useAccession';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useOrganization } from 'src/providers/hooks';
 import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
-import { SubLocationService } from 'src/services';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { Accession } from 'src/types/Accession';
-import { Facility, SubLocation } from 'src/types/Facility';
+import { Facility } from 'src/types/Facility';
 import { getAllSeedBanks } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -44,13 +44,11 @@ interface EditLocationModalFormProps {
 
 function EditLocationModalForm({ accession, open, onClose }: EditLocationModalFormProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
   const seedBanks: Facility[] = selectedOrganization
     ? selectedOrganization
       ? getAllSeedBanks(selectedOrganization)
       : [].filter((sb) => !!sb)
     : [];
-  const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const snackbar = useSnackbar();
   const markSubmitted = useTrackModalAbandonment('accession_edit_location', open);
   const [updateAccession] = useUpdateAccessionMutation();
@@ -61,25 +59,11 @@ function EditLocationModalForm({ accession, open, onClose }: EditLocationModalFo
   };
 
   const [record, setRecord, , onChangeCallback] = useForm(newRecord);
+  const { subLocations } = useFacilitySubLocations(record.facilityId);
 
   useEffect(() => {
     setRecord({ facilityId: accession.facilityId || 0, subLocation: accession.subLocation });
   }, [accession, setRecord]);
-
-  useEffect(() => {
-    const setLocations = async () => {
-      if (record.facilityId && activeLocale) {
-        const response = await SubLocationService.getSubLocations(record.facilityId);
-        if (response.requestSucceeded) {
-          const collator = new Intl.Collator(activeLocale);
-          setSubLocations(response.subLocations.sort((a, b) => collator.compare(a.name, b.name)));
-        } else {
-          setSubLocations([]);
-        }
-      }
-    };
-    void setLocations();
-  }, [activeLocale, record.facilityId]);
 
   const saveLocation = async () => {
     const updatedAccession = { ...accession, facilityId: record.facilityId, subLocation: record.subLocation };
@@ -137,7 +121,7 @@ function EditLocationModalForm({ accession, open, onClose }: EditLocationModalFo
             id='edit-sub-location'
             label={strings.SUB_LOCATION}
             selectedSubLocation={record.subLocation}
-            subLocations={subLocations.map((obj) => obj.name)}
+            subLocations={(subLocations ?? []).map((obj) => obj.name)}
             onChange={onChangeCallback('subLocation')}
             disabled={!record.facilityId}
           />

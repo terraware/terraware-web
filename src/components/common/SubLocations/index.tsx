@@ -8,7 +8,6 @@ import _ from 'lodash';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useLocalization } from 'src/providers';
-import { SubLocationService } from 'src/services';
 import strings from 'src/strings';
 import { DEFAULT_SUB_LOCATIONS, PartialSubLocation } from 'src/types/Facility';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -16,6 +15,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import AddEditSubLocationModal from './AddEditSubLocationModal';
 import SubLocationsCellRenderer from './SubLocationsCellRenderer';
+import { useFacilitySubLocations } from './useFacilitySubLocations';
 
 type FacilityType = 'seedbank' | 'nursery';
 
@@ -72,27 +72,20 @@ export default function SubLocations({
     return [baseColumn(), isSeedbank ? seedBankColumn() : nurseryColumn()];
   }, [activeLocale, isSeedbank]);
 
-  useEffect(() => {
-    const fetchSubLocations = async () => {
-      const response = await SubLocationService.getSubLocations(facilityId!);
-      if (response.requestSucceeded) {
-        if (activeLocale) {
-          const collator = new Intl.Collator(activeLocale);
-          const sorted = response.subLocations.sort((a, b) => collator.compare(a.name, b.name));
-          setSubLocations(sorted);
-          onLoad?.(sorted);
-        }
-      }
-    };
+  const { subLocations: facilitySubLocations } = useFacilitySubLocations(facilityId);
 
+  useEffect(() => {
     if (facilityId) {
-      void fetchSubLocations();
+      if (facilitySubLocations) {
+        setSubLocations(facilitySubLocations);
+        onLoad?.(facilitySubLocations);
+      }
     } else if (isSeedbank) {
       const defaults = DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index, facilityType));
       setSubLocations(defaults);
       onLoad?.(defaults);
     }
-  }, [facilityId, activeLocale, isSeedbank, facilityType, onLoad]);
+  }, [facilityId, facilitySubLocations, isSeedbank, facilityType, onLoad]);
 
   const getTopBarButtons = () => {
     const topBarButtons: TopBarButton[] = [
