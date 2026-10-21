@@ -72,15 +72,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   }, []);
 
   const updateObservation = useCallback(
-    (updatePayload: UpdateObservationRequestPayload) => {
-      if (results?.adHocPlot) {
-        const payload = {
-          observationId,
-          plotId: results.adHocPlot.monitoringPlotId,
-          updateObservationRequestPayload: updatePayload,
-        };
-        void update(payload);
+    async (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
+      if (!results?.adHocPlot) {
+        return false;
       }
+      const payload = {
+        observationId,
+        plotId: results.adHocPlot.monitoringPlotId,
+        updateObservationRequestPayload: updatePayload,
+      };
+      return !('error' in (await update(payload)));
     },
     [observationId, results, update]
   );
@@ -97,7 +98,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           recordedTreeId: row.id,
           [fieldId]: value,
         };
-        updateObservation({ updates: [payload] });
+        void updateObservation({ updates: [payload] });
       }
     },
     [updateObservation]
@@ -128,7 +129,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         scientificName: row.speciesId === undefined ? row.speciesName : undefined,
         [fieldId]: boolValue,
       };
-      updateObservation({ updates: [payload] });
+      void updateObservation({ updates: [payload] });
     },
     [updateObservation]
   );
@@ -156,7 +157,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [growthFormLabel, strings]
   );
 
-  const confirmRemoval = useCallback(() => {
+  const confirmRemoval = useCallback(async () => {
     if (!pendingRemoval) {
       return;
     }
@@ -164,7 +165,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     setPendingRemoval(undefined);
     setRemovedTreeIds((previous) => [...previous, id]);
     const payload: DeleteRecordedTreeOperationPayload = { type: 'DeleteRecordedTree', recordedTreeId: id };
-    updateObservation({ updates: [payload] });
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setRemovedTreeIds((previous) => previous.filter((removed) => removed !== id));
+    }
   }, [pendingRemoval, updateObservation]);
 
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
@@ -266,14 +269,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       if (row.original.treeGrowthForm === 'Shrub') {
         return <>{row.original.shrubDiameter ?? ''}</>;
       }
-      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
+      return <>{forestType === 'Mangrove' ? (row.original.treeCrownDiameter ?? '') : ''}</>;
     },
     [forestType]
   );
 
   const BoleHeightCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? (row.original.boleHeight ?? '') : ''}</>
     ),
     [forestType]
   );
@@ -480,7 +483,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           ...tree,
           ...optimistic,
           speciesName: tree.speciesId
-            ? findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName
+            ? (findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName)
             : tree.speciesName,
         };
       });
@@ -540,7 +543,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           detailsHeading={pendingRemoval.speciesName ?? ''}
           message={strings.REMOVE_RECORDED_TREE_CONFIRMATION_MESSAGE}
           onClose={() => setPendingRemoval(undefined)}
-          onConfirm={confirmRemoval}
+          onConfirm={() => void confirmRemoval()}
           title={
             strings.formatString(
               pendingRemoval.treeGrowthForm === 'Shrub'
