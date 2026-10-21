@@ -154,6 +154,95 @@ describe('TreesAndShrubsEditableTable', () => {
 
 const detailsText = (...parts: string[]) => parts.join(strings.LIST_SEPARATOR);
 
+const ABUTILON = { id: 103, scientificName: 'Abutilon incanum' };
+
+const setupTrunks = (trunkCount = 2) => {
+  mockGet('/api/v1/species', { species: [ABUTILON] });
+  mockGet('/api/v1/tracking/observations/7/results', {
+    observation: {
+      id: 7,
+      adHocPlot: { monitoringPlotId: 9 },
+      biomassMeasurements: {
+        forestType: 'Terrestrial',
+        trees: Array.from({ length: trunkCount }, (_, index) => index + 1).map((trunkNumber) => ({
+          id: 100 + trunkNumber,
+          treeNumber: 5,
+          trunkNumber,
+          treeGrowthForm: trunkCount > 1 ? 'Trunk' : 'Tree',
+          speciesName: 'Eucalyptus dalveenica',
+          diameterAtBreastHeight: 9,
+          height: 7,
+          pointOfMeasurement: 1.3,
+        })),
+      },
+    },
+  });
+  const requests: Request[] = [];
+  server.use(
+    http.patch(UPDATE_URL, ({ request }) => {
+      requests.push(request.clone());
+      return HttpResponse.json({ status: 'ok' });
+    })
+  );
+  const { user } = renderWithProviders(<TreesAndShrubsEditableTable />, {
+    route: '/observations/7',
+    path: '/observations/:observationId',
+  });
+  const pickSpecies = async (cellName: string, scientificName: string) => {
+    const cells = await screen.findAllByRole('cell', { name: cellName });
+    await user.dblClick(cells[0]);
+    await user.click(screen.getByPlaceholderText(cellName));
+    await user.click(await screen.findByText(scientificName));
+  };
+  return { user, requests, pickSpecies };
+};
+
+describe('TreesAndShrubsEditableTable species change', () => {
+  it('changes the species of every trunk once confirmed', async () => {
+    const { user, requests, pickSpecies } = setupTrunks();
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+
+    expect(screen.getByText(strings.CHANGE_SPECIES_CONFIRMATION)).toBeInTheDocument();
+    // The tree is named by its own number, not the trunk's, and the trunk count is spelled out.
+    expect(
+      screen.getByText(
+        strings.formatString(strings.CHANGE_TREE_SPECIES_MESSAGE_TRUNKS, '5', ABUTILON.scientificName, '2') as string
+      )
+    ).toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+    // One operation; the server applies it to every trunk of the tree.
+    expect(await requests[0].json()).toEqual({
+      updates: [{ type: 'RecordedTree', recordedTreeId: 101, speciesId: ABUTILON.id }],
+    });
+  });
+
+  it('does not mention trunks for a tree that has only one', async () => {
+    const { pickSpecies } = setupTrunks(1);
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+
+    expect(
+      screen.getByText(
+        strings.formatString(strings.CHANGE_TREE_SPECIES_MESSAGE, '5', ABUTILON.scientificName) as string
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('leaves the species alone when the change is cancelled', async () => {
+    const { user, requests, pickSpecies } = setupTrunks();
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+
+    expect(requests).toHaveLength(0);
+    expect(screen.getAllByRole('cell', { name: 'Eucalyptus dalveenica' })).toHaveLength(2);
+  });
+});
+
 describe('TreesAndShrubsEditableTable removal', () => {
   it('deletes the plant once the removal is confirmed, and takes it off the table', async () => {
     const { user, requests, removeRow } = setup();
