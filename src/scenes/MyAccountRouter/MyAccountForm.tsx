@@ -10,7 +10,6 @@ import LocaleSelector from 'src/components/LocaleSelector';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import WeightSystemSelector from 'src/components/WeightSystemSelector';
-import Checkbox from 'src/components/common/Checkbox';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageForm from 'src/components/common/PageForm';
@@ -28,6 +27,10 @@ import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
+import {
+  useGetEmailNotificationSettingsQuery,
+  useUpdateEmailNotificationSettingsMutation,
+} from 'src/queries/generated/emailNotificationSettings';
 import {
   useDeleteOrganizationUserMutation,
   useListOrganizationUsersQuery,
@@ -50,6 +53,7 @@ import AssignNewOwnerDialog from './AssignNewOwnerModal';
 import CannotRemoveOrgDialog from './CannotRemoveOrgModal';
 import DeleteAccountModal from './DeleteAccountModal';
 import DeleteOrgDialog from './DeleteOrgModal';
+import EmailNotificationSettings, { EmailNotificationSettingsValue } from './EmailNotificationSettings';
 import LeaveOrganizationDialog from './LeaveOrganizationModal';
 
 export type MyAccountFormProps = {
@@ -123,6 +127,17 @@ const MyAccountForm = ({
   const [deleteOrganization] = useDeleteOrganizationMutation();
   const [updateOrganizationUser] = useUpdateOrganizationUserMutation();
   const [deleteOrganizationUser] = useDeleteOrganizationUserMutation();
+  const { currentData: emailSettingsData } = useGetEmailNotificationSettingsQuery();
+  const [updateEmailNotificationSettings] = useUpdateEmailNotificationSettingsMutation();
+  const savedEmailSettings = useMemo<EmailNotificationSettingsValue | undefined>(
+    () =>
+      emailSettingsData && {
+        categories: emailSettingsData.categories,
+        emailNotificationsEnabled: emailSettingsData.emailNotificationsEnabled,
+      },
+    [emailSettingsData]
+  );
+  const [emailSettings, setEmailSettings] = useState(savedEmailSettings);
   const docLinks = useDocLinks();
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
@@ -138,11 +153,20 @@ const MyAccountForm = ({
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
   const [countryCodeSelected, setCountryCodeSelected] = useState(user?.countryCode);
 
+  const isEmailSettingsDirty =
+    !!emailSettings &&
+    !!savedEmailSettings &&
+    (emailSettings.emailNotificationsEnabled !== savedEmailSettings.emailNotificationsEnabled ||
+      emailSettings.categories.some(
+        ({ category, optedIn }) =>
+          savedEmailSettings.categories.find((saved) => saved.category === category)?.optedIn !== optedIn
+      ));
+
   const isDirty =
     (record.firstName ?? '') !== (user.firstName ?? '') ||
     (record.lastName ?? '') !== (user.lastName ?? '') ||
     record.timeZone !== user.timeZone ||
-    record.emailNotificationsEnabled !== user.emailNotificationsEnabled ||
+    isEmailSettingsDirty ||
     record.cookiesConsented !== user.cookiesConsented ||
     countryCodeSelected !== user.countryCode ||
     localeSelected !== selectedLocale ||
@@ -168,6 +192,10 @@ const MyAccountForm = ({
       setPreferredWeightSystemSelected(userPreferences.preferredWeightSystem as string);
     }
   }, [userPreferences]);
+
+  useEffect(() => {
+    setEmailSettings(savedEmailSettings);
+  }, [savedEmailSettings]);
 
   useEffect(() => {
     setRecord(user);
@@ -203,6 +231,7 @@ const MyAccountForm = ({
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
     setRecord(user);
+    setEmailSettings(savedEmailSettings);
     setCountryCodeSelected(user.countryCode);
     if (backToView) {
       backToView();
@@ -265,7 +294,11 @@ const MyAccountForm = ({
       countryCode: countryCodeSelected,
       locale: localeSelected,
     });
-    return succeeded;
+    if (!succeeded || !emailSettings || !isEmailSettingsDirty) {
+      return succeeded;
+    }
+    const emailSettingsResult = await updateEmailNotificationSettings(emailSettings);
+    return !('error' in emailSettingsResult);
   };
 
   const openDeleteOrgModal = () => {
@@ -577,20 +610,12 @@ const MyAccountForm = ({
               )}
             </Grid>
             <Grid item xs={12}>
-              <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
+              <Typography fontSize='20px' fontWeight={600}>
                 {strings.NOTIFICATIONS}
               </Typography>
-              <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
-            </Grid>
-            <Grid item xs={12}>
-              <Checkbox
-                disabled={!edit}
-                id='emailNotificationsEnabled'
-                name={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                label={strings.RECEIVE_EMAIL_NOTIFICATIONS}
-                value={record.emailNotificationsEnabled}
-                onChange={onChangeCallback('emailNotificationsEnabled')}
-              />
+              {emailSettings && (
+                <EmailNotificationSettings edit={edit} onChange={setEmailSettings} value={emailSettings} />
+              )}
             </Grid>
             {userIsFunder && disclaimer && (
               <Grid item xs={12}>

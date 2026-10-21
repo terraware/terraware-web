@@ -657,6 +657,16 @@ ELIGIBLE_AREA_HA,Área elegible (ha),02f04c77
 ELIGIBLE_LAND,Terreno apto,7b3162f0
 EMAIL,Correo electrónico,9743aa10
 EMAIL_ALREADY_EXISTS,Este correo electrónico ya existe.,22c67356
+EMAIL_NOTIFICATION_CATEGORY_ACCELERATOR_DESCRIPTION,Cambios en el estado de entregables y recordatorios de informes para proyectos del Acelerador.,cfac7743
+EMAIL_NOTIFICATION_CATEGORY_ACCELERATOR_EXAMPLE,Ejemplo: “El estado del entregable fue actualizado”,b1ee10e2
+EMAIL_NOTIFICATION_CATEGORY_NURSERY_DESCRIPTION,Actualizaciones sobre lotes de plántulas en sus viveros.,6b8441b9
+EMAIL_NOTIFICATION_CATEGORY_NURSERY_EXAMPLE,Ejemplo: “Un lote de plántulas está listo”,69e123d3
+EMAIL_NOTIFICATION_CATEGORY_PLANTING_AND_OBSERVATIONS_DESCRIPTION,"Programación y progreso de observaciones, temporadas de plantación y procesamiento de mapas de sitios de plantación.",43f1f788
+EMAIL_NOTIFICATION_CATEGORY_PLANTING_AND_OBSERVATIONS_EXAMPLE,Ejemplo: “¡Es hora de monitorear sus plantaciones!”,51ece7db
+EMAIL_NOTIFICATION_CATEGORY_SEED_BANK_DESCRIPTION,"Recordatorios de accesiones, informes de fondos de semillas y alertas de equipos para sus bancos de semillas.",40ba9f98
+EMAIL_NOTIFICATION_CATEGORY_SEED_BANK_EXAMPLE,Ejemplo: “Una accesión se ha secado.”,656becce
+EMAIL_NOTIFICATIONS,Notificaciones por correo electrónico,d3925474
+EMAIL_NOTIFICATIONS_DESCRIPTION,"Reciba correos electrónicos de Terraware sobre la actividad en sus organizaciones. Si desactiva esta opción, dejará de recibir todos los correos electrónicos opcionales. Los correos electrónicos de cuenta, como cuando se le agrega a una organización, siempre se enviarán.",3aab15cf
 EMAIL_REQUIRED,Correo electrónico *,6b68d782
 EMAIL_REQUIREMENT_TERRAFORMATION,"La dirección de correo electrónico tiene que incluir ""@terraformation.com"".",8bf29d92
 EMPTY_BATCH,Lote vacío,585f2912
@@ -1188,7 +1198,6 @@ MOVE,Mover,abe6be41
 MRV_CYCLE,Ciclo MRV,ab7e636c
 MULTIPLE_FORMS,Múltiples formas,abad8008
 MY_ACCOUNT,Mi cuenta,8e57f7ad
-MY_ACCOUNT_NOTIFICATIONS_DESC,Las notificaciones le avisan cuando hay actualizaciones importantes sobre sus organizaciones. Las recibirá por correo electrónico.,65644b47
 N_IMAGES,{0} imagen(es),098eae0e
 N_ROWS,{0} fila(s),2bb73684
 NA,No aplica,627f660e
@@ -1529,6 +1538,7 @@ PLANTED_SPECIES,Especies plantadas,0dd1f725
 PLANTED_SPECIES_TOOLTIP,"Las ""Especies plantadas"" indican el porcentaje de cada especie plantada. Se nombran las cuatro especies más comunes y el resto se agrupa en ""Otras especies"".",f4a01a11
 PLANTED_TOTALS,Totales Plantados,4a3edf5a
 PLANTING,Plantación,3fabf341
+PLANTING_AND_OBSERVATIONS,Plantación y Observaciones,6bf68404
 PLANTING_COMPLETE,¿Plantación completa?,e348c8a4
 PLANTING_COMPLETE_AREA,Área total de plantación,25dc3dab
 PLANTING_COMPLETE_CHART,Plantación completada,3bea077e
@@ -1772,7 +1782,6 @@ REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_LONG_TERM,La parcela temporal {0} fu
 REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_TEMPORARY,La parcela temporal {0} fue eliminada solo para esta observación.,f247edc2
 REASSIGNMENT_SUCESSFUL,Reasignación exitosa,6ecbb084
 RECALCITRANT,Recalcitrante,f95e16a4
-RECEIVE_EMAIL_NOTIFICATIONS,Recibir notificaciones por correo electrónico,378f118d
 RECEIVED_DATE,Fecha de recepción,9814318f
 RECEIVING_DATE_REQUIRED,Fecha de recepción *,bd66283e
 RECENT,Recientes,1e4a4bb6
