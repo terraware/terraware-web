@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
+import { shallowEqual } from 'react-redux';
 
 import { useLocalization } from 'src/providers/hooks';
-import { useLazyListSubLocationsQuery } from 'src/queries/generated/facilities';
+import { api, useLazyListSubLocationsQuery } from 'src/queries/generated/facilities';
+import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SubLocation } from 'src/types/Facility';
 
 const byName = (activeLocale: string | null) => {
@@ -11,7 +13,7 @@ const byName = (activeLocale: string | null) => {
 
 export const useFacilitySubLocations = (facilityId?: number) => {
   const { activeLocale } = useLocalization();
-  const [listSubLocations, { data, isError }] = useLazyListSubLocationsQuery();
+  const [listSubLocations, { currentData, isError }] = useLazyListSubLocationsQuery();
 
   useEffect(() => {
     if (facilityId) {
@@ -21,41 +23,27 @@ export const useFacilitySubLocations = (facilityId?: number) => {
 
   // The cached array is frozen, so sort a copy of it.
   const subLocations = useMemo(
-    () => (facilityId && data ? [...data.subLocations].sort(byName(activeLocale)) : undefined),
-    [activeLocale, data, facilityId]
+    () => (facilityId && currentData ? [...currentData.subLocations].sort(byName(activeLocale)) : undefined),
+    [activeLocale, currentData, facilityId]
   );
 
   return { subLocations, isError };
 };
 
 export const useSubLocationsForFacilities = (facilityIds?: number[]) => {
-  const [listSubLocations] = useLazyListSubLocationsQuery();
-  const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
+  const dispatch = useAppDispatch();
+
+  const facilityIdsKey = (facilityIds ?? []).join(',');
+  const ids = useMemo(() => (facilityIdsKey ? facilityIdsKey.split(',').map(Number) : []), [facilityIdsKey]);
 
   useEffect(() => {
-    let active = true;
+    const subscriptions = ids.map((facilityId) => dispatch(api.endpoints.listSubLocations.initiate(facilityId)));
+    return () => subscriptions.forEach((subscription) => subscription.unsubscribe());
+  }, [dispatch, ids]);
 
-    const loadSubLocations = async () => {
-      try {
-        const responses = await Promise.all(
-          (facilityIds ?? []).map((facilityId) => listSubLocations(facilityId, true).unwrap())
-        );
-        if (active) {
-          setSubLocations(responses.flatMap((response) => response.subLocations));
-        }
-      } catch {
-        if (active) {
-          setSubLocations([]);
-        }
-      }
-    };
-
-    void loadSubLocations();
-
-    return () => {
-      active = false;
-    };
-  }, [facilityIds, listSubLocations]);
-
-  return subLocations;
+  return useAppSelector(
+    (state) =>
+      ids.flatMap((facilityId) => api.endpoints.listSubLocations.select(facilityId)(state).data?.subLocations ?? []),
+    shallowEqual
+  );
 };

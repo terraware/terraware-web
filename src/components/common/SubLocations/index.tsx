@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -73,10 +73,12 @@ export default function SubLocations({
   }, [activeLocale, isSeedbank]);
 
   const { subLocations: facilitySubLocations } = useFacilitySubLocations(facilityId);
+  const seededFacilityId = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     if (facilityId) {
-      if (facilitySubLocations) {
+      if (facilitySubLocations && seededFacilityId.current !== facilityId) {
+        seededFacilityId.current = facilityId;
         setSubLocations(facilitySubLocations);
         onLoad?.(facilitySubLocations);
       }
