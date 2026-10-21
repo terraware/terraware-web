@@ -229,6 +229,7 @@ test.describe('PlantingSiteTests', () => {
   test('Detailed site: draw strata, substrata, and exclusions, then create and delete the site', async ({ page }) => {
     const siteName = `Detailed Site ${Date.now()}`;
     const stratumName = 'West';
+    const excludedSubstratumName = 'Excluded';
     const substratumName = 'North';
 
     await startNewPlantingSite(page, 'Detailed Site');
@@ -364,9 +365,55 @@ test.describe('PlantingSiteTests', () => {
     await expect(substratumNameInput).toHaveValue(substratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
 
+    // A substratum inside the exclusion area is a problem. Saving lists it, and the user can go back to editing or
+    // save anyway.
+    await drawPolygon(page, [
+      [0.78, 0.78],
+      [0.87, 0.78],
+      [0.87, 0.87],
+      [0.78, 0.87],
+    ]);
+    await expect(substratumNameInput).toBeVisible();
+    await substratumNameInput.fill(excludedSubstratumName);
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(substratumNameInput).toBeHidden();
+    await editorButton(page, 'Back').click();
+    const problemsDialog = page.getByRole('dialog').filter({ hasText: 'This draft has problems' });
+    await expect(problemsDialog).toBeVisible();
+    await expect(
+      problemsDialog.getByText(
+        `Substratum ${excludedSubstratumName} in stratum Stratum 01 is inside an exclusion area.`
+      )
+    ).toBeVisible();
+    await problemsDialog.getByRole('button', { name: 'Back to Edit' }).click();
+    await expect(problemsDialog).toBeHidden();
+    await expectActiveStep(page, 'Substratum Boundaries');
+    await expect(page.getByText('Unsaved changes')).toBeVisible();
+
+    await editorButton(page, 'Back').click();
+    await expect(problemsDialog).toBeVisible();
+    await problemsDialog.getByRole('button', { name: 'Save Anyway' }).click();
+    await expect(problemsDialog).toBeHidden();
+    await expectActiveStep(page, 'Stratum Boundaries');
+    await expect(page.getByText('Unsaved changes')).toBeHidden();
+
+    // The saved draft still has the problem, so moving on asks again.
+    await editorButton(page, 'Next').click();
+    await expect(problemsDialog).toBeVisible();
+    await problemsDialog.getByRole('button', { name: 'Save Anyway' }).click();
+    await expectActiveStep(page, 'Substratum Boundaries');
+
+    // Deleting the substratum fixes the problem, so the next save goes through without asking.
+    await waitForMap(page);
+    await openFeaturePopup(page, [0.825, 0.825], substratumNameInput);
+    await expect(substratumNameInput).toHaveValue(excludedSubstratumName);
+    await deleteMapFeature(page);
+    await expect(substratumNameInput).toBeHidden();
+
     // Going back saves the substrata, and the strata step still has the named stratum.
     await editorButton(page, 'Back').click();
     await expectActiveStep(page, 'Stratum Boundaries');
+    await expect(problemsDialog).toBeHidden();
     await expect(page.getByText('Unsaved changes')).toBeHidden();
     await waitForMap(page);
     await openFeaturePopup(page, [0.25, 0.5], stratumNameInput);
