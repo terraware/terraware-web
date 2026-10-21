@@ -33,11 +33,7 @@ const DRAFT_ROW_ID = 'mrt-row-create';
 type DraftGrowthForm = 'Tree' | 'Shrub';
 
 type DraftMeasurementField =
-  | 'diameterAtBreastHeight'
-  | 'height'
-  | 'pointOfMeasurement'
-  | 'shrubDiameter'
-  | 'treeCrownDiameter';
+  'diameterAtBreastHeight' | 'height' | 'pointOfMeasurement' | 'shrubDiameter' | 'treeCrownDiameter';
 
 type DraftTree = {
   diameterAtBreastHeight?: string;
@@ -48,6 +44,11 @@ type DraftTree = {
   treeCrownDiameter?: string;
   treeGrowthForm?: DraftGrowthForm;
 };
+
+const SPECIES_SCOPED_FIELDS = ['speciesId', 'speciesName', 'isInvasive', 'isThreatened'] as const;
+
+const speciesStateOf = (edits: Partial<TreeRow> = {}): Partial<TreeRow> =>
+  Object.fromEntries(SPECIES_SCOPED_FIELDS.filter((field) => edits[field] !== undefined).map((f) => [f, edits[f]]));
 
 /** Trunks of a multi-trunk tree are numbered within the tree, as in 5_2. */
 const getTreeLabel = (row: TreeRow): string =>
@@ -96,15 +97,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   }, []);
 
   const updateObservation = useCallback(
-    (updatePayload: UpdateObservationRequestPayload) => {
-      if (results?.adHocPlot) {
-        const payload = {
-          observationId,
-          plotId: results.adHocPlot.monitoringPlotId,
-          updateObservationRequestPayload: updatePayload,
-        };
-        void update(payload);
+    async (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
+      if (!results?.adHocPlot) {
+        return false;
       }
+      const payload = {
+        observationId,
+        plotId: results.adHocPlot.monitoringPlotId,
+        updateObservationRequestPayload: updatePayload,
+      };
+      return !('error' in (await update(payload)));
     },
     [observationId, results, update]
   );
@@ -121,7 +123,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           recordedTreeId: row.id,
           [fieldId]: value,
         };
-        updateObservation({ updates: [payload] });
+        void updateObservation({ updates: [payload] });
       }
     },
     [updateObservation]
@@ -152,7 +154,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         scientificName: row.speciesId === undefined ? row.speciesName : undefined,
         [fieldId]: boolValue,
       };
-      updateObservation({ updates: [payload] });
+      void updateObservation({ updates: [payload] });
     },
     [updateObservation]
   );
@@ -180,7 +182,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [growthFormLabel, strings]
   );
 
-  const confirmRemoval = useCallback(() => {
+  const confirmRemoval = useCallback(async () => {
     if (!pendingRemoval) {
       return;
     }
@@ -188,7 +190,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     setPendingRemoval(undefined);
     setRemovedTreeIds((previous) => [...previous, id]);
     const payload: DeleteRecordedTreeOperationPayload = { type: 'DeleteRecordedTree', recordedTreeId: id };
-    updateObservation({ updates: [payload] });
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setRemovedTreeIds((previous) => previous.filter((removed) => removed !== id));
+    }
   }, [pendingRemoval, updateObservation]);
 
   const isCrownDiameterEditable = useCallback(
@@ -242,7 +246,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       };
       setDraft(undefined);
       table.setCreatingRow(null);
-      updateObservation({ updates: [payload] });
+      void updateObservation({ updates: [payload] });
     },
     [draft, isCrownDiameterEditable, isDraftValid, updateObservation]
   );
@@ -256,16 +260,20 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [results]
   );
 
-  const confirmSpeciesChange = useCallback(() => {
+  const confirmSpeciesChange = useCallback(async () => {
     if (!pendingSpeciesChange) {
       return;
     }
     const { row, species } = pendingSpeciesChange;
     setPendingSpeciesChange(undefined);
     const changed = row.treeGrowthForm === 'Shrub' ? [row] : trunksOfTree(row);
+    const speciesBefore = new Map(changed.map((tree) => [tree.id, speciesStateOf(optimisticValues[tree.id])]));
     setOptimisticValues((previous) =>
       changed.reduce(
-        (next, tree) => ({ ...next, [tree.id]: { ...next[tree.id], speciesId: species.id, speciesName: undefined } }),
+        (next, tree) => ({
+          ...next,
+          [tree.id]: { ...next[tree.id], speciesId: species.id, speciesName: species.scientificName },
+        }),
         previous
       )
     );
@@ -274,8 +282,19 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       recordedTreeId: row.id,
       speciesId: species.id,
     };
-    updateObservation({ updates: [payload] });
-  }, [pendingSpeciesChange, trunksOfTree, updateObservation]);
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setOptimisticValues((previous) =>
+        changed.reduce((next, tree) => {
+          if (next[tree.id]?.speciesId !== species.id) {
+            return next;
+          }
+          const keptEdits = { ...next[tree.id] };
+          SPECIES_SCOPED_FIELDS.forEach((field) => delete keptEdits[field]);
+          return { ...next, [tree.id]: { ...keptEdits, ...speciesBefore.get(tree.id) } };
+        }, previous)
+      );
+    }
+  }, [optimisticValues, pendingSpeciesChange, trunksOfTree, updateObservation]);
 
   const SpeciesCellEditor = useCallback(
     ({ row, table }: { row: { id: string; original: TreeRow }; table: { setEditingCell: (cell: null) => void } }) =>
@@ -445,14 +464,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       if (row.original.treeGrowthForm === 'Shrub') {
         return <>{row.original.shrubDiameter ?? ''}</>;
       }
-      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
+      return <>{forestType === 'Mangrove' ? (row.original.treeCrownDiameter ?? '') : ''}</>;
     },
     [forestType]
   );
 
   const BoleHeightCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? (row.original.boleHeight ?? '') : ''}</>
     ),
     [forestType]
   );
@@ -700,13 +719,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     return results?.biomassMeasurements?.trees
       ?.filter((tree) => !removedTreeIds.includes(tree.id))
       .map((tree) => {
-        const optimistic = optimisticValues[tree.id] ?? {};
+        const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };
         return {
-          ...tree,
-          ...optimistic,
-          speciesName: tree.speciesId
-            ? findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName
-            : tree.speciesName,
+          ...merged,
+          speciesName: merged.speciesId
+            ? (findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName)
+            : merged.speciesName,
         };
       });
   }, [findSpeciesById, results, optimisticValues, removedTreeIds]);
@@ -753,7 +771,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
           message={speciesChangeMessage(pendingSpeciesChange.row, pendingSpeciesChange.species)}
           onClose={() => setPendingSpeciesChange(undefined)}
-          onConfirm={confirmSpeciesChange}
+          onConfirm={() => void confirmSpeciesChange()}
           title={strings.CHANGE_SPECIES_CONFIRMATION}
         />
       )}
@@ -765,7 +783,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           detailsHeading={pendingRemoval.speciesName ?? ''}
           message={strings.REMOVE_RECORDED_TREE_CONFIRMATION_MESSAGE}
           onClose={() => setPendingRemoval(undefined)}
-          onConfirm={confirmRemoval}
+          onConfirm={() => void confirmRemoval()}
           title={
             strings.formatString(
               pendingRemoval.treeGrowthForm === 'Shrub'

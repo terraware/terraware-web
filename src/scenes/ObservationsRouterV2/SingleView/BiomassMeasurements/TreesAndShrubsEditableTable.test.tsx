@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
@@ -10,7 +10,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
-const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1) => {
+const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1, updatesFail = false) => {
   mockGet('/api/v1/species', { species: [] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
@@ -40,7 +40,7 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
   server.use(
     http.patch(UPDATE_URL, ({ request }) => {
       requests.push(request.clone());
-      return HttpResponse.json({ status: 'ok' });
+      return updatesFail ? new HttpResponse(null, { status: 500 }) : HttpResponse.json({ status: 'ok' });
     })
   );
   const { user } = renderWithProviders(<TreesAndShrubsEditableTable />, {
@@ -155,9 +155,27 @@ describe('TreesAndShrubsEditableTable', () => {
 const detailsText = (...parts: string[]) => parts.join(strings.LIST_SEPARATOR);
 
 const ABUTILON = { id: 103, scientificName: 'Abutilon incanum' };
+const ACACIA = { id: 104, scientificName: 'Acacia koa' };
 
-const setupTrunks = (trunkCount = 2, forestType = 'Terrestrial') => {
-  mockGet('/api/v1/species', { species: [ABUTILON] });
+type TrunkSetup = {
+  /** Mangrove forests make crown diameter editable for trees. */
+  forestType?: string;
+  /** Hold the first update open until `releaseFirstUpdate`, so later edits overlap it. */
+  holdFirstUpdate?: boolean;
+  speciesId?: number;
+  trunkCount?: number;
+  /** Which updates fail, by 1-based request order. */
+  updateFails?: (requestNumber: number) => boolean;
+};
+
+const setupTrunks = ({
+  forestType = 'Terrestrial',
+  holdFirstUpdate = false,
+  speciesId,
+  trunkCount = 2,
+  updateFails = () => false,
+}: TrunkSetup = {}) => {
+  mockGet('/api/v1/species', { species: [ABUTILON, ACACIA] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
       id: 7,
@@ -169,6 +187,7 @@ const setupTrunks = (trunkCount = 2, forestType = 'Terrestrial') => {
           treeNumber: 5,
           trunkNumber,
           treeGrowthForm: trunkCount > 1 ? 'Trunk' : 'Tree',
+          speciesId,
           speciesName: 'Eucalyptus dalveenica',
           diameterAtBreastHeight: 9,
           height: 7,
@@ -178,10 +197,17 @@ const setupTrunks = (trunkCount = 2, forestType = 'Terrestrial') => {
     },
   });
   const requests: Request[] = [];
+  let releaseFirstUpdate!: () => void;
+  const firstUpdateGate = new Promise<void>((resolve) => {
+    releaseFirstUpdate = resolve;
+  });
   server.use(
-    http.patch(UPDATE_URL, ({ request }) => {
-      requests.push(request.clone());
-      return HttpResponse.json({ status: 'ok' });
+    http.patch(UPDATE_URL, async ({ request }) => {
+      const requestNumber = requests.push(request.clone());
+      if (requestNumber === 1 && holdFirstUpdate) {
+        await firstUpdateGate;
+      }
+      return updateFails(requestNumber) ? new HttpResponse(null, { status: 500 }) : HttpResponse.json({ status: 'ok' });
     })
   );
   const { user } = renderWithProviders(<TreesAndShrubsEditableTable />, {
@@ -194,7 +220,7 @@ const setupTrunks = (trunkCount = 2, forestType = 'Terrestrial') => {
     await user.click(screen.getByPlaceholderText(cellName));
     await user.click(await screen.findByText(scientificName));
   };
-  return { user, requests, pickSpecies };
+  return { user, requests, pickSpecies, releaseFirstUpdate: () => releaseFirstUpdate() };
 };
 
 describe('TreesAndShrubsEditableTable species change', () => {
@@ -218,10 +244,12 @@ describe('TreesAndShrubsEditableTable species change', () => {
     expect(await requests[0].json()).toEqual({
       updates: [{ type: 'RecordedTree', recordedTreeId: 101, speciesId: ABUTILON.id }],
     });
+    await waitFor(() => expect(screen.getAllByRole('cell', { name: ABUTILON.scientificName })).toHaveLength(2));
+    expect(screen.queryByRole('cell', { name: 'Eucalyptus dalveenica' })).not.toBeInTheDocument();
   });
 
   it('does not mention trunks for a tree that has only one', async () => {
-    const { pickSpecies } = setupTrunks(1);
+    const { pickSpecies } = setupTrunks({ trunkCount: 1 });
 
     await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
 
@@ -230,6 +258,86 @@ describe('TreesAndShrubsEditableTable species change', () => {
         strings.formatString(strings.CHANGE_TREE_SPECIES_MESSAGE, '5', ABUTILON.scientificName) as string
       )
     ).toBeInTheDocument();
+  });
+
+  it('puts the old species back when the change fails', async () => {
+    const { user, requests, pickSpecies } = setupTrunks({ updateFails: () => true });
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    await waitFor(() => expect(screen.getAllByRole('cell', { name: 'Eucalyptus dalveenica' })).toHaveLength(2));
+  });
+
+  it('drops a flag edit that was sent for the species the change did not stick', async () => {
+    const { user, requests, pickSpecies, releaseFirstUpdate } = setupTrunks({
+      trunkCount: 1,
+      holdFirstUpdate: true,
+      updateFails: () => true,
+    });
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    const invasiveCell = within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8];
+    expect(invasiveCell).toHaveTextContent(strings.NO);
+    await user.dblClick(invasiveCell);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await user.tab();
+    await waitFor(() => expect(requests).toHaveLength(2));
+
+    releaseFirstUpdate();
+
+    await waitFor(() => expect(screen.getByRole('cell', { name: 'Eucalyptus dalveenica' })).toBeInTheDocument());
+    expect(within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8]).toHaveTextContent(strings.NO);
+  });
+
+  it('keeps a change that succeeded when a later one fails', async () => {
+    const { user, requests, pickSpecies } = setupTrunks({ trunkCount: 1, updateFails: (n) => n >= 2 });
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(2));
+
+    await waitFor(() => expect(screen.getByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument());
+    expect(screen.queryByRole('cell', { name: 'Eucalyptus dalveenica' })).not.toBeInTheDocument();
+  });
+
+  it('keeps a flag saved after the species went back, when the earlier change fails', async () => {
+    const { user, requests, pickSpecies, releaseFirstUpdate } = setupTrunks({
+      trunkCount: 1,
+      holdFirstUpdate: true,
+      speciesId: ACACIA.id,
+      updateFails: (n) => n === 1,
+    });
+
+    await pickSpecies(ACACIA.scientificName, ABUTILON.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
+    await waitFor(() => expect(requests).toHaveLength(2));
+
+    const invasiveCell = within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8];
+    await user.dblClick(invasiveCell);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await user.tab();
+    await waitFor(() => expect(requests).toHaveLength(3));
+
+    releaseFirstUpdate();
+
+    await waitFor(() => expect(screen.getByRole('cell', { name: ACACIA.scientificName })).toBeInTheDocument());
+    expect(within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8]).toHaveTextContent(strings.YES);
   });
 
   it('leaves the species alone when the change is cancelled', async () => {
@@ -271,6 +379,17 @@ describe('TreesAndShrubsEditableTable removal', () => {
       updates: [{ type: 'DeleteRecordedTree', recordedTreeId: 11 }],
     });
     await waitFor(() => expect(screen.queryByRole('cell', { name: 'Acacia koa' })).not.toBeInTheDocument());
+  });
+
+  it('puts the plant back when the deletion fails', async () => {
+    const { user, requests, removeRow } = setup('Tree', 'Mangrove', 1, true);
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1');
+    await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeInTheDocument();
   });
 
   it('leaves the plant alone when the removal is cancelled', async () => {
@@ -400,7 +519,7 @@ describe('TreesAndShrubsEditableTable adding', () => {
   });
 
   it('offers a tree an optional crown diameter only in a mangrove forest', async () => {
-    const { user, requests } = setupTrunks(2, 'Mangrove');
+    const { user, requests } = setupTrunks({ forestType: 'Mangrove' });
     await startAdd(user);
     await chooseGrowthForm(user, strings.TREE);
 
