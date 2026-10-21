@@ -37,7 +37,9 @@ export const useSubLocationsForFacilities = (facilityIds?: number[]) => {
   const ids = useMemo(() => (facilityIdsKey ? facilityIdsKey.split(',').map(Number) : []), [facilityIdsKey]);
 
   useEffect(() => {
-    const subscriptions = ids.map((facilityId) => dispatch(api.endpoints.listSubLocations.initiate(facilityId)));
+    const subscriptions = ids.map((facilityId) =>
+      dispatch(api.endpoints.listSubLocations.initiate(facilityId, { forceRefetch: true }))
+    );
     return () => subscriptions.forEach((subscription) => subscription.unsubscribe());
   }, [dispatch, ids]);
 

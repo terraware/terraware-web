@@ -73,12 +73,19 @@ export default function SubLocations({
   }, [activeLocale, isSeedbank]);
 
   const { subLocations: facilitySubLocations } = useFacilitySubLocations(facilityId);
-  const seededFacilityId = useRef<number | undefined>(undefined);
+  const edited = useRef(false);
 
   useEffect(() => {
+    edited.current = false;
+  }, [facilityId]);
+
+  useEffect(() => {
+    if (edited.current) {
+      return;
+    }
+
     if (facilityId) {
-      if (facilitySubLocations && seededFacilityId.current !== facilityId) {
-        seededFacilityId.current = facilityId;
+      if (facilitySubLocations) {
         setSubLocations(facilitySubLocations);
         onLoad?.(facilitySubLocations);
       }
@@ -116,6 +123,7 @@ export default function SubLocations({
   };
 
   const setNewSubLocations = (locations: PartialSubLocation[]) => {
+    edited.current = true;
     setSubLocations(locations);
     if (onEdit) {
       onEdit(locations);
