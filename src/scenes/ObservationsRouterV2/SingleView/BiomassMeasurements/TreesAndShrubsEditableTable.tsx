@@ -209,6 +209,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     if (!(await updateObservation({ updates: [payload] }))) {
       setOptimisticValues((previous) =>
         changed.reduce((next, tree) => {
+          if (next[tree.id]?.speciesId !== species.id) {
+            return next;
+          }
           const keptEdits = { ...next[tree.id] };
           SPECIES_SCOPED_FIELDS.forEach((field) => delete keptEdits[field]);
           return { ...next, [tree.id]: { ...keptEdits, ...speciesBefore.get(tree.id) } };
