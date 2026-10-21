@@ -19,6 +19,7 @@ export enum QueryTagTypes {
   Deliverables = 'Deliverables',
   Deliveries = 'Deliveries',
   Disclaimer = 'Disclaimer',
+  EmailNotificationSettings = 'EmailNotificationSettings',
   FunderActivities = 'FunderActivities',
   InventoryPlanning = 'InventoryPlanning',
   CommonIndicators = 'CommonIndicators',
