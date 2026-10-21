@@ -214,7 +214,7 @@ export type SimpleSuccessResponsePayload = {
 export type DraftPlantingSitePayload = {
   boundary?: MultiPolygon | Polygon;
   boundarySource?: string;
-  /** ID of the user who created this draft. Only that user is allowed to modify or delete the draft. */
+  /** ID of the user who created this draft. */
   createdBy: number;
   createdTime: string;
   /** In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. */
