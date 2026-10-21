@@ -9,10 +9,6 @@ const byName = (activeLocale: string | null) => {
   return (location1: SubLocation, location2: SubLocation) => collator.compare(location1.name, location2.name);
 };
 
-/**
- * A facility's sub-locations, sorted by name. Undefined until the first load finishes, so callers
- * can tell "not loaded yet" from "this facility has none".
- */
 export const useFacilitySubLocations = (facilityId?: number) => {
   const { activeLocale } = useLocalization();
   const [listSubLocations, { data, isError }] = useLazyListSubLocationsQuery();
@@ -32,10 +28,6 @@ export const useFacilitySubLocations = (facilityId?: number) => {
   return { subLocations, isError };
 };
 
-/**
- * Sub-locations across several facilities, flattened into one list. Pass a stable `facilityIds`
- * reference; this reloads whenever that reference changes.
- */
 export const useSubLocationsForFacilities = (facilityIds?: number[]) => {
   const [listSubLocations] = useLazyListSubLocationsQuery();
   const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
