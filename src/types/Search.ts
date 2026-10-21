@@ -1,24 +1,31 @@
-import { components } from 'src/api/types/generated-schema';
+import {
+  AndNodePayload,
+  FieldNodePayload,
+  FieldValuesPayload as GeneratedFieldValuesPayload,
+  NotNodePayload,
+  OrNodePayload,
+  PrefixedSearch,
+  SearchApiArg,
+  SearchResponsePayload,
+  SearchSortOrderElement,
+  SearchValuesResponsePayload,
+} from 'src/queries/generated/search';
 
-export type AndNodePayload = components['schemas']['AndNodePayload'];
-export type FieldNodePayload = components['schemas']['FieldNodePayload'];
-export type NotNodePayload = components['schemas']['NotNodePayload'];
-export type OrNodePayload = components['schemas']['OrNodePayload'];
+export type { AndNodePayload, FieldNodePayload, NotNodePayload, OrNodePayload, PrefixedSearch };
 export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
-export type FieldValuesPayload = { [key: string]: components['schemas']['FieldValuesPayload'] };
+export type FieldValuesPayload = { [key: string]: GeneratedFieldValuesPayload };
 export type SearchCriteria = { [key: string]: SearchNodePayload };
-export type SearchSortOrder = components['schemas']['SearchSortOrderElement'];
-export type PrefixedSearch = components['schemas']['PrefixedSearch'];
-export type SearchType = components['schemas']['FieldNodePayload']['type'];
-export type SearchResponseElement = components['schemas']['SearchResponsePayload']['results'][0];
+export type SearchSortOrder = SearchSortOrderElement;
+export type SearchType = FieldNodePayload['type'];
+export type SearchResponseElement = SearchResponsePayload['results'][0];
 export type SearchResponseElementWithId = SearchResponseElement & { id: string };
-export type SearchValuesResponseElement = components['schemas']['SearchValuesResponsePayload']['results'];
+export type SearchValuesResponseElement = SearchValuesResponsePayload['results'];
 
 export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
-export type SearchRequestPayloadWithOptionalSearch = components['schemas']['SearchRequestPayload'];
+export type SearchRequestPayloadWithOptionalSearch = SearchApiArg;
 /** Search request payload that requires a search node and result count to be specified. */
-export type SearchRequestPayload = components['schemas']['SearchRequestPayload'] & {
+export type SearchRequestPayload = SearchApiArg & {
   count: number;
   search: SearchNodePayload;
 };
@@ -27,3 +34,8 @@ export const isFieldNodePayload = (node: SearchNodePayload): node is FieldNodePa
 export const isNotNodePayload = (node: SearchNodePayload): node is NotNodePayload => node.operation === 'not';
 export const isAndNodePayload = (node: SearchNodePayload): node is AndNodePayload => node.operation === 'and';
 export const isOrNodePayload = (node: SearchNodePayload): node is OrNodePayload => node.operation === 'or';
+
+export const getFieldNodeValues = (node?: SearchNodePayload): FieldNodePayload['values'] | undefined =>
+  node && isFieldNodePayload(node) ? node.values : undefined;
+export const getChildNodes = (node?: SearchNodePayload): SearchNodePayload[] | undefined =>
+  node && (isAndNodePayload(node) || isOrNodePayload(node)) ? node.children : undefined;

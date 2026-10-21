@@ -1,4 +1,11 @@
-import { paths } from 'src/api/types/generated-schema';
+import {
+  SearchApiArg,
+  SearchApiResponse,
+  SearchCountApiArg,
+  SearchCountApiResponse,
+  SearchDistinctValuesApiArg,
+  SearchDistinctValuesApiResponse,
+} from 'src/queries/generated/search';
 import {
   SearchCriteria,
   SearchNodePayload,
@@ -31,21 +38,17 @@ const SEARCH_VALUES_ENDPOINT = '/api/v1/search/values';
  *
  * You will generally want SearchRequestPayload instead of this.
  */
-type RawSearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type RawSearchRequestPayload = SearchApiArg;
 
-type SearchResponsePayload = paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type SearchResponsePayload = SearchApiResponse;
 
-type RawSearchCountRequestPayload =
-  paths[typeof SEARCH_COUNT_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type RawSearchCountRequestPayload = SearchCountApiArg;
 
-type SearchCountResponsePayload =
-  paths[typeof SEARCH_COUNT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type SearchCountResponsePayload = SearchCountApiResponse;
 
-type RawSearchValuesRequestPayload =
-  paths[typeof SEARCH_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type RawSearchValuesRequestPayload = SearchDistinctValuesApiArg;
 
-type SearchValuesResponsePayload =
-  paths[typeof SEARCH_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type SearchValuesResponsePayload = SearchDistinctValuesApiResponse;
 
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
 const httpSearchCount = HttpService.root(SEARCH_COUNT_ENDPOINT);

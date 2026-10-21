@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import theme from 'src/theme';
-import { SearchNodePayload } from 'src/types/Search';
+import { SearchNodePayload, getFieldNodeValues } from 'src/types/Search';
 
 import { FilterConfig } from './index';
 
@@ -34,7 +34,7 @@ const FeaturedFilters = ({ filters, setCurrentFilters, currentFilters, onFilterA
       filters.reduce(
         (acc: MultiSelectFilters, filter: FilterConfig): MultiSelectFilters => ({
           ...acc,
-          [filter.field]: currentFilters[filter.field] ? currentFilters[filter.field].values : [],
+          [filter.field]: getFieldNodeValues(currentFilters[filter.field]) ?? [],
         }),
         {} as MultiSelectFilters
       ),

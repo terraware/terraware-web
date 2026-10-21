@@ -1,4 +1,5 @@
 import {
+  FieldNodePayload,
   SearchNodePayload,
   SearchSortOrder,
   isAndNodePayload,
@@ -300,7 +301,7 @@ export type SearchNodeModifyConfig = {
   field: string;
   operation: 'APPEND' | 'REPLACE';
   values: string[];
-  condition?: (values: string[]) => boolean;
+  condition?: (values: FieldNodePayload['values']) => boolean;
 };
 
 /*
@@ -320,8 +321,8 @@ export const modifySearchNode = (
 
   const { field, operation, values, condition } = modifyConfig;
 
-  if (search.field === field) {
-    if (condition && !condition(search.values)) {
+  if (isFieldNodePayload(search)) {
+    if (search.field !== field || (condition && !condition(search.values))) {
       return search;
     }
 
@@ -336,16 +337,16 @@ export const modifySearchNode = (
         values,
       };
     }
-  } else if (search.child) {
+  } else if (isNotNodePayload(search)) {
     const modifiedChild = modifySearchNode(modifyConfig, search.child);
     return {
       ...search,
       child: modifiedChild || search.child,
     };
-  } else if (search.children) {
+  } else {
     return {
       ...search,
-      children: search.children.map((child: SearchNodePayload) => modifySearchNode(modifyConfig, child)),
+      children: search.children.map((child) => modifySearchNode(modifyConfig, child) || child),
     };
   }
 
