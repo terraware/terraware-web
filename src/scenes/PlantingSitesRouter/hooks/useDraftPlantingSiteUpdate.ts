@@ -9,7 +9,7 @@ import {
 import { useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
-import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
+import { DraftPlantingSite, OptionalSiteEditStep, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
 import { fromDraft, fromDraftToCreate, getDraftMapProblems, toDraft } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -36,9 +36,18 @@ type PendingRefetch = {
   requestIdBeforeSave?: string;
 };
 
+type PendingSave = {
+  problems: PlantingSiteProblem[];
+  redirectToDraft: boolean;
+  request: Data;
+};
+
 export type Response = {
   isUpdating: boolean;
+  onCancelSave: () => void;
   onFinishUpdate: () => void;
+  onSaveAnyway: () => void;
+  problems?: PlantingSiteProblem[];
   updateDraft: (draft: Data, redirectToDraft: boolean) => void;
   updatedDraft?: Data;
 };
@@ -47,6 +56,7 @@ export type Response = {
  * Hook to isolate workflow logic to update a draft planting site.
  * Returns update function, whether the request is in flight and the updated draft site.
  * Optionally redirects to draft after update.
+ * If the draft has validation problems, the save waits for onSaveAnyway or onCancelSave.
  */
 export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   const navigate = useSyncNavigate();
@@ -54,6 +64,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   const showProblems = usePlantingSiteProblemsToast();
 
   const [pendingRefetch, setPendingRefetch] = useState<PendingRefetch | undefined>();
+  const [pendingSave, setPendingSave] = useState<PendingSave | undefined>();
 
   const [validatePlantingSite, { isLoading: isValidating }] = useValidatePlantingSiteMutation();
   const [updateDraftPlantingSite, { isLoading: isSaving }] = useUpdateDraftPlantingSiteMutation();
@@ -64,43 +75,68 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
     latestRequestId.current = requestId;
   }, [requestId]);
 
+  const save = useCallback(
+    async (request: Data, redirectToDraft: boolean) => {
+      try {
+        const requestIdBeforeSave = latestRequestId.current;
+
+        await updateDraftPlantingSite({
+          id: request.draft.id,
+          updateDraftPlantingSiteRequestPayload: fromDraft(
+            request.draft,
+            currentData ? toDraft(currentData.site) : undefined
+          ),
+        }).unwrap();
+
+        if (redirectToDraft) {
+          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
+          navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${request.draft.id}`));
+        } else {
+          setPendingRefetch({ request, requestIdBeforeSave });
+        }
+      } catch (error) {
+        const problems = getDraftMapProblems(error);
+        if (problems?.length) {
+          showProblems(problems);
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
+      }
+    },
+    [currentData, navigate, showProblems, snackbar, updateDraftPlantingSite]
+  );
+
   const updateDraft = useCallback(
     (request: Data, redirectToDraft: boolean) => {
       const update = async () => {
+        let problems: PlantingSiteProblem[];
         try {
-          // a draft is allowed to still have validation problems, so only the request has to succeed
-          await validatePlantingSite(fromDraftToCreate(withDefaultStrata(request.draft))).unwrap();
+          ({ problems } = await validatePlantingSite(fromDraftToCreate(withDefaultStrata(request.draft))).unwrap());
+        } catch {
+          snackbar.toastError(strings.GENERIC_ERROR);
+          return;
+        }
 
-          const requestIdBeforeSave = latestRequestId.current;
-
-          await updateDraftPlantingSite({
-            id: request.draft.id,
-            updateDraftPlantingSiteRequestPayload: fromDraft(
-              request.draft,
-              currentData ? toDraft(currentData.site) : undefined
-            ),
-          }).unwrap();
-
-          if (redirectToDraft) {
-            snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-            navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${request.draft.id}`));
-          } else {
-            setPendingRefetch({ request, requestIdBeforeSave });
-          }
-        } catch (error) {
-          const problems = getDraftMapProblems(error);
-          if (problems?.length) {
-            showProblems(problems);
-          } else {
-            snackbar.toastError(strings.GENERIC_ERROR);
-          }
+        if (problems.length) {
+          setPendingSave({ problems, redirectToDraft, request });
+        } else {
+          await save(request, redirectToDraft);
         }
       };
 
       void update();
     },
-    [currentData, navigate, showProblems, snackbar, updateDraftPlantingSite, validatePlantingSite]
+    [save, snackbar, validatePlantingSite]
   );
+
+  const onSaveAnyway = useCallback(() => {
+    if (pendingSave) {
+      setPendingSave(undefined);
+      void save(pendingSave.request, pendingSave.redirectToDraft);
+    }
+  }, [pendingSave, save]);
+
+  const onCancelSave = useCallback(() => setPendingSave(undefined), []);
 
   // continue from the copy refetched after saving so new strata carry the IDs the server assigned
   const updatedDraft = useMemo<Data | undefined>(() => {
@@ -116,10 +152,23 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   return useMemo<Response>(
     () => ({
       isUpdating: isValidating || isSaving || (!!pendingRefetch && !updatedDraft),
+      onCancelSave,
       onFinishUpdate,
+      onSaveAnyway,
+      problems: pendingSave?.problems,
       updateDraft,
       updatedDraft,
     }),
-    [isSaving, isValidating, onFinishUpdate, pendingRefetch, updateDraft, updatedDraft]
+    [
+      isSaving,
+      isValidating,
+      onCancelSave,
+      onFinishUpdate,
+      onSaveAnyway,
+      pendingRefetch,
+      pendingSave,
+      updateDraft,
+      updatedDraft,
+    ]
   );
 }

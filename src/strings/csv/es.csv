@@ -240,6 +240,7 @@ AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
 AWAITING_CHECK_IN,Pendiente de facturación,11dee61b
 AWAITING_PROCESSING,Pendiente procesamiento,802b73ca
 BACK,Atrás,2e8211b0
+BACK_TO_EDIT,Volver a editar,b3d8a9a6
 BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
 BASELINE,Línea base,332af00e
@@ -576,6 +577,8 @@ DOWNLOAD_TEMPLATE,Descargue una plantilla aquí.,03a423cf
 DOWNLOAD_THE_CSV_TEMPLATE,Descargar la plantilla CSV.,d5d98658
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Descargar la aplicación móvil de Terraware,3eeed497
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y aproveche las funciones de Colección de semillas, Gestión de vivero y Monitoreo de plantas, las cuales puede usar con mayor flexibilidad ¡más allá de su escritorio!",94127206
+DRAFT_PLANTING_SITE_HAS_PROBLEMS,Este borrador tiene problemas,a866736a
+DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE,"Puede guardar estos cambios de todos modos, pero no podrá crear el sitio de plantación hasta que se resuelvan estos problemas.",dafd8fa7
 DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
 DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,Este sitio en borrador no puede utilizarse para plantaciones ni Observaciones hasta que se haya establecido completamente el límite del sitio.,48195727
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
@@ -1944,6 +1947,7 @@ SAVE_AND_CONTINUE,Guardar y continuar,a900547e
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e
+SAVE_ANYWAY,Guardar de todos modos,41580823
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc

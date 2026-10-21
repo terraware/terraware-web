@@ -239,6 +239,7 @@ AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
 AWAITING_CHECK_IN,En attente d'enregistrement,11dee61b
 AWAITING_PROCESSING,En attente de traitement,802b73ca
 BACK,Précédent,2e8211b0
+BACK_TO_EDIT,Retour à la modification,b3d8a9a6
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
 BASELINE,Référence,332af00e
@@ -575,6 +576,8 @@ DOWNLOAD_TEMPLATE,Téléchargez un modèle ici.,03a423cf
 DOWNLOAD_THE_CSV_TEMPLATE,Téléchargez le modèle CSV.,d5d98658
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Télécharger l'application mobile Terraware,3eeed497
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenez l'application mobile pour profiter des fonctionnalités de collecte de semences, de gestion des pépinières et de surveillance des plantes, que vous pouvez utiliser avec plus de flexibilité que depuis votre ordinateur de bureau !",94127206
+DRAFT_PLANTING_SITE_HAS_PROBLEMS,Ce brouillon présente des problèmes,a866736a
+DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE,"Vous pouvez tout de même enregistrer ces modifications, mais vous ne pourrez pas créer le site de plantation tant que ces problèmes ne seront pas résolus.",dafd8fa7
 DRAFT_PLANTING_SITES,Sites de plantation en brouillon,97403fcc
 DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,Ce site provisoire ne peut pas être utilisé pour la plantation ou les observations tant que la délimitation du site n’a pas été entièrement configurée.,48195727
 DRAW_BOUNDARY_WITHIN_MAP,Tracer les limites sur une carte,d1ee6da4
@@ -1943,6 +1946,7 @@ SAVE_AND_CONTINUE,Enregistrer et continuer,a900547e
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
+SAVE_ANYWAY,Enregistrer quand même,41580823
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
