@@ -10,7 +10,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
-const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1) => {
+const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1, updatesFail = false) => {
   mockGet('/api/v1/species', { species: [] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
@@ -40,7 +40,7 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
   server.use(
     http.patch(UPDATE_URL, ({ request }) => {
       requests.push(request.clone());
-      return HttpResponse.json({ status: 'ok' });
+      return updatesFail ? new HttpResponse(null, { status: 500 }) : HttpResponse.json({ status: 'ok' });
     })
   );
   const { user } = renderWithProviders(<TreesAndShrubsEditableTable />, {
@@ -182,6 +182,17 @@ describe('TreesAndShrubsEditableTable removal', () => {
       updates: [{ type: 'DeleteRecordedTree', recordedTreeId: 11 }],
     });
     await waitFor(() => expect(screen.queryByRole('cell', { name: 'Acacia koa' })).not.toBeInTheDocument());
+  });
+
+  it('puts the plant back when the deletion fails', async () => {
+    const { user, requests, removeRow } = setup('Tree', 'Mangrove', 1, true);
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1');
+    await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeInTheDocument();
   });
 
   it('leaves the plant alone when the removal is cancelled', async () => {
