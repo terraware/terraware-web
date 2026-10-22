@@ -23,7 +23,7 @@ const QuadratComponent = ({ position }: QuadratComponentProps) => {
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const biomassMeasurements = useMemo(() => results?.biomassMeasurements, [results?.biomassMeasurements]);
+  const biomassMeasurements = useMemo(() => monitoringPlot?.biomassMeasurements, [monitoringPlot?.biomassMeasurements]);
 
   return (
     <Box>

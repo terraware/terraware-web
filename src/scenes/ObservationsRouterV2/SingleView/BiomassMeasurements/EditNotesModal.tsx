@@ -34,7 +34,8 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
 
-  const biomassMeasurements = observationResults?.biomassMeasurements;
+  const observationResultsAdHocPlot = observationResults?.adHocPlot;
+  const biomassMeasurements = observationResultsAdHocPlot?.biomassMeasurements;
   const [record, setRecord] = useForm(biomassMeasurements);
   const [showWarning, setShowWarning] = useState(false);
 
@@ -43,7 +44,6 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   }, [biomassMeasurements, setRecord]);
 
   const recordQuadrats = record?.quadrats;
-  const observationResultsAdHocPlot = observationResults?.adHocPlot;
 
   const onSubmit = useCallback(() => {
     void (async () => {

@@ -36,7 +36,7 @@ const BiomassObservationDataTab = () => {
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const biomassMeasurement = useMemo(() => results?.biomassMeasurements, [results?.biomassMeasurements]);
+  const biomassMeasurement = useMemo(() => monitoringPlot?.biomassMeasurements, [monitoringPlot?.biomassMeasurements]);
 
   useEffect(() => {
     if (results) {

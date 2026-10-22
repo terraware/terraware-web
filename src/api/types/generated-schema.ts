@@ -7677,6 +7677,10 @@ export interface components {
             /** Format: date */
             reportingStartDate: string;
         };
+        /**
+         * @deprecated
+         * @description Use the plot-level biomassMeasurements field instead.
+         */
         ExistingBiomassMeasurementPayload: {
             additionalSpecies: components["schemas"]["BiomassSpeciesPayload"][];
             description?: string;
@@ -9769,6 +9773,7 @@ export interface components {
         };
         /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
         ObservationMonitoringPlotResultsPayload: {
+            biomassMeasurements?: components["schemas"]["ExistingBiomassMeasurementPayload"];
             boundary: components["schemas"]["Polygon"];
             claimedByName?: string;
             /** Format: int64 */
@@ -9968,6 +9973,7 @@ export interface components {
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
             areaHa?: number;
+            /** @description Use the plot-level biomassMeasurements field instead. */
             biomassMeasurements?: components["schemas"]["ExistingBiomassMeasurementPayload"];
             /** Format: date-time */
             completedTime?: string;
