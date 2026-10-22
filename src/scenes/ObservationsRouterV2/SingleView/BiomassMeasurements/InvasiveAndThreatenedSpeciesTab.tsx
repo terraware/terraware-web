@@ -23,8 +23,8 @@ const InvasiveAndThreatenedSpeciesTab = () => {
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
   const additionalSpecies = useMemo(
-    () => results?.biomassMeasurements?.additionalSpecies,
-    [results?.biomassMeasurements?.additionalSpecies]
+    () => monitoringPlot?.biomassMeasurements?.additionalSpecies,
+    [monitoringPlot?.biomassMeasurements?.additionalSpecies]
   );
 
   const [editNotesModalOpen, setEditNotesModalOpen] = useState(false);
