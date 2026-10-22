@@ -9,11 +9,14 @@ import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
   BiomassSpeciesUpdateOperationPayload,
+  CreateQuadratSpeciesOperationPayload,
   DeleteQuadratSpeciesOperationPayload,
   QuadratSpeciesUpdateOperationPayload,
   UpdateObservationRequestPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
+import { Species } from 'src/types/Species';
 
 import BiomassEditConfirmationModal from './BiomassEditConfirmationModal';
 import { QuadratPosition } from './QuadratNotesComponent';
@@ -35,9 +38,13 @@ type QuadratSpeciesEditableTableProps = {
 
 const REMOVE_BUTTON_CLASS = 'quadratSpeciesRemove';
 
+const SPECIES_SCOPED_FIELDS = ['speciesId', 'speciesName', 'scientificName'] as const;
+
+const speciesStateOf = (edits: Partial<SpeciesRow> = {}): Partial<SpeciesRow> =>
+  Object.fromEntries(SPECIES_SCOPED_FIELDS.filter((field) => edits[field] !== undefined).map((f) => [f, edits[f]]));
+
 const getRowKey = (row: SpeciesRow): string => String(row.speciesId ?? row.scientificName ?? row.speciesName ?? '');
 
-/** Identifies a species to the API by id, or by name for "Other" species that aren't in the list. */
 const speciesRef = (row: SpeciesRow): Pick<SpeciesRow, 'speciesId' | 'scientificName'> => ({
   speciesId: row.speciesId,
   scientificName: row.speciesId === undefined ? (row.scientificName ?? row.speciesName) : undefined,
@@ -59,6 +66,7 @@ export default function QuadratSpeciesEditableTable({
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<string, Partial<SpeciesRow>>>({});
   const [pendingRemoval, setPendingRemoval] = useState<SpeciesRow>();
+  const [pendingSpeciesChange, setPendingSpeciesChange] = useState<{ row: SpeciesRow; species: Species }>();
   const [removedKeys, setRemovedKeys] = useState<string[]>([]);
 
   const pendingUpdates = useRef<Promise<unknown>>(Promise.resolve());
@@ -138,6 +146,44 @@ export default function QuadratSpeciesEditableTable({
     }
   }, [pendingRemoval, position, updateObservation]);
 
+  const confirmSpeciesChange = useCallback(async () => {
+    if (!pendingSpeciesChange || !position) {
+      return;
+    }
+    const { row, species: newSpecies } = pendingSpeciesChange;
+    setPendingSpeciesChange(undefined);
+    const key = getRowKey(row);
+    const speciesBefore = speciesStateOf(optimisticValues[key]);
+    setOptimisticValues((previous) => ({
+      ...previous,
+      [key]: {
+        ...previous[key],
+        speciesId: newSpecies.id,
+        speciesName: newSpecies.scientificName,
+        scientificName: undefined,
+      },
+    }));
+    const updates = [
+      { type: 'DeleteQuadratSpecies', position, ...speciesRef(row) } as DeleteQuadratSpeciesOperationPayload,
+      {
+        type: 'CreateQuadratSpecies',
+        position,
+        speciesId: newSpecies.id,
+        abundance: row.abundanceCount ?? 0,
+      } as CreateQuadratSpeciesOperationPayload,
+    ];
+    if (!(await updateObservation({ updates }))) {
+      setOptimisticValues((previous) => {
+        if (previous[key]?.speciesId !== newSpecies.id) {
+          return previous;
+        }
+        const keptEdits = { ...previous[key] };
+        SPECIES_SCOPED_FIELDS.forEach((field) => delete keptEdits[field]);
+        return { ...previous, [key]: { ...keptEdits, ...speciesBefore } };
+      });
+    }
+  }, [optimisticValues, pendingSpeciesChange, position, updateObservation]);
+
   const speciesDetails = useCallback(
     (row: SpeciesRow) =>
       [
@@ -160,6 +206,45 @@ export default function QuadratSpeciesEditableTable({
       </IconButton>
     ),
     [strings, theme.palette.TwClrIcn]
+  );
+
+  const speciesWithData = useMemo(() => {
+    return species
+      ?.filter((sp) => !removedKeys.includes(getRowKey(sp)))
+      .map((sp) => {
+        const merged = { ...sp, ...(optimisticValues[getRowKey(sp)] ?? {}) };
+        const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === merged.speciesId);
+        return {
+          ...merged,
+          speciesName: foundSpecies?.scientificName || merged.scientificName || merged.speciesName,
+        };
+      });
+  }, [species, availableSpecies, optimisticValues, removedKeys]);
+
+  const recordedSpeciesIds = useMemo(
+    () => (speciesWithData ?? []).map((row) => row.speciesId).filter((id): id is number => id !== undefined),
+    [speciesWithData]
+  );
+
+  const canManageSpecies = editable && position !== undefined;
+
+  const SpeciesCellEditor = useCallback(
+    ({ row, table }: { row: { original: SpeciesRow }; table: { setEditingCell: (cell: null) => void } }) => (
+      <SpeciesSearchSelect
+        excludedSpeciesIds={row.original.speciesId === undefined ? undefined : [row.original.speciesId]}
+        id={`changeQuadratSpecies-${getRowKey(row.original)}`}
+        onChange={(picked) => {
+          if (picked) {
+            setPendingSpeciesChange({ row: row.original, species: picked });
+            table.setEditingCell(null);
+          }
+        }}
+        placeholder={row.original.speciesName ?? strings.SEARCH_SPECIES}
+        unavailableLabel={strings.ALREADY_IN_THIS_TABLE}
+        unavailableSpeciesIds={recordedSpeciesIds}
+      />
+    ),
+    [recordedSpeciesIds, strings.ALREADY_IN_THIS_TABLE, strings.SEARCH_SPECIES]
   );
 
   const IsInvasiveCell = useCallback(
@@ -231,7 +316,8 @@ export default function QuadratSpeciesEditableTable({
         id: 'speciesName',
         accessorKey: 'speciesName',
         header: strings.SPECIES,
-        enableEditing: false,
+        enableEditing: canManageSpecies,
+        ...(canManageSpecies ? { editConfig: { editVariant: 'custom', customEditComponent: SpeciesCellEditor } } : {}),
       },
       ...abundanceColumns,
       {
@@ -263,27 +349,36 @@ export default function QuadratSpeciesEditableTable({
         },
       },
     ],
-    [strings, abundanceColumns, saveBiomassSpecies, IsInvasiveCell, IsThreatenedCell]
+    [
+      strings,
+      abundanceColumns,
+      canManageSpecies,
+      saveBiomassSpecies,
+      SpeciesCellEditor,
+      IsInvasiveCell,
+      IsThreatenedCell,
+    ]
   );
-
-  const speciesWithData = useMemo(() => {
-    return species
-      ?.filter((sp) => !removedKeys.includes(getRowKey(sp)))
-      .map((sp) => {
-        const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
-        const optimistic = optimisticValues[getRowKey(sp)] ?? {};
-        return {
-          ...sp,
-          ...optimistic,
-          speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
-        };
-      });
-  }, [species, availableSpecies, optimisticValues, removedKeys]);
-
-  const removalEnabled = editable && position !== undefined;
 
   return (
     <>
+      {pendingSpeciesChange && (
+        <BiomassEditConfirmationModal
+          confirmLabel={strings.CHANGE_SPECIES}
+          details={speciesDetails(pendingSpeciesChange.row)}
+          detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
+          message={
+            strings.formatString(
+              strings.CHANGE_SPECIES_CONFIRMATION_MESSAGE,
+              pendingSpeciesChange.row.speciesName ?? '',
+              pendingSpeciesChange.species.scientificName
+            ) as string
+          }
+          onClose={() => setPendingSpeciesChange(undefined)}
+          onConfirm={() => void confirmSpeciesChange()}
+          title={strings.CHANGE_SPECIES_CONFIRMATION}
+        />
+      )}
       {pendingRemoval && (
         <BiomassEditConfirmationModal
           confirmLabel={strings.REMOVE}
@@ -307,7 +402,7 @@ export default function QuadratSpeciesEditableTable({
         enableTopToolbar={false}
         initialSorting={[{ id: 'speciesName', desc: false }]}
         sx={
-          removalEnabled
+          canManageSpecies
             ? {
                 [`& .${REMOVE_BUTTON_CLASS}`]: { opacity: 0, transition: 'opacity 150ms' },
                 [`& tr:hover .${REMOVE_BUTTON_CLASS}, & tr:focus-within .${REMOVE_BUTTON_CLASS}`]: { opacity: 1 },
@@ -316,7 +411,7 @@ export default function QuadratSpeciesEditableTable({
             : undefined
         }
         tableOptions={
-          removalEnabled
+          canManageSpecies
             ? {
                 enableRowActions: true,
                 positionActionsColumn: 'last',

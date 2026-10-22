@@ -172,6 +172,7 @@ ALL_VARIABLES,Todas las variables,1fe9cddb
 ALLOCATED,Asignado,1105670f
 ALLOCATED_FOR_TARGET,Asignado al objetivo,b2860a99
 ALLOCATED_FOR_TARGET_TOOLTIP,Porcentaje del objetivo total de especies que ha sido asignado.,b2c6ce5b
+ALREADY_IN_THIS_TABLE,Ya está en esta tabla,33833fb5
 ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Por favor ingrese un correo electrónico único o vaya al perfil existente de la persona.,67ec2d39
 ALREADY_WITHDRAWN,Ya retirado,aa003cd7
 ANIMAL_DAMAGE,Daño animal,754d26fb
