@@ -37,7 +37,7 @@ export default function DraftProblemsConfirmation({
         <Button id='save-draft-planting-site-anyway' key='save' label={strings.SAVE_ANYWAY} onClick={onSaveAnyway} />,
       ]}
     >
-      <Box component='ul' textAlign='left' margin={0}>
+      <Box component='ul' textAlign='left' marginBottom={0} marginTop={2}>
         {problems.map((problem, index) => (
           <Typography component='li' key={index}>
             {problemText(problem)}
