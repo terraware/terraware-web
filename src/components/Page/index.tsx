@@ -1,6 +1,6 @@
 import React, { CSSProperties, type JSX, useCallback, useState } from 'react';
 
-import { Box, CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, GridLegacy as Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

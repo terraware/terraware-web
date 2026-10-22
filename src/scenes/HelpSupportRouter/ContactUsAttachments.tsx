@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 
 import strings from 'src/strings';

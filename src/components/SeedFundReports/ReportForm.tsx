@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 
 import LocationSection from 'src/components/SeedFundReports/LocationSelection';

@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import { useFacilitySubLocations } from 'src/components/common/SubLocations/useFacilitySubLocations';
 import { useOrganization } from 'src/providers/hooks';

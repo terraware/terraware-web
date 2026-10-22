@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { Box, Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
 import TfMain from 'src/components/common/TfMain';

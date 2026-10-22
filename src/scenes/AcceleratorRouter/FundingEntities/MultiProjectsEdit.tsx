@@ -1,6 +1,6 @@
 import React, { Fragment, type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, GridLegacy as Grid } from '@mui/material';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import AddLink from 'src/components/common/AddLink';

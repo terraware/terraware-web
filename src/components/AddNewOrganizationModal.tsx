@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
@@ -246,7 +246,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           countrySubdivisionError={stateError}
           paddingBottom={theme.spacing(4)}
         />
-        <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+        <Grid item xs={12} sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}>
           <TimeZoneSelector
             label={strings.TIME_ZONE_REQUIRED}
             onTimeZoneSelected={onTimeZoneChange}

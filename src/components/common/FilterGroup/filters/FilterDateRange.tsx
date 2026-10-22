@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { isValid } from 'date-fns';
 

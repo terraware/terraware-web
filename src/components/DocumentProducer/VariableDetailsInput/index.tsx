@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, DatePicker, Dropdown, DropdownItem, Icon, MultiSelect, Textfield } from '@terraware/web-components';
 
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';

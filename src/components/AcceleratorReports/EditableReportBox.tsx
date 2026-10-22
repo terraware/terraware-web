@@ -1,6 +1,6 @@
 import React, { type JSX, ReactNode } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';

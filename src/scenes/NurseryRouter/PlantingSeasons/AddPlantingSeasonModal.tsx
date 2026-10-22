@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -274,7 +274,7 @@ const AddPlantingSeasonModal = ({
           </Grid>
         )}
         {seasonsForSelectedSite.length > 0 && (
-          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingBottom: 0 } }} display={'flex'} alignItems='end'>
+          <Grid item xs={12} sx={{ '&.MuiGridLegacy-item': { paddingBottom: 0 } }} display={'flex'} alignItems='end'>
             <Checkbox
               id='copyPreviousSeason'
               name='copyPreviousSeason'

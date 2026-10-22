@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, Container, Grid, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';

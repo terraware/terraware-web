@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { ToDoItem } from 'src/types/ProjectToDo';

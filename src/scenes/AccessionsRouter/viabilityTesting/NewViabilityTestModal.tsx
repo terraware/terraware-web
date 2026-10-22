@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Close } from '@mui/icons-material';
-import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import { GenericMap } from 'src/components/Map';

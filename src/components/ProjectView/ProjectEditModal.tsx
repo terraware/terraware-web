@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
 import UpdateLocationModal from 'src/components/UpdateLocationModal';

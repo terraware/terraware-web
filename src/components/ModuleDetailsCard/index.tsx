@@ -1,6 +1,6 @@
 import React, { ReactNode, useMemo } from 'react';
 
-import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';

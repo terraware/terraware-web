@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Icon, IconName } from '@terraware/web-components';
 import { Props as ButtonProps } from '@terraware/web-components/components/Button/Button';
 import { useDeviceInfo } from '@terraware/web-components/utils';

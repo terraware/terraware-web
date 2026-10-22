@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useRef, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

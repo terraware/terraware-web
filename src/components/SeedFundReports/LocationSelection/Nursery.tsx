@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
 import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';

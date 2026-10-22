@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';

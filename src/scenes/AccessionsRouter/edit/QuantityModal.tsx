@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, GridLegacy as Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
 import _ from 'lodash';
 

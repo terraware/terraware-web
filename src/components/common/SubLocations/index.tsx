@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import _ from 'lodash';

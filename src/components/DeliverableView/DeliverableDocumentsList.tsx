@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, GridLegacy as Grid } from '@mui/material';
 
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';

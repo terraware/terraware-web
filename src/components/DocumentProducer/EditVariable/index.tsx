@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';

@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
+import { FormControlLabel, GridLegacy as Grid, Radio, RadioGroup, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';
 

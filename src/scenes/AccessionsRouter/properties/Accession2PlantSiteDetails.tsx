@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 
 import AddLink from 'src/components/common/AddLink';
 import Textfield from 'src/components/common/Textfield/Textfield';
