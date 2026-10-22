@@ -112,17 +112,24 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     setOptimisticValues((prev) => ({ ...prev }));
   }, []);
 
+  const pendingUpdates = useRef<Promise<unknown>>(Promise.resolve());
+
   const updateObservation = useCallback(
-    async (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
+    (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
       if (!results?.adHocPlot) {
-        return false;
+        return Promise.resolve(false);
       }
       const payload = {
         observationId,
         plotId: results.adHocPlot.monitoringPlotId,
         updateObservationRequestPayload: updatePayload,
       };
-      return !('error' in (await update(payload)));
+      // A failed request must not strand everything queued behind it.
+      const queued = pendingUpdates.current
+        .catch(() => undefined)
+        .then(async () => !('error' in (await update(payload))));
+      pendingUpdates.current = queued;
+      return queued;
     },
     [observationId, results, update]
   );
