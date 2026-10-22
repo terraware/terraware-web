@@ -13,7 +13,6 @@ import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlic
 import snackbarReducers from './features/snackbar/snackbarSlice';
 import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
-import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 
 // assembly of app reducers
@@ -28,7 +27,6 @@ const reducers = {
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
   ...subLocationsReducers,
-  ...trackingReducers,
   ...userAnalyticsReducers,
   ...rtkReducers,
 };
