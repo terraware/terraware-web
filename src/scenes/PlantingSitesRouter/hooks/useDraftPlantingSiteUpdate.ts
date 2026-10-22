@@ -10,7 +10,13 @@ import { useValidatePlantingSiteMutation } from 'src/queries/generated/plantingS
 import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
-import { fromDraft, fromDraftToCreate, getDraftMapProblems, toDraft } from 'src/utils/draftPlantingSiteUtils';
+import {
+  fromDraft,
+  fromDraftToCreate,
+  getDraftMapProblems,
+  getDraftSaveErrorMessage,
+  toDraft,
+} from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import usePlantingSiteProblemsToast from './usePlantingSiteProblemsToast';
@@ -99,7 +105,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         if (problems?.length) {
           showProblems(problems);
         } else {
-          snackbar.toastError(strings.GENERIC_ERROR);
+          snackbar.toastError(getDraftSaveErrorMessage(error));
         }
       }
     },
@@ -112,8 +118,8 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         let problems: PlantingSiteProblem[];
         try {
           ({ problems } = await validatePlantingSite(fromDraftToCreate(withDefaultStrata(request.draft))).unwrap());
-        } catch {
-          snackbar.toastError(strings.GENERIC_ERROR);
+        } catch (error) {
+          snackbar.toastError(getDraftSaveErrorMessage(error));
           return;
         }
 

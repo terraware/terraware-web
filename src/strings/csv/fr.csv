@@ -1585,6 +1585,7 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utilis
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Dessiner les limites du site,1200219a
 PLANTING_SITE_DELETED,Site de plantation supprimé !,61c0d69a
 PLANTING_SITE_MAP_HAS_PROBLEMS,La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.,fd9e2ab8
+PLANTING_SITE_MAP_SELF_INTERSECTS,"Une forme sur la carte se croise elle-même. Redessinez-la afin que ses contours ne se croisent pas, puis réessayez.",b1d07b65
 PLANTING_SITE_NAME,Nom du site de plantation,f3cb062b
 PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME,Plus d’un stratum porte le nom {0}.,14b61803
 PLANTING_SITE_PROBLEM_DUPLICATE_SUBSTRATUM_NAME,Plus d’un substratum dans le stratum {0} porte le nom {1}.,9e35127b

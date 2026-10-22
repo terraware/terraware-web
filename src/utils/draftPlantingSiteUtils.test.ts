@@ -1,8 +1,9 @@
 import { DraftStratumPayload } from 'src/queries/generated/draftPlantingSites';
+import strings from 'src/strings';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
 
-import { fromDraft, getDraftMapProblems, toDraft } from './draftPlantingSiteUtils';
+import { fromDraft, getDraftMapProblems, getDraftSaveErrorMessage, toDraft } from './draftPlantingSiteUtils';
 
 const boundary: MultiPolygon = {
   type: 'MultiPolygon',
@@ -378,5 +379,26 @@ describe('getDraftMapProblems', () => {
   test('should return undefined for other errors', () => {
     expect(getDraftMapProblems({ status: 500, data: { problems: [] } })).toBeUndefined();
     expect(getDraftMapProblems(undefined)).toBeUndefined();
+  });
+});
+
+describe('getDraftSaveErrorMessage', () => {
+  test('should explain a self-intersecting shape', () => {
+    const error = {
+      status: 400,
+      data: { error: { message: 'JSON parse error: Self-intersection at or near point (1.0, 2.0, NaN)' } },
+    };
+
+    expect(getDraftSaveErrorMessage(error)).toBe(strings.PLANTING_SITE_MAP_SELF_INTERSECTS);
+  });
+
+  test('should fall back to a generic message for other errors', () => {
+    expect(getDraftSaveErrorMessage({ status: 400, data: { error: { message: 'Unrecognized field: foo' } } })).toBe(
+      strings.GENERIC_ERROR
+    );
+    expect(getDraftSaveErrorMessage({ status: 500, data: { error: { message: 'Self-intersection' } } })).toBe(
+      strings.GENERIC_ERROR
+    );
+    expect(getDraftSaveErrorMessage(undefined)).toBe(strings.GENERIC_ERROR);
   });
 });
