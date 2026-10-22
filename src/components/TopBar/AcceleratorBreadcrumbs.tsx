@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';

@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Divider, Grid, useTheme } from '@mui/material';
+import { Box, Divider, GridLegacy as Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 

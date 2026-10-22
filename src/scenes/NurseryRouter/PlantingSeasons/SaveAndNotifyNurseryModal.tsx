@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';

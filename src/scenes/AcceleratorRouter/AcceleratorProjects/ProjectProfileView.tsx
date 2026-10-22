@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';

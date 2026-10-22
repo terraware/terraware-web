@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -118,7 +118,7 @@ export default function RegionSelector({
           xs={gridSize()}
           paddingLeft={isMobile ? 0 : theme.spacing(2)}
           paddingBottom={paddingBottom}
-          sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}
+          sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}
         >
           <Dropdown
             id='countySubdivisionCode'

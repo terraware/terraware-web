@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { CarbonCertifications } from 'src/types/AcceleratorProject';

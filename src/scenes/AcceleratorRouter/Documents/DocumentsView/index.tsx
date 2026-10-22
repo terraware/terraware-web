@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { IconName, Separator } from '@terraware/web-components';
 
 import Page from 'src/components/Page';

@@ -1,6 +1,6 @@
 import React, { type JSX, isValidElement, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
 type DataValue = string | number | null | undefined | JSX.Element;

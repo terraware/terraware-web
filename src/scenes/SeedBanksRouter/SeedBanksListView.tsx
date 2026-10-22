@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useRef, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';

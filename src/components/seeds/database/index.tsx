@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container, Grid, useTheme } from '@mui/material';
+import { Container, GridLegacy as Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message, Tabs } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';

@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';

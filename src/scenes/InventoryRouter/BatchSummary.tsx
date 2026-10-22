@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 
 import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';

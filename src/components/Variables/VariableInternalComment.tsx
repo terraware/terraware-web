@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, SxProps, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, SxProps, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';

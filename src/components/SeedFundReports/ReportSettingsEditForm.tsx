@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageForm from 'src/components/common/PageForm';

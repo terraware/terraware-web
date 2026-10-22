@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 

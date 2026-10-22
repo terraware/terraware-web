@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, GridLegacy as Grid } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';

@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container, GridLegacy as Grid, SxProps, Typography, useTheme } from '@mui/material';
 import Cookies from 'cookies-js';
 
 import MainPaper from 'src/components/MainPaper';

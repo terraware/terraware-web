@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';

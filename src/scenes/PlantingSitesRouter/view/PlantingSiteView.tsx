@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';

@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
 import { Close } from '@mui/icons-material';
-import { Box, Grid, IconButton, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, IconButton, useTheme } from '@mui/material';
 import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';

@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Divider, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue from '@terraware/web-components/utils/date';

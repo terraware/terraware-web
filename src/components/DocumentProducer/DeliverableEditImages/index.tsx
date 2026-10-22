@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import strings from 'src/strings';

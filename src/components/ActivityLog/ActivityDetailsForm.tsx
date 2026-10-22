@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';

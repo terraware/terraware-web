@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox } from '@terraware/web-components';
 
 import { useProjects } from 'src/hooks/useProjects';

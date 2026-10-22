@@ -1,6 +1,6 @@
 import React, { type JSX, useRef } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';

@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';

@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
