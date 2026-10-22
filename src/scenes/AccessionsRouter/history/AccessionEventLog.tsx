@@ -172,6 +172,7 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 
       <EventLog
         defaultExpanded
+        disableFirstEventTopPadding
         emptyState={<Typography>{strings.ACCESSION_HISTORY_NO_EVENTS}</Typography>}
         events={events ?? []}
         filterEvent={filterEvent}

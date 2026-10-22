@@ -9,6 +9,7 @@ import { EventLogEntryPayload } from 'src/queries/generated/events';
 
 type EventLogProps = {
   defaultExpanded?: boolean;
+  disableFirstEventTopPadding?: boolean;
   emptyState?: ReactNode;
   events?: EventLogEntryPayload[];
   filterEvent?: (event: EventLogEntryPayload) => boolean;
@@ -20,6 +21,7 @@ type EventLogProps = {
 
 const EventLog = ({
   defaultExpanded,
+  disableFirstEventTopPadding,
   emptyState,
   events,
   filterEvent,
@@ -109,7 +111,9 @@ const EventLog = ({
                 borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
                 display='flex'
                 gap='24px'
-                padding={2}
+                paddingBottom={2}
+                paddingTop={disableFirstEventTopPadding && index === 0 ? 0 : 2}
+                paddingX={2}
               >
                 <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
                   <Typography
