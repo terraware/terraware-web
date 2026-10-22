@@ -11,9 +11,9 @@ import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
 import { FacilityService, SubLocationService } from 'src/services';
-import { CreateFacilityResponse } from 'src/services/FacilityService';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -50,6 +50,8 @@ export default function NurseryView(): JSX.Element {
   const [baselineSubLocations, setBaselineSubLocations] = useState<PartialSubLocation[]>();
   const [saving, setSaving] = useState(false);
   const snackbar = useSnackbar();
+  const [createFacility] = useCreateFacilityMutation();
+  const [updateFacility] = useUpdateFacilityMutation();
   const theme = useTheme();
   const [navigateToNursery, setNavigateToNursery] = useState<NavigateToFacilityObject>({
     navigate: false,
@@ -167,30 +169,43 @@ export default function NurseryView(): JSX.Element {
         ? { type: 'Point', coordinates: [parsedLongitude, parsedLatitude] }
         : undefined;
 
+    const facilityPayload = {
+      buildCompletedDate: record.buildCompletedDate,
+      buildStartedDate: record.buildStartedDate,
+      capacity: record.capacity,
+      description: record.description,
+      location,
+      name: record.name,
+      operationStartedDate: record.operationStartedDate,
+      timeZone: record.timeZone,
+    };
+
     setSaving(true);
     try {
       let id = selectedNursery?.id;
-      const response = selectedNursery
-        ? await FacilityService.updateFacility({ ...record, location } as Facility)
-        : await FacilityService.createFacility({
-            ...record,
-            location,
-            subLocationNames: editedSubLocations?.map((l) => l.name as string),
-          });
-
-      if (response.requestSucceeded && selectedOrganization) {
-        if (selectedNursery && editedSubLocations) {
-          await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
+      if (selectedNursery) {
+        await updateFacility({
+          facilityId: selectedNursery.id,
+          updateFacilityRequestPayload: facilityPayload,
+        }).unwrap();
+        if (editedSubLocations) {
+          await SubLocationService.saveEditedSubLocations(selectedNursery.id, editedSubLocations);
         }
-        await reloadOrganizations(selectedOrganization.id);
-        snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
-        if (!selectedNursery) {
-          id = (response as CreateFacilityResponse).facilityId || undefined;
-        }
-        setNavigateToNursery({ navigate: true, id });
       } else {
-        snackbar.toastError();
+        const response = await createFacility({
+          ...facilityPayload,
+          organizationId: selectedOrganization.id,
+          subLocationNames: editedSubLocations?.map((l) => l.name as string),
+          type: record.type,
+        }).unwrap();
+        id = response.id;
       }
+
+      await reloadOrganizations(selectedOrganization.id);
+      snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
+      setNavigateToNursery({ navigate: true, id });
+    } catch {
+      snackbar.toastError();
     } finally {
       setSaving(false);
     }

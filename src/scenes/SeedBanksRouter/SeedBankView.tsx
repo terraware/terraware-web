@@ -12,6 +12,7 @@ import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
 import { FacilityService, SubLocationService } from 'src/services';
 import strings from 'src/strings';
@@ -50,6 +51,8 @@ export default function SeedBankView(): JSX.Element {
   const [baselineSubLocations, setBaselineSubLocations] = useState<PartialSubLocation[]>();
   const [saving, setSaving] = useState(false);
   const snackbar = useSnackbar();
+  const [createFacility] = useCreateFacilityMutation();
+  const [updateFacility] = useUpdateFacilityMutation();
   const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToFacilityObject>({
     navigate: false,
     id: undefined,
@@ -146,35 +149,41 @@ export default function SeedBankView(): JSX.Element {
       return;
     }
 
+    const facilityPayload = {
+      buildCompletedDate: record.buildCompletedDate,
+      buildStartedDate: record.buildStartedDate,
+      description: record.description,
+      name: record.name,
+      operationStartedDate: record.operationStartedDate,
+      timeZone: record.timeZone,
+    };
+
     setSaving(true);
     let succeeded = false;
     try {
       if (selectedSeedBank) {
-        const response = await FacilityService.updateFacility({ ...record } as Facility);
-        if (response.requestSucceeded) {
-          if (editedSubLocations) {
-            await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
-          }
-          void reloadOrganizations(selectedOrganization?.id);
-          snackbar.toastSuccess(strings.CHANGES_SAVED);
-          succeeded = true;
-        } else {
-          snackbar.toastError();
+        await updateFacility({
+          facilityId: selectedSeedBank.id,
+          updateFacilityRequestPayload: facilityPayload,
+        }).unwrap();
+        if (editedSubLocations) {
+          await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
         }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        const response = await FacilityService.createFacility({
-          ...record,
+        const response = await createFacility({
+          ...facilityPayload,
+          organizationId: selectedOrganization.id,
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
-        });
-        if (response.requestSucceeded) {
-          await reloadOrganizations(selectedOrganization?.id);
-          snackbar.toastSuccess(strings.SEED_BANK_ADDED);
-          id = response.facilityId || undefined;
-          succeeded = true;
-        } else {
-          snackbar.toastError();
-        }
+          type: record.type,
+        }).unwrap();
+        await reloadOrganizations(selectedOrganization.id);
+        snackbar.toastSuccess(strings.SEED_BANK_ADDED);
+        id = response.id;
       }
+      succeeded = true;
+    } catch {
+      snackbar.toastError();
     } finally {
       setSaving(false);
     }
