@@ -160,8 +160,8 @@ const ACACIA = { id: 104, scientificName: 'Acacia koa' };
 type TrunkSetup = {
   /** Mangrove forests make crown diameter editable for trees. */
   forestType?: string;
-  /** Hold the first update open until `releaseFirstUpdate`, so later edits overlap it. */
-  holdFirstUpdate?: boolean;
+  /** Which updates hang until released, by 1-based request order, so work can overlap them. */
+  holdUpdates?: (requestNumber: number) => boolean;
   speciesId?: number;
   trunkCount?: number;
   /** Which updates fail, by 1-based request order. */
@@ -170,7 +170,7 @@ type TrunkSetup = {
 
 const setupTrunks = ({
   forestType = 'Terrestrial',
-  holdFirstUpdate = false,
+  holdUpdates = () => false,
   speciesId,
   trunkCount = 2,
   updateFails = () => false,
@@ -197,15 +197,14 @@ const setupTrunks = ({
     },
   });
   const requests: Request[] = [];
-  let releaseFirstUpdate!: () => void;
-  const firstUpdateGate = new Promise<void>((resolve) => {
-    releaseFirstUpdate = resolve;
-  });
+  // One gate per held request, so they can be let go independently.
+  const gates = new Map<number, () => void>();
+  const waitForRelease = (requestNumber: number) => new Promise<void>((resolve) => gates.set(requestNumber, resolve));
   server.use(
     http.patch(UPDATE_URL, async ({ request }) => {
       const requestNumber = requests.push(request.clone());
-      if (requestNumber === 1 && holdFirstUpdate) {
-        await firstUpdateGate;
+      if (holdUpdates(requestNumber)) {
+        await waitForRelease(requestNumber);
       }
       return updateFails(requestNumber) ? new HttpResponse(null, { status: 500 }) : HttpResponse.json({ status: 'ok' });
     })
@@ -220,7 +219,7 @@ const setupTrunks = ({
     await user.click(screen.getByPlaceholderText(cellName));
     await user.click(await screen.findByText(scientificName));
   };
-  return { user, requests, pickSpecies, releaseFirstUpdate: () => releaseFirstUpdate() };
+  return { user, requests, pickSpecies, releaseUpdate: (requestNumber: number) => gates.get(requestNumber)?.() };
 };
 
 describe('TreesAndShrubsEditableTable species change', () => {
@@ -271,9 +270,9 @@ describe('TreesAndShrubsEditableTable species change', () => {
   });
 
   it('drops a flag edit that was sent for the species the change did not stick', async () => {
-    const { user, requests, pickSpecies, releaseFirstUpdate } = setupTrunks({
+    const { user, requests, pickSpecies, releaseUpdate } = setupTrunks({
       trunkCount: 1,
-      holdFirstUpdate: true,
+      holdUpdates: (n) => n === 1,
       updateFails: () => true,
     });
 
@@ -289,7 +288,7 @@ describe('TreesAndShrubsEditableTable species change', () => {
     await user.tab();
     await waitFor(() => expect(requests).toHaveLength(2));
 
-    releaseFirstUpdate();
+    releaseUpdate(1);
 
     await waitFor(() => expect(screen.getByRole('cell', { name: 'Eucalyptus dalveenica' })).toBeInTheDocument());
     expect(within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8]).toHaveTextContent(strings.NO);
@@ -312,9 +311,9 @@ describe('TreesAndShrubsEditableTable species change', () => {
   });
 
   it('keeps a flag saved after the species went back, when the earlier change fails', async () => {
-    const { user, requests, pickSpecies, releaseFirstUpdate } = setupTrunks({
+    const { user, requests, pickSpecies, releaseUpdate } = setupTrunks({
       trunkCount: 1,
-      holdFirstUpdate: true,
+      holdUpdates: (n) => n === 1,
       speciesId: ACACIA.id,
       updateFails: (n) => n === 1,
     });
@@ -334,7 +333,7 @@ describe('TreesAndShrubsEditableTable species change', () => {
     await user.tab();
     await waitFor(() => expect(requests).toHaveLength(3));
 
-    releaseFirstUpdate();
+    releaseUpdate(1);
 
     await waitFor(() => expect(screen.getByRole('cell', { name: ACACIA.scientificName })).toBeInTheDocument());
     expect(within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8]).toHaveTextContent(strings.YES);
@@ -636,7 +635,7 @@ describe('TreesAndShrubsEditableTable adding', () => {
   });
 
   it('records the plant once however many times the button is clicked', async () => {
-    const { user, requests, releaseFirstUpdate } = setupTrunks({ holdFirstUpdate: true });
+    const { user, requests, releaseUpdate } = setupTrunks({ holdUpdates: (n) => n === 1 });
     await startAdd(user);
     await chooseGrowthForm(user, strings.TREE);
     await fill(user, [12, 1.3, 8]);
@@ -646,13 +645,13 @@ describe('TreesAndShrubsEditableTable adding', () => {
 
     await waitFor(() => expect(submit).toBeDisabled());
 
-    releaseFirstUpdate();
+    releaseUpdate(1);
     await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
     expect(requests).toHaveLength(1);
   });
 
   it('leaves a newly started draft alone when an earlier create finishes', async () => {
-    const { user, requests, releaseFirstUpdate } = setupTrunks({ holdFirstUpdate: true });
+    const { user, requests, releaseUpdate } = setupTrunks({ holdUpdates: (n) => n === 1 });
     await startAdd(user);
     await chooseGrowthForm(user, strings.TREE);
     await fill(user, [12, 1.3, 8]);
@@ -664,11 +663,34 @@ describe('TreesAndShrubsEditableTable adding', () => {
     await chooseGrowthForm(user, strings.SHRUB);
     await fill(user, [40]);
 
-    releaseFirstUpdate();
+    releaseUpdate(1);
 
     await waitFor(() => expect(requests).toHaveLength(1));
     expect(screen.getByPlaceholderText(strings.SEARCH_SPECIES)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB })).toBeEnabled();
+  });
+
+  it('keeps a plant locked while its own create runs, whatever else finishes', async () => {
+    const { user, requests, releaseUpdate } = setupTrunks({ holdUpdates: () => true });
+
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await fill(user, [12, 1.3, 8]);
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.SHRUB);
+    await fill(user, [40]);
+    const submit = screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB });
+    await user.click(submit);
+    await waitFor(() => expect(requests).toHaveLength(2));
+
+    releaseUpdate(1);
+
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(submit).toBeDisabled();
   });
 
   it('abandons the new plant when the add is cancelled', async () => {

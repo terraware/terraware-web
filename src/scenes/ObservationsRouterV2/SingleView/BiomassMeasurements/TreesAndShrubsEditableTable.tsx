@@ -98,7 +98,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const [removedTreeIds, setRemovedTreeIds] = useState<number[]>([]);
   const [pendingSpeciesChange, setPendingSpeciesChange] = useState<{ row: TreeRow; species: Species }>();
   const [draft, setDraft] = useState<DraftTree>();
-  const [savingDraftId, setSavingDraftId] = useState<number>();
+  const [savingDraftIds, setSavingDraftIds] = useState<number[]>([]);
   const draftIdRef = useRef(0);
 
   const updateDraft = useCallback(
@@ -259,7 +259,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const submitAdding = useCallback(
     (table: MRT_TableInstance<TreeRow>) => {
       const species = draft?.species;
-      if (!species || !draft?.treeGrowthForm || !isDraftValid || savingDraftId === draft.id) {
+      if (!species || !draft?.treeGrowthForm || !isDraftValid || savingDraftIds.includes(draft.id)) {
         return;
       }
       const isShrub = draft.treeGrowthForm === 'Shrub';
@@ -281,9 +281,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       };
       const draftId = draft.id;
       const send = async () => {
-        setSavingDraftId(draftId);
+        setSavingDraftIds((previous) => [...previous, draftId]);
         const saved = await updateObservation({ updates: [payload] });
-        setSavingDraftId(undefined);
+        setSavingDraftIds((previous) => previous.filter((id) => id !== draftId));
         if (saved && draftIdRef.current === draftId) {
           setDraft(undefined);
           table.setCreatingRow(null);
@@ -303,7 +303,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       }
       void send();
     },
-    [draft, draftFields, isCrownDiameterEditable, isDraftValid, measurementRanges, savingDraftId, updateObservation]
+    [draft, draftFields, isCrownDiameterEditable, isDraftValid, measurementRanges, savingDraftIds, updateObservation]
   );
 
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
@@ -758,7 +758,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             type='passive'
           />
           <Button
-            disabled={!isDraftValid || savingDraftId === draft.id}
+            disabled={!isDraftValid || savingDraftIds.includes(draft.id)}
             id='confirmAddTreeOrShrub'
             label={strings.ADD_TREE_OR_SHRUB}
             onClick={() => submitAdding(table)}
@@ -770,7 +770,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       cancelAdding,
       draft,
       isDraftValid,
-      savingDraftId,
+      savingDraftIds,
       startAdding,
       strings.ADD_TREE_OR_SHRUB,
       strings.CANCEL,
