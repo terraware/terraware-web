@@ -43,8 +43,8 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.getByText('0 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Observation Events' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('checkbox')).toBeDisabled();
-    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('checkbox')).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('switch')).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('switch')).toBeDisabled();
   });
 
   test('Console rolled-up dashboard for project', async ({ page }, testInfo) => {
@@ -77,8 +77,8 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.getByText('10,887.4 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Observation Events' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('checkbox')).toBeDisabled();
-    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('checkbox')).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('switch')).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('switch')).toBeDisabled();
   });
 
   test('Console dashboard for project planting site with no observations', async ({ page }, testInfo) => {
@@ -111,8 +111,8 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.getByText('6,793.5 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Observation Events' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('checkbox')).toBeDisabled();
-    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('checkbox')).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('switch')).toBeDisabled();
+    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('switch')).toBeDisabled();
   });
 
   test('Console dashboard for project planting site with observations', async ({ page }, testInfo) => {
@@ -192,10 +192,10 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.getByText('4,093.9 ha in Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('Boundaries')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Observation Events' })).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('checkbox')).toBeChecked({
+    await expect(page.getByRole('button', { name: 'Observation Events' }).getByRole('switch')).toBeChecked({
       checked: false,
     });
-    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('checkbox')).toBeChecked({
+    await expect(page.getByRole('button', { name: 'Survival Rate' }).getByRole('switch')).toBeChecked({
       checked: false,
     });
   });
