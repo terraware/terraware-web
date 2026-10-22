@@ -42,7 +42,7 @@ const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
   JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
 export default function NurseryView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization, isFetchingOrganizations } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [validateDates, setValidateDates] = useState(false);
@@ -68,6 +68,7 @@ export default function NurseryView(): JSX.Element {
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
   const { nurseryId } = useParams<{ nurseryId: string }>();
+  const waitingForOrganizations = !!nurseryId && isFetchingOrganizations;
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
@@ -201,7 +202,6 @@ export default function NurseryView(): JSX.Element {
         id = response.id;
       }
 
-      await reloadOrganizations(selectedOrganization.id);
       snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
       setNavigateToNursery({ navigate: true, id });
     } catch {
@@ -265,7 +265,7 @@ export default function NurseryView(): JSX.Element {
         type='passive'
       />
       <Button
-        disabled={!isDirty || saving}
+        disabled={!isDirty || saving || waitingForOrganizations}
         id='saveCreateNursery'
         label={strings.SAVE}
         onClick={() => void saveNursery()}
@@ -276,7 +276,7 @@ export default function NurseryView(): JSX.Element {
 
   return (
     <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={isDirty} title={title}>
-      {saving && <BusySpinner withSkrim={true} />}
+      {(saving || waitingForOrganizations) && <BusySpinner withSkrim={true} />}
       <Box
         sx={{
           backgroundColor: theme.palette.TwClrBg,
