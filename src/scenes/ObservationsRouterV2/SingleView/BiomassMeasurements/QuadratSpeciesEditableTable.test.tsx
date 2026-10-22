@@ -259,6 +259,24 @@ describe('QuadratSpeciesEditableTable species change', () => {
     expect(requests).toHaveLength(0);
   });
 
+  it('will not change to a species another row records by name', async () => {
+    const { user, requests, openSpeciesEditor } = setupQuadrat({
+      species: [
+        { speciesId: ABUTILON.id, abundanceCount: 4, isInvasive: false, isThreatened: false },
+        { scientificName: ACACIA.scientificName, abundanceCount: 2, isInvasive: false, isThreatened: false },
+      ],
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    const options = await openSpeciesEditor(ABUTILON.scientificName);
+
+    expect(within(options).getByText(strings.ALREADY_IN_THIS_TABLE)).toBeInTheDocument();
+    await user.click(within(options).getByText(ACACIA.scientificName));
+
+    expect(screen.queryByText(strings.CHANGE_SPECIES_CONFIRMATION)).not.toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+  });
+
   it('describes the values that will move before changing a species', async () => {
     const { requests, pickSpecies } = setupQuadrat();
 
@@ -275,16 +293,18 @@ describe('QuadratSpeciesEditableTable species change', () => {
       )
     ).toBeInTheDocument();
     expect(screen.getByText(`${ABUTILON.scientificName} → ${ACACIA.scientificName}`)).toBeInTheDocument();
-    expect(
-      screen.getByText(
-        detailsText(
-          `${strings.ABUNDANCE} 4`,
-          `${strings.INVASIVE} ${strings.YES}`,
-          `${strings.THREATENED} ${strings.NO}`
-        )
-      )
-    ).toBeInTheDocument();
+    expect(screen.getByText(`${strings.ABUNDANCE} 4`)).toBeInTheDocument();
     expect(requests).toHaveLength(0);
+  });
+
+  it('does not promise to move values that belong to the species rather than the quadrat', async () => {
+    const { pickSpecies } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+
+    const dialog = within(screen.getByRole('dialog'));
+    expect(dialog.queryByText(new RegExp(strings.INVASIVE))).not.toBeInTheDocument();
+    expect(dialog.queryByText(new RegExp(strings.THREATENED))).not.toBeInTheDocument();
   });
 
   it('leaves the species alone when the change is cancelled', async () => {
@@ -359,6 +379,43 @@ describe('QuadratSpeciesEditableTable species change', () => {
 
     expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
     expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument();
+  });
+
+  it('keeps an abundance edit made after a species change on the table', async () => {
+    const { user, requests, pickSpecies, confirmSpeciesChange } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await user.dblClick(cellsOf(1)[1]);
+    const abundance = screen.getByRole('spinbutton');
+    await user.clear(abundance);
+    await user.type(abundance, '7');
+    await user.tab();
+
+    await waitFor(() => expect(cellsOf(1)[1]).toHaveTextContent('7'));
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'QuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 7 }],
+    });
+  });
+
+  it('takes a row removed after a species change off the table', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange, removeRow, confirmRemoval } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await removeRow(ACACIA.scientificName);
+    await confirmRemoval();
+
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument());
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'DeleteQuadratSpecies', position: POSITION, speciesId: ACACIA.id }],
+    });
   });
 });
 

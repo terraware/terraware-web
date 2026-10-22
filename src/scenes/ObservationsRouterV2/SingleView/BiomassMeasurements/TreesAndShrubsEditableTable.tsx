@@ -33,7 +33,11 @@ const DRAFT_ROW_ID = 'mrt-row-create';
 type DraftGrowthForm = 'Tree' | 'Shrub';
 
 type DraftMeasurementField =
-  'diameterAtBreastHeight' | 'height' | 'pointOfMeasurement' | 'shrubDiameter' | 'treeCrownDiameter';
+  | 'diameterAtBreastHeight'
+  | 'height'
+  | 'pointOfMeasurement'
+  | 'shrubDiameter'
+  | 'treeCrownDiameter';
 
 type DraftTree = {
   id: number;
@@ -192,7 +196,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const treeDetails = useCallback(
-    (row: TreeRow) =>
+    (row: TreeRow, { includeSpeciesFlags = true } = {}) =>
       [
         `${strings.GROWTH_FORM} ${growthFormLabel(row)}`,
         ...(row.treeGrowthForm === 'Shrub'
@@ -202,8 +206,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
               `${strings.POM_M} ${row.pointOfMeasurement ?? ''}`,
               `${strings.HEIGHT_M} ${row.height ?? ''}`,
             ]),
-        `${strings.INVASIVE} ${row.isInvasive ? strings.YES : strings.NO}`,
-        `${strings.THREATENED} ${row.isThreatened ? strings.YES : strings.NO}`,
+        ...(includeSpeciesFlags
+          ? [
+              `${strings.INVASIVE} ${row.isInvasive ? strings.YES : strings.NO}`,
+              `${strings.THREATENED} ${row.isThreatened ? strings.YES : strings.NO}`,
+            ]
+          : []),
         `${strings.DEAD} ${row.isDead ? strings.YES : strings.NO}`,
       ].join(strings.LIST_SEPARATOR),
     [growthFormLabel, strings]
@@ -524,14 +532,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       if (row.original.treeGrowthForm === 'Shrub') {
         return <>{row.original.shrubDiameter ?? ''}</>;
       }
-      return <>{forestType === 'Mangrove' ? (row.original.treeCrownDiameter ?? '') : ''}</>;
+      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
     },
     [forestType]
   );
 
   const BoleHeightCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? (row.original.boleHeight ?? '') : ''}</>
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
     ),
     [forestType]
   );
@@ -793,7 +801,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         return {
           ...merged,
           speciesName: merged.speciesId
-            ? (findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName)
+            ? findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName
             : merged.speciesName,
         };
       });
@@ -837,7 +845,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       {pendingSpeciesChange && (
         <BiomassEditConfirmationModal
           confirmLabel={strings.CHANGE_SPECIES}
-          details={treeDetails(pendingSpeciesChange.row)}
+          details={treeDetails(pendingSpeciesChange.row, { includeSpeciesFlags: false })}
           detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
           message={speciesChangeMessage(pendingSpeciesChange.row, pendingSpeciesChange.species)}
           onClose={() => setPendingSpeciesChange(undefined)}
