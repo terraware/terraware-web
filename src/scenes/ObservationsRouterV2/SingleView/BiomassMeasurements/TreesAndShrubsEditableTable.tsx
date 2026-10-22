@@ -16,7 +16,7 @@ import {
   UpdateObservationRequestPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
-import RecordedTreeConfirmationModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/RecordedTreeConfirmationModal';
+import BiomassEditConfirmationModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/BiomassEditConfirmationModal';
 import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/TreeNoteModal';
 import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ExistingTreePayload } from 'src/types/Observations';
@@ -835,7 +835,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         </DialogBox>
       )}
       {pendingSpeciesChange && (
-        <RecordedTreeConfirmationModal
+        <BiomassEditConfirmationModal
           confirmLabel={strings.CHANGE_SPECIES}
           details={treeDetails(pendingSpeciesChange.row)}
           detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
@@ -846,7 +846,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         />
       )}
       {pendingRemoval && (
-        <RecordedTreeConfirmationModal
+        <BiomassEditConfirmationModal
           confirmLabel={strings.REMOVE}
           destructive
           details={treeDetails(pendingRemoval)}
