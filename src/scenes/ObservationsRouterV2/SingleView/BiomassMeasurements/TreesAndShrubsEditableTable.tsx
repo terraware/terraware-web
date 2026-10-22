@@ -97,7 +97,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const observationId = Number(params.observationId);
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const forestType = results?.biomassMeasurements?.forestType;
+  const forestType = results?.adHocPlot?.biomassMeasurements?.forestType;
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
@@ -876,7 +876,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const treesWithData = useMemo(() => {
-    return results?.biomassMeasurements?.trees
+    return results?.adHocPlot?.biomassMeasurements?.trees
       ?.filter((tree) => !removedTreeIds.includes(tree.id))
       .map((tree) => {
         const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };

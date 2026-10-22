@@ -15,24 +15,26 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
       id: 7,
-      adHocPlot: { monitoringPlotId: 9 },
-      biomassMeasurements: {
-        forestType,
-        trees: [
-          {
-            id: 11,
-            treeNumber: 1,
-            trunkNumber,
-            treeGrowthForm,
-            speciesName: 'Acacia koa',
-            boleHeight: 6,
-            diameterAtBreastHeight: 25,
-            height: 12,
-            pointOfMeasurement: 1.3,
-            treeCrownDiameter: 400,
-            shrubDiameter: 150,
-          },
-        ],
+      adHocPlot: {
+        biomassMeasurements: {
+          forestType,
+          trees: [
+            {
+              id: 11,
+              treeNumber: 1,
+              trunkNumber,
+              treeGrowthForm,
+              speciesName: 'Acacia koa',
+              boleHeight: 6,
+              diameterAtBreastHeight: 25,
+              height: 12,
+              pointOfMeasurement: 1.3,
+              treeCrownDiameter: 400,
+              shrubDiameter: 150,
+            },
+          ],
+        },
+        monitoringPlotId: 9,
       },
     },
   });
