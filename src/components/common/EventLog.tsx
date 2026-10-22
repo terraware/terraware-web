@@ -15,6 +15,7 @@ type EventLogProps = {
   getUpdatedFieldLabel?: (event: EventLogEntryPayload) => ReactNode;
   hideToggle?: boolean;
   isLoading?: boolean;
+  noTopPadding?: boolean;
   renderEventDescription?: (event: EventLogEntryPayload) => ReactNode;
 };
 
@@ -26,6 +27,7 @@ const EventLog = ({
   getUpdatedFieldLabel,
   hideToggle,
   isLoading,
+  noTopPadding,
   renderEventDescription,
 }: EventLogProps): JSX.Element | null => {
   const { strings } = useLocalization();
@@ -110,6 +112,7 @@ const EventLog = ({
                 display='flex'
                 gap='24px'
                 padding={2}
+                paddingTop={noTopPadding && index === 0 ? 0 : undefined}
               >
                 <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
                   <Typography

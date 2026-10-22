@@ -176,6 +176,7 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
         events={events ?? []}
         filterEvent={filterEvent}
         hideToggle
+        noTopPadding
         renderEventDescription={renderEventDescription}
       />
     </Box>
