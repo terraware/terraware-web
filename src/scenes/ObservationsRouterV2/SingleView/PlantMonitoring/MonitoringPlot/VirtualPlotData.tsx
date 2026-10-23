@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import usePlantingSite from 'src/hooks/usePlantingSite';
@@ -31,14 +31,14 @@ const VirtualPlotData = ({ monitoringPlot, plantingSiteId }: VirtualPlotDataProp
         borderRadius: '1rem',
       }}
     >
-      <Grid item style={{ paddingTop: 0 }}>
+      <Grid style={{ paddingTop: 0 }}>
         {strings.PLOT_CAPTURED}:{' '}
         {monitoringPlot.completedTime ? getDateDisplayValue(monitoringPlot.completedTime, timeZone) : undefined}
       </Grid>
-      <Grid item style={{ paddingTop: 0 }}>
+      <Grid style={{ paddingTop: 0 }}>
         {strings.LIVE_PLANTS}: {monitoringPlot.species.reduce((total, plotSpecies) => total + plotSpecies.totalLive, 0)}
       </Grid>
-      <Grid item style={{ paddingTop: 0 }}>
+      <Grid style={{ paddingTop: 0 }}>
         {strings.SPECIES}: {monitoringPlot.totalSpecies}
       </Grid>
     </Grid>

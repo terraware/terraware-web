@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -46,7 +46,7 @@ const SaveAndNotifyNurseryModal = ({ open, onClose, onConfirm, busy }: SaveAndNo
       ]}
     >
       <Grid container spacing={2} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='nurseryNote'
             type='textarea'

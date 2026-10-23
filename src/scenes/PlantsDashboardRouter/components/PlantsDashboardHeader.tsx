@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, GlobalStyles, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, GlobalStyles, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Message } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -229,11 +229,11 @@ export default function PlantsDashboardHeader({
   return (
     <Wrapper>
       {title && (
-        <Grid item xs={12} paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(2)}>
+        <Grid paddingLeft={theme.spacing(3)} marginBottom={theme.spacing(2)} size={12}>
           <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
         </Grid>
       )}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PageSnackbar />
       </Grid>
       {showGeometryNote && isSiteSelected && latestObservationId && (
@@ -272,7 +272,7 @@ export default function PlantsDashboardHeader({
       {showSelectorCard && (
         <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
           <Grid container alignItems={'center'} spacing={4}>
-            <Grid item xs={isDesktop ? 3 : 12}>
+            <Grid size={isDesktop ? 3 : 12}>
               {showProjectSelector && (
                 <Box marginBottom={1}>
                   <Dropdown
@@ -320,7 +320,7 @@ export default function PlantsDashboardHeader({
                 </>
               )}
             </Grid>
-            <Grid item xs={isDesktop ? 3 : 12}>
+            <Grid size={isDesktop ? 3 : 12}>
               <Box>
                 <Typography fontWeight={600}>{strings.TOTAL_PLANTING_AREA}</Typography>
                 <Typography fontSize='28px' fontWeight={600}>
@@ -331,7 +331,7 @@ export default function PlantsDashboardHeader({
             {!delayedIsReady ? (
               <CircularProgress sx={{ margin: 'auto' }} />
             ) : (
-              <Grid item xs={isDesktop ? 6 : 12}>
+              <Grid size={isDesktop ? 6 : 12}>
                 <Typography fontSize='16px' marginTop={theme.spacing(1)}>
                   {headerText}
                 </Typography>

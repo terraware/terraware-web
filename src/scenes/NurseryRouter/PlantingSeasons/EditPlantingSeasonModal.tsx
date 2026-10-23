@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -115,10 +115,10 @@ const EditPlantingSeasonModal = ({
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontWeight={600}>{plantingSite.name}</Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='seasonName'
             type='text'
@@ -128,7 +128,7 @@ const EditPlantingSeasonModal = ({
             errorText={validate && !record.name.trim() ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <DatePicker
             id='startDate'
             label={strings.START_DATE_REQUIRED}
@@ -139,7 +139,7 @@ const EditPlantingSeasonModal = ({
             defaultTimeZone={timeZoneId}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Box sx={{ alignItems: 'flex-end', display: 'flex', gap: theme.spacing(1) }}>
             <Box sx={{ flex: 1 }}>
               <DatePicker
