@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -73,7 +73,7 @@ const RejectedBox = ({ acceleratorProjectSpecies, onSubmit }: RejectedBoxProps) 
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               label={''}
               type='textarea'

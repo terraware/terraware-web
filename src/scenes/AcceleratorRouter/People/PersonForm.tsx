@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Container, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, MultiSelect, Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -148,7 +148,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
         }}
       >
         <Card style={{ width: '568px', margin: 'auto' }}>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Textfield
               errorText={emailError}
               id='email'
@@ -161,7 +161,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               required={true}
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Textfield
               id='firstName'
               label={strings.FIRST_NAME}
@@ -171,7 +171,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               disabled
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Textfield
               id='lastName'
               label={strings.LAST_NAME}
@@ -181,7 +181,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               disabled
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Dropdown
               fullWidth
               required
@@ -194,7 +194,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               errorText={roleError}
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <MultiSelect<string, string>
               fullWidth
               onAdd={onAddInternalInterest}
