@@ -15,8 +15,8 @@ export default function PlantingProgressView(): JSX.Element {
 
   return (
     <TfMain>
-      <Box sx={{ paddingLeft: theme.spacing(3) }} display='flex' flexDirection='column' flexGrow={1}>
-        <Grid container spacing={3} sx={{ marginTop: 0 }} display='flex' flexDirection='column' flexGrow={1}>
+      <Box display='flex' flexDirection='column' flexGrow={1}>
+        <Grid container sx={{ marginTop: 0 }} display='flex' flexDirection='column' flexGrow={1}>
           <PageHeaderWrapper nextElement={contentRef.current}>
             <Grid container spacing={3} sx={{ paddingLeft: theme.spacing(3), paddingBottom: theme.spacing(2) }}>
               <Grid size={8}>
