@@ -49,6 +49,9 @@ const config: ConfigFile = {
     './src/queries/generated/disclaimer.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/disclaimer'),
     },
+    './src/queries/generated/emailNotificationSettings.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/users/me/emailNotifications',
+    },
     './src/queries/generated/users.ts': {
       filterEndpoints: (_, operation) =>
         operation.path === '/api/v1/users' ||
