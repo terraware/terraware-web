@@ -366,6 +366,8 @@ CLOSE_DRAFT_SITE_SETUP_MESSAGE,Sus cambios en {0} no se han guardado. Guárdelos
 CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
 CLOSE_SEASON,Cerrar temporada,72b4448a
+CLOSE_SITE_EDITOR,¿Cerrar el editor de sitios?,b12bdd39
+CLOSE_SITE_EDITOR_MESSAGE,Sus cambios en {0} no se han guardado. Continúe editando o descártelos.,2ebd3a7b
 CLOSE_SITE_SETUP,¿Cerrar la configuración del sitio?,1304ca0d
 CLOSED,Cerrado,7b8d0429
 COLLECTED_FROM,Recolectado de,ffc6ad60
@@ -638,6 +640,7 @@ EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
 EDIT_PERSON,Editar persona,5ec719a6
 EDIT_PHOTOS_AND_VIDEOS,Editar fotos y videos,d87a88ba
 EDIT_PLANTING_SEASON,Editar temporada de plantación,b9eeb92a
+EDIT_PLANTING_SITE,Editar sitio de plantación,71f7ea28
 EDIT_PROJECT,Editar proyecto,88eb63cb
 EDIT_QUANTITY,Editar cantidad,1d60ca38
 EDIT_QUANTITY_DISABLED,"La cantidad no puede editarse cuando el estado es ""Utilizado"".",e04bdf0b
@@ -645,6 +648,7 @@ EDIT_SCORES,Editar las puntuaciones,95db2e9b
 EDIT_SEED_BANK,Editar banco de semillas,e2400ded
 EDIT_SETTINGS,Editar configuración,f9c91817
 EDIT_SITE_BOUNDARY,Editar límite del sitio,964e9a9c
+EDIT_SITE_START_OVER_WARNING,"Todos los cambios en el límite del sitio, áreas de exclusión, estratos y límites de sustratos se descartarán.",d4ee7432
 EDIT_SPECIES,Editar especie,0893d9a0
 EDIT_STATUS,Editar estado,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c
@@ -1608,6 +1612,8 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar 
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,1200219a
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,61c0d69a
 PLANTING_SITE_MAP_HAS_PROBLEMS,El mapa del sitio tiene problemas que deben corregirse antes de poder guardarlo.,fd9e2ab8
+PLANTING_SITE_MAP_NO_STRATA,Este sitio de plantación no tiene estratos y no se puede editar aquí.,8ee4e8d0
+PLANTING_SITE_MAP_PROBLEMS_TITLE,Este mapa tiene problemas,0596e232
 PLANTING_SITE_MAP_SELF_INTERSECTS,Una figura en el mapa se cruza a sí misma. Vuelva a dibujarla para que sus bordes no se crucen y luego intente de nuevo.,b1d07b65
 PLANTING_SITE_NAME,Nombre del sitio de plantación,f3cb062b
 PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME,Más de un estrato se llama {0}.,14b61803
@@ -1973,6 +1979,7 @@ SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e
 SAVE_ANYWAY,Guardar de todos modos,41580823
+SAVE_CHANGES,Guardar cambios,cb5e8c33
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc

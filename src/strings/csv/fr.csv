@@ -365,6 +365,8 @@ CLOSE_DRAFT_SITE_SETUP_MESSAGE,Vos modifications apportées à {0} n'ont pas ét
 CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
 CLOSE_SEASON,Clore la saison,72b4448a
+CLOSE_SITE_EDITOR,Fermer l’éditeur de site ?,b12bdd39
+CLOSE_SITE_EDITOR_MESSAGE,Vos modifications apportées à {0} n’ont pas été enregistrées. Continuez la modification ou abandonnez-les.,2ebd3a7b
 CLOSE_SITE_SETUP,Fermer la configuration du site ?,1304ca0d
 CLOSED,Fermé,7b8d0429
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
@@ -637,6 +639,7 @@ EDIT_PERMANENT_PLOTS,Modifier les parcelles permanentes,b78a9922
 EDIT_PERSON,Modifier la personne,5ec719a6
 EDIT_PHOTOS_AND_VIDEOS,Modifier les photos et vidéos,d87a88ba
 EDIT_PLANTING_SEASON,Modifier la saison de plantation,b9eeb92a
+EDIT_PLANTING_SITE,Modifier le site de plantation,71f7ea28
 EDIT_PROJECT,Modifier le projet,88eb63cb
 EDIT_QUANTITY,Modifier la quantité,1d60ca38
 EDIT_QUANTITY_DISABLED,La quantité ne peut pas être modifiée lorsque le statut est « Épuisé ».,e04bdf0b
@@ -644,6 +647,7 @@ EDIT_SCORES,Modifier les scores,95db2e9b
 EDIT_SEED_BANK,Modifier la banque de semences,e2400ded
 EDIT_SETTINGS,Modifier les paramètres,f9c91817
 EDIT_SITE_BOUNDARY,Modifier la limite du site,964e9a9c
+EDIT_SITE_START_OVER_WARNING,"Toutes les modifications apportées à la limite du site, aux zones d’exclusion, aux limites de strates et de sous-strates seront perdues.",d4ee7432
 EDIT_SPECIES,Modifier les espèces,0893d9a0
 EDIT_STATUS,Modifier le statut,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Modifier les paramètres du taux de survie pour {0},669ad74c
@@ -1607,6 +1611,8 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utilis
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Dessiner les limites du site,1200219a
 PLANTING_SITE_DELETED,Site de plantation supprimé !,61c0d69a
 PLANTING_SITE_MAP_HAS_PROBLEMS,La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.,fd9e2ab8
+PLANTING_SITE_MAP_NO_STRATA,Ce site de plantation ne comporte aucune strate et ne peut pas être modifié ici.,8ee4e8d0
+PLANTING_SITE_MAP_PROBLEMS_TITLE,Cette carte présente des problèmes,0596e232
 PLANTING_SITE_MAP_SELF_INTERSECTS,"Une forme sur la carte se croise elle-même. Redessinez-la afin que ses contours ne se croisent pas, puis réessayez.",b1d07b65
 PLANTING_SITE_NAME,Nom du site de plantation,f3cb062b
 PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME,Plus d’un stratum porte le nom {0}.,14b61803
@@ -1972,6 +1978,7 @@ SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
 SAVE_ANYWAY,Enregistrer quand même,41580823
+SAVE_CHANGES,Enregistrer les modifications,cb5e8c33
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
