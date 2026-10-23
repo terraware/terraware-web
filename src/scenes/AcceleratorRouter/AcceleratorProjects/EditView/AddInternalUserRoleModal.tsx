@@ -64,7 +64,7 @@ export default function AddInternalUserRoleModal({
         />,
       ]}
     >
-      <Grid>
+      <Grid container>
         <Grid display='flex' textAlign='left' size={11}>
           <Textfield
             id='newContactType'
