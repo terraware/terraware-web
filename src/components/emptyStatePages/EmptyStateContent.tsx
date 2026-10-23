@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, Container, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
@@ -111,8 +111,6 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
           {listItems.map((item, index) => {
             return (
               <Grid
-                item
-                xs={gridSize()}
                 key={`${item.title}-${index}`}
                 sx={{
                   flex: '1 1 auto',
@@ -124,6 +122,7 @@ export default function EmptyStateContent(props: EmptyStateContentProps): JSX.El
                   },
                   padding: isMobile ? '20px 0' : '0 5px',
                 }}
+                size={gridSize()}
               >
                 <Icon
                   name={item.icon}

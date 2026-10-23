@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox } from '@terraware/web-components';
 
 import { useProjects } from 'src/hooks/useProjects';
@@ -35,7 +35,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
   const renderCheckbox = useCallback(
     ({ label, key, value, index }: ReportsSettingsCheckboxConfig) => {
       return (
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }} key={index || 0}>
+        <Grid sx={{ marginTop: theme.spacing(1) }} key={index || 0} size={12}>
           <Checkbox
             label={label}
             onChange={(checked: boolean) => onChange && onChange(key, checked)}
@@ -63,16 +63,16 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
 
   return (
     <>
-      <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+      <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
         <Grid container justifyContent={'space-between'}>
-          <Grid item xs={7}>
+          <Grid size={7}>
             <Typography variant={'h5'} sx={{ fontWeight: 600 }}>
               {strings.SETTINGS}
             </Typography>
           </Grid>
 
           {!isEditing && (
-            <Grid item xs={5} textAlign={'right'}>
+            <Grid textAlign={'right'} size={5}>
               <Button
                 icon={'iconEdit'}
                 label={strings.EDIT}
@@ -83,7 +83,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
         </Grid>
       </Grid>
 
-      <Grid item xs={12} sx={{ marginTop: theme.spacing(0), marginBottom: theme.spacing(2) }}>
+      <Grid sx={{ marginTop: theme.spacing(0), marginBottom: theme.spacing(2) }} size={12}>
         <Typography>{strings.REPORTS_SETTINGS_EDIT_SUBTITLE}</Typography>
       </Grid>
 
@@ -96,7 +96,7 @@ const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: 
         value: reportsSettings?.organizationEnabled,
       })}
 
-      <Grid item xs={12} sx={{ marginTop: theme.spacing(3) }}>
+      <Grid sx={{ marginTop: theme.spacing(3) }} size={12}>
         <Typography
           sx={{
             color: theme.palette.TwClrTxtSecondary,

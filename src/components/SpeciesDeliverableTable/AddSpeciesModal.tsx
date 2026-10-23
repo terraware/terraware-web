@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Message, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -136,13 +136,13 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     >
       <Grid container textAlign={'left'}>
         {message && (
-          <Grid item xs={12} sx={{ marginBottom: theme.spacing(2) }}>
+          <Grid sx={{ marginBottom: theme.spacing(2) }} size={12}>
             <Message body={message} priority='info' type='page' />
           </Grid>
         )}
 
         {selectableSpecies.length === 0 && (
-          <Grid item xs={12} sx={{ marginBottom: theme.spacing(2) }}>
+          <Grid sx={{ marginBottom: theme.spacing(2) }} size={12}>
             <Message
               title={strings.SPECIES_LIST_NO_ORGANIZATION_SPECIES_TITLE}
               body={
@@ -164,7 +164,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
           </Grid>
         )}
 
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='project-name'
             label={strings.NAME}
@@ -173,7 +173,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             value={currentAcceleratorProject?.name}
           />
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <SelectT<Species>
             id='scientificName'
             label={strings.SCIENTIFIC_NAME}
@@ -197,7 +197,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             errorText={error && !record?.speciesId ? error : ''}
           />
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <Dropdown
             id='speciesNativeCategory'
             selectedValue={record?.speciesNativeCategory}
@@ -212,7 +212,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
             errorText={error && !record?.speciesNativeCategory ? error : ''}
           />
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <TextField
             id='rationale'
             label={strings.RATIONALE}

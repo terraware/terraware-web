@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
 import { infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
@@ -18,7 +18,7 @@ const LocationSectionSeedBank = (props: LocationSectionProps): JSX.Element => {
 
   return (
     <>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <OverviewItemCard
           isEditable={false}
           title={strings.TOTAL_SEEDS_STORED}
@@ -28,7 +28,7 @@ const LocationSectionSeedBank = (props: LocationSectionProps): JSX.Element => {
       </Grid>
       {projectName && (
         <>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.formatString(strings.TOTAL_SEEDS_STORED_FOR_PROJECT, projectName) as string}
@@ -38,7 +38,7 @@ const LocationSectionSeedBank = (props: LocationSectionProps): JSX.Element => {
           </Grid>
         </>
       )}
-      {projectName && !isMobile && <Grid item xs={smallItemGridWidth()} />}
+      {projectName && !isMobile && <Grid size={smallItemGridWidth()} />}
     </>
   );
 };

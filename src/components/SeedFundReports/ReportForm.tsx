@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Textfield } from '@terraware/web-components';
 
 import LocationSection from 'src/components/SeedFundReports/LocationSelection';
@@ -131,12 +131,12 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         backgroundColor: theme.palette.TwClrBg,
       }}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize='20px' fontWeight={600}>
           {strings.PROJECT_INFORMATION}
         </Typography>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <OverviewItemCard
           isEditable={false}
           title={strings.ORGANIZATION}
@@ -144,7 +144,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           sx={infoCardStyle}
         />
       </Grid>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <OverviewItemCard
           isEditable={false}
           title={strings.SEED_BANKS}
@@ -152,7 +152,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           sx={infoCardStyle}
         />
       </Grid>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <OverviewItemCard
           isEditable={false}
           title={strings.NURSERIES}
@@ -160,7 +160,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           sx={infoCardStyle}
         />
       </Grid>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <OverviewItemCard
           isEditable={false}
           title={strings.PLANTING_SITES}
@@ -168,7 +168,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           sx={infoCardStyle}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <Textfield
           label={strings.SUMMARY_OF_PROGRESS_REQUIRED}
           placeholder={strings.SUMMARY_OF_PROGRESS_DESCRIPTION}
@@ -187,7 +187,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           tooltipTitle={strings.REPORT_SUMMARY_OF_PROGRESS_INFO}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <Textfield
           label={strings.PROJECT_NOTES}
           id='notes'
@@ -212,7 +212,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
             {strings.NOTE_ANY_ISSUES}
           </Typography>
         )}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='20px' fontWeight={600} marginTop={4}>
             {strings.PROJECT_PHOTOS}
           </Typography>
@@ -243,7 +243,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           </Container>
         )}
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize='20px' fontWeight={600}>
           {strings.SEED_BANKS}
         </Typography>
@@ -252,8 +252,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         {reportSeedBanks ? (
           reportSeedBanks.map((seedbank, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
-              {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
-              <Grid item xs={12}>
+              {index !== 0 && <Grid sx={sectionStyles} size={12} />}
+              <Grid size={12}>
                 {LocationCheckbox(seedbank.name, seedbank.selected, `seedbank-${index}`, index, 'seedBanks')}
               </Grid>
               {seedbank.selected && (
@@ -277,7 +277,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           <Typography marginLeft={theme.spacing(3)}>{strings.REPORT_NO_SEEDBANKS}</Typography>
         )}
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize='20px' fontWeight={600}>
           {strings.NURSERIES}
         </Typography>
@@ -286,8 +286,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         {reportNurseries ? (
           reportNurseries.map((nursery, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
-              {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
-              <Grid item xs={12}>
+              {index !== 0 && <Grid sx={sectionStyles} size={12} />}
+              <Grid size={12}>
                 {LocationCheckbox(nursery.name, nursery.selected, `nursery-${index}`, index, 'nurseries')}
               </Grid>
               {nursery.selected && (
@@ -312,7 +312,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         )}
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize='20px' fontWeight={600}>
           {strings.PLANTING_SITES}
         </Typography>
@@ -321,8 +321,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
         {reportPlantingSites ? (
           reportPlantingSites.map((plantingSite, index) => (
             <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
-              {index !== 0 && <Grid item xs={12} sx={sectionStyles} />}
-              <Grid item xs={12}>
+              {index !== 0 && <Grid sx={sectionStyles} size={12} />}
+              <Grid size={12}>
                 {LocationCheckbox(
                   plantingSite.name,
                   plantingSite.selected,

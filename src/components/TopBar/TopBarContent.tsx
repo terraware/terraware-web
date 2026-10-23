@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
-import { Box, GridLegacy as Grid, IconButton, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';
 
 import KnowledgeBaseLink from 'src/components/KnowledgeBaseLink';
@@ -131,7 +131,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
         alignItems: 'center',
       }}
     >
-      <Grid item xs={1} sx={leftStyles}>
+      <Grid sx={leftStyles} size={1}>
         {selectedOrganization && (
           <IconButton onClick={() => setShowNavBar(true)} size='small'>
             <Icon name='iconMenu' />
@@ -140,8 +140,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       </Grid>
 
       <Grid
-        item
-        xs={6}
         onClick={() => navigate(APP_PATHS.HOME)}
         sx={{
           cursor: 'pointer',
@@ -150,9 +148,10 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           justifyContent: 'center',
           ...logoStyles,
         }}
+        size={6}
       />
 
-      <Grid item xs={5} sx={rightStyles}>
+      <Grid sx={rightStyles} size={5}>
         <KnowledgeBaseLink />
         <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadOrganizations} />
         {(userFundingEntity || selectedOrganization) && (
