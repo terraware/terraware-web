@@ -154,6 +154,8 @@ describe('TreesAndShrubsEditableTable', () => {
 
 const detailsText = (...parts: string[]) => parts.join(strings.LIST_SEPARATOR);
 
+const invasiveFlagOf = () => within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8];
+
 const ABUTILON = { id: 103, scientificName: 'Abutilon incanum' };
 const ACACIA = { id: 104, scientificName: 'Acacia koa' };
 
@@ -219,7 +221,25 @@ const setupTrunks = ({
     await user.click(screen.getByPlaceholderText(cellName));
     await user.click(await screen.findByText(scientificName));
   };
-  return { user, requests, pickSpecies, releaseUpdate: (requestNumber: number) => gates.get(requestNumber)?.() };
+  const edit = async (oldValue: string, newValue: string) => {
+    await user.dblClick(await screen.findByRole('cell', { name: oldValue }));
+    const input = screen.getByRole('textbox');
+    await user.clear(input);
+    await user.type(input, newValue);
+    await user.tab();
+  };
+  const removeRow = async (label: string) =>
+    await user.click(
+      screen.getByRole('button', { name: strings.formatString(strings.REMOVE_SPECIES_NAMED, label) as string })
+    );
+  return {
+    user,
+    requests,
+    edit,
+    pickSpecies,
+    removeRow,
+    releaseUpdate: (requestNumber: number) => gates.get(requestNumber)?.(),
+  };
 };
 
 describe('TreesAndShrubsEditableTable species change', () => {
@@ -286,9 +306,10 @@ describe('TreesAndShrubsEditableTable species change', () => {
     await user.click(screen.getByRole('combobox'));
     await user.click(await screen.findByRole('option', { name: strings.YES }));
     await user.tab();
-    await waitFor(() => expect(requests).toHaveLength(2));
+    await waitFor(() => expect(invasiveFlagOf()).toHaveTextContent(strings.YES));
 
     releaseUpdate(1);
+    await waitFor(() => expect(requests).toHaveLength(2));
 
     await waitFor(() => expect(screen.getByRole('cell', { name: 'Eucalyptus dalveenica' })).toBeInTheDocument());
     expect(within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8]).toHaveTextContent(strings.NO);
@@ -324,16 +345,17 @@ describe('TreesAndShrubsEditableTable species change', () => {
 
     await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
     await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
-    await waitFor(() => expect(requests).toHaveLength(2));
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
 
     const invasiveCell = within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8];
     await user.dblClick(invasiveCell);
     await user.click(screen.getByRole('combobox'));
     await user.click(await screen.findByRole('option', { name: strings.YES }));
     await user.tab();
-    await waitFor(() => expect(requests).toHaveLength(3));
+    await waitFor(() => expect(invasiveFlagOf()).toHaveTextContent(strings.YES));
 
     releaseUpdate(1);
+    await waitFor(() => expect(requests).toHaveLength(3));
 
     await waitFor(() => expect(screen.getByRole('cell', { name: ACACIA.scientificName })).toBeInTheDocument());
     expect(within(screen.getAllByRole('row')[1]).getAllByRole('cell')[8]).toHaveTextContent(strings.YES);
@@ -431,6 +453,28 @@ describe('TreesAndShrubsEditableTable removal', () => {
         )
       )
     ).toBeInTheDocument();
+  });
+});
+
+describe('TreesAndShrubsEditableTable request order', () => {
+  it('holds a removal until the measurement edit before it has landed', async () => {
+    const { user, requests, edit, removeRow, releaseUpdate } = setupTrunks({
+      holdUpdates: (n) => n === 1,
+      trunkCount: 1,
+    });
+
+    await edit('9', '11');
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    await removeRow('5');
+    await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+    await waitFor(() => expect(screen.queryByRole('cell', { name: '5' })).not.toBeInTheDocument());
+    expect(requests).toHaveLength(1);
+
+    releaseUpdate(1);
+
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toMatchObject({ updates: [{ type: 'DeleteRecordedTree', recordedTreeId: 101 }] });
   });
 });
 
@@ -685,7 +729,7 @@ describe('TreesAndShrubsEditableTable adding', () => {
     await fill(user, [40]);
     const submit = screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB });
     await user.click(submit);
-    await waitFor(() => expect(requests).toHaveLength(2));
+    await waitFor(() => expect(submit).toBeDisabled());
 
     releaseUpdate(1);
 
