@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -82,7 +82,7 @@ export default function AddSpeciesToProjectModal({
     >
       <Grid container textAlign={'left'}>
         {selectedProjects.map((selectedProject, index) => (
-          <Grid item xs={12} key={`project-${index}`} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid key={`project-${index}`} sx={{ marginTop: theme.spacing(2) }} size={12}>
             <SelectT<Project>
               id='project'
               label={strings.PROJECT}
@@ -94,7 +94,11 @@ export default function AddSpeciesToProjectModal({
               isEqual={(a: Project, b: Project) => a.id === b.id}
               renderOption={(project: Project) => project?.name || ''}
               displayLabel={(project: Project) => project?.name || ''}
-              toT={(name: string) => ({ name }) as Project}
+              toT={(name: string) =>
+                ({
+                  name,
+                }) as Project
+              }
               required
               errorText={error && !selectedProject ? error : ''}
             />

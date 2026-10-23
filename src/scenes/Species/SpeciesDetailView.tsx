@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, GridLegacyProps as GridProps, Typography, useTheme } from '@mui/material';
+import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { Badge, BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -343,7 +343,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
 
   const GridItemWrapper = useCallback(
     ({ children, props }: { children: JSX.Element; props?: GridProps }) => (
-      <Grid item xs={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}>
+      <Grid size={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}>
         {children}
       </Grid>
     ),
@@ -606,7 +606,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
                 }
               />
             </GridItemWrapper>
-            <GridItemWrapper props={{ xs: isMobile ? 12 : showOrgNativity ? 4 : 8 }}>
+            <GridItemWrapper props={{ size: isMobile ? 12 : showOrgNativity ? 4 : 8 }}>
               <TextField
                 id={'otherFacts'}
                 label={strings.OTHER_FACTS}
@@ -666,7 +666,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
             )}
             {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
             {hasMultipleProjects && species && (
-              <Grid item xs={12} marginTop={theme.spacing(4)}>
+              <Grid marginTop={theme.spacing(4)} size={12}>
                 <SpeciesProjectsSection
                   speciesId={species.id}
                   speciesName={species.scientificName}

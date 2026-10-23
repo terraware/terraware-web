@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
@@ -65,12 +65,10 @@ export default function SeedBankDetailsView(): JSX.Element {
   return (
     <TfMain>
       <Grid container padding={theme.spacing(0, 0, 2, 0)}>
-        <Grid item xs={12} marginBottom={theme.spacing(3)}>
+        <Grid marginBottom={theme.spacing(3)} size={12}>
           <BackToLink id='back' to={APP_PATHS.SEED_BANKS} name={strings.SEED_BANKS} />
         </Grid>
         <Grid
-          item
-          xs={12}
           padding={theme.spacing(0, 3)}
           sx={{
             display: 'flex',
@@ -78,6 +76,7 @@ export default function SeedBankDetailsView(): JSX.Element {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
+          size={12}
         >
           <Typography fontSize='20px' fontWeight={600} margin={0}>
             {seedBank?.name}
@@ -93,7 +92,7 @@ export default function SeedBankDetailsView(): JSX.Element {
             />
           )}
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <PageSnackbar />
         </Grid>
       </Grid>
@@ -106,10 +105,10 @@ export default function SeedBankDetailsView(): JSX.Element {
           margin: 0,
         }}
       >
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+        <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
           <TextField label={strings.NAME_REQUIRED} id='name' type='text' value={seedBank?.name} display={true} />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             label={strings.DESCRIPTION_REQUIRED}
             id='description'
@@ -118,7 +117,7 @@ export default function SeedBankDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+        <Grid marginTop={isMobile ? 3 : 0} size={gridSize()}>
           <TextField
             label={strings.TIME_ZONE}
             id='timezone'
@@ -128,7 +127,7 @@ export default function SeedBankDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             id={'buildStartedDate'}
             label={strings.FACILITY_BUILD_START_DATE}
@@ -138,7 +137,7 @@ export default function SeedBankDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             id={'buildCompletedDate'}
             label={strings.FACILITY_BUILD_COMPLETION_DATE}
@@ -148,7 +147,7 @@ export default function SeedBankDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             id={'operationStartedDate'}
             label={strings.FACILITY_OPERATION_START_DATE}

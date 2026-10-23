@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useRef, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -174,7 +174,7 @@ export default function SpeciesDetailsForm({
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <Select
           id='scientificName'
           selectedValue={record.scientificName}
@@ -196,7 +196,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.TOOLTIP_SCIENTIFIC_NAME}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <Select
           id='commonName'
           selectedValue={record.commonName}
@@ -210,7 +210,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.TOOLTIP_COMMON_NAME}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <TextField
           id={'family'}
           label={strings.FAMILY}
@@ -219,7 +219,7 @@ export default function SpeciesDetailsForm({
           type='text'
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <Dropdown
           id='conservationCategory'
           label={strings.CONSERVATION_CATEGORY}
@@ -232,7 +232,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.TOOLTIP_SPECIES_CONSERVATION_CATEGORY}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <MultiSelect
           id='growthForms'
           label={strings.GROWTH_FORM}
@@ -252,7 +252,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.TOOLTIP_SPECIES_GROWTH_FORM}
         />
       </Grid>
-      <Grid item xs={gridSize} sx={{ alignSelf: 'center' }}>
+      <Grid sx={{ alignSelf: 'center' }} size={gridSize}>
         <Checkbox
           id='Rare'
           name='rare'
@@ -262,7 +262,7 @@ export default function SpeciesDetailsForm({
           sx={{ display: 'block' }}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <TextField
           id={'nativeEcosystem'}
           label={strings.NATIVE_ECOSYSTEM}
@@ -272,7 +272,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.NATIVE_ECOSYSTEM_TOOLTIP}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <MultiSelect
           id='successionalGroups'
           label={strings.SUCCESSIONAL_GROUP}
@@ -291,7 +291,7 @@ export default function SpeciesDetailsForm({
           placeHolder={strings.SELECT}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <MultiSelect
           id='ecosystemTypes'
           fullWidth={true}
@@ -311,7 +311,7 @@ export default function SpeciesDetailsForm({
           placeHolder={strings.SELECT}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <TextField
           id={'ecologicalRoleKnown'}
           label={strings.ECOLOGICAL_ROLE_KNOWN}
@@ -321,7 +321,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.ECOLOGICAL_ROLE_KNOWN_TOOLTIP}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <TextField
           id={'localUsesKnown'}
           label={strings.LOCAL_USES_KNOWN}
@@ -331,7 +331,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.LOCAL_USES_KNOWN_TOOLTIP}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <Dropdown
           id='seedStorageBehavior'
           selectedValue={record.seedStorageBehavior}
@@ -345,7 +345,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.TOOLTIP_SPECIES_SEED_STORAGE_BEHAVIOR}
         />
       </Grid>
-      <Grid item xs={gridSize}>
+      <Grid size={gridSize}>
         <MultiSelect
           id='plantMaterialSourcingMethods'
           fullWidth={true}
@@ -378,7 +378,7 @@ export default function SpeciesDetailsForm({
           }
         />
       </Grid>
-      <Grid item xs={isMobile ? 12 : 8}>
+      <Grid size={isMobile ? 12 : 8}>
         <TextField
           id={'otherFacts'}
           label={strings.OTHER_FACTS}
