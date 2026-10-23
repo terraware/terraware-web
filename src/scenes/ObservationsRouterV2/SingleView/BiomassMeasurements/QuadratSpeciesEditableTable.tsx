@@ -66,7 +66,8 @@ export default function QuadratSpeciesEditableTable({
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const [update] = useUpdateCompletedObservationPlotMutation();
-  const [optimisticValues, setOptimisticValues] = useState<Record<string, Partial<SpeciesRow>>>({});
+  const [rowEdits, setRowEdits] = useState<Record<string, Partial<SpeciesRow>>>({});
+  const [speciesFlags, setSpeciesFlags] = useState<Record<string, Partial<SpeciesRow>>>({});
   const [pendingRemoval, setPendingRemoval] = useState<TableRow>();
   const [pendingSpeciesChange, setPendingSpeciesChange] = useState<{ row: TableRow; species: Species }>();
   const [removedKeys, setRemovedKeys] = useState<string[]>([]);
@@ -97,7 +98,7 @@ export default function QuadratSpeciesEditableTable({
       if (!position) {
         return;
       }
-      setOptimisticValues((prev) => ({
+      setRowEdits((prev) => ({
         ...prev,
         [row.rowKey]: { ...prev[row.rowKey], abundanceCount: numValue },
       }));
@@ -116,10 +117,8 @@ export default function QuadratSpeciesEditableTable({
   const saveBiomassSpecies = useCallback(
     (fieldId: string, row: TableRow, value: string) => {
       const boolValue = value === 'true';
-      setOptimisticValues((prev) => ({
-        ...prev,
-        [row.rowKey]: { ...prev[row.rowKey], [fieldId]: boolValue },
-      }));
+      const key = getRowKey(row);
+      setSpeciesFlags((prev) => ({ ...prev, [key]: { ...prev[key], [fieldId]: boolValue } }));
       const payload: BiomassSpeciesUpdateOperationPayload = {
         type: 'BiomassSpecies',
         speciesId: row.speciesId,
@@ -155,8 +154,8 @@ export default function QuadratSpeciesEditableTable({
     const { row, species: newSpecies } = pendingSpeciesChange;
     setPendingSpeciesChange(undefined);
     const key = row.rowKey;
-    const speciesBefore = speciesStateOf(optimisticValues[key]);
-    setOptimisticValues((previous) => ({
+    const speciesBefore = speciesStateOf(rowEdits[key]);
+    setRowEdits((previous) => ({
       ...previous,
       [key]: {
         ...previous[key],
@@ -175,7 +174,7 @@ export default function QuadratSpeciesEditableTable({
       } as CreateQuadratSpeciesOperationPayload,
     ];
     if (!(await updateObservation({ updates }))) {
-      setOptimisticValues((previous) => {
+      setRowEdits((previous) => {
         if (previous[key]?.speciesId !== newSpecies.id) {
           return previous;
         }
@@ -184,7 +183,7 @@ export default function QuadratSpeciesEditableTable({
         return { ...previous, [key]: { ...keptEdits, ...speciesBefore } };
       });
     }
-  }, [optimisticValues, pendingSpeciesChange, position, updateObservation]);
+  }, [rowEdits, pendingSpeciesChange, position, updateObservation]);
 
   const speciesDetails = useCallback(
     (row: SpeciesRow, { includeSpeciesFlags = true } = {}) =>
@@ -219,14 +218,15 @@ export default function QuadratSpeciesEditableTable({
       ?.map((sp) => ({ ...sp, rowKey: getRowKey(sp) }))
       .filter((sp) => !removedKeys.includes(sp.rowKey))
       .map((sp) => {
-        const merged = { ...sp, ...(optimisticValues[sp.rowKey] ?? {}) };
+        const edited = { ...sp, ...(rowEdits[sp.rowKey] ?? {}) };
+        const merged = { ...edited, ...(speciesFlags[getRowKey(edited)] ?? {}) };
         const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === merged.speciesId);
         return {
           ...merged,
           speciesName: foundSpecies?.scientificName || merged.scientificName || merged.speciesName,
         };
       });
-  }, [species, availableSpecies, optimisticValues, removedKeys]);
+  }, [species, availableSpecies, rowEdits, speciesFlags, removedKeys]);
 
   const recordedSpeciesIds = useMemo(
     () =>

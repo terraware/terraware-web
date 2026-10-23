@@ -381,6 +381,35 @@ describe('QuadratSpeciesEditableTable species change', () => {
     expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument();
   });
 
+  it('drops a flag edit that was sent for the species the change did not stick', async () => {
+    const { user, requests, pickSpecies, confirmSpeciesChange, releaseUpdate } = setupQuadrat({
+      species: [{ speciesId: ABUTILON.id, abundanceCount: 4, isInvasive: false, isThreatened: false }],
+      holdUpdates: (n) => n === 1,
+      updateFails: (n) => n === 1,
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await user.dblClick(cellsOf(1)[3]);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await user.tab();
+    await waitFor(() => expect(cellsOf(1)[3]).toHaveTextContent(strings.YES));
+
+    releaseUpdate(1);
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toMatchObject({
+      updates: [{ type: 'BiomassSpecies', speciesId: ACACIA.id, isInvasive: true }],
+    });
+
+    await waitFor(() => expect(screen.getByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument());
+    expect(cellsOf(1)[3]).toHaveTextContent(strings.NO);
+  });
+
   it('keeps an abundance edit made after a species change on the table', async () => {
     const { user, requests, pickSpecies, confirmSpeciesChange } = setupQuadrat();
 
