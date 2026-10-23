@@ -10,7 +10,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
-const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1) => {
+const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1, updatesFail = false) => {
   mockGet('/api/v1/species', { species: [] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
@@ -40,7 +40,7 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
   server.use(
     http.patch(UPDATE_URL, ({ request }) => {
       requests.push(request.clone());
-      return HttpResponse.json({ status: 'ok' });
+      return updatesFail ? new HttpResponse(null, { status: 500 }) : HttpResponse.json({ status: 'ok' });
     })
   );
   const { user } = renderWithProviders(<TreesAndShrubsEditableTable />, {
@@ -56,7 +56,11 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
     }
     await user.tab();
   };
-  return { user, requests, edit };
+  const removeRow = async (label: string) =>
+    await user.click(
+      screen.getByRole('button', { name: strings.formatString(strings.REMOVE_SPECIES_NAMED, label) as string })
+    );
+  return { user, requests, edit, removeRow };
 };
 
 describe('TreesAndShrubsEditableTable', () => {
@@ -145,5 +149,91 @@ describe('TreesAndShrubsEditableTable', () => {
       expect(await screen.findByRole('cell', { name: '12' })).toBeVisible();
       expect(screen.queryByRole('cell', { name: '6' })).not.toBeInTheDocument();
     });
+  });
+});
+
+const detailsText = (...parts: string[]) => parts.join(strings.LIST_SEPARATOR);
+
+describe('TreesAndShrubsEditableTable removal', () => {
+  it('deletes the plant once the removal is confirmed, and takes it off the table', async () => {
+    const { user, requests, removeRow } = setup();
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1');
+    expect(screen.getByText(strings.formatString(strings.REMOVE_TREE_CONFIRMATION, '1') as string)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        detailsText(
+          `${strings.GROWTH_FORM} ${strings.TREE}`,
+          `${strings.DBH_CM} 25`,
+          `${strings.POM_M} 1.3`,
+          `${strings.HEIGHT_M} 12`,
+          `${strings.INVASIVE} ${strings.NO}`,
+          `${strings.THREATENED} ${strings.NO}`,
+          `${strings.DEAD} ${strings.NO}`
+        )
+      )
+    ).toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+
+    await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [{ type: 'DeleteRecordedTree', recordedTreeId: 11 }],
+    });
+    await waitFor(() => expect(screen.queryByRole('cell', { name: 'Acacia koa' })).not.toBeInTheDocument());
+  });
+
+  it('puts the plant back when the deletion fails', async () => {
+    const { user, requests, removeRow } = setup('Tree', 'Mangrove', 1, true);
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1');
+    await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeInTheDocument();
+  });
+
+  it('leaves the plant alone when the removal is cancelled', async () => {
+    const { user, requests, removeRow } = setup();
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1');
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+
+    expect(requests).toHaveLength(0);
+    expect(screen.getByRole('cell', { name: 'Acacia koa' })).toBeInTheDocument();
+  });
+
+  it('names a trunk by its tree and trunk number, and a shrub as a shrub', async () => {
+    const { removeRow } = setup('Trunk', 'Mangrove', 2);
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1_2');
+    expect(
+      screen.getByText(strings.formatString(strings.REMOVE_TREE_CONFIRMATION, '1_2') as string)
+    ).toBeInTheDocument();
+  });
+
+  it('describes a shrub with its crown diameter rather than tree measurements', async () => {
+    const { removeRow } = setup('Shrub');
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+
+    await removeRow('1');
+    expect(
+      screen.getByText(strings.formatString(strings.REMOVE_SHRUB_CONFIRMATION, '1') as string)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        detailsText(
+          `${strings.GROWTH_FORM} ${strings.SHRUB}`,
+          `${strings.CROWN_DIAMETER_CM} 150`,
+          `${strings.INVASIVE} ${strings.NO}`,
+          `${strings.THREATENED} ${strings.NO}`,
+          `${strings.DEAD} ${strings.NO}`
+        )
+      )
+    ).toBeInTheDocument();
   });
 });

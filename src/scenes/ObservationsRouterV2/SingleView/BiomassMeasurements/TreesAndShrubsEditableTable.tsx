@@ -9,16 +9,24 @@ import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
   BiomassSpeciesUpdateOperationPayload,
+  DeleteRecordedTreeOperationPayload,
   RecordedTreeUpdateOperationPayload,
   UpdateObservationRequestPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+import RecordedTreeConfirmationModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/RecordedTreeConfirmationModal';
 import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/TreeNoteModal';
 import { ExistingTreePayload } from 'src/types/Observations';
 
 type TreeRow = ExistingTreePayload & {
   speciesName?: string;
 };
+
+const REMOVE_BUTTON_CLASS = 'recordedTreeRemove';
+
+/** Trunks of a multi-trunk tree are numbered within the tree, as in 5_2. */
+const getTreeLabel = (row: TreeRow): string =>
+  row.treeGrowthForm === 'Trunk' ? `${row.treeNumber}_${row.trunkNumber}` : String(row.treeNumber);
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
   const theme = useTheme();
@@ -51,6 +59,8 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
+  const [pendingRemoval, setPendingRemoval] = useState<TreeRow>();
+  const [removedTreeIds, setRemovedTreeIds] = useState<number[]>([]);
 
   const dismissMeasurementWarning = useCallback(() => {
     setPendingMeasurement(undefined);
@@ -59,15 +69,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   }, []);
 
   const updateObservation = useCallback(
-    (updatePayload: UpdateObservationRequestPayload) => {
-      if (results?.adHocPlot) {
-        const payload = {
-          observationId,
-          plotId: results.adHocPlot.monitoringPlotId,
-          updateObservationRequestPayload: updatePayload,
-        };
-        void update(payload);
+    async (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
+      if (!results?.adHocPlot) {
+        return false;
       }
+      const payload = {
+        observationId,
+        plotId: results.adHocPlot.monitoringPlotId,
+        updateObservationRequestPayload: updatePayload,
+      };
+      return !('error' in (await update(payload)));
     },
     [observationId, results, update]
   );
@@ -84,7 +95,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           recordedTreeId: row.id,
           [fieldId]: value,
         };
-        updateObservation({ updates: [payload] });
+        void updateObservation({ updates: [payload] });
       }
     },
     [updateObservation]
@@ -115,19 +126,63 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         scientificName: row.speciesId === undefined ? row.speciesName : undefined,
         [fieldId]: boolValue,
       };
-      updateObservation({ updates: [payload] });
+      void updateObservation({ updates: [payload] });
     },
     [updateObservation]
   );
 
-  const TreeNumberCell = useCallback(
+  const growthFormLabel = useCallback(
+    (row: TreeRow) => (row.treeGrowthForm === 'Shrub' ? strings.SHRUB : strings.TREE),
+    [strings.SHRUB, strings.TREE]
+  );
+
+  const treeDetails = useCallback(
+    (row: TreeRow) =>
+      [
+        `${strings.GROWTH_FORM} ${growthFormLabel(row)}`,
+        ...(row.treeGrowthForm === 'Shrub'
+          ? [`${strings.CROWN_DIAMETER_CM} ${row.shrubDiameter ?? ''}`]
+          : [
+              `${strings.DBH_CM} ${row.diameterAtBreastHeight ?? ''}`,
+              `${strings.POM_M} ${row.pointOfMeasurement ?? ''}`,
+              `${strings.HEIGHT_M} ${row.height ?? ''}`,
+            ]),
+        `${strings.INVASIVE} ${row.isInvasive ? strings.YES : strings.NO}`,
+        `${strings.THREATENED} ${row.isThreatened ? strings.YES : strings.NO}`,
+        `${strings.DEAD} ${row.isDead ? strings.YES : strings.NO}`,
+      ].join(strings.LIST_SEPARATOR),
+    [growthFormLabel, strings]
+  );
+
+  const confirmRemoval = useCallback(async () => {
+    if (!pendingRemoval) {
+      return;
+    }
+    const { id } = pendingRemoval;
+    setPendingRemoval(undefined);
+    setRemovedTreeIds((previous) => [...previous, id]);
+    const payload: DeleteRecordedTreeOperationPayload = { type: 'DeleteRecordedTree', recordedTreeId: id };
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setRemovedTreeIds((previous) => previous.filter((removed) => removed !== id));
+    }
+  }, [pendingRemoval, updateObservation]);
+
+  const RemoveCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>
-        {row.original.treeGrowthForm === 'Trunk'
-          ? `${row.original.treeNumber}_${row.original.trunkNumber}`
-          : row.original.treeNumber}
-      </>
+      <IconButton
+        aria-label={strings.formatString(strings.REMOVE_SPECIES_NAMED, getTreeLabel(row.original)) as string}
+        className={REMOVE_BUTTON_CLASS}
+        onClick={() => setPendingRemoval(row.original)}
+        size='small'
+      >
+        <Icon name='iconTrashCan' size='medium' style={{ fill: theme.palette.TwClrIcn }} />
+      </IconButton>
     ),
+    [strings, theme.palette.TwClrIcn]
+  );
+
+  const TreeNumberCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => <>{getTreeLabel(row.original)}</>,
     []
   );
 
@@ -330,17 +385,19 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const treesWithData = useMemo(() => {
-    return results?.biomassMeasurements?.trees?.map((tree) => {
-      const optimistic = optimisticValues[tree.id] ?? {};
-      return {
-        ...tree,
-        ...optimistic,
-        speciesName: tree.speciesId
-          ? (findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName)
-          : tree.speciesName,
-      };
-    });
-  }, [findSpeciesById, results, optimisticValues]);
+    return results?.biomassMeasurements?.trees
+      ?.filter((tree) => !removedTreeIds.includes(tree.id))
+      .map((tree) => {
+        const optimistic = optimisticValues[tree.id] ?? {};
+        return {
+          ...tree,
+          ...optimistic,
+          speciesName: tree.speciesId
+            ? (findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName)
+            : tree.speciesName,
+        };
+      });
+  }, [findSpeciesById, results, optimisticValues, removedTreeIds]);
 
   return (
     <>
@@ -377,6 +434,25 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           )}
         </DialogBox>
       )}
+      {pendingRemoval && (
+        <RecordedTreeConfirmationModal
+          confirmLabel={strings.REMOVE}
+          destructive
+          details={treeDetails(pendingRemoval)}
+          detailsHeading={pendingRemoval.speciesName ?? ''}
+          message={strings.REMOVE_RECORDED_TREE_CONFIRMATION_MESSAGE}
+          onClose={() => setPendingRemoval(undefined)}
+          onConfirm={() => void confirmRemoval()}
+          title={
+            strings.formatString(
+              pendingRemoval.treeGrowthForm === 'Shrub'
+                ? strings.REMOVE_SHRUB_CONFIRMATION
+                : strings.REMOVE_TREE_CONFIRMATION,
+              getTreeLabel(pendingRemoval)
+            ) as string
+          }
+        />
+      )}
       {noteModalRow && (
         <TreeNoteModal
           description={noteModalRow.description ?? ''}
@@ -388,13 +464,29 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={columns}
         data={treesWithData ?? []}
+        enableColumnPinning={true}
         enableEditing={true}
         enableSorting={true}
         enablePagination={false}
         enableBottomToolbar={false}
         enableTopToolbar={false}
-        initialSorting={[{ id: 'speciesName', desc: false }]}
-        sx={{ '&& .Mui-TableHeadCell-Content-Wrapper': { whiteSpace: 'nowrap' } }}
+        sx={{
+          '&& .Mui-TableHeadCell-Content-Wrapper': { whiteSpace: 'nowrap' },
+          [`& .${REMOVE_BUTTON_CLASS}`]: { opacity: 0, transition: 'opacity 150ms' },
+          [`& tr:hover .${REMOVE_BUTTON_CLASS}, & tr:focus-within .${REMOVE_BUTTON_CLASS}`]: { opacity: 1 },
+          '@media (hover: none)': { [`& .${REMOVE_BUTTON_CLASS}`]: { opacity: 1 } },
+        }}
+        tableOptions={{
+          enableRowActions: true,
+          positionActionsColumn: 'last',
+          displayColumnDefOptions: {
+            'mrt-row-actions': { Cell: RemoveCell, enableHiding: false, header: '', size: 60 },
+          },
+          initialState: {
+            columnPinning: { right: ['mrt-row-actions'] },
+            sorting: [{ id: 'speciesName', desc: false }],
+          },
+        }}
       />
     </>
   );
