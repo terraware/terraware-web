@@ -190,7 +190,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       container
       spacing={theme.spacing(3)}
       borderRadius={theme.spacing(3)}
-      padding={theme.spacing(0, 3, 3, 0)}
+      padding={theme.spacing(3)}
       margin={0}
       width='100%'
       sx={{
@@ -228,7 +228,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           />
         </Grid>
       ))}
-      <Grid paddingTop={0} size={12}>
+      <Grid marginTop={theme.spacing(-3)} paddingTop={0} size={12}>
         <Textfield
           label=''
           id='observations-months-validation'
