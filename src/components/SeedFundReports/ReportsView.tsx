@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Container, GridLegacy as Grid, List, ListItem, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { Message, TableColumnType, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -130,13 +130,13 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
                   paddingTop: theme.spacing(4),
                 }}
               >
-                <Grid item xs={12} sx={{ paddingLeft: 4 }}>
+                <Grid sx={{ paddingLeft: 4 }} size={12}>
                   <Typography variant={'h5'} sx={{ fontWeight: 600 }}>
                     {strings.REPORTS}
                   </Typography>
                 </Grid>
                 <Container ref={contentRef} maxWidth={false}>
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <Table
                       id='reports-table'
                       columns={columns}

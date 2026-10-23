@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { GridLegacy as Grid, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
@@ -105,7 +105,7 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <SelectT<SuggestedSpecies>
           id={id ?? 'speciesSelector'}
           label={hideLabel ? '' : strings.SPECIES_REQUIRED}

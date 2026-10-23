@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Container, GridLegacy as Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -214,7 +214,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
   return (
     <Container disableGutters maxWidth={false} sx={{ padding: 0 }}>
       <Card busy={busy} flushMobile rightComponent={rightComponent} title={title}>
-        <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
+        <Grid sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }} size={12}>
           <SearchFiltersWrapperV2
             currentFilters={filters}
             extraComponent={extraComponent}
@@ -233,7 +233,7 @@ const ClientSideFilterTable = (props: ClientSideFilterTableProps) => {
         {emptyState && !busy && _filteredSortedRows.length === 0 ? (
           emptyState
         ) : (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <OrderPreservedTable
               {...tableProps}
               columns={tableColumns}

@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { isValid } from 'date-fns';
 
@@ -54,7 +54,7 @@ export default function DateRange(props: Props): JSX.Element {
   return (
     <Box sx={{ padding: theme.spacing(1.75) }}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <DatePicker
             id='startDate'
             value={startDate}
@@ -63,7 +63,7 @@ export default function DateRange(props: Props): JSX.Element {
             aria-label='Start date'
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <DatePicker
             id='endDate'
             value={endDate}

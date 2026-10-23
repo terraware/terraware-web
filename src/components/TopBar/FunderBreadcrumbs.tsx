@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -16,7 +16,7 @@ export default function FunderBreadcrumbs(): JSX.Element | null {
     return (
       <div>
         <Grid container>
-          <Grid item>
+          <Grid>
             <span
               style={{
                 color: theme.palette.TwClrTxtAccentAux,
@@ -30,7 +30,7 @@ export default function FunderBreadcrumbs(): JSX.Element | null {
               {strings.FUNDER_PORTAL}
             </span>
           </Grid>
-          <Grid item>
+          <Grid>
             <Separator />
           </Grid>
         </Grid>
