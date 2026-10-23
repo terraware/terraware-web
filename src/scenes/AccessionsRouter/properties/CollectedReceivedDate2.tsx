@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
@@ -75,7 +75,7 @@ export default function CollectedReceivedDate2({
   }, [validate, dateValue, validateDate]);
 
   return (
-    <Grid item xs={12} sx={datePickerStyle}>
+    <Grid sx={datePickerStyle} size={12}>
       <DatePicker
         id={id}
         label={label}

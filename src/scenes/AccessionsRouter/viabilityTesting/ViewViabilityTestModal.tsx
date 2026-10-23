@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 import { useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -88,9 +88,9 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         open={tooltipLearnMoreModalOpen}
         title={tooltipLearnMoreModalData?.title}
       />
-      <Grid container item xs={12} spacing={2} textAlign='left' color={theme.palette.TwClrTxt} fontSize='14px'>
-        <Grid item xs={12} display='flex'>
-          <Grid xs={isEditable ? 6 : 12}>
+      <Grid container spacing={2} textAlign='left' color={theme.palette.TwClrTxt} fontSize='14px' size={12}>
+        <Grid display='flex' size={12}>
+          <Grid size={isEditable ? 6 : 12}>
             <Typography fontSize='20px'>
               {strings.TEST} #{viabilityTest.id}
             </Typography>
@@ -99,7 +99,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Typography>
           </Grid>
           {isEditable ? (
-            <Grid xs={6} textAlign='right'>
+            <Grid textAlign='right' size={6}>
               <Box marginRight={1} display='inline-block'>
                 <Button
                   type='passive'
@@ -113,15 +113,15 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
           ) : null}
         </Grid>
-        <Grid item xs={12} display='flex'>
-          <Grid xs={smallColumn}>
-            <Grid xs={12} sx={titleStyle}>
+        <Grid display='flex' size={12}>
+          <Grid size={smallColumn}>
+            <Grid sx={titleStyle} size={12}>
               {strings.TEST_METHOD}
             </Grid>
-            <Grid xs={12}>{getFullTestType(viabilityTest.testType)}</Grid>
+            <Grid size={12}>{getFullTestType(viabilityTest.testType)}</Grid>
           </Grid>
-          <Grid xs={smallColumn}>
-            <Grid xs={12} sx={titleStyle}>
+          <Grid size={smallColumn}>
+            <Grid sx={titleStyle} size={12}>
               {strings.SEED_TYPE}
               <IconTooltip
                 title={
@@ -139,19 +139,19 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                 }
               />
             </Grid>
-            <Grid xs={12}>{viabilityTest.seedType}</Grid>
+            <Grid size={12}>{viabilityTest.seedType}</Grid>
           </Grid>
           {!isMobile && viabilityTest.testType === 'Cut' && (
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.STAFF}
               </Grid>
-              <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
+              <Grid size={12}>{viabilityTest.withdrawnByName}</Grid>
             </Grid>
           )}
           {!isMobile && viabilityTest.testType !== 'Cut' && (
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.TREATMENT}
                 <IconTooltip
                   title={
@@ -169,14 +169,14 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 />
               </Grid>
-              <Grid xs={12}>{viabilityTest.treatment}</Grid>
+              <Grid size={12}>{viabilityTest.treatment}</Grid>
             </Grid>
           )}
         </Grid>
-        <Grid item xs={12} display='flex'>
+        <Grid display='flex' size={12}>
           {isMobile && viabilityTest.testType !== 'Cut' && (
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.TREATMENT}
                 <IconTooltip
                   title={
@@ -194,12 +194,12 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 />
               </Grid>
-              <Grid xs={12}>{viabilityTest.treatment}</Grid>
+              <Grid size={12}>{viabilityTest.treatment}</Grid>
             </Grid>
           )}
           {viabilityTest.testType !== 'Cut' && (
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.SUBSTRATE}
                 <IconTooltip
                   title={
@@ -217,41 +217,39 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 />
               </Grid>
-              <Grid xs={12}>{viabilityTest.substrate}</Grid>
+              <Grid size={12}>{viabilityTest.substrate}</Grid>
             </Grid>
           )}
           {!isMobile && viabilityTest.testType !== 'Cut' && (
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.STAFF}
               </Grid>
-              <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
+              <Grid size={12}>{viabilityTest.withdrawnByName}</Grid>
             </Grid>
           )}
         </Grid>
         {isMobile && (
-          <Grid item xs={12} display='flex'>
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+          <Grid display='flex' size={12}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.STAFF}
               </Grid>
-              <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
+              <Grid size={12}>{viabilityTest.withdrawnByName}</Grid>
             </Grid>
           </Grid>
         )}
         {viabilityTest.substrateNotes && (
-          <Grid item xs={12}>
-            <Grid xs={12} sx={titleStyle}>
+          <Grid size={12}>
+            <Grid sx={titleStyle} size={12}>
               {strings.SUBSTRATE_NOTES}
             </Grid>
-            <Grid xs={12} sx={{ whiteSpace: 'pre-wrap' }}>
+            <Grid sx={{ whiteSpace: 'pre-wrap' }} size={12}>
               {viabilityTest.substrateNotes}
             </Grid>
           </Grid>
         )}
         <Grid
-          item
-          xs={12}
           sx={{
             background: theme.palette.TwClrBgSecondary,
             borderRadius: '16px',
@@ -259,19 +257,20 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             marginTop: 2,
             marginLeft: 1,
           }}
+          size={12}
         >
-          <Grid xs={12} display='flex'>
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+          <Grid display='flex' size={12}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {strings.START_DATE}
               </Grid>
-              <Grid xs={12}>{viabilityTest.startDate}</Grid>
+              <Grid size={12}>{viabilityTest.startDate}</Grid>
             </Grid>
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
+            <Grid size={smallColumn}>
+              <Grid sx={titleStyle} size={12}>
                 {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED_V2 : strings.NUMBER_OF_SEEDS_TESTED}
               </Grid>
-              <Grid xs={12}>
+              <Grid size={12}>
                 {numberFormatter.format(
                   viabilityTest.testType === 'Cut' ? viabilityTest.seedsFilled : viabilityTest.seedsTested
                 )}
@@ -280,57 +279,57 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
           {viabilityTest.testType === 'Cut' && (
             <>
-              <Grid xs={12} display='flex' paddingTop={2}>
-                <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+              <Grid display='flex' paddingTop={2} size={12}>
+                <Grid size={smallColumn}>
+                  <Grid sx={titleStyle} size={12}>
                     {strings.NUMBER_OF_SEEDS_COMPROMISED_V2}
                   </Grid>
-                  <Grid xs={12}>{numberFormatter.format(viabilityTest.seedsCompromised)}</Grid>
+                  <Grid size={12}>{numberFormatter.format(viabilityTest.seedsCompromised)}</Grid>
                 </Grid>
-                <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+                <Grid size={smallColumn}>
+                  <Grid sx={titleStyle} size={12}>
                     {strings.NUMBER_OF_SEEDS_EMPTY_V2}
                   </Grid>
-                  <Grid xs={12}>{numberFormatter.format(viabilityTest.seedsEmpty)}</Grid>
+                  <Grid size={12}>{numberFormatter.format(viabilityTest.seedsEmpty)}</Grid>
                 </Grid>
               </Grid>
-              <Grid xs={12} paddingTop={2}>
-                <Grid xs={12} sx={titleStyle}>
+              <Grid paddingTop={2} size={12}>
+                <Grid sx={titleStyle} size={12}>
                   #{strings.TOTAL_SEEDS_TESTED}
                 </Grid>
-                <Grid xs={12}>{numberFormatter.format(viabilityTest.seedsTested)}</Grid>
+                <Grid size={12}>{numberFormatter.format(viabilityTest.seedsTested)}</Grid>
               </Grid>
             </>
           )}
           {viabilityTest.testResults?.map((testResult, index) => {
             return (
-              <Grid xs={12} key={`observation-${index}`} display='flex' paddingTop={1}>
-                <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+              <Grid key={`observation-${index}`} display='flex' paddingTop={1} size={12}>
+                <Grid size={smallColumn}>
+                  <Grid sx={titleStyle} size={12}>
                     {strings.CHECK_DATE}
                   </Grid>
-                  <Grid xs={12}>{testResult.recordingDate}</Grid>
+                  <Grid size={12}>{testResult.recordingDate}</Grid>
                 </Grid>
-                <Grid xs={smallColumn}>
-                  <Grid xs={12} sx={titleStyle}>
+                <Grid size={smallColumn}>
+                  <Grid sx={titleStyle} size={12}>
                     {strings.NUMBER_OF_SEEDS_GERMINATED}
                   </Grid>
-                  <Grid xs={12}>{numberFormatter.format(testResult.seedsGerminated)}</Grid>
+                  <Grid size={12}>{numberFormatter.format(testResult.seedsGerminated)}</Grid>
                 </Grid>
               </Grid>
             );
           })}
         </Grid>
         {viabilityTest.testResults && viabilityTest.testResults.length > 0 ? (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <ObservationsChart observations={viabilityTest.testResults} />
           </Grid>
         ) : null}
-        <Grid item xs={12}>
-          <Grid xs={12} sx={titleStyle}>
+        <Grid size={12}>
+          <Grid sx={titleStyle} size={12}>
             {strings.NOTES}
           </Grid>
-          <Grid xs={12}>{viabilityTest.notes}</Grid>
+          <Grid size={12}>{viabilityTest.notes}</Grid>
         </Grid>
       </Grid>
     </DialogBox>

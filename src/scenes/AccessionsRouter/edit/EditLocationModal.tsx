@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
@@ -122,8 +122,8 @@ function EditLocationModalForm({ accession, open, onClose }: EditLocationModalFo
         <Button id='saveEditLocation' onClick={() => void saveLocation()} label={strings.SAVE} key='button-2' />,
       ]}
     >
-      <Grid item xs={12} textAlign='left'>
-        <Grid item xs={12}>
+      <Grid textAlign='left' size={12}>
+        <Grid size={12}>
           <FacilitySelector
             id='edit-location'
             label={strings.LOCATION}
@@ -132,7 +132,7 @@ function EditLocationModalForm({ accession, open, onClose }: EditLocationModalFo
             onChange={(value: Facility) => onChangeHandler(value)}
           />
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <SubLocationSelector
             id='edit-sub-location'
             label={strings.SUB_LOCATION}
