@@ -31,6 +31,11 @@ const DEFAULT_SPECIES: SpeciesRow[] = [
   { scientificName: UNLISTED_SPECIES, abundanceCount: 2, isInvasive: false, isThreatened: true },
 ];
 
+const ADDITIONAL_SPECIES: SpeciesRow[] = [
+  { speciesId: ABUTILON.id, isInvasive: true, isThreatened: false },
+  { scientificName: UNLISTED_SPECIES, isInvasive: false, isThreatened: true },
+];
+
 type QuadratSetup = {
   editable?: boolean;
   holdUpdates?: (requestNumber: number) => boolean;
@@ -98,9 +103,11 @@ const setupQuadrat = ({
     await user.click(await within(options).findByText(speciesName));
   };
   const abundanceInput = () => screen.getByPlaceholderText('1–25');
-  const fillDraft = async (speciesName: string, abundance: string) => {
+  const fillDraft = async (speciesName: string, abundance?: string) => {
     await pickDraftSpecies(speciesName);
-    await user.type(abundanceInput(), abundance);
+    if (abundance !== undefined) {
+      await user.type(abundanceInput(), abundance);
+    }
   };
   const setDraftFlag = async (flag: 'isInvasive' | 'isThreatened', label: string) => {
     await user.click(within(draftRow()).getAllByRole('combobox')[flag === 'isInvasive' ? 0 : 1]);
@@ -129,6 +136,10 @@ const setupQuadrat = ({
   };
 };
 
+/** The "Additional Invasive/Threatened Species" table: no quadrat, so no abundance. */
+const setupAdditional = (setup: Omit<QuadratSetup, 'position'> = {}) =>
+  setupQuadrat({ species: ADDITIONAL_SPECIES, ...setup, position: null });
+
 const detailsText = (...parts: string[]) => parts.join(strings.LIST_SEPARATOR);
 
 const cellsOf = (rowIndex: number) => within(screen.getAllByRole('row')[rowIndex]).getAllByRole('cell');
@@ -150,11 +161,43 @@ describe('QuadratSpeciesEditableTable', () => {
 });
 
 describe('QuadratSpeciesEditableTable removal', () => {
-  it('does not offer removal in the additional species table', async () => {
-    const { removeLabel } = setupQuadrat({ position: null });
+  it('deletes an additional species from the biomass measurement, and takes it off the table', async () => {
+    const { requests, removeRow, confirmRemoval } = setupAdditional();
     await screen.findByRole('cell', { name: ABUTILON.scientificName });
 
-    expect(screen.queryByRole('button', { name: removeLabel(ABUTILON.scientificName) })).not.toBeInTheDocument();
+    await removeRow(ABUTILON.scientificName);
+    await confirmRemoval();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [{ type: 'DeleteBiomassSpecies', speciesId: ABUTILON.id }],
+    });
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ABUTILON.scientificName })).not.toBeInTheDocument());
+    expect(screen.getByRole('cell', { name: UNLISTED_SPECIES })).toBeInTheDocument();
+  });
+
+  it('identifies an additional species that is not in the species list by its name', async () => {
+    const { requests, removeRow, confirmRemoval } = setupAdditional();
+    await screen.findByRole('cell', { name: UNLISTED_SPECIES });
+
+    await removeRow(UNLISTED_SPECIES);
+    await confirmRemoval();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [{ type: 'DeleteBiomassSpecies', scientificName: UNLISTED_SPECIES }],
+    });
+  });
+
+  it('puts the additional species back when the removal fails', async () => {
+    const { requests, removeRow, confirmRemoval } = setupAdditional({ updateFails: () => true });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await removeRow(ABUTILON.scientificName);
+    await confirmRemoval();
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
   });
 
   it('does not offer removal when the observation is not editable', async () => {
@@ -252,12 +295,39 @@ describe('QuadratSpeciesEditableTable removal', () => {
 });
 
 describe('QuadratSpeciesEditableTable species change', () => {
-  it('does not offer a species change in the additional species table', async () => {
-    const { user } = setupQuadrat({ position: null });
+  it('moves the recorded flags to the new additional species once confirmed', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange } = setupAdditional();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
 
-    await user.dblClick(await screen.findByRole('cell', { name: ABUTILON.scientificName }));
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
 
-    expect(screen.queryByPlaceholderText(ABUTILON.scientificName)).not.toBeInTheDocument();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    // One request, so the API either applies both operations or rejects the change as a whole.
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        { type: 'DeleteBiomassSpecies', speciesId: ABUTILON.id },
+        { type: 'CreateBiomassSpecies', speciesId: ACACIA.id, isInvasive: true, isThreatened: false },
+      ],
+    });
+    expect(await screen.findByRole('cell', { name: ACACIA.scientificName })).toBeInTheDocument();
+    expect(screen.queryByRole('cell', { name: ABUTILON.scientificName })).not.toBeInTheDocument();
+  });
+
+  it('identifies the additional species being replaced by its name when it is not in the species list', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange } = setupAdditional();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(UNLISTED_SPECIES, ACACIA.scientificName);
+    await confirmSpeciesChange();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        { type: 'DeleteBiomassSpecies', scientificName: UNLISTED_SPECIES },
+        { type: 'CreateBiomassSpecies', speciesId: ACACIA.id, isInvasive: false, isThreatened: true },
+      ],
+    });
   });
 
   it('does not offer a species change when the observation is not editable', async () => {
@@ -528,11 +598,46 @@ describe('QuadratSpeciesEditableTable flag editing', () => {
 });
 
 describe('QuadratSpeciesEditableTable adding', () => {
-  it('does not offer to add a species to the additional species table', async () => {
-    setupQuadrat({ position: null });
+  it('has no abundance to record for an additional species', async () => {
+    const { draftRow, startAdd } = setupAdditional();
     await screen.findByRole('cell', { name: ABUTILON.scientificName });
 
-    expect(screen.queryByRole('button', { name: strings.ADD_SPECIES })).not.toBeInTheDocument();
+    await startAdd();
+
+    expect(within(draftRow()).queryByRole('spinbutton')).not.toBeInTheDocument();
+  });
+
+  it('will not add an additional species until both flags are answered', async () => {
+    const { addSpeciesButton, fillDraft, requests, setDraftFlag, startAdd } = setupAdditional();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await startAdd();
+    await fillDraft(ACACIA.scientificName);
+    expect(addSpeciesButton()).toBeDisabled();
+
+    await setDraftFlag('isInvasive', strings.NO);
+    expect(addSpeciesButton()).toBeDisabled();
+
+    await setDraftFlag('isThreatened', strings.NO);
+    expect(addSpeciesButton()).toBeEnabled();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('records an additional species with the flags that were chosen', async () => {
+    const { fillDraft, requests, setDraftFlag, startAdd, submitAdd } = setupAdditional();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await startAdd();
+    await fillDraft(ACACIA.scientificName);
+    await setDraftFlag('isInvasive', strings.YES);
+    await setDraftFlag('isThreatened', strings.NO);
+    await submitAdd();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [{ type: 'CreateBiomassSpecies', speciesId: ACACIA.id, isInvasive: true, isThreatened: false }],
+    });
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
   });
 
   it('does not offer to add a species when the observation is not editable', async () => {
@@ -830,5 +935,29 @@ describe('QuadratSpeciesEditableTable adding', () => {
     await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
     expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
     expect(cellsOf(1)[3]).toHaveTextContent(strings.NO);
+  });
+
+  it('shows the flags an additional species was added back with, not the ones edited before it was removed', async () => {
+    const { confirmRemoval, fillDraft, removeRow, setDraftFlag, startAdd, submitAdd, user } = setupAdditional();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await user.dblClick(cellsOf(1)[2]);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await waitFor(() => expect(cellsOf(1)[2]).toHaveTextContent(strings.YES));
+
+    await removeRow(ABUTILON.scientificName);
+    await confirmRemoval();
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ABUTILON.scientificName })).not.toBeInTheDocument());
+
+    await startAdd();
+    await fillDraft(ABUTILON.scientificName);
+    await setDraftFlag('isInvasive', strings.NO);
+    await setDraftFlag('isThreatened', strings.NO);
+    await submitAdd();
+
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
+    expect(cellsOf(1)[1]).toHaveTextContent(strings.NO);
+    expect(cellsOf(1)[2]).toHaveTextContent(strings.NO);
   });
 });

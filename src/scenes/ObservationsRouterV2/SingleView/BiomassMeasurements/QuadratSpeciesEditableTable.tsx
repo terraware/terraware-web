@@ -10,7 +10,9 @@ import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
   BiomassSpeciesUpdateOperationPayload,
+  CreateBiomassSpeciesOperationPayload,
   CreateQuadratSpeciesOperationPayload,
+  DeleteBiomassSpeciesOperationPayload,
   DeleteQuadratSpeciesOperationPayload,
   QuadratSpeciesUpdateOperationPayload,
   UpdateObservationRequestPayload,
@@ -147,24 +149,26 @@ export default function QuadratSpeciesEditableTable({
   );
 
   const confirmRemoval = useCallback(async () => {
-    if (!pendingRemoval || !position) {
+    if (!pendingRemoval) {
       return;
     }
     const key = pendingRemoval.rowKey;
     setPendingRemoval(undefined);
     setRemovedKeys((previous) => [...previous, key]);
-    const payload: DeleteQuadratSpeciesOperationPayload = {
-      type: 'DeleteQuadratSpecies',
-      position,
-      ...speciesRef(pendingRemoval),
-    };
+    const payload = position
+      ? ({
+          type: 'DeleteQuadratSpecies',
+          position,
+          ...speciesRef(pendingRemoval),
+        } as DeleteQuadratSpeciesOperationPayload)
+      : ({ type: 'DeleteBiomassSpecies', ...speciesRef(pendingRemoval) } as DeleteBiomassSpeciesOperationPayload);
     if (!(await updateObservation({ updates: [payload] }))) {
       setRemovedKeys((previous) => previous.filter((removed) => removed !== key));
     }
   }, [pendingRemoval, position, updateObservation]);
 
   const confirmSpeciesChange = useCallback(async () => {
-    if (!pendingSpeciesChange || !position) {
+    if (!pendingSpeciesChange) {
       return;
     }
     const { row, species: newSpecies } = pendingSpeciesChange;
@@ -180,15 +184,25 @@ export default function QuadratSpeciesEditableTable({
         scientificName: undefined,
       },
     }));
-    const updates = [
-      { type: 'DeleteQuadratSpecies', position, ...speciesRef(row) } as DeleteQuadratSpeciesOperationPayload,
-      {
-        type: 'CreateQuadratSpecies',
-        position,
-        speciesId: newSpecies.id,
-        abundance: row.abundanceCount ?? 0,
-      } as CreateQuadratSpeciesOperationPayload,
-    ];
+    const updates: UpdateObservationRequestPayload['updates'] = position
+      ? [
+          { type: 'DeleteQuadratSpecies', position, ...speciesRef(row) } as DeleteQuadratSpeciesOperationPayload,
+          {
+            type: 'CreateQuadratSpecies',
+            position,
+            speciesId: newSpecies.id,
+            abundance: row.abundanceCount ?? 0,
+          } as CreateQuadratSpeciesOperationPayload,
+        ]
+      : [
+          { type: 'DeleteBiomassSpecies', ...speciesRef(row) } as DeleteBiomassSpeciesOperationPayload,
+          {
+            type: 'CreateBiomassSpecies',
+            speciesId: newSpecies.id,
+            isInvasive: row.isInvasive ?? false,
+            isThreatened: row.isThreatened ?? false,
+          } as CreateBiomassSpeciesOperationPayload,
+        ];
     if (!(await updateObservation({ updates }))) {
       setRowEdits((previous) => {
         if (previous[key]?.speciesId !== newSpecies.id) {
@@ -252,7 +266,7 @@ export default function QuadratSpeciesEditableTable({
     [availableSpecies, speciesWithData]
   );
 
-  const canManageSpecies = editable && position !== undefined;
+  const canManageSpecies = editable;
 
   const updateDraft = useCallback(
     (changes: Partial<DraftSpecies>) => setDraft((previous) => previous && { ...previous, ...changes }),
@@ -260,12 +274,18 @@ export default function QuadratSpeciesEditableTable({
   );
 
   const isDraftValid = useMemo(() => {
-    if (!draft?.species || draft.abundanceCount === undefined || draft.abundanceCount.trim() === '') {
+    if (!draft?.species) {
+      return false;
+    }
+    if (!position) {
+      return draft.isInvasive !== undefined && draft.isThreatened !== undefined;
+    }
+    if (draft.abundanceCount === undefined || draft.abundanceCount.trim() === '') {
       return false;
     }
     const abundance = Number(draft.abundanceCount);
     return Number.isInteger(abundance) && abundance >= 0 && abundance <= MAX_ABUNDANCE;
-  }, [draft]);
+  }, [draft, position]);
 
   const startAdding = useCallback((table: MRT_TableInstance<TableRow>) => {
     draftIdRef.current += 1;
@@ -282,26 +302,44 @@ export default function QuadratSpeciesEditableTable({
   const submitAdding = useCallback(
     (table: MRT_TableInstance<TableRow>) => {
       const newSpecies = draft?.species;
-      if (!newSpecies || !position || !isDraftValid || savingDraftIds.includes(draft.id)) {
+      if (!newSpecies || !isDraftValid || savingDraftIds.includes(draft.id)) {
         return;
       }
       const flags = {
         ...(draft.isInvasive === undefined ? {} : { isInvasive: draft.isInvasive === 'true' }),
         ...(draft.isThreatened === undefined ? {} : { isThreatened: draft.isThreatened === 'true' }),
       };
-      const updates: UpdateObservationRequestPayload['updates'] = [
-        {
-          type: 'CreateQuadratSpecies',
-          position,
-          speciesId: newSpecies.id,
-          abundance: Number(draft.abundanceCount),
-        } as CreateQuadratSpeciesOperationPayload,
-        ...(Object.keys(flags).length === 0
-          ? []
-          : [{ type: 'BiomassSpecies', speciesId: newSpecies.id, ...flags } as BiomassSpeciesUpdateOperationPayload]),
-      ];
+      const updates: UpdateObservationRequestPayload['updates'] = position
+        ? [
+            {
+              type: 'CreateQuadratSpecies',
+              position,
+              speciesId: newSpecies.id,
+              abundance: Number(draft.abundanceCount),
+            } as CreateQuadratSpeciesOperationPayload,
+            ...(Object.keys(flags).length === 0
+              ? []
+              : [
+                  {
+                    type: 'BiomassSpecies',
+                    speciesId: newSpecies.id,
+                    ...flags,
+                  } as BiomassSpeciesUpdateOperationPayload,
+                ]),
+          ]
+        : [
+            {
+              type: 'CreateBiomassSpecies',
+              speciesId: newSpecies.id,
+              isInvasive: draft.isInvasive === 'true',
+              isThreatened: draft.isThreatened === 'true',
+            } as CreateBiomassSpeciesOperationPayload,
+          ];
       const addedKey = String(newSpecies.id);
-      const addedValues: Partial<SpeciesRow> = { abundanceCount: Number(draft.abundanceCount) };
+      const addedValues: Partial<SpeciesRow> = position ? { abundanceCount: Number(draft.abundanceCount) } : {};
+      const addedFlags: Partial<SpeciesRow> = position
+        ? flags
+        : { isInvasive: draft.isInvasive === 'true', isThreatened: draft.isThreatened === 'true' };
       const draftId = draft.id;
       void (async () => {
         setSavingDraftIds((previous) => [...previous, draftId]);
@@ -311,7 +349,7 @@ export default function QuadratSpeciesEditableTable({
           return;
         }
         setRowEdits((previous) => ({ ...previous, [addedKey]: addedValues }));
-        setSpeciesFlags((previous) => ({ ...previous, [addedKey]: { ...previous[addedKey], ...flags } }));
+        setSpeciesFlags((previous) => ({ ...previous, [addedKey]: { ...previous[addedKey], ...addedFlags } }));
         setRemovedKeys((previous) => previous.filter((key) => key !== addedKey));
         if (draftIdRef.current === draftId) {
           setDraft(undefined);
