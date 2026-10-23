@@ -89,6 +89,7 @@ export default function SpeciesSearchSelect({
       placeholder={placeholder}
       renderOption={renderOption}
       selectedValue={selectedValue}
+      selectStyles={{ optionsContainer: { minWidth: '300px' } }}
       toT={(input: string) => ({ scientificName: input }) as Species}
     />
   );
