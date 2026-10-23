@@ -60,7 +60,7 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
               return (
                 <>
                   {index > 0 ? (
-                    <Grid key={index + 0.5}>
+                    <Grid key={index + 0.5} size='auto'>
                       <Box
                         borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
                         borderLeft={`1px solid ${theme.palette.TwClrBgTertiary}`}
