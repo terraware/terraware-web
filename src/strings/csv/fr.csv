@@ -661,6 +661,16 @@ ELIGIBLE_AREA_HA,Zone éligible (ha),02f04c77
 ELIGIBLE_LAND,Terrain Admissible,7b3162f0
 EMAIL,E-mail,9743aa10
 EMAIL_ALREADY_EXISTS,Cet e-mail existe déjà.,22c67356
+EMAIL_NOTIFICATION_CATEGORY_ACCELERATOR_DESCRIPTION,Changements de statut des livrables et rappels de rapports pour les projets de l’Accélérateur.,cfac7743
+EMAIL_NOTIFICATION_CATEGORY_ACCELERATOR_EXAMPLE,ex. « Le statut du livrable a été mis à jour »,b1ee10e2
+EMAIL_NOTIFICATION_CATEGORY_NURSERY_DESCRIPTION,Mises à jour concernant les lots de semis dans vos pépinières.,6b8441b9
+EMAIL_NOTIFICATION_CATEGORY_NURSERY_EXAMPLE,ex. « Un lot de semis est prêt »,69e123d3
+EMAIL_NOTIFICATION_CATEGORY_PLANTING_AND_OBSERVATIONS_DESCRIPTION,"Planification et suivi des observations, saisons de plantation et traitement des cartes des sites de plantation.",43f1f788
+EMAIL_NOTIFICATION_CATEGORY_PLANTING_AND_OBSERVATIONS_EXAMPLE,ex. « Il est temps de suivre vos plantations ! »,51ece7db
+EMAIL_NOTIFICATION_CATEGORY_SEED_BANK_DESCRIPTION,"Rappels d’accession, rapports de fonds de semences et alertes d’équipement pour vos banques de semences.",40ba9f98
+EMAIL_NOTIFICATION_CATEGORY_SEED_BANK_EXAMPLE,ex. « Une accession a séché. »,656becce
+EMAIL_NOTIFICATIONS,Notifications par e-mail,d3925474
+EMAIL_NOTIFICATIONS_DESCRIPTION,"Recevez des e-mails de Terraware concernant l’activité de vos organisations. Désactiver cette option arrête tous les e-mails facultatifs. Les e-mails liés au compte, comme l’ajout à une organisation, sont toujours envoyés.",3aab15cf
 EMAIL_REQUIRED,E-mail *,6b68d782
 EMAIL_REQUIREMENT_TERRAFORMATION,L'adresse e-mail doit inclure @terraformation.com,8bf29d92
 EMPTY_BATCH,Lot vide,585f2912
@@ -1192,7 +1202,6 @@ MOVE,Déplacer,abe6be41
 MRV_CYCLE,Cycle MRV,ab7e636c
 MULTIPLE_FORMS,Formes multiples,abad8008
 MY_ACCOUNT,Mon compte,8e57f7ad
-MY_ACCOUNT_NOTIFICATIONS_DESC,Les notifications vous informent des actualités importantes concernant votre organisation. Vous les recevrez par e-mail.,65644b47
 N_IMAGES,{0} image(s),098eae0e
 N_ROWS,{0} ligne(s),2bb73684
 NA,N/A,627f660e
@@ -1533,6 +1542,7 @@ PLANTED_SPECIES,Espèces plantées,0dd1f725
 PLANTED_SPECIES_TOOLTIP,La rubrique « Espèces plantées » indique les pourcentages de chacune des espèces plantées. Les quatre premières espèces sont nommées et les autres sont incluses dans la rubrique « Autres espèces ».,f4a01a11
 PLANTED_TOTALS,Totaux plantés,4a3edf5a
 PLANTING,Plantation,3fabf341
+PLANTING_AND_OBSERVATIONS,Plantation & Observations,6bf68404
 PLANTING_COMPLETE,Plantation terminée ?,e348c8a4
 PLANTING_COMPLETE_AREA,Zone de plantation complète,25dc3dab
 PLANTING_COMPLETE_CHART,Plantation terminée,3bea077e
@@ -1776,7 +1786,6 @@ REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_LONG_TERM,La parcelle temporaire {0}
 REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_TEMPORARY,La parcelle temporaire {0} a été supprimée uniquement pour cette observation.,f247edc2
 REASSIGNMENT_SUCESSFUL,Réaffectation réussie,6ecbb084
 RECALCITRANT,Récalcitrant,f95e16a4
-RECEIVE_EMAIL_NOTIFICATIONS,Recevoir des notifications par e-mail,378f118d
 RECEIVED_DATE,Date de réception,9814318f
 RECEIVING_DATE_REQUIRED,Date de réception *,bd66283e
 RECENT,Récents,1e4a4bb6
