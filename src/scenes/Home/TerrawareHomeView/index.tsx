@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
-import { Box, Container, GridLegacy as Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -239,21 +239,21 @@ const TerrawareHomeView = () => {
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 {virtualWalkthroughEnabled && (
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <VirtualWalkthroughMessages organizationId={selectedOrganization!.id} />
                   </Grid>
                 )}
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <OrganizationStatsCard rows={organizationStatsCardRows} />
                 </Grid>
 
                 {virtualWalkthroughEnabled && (
-                  <Grid item xs={12}>
+                  <Grid size={12}>
                     <VirtualWalkthroughCard />
                   </Grid>
                 )}
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <MobileAppCard
                     description={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION}
                     imageAlt={strings.TERRAWARE_MOBILE_APP_IMAGE_ALT}
@@ -275,7 +275,7 @@ const TerrawareHomeView = () => {
               <Grid container spacing={3} sx={{ padding: 0 }}>
                 {isAdmin(selectedOrganization) && (
                   <>
-                    <Grid item xs={primaryGridSize}>
+                    <Grid size={primaryGridSize}>
                       <PageCard
                         id='peopleHomeCard'
                         name={strings.PEOPLE}
@@ -286,7 +286,7 @@ const TerrawareHomeView = () => {
                         linkStyle={'plain'}
                       />
                     </Grid>
-                    <Grid item xs={primaryGridSize}>
+                    <Grid size={primaryGridSize}>
                       <PageCard
                         id='seedbankHomeCard'
                         name={strings.SEED_BANKS}
@@ -299,7 +299,7 @@ const TerrawareHomeView = () => {
                     </Grid>
                   </>
                 )}
-                <Grid item xs={secondaryGridSize}>
+                <Grid size={secondaryGridSize}>
                   <PageCard
                     id='speciesHomeCard'
                     name={strings.SPECIES}
@@ -310,7 +310,7 @@ const TerrawareHomeView = () => {
                     linkStyle={'plain'}
                   />
                 </Grid>
-                <Grid item xs={secondaryGridSize}>
+                <Grid size={secondaryGridSize}>
                   <PageCard
                     id='accessionsHomeCard'
                     name={strings.ACCESSIONS}

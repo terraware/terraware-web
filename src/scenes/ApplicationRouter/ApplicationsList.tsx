@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Box, Container, GridLegacy as Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -71,11 +71,7 @@ const ApplicationListView = () => {
           <NewApplicationModal open={isNewApplicationModalOpen} onClose={() => setIsNewApplicationModalOpen(false)} />
           <Grid container spacing={3} sx={{ padding: 0 }}>
             {allApplications?.map((application) => (
-              <Grid
-                item
-                xs={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}
-                key={application.id}
-              >
+              <Grid key={application.id} size={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}>
                 <ApplicationCard
                   applicationId={application.id}
                   applicationName={application.projectName}

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';
@@ -60,10 +60,10 @@ const AttachmentRow = ({ attachment, file, onChange, onRemove }: AttachmentRowPr
       justifyContent={'flex-start'}
       flexWrap={'nowrap'}
     >
-      <Grid item flexGrow={0}>
+      <Grid flexGrow={0}>
         <AttachmentStatusBadge status={attachment.status ?? 'pending'} />
       </Grid>
-      <Grid item flexBasis={'content'} flexGrow={0} overflow={'hidden'} textOverflow={'ellipsis'}>
+      <Grid flexBasis={'content'} flexGrow={0} overflow={'hidden'} textOverflow={'ellipsis'}>
         <Typography
           display={'inline'}
           fontSize={'16px'}
@@ -75,7 +75,7 @@ const AttachmentRow = ({ attachment, file, onChange, onRemove }: AttachmentRowPr
           {attachment.filename}
         </Typography>
       </Grid>
-      <Grid item flexGrow={0} marginLeft={'auto'}>
+      <Grid flexGrow={0} marginLeft={'auto'}>
         <Button
           priority={'secondary'}
           icon={'iconTrashCan'}

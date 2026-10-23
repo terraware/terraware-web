@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -81,14 +81,18 @@ export default function HelpSupportHome(): JSX.Element {
             backgroundColor: theme.palette.TwClrBg,
           }}
         >
-          <Grid xs={12} paddingBottom={theme.spacing(2)} borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}>
-            <Grid xs={12} sx={{ display: 'flex', alignItems: 'center' }} marginBottom={theme.spacing(1)}>
+          <Grid
+            paddingBottom={theme.spacing(2)}
+            borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+            size={12}
+          >
+            <Grid sx={{ display: 'flex', alignItems: 'center' }} marginBottom={theme.spacing(1)} size={12}>
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} sx={{ flexGrow: 1 }}>
                 {strings.THANK_YOU_FOR_USING_TERRAWARE}
               </Typography>
             </Grid>
 
-            <Grid xs={12} flexDirection={'column'}>
+            <Grid flexDirection={'column'} size={12}>
               <Typography fontSize='16px' display={'inline'}>
                 <TextWithLink
                   href={docLinks.terraformation}
@@ -110,7 +114,7 @@ export default function HelpSupportHome(): JSX.Element {
           </Grid>
           {listItemContent.map((item) => {
             return (
-              <Grid key={item.title} item xs={12}>
+              <Grid key={item.title} size={12}>
                 <Box
                   sx={{ display: 'flex', alignItems: 'center' }}
                   marginTop={theme.spacing(3)}
@@ -123,12 +127,11 @@ export default function HelpSupportHome(): JSX.Element {
                 </Box>
 
                 <Grid
-                  item
-                  xs={isDesktop ? 9 : 12}
                   flexDirection={isMobile ? 'column' : 'row'}
                   display='flex'
                   alignItems='center'
                   justifyContent='space-between'
+                  size={isDesktop ? 9 : 12}
                 >
                   <Box display='flex' alignItems='center' flexShrink='1' flexGrow='0' marginRight={theme.spacing(3)}>
                     <Typography fontSize='16px'>{item.description}</Typography>
