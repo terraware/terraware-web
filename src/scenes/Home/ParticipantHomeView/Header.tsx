@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -39,9 +39,9 @@ const Header = () => {
 
   return (
     <Grid container>
-      <Grid item marginTop={theme.spacing(1)} marginLeft={theme.spacing(1)}>
+      <Grid marginTop={theme.spacing(1)} marginLeft={theme.spacing(1)}>
         <Grid container alignItems={'center'} columnSpacing={theme.spacing(2)}>
-          <Grid item>
+          <Grid>
             {options?.length > 1 ? (
               <Dropdown
                 onChange={setCurrentAcceleratorProject}
@@ -54,13 +54,13 @@ const Header = () => {
             )}
           </Grid>
 
-          <Grid item>
+          <Grid>
             <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'} component={'span'}>
               {currentModule && currentModule?.name}
             </Typography>
           </Grid>
 
-          <Grid item>
+          <Grid>
             {currentModule && currentModule?.startDate && currentModule?.endDate && (
               <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} component={'span'}>
                 {getDateRangeString(currentModule?.startDate, currentModule?.endDate)}

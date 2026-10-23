@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -175,10 +175,8 @@ const ContactUsForm = () => {
           }}
         >
           <Grid container columnSpacing={theme.spacing(2)} rowSpacing={theme.spacing(2)}>
-            <Grid item xs={12}>
-              {supportRequestInstructions}
-            </Grid>
-            <Grid item xs={isDesktop ? 6 : 12}>
+            <Grid size={12}>{supportRequestInstructions}</Grid>
+            <Grid size={isDesktop ? 6 : 12}>
               <Textfield
                 id={'name'}
                 label={strings.NAME}
@@ -187,10 +185,10 @@ const ContactUsForm = () => {
                 disabled
               />
             </Grid>
-            <Grid item xs={isDesktop ? 6 : 12}>
+            <Grid size={isDesktop ? 6 : 12}>
               <Textfield id={'email'} label={strings.EMAIL} value={user?.email} type={'text'} disabled />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Textfield
                 id={'summary'}
                 label={strings.SUMMARY}
@@ -201,7 +199,7 @@ const ContactUsForm = () => {
                 required={true}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Textfield
                 id={'description'}
                 label={strings.DESCRIPTION}
@@ -213,7 +211,7 @@ const ContactUsForm = () => {
                 required={true}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography
                 fontSize={'14px'}
                 lineHeight={'24px'}

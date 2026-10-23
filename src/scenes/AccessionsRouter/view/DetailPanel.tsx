@@ -1,7 +1,7 @@
 import React, { type JSX, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import PhotosList from 'src/components/common/PhotosList';
@@ -114,41 +114,41 @@ export default function DetailPanel(): JSX.Element {
         <Accession2EditModal open={openEditAccessionModal} onClose={() => setOpenEditAccessionModal(false)} />
       )}
       <Grid container>
-        <Grid item xs={9}>
-          <Grid item xs={12} sx={headerStyle}>
+        <Grid size={9}>
+          <Grid sx={headerStyle} size={12}>
             {strings.ACCESSION_DETAILS}
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.COLLECTION_TIME}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle}>
+            <Grid sx={valueStyle} size={gridRightSide}>
               {accession.collectedTime
                 ? getDateTimeDisplayValue(new Date(accession.collectedTime).getTime(), timeZone)
                 : '- -'}
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.RECEIVED_DATE}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle}>
+            <Grid sx={valueStyle} size={gridRightSide}>
               {accession.receivedDate}
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.COLLECTORS}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle}>
+            <Grid sx={valueStyle} size={gridRightSide}>
               {accession.collectors && accession.collectors.length > 0 ? accession.collectors.join(', ') : ''}
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.COLLECTION_SITE}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle}>
+            <Grid sx={valueStyle} size={gridRightSide}>
               {accession.collectionSiteName}
               {getCollectionSiteAddress()}
 
@@ -180,19 +180,19 @@ export default function DetailPanel(): JSX.Element {
               )}
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.LANDOWNER}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle}>
+            <Grid sx={valueStyle} size={gridRightSide}>
               {accession.collectionSiteLandowner}
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.PLANT_LABEL}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle}>
+            <Grid sx={valueStyle} size={gridRightSide}>
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : ' ' + numPlants}${
                 collectionSource && collectionSource !== 'Other' ? ' ' + collectionSource : ''
               } ${isNotPlural ? strings.PLANT : strings.PLANTS.toLowerCase()}`}
@@ -217,18 +217,18 @@ export default function DetailPanel(): JSX.Element {
               ) : null}
             </Grid>
           </Grid>
-          <Grid item xs={12} sx={gridRowStyle}>
-            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+          <Grid sx={gridRowStyle} size={12}>
+            <Grid sx={categoryStyle} size={gridLeftSide}>
               {strings.PHOTOS}
             </Grid>
-            <Grid item xs={gridRightSide} sx={valueStyle} display='flex'>
+            <Grid sx={valueStyle} display='flex' size={gridRightSide}>
               <PhotosList photoUrls={photoUrls} />
             </Grid>
           </Grid>
         </Grid>
 
         <Grid />
-        <Grid item xs={3} sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}>
+        <Grid sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }} size={3}>
           {userCanEdit ? (
             <Box height='32px'>
               <Button

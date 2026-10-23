@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Card, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Card, Grid, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { BusySpinner, Button } from '@terraware/web-components';
 import area from '@turf/area';
@@ -162,7 +162,7 @@ const MapUpdateView = () => {
     >
       {isSaving && <BusySpinner withSkrim={true} />}
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
-        <Grid item xs={4}>
+        <Grid size={4}>
           <StepTitleDescription
             description={description}
             dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
@@ -172,7 +172,7 @@ const MapUpdateView = () => {
             tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid size={8}>
           <EditableMap
             // the map only fits to its initial boundaries, so remount once the country boundary loads
             key={countryBoundary ? 'country' : 'none'}

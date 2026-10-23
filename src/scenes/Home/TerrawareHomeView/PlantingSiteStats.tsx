@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -117,7 +117,7 @@ const PlantingSiteStats = () => {
     >
       <Box sx={{ padding: '16px', width: isDesktop ? '50%' : '100%' }}>
         <Grid container spacing={3} sx={{ padding: 0 }}>
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <Box
               sx={{
                 alignItems: 'center',
@@ -146,13 +146,12 @@ const PlantingSiteStats = () => {
           </Grid>
 
           <Grid
-            item
-            xs={primaryGridSize}
             sx={{
               display: 'flex',
               flexDirection: 'column',
               alignItems: isDesktop ? 'normal' : 'center',
             }}
+            size={primaryGridSize}
           >
             <Typography
               sx={{
@@ -173,7 +172,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label={strings.LOCATION}
               showLink={false}
@@ -181,7 +180,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label='Area'
               showLink={false}
@@ -190,7 +189,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label={strings.DATE_OF_LAST_OBSERVATION}
               showLink={false}
@@ -198,7 +197,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label={strings.SURVIVAL_RATE}
               showBorder={!isDesktop}
@@ -215,7 +214,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label={strings.TOTAL_PLANTS_PLANTED}
               showLink={false}
@@ -223,7 +222,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label={strings.TOTAL_SPECIES_PLANTED}
               showBorder={!isDesktop}
@@ -232,7 +231,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <StatsCardItem
               label={strings.TOTAL_HECTARES_PLANTED}
               showLink={false}
@@ -242,7 +241,7 @@ const PlantingSiteStats = () => {
             />
           </Grid>
 
-          <Grid item xs={primaryGridSize} sx={{ textAlign: isDesktop ? 'left' : 'center' }}>
+          <Grid sx={{ textAlign: isDesktop ? 'left' : 'center' }} size={primaryGridSize}>
             <Link
               onClick={() => {
                 navigate(`${APP_PATHS.PLANTS_DASHBOARD}/${plantingSite?.id}`);
