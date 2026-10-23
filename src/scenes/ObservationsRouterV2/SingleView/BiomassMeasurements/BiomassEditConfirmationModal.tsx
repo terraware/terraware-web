@@ -5,7 +5,7 @@ import { Button, DialogBox } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 
-export type RecordedTreeConfirmationModalProps = {
+export type BiomassEditConfirmationModalProps = {
   confirmLabel: string;
   details: string;
   detailsHeading: string;
@@ -16,7 +16,7 @@ export type RecordedTreeConfirmationModalProps = {
   title: string;
 };
 
-const RecordedTreeConfirmationModal = ({
+const BiomassEditConfirmationModal = ({
   confirmLabel,
   details,
   detailsHeading,
@@ -25,7 +25,7 @@ const RecordedTreeConfirmationModal = ({
   onClose,
   onConfirm,
   title,
-}: RecordedTreeConfirmationModalProps): JSX.Element => {
+}: BiomassEditConfirmationModalProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
 
@@ -37,7 +37,7 @@ const RecordedTreeConfirmationModal = ({
       size='medium'
       middleButtons={[
         <Button
-          id='cancelRecordedTreeChange'
+          id='cancelBiomassEdit'
           key='button-1'
           label={strings.CANCEL}
           onClick={onClose}
@@ -46,7 +46,7 @@ const RecordedTreeConfirmationModal = ({
           type='passive'
         />,
         <Button
-          id='confirmRecordedTreeChange'
+          id='confirmBiomassEdit'
           key='button-2'
           label={confirmLabel}
           onClick={onConfirm}
@@ -77,4 +77,4 @@ const RecordedTreeConfirmationModal = ({
   );
 };
 
-export default RecordedTreeConfirmationModal;
+export default BiomassEditConfirmationModal;

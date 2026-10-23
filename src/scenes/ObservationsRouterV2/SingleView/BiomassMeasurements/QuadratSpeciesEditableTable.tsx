@@ -1,19 +1,21 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { TextField } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { IconButton, TextField, useTheme } from '@mui/material';
+import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
   BiomassSpeciesUpdateOperationPayload,
+  DeleteQuadratSpeciesOperationPayload,
   QuadratSpeciesUpdateOperationPayload,
   UpdateObservationRequestPayload,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
 
+import BiomassEditConfirmationModal from './BiomassEditConfirmationModal';
 import { QuadratPosition } from './QuadratNotesComponent';
 
 type SpeciesRow = {
@@ -31,7 +33,15 @@ type QuadratSpeciesEditableTableProps = {
   position?: QuadratPosition;
 };
 
+const REMOVE_BUTTON_CLASS = 'quadratSpeciesRemove';
+
 const getRowKey = (row: SpeciesRow): string => String(row.speciesId ?? row.scientificName ?? row.speciesName ?? '');
+
+/** Identifies a species to the API by id, or by name for "Other" species that aren't in the list. */
+const speciesRef = (row: SpeciesRow): Pick<SpeciesRow, 'speciesId' | 'scientificName'> => ({
+  speciesId: row.speciesId,
+  scientificName: row.speciesId === undefined ? (row.scientificName ?? row.speciesName) : undefined,
+});
 
 export default function QuadratSpeciesEditableTable({
   editable,
@@ -40,6 +50,7 @@ export default function QuadratSpeciesEditableTable({
 }: QuadratSpeciesEditableTableProps): JSX.Element {
   const { species: availableSpecies } = useOrganizationSpecies();
   const { strings } = useLocalization();
+  const theme = useTheme();
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
@@ -47,17 +58,26 @@ export default function QuadratSpeciesEditableTable({
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<string, Partial<SpeciesRow>>>({});
+  const [pendingRemoval, setPendingRemoval] = useState<SpeciesRow>();
+  const [removedKeys, setRemovedKeys] = useState<string[]>([]);
+
+  const pendingUpdates = useRef<Promise<unknown>>(Promise.resolve());
 
   const updateObservation = useCallback(
-    (updatePayload: UpdateObservationRequestPayload) => {
-      if (results?.adHocPlot) {
-        const payload = {
-          observationId,
-          plotId: results.adHocPlot.monitoringPlotId,
-          updateObservationRequestPayload: updatePayload,
-        };
-        void update(payload);
+    (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
+      if (!results?.adHocPlot) {
+        return Promise.resolve(false);
       }
+      const payload = {
+        observationId,
+        plotId: results.adHocPlot.monitoringPlotId,
+        updateObservationRequestPayload: updatePayload,
+      };
+      const queued = pendingUpdates.current
+        .catch(() => undefined)
+        .then(async () => !('error' in (await update(payload))));
+      pendingUpdates.current = queued;
+      return queued;
     },
     [observationId, results, update]
   );
@@ -78,7 +98,7 @@ export default function QuadratSpeciesEditableTable({
         scientificName: row.speciesId ? undefined : row.scientificName || row.speciesName,
         abundance: numValue,
       };
-      updateObservation({ updates: [uploadPayload] });
+      void updateObservation({ updates: [uploadPayload] });
     },
     [position, updateObservation]
   );
@@ -96,9 +116,50 @@ export default function QuadratSpeciesEditableTable({
         scientificName: row.speciesId === undefined ? row.scientificName || row.speciesName : undefined,
         [fieldId]: boolValue,
       };
-      updateObservation({ updates: [payload] });
+      void updateObservation({ updates: [payload] });
     },
     [updateObservation]
+  );
+
+  const confirmRemoval = useCallback(async () => {
+    if (!pendingRemoval || !position) {
+      return;
+    }
+    const key = getRowKey(pendingRemoval);
+    setPendingRemoval(undefined);
+    setRemovedKeys((previous) => [...previous, key]);
+    const payload: DeleteQuadratSpeciesOperationPayload = {
+      type: 'DeleteQuadratSpecies',
+      position,
+      ...speciesRef(pendingRemoval),
+    };
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setRemovedKeys((previous) => previous.filter((removed) => removed !== key));
+    }
+  }, [pendingRemoval, position, updateObservation]);
+
+  const speciesDetails = useCallback(
+    (row: SpeciesRow) =>
+      [
+        ...(row.abundanceCount === undefined ? [] : [`${strings.ABUNDANCE} ${row.abundanceCount}`]),
+        `${strings.INVASIVE} ${row.isInvasive ? strings.YES : strings.NO}`,
+        `${strings.THREATENED} ${row.isThreatened ? strings.YES : strings.NO}`,
+      ].join(strings.LIST_SEPARATOR),
+    [strings]
+  );
+
+  const RemoveCell = useCallback(
+    ({ row }: { row: { original: SpeciesRow } }) => (
+      <IconButton
+        aria-label={strings.formatString(strings.REMOVE_SPECIES_NAMED, row.original.speciesName ?? '') as string}
+        className={REMOVE_BUTTON_CLASS}
+        onClick={() => setPendingRemoval(row.original)}
+        size='small'
+      >
+        <Icon name='iconTrashCan' size='medium' style={{ fill: theme.palette.TwClrIcn }} />
+      </IconButton>
+    ),
+    [strings, theme.palette.TwClrIcn]
   );
 
   const IsInvasiveCell = useCallback(
@@ -206,28 +267,66 @@ export default function QuadratSpeciesEditableTable({
   );
 
   const speciesWithData = useMemo(() => {
-    return species?.map((sp) => {
-      const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
-      const optimistic = optimisticValues[getRowKey(sp)] ?? {};
-      return {
-        ...sp,
-        ...optimistic,
-        speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
-      };
-    });
-  }, [species, availableSpecies, optimisticValues]);
+    return species
+      ?.filter((sp) => !removedKeys.includes(getRowKey(sp)))
+      .map((sp) => {
+        const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === sp.speciesId);
+        const optimistic = optimisticValues[getRowKey(sp)] ?? {};
+        return {
+          ...sp,
+          ...optimistic,
+          speciesName: foundSpecies?.scientificName || sp.scientificName || sp.speciesName,
+        };
+      });
+  }, [species, availableSpecies, optimisticValues, removedKeys]);
+
+  const removalEnabled = editable && position !== undefined;
 
   return (
-    <EditableTable
-      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      columns={columns}
-      data={speciesWithData ?? []}
-      enableEditing={editable}
-      enableSorting={true}
-      enablePagination={false}
-      enableBottomToolbar={false}
-      enableTopToolbar={false}
-      initialSorting={[{ id: 'speciesName', desc: false }]}
-    />
+    <>
+      {pendingRemoval && (
+        <BiomassEditConfirmationModal
+          confirmLabel={strings.REMOVE}
+          destructive
+          details={speciesDetails(pendingRemoval)}
+          detailsHeading={pendingRemoval.speciesName ?? ''}
+          message={strings.REMOVE_SPECIES_CONFIRMATION_MESSAGE}
+          onClose={() => setPendingRemoval(undefined)}
+          onConfirm={() => void confirmRemoval()}
+          title={strings.formatString(strings.REMOVE_SPECIES_CONFIRMATION, pendingRemoval.speciesName ?? '') as string}
+        />
+      )}
+      <EditableTable
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={columns}
+        data={speciesWithData ?? []}
+        enableEditing={editable}
+        enableSorting={true}
+        enablePagination={false}
+        enableBottomToolbar={false}
+        enableTopToolbar={false}
+        initialSorting={[{ id: 'speciesName', desc: false }]}
+        sx={
+          removalEnabled
+            ? {
+                [`& .${REMOVE_BUTTON_CLASS}`]: { opacity: 0, transition: 'opacity 150ms' },
+                [`& tr:hover .${REMOVE_BUTTON_CLASS}, & tr:focus-within .${REMOVE_BUTTON_CLASS}`]: { opacity: 1 },
+                '@media (hover: none)': { [`& .${REMOVE_BUTTON_CLASS}`]: { opacity: 1 } },
+              }
+            : undefined
+        }
+        tableOptions={
+          removalEnabled
+            ? {
+                enableRowActions: true,
+                positionActionsColumn: 'last',
+                displayColumnDefOptions: {
+                  'mrt-row-actions': { Cell: RemoveCell, enableHiding: false, header: '', size: 60 },
+                },
+              }
+            : undefined
+        }
+      />
+    </>
   );
 }
