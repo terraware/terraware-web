@@ -299,7 +299,7 @@ export default function ChangeQuantityModal({
         />,
       ]}
     >
-      <Grid>
+      <Grid container>
         {saving && <BusySpinner withSkrim />}
 
         <Grid display='flex' marginBottom='16px' textAlign='left' size={11}>

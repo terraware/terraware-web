@@ -65,43 +65,46 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   }, [batch, snackbar, updateBatch]);
 
   const overviewItemCount = 7;
-  const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
+  const overviewGridSize = isMobile ? 100 : isTablet ? 50 : overviewItemCount <= 6 ? 33 : 25;
+  const overviewGridFlexBasis = `calc(${overviewGridSize}% - ${
+    Number.parseFloat(theme.spacing(3)) * (1 - overviewGridSize / 100)
+  }px)`;
 
   return (
     <Grid container spacing={3} marginBottom={theme.spacing(4)}>
-      <Grid flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
         <OverviewItemCardSubLocations batch={batch} />
       </Grid>
-      <Grid flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.GERMINATION_ESTABLISHMENT_RATE}
           contents={batch.germinationRate ? numberFormatter.format(batch.germinationRate) : '%'}
         />
       </Grid>
-      <Grid flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.LOSS_RATE}
           contents={batch.lossRate ? numberFormatter.format(batch.lossRate) : '%'}
         />
       </Grid>
-      <Grid flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.TOTAL_WITHDRAWN}
           contents={numberFormatter.format(batch.totalWithdrawn)}
         />
       </Grid>
-      <Grid flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.ACCESSION_ID} contents={accessionLinkContents} />
       </Grid>
-      <Grid flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.BATCH_CREATED} contents={batch.addedDate} />
       </Grid>
 
       {batch && (
-        <Grid flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
           <ProjectOverviewItemCard<Batch>
             entity={batch}
             projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
