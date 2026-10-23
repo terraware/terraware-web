@@ -17,10 +17,15 @@ import useQuery from 'src/utils/useQuery';
 
 type FunderReportTabV2Props = {
   onViewQuarterlyHighlights?: () => void;
+  projectHighlightPhotoValueId?: number;
   selectedProjectId: number;
 };
 
-const FunderReportTabV2 = ({ onViewQuarterlyHighlights, selectedProjectId }: FunderReportTabV2Props): JSX.Element => {
+const FunderReportTabV2 = ({
+  onViewQuarterlyHighlights,
+  projectHighlightPhotoValueId,
+  selectedProjectId,
+}: FunderReportTabV2Props): JSX.Element => {
   const theme = useTheme();
   const trackEvent = useTrackEvent();
   const query = useQuery();
@@ -102,6 +107,7 @@ const FunderReportTabV2 = ({ onViewQuarterlyHighlights, selectedProjectId }: Fun
         }
         indicators={indicators}
         onViewQuarterlyHighlights={onViewQuarterlyHighlights}
+        projectHighlightPhotoValueId={projectHighlightPhotoValueId}
         projectId={selectedProjectId}
         report={selectedReport}
       />
