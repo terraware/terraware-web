@@ -13,7 +13,7 @@ import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo } from 'src/types/Map';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -36,7 +36,7 @@ import {
 export type SubstrataProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
-  site: DraftPlantingSite;
+  site: EditorPlantingSite;
 };
 
 /**
@@ -54,7 +54,7 @@ export type SubstrataProps = {
  */
 const createDraftSiteWith =
   (
-    site: DraftPlantingSite,
+    site: EditorPlantingSite,
     substrata: Record<number, FeatureCollection> | undefined,
     selectedStratum: number | undefined
   ) =>
@@ -78,7 +78,7 @@ const createDraftSiteWith =
   });
 
 // create substratum feature collections from site, for edit purposes
-const featureSiteSubstrata = (site: DraftPlantingSite): Record<number, FeatureCollection> =>
+const featureSiteSubstrata = (site: EditorPlantingSite): Record<number, FeatureCollection> =>
   (site.strata ?? []).reduce(
     (substrataMap, stratum) => {
       substrataMap[stratum.id] = {

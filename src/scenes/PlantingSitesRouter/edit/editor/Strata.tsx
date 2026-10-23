@@ -13,7 +13,7 @@ import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo } from 'src/types/Map';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -35,7 +35,7 @@ import {
 export type StrataProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
-  site: DraftPlantingSite;
+  site: EditorPlantingSite;
 };
 
 /**
@@ -47,7 +47,7 @@ export type StrataProps = {
  *   and should return a version of the draft planting site accounting
  *   for the potentially new stratum boundaries.
  */
-const createDraftSiteWith = (site: DraftPlantingSite) => (cutStrata: GeometryFeature[]) => ({
+const createDraftSiteWith = (site: EditorPlantingSite) => (cutStrata: GeometryFeature[]) => ({
   ...site,
   strata: cutStrata.map((stratum, index) =>
     defaultStratumPayload({
@@ -60,7 +60,7 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutStrata: GeometryFea
 });
 
 // create stratum feature collections from the site
-const featureSiteStrata = (site: DraftPlantingSite): FeatureCollection | undefined => {
+const featureSiteStrata = (site: EditorPlantingSite): FeatureCollection | undefined => {
   if (site.strata) {
     const features = site.strata.map(stratumToFeature);
     return { type: 'FeatureCollection', features };

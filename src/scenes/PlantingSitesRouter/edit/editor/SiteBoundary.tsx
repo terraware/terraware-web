@@ -17,7 +17,7 @@ import { useLocalization } from 'src/providers';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import { BoundarySource, DraftPlantingSite } from 'src/types/PlantingSite';
+import { BoundarySource, EditorPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
@@ -32,7 +32,7 @@ import { boundingAreaHectares, createDefaultStrata, findErrors } from './utils';
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
-  site: DraftPlantingSite;
+  site: EditorPlantingSite;
 };
 
 // one feature per polygon

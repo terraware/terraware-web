@@ -10,7 +10,7 @@ import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { EditorPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useEditorStepperDrawer } from './EditorStepper';
@@ -21,10 +21,10 @@ import { findErrors } from './utils';
 export type ExclusionsProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
-  site: DraftPlantingSite;
+  site: EditorPlantingSite;
 };
 
-const featureSiteExclusions = (site: DraftPlantingSite): FeatureCollection | undefined => {
+const featureSiteExclusions = (site: EditorPlantingSite): FeatureCollection | undefined => {
   if (site.exclusion) {
     return {
       type: 'FeatureCollection',
