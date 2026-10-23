@@ -741,4 +741,94 @@ describe('QuadratSpeciesEditableTable adding', () => {
     });
     expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
   });
+
+  it('shows the abundance it was added back with, not the one edited before it was removed', async () => {
+    const { confirmRemoval, fillDraft, removeRow, startAdd, submitAdd, user } = setupQuadrat();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await user.dblClick(cellsOf(1)[1]);
+    const abundance = screen.getByRole('spinbutton');
+    await user.clear(abundance);
+    await user.type(abundance, '7');
+    await user.tab();
+    await waitFor(() => expect(cellsOf(1)[1]).toHaveTextContent('7'));
+
+    await removeRow(ABUTILON.scientificName);
+    await confirmRemoval();
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ABUTILON.scientificName })).not.toBeInTheDocument());
+
+    await startAdd();
+    await fillDraft(ABUTILON.scientificName, '3');
+    await submitAdd();
+
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
+    expect(cellsOf(1)[1]).toHaveTextContent('3');
+    expect(cellsOf(1)[2]).toHaveTextContent('12');
+  });
+
+  it('keeps a flag edited before a removal when the species is added back', async () => {
+    const { confirmRemoval, fillDraft, removeRow, startAdd, submitAdd, user } = setupQuadrat({
+      species: [{ speciesId: ACACIA.id, abundanceCount: 4, isInvasive: false, isThreatened: false }],
+    });
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await user.dblClick(cellsOf(1)[3]);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await waitFor(() => expect(cellsOf(1)[3]).toHaveTextContent(strings.YES));
+
+    await removeRow(ACACIA.scientificName);
+    await confirmRemoval();
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument());
+
+    await startAdd();
+    await fillDraft(ACACIA.scientificName, '3');
+    await submitAdd();
+
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
+    expect(cellsOf(1)[1]).toHaveTextContent('3');
+    expect(cellsOf(1)[3]).toHaveTextContent(strings.YES);
+  });
+
+  it('names the species added back, not the one an earlier change left on that row', async () => {
+    const { confirmSpeciesChange, fillDraft, pickSpecies, startAdd, submitAdd } = setupQuadrat({
+      species: [{ speciesId: ABUTILON.id, abundanceCount: 4, isInvasive: false, isThreatened: false }],
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await startAdd();
+    await fillDraft(ABUTILON.scientificName, '3');
+    await submitAdd();
+
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
+    expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
+  });
+
+  it('does not carry a flag edited on one species onto another added later', async () => {
+    const { confirmSpeciesChange, fillDraft, pickSpecies, startAdd, submitAdd, user } = setupQuadrat({
+      species: [{ speciesId: ABUTILON.id, abundanceCount: 4, isInvasive: false, isThreatened: false }],
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await user.dblClick(cellsOf(1)[3]);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await waitFor(() => expect(cellsOf(1)[3]).toHaveTextContent(strings.YES));
+
+    await startAdd();
+    await fillDraft(ABUTILON.scientificName, '3');
+    await submitAdd();
+
+    await waitFor(() => expect(screen.queryByPlaceholderText(strings.SEARCH_SPECIES)).not.toBeInTheDocument());
+    expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
+    expect(cellsOf(1)[3]).toHaveTextContent(strings.NO);
+  });
 });

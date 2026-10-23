@@ -300,6 +300,8 @@ export default function QuadratSpeciesEditableTable({
           ? []
           : [{ type: 'BiomassSpecies', speciesId: newSpecies.id, ...flags } as BiomassSpeciesUpdateOperationPayload]),
       ];
+      const addedKey = String(newSpecies.id);
+      const addedValues: Partial<SpeciesRow> = { abundanceCount: Number(draft.abundanceCount) };
       const draftId = draft.id;
       void (async () => {
         setSavingDraftIds((previous) => [...previous, draftId]);
@@ -308,7 +310,9 @@ export default function QuadratSpeciesEditableTable({
         if (!saved) {
           return;
         }
-        setRemovedKeys((previous) => previous.filter((key) => key !== String(newSpecies.id)));
+        setRowEdits((previous) => ({ ...previous, [addedKey]: addedValues }));
+        setSpeciesFlags((previous) => ({ ...previous, [addedKey]: { ...previous[addedKey], ...flags } }));
+        setRemovedKeys((previous) => previous.filter((key) => key !== addedKey));
         if (draftIdRef.current === draftId) {
           setDraft(undefined);
           table.setCreatingRow(null);
