@@ -17,8 +17,10 @@ import { EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorMode } from './EditorModeContext';
 import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { NegativeIdGenerator } from './reconcileUtils';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
 import {
@@ -122,6 +124,11 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
   const { strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
+  const mode = useEditorMode();
+  const siteSubstratumKeys = useMemo(
+    () => (site.strata ?? []).flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)),
+    [site.strata]
+  );
 
   // expose substrata as a constant for easier use
   const substrata = useMemo<Record<number, FeatureCollection> | undefined>(
@@ -186,9 +193,10 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     }
 
     const stratumIdGenerator = IdGenerator(strata.features);
-    const substratumIdGenerator = IdGenerator(
-      site.id === -1 ? [] : Object.values(substrata ?? {}).flatMap((substratum) => substratum.features)
-    );
+    const substratumFeatures =
+      site.id === -1 ? [] : Object.values(substrata ?? {}).flatMap((substratum) => substratum.features);
+    const substratumIdGenerator =
+      mode === 'edit' ? NegativeIdGenerator(substratumFeatures, siteSubstratumKeys) : IdGenerator(substratumFeatures);
 
     const strataData: EditableMapBoundary = {
       data: {
@@ -220,7 +228,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     };
 
     return [strataData, substrataBoundaries];
-  }, [selectedStratum, site.id, strata, strataLayerStyle, substrata, substrataLayerStyle]);
+  }, [mode, selectedStratum, site.id, siteSubstratumKeys, strata, strataLayerStyle, substrata, substrataLayerStyle]);
 
   const description = useMemo<Description[]>(() => {
     if (!activeLocale) {
@@ -258,7 +266,11 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
         const usedNames: Set<string> = new Set(
           (substrata[selectedStratum].features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
         );
-        const idGenerator = IdGenerator(Object.values(substrata).flatMap((_substratum) => _substratum.features));
+        const allSubstratumFeatures = Object.values(substrata).flatMap((_substratum) => _substratum.features);
+        const idGenerator =
+          mode === 'edit'
+            ? NegativeIdGenerator(allSubstratumFeatures, siteSubstratumKeys)
+            : IdGenerator(allSubstratumFeatures);
         const substrataWithIds = leftOrderedFeatures(cutSubstrata).map(({ feature: substratum }) => {
           if (substratum && substratum.properties && !substratum.properties.name) {
             const substratumName = substratumNameGenerator(usedNames, strings.SUBSTRATUM);

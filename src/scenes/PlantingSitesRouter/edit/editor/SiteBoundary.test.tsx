@@ -2,13 +2,15 @@ import React, { useEffect } from 'react';
 
 import { rstest } from '@rstest/core';
 import { screen, waitFor } from '@testing-library/react';
-import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+import { FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 
 import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
+import { EditorMode, EditorModeContext } from 'src/scenes/PlantingSitesRouter/edit/editor/EditorModeContext';
 import { EditorStepperContext } from 'src/scenes/PlantingSitesRouter/edit/editor/EditorStepper';
 import SiteBoundary from 'src/scenes/PlantingSitesRouter/edit/editor/SiteBoundary';
 import type { OnValidate } from 'src/scenes/PlantingSitesRouter/edit/editor/types';
+import { defaultStratumPayload } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { buildDraftPlantingSite, mockPost, renderWithProviders } from 'src/test-utils';
 
@@ -109,6 +111,48 @@ const EDITED_BOUNDARY: FeatureCollection = {
 
 const site = buildDraftPlantingSite();
 
+const square = (west: number, south: number, east: number, north: number): Position[][] => [
+  [
+    [west, south],
+    [west, north],
+    [east, north],
+    [east, south],
+    [west, south],
+  ],
+];
+
+// two ~1.1km strata side by side, filling the site boundary
+const SITE_WITH_TWO_STRATA = buildDraftPlantingSite({
+  boundary: { type: 'MultiPolygon', coordinates: [square(0, 0, 0.02, 0.01)] },
+  strata: [
+    defaultStratumPayload({
+      boundary: { type: 'MultiPolygon', coordinates: [square(0, 0, 0.01, 0.01)] },
+      id: 10,
+      initialPlantingDensity: 1500,
+      name: 'West',
+    }),
+    defaultStratumPayload({
+      boundary: { type: 'MultiPolygon', coordinates: [square(0.01, 0, 0.02, 0.01)] },
+      id: 11,
+      initialPlantingDensity: 1500,
+      name: 'East',
+    }),
+  ],
+});
+
+// smaller than the site but still overlapping both strata
+const SHRUNK_BOUNDARY: FeatureCollection = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      id: 1,
+      properties: {},
+      geometry: { type: 'Polygon', coordinates: square(0.002, 0.002, 0.018, 0.008) },
+    },
+  ],
+};
+
 const lastMountedGeometry = () => mapMounts[mapMounts.length - 1]?.features[0]?.geometry;
 
 const polygonsCombinedMessage = (numPolygons: number) =>
@@ -124,12 +168,14 @@ const stepperContext = {
   steps: [{ type: 'site_boundary' as const, label: 'Site Boundary' }],
 };
 
-const renderSiteBoundary = (siteToRender = site, onValidate?: OnValidate) =>
+const renderSiteBoundary = (siteToRender = site, onValidate?: OnValidate, mode: EditorMode = 'draft') =>
   renderWithProviders(
-    <EditorStepperContext.Provider value={stepperContext}>
-      <ToastSnackbar />
-      <SiteBoundary onValidate={onValidate} site={siteToRender} />
-    </EditorStepperContext.Provider>,
+    <EditorModeContext.Provider value={mode}>
+      <EditorStepperContext.Provider value={stepperContext}>
+        <ToastSnackbar />
+        <SiteBoundary onValidate={onValidate} site={siteToRender} />
+      </EditorStepperContext.Provider>
+    </EditorModeContext.Provider>,
     {
       // the step's tutorial dialog opens on mount otherwise, and covers the map
       currentUser: { userPreferences: { 'dont-show-site-boundary-instructions': true } },
@@ -528,6 +574,34 @@ describe('SiteBoundary', () => {
         })
       )
     );
+  });
+
+  it('replaces the strata of a draft with one default stratum when the boundary changes', async () => {
+    const onValidate = { allowIncomplete: false, apply: rstest.fn() };
+    const { user } = renderSiteBoundary(SITE_WITH_TWO_STRATA, onValidate);
+    mapEdit.boundary = SHRUNK_BOUNDARY;
+
+    await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+
+    await waitFor(() =>
+      expect(onValidate.apply).toHaveBeenLastCalledWith(
+        false,
+        expect.objectContaining({ strata: [expect.objectContaining({ id: 0 })] })
+      )
+    );
+  });
+
+  it('edit mode reconciles strata instead of resetting them', async () => {
+    const onValidate = { allowIncomplete: false, apply: rstest.fn() };
+    const { user } = renderSiteBoundary(SITE_WITH_TWO_STRATA, onValidate, 'edit');
+    mapEdit.boundary = SHRUNK_BOUNDARY;
+
+    await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+
+    await waitFor(() => expect(onValidate.apply.mock.lastCall?.[1]?.strata).toBeDefined());
+    const [hasErrors, data] = onValidate.apply.mock.lastCall!;
+    expect(hasErrors).toBe(false);
+    expect(data.strata.map((stratum: { id: number }) => stratum.id)).toEqual([10, 11]);
   });
 
   describe('refitting the map to the uploaded file', () => {
