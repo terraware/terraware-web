@@ -2,7 +2,7 @@ import { buildPlantingSite, buildStratum, buildSubstratum } from 'src/test-utils
 import { EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum, MultiPolygon } from 'src/types/Tracking';
 
-import { toEditorSite, toPlantingSiteMapEdit } from './plantingSiteMapEditUtils';
+import { getEditedCompletedSubstrata, toEditorSite, toPlantingSiteMapEdit } from './plantingSiteMapEditUtils';
 
 const square = (x: number): MultiPolygon => ({
   type: 'MultiPolygon',
@@ -138,5 +138,44 @@ describe('toPlantingSiteMapEdit', () => {
 
     expect(toPlantingSiteMapEdit(site, loaded)).not.toHaveProperty('substratumIdsToMarkIncomplete');
     expect(toPlantingSiteMapEdit(site, loaded, [100]).substratumIdsToMarkIncomplete).toEqual([100]);
+  });
+});
+
+describe('getEditedCompletedSubstrata', () => {
+  const completedSite = buildPlantingSite({
+    strata: [
+      buildStratum({
+        id: 10,
+        name: 'Stratum 10',
+        substrata: [
+          buildSubstratum({ boundary: square(100), id: 100, name: 'A', plantingCompleted: true }),
+          buildSubstratum({ boundary: square(101), id: 101, name: 'B', plantingCompleted: true }),
+          buildSubstratum({ boundary: square(102), id: 102, name: 'C', plantingCompleted: false }),
+          buildSubstratum({ boundary: square(103), id: 103, name: 'D', plantingCompleted: true }),
+        ],
+      }),
+    ],
+  });
+
+  it('returns completed substrata whose boundaries changed', () => {
+    const site: EditorPlantingSite = {
+      ...toEditorSite(completedSite),
+      strata: [
+        stratum(10, 'Renamed', [
+          { ...substratum(100, 'A'), boundary: square(200) },
+          { ...substratum(101, 'B'), boundary: square(101) },
+          { ...substratum(102, 'C'), boundary: square(202) },
+          { ...substratum(-1, 'E'), boundary: square(103) },
+        ]),
+      ],
+    };
+
+    expect(getEditedCompletedSubstrata(site, completedSite)).toEqual([
+      { id: 100, stratumName: 'Renamed', substratumName: 'A' },
+    ]);
+  });
+
+  it('returns nothing when the map is unchanged', () => {
+    expect(getEditedCompletedSubstrata(toEditorSite(completedSite), completedSite)).toEqual([]);
   });
 });

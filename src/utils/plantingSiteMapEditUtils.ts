@@ -48,3 +48,31 @@ export const toPlantingSiteMapEdit = (
     ...(substratumIdsToMarkIncomplete ? { substratumIdsToMarkIncomplete } : {}),
   };
 };
+
+export type EditedCompletedSubstratum = {
+  id: number;
+  stratumName: string;
+  substratumName: string;
+};
+
+// substrata that were planted but whose boundaries changed, which the user may want to mark as not finished planting
+export const getEditedCompletedSubstrata = (
+  site: EditorPlantingSite,
+  loaded: PlantingSitePayload
+): EditedCompletedSubstratum[] => {
+  const completed = new Map(
+    (loaded.strata ?? [])
+      .flatMap((stratum) => stratum.substrata)
+      .filter((substratum) => substratum.plantingCompleted)
+      .map((substratum) => [substratum.id, substratum])
+  );
+
+  return (site.strata ?? []).flatMap((stratum) =>
+    stratum.substrata
+      .filter((substratum) => {
+        const original = completed.get(substratum.id);
+        return !!original && !_.isEqual(original.boundary, substratum.boundary);
+      })
+      .map((substratum) => ({ id: substratum.id, stratumName: stratum.name, substratumName: substratum.name }))
+  );
+};

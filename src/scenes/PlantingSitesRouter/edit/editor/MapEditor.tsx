@@ -8,12 +8,18 @@ import { PlantingSitePayload, useUpdatePlantingSiteMapMutation } from 'src/queri
 import strings from 'src/strings';
 import { EditorPlantingSite, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
 import { getDraftMapProblems, getDraftSaveErrorMessage } from 'src/utils/draftPlantingSiteUtils';
-import { toEditorSite, toPlantingSiteMapEdit } from 'src/utils/plantingSiteMapEditUtils';
+import {
+  EditedCompletedSubstratum,
+  getEditedCompletedSubstrata,
+  toEditorSite,
+  toPlantingSiteMapEdit,
+} from 'src/utils/plantingSiteMapEditUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CloseSetupConfirmation from './CloseSetupConfirmation';
 import DraftProblemsConfirmation from './DraftProblemsConfirmation';
 import EditorLayout from './EditorLayout';
+import MarkSubstrataIncompleteModal from './MarkSubstrataIncompleteModal';
 import StartOverConfirmation from './StartOverConfirmation';
 import { initializeOptionalStepsStatus, useEditorSteps } from './editorSteps';
 import { OnValidate } from './types';
@@ -39,6 +45,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   const [showCloseConfirmation, setShowCloseConfirmation] = useState(false);
   const [showStartOver, setShowStartOver] = useState(false);
   const [problems, setProblems] = useState<PlantingSiteProblem[]>();
+  const [substrataToConfirm, setSubstrataToConfirm] = useState<EditedCompletedSubstratum[]>();
 
   const completedOptionalSteps = useMemo(() => initializeOptionalStepsStatus(editorSite), [editorSite]);
   const steps = useEditorSteps(editorSite.siteType, completedOptionalSteps);
@@ -105,12 +112,26 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
     () =>
       validateStep(false, (edited) => {
         if (stepIndex === steps.length - 1) {
-          void save(edited);
+          const editedCompletedSubstrata = getEditedCompletedSubstrata(edited, site);
+          if (editedCompletedSubstrata.length) {
+            setSubstrataToConfirm(editedCompletedSubstrata);
+          } else {
+            void save(edited);
+          }
         } else {
           setCurrentStep(steps[stepIndex + 1].type);
         }
       }),
-    [save, stepIndex, steps, validateStep]
+    [save, site, stepIndex, steps, validateStep]
+  );
+
+  const onCancelMarkIncomplete = useCallback(() => setSubstrataToConfirm(undefined), []);
+  const onSaveMarkIncomplete = useCallback(
+    (substratumIds: number[]) => {
+      setSubstrataToConfirm(undefined);
+      void save(editorSite, substratumIds);
+    },
+    [editorSite, save]
   );
 
   const onBack = useCallback(() => {
@@ -170,6 +191,13 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
           message={strings.EDIT_SITE_START_OVER_WARNING}
           onClose={onCloseStartOver}
           onConfirm={onStartOver}
+        />
+      )}
+      {substrataToConfirm && (
+        <MarkSubstrataIncompleteModal
+          onCancel={onCancelMarkIncomplete}
+          onSave={onSaveMarkIncomplete}
+          substrata={substrataToConfirm}
         />
       )}
       {problems && (
