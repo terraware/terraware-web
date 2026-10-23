@@ -5,6 +5,7 @@ import {
   CreatePlantingSiteRequestPayload,
   DraftPlantingSite,
   DraftPlantingSitePayload,
+  PlantingSiteProblem,
   SiteEditStep,
 } from 'src/types/PlantingSite';
 import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
@@ -130,4 +131,10 @@ export const fromDraftToCreate = (site: DraftPlantingSite): CreatePlantingSiteRe
     projectId,
     timeZone,
   };
+};
+
+// the draft API rejects a map that fails validation with a 409 listing the problems
+export const getDraftMapProblems = (error: unknown): PlantingSiteProblem[] | undefined => {
+  const { data, status } = (error ?? {}) as { data?: { problems?: PlantingSiteProblem[] }; status?: number };
+  return status === 409 ? data?.problems : undefined;
 };

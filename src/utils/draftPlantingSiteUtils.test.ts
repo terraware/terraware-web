@@ -2,7 +2,7 @@ import { DraftStratumPayload } from 'src/queries/generated/draftPlantingSites';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
 
-import { fromDraft, toDraft } from './draftPlantingSiteUtils';
+import { fromDraft, getDraftMapProblems, toDraft } from './draftPlantingSiteUtils';
 
 const boundary: MultiPolygon = {
   type: 'MultiPolygon',
@@ -365,5 +365,18 @@ describe('toDraft', () => {
     };
 
     expect(toDraft(payload).siteEditStep).toStrictEqual('site_boundary');
+  });
+});
+
+describe('getDraftMapProblems', () => {
+  test('should return the problems from a 409 response', () => {
+    const problems = [{ problemType: 'StratumTooSmall' as const, stratum: 'stratum1' }];
+
+    expect(getDraftMapProblems({ status: 409, data: { problems } })).toStrictEqual(problems);
+  });
+
+  test('should return undefined for other errors', () => {
+    expect(getDraftMapProblems({ status: 500, data: { problems: [] } })).toBeUndefined();
+    expect(getDraftMapProblems(undefined)).toBeUndefined();
   });
 });

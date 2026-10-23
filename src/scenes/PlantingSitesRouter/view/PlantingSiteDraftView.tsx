@@ -13,9 +13,10 @@ import { useUpdateDraftPlantingSiteMutation } from 'src/queries/generated/draftP
 import DeleteDraftPlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal';
 import DraftSiteDetailsModal from 'src/scenes/PlantingSitesRouter/edit/DraftSiteDetailsModal';
 import useDraftPlantingSite from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
+import usePlantingSiteProblemsToast from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteProblemsToast';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
-import { fromDraft } from 'src/utils/draftPlantingSiteUtils';
+import { fromDraft, getDraftMapProblems } from 'src/utils/draftPlantingSiteUtils';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -27,6 +28,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
+  const showProblems = usePlantingSiteProblemsToast();
   const navigate = useSyncNavigate();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const { site: plantingSite } = useDraftPlantingSite({ draftId: Number(plantingSiteId) });
@@ -56,12 +58,17 @@ export default function PlantingSiteDraftView(): JSX.Element {
         }).unwrap();
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
         return true;
-      } catch {
-        snackbar.toastError(strings.GENERIC_ERROR);
+      } catch (error) {
+        const problems = getDraftMapProblems(error);
+        if (problems?.length) {
+          showProblems(problems);
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
         return false;
       }
     },
-    [plantingSite, snackbar, updateDraftPlantingSite]
+    [plantingSite, showProblems, snackbar, updateDraftPlantingSite]
   );
 
   const saveDetailsAndClose = useCallback(

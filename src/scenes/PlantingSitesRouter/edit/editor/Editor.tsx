@@ -16,8 +16,9 @@ import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import useDraftPlantingSiteFinalize from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteFinalize';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
+import usePlantingSiteProblemsToast from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteProblemsToast';
 import strings from 'src/strings';
-import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
+import { DraftPlantingSite, OptionalSiteEditStep, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -77,6 +78,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const isNarrowPortrait = useMediaQuery('(min-width: 768px) and (max-width: 1439px) and (orientation: portrait)');
   const isEditorAvailable = isDesktop && !isNarrowPortrait;
   const snackbar = useSnackbar();
+  const showProblems = usePlantingSiteProblemsToast();
   const dispatch = useAppDispatch();
 
   const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
@@ -99,9 +101,16 @@ export default function Editor(props: EditorProps): JSX.Element {
     [goToPlantingSiteView]
   );
 
-  const onFinalizeError = useCallback(() => {
-    snackbar.toastError(strings.GENERIC_ERROR);
-  }, [snackbar]);
+  const onFinalizeError = useCallback(
+    (problems?: PlantingSiteProblem[]) => {
+      if (problems?.length) {
+        showProblems(problems);
+      } else {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    },
+    [showProblems, snackbar]
+  );
 
   /**
    * set up hooks to update a draft and also to create a planting site from draft
