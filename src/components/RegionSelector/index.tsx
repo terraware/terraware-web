@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -98,7 +98,7 @@ export default function RegionSelector({
 
   return (
     <>
-      <Grid item xs={gridSize()} paddingBottom={paddingBottom}>
+      <Grid paddingBottom={paddingBottom} size={gridSize()}>
         <Dropdown
           id='countryCode'
           placeholder={strings.SELECT}
@@ -113,13 +113,7 @@ export default function RegionSelector({
         />
       </Grid>
       {!hideCountrySubdivisions && getSelectedCountry()?.subdivisions ? (
-        <Grid
-          item
-          xs={gridSize()}
-          paddingLeft={isMobile ? 0 : theme.spacing(2)}
-          paddingBottom={paddingBottom}
-          sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}
-        >
+        <Grid paddingLeft={isMobile ? 0 : theme.spacing(2)} paddingBottom={paddingBottom} size={gridSize()}>
           <Dropdown
             id='countySubdivisionCode'
             placeholder={strings.SELECT}
@@ -133,7 +127,7 @@ export default function RegionSelector({
           />
         </Grid>
       ) : (
-        horizontalLayout && !isMobile && <Grid item xs={gridSize()} paddingLeft={isMobile ? 0 : theme.spacing(2)} />
+        horizontalLayout && !isMobile && <Grid paddingLeft={isMobile ? 0 : theme.spacing(2)} size={gridSize()} />
       )}
     </>
   );

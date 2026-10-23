@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
@@ -55,7 +55,7 @@ export default function PageHeader({
       }}
     >
       <Grid container spacing={0} sx={{ maxWidth: '100%' }}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           {back && backUrl && backName && (
             <BackToLink
               id='back'
@@ -69,12 +69,8 @@ export default function PageHeader({
             />
           )}
         </Grid>
-        {page && parentPage && title && (
-          <Grid item xs={12}>
-            {getPageHeading()}
-          </Grid>
-        )}
-        <Grid item xs={12} sx={{ display: 'flex' }}>
+        {page && parentPage && title && <Grid size={12}>{getPageHeading()}</Grid>}
+        <Grid sx={{ display: 'flex' }} size={12}>
           <Box sx={{ width: '100%' }}>
             <Box padding={theme.spacing(0, 3, children?.some((el) => !!el) ? 3 : 0, 3)}>
               <Box display='flex' justifyContent='space-between' alignItems='center'>

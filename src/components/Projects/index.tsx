@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useRef, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
@@ -91,14 +91,13 @@ export default function ProjectsList(): JSX.Element {
       <Card flushMobile radius={theme.spacing(1)} style={{ padding: theme.spacing(3, 4) }}>
         <Grid container ref={contentRef}>
           <Grid
-            item
-            xs={12}
             marginBottom='16px'
             sx={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
+            size={12}
           >
             <Box sx={{ display: 'flex' }}>
               <TextField
@@ -129,10 +128,10 @@ export default function ProjectsList(): JSX.Element {
               ))}
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <div>
               <Grid container spacing={4}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {results && (
                     <Table
                       id='projects-table'
