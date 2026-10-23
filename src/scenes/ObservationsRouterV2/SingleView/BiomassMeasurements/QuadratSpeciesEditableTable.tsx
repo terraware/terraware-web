@@ -57,7 +57,7 @@ export default function QuadratSpeciesEditableTable({
   species,
   position,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
-  const { species: availableSpecies } = useOrganizationSpecies();
+  const { findSpeciesById, species: availableSpecies } = useOrganizationSpecies();
   const { strings } = useLocalization();
   const theme = useTheme();
 
@@ -220,13 +220,12 @@ export default function QuadratSpeciesEditableTable({
       .map((sp) => {
         const edited = { ...sp, ...(rowEdits[sp.rowKey] ?? {}) };
         const merged = { ...edited, ...(speciesFlags[getRowKey(edited)] ?? {}) };
-        const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === merged.speciesId);
         return {
           ...merged,
-          speciesName: foundSpecies?.scientificName || merged.scientificName || merged.speciesName,
+          speciesName: findSpeciesById(merged.speciesId)?.scientificName || merged.scientificName || merged.speciesName,
         };
       });
-  }, [species, availableSpecies, rowEdits, speciesFlags, removedKeys]);
+  }, [species, findSpeciesById, rowEdits, speciesFlags, removedKeys]);
 
   const recordedSpeciesIds = useMemo(
     () =>
