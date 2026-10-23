@@ -124,7 +124,7 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
       container
       spacing={theme.spacing(3)}
       borderRadius={theme.spacing(3)}
-      padding={theme.spacing(0, 3, 3, 0)}
+      padding={theme.spacing(3)}
       margin={0}
       width='fit-content'
       sx={{
