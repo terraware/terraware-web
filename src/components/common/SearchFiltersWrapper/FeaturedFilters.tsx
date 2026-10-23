@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectContainer';
 import theme from 'src/theme';
-import { SearchNodePayload } from 'src/types/Search';
+import { SearchNodePayload, getFieldNodeValues } from 'src/types/Search';
 
 import { FeaturedFilterConfig } from './index';
 
@@ -28,7 +28,7 @@ const FeaturedFilters = ({ featuredFilters, setFilters, allFilters }: FeaturedFi
             }
             return {
               ...acc,
-              [curr]: allFilters[curr].values.map((value: string | number) => Number(value)),
+              [curr]: (getFieldNodeValues(allFilters[curr]) ?? []).map((value) => Number(value)),
             };
           },
           {} as Record<string, (number | null)[]>

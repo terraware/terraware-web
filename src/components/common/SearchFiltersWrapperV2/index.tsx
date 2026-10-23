@@ -5,7 +5,7 @@ import { PillList, PillListItem, Textfield } from '@terraware/web-components';
 
 import { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
-import { SearchNodePayload } from 'src/types/Search';
+import { SearchNodePayload, getFieldNodeValues } from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -72,7 +72,7 @@ export default function SearchFiltersWrapperV2({
       Object.keys(currentFilters)
         .map((key): PillListItem<string> | false => {
           // If there are no values, there should be no pill
-          if (!currentFilters[key] || (currentFilters[key].values || []).length === 0) {
+          if (!currentFilters[key] || (getFieldNodeValues(currentFilters[key]) || []).length === 0) {
             return false;
           }
 
@@ -86,8 +86,8 @@ export default function SearchFiltersWrapperV2({
           }
 
           const pillValue = filterConfig.pillValueRenderer
-            ? filterConfig.pillValueRenderer(currentFilters[key].values)
-            : defaultPillValueRenderer(currentFilters[key].values);
+            ? filterConfig.pillValueRenderer(getFieldNodeValues(currentFilters[key]) ?? [])
+            : defaultPillValueRenderer(getFieldNodeValues(currentFilters[key]) ?? []);
           const label = filterConfig.label;
 
           const removeFilter = (k: string) => {
@@ -159,9 +159,9 @@ export default function SearchFiltersWrapperV2({
         let sessionFiltersCopy = { ...sessionFilters };
         Object.keys(allFilters).forEach((filter) => {
           if (existingKeys.includes(filter)) {
-            sessionFiltersCopy[filter] = allFilters[filter].values;
+            sessionFiltersCopy[filter] = getFieldNodeValues(allFilters[filter]) ?? [];
           } else {
-            sessionFiltersCopy = { ...sessionFiltersCopy, [filter]: allFilters[filter].values };
+            sessionFiltersCopy = { ...sessionFiltersCopy, [filter]: getFieldNodeValues(allFilters[filter]) ?? [] };
           }
         });
 

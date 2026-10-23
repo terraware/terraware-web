@@ -17,12 +17,12 @@ import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRou
 import strings from 'src/strings';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
-import { SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 
-const initialFilters: Record<string, SearchNodePayload> = {
+const initialFilters: Record<string, FieldNodePayload> = {
   showEmptyBatches: {
     field: 'showEmptyBatches',
     values: ['false'],

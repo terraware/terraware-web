@@ -1258,7 +1258,7 @@ describe('modifySearchNode', () => {
       operation: 'and',
       children: [
         {
-          operation: 'and',
+          operation: 'not',
           child: {
             field: 'status',
             operation: 'field',
@@ -1279,7 +1279,7 @@ describe('modifySearchNode', () => {
       operation: 'and',
       children: [
         {
-          operation: 'and',
+          operation: 'not',
           child: {
             field: 'status',
             operation: 'field',

@@ -12,7 +12,13 @@ import { default as OrderPreservedTable, OrderPreservedTablePropsFull } from 'sr
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
+import {
+  FieldNodePayload,
+  SearchNodePayload,
+  SearchSortOrder,
+  getFieldNodeValues,
+  isFieldNodePayload,
+} from 'src/types/Search';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
@@ -103,7 +109,7 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     // Apply filters to search API payload
     if (Object.keys(filters).length > 0) {
       const filterValueChildren = Object.keys(filters)
-        .filter((field: string) => (filters[field]?.values || []).length > 0)
+        .filter((field: string) => (getFieldNodeValues(filters[field]) || []).length > 0)
         .map((field: string): SearchNodePayload => filters[field]);
 
       searchNodeChildren.push({
@@ -147,7 +153,10 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     setFilters((prevFilters) => {
       const newFilters = { ...prevFilters };
       Object.keys(newFilters).forEach((key) => {
-        newFilters[key] = { ...newFilters[key], values: [] };
+        const filter = newFilters[key];
+        if (isFieldNodePayload(filter)) {
+          newFilters[key] = { ...filter, values: [] };
+        }
       });
       return newFilters;
     });
