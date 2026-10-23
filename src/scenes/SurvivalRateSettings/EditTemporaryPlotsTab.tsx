@@ -9,7 +9,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { UpdatePlantingSiteApiArg, useUpdatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import { useAssignT0TempSiteDataMutation } from 'src/queries/generated/t0';
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';

@@ -75,6 +75,9 @@ const config: ConfigFile = {
     './src/queries/generated/activities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/activities'),
     },
+    './src/queries/generated/facilities.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/facilities'),
+    },
     './src/queries/generated/funderActivities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/activities'),
     },

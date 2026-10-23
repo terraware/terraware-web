@@ -1,13 +1,14 @@
 import { components } from 'src/api/types/generated-schema';
+import { FacilityPayload, Point } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 
 export type SubLocation = components['schemas']['SubLocationPayload'];
 
 export type PartialSubLocation = Partial<SubLocation>;
 
-export type FacilityType = components['schemas']['FacilityPayload']['type'];
+export type FacilityType = FacilityPayload['type'];
 
-type FacilityLocation = components['schemas']['Point'];
+type FacilityLocation = Point;
 
 export interface Facility {
   id: number;

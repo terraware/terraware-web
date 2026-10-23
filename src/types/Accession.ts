@@ -1,13 +1,13 @@
-import { components } from 'src/api/types/generated-schema';
+import { AccessionPayloadV2Read, Geolocation, GetViabilityTestPayload } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 
 import { Batch } from './Batch';
 
-export type Accession = components['schemas']['AccessionPayloadV2'];
-export type ViabilityTest = components['schemas']['GetViabilityTestPayload'];
-export type ViabilityTestResult = Required<components['schemas']['GetViabilityTestPayload']>['testResults'][0];
+export type Accession = AccessionPayloadV2Read;
+export type ViabilityTest = GetViabilityTestPayload;
+export type ViabilityTestResult = Required<GetViabilityTestPayload>['testResults'][0];
 export type Withdrawal = Required<Accession>['withdrawals'][0];
-export type Geolocation = components['schemas']['Geolocation'];
+export type { Geolocation };
 
 export type AccessionState = Accession['state'];
 
