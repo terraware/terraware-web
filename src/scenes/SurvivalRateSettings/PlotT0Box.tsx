@@ -8,7 +8,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import strings from 'src/strings';
 import { PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';

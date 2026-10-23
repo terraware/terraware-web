@@ -14,7 +14,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useGetT0SiteDataQuery, useGetT0SpeciesForPlantingSiteQuery } from 'src/queries/generated/t0';
 import { useGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';

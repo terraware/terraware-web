@@ -6,7 +6,7 @@ import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useAssignT0SiteDataMutation } from 'src/queries/generated/t0';
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import strings from 'src/strings';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';

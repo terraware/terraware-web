@@ -159,6 +159,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferences,
       redirectAndNotify,
       reloadOrganizations,
+      isFetchingOrganizations,
       bootstrapped,
     }),
     [
@@ -168,6 +169,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       orgPreferences,
       redirectAndNotify,
       reloadOrganizations,
+      isFetchingOrganizations,
       bootstrapped,
     ]
   );

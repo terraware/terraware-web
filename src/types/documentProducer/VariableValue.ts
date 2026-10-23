@@ -1,4 +1,3 @@
-import { operations } from 'src/api/types/generated-schema';
 import {
   AppendValueOperationPayload,
   DeleteValueOperationPayload,
@@ -14,6 +13,7 @@ import {
   ReplaceValuesOperationPayload,
   UpdateValueOperationPayload,
   UpdateVariableValuesRequestPayload,
+  UploadProjectImageValueApiArg,
 } from 'src/queries/generated/documentProducerValues';
 import {
   ExistingDateValuePayload,
@@ -144,9 +144,7 @@ export type Operation =
   | ReplaceValuesOperationPayload
   | UpdateVariableValueOperation;
 
-type OriginalUploadImageValue = Required<
-  operations['uploadProjectImageValue']
->['requestBody']['content']['application/json'];
+type OriginalUploadImageValue = UploadProjectImageValueApiArg['body'];
 
 // Change type for file attribute from string to File, because that is how we process it in the frontend
 type UploadImageValueRequestPayload = Omit<OriginalUploadImageValue, 'file'> & { file: File };
