@@ -112,9 +112,9 @@ const SingleView = () => {
                 </Grid>
               ))}
             </Grid>
-            <Grid container spacing={3}>
+            <Box sx={{ marginTop: -3, marginLeft: -3, width: 'calc(100% + 24px)' }}>
               <FundersTable fundingEntityId={fundingEntity.id} />
-            </Grid>
+            </Box>
           </Card>
         </Page>
       )}
