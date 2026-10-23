@@ -29,6 +29,7 @@ import { useListAcceleratorReportsQuery } from 'src/queries/generated/accelerato
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ReportInternalComment from './ReportInternalComment';
 import useResolvedReportId from './useResolvedReportId';
 
@@ -48,6 +49,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
   const navigate = useSyncNavigate();
 
   const location = useStateLocation();
+  const { acceleratorProject } = useAcceleratorProjectData();
 
   const projectId = Number(pathParams.projectId);
   const currentReportId = onSelectReport ? selectedReportId : Number(pathParams.reportId) || undefined;
@@ -184,6 +186,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
           <QuarterlyHighlightsBox
             onViewHighlights={goToQuarterlyHighlights}
             projectId={projectId}
+            projectHighlightPhotoValueId={acceleratorProject?.projectHighlightPhotoValueId}
             report={selectedReport}
           />
         </>
