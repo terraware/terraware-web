@@ -12,13 +12,13 @@ import {
   UpdateCompletedObservationPlotApiArg,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
 
 import useObservationSpecies from '../useObservationSpecies';
 import ChangeSpeciesConfirmationModal from './ChangeSpeciesConfirmationModal';
 import RemoveSpeciesConfirmationModal from './RemoveSpeciesConfirmationModal';
-import SpeciesSearchSelect from './SpeciesSearchSelect';
 
 /** The id material-react-table gives the row it renders for `createRow()`. */
 const DRAFT_ROW_ID = 'mrt-row-create';

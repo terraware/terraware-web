@@ -16,13 +16,20 @@ import {
 } from 'src/queries/generated/observations';
 import RecordedTreeConfirmationModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/RecordedTreeConfirmationModal';
 import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/TreeNoteModal';
+import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ExistingTreePayload } from 'src/types/Observations';
+import { Species } from 'src/types/Species';
 
 type TreeRow = ExistingTreePayload & {
   speciesName?: string;
 };
 
 const REMOVE_BUTTON_CLASS = 'recordedTreeRemove';
+
+const SPECIES_SCOPED_FIELDS = ['speciesId', 'speciesName', 'isInvasive', 'isThreatened'] as const;
+
+const speciesStateOf = (edits: Partial<TreeRow> = {}): Partial<TreeRow> =>
+  Object.fromEntries(SPECIES_SCOPED_FIELDS.filter((field) => edits[field] !== undefined).map((f) => [f, edits[f]]));
 
 /** Trunks of a multi-trunk tree are numbered within the tree, as in 5_2. */
 const getTreeLabel = (row: TreeRow): string =>
@@ -61,6 +68,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
   const [pendingRemoval, setPendingRemoval] = useState<TreeRow>();
   const [removedTreeIds, setRemovedTreeIds] = useState<number[]>([]);
+  const [pendingSpeciesChange, setPendingSpeciesChange] = useState<{ row: TreeRow; species: Species }>();
 
   const dismissMeasurementWarning = useCallback(() => {
     setPendingMeasurement(undefined);
@@ -167,6 +175,68 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     }
   }, [pendingRemoval, updateObservation]);
 
+  /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
+  const trunksOfTree = useCallback(
+    (row: TreeRow) =>
+      (results?.biomassMeasurements?.trees ?? []).filter(
+        (tree) => tree.treeGrowthForm !== 'Shrub' && tree.treeNumber === row.treeNumber
+      ),
+    [results]
+  );
+
+  const confirmSpeciesChange = useCallback(async () => {
+    if (!pendingSpeciesChange) {
+      return;
+    }
+    const { row, species } = pendingSpeciesChange;
+    setPendingSpeciesChange(undefined);
+    const changed = row.treeGrowthForm === 'Shrub' ? [row] : trunksOfTree(row);
+    const speciesBefore = new Map(changed.map((tree) => [tree.id, speciesStateOf(optimisticValues[tree.id])]));
+    setOptimisticValues((previous) =>
+      changed.reduce(
+        (next, tree) => ({
+          ...next,
+          [tree.id]: { ...next[tree.id], speciesId: species.id, speciesName: species.scientificName },
+        }),
+        previous
+      )
+    );
+    const payload: RecordedTreeUpdateOperationPayload = {
+      type: 'RecordedTree',
+      recordedTreeId: row.id,
+      speciesId: species.id,
+    };
+    if (!(await updateObservation({ updates: [payload] }))) {
+      setOptimisticValues((previous) =>
+        changed.reduce((next, tree) => {
+          if (next[tree.id]?.speciesId !== species.id) {
+            return next;
+          }
+          const keptEdits = { ...next[tree.id] };
+          SPECIES_SCOPED_FIELDS.forEach((field) => delete keptEdits[field]);
+          return { ...next, [tree.id]: { ...keptEdits, ...speciesBefore.get(tree.id) } };
+        }, previous)
+      );
+    }
+  }, [optimisticValues, pendingSpeciesChange, trunksOfTree, updateObservation]);
+
+  const SpeciesCellEditor = useCallback(
+    ({ row, table }: { row: { original: TreeRow }; table: { setEditingCell: (cell: null) => void } }) => (
+      <SpeciesSearchSelect
+        id={`changeTreeSpecies-${row.original.id}`}
+        onChange={(species) => {
+          // Typing a search term is not yet a change; only a picked species asks to confirm one.
+          if (species) {
+            setPendingSpeciesChange({ row: row.original, species });
+            table.setEditingCell(null);
+          }
+        }}
+        placeholder={row.original.speciesName ?? strings.SEARCH_SPECIES}
+      />
+    ),
+    [strings.SEARCH_SPECIES]
+  );
+
   const RemoveCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
       <IconButton
@@ -255,7 +325,10 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'speciesName',
         accessorKey: 'speciesName',
         header: strings.SPECIES,
-        enableEditing: false,
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: SpeciesCellEditor,
+        },
       },
       {
         id: 'treeGrowthForm',
@@ -371,6 +444,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [
       saveRecordedTree,
       saveBiomassSpecies,
+      SpeciesCellEditor,
       strings,
       forestType,
       TreeNumberCell,
@@ -384,17 +458,52 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     ]
   );
 
+  const speciesChangeMessage = useCallback(
+    (row: TreeRow, species: Species) => {
+      const trunkCount = trunksOfTree(row).length;
+      const treeNumber = String(row.treeNumber);
+      if (row.treeGrowthForm === 'Shrub') {
+        return strings.formatString(strings.CHANGE_SHRUB_SPECIES_MESSAGE, treeNumber, species.scientificName) as string;
+      }
+      return trunkCount > 1
+        ? (strings.formatString(
+            strings.CHANGE_TREE_SPECIES_MESSAGE_TRUNKS,
+            treeNumber,
+            species.scientificName,
+            String(trunkCount)
+          ) as string)
+        : (strings.formatString(strings.CHANGE_TREE_SPECIES_MESSAGE, treeNumber, species.scientificName) as string);
+    },
+    [strings, trunksOfTree]
+  );
+
+  const rowPropsWithDropdownOnTop = useCallback(
+    ({
+      row,
+      table,
+    }: {
+      row: { id: string };
+      table: { getState: () => { editingCell?: { row: { id: string } } | null } };
+    }) => ({
+      sx: {
+        cursor: 'default',
+        '& td': { borderBottom: 'none' },
+        ...(table.getState().editingCell?.row.id === row.id ? { zIndex: 3 } : {}),
+      },
+    }),
+    []
+  );
+
   const treesWithData = useMemo(() => {
     return results?.biomassMeasurements?.trees
       ?.filter((tree) => !removedTreeIds.includes(tree.id))
       .map((tree) => {
-        const optimistic = optimisticValues[tree.id] ?? {};
+        const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };
         return {
-          ...tree,
-          ...optimistic,
-          speciesName: tree.speciesId
-            ? (findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName)
-            : tree.speciesName,
+          ...merged,
+          speciesName: merged.speciesId
+            ? (findSpeciesById(merged.speciesId)?.scientificName ?? merged.speciesName)
+            : merged.speciesName,
         };
       });
   }, [findSpeciesById, results, optimisticValues, removedTreeIds]);
@@ -433,6 +542,17 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             pendingMeasurement.label
           )}
         </DialogBox>
+      )}
+      {pendingSpeciesChange && (
+        <RecordedTreeConfirmationModal
+          confirmLabel={strings.CHANGE_SPECIES}
+          details={treeDetails(pendingSpeciesChange.row)}
+          detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
+          message={speciesChangeMessage(pendingSpeciesChange.row, pendingSpeciesChange.species)}
+          onClose={() => setPendingSpeciesChange(undefined)}
+          onConfirm={() => void confirmSpeciesChange()}
+          title={strings.CHANGE_SPECIES_CONFIRMATION}
+        />
       )}
       {pendingRemoval && (
         <RecordedTreeConfirmationModal
@@ -477,6 +597,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           '@media (hover: none)': { [`& .${REMOVE_BUTTON_CLASS}`]: { opacity: 1 } },
         }}
         tableOptions={{
+          muiTableBodyRowProps: rowPropsWithDropdownOnTop,
           enableRowActions: true,
           positionActionsColumn: 'last',
           displayColumnDefOptions: {

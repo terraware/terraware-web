@@ -328,10 +328,13 @@ CHANGE_ACTIVE_GROWTH_STATUS,Modifier l'état de la croissance active,969b83ab
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Changer l'état de germination/établissement,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Modifier le statut d’acclimatation,b734dbd7
 CHANGE_HISTORY,Historique des modifications,3aa8d940
+CHANGE_SHRUB_SPECIES_MESSAGE,L’arbuste {0} sera enregistré comme {1}. Ses mesures restent inchangées.,485c4824
 CHANGE_SPECIES,Changer d'espèce,0c459473
 CHANGE_SPECIES_CONFIRMATION,Changer d'espèce ?,014eca39
 CHANGE_SPECIES_CONFIRMATION_MESSAGE,Les valeurs enregistrées pour {0} seront transférées à {1}.,6c77f2aa
 CHANGE_TO,Passez à {0},8423817d
+CHANGE_TREE_SPECIES_MESSAGE,L’arbre {0} sera enregistré comme {1}. Ses mesures restent inchangées.,c852d92f
+CHANGE_TREE_SPECIES_MESSAGE_TRUNKS,L’arbre {0} sera enregistré comme {1}. Cela s’applique à ses {2} troncs. Leurs mesures restent inchangées.,41f4c47d
 CHANGES,Changements,47809a57
 CHANGES_SAVED,Changements sauvés !,709a9559
 CHECK_DATE,Date de contrôle,2e9f3043
