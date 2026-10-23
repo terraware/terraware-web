@@ -313,7 +313,10 @@ export default function Accession2View(): JSX.Element {
     (accession?.state === 'Drying' ? 1 : 0) +
     4;
 
-  const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
+  const overviewGridSize = isMobile ? 100 : isTablet ? 50 : overviewItemCount <= 6 ? 33 : 25;
+  const overviewGridFlexBasis = `calc(${overviewGridSize}% - ${
+    Number.parseFloat(themeObj.spacing(3)) * (1 - overviewGridSize / 100)
+  }px)`;
 
   const quantityEditable = isAllowed('EDIT_ACCESSION_QUANTITY', accessionAcl);
   const viabilityEditable = isAllowed('EDIT_ACCESSION_VIABILITY', accessionAcl);
@@ -531,7 +534,7 @@ export default function Accession2View(): JSX.Element {
         alignItems={'stretch'}
       >
         {accession?.state && (
-          <Grid flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
             <OverviewItemCard
               isEditable={stateEditable}
               handleEdit={() => setOpenEditStateModal(true)}
@@ -555,7 +558,7 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {accession?.facilityId !== undefined && (
-          <Grid flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
             <OverviewItemCard
               isEditable={userCanEdit}
               handleEdit={() => setOpenEditLocationModal(true)}
@@ -571,7 +574,7 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {accession?.state === 'Drying' && (
-          <Grid flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
             <OverviewItemCard
               isEditable={userCanEdit}
               handleEdit={() => setOpenEndDryingReminderModal(true)}
@@ -587,7 +590,7 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {accession && (
-          <Grid flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
             <ProjectOverviewItemCard<Accession>
               entity={accession}
               reloadData={reloadData}
@@ -598,12 +601,12 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
-          <Grid flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
             <OverviewItemCard isEditable={false} title={strings.BAG_ID} contents={accession.bagNumbers.join(', ')} />
           </Grid>
         )}
 
-        <Grid flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
           <OverviewItemCard
             isEditable={quantityEditable}
             handleEdit={() => setOpenQuantityModal(true)}
@@ -635,11 +638,11 @@ export default function Accession2View(): JSX.Element {
           />
         </Grid>
 
-        <Grid flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
           <OverviewItemCard isEditable={false} title={strings.AGE} contents={age} />
         </Grid>
 
-        <Grid flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
           <OverviewItemCard
             isEditable={viabilityEditable}
             handleEdit={() => setOpenViabilityModal(true)}
