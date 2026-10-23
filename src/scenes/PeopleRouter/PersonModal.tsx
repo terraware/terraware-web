@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Dropdown } from '@terraware/web-components';
 
@@ -200,12 +200,12 @@ export default function PersonModal({ open, onClose, person }: PersonModalProps)
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         {!person && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>{strings.ADD_PERSON_DESC}</Typography>
           </Grid>
         )}
         {pageError === 'REPEATED_EMAIL' && repeatedEmail && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <ErrorBox
               text={strings.ALREADY_INVITED_PERSON_ERROR}
               buttonText={strings.GO_TO_PROFILE}
@@ -214,11 +214,11 @@ export default function PersonModal({ open, onClose, person }: PersonModalProps)
           </Grid>
         )}
         {pageError === 'INVALID_EMAIL' && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <ErrorBox title={strings.UNABLE_TO_ADD_PERSON} text={strings.FIX_HIGHLIGHTED_FIELDS} />
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='email'
             label={strings.EMAIL_REQUIRED}
@@ -229,7 +229,7 @@ export default function PersonModal({ open, onClose, person }: PersonModalProps)
             errorText={emailError}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='firstName'
             label={strings.FIRST_NAME}
@@ -239,7 +239,7 @@ export default function PersonModal({ open, onClose, person }: PersonModalProps)
             value={editedPerson.firstName}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='lastName'
             label={strings.LAST_NAME}
@@ -249,7 +249,7 @@ export default function PersonModal({ open, onClose, person }: PersonModalProps)
             value={editedPerson.lastName}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             id='role'
             label={strings.ROLE_REQUIRED}

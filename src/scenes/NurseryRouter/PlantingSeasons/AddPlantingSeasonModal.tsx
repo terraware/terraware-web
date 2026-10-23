@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -259,7 +259,7 @@ const AddPlantingSeasonModal = ({
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         {!hidePlantingSiteSelector && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Dropdown
               id='plantingSite'
               required
@@ -274,7 +274,7 @@ const AddPlantingSeasonModal = ({
           </Grid>
         )}
         {seasonsForSelectedSite.length > 0 && (
-          <Grid item xs={12} sx={{ '&.MuiGridLegacy-item': { paddingBottom: 0 } }} display={'flex'} alignItems='end'>
+          <Grid display={'flex'} alignItems='end' size={12}>
             <Checkbox
               id='copyPreviousSeason'
               name='copyPreviousSeason'
@@ -296,7 +296,7 @@ const AddPlantingSeasonModal = ({
           </Grid>
         )}
         {record.copyPrevious && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Dropdown
               id='seasonToCopy'
               label={strings.SEASON_TO_COPY}
@@ -315,7 +315,7 @@ const AddPlantingSeasonModal = ({
             )}
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='seasonName'
             type='text'
@@ -325,7 +325,7 @@ const AddPlantingSeasonModal = ({
             errorText={validate && !record.name?.trim() ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <DatePicker
             id='startDate'
             label={strings.START_DATE_REQUIRED}
@@ -336,7 +336,7 @@ const AddPlantingSeasonModal = ({
             defaultTimeZone={timeZoneId}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Box sx={{ alignItems: 'flex-end', display: 'flex', gap: theme.spacing(1) }}>
             <Box sx={{ flex: 1 }}>
               <DatePicker

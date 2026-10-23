@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -84,7 +84,7 @@ export default function OrganizationView(): JSX.Element {
           margin: 0,
         }}
       >
-        <Grid item xs={12} paddingBottom={theme.spacing(2)} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid paddingBottom={theme.spacing(2)} sx={{ display: 'flex', justifyContent: 'flex-end' }} size={12}>
           <Button
             icon='iconEdit'
             label={isMobile ? undefined : strings.EDIT_ORGANIZATION}
@@ -93,7 +93,7 @@ export default function OrganizationView(): JSX.Element {
             onClick={() => setEditModalOpen(true)}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField
             label={strings.ORGANIZATION_NAME}
             id='name'
@@ -102,7 +102,7 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField
             label={strings.DESCRIPTION}
             id='description'
@@ -111,10 +111,10 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField label={strings.DATE_ADDED} id='dateAdded' type='text' value={getDateAdded()} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField
             label={strings.COUNTRY}
             id='country'
@@ -128,12 +128,12 @@ export default function OrganizationView(): JSX.Element {
           />
         </Grid>
         {selectedOrganization?.countrySubdivisionCode && (
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+          <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
             <TextField label={strings.STATE} id='state' type='text' value={organizationState()} display={true} />
           </Grid>
         )}
         {showBotanicalCountry && (
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+          <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
             <TextField
               label={strings.BOTANICAL_COUNTRY}
               id='botanicalCountry'
@@ -143,7 +143,7 @@ export default function OrganizationView(): JSX.Element {
             />
           </Grid>
         )}
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField
             label={strings.NUMBER_OF_PEOPLE}
             id='numberOfPeople'
@@ -152,7 +152,7 @@ export default function OrganizationView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
+        <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField
             label={strings.TIME_ZONE}
             id='timeZone'
@@ -162,7 +162,7 @@ export default function OrganizationView(): JSX.Element {
             tooltipTitle={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+        <Grid paddingBottom={isMobile ? theme.spacing(4) : 0} size={gridSize()}>
           <TextField
             label={strings.ORGANIZATION_TYPE}
             id='org-type'
@@ -174,7 +174,7 @@ export default function OrganizationView(): JSX.Element {
           />
         </Grid>
         {selectedOrganization?.organizationType === 'Other' && (
-          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(4) : 0}>
+          <Grid paddingBottom={isMobile ? theme.spacing(4) : 0} size={gridSize()}>
             <TextField
               label={strings.ORGANIZATION_TYPE_DESCRIPTION}
               id='org-type-description'
@@ -184,7 +184,7 @@ export default function OrganizationView(): JSX.Element {
             />
           </Grid>
         )}
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             label={strings.ORGANIZATION_WEBSITE}
             id='org-website'

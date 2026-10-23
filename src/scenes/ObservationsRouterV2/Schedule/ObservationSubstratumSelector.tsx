@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Divider, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Icon } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -127,7 +127,7 @@ const ObservationSubstratumSelector = ({
     plantingSite &&
     plantingSite.strata?.length && (
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='14px'>{strings.SCHEDULE_OBSERVATION_MESSAGE}</Typography>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE}
@@ -138,7 +138,7 @@ const ObservationSubstratumSelector = ({
             </Typography>
           )}
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box display='flex' alignItems='center'>
             <Box flex={1}>
               <Checkbox
@@ -171,7 +171,7 @@ const ObservationSubstratumSelector = ({
         </Grid>
         {plantingSite.strata?.map((stratum, index) => {
           return (
-            <Grid item xs={12} key={index}>
+            <Grid key={index} size={12}>
               <Box display='flex' alignItems='center'>
                 <Box flex={1}>
                   <Checkbox
@@ -268,7 +268,7 @@ const ObservationSubstratumSelector = ({
           );
         })}
         {(fullySelectedStrata.length > 0 || partiallySelectedStrata.length > 0) && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Divider sx={{ marginBottom: theme.spacing(3) }} />
             {fullySelectedStrata.length > 0 && (
               <Typography fontSize='14px'>

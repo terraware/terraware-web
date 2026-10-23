@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
@@ -56,12 +56,12 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
         <Typography>{strings.MATCH_SPECIES_MODAL_DESCRIPTION} </Typography>
       </Box>
       <Grid container textAlign={'left'} spacing={1}>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
+        <Grid sx={{ marginTop: theme.spacing(2), paddingRight: 1 }} size={6}>
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
             {strings.UNRECOGNIZED_SPECIES}
           </Typography>
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
+        <Grid sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }} size={6}>
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
             {strings.SCIENTIFIC_NAME}
           </Typography>
@@ -112,20 +112,18 @@ function MatchSpeciesRow(props: MatchSpeciesRowProps): JSX.Element {
   return (
     <>
       <Grid
-        item
-        xs={6}
         borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         paddingBottom={2}
         paddingTop={index === 0 ? 1 : 2}
+        size={6}
       >
         <Typography>{record.otherSpeciesName}</Typography>
       </Grid>
       <Grid
-        item
-        xs={6}
         borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         paddingBottom={2}
         paddingTop={index === 0 ? 1 : 2}
+        size={6}
       >
         <SpeciesSelector record={record} setRecord={setRecord} hideLabel id={`speciesSelector${index}`} />
       </Grid>

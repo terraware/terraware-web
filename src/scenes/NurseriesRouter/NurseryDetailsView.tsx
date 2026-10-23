@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
@@ -63,12 +63,10 @@ export default function NurseryDetailsView(): JSX.Element {
   return (
     <TfMain>
       <Grid container padding={theme.spacing(0, 0, 2, 0)}>
-        <Grid item xs={12} marginBottom={theme.spacing(3)}>
+        <Grid marginBottom={theme.spacing(3)} size={12}>
           <BackToLink id='back' to={APP_PATHS.NURSERIES} name={strings.NURSERIES} />
         </Grid>
         <Grid
-          item
-          xs={12}
           padding={theme.spacing(0, 3)}
           sx={{
             display: 'flex',
@@ -76,6 +74,7 @@ export default function NurseryDetailsView(): JSX.Element {
             justifyContent: 'space-between',
             alignItems: 'center',
           }}
+          size={12}
         >
           <Typography fontSize='20px' fontWeight={600}>
             {nursery?.name}
@@ -91,7 +90,7 @@ export default function NurseryDetailsView(): JSX.Element {
             />
           )}
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <PageSnackbar />
         </Grid>
       </Grid>
@@ -105,10 +104,10 @@ export default function NurseryDetailsView(): JSX.Element {
           margin: 0,
         }}
       >
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+        <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
           <TextField label={strings.NAME} id='name' type='text' value={nursery?.name} display={true} />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             label={strings.DESCRIPTION}
             id='description'
@@ -117,7 +116,7 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} marginTop={isMobile ? 3 : 0}>
+        <Grid marginTop={isMobile ? 3 : 0} size={gridSize()}>
           <TextField
             label={strings.TIME_ZONE}
             id='timezone'
@@ -127,7 +126,7 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+        <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
           <TextField
             id={'buildStartedDate'}
             label={strings.FACILITY_BUILD_START_DATE}
@@ -137,7 +136,7 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+        <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
           <TextField
             id={'buildCompletedDate'}
             label={strings.FACILITY_BUILD_COMPLETION_DATE}
@@ -147,7 +146,7 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+        <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
           <TextField
             id={'operationStartedDate'}
             label={strings.FACILITY_OPERATION_START_DATE}
@@ -157,7 +156,7 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             id={'capacity'}
             label={strings.NURSERY_CAPACITY}
@@ -167,7 +166,7 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()}>
+        <Grid size={gridSize()}>
           <TextField
             id={'location'}
             label={strings.LOCATION}

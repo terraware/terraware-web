@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
@@ -89,7 +89,7 @@ export default function DraftSiteDetailsInputForm({
 
   return (
     <Grid container display='flex' spacing={3} flexGrow={0}>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <TextField
           id='name'
           label={strings.NAME_REQUIRED}
@@ -100,7 +100,7 @@ export default function DraftSiteDetailsInputForm({
           autoFocus={true}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <TextField
           id='description'
           label={strings.DESCRIPTION}
@@ -109,14 +109,14 @@ export default function DraftSiteDetailsInputForm({
           value={record.description}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <LocationTimeZoneSelector
           location={record}
           onChangeTimeZone={onChangeTimeZone}
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <ProjectsDropdown availableProjects={availableProjects} record={record} setRecord={setRecord} allowUnselect />
       </Grid>
     </Grid>
