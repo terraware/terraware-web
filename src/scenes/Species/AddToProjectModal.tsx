@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -145,7 +145,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
                 }}
                 key={`project-${index}`}
               >
-                <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+                <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
                   <SelectT<Project>
                     id='project'
                     label={strings.PROJECT}
@@ -165,7 +165,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
                     required
                   />
                 </Grid>
-                <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+                <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
                   <Dropdown
                     id='nativeCategory'
                     selectedValue={ps?.nativeCategory}
