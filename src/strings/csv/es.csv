@@ -644,6 +644,7 @@ EDIT_QUANTITY_DISABLED,"La cantidad no puede editarse cuando el estado es ""Util
 EDIT_SCORES,Editar las puntuaciones,95db2e9b
 EDIT_SEED_BANK,Editar banco de semillas,e2400ded
 EDIT_SETTINGS,Editar configuración,f9c91817
+EDIT_SITE_BOUNDARY,Editar límite del sitio,964e9a9c
 EDIT_SPECIES,Editar especie,0893d9a0
 EDIT_STATUS,Editar estado,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c

@@ -336,6 +336,8 @@ export default function useNavigateTo() {
         window.scrollTo(0, 0);
       },
 
+      goToPlantingSiteEdit: (plantingSiteId: number) =>
+        navigate(APP_PATHS.PLANTING_SITES_EDIT.replace(':plantingSiteId', `${plantingSiteId}`)),
       goToPlantingSiteView: (plantingSiteId: number) =>
         navigate(APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', `${plantingSiteId}`)),
       goToPlantingSitesView: (newSite: boolean) => navigate(`${APP_PATHS.PLANTING_SITES}${newSite ? '?new=true' : ''}`),

@@ -643,6 +643,7 @@ EDIT_QUANTITY_DISABLED,La quantité ne peut pas être modifiée lorsque le statu
 EDIT_SCORES,Modifier les scores,95db2e9b
 EDIT_SEED_BANK,Modifier la banque de semences,e2400ded
 EDIT_SETTINGS,Modifier les paramètres,f9c91817
+EDIT_SITE_BOUNDARY,Modifier la limite du site,964e9a9c
 EDIT_SPECIES,Modifier les espèces,0893d9a0
 EDIT_STATUS,Modifier le statut,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Modifier les paramètres du taux de survie pour {0},669ad74c
