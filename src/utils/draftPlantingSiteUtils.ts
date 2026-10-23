@@ -9,17 +9,22 @@ import {
 } from 'src/types/PlantingSite';
 import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
 
-const toStratumPayload = ({
-  boundary,
-  initialPlantingDensity,
-  name,
-  substrata,
-}: MinimalStratum): DraftStratumPayload => ({
-  boundary,
-  initialPlantingDensity,
-  name,
-  substrata: substrata.map((substratum) => ({ boundary: substratum.boundary, name: substratum.name })),
-});
+// only IDs the server assigned are sent, so strata the editor numbered locally are created as new ones
+const toStratumPayload = (stratum: MinimalStratum, persistedStratum?: MinimalStratum): DraftStratumPayload => {
+  const { boundary, id, initialPlantingDensity, name, substrata } = stratum;
+
+  return {
+    boundary,
+    ...(persistedStratum ? { id } : {}),
+    initialPlantingDensity,
+    name,
+    substrata: substrata.map((substratum) => ({
+      boundary: substratum.boundary,
+      ...(persistedStratum?.substrata.some((persisted) => persisted.id === substratum.id) ? { id: substratum.id } : {}),
+      name: substratum.name,
+    })),
+  };
+};
 
 const toStratum = ({ boundary, id, initialPlantingDensity, name, substrata }: DraftStratumPayload): MinimalStratum => ({
   boundary: boundary as MultiPolygon,
@@ -36,7 +41,10 @@ const toStratum = ({ boundary, id, initialPlantingDensity, name, substrata }: Dr
 });
 
 // convert from client representation to BE representation
-export const fromDraft = (site: DraftPlantingSite): CreateDraftPlantingSiteRequestPayload => {
+export const fromDraft = (
+  site: DraftPlantingSite,
+  persistedSite?: DraftPlantingSite
+): CreateDraftPlantingSiteRequestPayload => {
   const {
     boundary,
     boundarySource,
@@ -61,7 +69,15 @@ export const fromDraft = (site: DraftPlantingSite): CreateDraftPlantingSiteReque
     projectId,
     siteEditStep,
     siteType,
-    strata: siteType === 'Detailed' ? strata?.map(toStratumPayload) : undefined,
+    strata:
+      siteType === 'Detailed'
+        ? strata?.map((stratum) =>
+            toStratumPayload(
+              stratum,
+              persistedSite?.strata?.find((persisted) => persisted.id === stratum.id)
+            )
+          )
+        : undefined,
     timeZone,
   };
 };
