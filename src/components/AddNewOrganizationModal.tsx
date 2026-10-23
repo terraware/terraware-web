@@ -246,7 +246,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           countrySubdivisionError={stateError}
           paddingBottom={theme.spacing(4)}
         />
-        <Grid size={12}>
+        <Grid marginTop={theme.spacing(-3)} size={12}>
           <TimeZoneSelector
             label={strings.TIME_ZONE_REQUIRED}
             onTimeZoneSelected={onTimeZoneChange}
