@@ -5,7 +5,6 @@ import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import documentProducerReducers from './features/documentProducer';
-import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import gisReducers from './features/gis/gisSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
@@ -14,7 +13,6 @@ import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlic
 import snackbarReducers from './features/snackbar/snackbarSlice';
 import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
-import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 
 // assembly of app reducers
@@ -22,7 +20,6 @@ const reducers = {
   ...acceleratorReducers,
   ...documentProducerReducers,
   ...funderProjectsReducers,
-  ...fundingEntitiesReducers,
   ...gisReducers,
   ...messageReducers,
   ...matrixViewReducers,
@@ -30,7 +27,6 @@ const reducers = {
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
   ...subLocationsReducers,
-  ...trackingReducers,
   ...userAnalyticsReducers,
   ...rtkReducers,
 };

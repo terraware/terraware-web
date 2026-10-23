@@ -7,13 +7,14 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import { useSaveSubLocations } from 'src/components/common/SubLocations/useSaveSubLocations';
 import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
-import { FacilityService, SubLocationService } from 'src/services';
-import { CreateFacilityResponse } from 'src/services/FacilityService';
+import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -42,7 +43,7 @@ const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
   JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
 export default function NurseryView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization, isFetchingOrganizations } = useOrganization();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
   const [validateDates, setValidateDates] = useState(false);
@@ -50,6 +51,9 @@ export default function NurseryView(): JSX.Element {
   const [baselineSubLocations, setBaselineSubLocations] = useState<PartialSubLocation[]>();
   const [saving, setSaving] = useState(false);
   const snackbar = useSnackbar();
+  const [createFacility] = useCreateFacilityMutation();
+  const [updateFacility] = useUpdateFacilityMutation();
+  const saveSubLocations = useSaveSubLocations();
   const theme = useTheme();
   const [navigateToNursery, setNavigateToNursery] = useState<NavigateToFacilityObject>({
     navigate: false,
@@ -66,6 +70,7 @@ export default function NurseryView(): JSX.Element {
   const [latitude, setLatitude] = useState<string>('');
   const [longitude, setLongitude] = useState<string>('');
   const { nurseryId } = useParams<{ nurseryId: string }>();
+  const waitingForOrganizations = !!nurseryId && isFetchingOrganizations;
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
@@ -167,30 +172,42 @@ export default function NurseryView(): JSX.Element {
         ? { type: 'Point', coordinates: [parsedLongitude, parsedLatitude] }
         : undefined;
 
+    const facilityPayload = {
+      buildCompletedDate: record.buildCompletedDate,
+      buildStartedDate: record.buildStartedDate,
+      capacity: record.capacity,
+      description: record.description,
+      location,
+      name: record.name,
+      operationStartedDate: record.operationStartedDate,
+      timeZone: record.timeZone,
+    };
+
     setSaving(true);
     try {
       let id = selectedNursery?.id;
-      const response = selectedNursery
-        ? await FacilityService.updateFacility({ ...record, location } as Facility)
-        : await FacilityService.createFacility({
-            ...record,
-            location,
-            subLocationNames: editedSubLocations?.map((l) => l.name as string),
-          });
-
-      if (response.requestSucceeded && selectedOrganization) {
-        if (selectedNursery && editedSubLocations) {
-          await SubLocationService.saveEditedSubLocations(id as number, editedSubLocations);
+      if (selectedNursery) {
+        await updateFacility({
+          facilityId: selectedNursery.id,
+          updateFacilityRequestPayload: facilityPayload,
+        }).unwrap();
+        if (editedSubLocations) {
+          await saveSubLocations(selectedNursery.id, editedSubLocations);
         }
-        await reloadOrganizations(selectedOrganization.id);
-        snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
-        if (!selectedNursery) {
-          id = (response as CreateFacilityResponse).facilityId || undefined;
-        }
-        setNavigateToNursery({ navigate: true, id });
       } else {
-        snackbar.toastError();
+        const response = await createFacility({
+          ...facilityPayload,
+          organizationId: selectedOrganization.id,
+          subLocationNames: editedSubLocations?.map((l) => l.name as string),
+          type: record.type,
+        }).unwrap();
+        id = response.id;
       }
+
+      snackbar.toastSuccess(selectedNursery ? strings.CHANGES_SAVED : strings.NURSERY_ADDED);
+      setNavigateToNursery({ navigate: true, id });
+    } catch {
+      snackbar.toastError();
     } finally {
       setSaving(false);
     }
@@ -250,7 +267,7 @@ export default function NurseryView(): JSX.Element {
         type='passive'
       />
       <Button
-        disabled={!isDirty || saving}
+        disabled={!isDirty || saving || waitingForOrganizations}
         id='saveCreateNursery'
         label={strings.SAVE}
         onClick={() => void saveNursery()}
@@ -261,7 +278,7 @@ export default function NurseryView(): JSX.Element {
 
   return (
     <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={isDirty} title={title}>
-      {saving && <BusySpinner withSkrim={true} />}
+      {(saving || waitingForOrganizations) && <BusySpinner withSkrim={true} />}
       <Box
         sx={{
           backgroundColor: theme.palette.TwClrBg,

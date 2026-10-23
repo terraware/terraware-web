@@ -1,9 +1,9 @@
 import { isArray } from 'lodash';
 
-import { components } from 'src/api/types/generated-schema';
 import {
   DateVariablePayload,
   EmailVariablePayload,
+  ExistingValuePayloadBase,
   GetVariableWorkflowHistoryResponsePayload,
   ImageVariablePayload,
   LinkVariablePayload,
@@ -25,7 +25,7 @@ export type VariableListResponse = ListVariablesResponsePayload;
 
 export type Variable = VariableListResponse['variables'][0];
 
-export type VariableType = components['schemas']['ExistingValuePayload']['type'];
+export type VariableType = ExistingValuePayloadBase['type'];
 
 type LinkVariable = LinkVariablePayload;
 

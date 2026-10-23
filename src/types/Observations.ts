@@ -1,6 +1,11 @@
-import { components } from 'src/api/types/generated-schema';
 import {
+  CompleteAdHocObservationRequestPayload,
+  ExistingBiomassMeasurementPayload,
+  ExistingTreePayload,
   ObservationMonitoringPlotMediaPayload,
+  ObservationPayload,
+  RecordedPlantPayload,
+  ReplaceObservationPlotRequestPayload,
   ObservationMonitoringPlotResultsPayload as RtkObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload as RtkObservationResultsPayload,
   ObservationSpeciesResultsPayload as RtkObservationSpeciesResultsPayload,
@@ -12,13 +17,12 @@ import defaultStrings from 'src/strings';
 import { MultiPolygon } from './Tracking';
 
 // basic information on a single observation (excluding observation results)
-type Observation = components['schemas']['ObservationPayload'];
+type Observation = ObservationPayload;
 
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
 // plot replacement
-type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
 // "Temporary" | "LongTerm"
 export type ReplaceObservationPlotDuration = ReplaceObservationPlotRequestPayload['duration'];
 
@@ -134,14 +138,14 @@ export const getPlotStatus = (status: MonitoringPlotStatus | undefined, strings:
   }
 };
 
-export type RecordedPlant = components['schemas']['RecordedPlantPayload'];
+export type RecordedPlant = RecordedPlantPayload;
 export type RecordedPlantStatus = RecordedPlant['status'];
 
-export type ExistingTreePayload = components['schemas']['ExistingTreePayload'];
+export type { ExistingTreePayload };
 
-export type PlotCondition = components['schemas']['CompleteAdHocObservationRequestPayload']['conditions'][0];
+export type PlotCondition = CompleteAdHocObservationRequestPayload['conditions'][0];
 
-export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];
+export type BiomassMeasurement = ExistingBiomassMeasurementPayload;
 
 type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
 

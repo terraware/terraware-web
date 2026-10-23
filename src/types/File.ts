@@ -1,6 +1,6 @@
-import { components } from 'src/api/types/generated-schema';
+import { GetUploadStatusResponsePayload } from 'src/queries/generated/species';
 
-export type GetUploadStatusResponsePayload = components['schemas']['GetUploadStatusResponsePayload'];
+export type { GetUploadStatusResponsePayload };
 
 export type UploadResponse = {
   uploadStatus?: GetUploadStatusResponsePayload;

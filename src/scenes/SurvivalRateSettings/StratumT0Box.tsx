@@ -6,7 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import strings from 'src/strings';
 import { SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
 import { roundToDecimal } from 'src/utils/numbers';
