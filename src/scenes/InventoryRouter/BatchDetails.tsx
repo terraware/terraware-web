@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -99,7 +99,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
         <ChangeQuantityModal modalValues={modalValues} onClose={onCloseChangeQuantityModal} row={batchWithRawQtys} />
       )}
       <Grid container>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={false}
             title={strings.SEEDS_SOWN_DATE}
@@ -107,8 +107,8 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             grid={true}
           />
         </Grid>
-        {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        {!isMobile && <Grid paddingRight={theme.spacing(3)} size={6} />}
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={true}
             title={strings.GERMINATION_ESTABLISHMENT_QUANTITY}
@@ -117,7 +117,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             handleEdit={handleEditGerminatingQuantity}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={false}
             title={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
@@ -125,7 +125,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             grid={true}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={true}
             title={strings.ACTIVE_GROWTH_QUANTITY}
@@ -134,7 +134,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             handleEdit={handleEditActiveGrowthQuantity}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={false}
             title={strings.EST_READY_DATE}
@@ -142,7 +142,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             grid={true}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             contents={numberFormatter.format(batch.hardeningOffQuantity)}
             grid
@@ -151,8 +151,8 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             title={strings.HARDENING_OFF_QUANTITY}
           />
         </Grid>
-        {!isMobile && <Grid item xs={6} paddingRight={theme.spacing(3)} />}
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        {!isMobile && <Grid paddingRight={theme.spacing(3)} size={6} />}
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={false}
             title={strings.READY_TO_PLANT_QUANTITY}
@@ -160,7 +160,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             grid={true}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={false}
             title={strings.TOTAL_QUANTITY}
@@ -170,7 +170,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             grid={true}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard
             isEditable={false}
             title={strings.SUBSTRATE}
@@ -179,7 +179,7 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
           />
         </Grid>
         {batch.substrate === 'Other' && (
-          <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+          <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
             <OverviewItemCard
               isEditable={false}
               title={strings.SUBSTRATE_NOTES}
@@ -188,10 +188,10 @@ export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element 
             />
           </Grid>
         )}
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard isEditable={false} title={strings.TREATMENT} contents={batch.treatment || ''} grid={true} />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>
+        <Grid paddingRight={theme.spacing(3)} size={isMobile ? 12 : 6}>
           <OverviewItemCard isEditable={false} title={strings.NOTES} contents={batch.notes || ''} grid={true} />
         </Grid>
       </Grid>

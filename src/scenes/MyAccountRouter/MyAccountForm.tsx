@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, FormControlLabel, GridLegacy as Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
@@ -460,12 +460,12 @@ const MyAccountForm = ({
       >
         <Box sx={isMobile ? { width: 'calc(100vw - 72px)' } : {}}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography fontSize='20px' fontWeight={600}>
                 {userIsFunder ? strings.FUNDER : strings.GENERAL}
               </Typography>
             </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
+            <Grid size={isMobile ? 12 : 4}>
               <TextField
                 label={strings.FIRST_NAME}
                 id='firstName'
@@ -475,7 +475,7 @@ const MyAccountForm = ({
                 onChange={onChangeCallback('firstName')}
               />
             </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
+            <Grid size={isMobile ? 12 : 4}>
               <TextField
                 label={strings.LAST_NAME}
                 id='lastName'
@@ -485,7 +485,7 @@ const MyAccountForm = ({
                 onChange={onChangeCallback('lastName')}
               />
             </Grid>
-            <Grid item xs={isMobile ? 12 : 4}>
+            <Grid size={isMobile ? 12 : 4}>
               <TextField
                 label={strings.EMAIL}
                 id='email'
@@ -495,13 +495,13 @@ const MyAccountForm = ({
                 readonly={true}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography fontSize='20px' fontWeight={600}>
                 {userIsFunder ? strings.REGION : strings.LANGUAGE_AND_REGION}
               </Typography>
             </Grid>
             {!userIsFunder && (
-              <Grid item xs={isMobile ? 12 : 3}>
+              <Grid size={isMobile ? 12 : 3}>
                 {edit ? (
                   <LocaleSelector
                     onChangeLocale={(newValue) => setLocaleSelected(newValue)}
@@ -519,7 +519,7 @@ const MyAccountForm = ({
                 )}
               </Grid>
             )}
-            <Grid item xs={isMobile ? 12 : 3}>
+            <Grid size={isMobile ? 12 : 3}>
               {edit ? (
                 <RegionSelector
                   selectedCountryCode={countryCodeSelected}
@@ -539,7 +539,7 @@ const MyAccountForm = ({
               )}
             </Grid>
             {!userIsFunder && (
-              <Grid item xs={isMobile ? 12 : 3}>
+              <Grid size={isMobile ? 12 : 3}>
                 {edit ? (
                   <WeightSystemSelector
                     onChange={(newValue) => setPreferredWeightSystemSelected(newValue)}
@@ -557,7 +557,7 @@ const MyAccountForm = ({
                 )}
               </Grid>
             )}
-            <Grid item xs={isMobile ? 12 : 3}>
+            <Grid size={isMobile ? 12 : 3}>
               {edit ? (
                 <TimeZoneSelector
                   onTimeZoneSelected={onTimeZoneChange}
@@ -576,13 +576,13 @@ const MyAccountForm = ({
                 />
               )}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.NOTIFICATIONS}
               </Typography>
               <Typography fontSize='14px'>{strings.MY_ACCOUNT_NOTIFICATIONS_DESC}</Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Checkbox
                 disabled={!edit}
                 id='emailNotificationsEnabled'
@@ -593,7 +593,7 @@ const MyAccountForm = ({
               />
             </Grid>
             {userIsFunder && disclaimer && (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                   {strings.FUNDER_DISCLAIMER_TITLE}
                 </Typography>
@@ -608,7 +608,7 @@ const MyAccountForm = ({
                 </Typography>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}>
                 {strings.COOKIES}
               </Typography>
@@ -617,7 +617,7 @@ const MyAccountForm = ({
                 onChange={(_event, value) => onChange('cookiesConsented', value === 'true')}
                 value={record.cookiesConsented}
               >
-                <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+                <Grid textAlign='left' display='flex' flexDirection='row' size={12}>
                   <FormControlLabel control={<Radio />} disabled={!edit} label={strings.COOKIES_ACCEPT} value={true} />
                   <FormControlLabel
                     control={<Radio />}
@@ -634,13 +634,13 @@ const MyAccountForm = ({
         </Box>
         {organizations && organizations.length > 0 ? (
           <Grid container spacing={4}>
-            <Grid item xs={12} />
-            <Grid item xs={12}>
+            <Grid size={12} />
+            <Grid size={12}>
               <Typography fontSize='20px' fontWeight={600}>
                 {strings.ORGANIZATIONS}
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               {organizations && (
                 <Table
                   id='organizations-table'

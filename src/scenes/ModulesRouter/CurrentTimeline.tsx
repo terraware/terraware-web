@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import strings from 'src/strings';
@@ -42,10 +42,10 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
   return (
     <Box borderRadius={theme.spacing(1)} padding={theme.spacing(3)} bgcolor={theme.palette.TwClrBgSecondary}>
       <Grid display={'flex'} flexDirection={'column'}>
-        <Grid item marginBottom={theme.spacing(2)}>
+        <Grid marginBottom={theme.spacing(2)}>
           <Typography fontWeight={600}>{strings.CURRENT_TIMELINE}</Typography>
         </Grid>
-        <Grid item>
+        <Grid>
           <Grid
             display={'flex'}
             flexDirection={isDesktop ? 'row' : 'column'}
@@ -58,7 +58,7 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
               return (
                 <>
                   {index > 0 ? (
-                    <Grid item key={index + 0.5}>
+                    <Grid key={index + 0.5}>
                       <Box
                         borderBottom={`1px solid ${theme.palette.TwClrBgTertiary}`}
                         borderLeft={`1px solid ${theme.palette.TwClrBgTertiary}`}
@@ -70,11 +70,10 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
                     </Grid>
                   ) : null}
                   <Grid
-                    item
                     key={index}
                     color={theme.palette.TwClrBaseBlack}
                     alignSelf={'start'}
-                    xs={isDesktop ? undefined : 12}
+                    size={isDesktop ? undefined : 12}
                   >
                     {(isDesktop || isActivePhase) && (
                       <Box

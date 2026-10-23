@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
 import {
   MRT_Cell,
@@ -416,11 +416,10 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   return (
     <>
       <Grid
-        item
-        xs={12}
         sx={{
           backgroundColor: theme.palette.TwClrBg,
         }}
+        size={12}
       >
         {openNewBatchModal && (
           <BatchDetailsModal
@@ -459,7 +458,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             row={modalValues.batch}
           />
         )}
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
+        <Grid sx={{ marginTop: theme.spacing(1) }} size={12}>
           <Box
             sx={{
               display: 'flex',

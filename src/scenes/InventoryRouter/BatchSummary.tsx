@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
@@ -69,39 +69,39 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
 
   return (
     <Grid container spacing={3} marginBottom={theme.spacing(4)}>
-      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCardSubLocations batch={batch} />
       </Grid>
-      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.GERMINATION_ESTABLISHMENT_RATE}
           contents={batch.germinationRate ? numberFormatter.format(batch.germinationRate) : '%'}
         />
       </Grid>
-      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.LOSS_RATE}
           contents={batch.lossRate ? numberFormatter.format(batch.lossRate) : '%'}
         />
       </Grid>
-      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard
           isEditable={false}
           title={strings.TOTAL_WITHDRAWN}
           contents={numberFormatter.format(batch.totalWithdrawn)}
         />
       </Grid>
-      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.ACCESSION_ID} contents={accessionLinkContents} />
       </Grid>
-      <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+      <Grid flexBasis={overviewGridSize} flexGrow={1}>
         <OverviewItemCard isEditable={false} title={strings.BATCH_CREATED} contents={batch.addedDate} />
       </Grid>
 
       {batch && (
-        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridSize} flexGrow={1}>
           <ProjectOverviewItemCard<Batch>
             entity={batch}
             projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}

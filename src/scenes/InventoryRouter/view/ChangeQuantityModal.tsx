@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -302,7 +302,7 @@ export default function ChangeQuantityModal({
       <Grid>
         {saving && <BusySpinner withSkrim />}
 
-        <Grid display='flex' item marginBottom='16px' textAlign='left' xs={11}>
+        <Grid display='flex' marginBottom='16px' textAlign='left' size={11}>
           <Dropdown
             errorText={undefined}
             fullWidth
@@ -315,7 +315,7 @@ export default function ChangeQuantityModal({
           />
         </Grid>
 
-        <Grid item xs={11} textAlign='left' display='flex'>
+        <Grid textAlign='left' display='flex' size={11}>
           <Textfield display id='previousValue' label={fromLabel} type='number' value={fromValueFormatted} />
 
           <Box maxWidth='120px' marginLeft={2}>
