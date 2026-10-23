@@ -5,7 +5,13 @@ import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src
 import { OrganizationUser } from 'src/types/User';
 
 export const getOrganizationSwitchPath = (pathname: string): string => {
-  const staticPaths = new Set<string>(Object.values(APP_PATHS).filter((path) => !path.includes(':')));
+  const staticPaths = new Set<string>(
+    Object.values(APP_PATHS).filter(
+      (path) =>
+        !path.includes(':') &&
+        ![APP_PATHS.ACCELERATOR, APP_PATHS.FUNDER].some((base) => path === base || path.startsWith(`${base}/`))
+    )
+  );
   const segments = pathname.split('/').filter((segment) => segment);
   for (let length = segments.length; length > 0; length--) {
     const candidate = `/${segments.slice(0, length).join('/')}`;

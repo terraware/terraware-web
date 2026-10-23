@@ -166,7 +166,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
         sx={type === 'desktop' || showNavBar ? { ...contentStyles, ...contentWithNavBar } : contentStyles}
         className='scrollable-content'
       >
-        <ErrorBoundary setShowNavBar={setShowNavBar}>
+        <ErrorBoundary key={selectedOrganization?.id} setShowNavBar={setShowNavBar}>
           <Routes>
             {/* Routes, in order of their appearance down the side NavBar */}
             <Route

@@ -42,4 +42,16 @@ describe('getOrganizationSwitchPath', () => {
   it('falls back to home for the root path', () => {
     expect(getOrganizationSwitchPath('/')).toBe(APP_PATHS.HOME);
   });
+
+  it('falls back to home for accelerator project pages', () => {
+    expect(getOrganizationSwitchPath('/accelerator/projects')).toBe(APP_PATHS.HOME);
+  });
+
+  it('falls back to home for the accelerator console root', () => {
+    expect(getOrganizationSwitchPath('/accelerator')).toBe(APP_PATHS.HOME);
+  });
+
+  it('falls back to home for funder console pages', () => {
+    expect(getOrganizationSwitchPath('/funder/home')).toBe(APP_PATHS.HOME);
+  });
 });
