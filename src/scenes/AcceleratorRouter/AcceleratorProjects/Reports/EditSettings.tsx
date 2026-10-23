@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
@@ -129,12 +129,12 @@ export default function EditSettings(): JSX.Element {
         >
           <Card style={{ width: '568px', margin: 'auto' }}>
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography fontSize={'20px'} fontWeight={600}>
                   {strings.SETTINGS}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <DatePicker
                   id='reportingStartDate'
                   disabled={loadingConfig}
@@ -144,7 +144,7 @@ export default function EditSettings(): JSX.Element {
                   value={newConfig.reportingStartDate}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <DatePicker
                   id='reportingEndDate'
                   disabled={loadingConfig}
@@ -154,7 +154,7 @@ export default function EditSettings(): JSX.Element {
                   value={newConfig.reportingEndDate}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   id='logframe'
                   disabled={loadingConfig}

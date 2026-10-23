@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import ApplicationStatusLink from 'src/components/ProjectField/ApplicationStatusLink';
@@ -287,7 +287,12 @@ const ProjectProfileView = ({
           fileNaming={projectDetails && 'fileNaming' in projectDetails ? projectDetails?.fileNaming : undefined}
           projectName={project?.name}
         />
-        <Grid item md={isMobile || isTablet ? 12 : 3} xs={12}>
+        <Grid
+          size={{
+            md: isMobile || isTablet ? 12 : 3,
+            xs: 12,
+          }}
+        >
           <Grid container>
             <InvertedCard
               md={isTablet ? 6 : 12}
@@ -410,7 +415,7 @@ const ProjectProfileView = ({
         {((funderView && publishedReports?.length > 0) || (!funderView && acceleratorReports?.length > 0)) && (
           <>
             {lastPublishedReport && (
-              <Grid item marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}>
+              <Grid marginRight={theme.spacing(3)} marginLeft={theme.spacing(1)}>
                 <Typography fontWeight={500}>
                   {strings.formatString(
                     strings.LAST_REPORT_PUBLISHED,
@@ -421,7 +426,7 @@ const ProjectProfileView = ({
               </Grid>
             )}
 
-            <Grid item marginLeft={isMobile ? theme.spacing(1) : 0}>
+            <Grid marginLeft={isMobile ? theme.spacing(1) : 0}>
               <ProjectFieldLink
                 value={
                   funderView
@@ -446,13 +451,17 @@ const ProjectProfileView = ({
           borderTop={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
           width={'100%'}
         >
-          <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
+          <Grid margin={theme.spacing(2, 0, 1)} size={12}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.LAND_DATA}
             </Typography>
           </Grid>
         </Box>
-        <Grid item md={isMobile ? 12 : 4}>
+        <Grid
+          size={{
+            md: isMobile ? 12 : 4,
+          }}
+        >
           <Grid container>
             <ProjectDataDisplay
               label={strings.ELIGIBLE_AREA}
@@ -468,7 +477,11 @@ const ProjectProfileView = ({
             />
           </Grid>
         </Grid>
-        <Grid item md={isMobile ? 12 : 4}>
+        <Grid
+          size={{
+            md: isMobile ? 12 : 4,
+          }}
+        >
           <Grid container>
             <ProjectDataDisplay
               label={strings.PROJECT_AREA}
@@ -498,7 +511,7 @@ const ProjectProfileView = ({
               projectDetails?.methodologyNumber ||
               (projectDetails?.carbonCertifications?.length ?? 0) > 0))) && (
           <Box marginX={theme.spacing(2)} width={'100%'}>
-            <Grid item xs={12} margin={theme.spacing(2, 0, 1)}>
+            <Grid margin={theme.spacing(2, 0, 1)} size={12}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                 {strings.CARBON_DATA}
               </Typography>
@@ -643,7 +656,7 @@ const ProjectProfileView = ({
 
       <Grid container>
         <Box margin={theme.spacing(0, 2, 1)} width={'100%'}>
-          <Grid item xs={12} marginBottom={theme.spacing(2)}>
+          <Grid marginBottom={theme.spacing(2)} size={12}>
             <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
               {strings.UN_SDG}
             </Typography>
@@ -655,7 +668,7 @@ const ProjectProfileView = ({
       {!funderView && fundingEntities?.length > 0 && (
         <Grid container>
           <Box marginX={theme.spacing(2)} width={'100%'}>
-            <Grid item xs={12} marginY={theme.spacing(2)}>
+            <Grid marginY={theme.spacing(2)} size={12}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='24px'>
                 {strings.FUNDING_ENTITIES}
               </Typography>
