@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -194,7 +194,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
               <Button label={strings.WITHDRAW} onClick={openWithdraw} style={isMobile ? { width: '100%' } : {}} />
             </Box>
           )}
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PageSnackbar />
           </Grid>
         </Grid>
@@ -208,7 +208,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       )}
       <Grid container ref={contentRef}>
         {batch && (
-          <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
             <BatchSummary batch={batch} />
             <Box
               display='flex'

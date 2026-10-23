@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Divider, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -58,11 +58,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
       middleButtons={[<Button id='done' onClick={onClose} label={strings.DONE} key='button-1' />]}
       scrolled={true}
     >
-      <Grid container item xs={12} spacing={2} textAlign='left'>
-        <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+      <Grid container spacing={2} textAlign='left' size={12}>
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
           <Textfield id='event' value={getEventType(selectedEvent)} type='text' label={strings.EVENT} display={true} />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} paddingLeft={paddingSeparator}>
+        <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize()}>
           <Textfield
             id='createdTime'
             value={getDateDisplayValue(selectedEvent.createdTime)}
@@ -71,7 +71,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             display={true}
           />
         </Grid>
-        <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
           <Textfield
             id='editedByName'
             value={selectedEvent.editedByName}
@@ -83,7 +83,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         {(selectedEvent.modifiedFields.includes(strings.GERMINATION_ESTABLISHMENT_QUANTITY) ||
           selectedEvent.modifiedFields.includes(strings.ACTIVE_GROWTH_QUANTITY) ||
           selectedEvent.modifiedFields.includes(strings.READY_TO_PLANT_QUANTITY)) && (
-          <Grid item xs={12} sx={marginTop}>
+          <Grid sx={marginTop} size={12}>
             <Divider />
           </Grid>
         )}
@@ -92,7 +92,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
               previousEvent?.type === 'StatusChanged') && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='germinationQuantityBefore'
                   value={previousEvent?.germinatingQuantity || 0}
@@ -105,7 +105,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             {(selectedEvent.type === 'QuantityEdited' ||
               selectedEvent.type === 'StatusChanged' ||
               selectedEvent.type === 'AddedFromAccession') && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='germinationQuantityAfter'
                   value={selectedEvent.germinatingQuantity}
@@ -122,7 +122,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
               previousEvent?.type === 'StatusChanged') && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='activeGrowthQuantityBefore'
                   value={previousEvent?.activeGrowthQuantity || 0}
@@ -133,7 +133,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               </Grid>
             )}
             {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='notReadQuantityAfter'
                   value={selectedEvent.activeGrowthQuantity}
@@ -151,7 +151,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
               previousEvent?.type === 'StatusChanged') && (
-              <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
+              <Grid paddingRight={paddingSeparator} sx={marginTop} size={12}>
                 <Textfield
                   display
                   id='hardeningOffQuantityBefore'
@@ -162,7 +162,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               </Grid>
             )}
             {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
-              <Grid item paddingRight={paddingSeparator} sx={marginTop} xs={12}>
+              <Grid paddingRight={paddingSeparator} sx={marginTop} size={12}>
                 <Textfield
                   display
                   id='hardeningOffQuantityAfter'
@@ -180,7 +180,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             {(!previousEvent ||
               previousEvent?.type === 'QuantityEdited' ||
               previousEvent?.type === 'StatusChanged') && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='readyQuantityBefore'
                   value={previousEvent?.readyQuantity || 0}
@@ -191,7 +191,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               </Grid>
             )}
             {(selectedEvent.type === 'QuantityEdited' || selectedEvent.type === 'StatusChanged') && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='readyQuantityAfter'
                   value={selectedEvent.readyQuantity}
@@ -205,12 +205,12 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         )}
         {selectedEvent.modifiedFields.includes(strings.SUBSTRATE) && (
           <>
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Divider />
             </Grid>
             {previousEvent?.type === 'DetailsEdited' && (
               <>
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
                   <Textfield
                     id='substrateBefore'
                     value={previousEvent.substrate}
@@ -219,7 +219,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                     display={true}
                   />
                 </Grid>
-                <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+                <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
                   {previousEvent.substrate === strings.OTHER && (
                     <Textfield id='substrateNotesBefore' value={previousEvent.substrateNotes} type='text' label='' />
                   )}
@@ -228,7 +228,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             )}
             {selectedEvent?.type === 'DetailsEdited' && (
               <>
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
                   <Textfield
                     id='substrateAfter'
                     value={selectedEvent.substrate}
@@ -237,7 +237,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                     display={true}
                   />
                 </Grid>
-                <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+                <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
                   {selectedEvent.substrate === strings.OTHER && (
                     <Textfield id='substrateNotesAfter' value={selectedEvent.substrateNotes} type='text' label='' />
                   )}
@@ -249,12 +249,12 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
 
         {selectedEvent.modifiedFields.includes(strings.TREATMENT) && (
           <>
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Divider />
             </Grid>
             {previousEvent?.type === 'DetailsEdited' && (
               <>
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
                   <Textfield
                     id='treatmentBefore'
                     value={previousEvent.treatment}
@@ -263,7 +263,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                     display={true}
                   />
                 </Grid>
-                <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+                <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
                   {previousEvent.treatment === strings.OTHER && (
                     <Textfield id='treatmentNotesBefore' value={previousEvent.treatmentNotes} type='text' label='' />
                   )}
@@ -272,7 +272,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             )}
             {selectedEvent?.type === 'DetailsEdited' && (
               <>
-                <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+                <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
                   <Textfield
                     id='treatmentAfter'
                     value={selectedEvent.treatment}
@@ -281,7 +281,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                     display={true}
                   />
                 </Grid>
-                <Grid padding={theme.spacing(3, 0, 1, 2)} xs={gridSize()} sx={{ alignSelf: 'flex-end' }}>
+                <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
                   {selectedEvent.substrate === strings.OTHER && (
                     <Textfield id='treatmentNotesAfter' value={selectedEvent.treatmentNotes} type='text' label='' />
                   )}
@@ -293,11 +293,11 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
 
         {selectedEvent.modifiedFields.includes(strings.NOTES) && (
           <>
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Divider />
             </Grid>
             {previousEvent?.type === 'DetailsEdited' && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='notesBefore'
                   value={previousEvent.notes}
@@ -308,7 +308,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               </Grid>
             )}
             {selectedEvent?.type === 'DetailsEdited' && (
-              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+              <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
                 <Textfield
                   id='notesAfter'
                   value={selectedEvent.notes}
@@ -322,7 +322,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         )}
         {selectedEvent?.type === 'IncomingWithdrawal' && relatedBatch && (
           <>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
               <Textfield
                 id='fromNursery'
                 value={
@@ -334,7 +334,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               />
             </Grid>
 
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
               <Textfield
                 id='toNursery'
                 value={selectedEvent.nurseryName || ''}
@@ -343,7 +343,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 display={true}
               />
             </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
               <Textfield
                 id='totalQuantityMoved'
                 value={
@@ -356,7 +356,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                 display={true}
               />
             </Grid>
-            <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
               <Textfield
                 id='fromBatchNumber'
                 value={relatedBatch.batchNumber}
@@ -368,7 +368,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
           </>
         )}
         {selectedEvent?.type === 'PhotoCreated' && photoUrl && (
-          <Grid item xs={gridSize()} sx={marginTop} paddingRight={paddingSeparator}>
+          <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
             <Box
               display='flex'
               position='relative'

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Card, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
@@ -112,7 +112,7 @@ const ModuleContentView = ({ contentType }: ModuleContentViewProps) => {
       >
         {projectModule && (
           <Grid container spacing={theme.spacing(1)}>
-            <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+            <Grid style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }} size='grow'>
               <ModuleContentSection>
                 <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={500}>
                   {projectModule.title}
