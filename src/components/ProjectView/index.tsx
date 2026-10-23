@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { DropdownItem } from '@terraware/web-components';
 
@@ -85,7 +85,7 @@ export default function ProjectView(): JSX.Element {
   const rightComponents = useMemo(
     () =>
       isAdmin(selectedOrganization) && (
-        <Grid item>
+        <Grid>
           <Button
             label={strings.EDIT_PROJECT}
             icon='iconEdit'
@@ -114,7 +114,7 @@ export default function ProjectView(): JSX.Element {
       )}
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container padding={theme.spacing(0, 0, 2, 0)}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <BackToLink
               id='back'
               to={APP_PATHS.PROJECTS}
@@ -123,8 +123,6 @@ export default function ProjectView(): JSX.Element {
             />
           </Grid>
           <Grid
-            item
-            xs={12}
             paddingLeft={theme.spacing(3)}
             sx={{
               display: 'flex',
@@ -132,8 +130,9 @@ export default function ProjectView(): JSX.Element {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
+            size={12}
           >
-            <Grid item>
+            <Grid>
               <Typography
                 fontSize='24px'
                 fontWeight={600}
@@ -157,10 +156,10 @@ export default function ProjectView(): JSX.Element {
             margin: 0,
           }}
         >
-          <Grid item xs={4}>
+          <Grid size={4}>
             <TextField label={strings.NAME} id='name' type='text' value={project?.name} display={true} />
           </Grid>
-          <Grid item xs={8}>
+          <Grid size={8}>
             <TextField
               label={strings.DESCRIPTION}
               id='description'
@@ -171,7 +170,7 @@ export default function ProjectView(): JSX.Element {
           </Grid>
           {showProjectLocation && (
             <>
-              <Grid item xs={4} paddingTop={theme.spacing(3)}>
+              <Grid paddingTop={theme.spacing(3)} size={4}>
                 <TextField
                   label={strings.COUNTRY}
                   id='country'
@@ -180,7 +179,7 @@ export default function ProjectView(): JSX.Element {
                   display={true}
                 />
               </Grid>
-              <Grid item xs={4} paddingTop={theme.spacing(3)}>
+              <Grid paddingTop={theme.spacing(3)} size={4}>
                 <TextField
                   label={strings.BOTANICAL_COUNTRY}
                   id='botanicalCountry'

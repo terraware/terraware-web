@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
 import { RendererProps } from '@terraware/web-components/components/table/types';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -284,7 +284,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                 backgroundColor: theme.palette.TwClrBg,
               }}
             >
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
                   {strings.formatString(strings.SELECT_ACCESSIONS_FOR_PROJECT, project.name)}
                 </Typography>
@@ -293,7 +293,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                 </Typography>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -312,7 +312,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                 </Box>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Box marginTop={theme.spacing(0)}>
                   <Table
                     columns={columns}

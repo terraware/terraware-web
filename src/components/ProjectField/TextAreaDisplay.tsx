@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import { ProjectFieldProps } from '.';
 
@@ -9,12 +9,13 @@ const ProjectFieldTextAreaDisplay = ({ label, value }: ProjectFieldProps) => {
 
   return (
     <Grid
-      item
-      xs={12}
-      md={6}
       margin={`${theme.spacing(2)} 0`}
       sx={{
         minHeight: '144px',
+      }}
+      size={{
+        xs: 12,
+        md: 6,
       }}
     >
       <Box paddingX={theme.spacing(2)}>

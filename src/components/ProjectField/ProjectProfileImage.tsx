@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import { getImagePath } from 'src/utils/images';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -17,7 +17,12 @@ const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectPro
   const { isMobile, isTablet } = useDeviceInfo();
 
   return (
-    <Grid item md={isMobile || isTablet ? 12 : 6} sx={{ padding: theme.spacing(isMobile || isTablet ? 1 : 0, 1) }}>
+    <Grid
+      sx={{ padding: theme.spacing(isMobile || isTablet ? 1 : 0, 1) }}
+      size={{
+        md: isMobile || isTablet ? 12 : 6,
+      }}
+    >
       <Box
         sx={{
           overflow: 'hidden',

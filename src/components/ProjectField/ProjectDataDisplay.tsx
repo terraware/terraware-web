@@ -1,6 +1,6 @@
 import React, { type JSX, isValidElement, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
 type DataValue = string | number | null | undefined | JSX.Element;
@@ -40,7 +40,14 @@ const ProjectDataDisplay = ({ label, value, md, tooltip, units }: ProjectDataDis
   const theme = useTheme();
 
   return (
-    <Grid item xs={12} md={md || 3} height={'64px'} margin={`${theme.spacing(1)} 0`}>
+    <Grid
+      height={'64px'}
+      margin={`${theme.spacing(1)} 0`}
+      size={{
+        xs: 12,
+        md: md || 3,
+      }}
+    >
       <Box paddingX={theme.spacing(2)}>
         <Typography
           sx={{
