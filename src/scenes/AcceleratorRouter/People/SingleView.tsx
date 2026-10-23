@@ -77,7 +77,7 @@ const SingleView = () => {
             <TextField label={strings.LAST_NAME} id='lastName' type='text' value={user?.lastName} display={true} />
           </Grid>
         </Grid>
-        <Grid container spacing={3} sx={{ marginTop: theme.spacing(1) }}>
+        <Grid container spacing={3} sx={{ marginTop: theme.spacing(4) }}>
           <Grid size={4}>
             <TextField
               label={strings.ROLE}
