@@ -1,5 +1,5 @@
-import { components } from 'src/api/types/generated-schema';
+import { FunderPayload, FundingEntityPayload } from 'src/queries/generated/fundingEntities';
 
-export type FundingEntity = components['schemas']['FundingEntityPayload'];
+export type FundingEntity = FundingEntityPayload;
 
-export type Funder = components['schemas']['FunderPayload'];
+export type Funder = FunderPayload;

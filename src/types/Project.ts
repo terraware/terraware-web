@@ -1,16 +1,20 @@
-import { components } from 'src/api/types/generated-schema';
+import {
+  CreateProjectRequestPayload,
+  ProjectPayload,
+  UpdateProjectRequestPayload,
+} from 'src/queries/generated/projects';
 import defaultStrings from 'src/strings';
 
 import { InternalUserPayload } from '../queries/generated/projectInternalUsers';
 
-export type Project = components['schemas']['ProjectPayload'];
+export type Project = ProjectPayload;
 export type ProjectMeta = {
   createdByUserName?: string;
   modifiedByUserName?: string;
 };
 
-export type CreateProjectRequest = components['schemas']['CreateProjectRequestPayload'];
-export type UpdateProjectRequest = components['schemas']['UpdateProjectRequestPayload'];
+export type CreateProjectRequest = CreateProjectRequestPayload;
+export type UpdateProjectRequest = UpdateProjectRequestPayload;
 
 export type ProjectInternalUserRole = InternalUserPayload['role'];
 

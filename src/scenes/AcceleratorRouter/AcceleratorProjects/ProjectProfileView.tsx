@@ -23,9 +23,9 @@ import VotingDecisionLink from 'src/components/ProjectField/VotingDecisionLink';
 import Co2HectareYear from 'src/components/Units/Co2HectareYear';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import useProjectFundingEntities from 'src/hooks/useProjectFundingEntities';
 import { useLocalization, useUser } from 'src/providers';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
+import { useGetProjectFundingEntitiesQuery } from 'src/queries/generated/fundingEntities';
 import { useGetInternalUsersQuery } from 'src/queries/generated/projectInternalUsers';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { useAppDispatch } from 'src/redux/store';
@@ -73,7 +73,11 @@ const ProjectProfileView = ({
   const { isAllowed } = useUser();
   const { activeLocale, countries, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
-  const { fundingEntities } = useProjectFundingEntities(funderView ? undefined : projectDetails?.projectId);
+  const fundingEntitiesProjectId = funderView ? undefined : projectDetails?.projectId;
+  const { currentData: fundingEntitiesData } = useGetProjectFundingEntitiesQuery(fundingEntitiesProjectId ?? -1, {
+    skip: fundingEntitiesProjectId === undefined,
+  });
+  const fundingEntities = fundingEntitiesData?.fundingEntities ?? [];
   const { isMobile, isTablet } = useDeviceInfo();
 
   const { data: internalUsersData, isSuccess: isUsersRequestSuccess } = useGetInternalUsersQuery(

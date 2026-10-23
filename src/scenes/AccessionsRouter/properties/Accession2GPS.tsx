@@ -7,9 +7,9 @@ import _ from 'lodash';
 import AddLink from 'src/components/common/AddLink';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
-import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Geolocation } from 'src/types/Accession';
+import { getParsedCoords } from 'src/utils/gps';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
 type Accession2GPSProps = {
@@ -32,7 +32,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
   const theme = useTheme();
 
   useEffect(() => {
-    const parsedCoords: Geolocation[] = AccessionService.getParsedCoords(gpsCoordsList);
+    const parsedCoords: Geolocation[] = getParsedCoords(gpsCoordsList);
 
     if (!_.isEqual(parsedCoords, record.collectionSiteCoordinates)) {
       onChange('collectionSiteCoordinates', parsedCoords);

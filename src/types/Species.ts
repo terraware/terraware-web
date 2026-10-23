@@ -1,6 +1,6 @@
 import { DropdownItem } from '@terraware/web-components';
 
-import { components } from 'src/api/types/generated-schema';
+import { MergeOtherSpeciesRequestPayload } from 'src/queries/generated/observations';
 import { SpeciesResponseElement } from 'src/queries/generated/species';
 import strings from 'src/strings';
 
@@ -363,4 +363,4 @@ export enum SpeciesRequestError {
 
 export type SuggestedSpecies = Partial<Species> & { scientificName: string };
 
-export type MergeOtherSpeciesPayload = components['schemas']['MergeOtherSpeciesRequestPayload'];
+export type MergeOtherSpeciesPayload = MergeOtherSpeciesRequestPayload;

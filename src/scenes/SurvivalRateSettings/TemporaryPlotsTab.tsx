@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Checkbox, Icon, Tooltip } from '@terraware/web-components';
 
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import strings from 'src/strings';
 import { SiteT0Data, SpeciesPlot } from 'src/types/Tracking';
 
