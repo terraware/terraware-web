@@ -79,7 +79,7 @@ export default function DraftPlantingSiteBoundaryCard({
           >
             <DetailField label={strings.TOTAL_AREA} value={formatHectares(boundary)} />
             <DetailField label={strings.EXCLUSION_AREAS} value={exclusionSummary} />
-            {siteType === 'detailed' && (
+            {siteType === 'Detailed' && (
               <>
                 <DetailField
                   label={strings.STRATA}

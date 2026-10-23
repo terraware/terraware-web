@@ -163,7 +163,7 @@ export const createDefaultStrata = (boundary?: MultiPolygon): MinimalStratum[] =
 
 // the BE doesn't persist strata for simple sites, so they're derived from the site boundary
 export const withDefaultStrata = (site: DraftPlantingSite): DraftPlantingSite =>
-  site.siteType === 'simple' ? { ...site, strata: createDefaultStrata(site.boundary) } : site;
+  site.siteType === 'Simple' ? { ...site, strata: createDefaultStrata(site.boundary) } : site;
 
 /**
  * Get area of bbox of polygon in hectares

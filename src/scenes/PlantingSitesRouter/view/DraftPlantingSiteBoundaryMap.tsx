@@ -35,7 +35,7 @@ export default function DraftPlantingSiteBoundaryMap({
   const mapLayers = useMemo((): MapLayer[] => {
     const layers = [toLayer('site', [{ featureId: `${plantingSite.id}`, geometry: boundary }], sitesLayerStyle)];
 
-    if (plantingSite.siteType === 'detailed' && plantingSite.strata) {
+    if (plantingSite.siteType === 'Detailed' && plantingSite.strata) {
       const substrata = plantingSite.strata.flatMap((stratum) => stratum.substrata);
       layers.push(
         toLayer(

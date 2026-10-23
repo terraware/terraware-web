@@ -67,6 +67,6 @@ export const buildDraftPlantingSite = (overrides: Partial<DraftPlantingSite> = {
   name: 'Draft Planting Site',
   organizationId: 1,
   siteEditStep: 'site_boundary',
-  siteType: 'detailed',
+  siteType: 'Detailed',
   ...overrides,
 });

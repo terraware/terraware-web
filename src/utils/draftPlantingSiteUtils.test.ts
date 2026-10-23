@@ -198,7 +198,7 @@ describe('fromDraft', () => {
       name: 'draft site',
       organizationId: 3,
       siteEditStep: 'site_boundary',
-      siteType: 'simple',
+      siteType: 'Simple',
     };
 
     expect(fromDraft(draft)).toStrictEqual({
@@ -229,7 +229,7 @@ describe('fromDraft', () => {
       strata,
       projectId: 6,
       siteEditStep: 'substratum_boundaries',
-      siteType: 'detailed',
+      siteType: 'Detailed',
       timeZone: 'America/Puerto_Rico',
     };
 
@@ -257,7 +257,7 @@ describe('fromDraft', () => {
       organizationId: 3,
       strata,
       siteEditStep: 'exclusion_areas',
-      siteType: 'simple',
+      siteType: 'Simple',
     };
 
     expect(fromDraft(draft).strata).toBeUndefined();
@@ -287,7 +287,7 @@ describe('toDraft', () => {
       strata: undefined,
       projectId: undefined,
       siteEditStep: 'site_boundary',
-      siteType: 'simple',
+      siteType: 'Simple',
       timeZone: undefined,
     });
   });
@@ -323,7 +323,7 @@ describe('toDraft', () => {
       strata,
       projectId: 6,
       siteEditStep: 'substratum_boundaries',
-      siteType: 'detailed',
+      siteType: 'Detailed',
       timeZone: 'America/Puerto_Rico',
     });
   });

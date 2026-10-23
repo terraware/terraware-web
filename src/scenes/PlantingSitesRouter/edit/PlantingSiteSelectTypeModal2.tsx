@@ -29,7 +29,7 @@ export default function PlantingSiteSelectTypeModal(props: PlantingSiteSelectTyp
   };
 
   const handleNext = () => {
-    onNext(detailed ? 'detailed' : 'simple');
+    onNext(detailed ? 'Detailed' : 'Simple');
   };
 
   return (

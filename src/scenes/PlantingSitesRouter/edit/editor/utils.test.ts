@@ -31,7 +31,7 @@ const createDraftSiteWith = (): DraftPlantingSite => {
     name: 'test',
     organizationId: 2,
     siteEditStep: 'site_boundary',
-    siteType: 'simple',
+    siteType: 'Simple',
   };
 };
 
@@ -338,25 +338,25 @@ describe('createDefaultStrata', () => {
 
 describe('withDefaultStrata', () => {
   test('should derive strata from the boundary for a simple site without strata', () => {
-    const site = buildDraftPlantingSite({ siteType: 'simple', boundary: siteBoundary, strata: undefined });
+    const site = buildDraftPlantingSite({ siteType: 'Simple', boundary: siteBoundary, strata: undefined });
 
     expect(withDefaultStrata(site)).toEqual({ ...site, strata: createDefaultStrata(siteBoundary) });
   });
 
   test('should replace stale strata for a simple site', () => {
-    const site = buildDraftPlantingSite({ siteType: 'simple', boundary: siteBoundary, strata: [buildStratum()] });
+    const site = buildDraftPlantingSite({ siteType: 'Simple', boundary: siteBoundary, strata: [buildStratum()] });
 
     expect(withDefaultStrata(site).strata).toEqual(createDefaultStrata(siteBoundary));
   });
 
   test('should return no strata for a simple site without a boundary', () => {
-    const site = buildDraftPlantingSite({ siteType: 'simple', strata: [buildStratum()] });
+    const site = buildDraftPlantingSite({ siteType: 'Simple', strata: [buildStratum()] });
 
     expect(withDefaultStrata(site).strata).toEqual([]);
   });
 
   test('should leave a detailed site unchanged', () => {
-    const site = buildDraftPlantingSite({ siteType: 'detailed', boundary: siteBoundary, strata: [buildStratum()] });
+    const site = buildDraftPlantingSite({ siteType: 'Detailed', boundary: siteBoundary, strata: [buildStratum()] });
 
     expect(withDefaultStrata(site)).toBe(site);
   });
