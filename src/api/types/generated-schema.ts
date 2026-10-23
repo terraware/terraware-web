@@ -5191,6 +5191,27 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/users/me/emailNotifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets the current user's email notification settings.
+         * @description Only includes the categories that apply to the current user. Users only receive email notifications in a category if they have opted into it and have also enabled email notifications.
+         */
+        get: operations["getEmailNotificationSettings"];
+        /** Updates the current user's email notification settings. */
+        put: operations["updateEmailNotificationSettings"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/users/me/preferences": {
         parameters: {
             query?: never;
@@ -6906,20 +6927,28 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateDraftPlantingSiteRequestPayload: {
-            /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
-            data: {
+            /** @description Boundary of the site. Polygons are stored as MultiPolygons. Not allowed if data is supplied. */
+            boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** @description Not allowed if data is supplied. */
+            boundarySource?: string;
+            /** @description In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. If this is supplied, the typed map fields must be omitted and the map is saved without validation. */
+            data?: {
                 [key: string]: unknown;
             };
             description?: string;
+            /** @description Exclusion area. Not allowed if data is supplied. */
+            exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining strata, the number of strata defined so far.
+             * @deprecated
+             * @description Ignored; the server computes this.
              */
             numStrata?: number;
             /**
              * Format: int32
-             * @description If the user has started defining substrata, the number of substrata defined so far.
+             * @deprecated
+             * @description Ignored; the server computes this.
              */
             numSubstrata?: number;
             /** Format: int64 */
@@ -6929,6 +6958,15 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
+            /** @description Not allowed if data is supplied. */
+            siteEditStep?: string;
+            /**
+             * @description Required if data is not supplied.
+             * @enum {string}
+             */
+            siteType?: "Simple" | "Detailed";
+            /** @description Strata and substrata. Not allowed if data is supplied. Must be empty or omitted for Simple sites. */
+            strata?: components["schemas"]["DraftStratumPayload"][];
             /**
              * @description Time zone name in IANA tz database format
              * @example America/New_York
@@ -7719,7 +7757,14 @@ export interface components {
              */
             variableManifestId?: number;
         };
+        DraftPlantingSiteMapInvalidResponsePayload: {
+            error: components["schemas"]["ErrorDetails"];
+            problems: components["schemas"]["PlantingSiteValidationProblemPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         DraftPlantingSitePayload: {
+            boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            boundarySource?: string;
             /**
              * Format: int64
              * @description ID of the user who created this draft.
@@ -7727,11 +7772,12 @@ export interface components {
             createdBy: number;
             /** Format: date-time */
             createdTime: string;
-            /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
+            /** @description In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. */
             data: {
                 [key: string]: unknown;
             };
             description?: string;
+            exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             /** Format: int64 */
             id: number;
             /** Format: date-time */
@@ -7739,12 +7785,12 @@ export interface components {
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining strata, the number of strata defined so far.
+             * @description Number of strata in the draft.
              */
             numStrata?: number;
             /**
              * Format: int32
-             * @description If the user has started defining substrata, the number of substrata defined so far.
+             * @description Number of substrata in the draft.
              */
             numSubstrata?: number;
             /** Format: int64 */
@@ -7754,11 +7800,35 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
+            siteEditStep?: string;
+            /** @enum {string} */
+            siteType: "Simple" | "Detailed";
+            strata: components["schemas"]["DraftStratumPayload"][];
             /**
              * @description Time zone name in IANA tz database format
              * @example America/New_York
              */
             timeZone?: string;
+        };
+        /** @description Strata and substrata. Not allowed if data is supplied. Existing strata and substrata are matched by ID; those that are omitted are deleted. */
+        DraftStratumPayload: {
+            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** Format: int64 */
+            id?: number;
+            initialPlantingDensity: number;
+            name: string;
+            substrata: components["schemas"]["DraftSubstratumPayload"][];
+        };
+        DraftSubstratumPayload: {
+            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** Format: int64 */
+            id?: number;
+            name: string;
+        };
+        EmailNotificationCategorySettingPayload: {
+            /** @enum {string} */
+            category: "SeedBank" | "Nursery" | "PlantingAndObservations" | "Accelerator";
+            optedIn: boolean;
         };
         EmailVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             /**
@@ -8398,6 +8468,12 @@ export interface components {
         };
         GetDraftPlantingSiteResponsePayload: {
             site: components["schemas"]["DraftPlantingSitePayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetEmailNotificationSettingsResponsePayload: {
+            categories: components["schemas"]["EmailNotificationCategorySettingPayload"][];
+            /** @description If false, the user doesn't receive email notifications regardless of which categories they've opted into. */
+            emailNotificationsEnabled: boolean;
             status: components["schemas"]["SuccessOrError"];
         };
         GetEventResponsePayload: {
@@ -12659,20 +12735,28 @@ export interface components {
             status: "Draft" | "Locked" | "Published" | "Ready" | "Submitted";
         };
         UpdateDraftPlantingSiteRequestPayload: {
-            /** @description In-progress state of the draft. This includes map data and other information needed by the client. It is treated as opaque data by the server. */
-            data: {
+            /** @description Boundary of the site. Polygons are stored as MultiPolygons. Not allowed if data is supplied. If data is not supplied, the typed map fields replace the stored map entirely, so omitted fields are cleared. */
+            boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** @description Not allowed if data is supplied. */
+            boundarySource?: string;
+            /** @description In-progress state of the draft, including its map, in the legacy JSON format. Deprecated: use the typed fields instead. If this is supplied, the typed map fields must be omitted and the map is saved without validation. */
+            data?: {
                 [key: string]: unknown;
             };
             description?: string;
+            /** @description Exclusion area. Not allowed if data is supplied. */
+            exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             name: string;
             /**
              * Format: int32
-             * @description If the user has started defining strata, the number of strata defined so far.
+             * @deprecated
+             * @description Ignored; the server computes this.
              */
             numStrata?: number;
             /**
              * Format: int32
-             * @description If the user has started defining substrata, the number of substrata defined so far.
+             * @deprecated
+             * @description Ignored; the server computes this.
              */
             numSubstrata?: number;
             /**
@@ -12680,11 +12764,26 @@ export interface components {
              * @description If the draft is associated with a project, its ID.
              */
             projectId?: number;
+            /** @description Not allowed if data is supplied. */
+            siteEditStep?: string;
+            /**
+             * @description Not allowed if data is supplied. If omitted, the stored site type is kept. The site type of an existing draft cannot be changed.
+             * @enum {string}
+             */
+            siteType?: "Simple" | "Detailed";
+            /** @description Strata and substrata. Not allowed if data is supplied. Existing strata and substrata are matched by ID; those that are omitted are deleted. */
+            strata?: components["schemas"]["DraftStratumPayload"][];
             /**
              * @description Time zone name in IANA tz database format
              * @example America/New_York
              */
             timeZone?: string;
+        };
+        UpdateEmailNotificationSettingsRequestPayload: {
+            /** @description Categories to opt into or out of. Categories that aren't included here are left as-is. */
+            categories: components["schemas"]["EmailNotificationCategorySettingPayload"][];
+            /** @description If present, turns email notifications on or off regardless of category opt-ins. If absent, leaves the current setting as-is. */
+            emailNotificationsEnabled?: boolean;
         };
         UpdateFacilityRequestPayload: {
             /** Format: date */
@@ -22696,13 +22795,22 @@ export interface operations {
             };
         };
         responses: {
-            /** @description OK */
+            /** @description The requested operation succeeded. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["CreateDraftPlantingSiteResponsePayload"];
+                };
+            };
+            /** @description The typed map fields failed validation; nothing was saved. The problems list describes what is wrong. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DraftPlantingSiteMapInvalidResponsePayload"];
                 };
             };
         };
@@ -22780,7 +22888,7 @@ export interface operations {
             };
         };
         responses: {
-            /** @description OK */
+            /** @description The requested operation succeeded. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -24720,6 +24828,50 @@ export interface operations {
         };
         responses: {
             /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getEmailNotificationSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetEmailNotificationSettingsResponsePayload"];
+                };
+            };
+        };
+    };
+    updateEmailNotificationSettings: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateEmailNotificationSettingsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
             200: {
                 headers: {
                     [name: string]: unknown;

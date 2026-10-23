@@ -1,4 +1,7 @@
-import { DraftPlantingSitePayload as DraftPlantingSitePayloadRaw } from 'src/queries/generated/draftPlantingSites';
+import {
+  CreateDraftPlantingSiteRequestPayload as CreateDraftPlantingSiteRequestPayloadRaw,
+  DraftPlantingSitePayload as DraftPlantingSitePayloadRaw,
+} from 'src/queries/generated/draftPlantingSites';
 import {
   CreatePlantingSiteRequestPayload as CreatePlantingSiteRequestPayloadRaw,
   PlantingSiteValidationProblemPayload,
@@ -14,15 +17,9 @@ export type PlantingSitesFilters = {
   projectIds?: number[];
 };
 
-/**
- * Draft planting sites hold basic planting site information with most of the
- * client side details under a `data` JSON payload.
- * This allows the client to store boundaries and various other client flow
- * properties such as last visited workflow step, etc.
- * Expectation is for the client to parse the `data` JSON into first class properties on read,
- * and put them back into `data` as JSON upon write/update.
- */
-export type DraftPlantingSitePayload = Omit<DraftPlantingSitePayloadRaw, 'createdTime' | 'modifiedTime'>;
+export type DraftPlantingSitePayload = Omit<DraftPlantingSitePayloadRaw, 'createdTime' | 'data' | 'modifiedTime'>;
+
+export type CreateDraftPlantingSiteRequestPayload = Omit<CreateDraftPlantingSiteRequestPayloadRaw, 'data'>;
 
 /**
  * Planting Sites Payloads
