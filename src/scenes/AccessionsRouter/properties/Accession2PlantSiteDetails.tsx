@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import AddLink from 'src/components/common/AddLink';
 import Textfield from 'src/components/common/Textfield/Textfield';
@@ -24,7 +24,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
 
   if (!isOpen) {
     return (
-      <Grid item xs={12} marginTop={theme.spacing(2)}>
+      <Grid marginTop={theme.spacing(2)} size={12}>
         <Box display='flex' justifyContent='flex-start'>
           <AddLink
             id='addPlantSiteDescription'
@@ -38,8 +38,8 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
   }
 
   return (
-    <Grid item xs={12} display='flex' flexDirection={'column'} marginTop={theme.spacing(2)}>
-      <Grid item xs={12}>
+    <Grid display='flex' flexDirection={'column'} marginTop={theme.spacing(2)} size={12}>
+      <Grid size={12}>
         <CollectionSource
           id='collectionSource'
           label={strings.COLLECTION_SOURCE}
@@ -48,8 +48,8 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
           onChange={(value) => onChange('collectionSource', value)}
         />
       </Grid>
-      <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
-        <Grid item xs={isMobile ? 12 : 7} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
+      <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)} size={12}>
+        <Grid sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }} size={isMobile ? 12 : 7}>
           <Textfield
             id='plantsCollectedFrom'
             value={record.plantsCollectedFrom}
@@ -59,7 +59,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
             label={strings.NUMBER_PLANTS_COLLECTED_FROM}
           />
         </Grid>
-        <Grid item xs={isMobile ? 12 : 5} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
+        <Grid sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }} size={isMobile ? 12 : 5}>
           <Textfield
             id='plantId'
             value={record.plantId}
@@ -70,7 +70,7 @@ export default function Accession2PlantSiteDetails(props: Accession2PlantSiteDet
           />
         </Grid>
       </Grid>
-      <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+      <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
         <Textfield
           id='notes'
           value={record.notes}

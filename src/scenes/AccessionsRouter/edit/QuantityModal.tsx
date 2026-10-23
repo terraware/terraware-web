@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, FormControlLabel, GridLegacy as Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Icon, Textfield } from '@terraware/web-components';
 import _ from 'lodash';
 
@@ -281,7 +281,7 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
           </Box>
         )}
         <Grid container spacing={2}>
-          <Grid item xs={12} textAlign='left'>
+          <Grid textAlign='left' size={12}>
             <Typography color={theme.palette.TwClrTxtSecondary} display='flex' fontSize={14}>
               {strings.SEED_QUANTITY_BY}
             </Typography>
@@ -290,13 +290,13 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
               defaultValue={accession.remainingQuantity?.units === 'Seeds' ? 'count' : 'weight'}
               onChange={onChangeQuantityBy}
             >
-              <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+              <Grid textAlign='left' display='flex' flexDirection='row' size={12}>
                 <FormControlLabel value='count' control={<Radio />} label={strings.COUNT} />
                 <FormControlLabel value='weight' control={<Radio />} label={strings.WEIGHT} />
               </Grid>
             </RadioGroup>
           </Grid>
-          <Grid item xs={12} textAlign='left'>
+          <Grid textAlign='left' size={12}>
             {!isByWeight ? (
               <Textfield
                 label={strings.SEED_COUNT}
@@ -355,7 +355,7 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
               record.remainingQuantity.units,
               userPreferences.preferredWeightSystem as string
             ) && (
-              <Grid item xs={12} textAlign='left'>
+              <Grid textAlign='left' size={12}>
                 <ConvertedValue
                   quantity={record.remainingQuantity.quantity}
                   unit={record.remainingQuantity.units}
@@ -364,7 +364,7 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
               </Grid>
             )}
 
-          <Grid item xs={12} textAlign='left'>
+          <Grid textAlign='left' size={12}>
             <Textfield
               id='notes'
               value={remainingQuantityNotes}
@@ -377,7 +377,7 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             {!isSubsetOpen ? (
               <Box display='flex' justifyContent='flex-start'>
                 <Link id='addNotes' onClick={showSubset} fontSize='16px'>
@@ -401,9 +401,9 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
                   paddingTop: theme.spacing(2),
                 }}
               >
-                <Grid container item justifyContent='space-between'>
-                  <Grid container item xs={isMobile ? 12 : 7} spacing={1}>
-                    <Grid item xs={8} textAlign='left'>
+                <Grid container justifyContent='space-between'>
+                  <Grid container spacing={1} size={isMobile ? 12 : 7}>
+                    <Grid textAlign='left' size={8}>
                       <Textfield
                         label={strings.SUBSET_WEIGHT}
                         id='subsetWeight'
@@ -416,13 +416,13 @@ function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
                         tooltipTitle={strings.ENTER_SUBSET_WEIGHT_AND_COUNT}
                       />
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid size={4}>
                       <Box height={subsetWeightError ? '85px' : subsetError ? '65px' : 'auto'} paddingTop='24px'>
                         <WeightUnitsSelector onChange={onChangeSubsetUnit} selectedValue={record.subsetWeight?.units} />
                       </Box>
                     </Grid>
                   </Grid>
-                  <Grid item xs={isMobile ? 12 : 4} paddingTop={isMobile ? '4px' : '0px'} textAlign='left'>
+                  <Grid paddingTop={isMobile ? '4px' : '0px'} textAlign='left' size={isMobile ? 12 : 4}>
                     <Textfield
                       label={strings.SUBSET_COUNT}
                       id='subsetCount'

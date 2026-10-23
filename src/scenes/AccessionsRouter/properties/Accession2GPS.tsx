@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
 import { Close } from '@mui/icons-material';
-import { Box, GridLegacy as Grid, IconButton, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, useTheme } from '@mui/material';
 import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';
@@ -64,7 +64,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
 
   if (!isOpen) {
     return (
-      <Grid item xs={12} marginTop={theme.spacing(2)}>
+      <Grid marginTop={theme.spacing(2)} size={12}>
         <Box display='flex' justifyContent='flex-start'>
           <AddLink id='addGPS' onClick={() => setIsOpen(true)} large={true} text={strings.ADD_GPS_COORDINATES} />
         </Box>

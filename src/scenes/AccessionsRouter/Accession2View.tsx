@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -557,7 +557,7 @@ export default function Accession2View(): JSX.Element {
         alignItems={'stretch'}
       >
         {accession?.state && (
-          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
               isEditable={stateEditable}
               handleEdit={() => setOpenEditStateModal(true)}
@@ -581,7 +581,7 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {accession?.facilityId !== undefined && (
-          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
               isEditable={userCanEdit}
               handleEdit={() => setOpenEditLocationModal(true)}
@@ -597,7 +597,7 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {accession?.state === 'Drying' && (
-          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
               isEditable={userCanEdit}
               handleEdit={() => setOpenEndDryingReminderModal(true)}
@@ -613,7 +613,7 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {accession && (
-          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridSize} flexGrow={1}>
             <ProjectOverviewItemCard<Accession>
               entity={accession}
               reloadData={reloadData}
@@ -624,12 +624,12 @@ export default function Accession2View(): JSX.Element {
         )}
 
         {isAwaitingCheckin && accession?.bagNumbers !== undefined && (
-          <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+          <Grid flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard isEditable={false} title={strings.BAG_ID} contents={accession.bagNumbers.join(', ')} />
           </Grid>
         )}
 
-        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridSize} flexGrow={1}>
           <OverviewItemCard
             isEditable={quantityEditable}
             handleEdit={() => setOpenQuantityModal(true)}
@@ -661,11 +661,11 @@ export default function Accession2View(): JSX.Element {
           />
         </Grid>
 
-        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridSize} flexGrow={1}>
           <OverviewItemCard isEditable={false} title={strings.AGE} contents={age} />
         </Grid>
 
-        <Grid item flexBasis={overviewGridSize} flexGrow={1}>
+        <Grid flexBasis={overviewGridSize} flexGrow={1}>
           <OverviewItemCard
             isEditable={viabilityEditable}
             handleEdit={() => setOpenViabilityModal(true)}
