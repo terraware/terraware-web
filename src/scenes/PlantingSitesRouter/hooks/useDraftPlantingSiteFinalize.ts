@@ -5,9 +5,8 @@ import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useDeleteDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import { useCreatePlantingSiteMutation, useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
-import strings from 'src/strings';
 import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
-import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
+import { fromDraftToCreate, getDraftSaveErrorMessage } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
@@ -59,8 +58,8 @@ export default function useDraftPlantingSiteFinalize(
             .catch(() => undefined);
 
           onSuccess?.(id);
-        } catch {
-          snackbar.toastError(strings.GENERIC_ERROR);
+        } catch (error) {
+          snackbar.toastError(getDraftSaveErrorMessage(error));
         }
       };
 

@@ -4,7 +4,7 @@ import strings from 'src/strings';
 import { PlantingSiteProblem } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
-const problemText = ({ conflictsWith, problemType, stratum, substratum }: PlantingSiteProblem): string => {
+export const problemText = ({ conflictsWith, problemType, stratum, substratum }: PlantingSiteProblem): string => {
   const conflicts = conflictsWith?.join(', ') ?? '';
 
   switch (problemType) {

@@ -23,6 +23,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CloseSetupConfirmation from './CloseSetupConfirmation';
+import DraftProblemsConfirmation from './DraftProblemsConfirmation';
 import { EditorStepperContext, PlantingSiteStep } from './EditorStepper';
 import Exclusions from './Exclusions';
 import SiteBoundary from './SiteBoundary';
@@ -115,7 +116,15 @@ export default function Editor(props: EditorProps): JSX.Element {
   /**
    * set up hooks to update a draft and also to create a planting site from draft
    */
-  const { onFinishUpdate, updateDraft, isUpdating, updatedDraft } = useDraftPlantingSiteUpdate(site.id);
+  const {
+    onCancelSave,
+    onFinishUpdate,
+    onSaveAnyway,
+    problems: draftProblems,
+    updateDraft,
+    isUpdating,
+    updatedDraft,
+  } = useDraftPlantingSiteUpdate(site.id);
   const { finalize, isPending } = useDraftPlantingSiteFinalize(onFinalizeSuccess, onFinalizeError);
 
   // update local state when draft is updated
@@ -286,6 +295,11 @@ export default function Editor(props: EditorProps): JSX.Element {
     setShowStartOver(false);
   }, [plantingSite, updateDraft]);
 
+  const onBackToEdit = useCallback(() => {
+    isStartingOver.current = false;
+    onCancelSave();
+  }, [onCancelSave]);
+
   const onOpenStartOver = useCallback(() => {
     dispatch(clearSnackbar({ type: 'toast' }));
     setShowStartOver(true);
@@ -335,6 +349,9 @@ export default function Editor(props: EditorProps): JSX.Element {
       {isPending && <BusySpinner withSkrim={true} />}
       {isUpdating && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={onCloseStartOver} onConfirm={onStartOver} />}
+      {draftProblems && (
+        <DraftProblemsConfirmation onBackToEdit={onBackToEdit} onSaveAnyway={onSaveAnyway} problems={draftProblems} />
+      )}
       {showCloseConfirmation && (
         <CloseSetupConfirmation
           onDiscard={goToPlantingSites}

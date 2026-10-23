@@ -242,6 +242,7 @@ AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
 AWAITING_CHECK_IN,En attente d'enregistrement,11dee61b
 AWAITING_PROCESSING,En attente de traitement,802b73ca
 BACK,Précédent,2e8211b0
+BACK_TO_EDIT,Retour à la modification,b3d8a9a6
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
 BASELINE,Référence,332af00e
@@ -581,6 +582,8 @@ DOWNLOAD_TEMPLATE,Téléchargez un modèle ici.,03a423cf
 DOWNLOAD_THE_CSV_TEMPLATE,Téléchargez le modèle CSV.,d5d98658
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Télécharger l'application mobile Terraware,3eeed497
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenez l'application mobile pour profiter des fonctionnalités de collecte de semences, de gestion des pépinières et de surveillance des plantes, que vous pouvez utiliser avec plus de flexibilité que depuis votre ordinateur de bureau !",94127206
+DRAFT_PLANTING_SITE_HAS_PROBLEMS,Ce brouillon présente des problèmes,7e05f159
+DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE,"Vous pouvez tout de même enregistrer ces modifications, mais vous ne pourrez pas créer le site de plantation tant que ces problèmes ne seront pas résolus.",dafd8fa7
 DRAFT_PLANTING_SITES,Sites de plantation en brouillon,97403fcc
 DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,Ce site provisoire ne peut pas être utilisé pour la plantation ou les observations tant que la délimitation du site n’a pas été entièrement configurée.,48195727
 DRAW_BOUNDARY_WITHIN_MAP,Tracer les limites sur une carte,d1ee6da4
@@ -1588,6 +1591,7 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utilis
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Dessiner les limites du site,1200219a
 PLANTING_SITE_DELETED,Site de plantation supprimé !,61c0d69a
 PLANTING_SITE_MAP_HAS_PROBLEMS,La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.,fd9e2ab8
+PLANTING_SITE_MAP_SELF_INTERSECTS,"Une forme sur la carte se croise elle-même. Redessinez-la afin que ses contours ne se croisent pas, puis réessayez.",b1d07b65
 PLANTING_SITE_NAME,Nom du site de plantation,f3cb062b
 PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME,Plus d’un stratum porte le nom {0}.,14b61803
 PLANTING_SITE_PROBLEM_DUPLICATE_SUBSTRATUM_NAME,Plus d’un substratum dans le stratum {0} porte le nom {1}.,9e35127b
@@ -1952,6 +1956,7 @@ SAVE_AND_CONTINUE,Enregistrer et continuer,a900547e
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
+SAVE_ANYWAY,Enregistrer quand même,41580823
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc

@@ -1,4 +1,5 @@
 import { DraftStratumPayload } from 'src/queries/generated/draftPlantingSites';
+import strings from 'src/strings';
 import {
   BoundarySource,
   CreateDraftPlantingSiteRequestPayload,
@@ -137,4 +138,11 @@ export const fromDraftToCreate = (site: DraftPlantingSite): CreatePlantingSiteRe
 export const getDraftMapProblems = (error: unknown): PlantingSiteProblem[] | undefined => {
   const { data, status } = (error ?? {}) as { data?: { problems?: PlantingSiteProblem[] }; status?: number };
   return status === 409 ? data?.problems : undefined;
+};
+
+// the API rejects a malformed geometry with a 400 whose message comes from the geometry validator
+export const getDraftSaveErrorMessage = (error: unknown): string => {
+  const { data, status } = (error ?? {}) as { data?: { error?: { message?: string } }; status?: number };
+  const isSelfIntersection = status === 400 && !!data?.error?.message?.toLowerCase().includes('self-intersection');
+  return isSelfIntersection ? strings.PLANTING_SITE_MAP_SELF_INTERSECTS : strings.GENERIC_ERROR;
 };
