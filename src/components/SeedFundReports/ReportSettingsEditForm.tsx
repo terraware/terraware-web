@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageForm from 'src/components/common/PageForm';
@@ -86,7 +86,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
       busy={isBusy}
     >
       <Grid container justifyContent={'center'}>
-        <Grid item>
+        <Grid>
           <Card style={{ width: isMobile ? '100%' : '700px' }}>
             <ReportSettingsEditFormFields
               reportsSettings={localReportsSettings}

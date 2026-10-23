@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import Page, { PageProps } from 'src/components/Page';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -21,7 +21,6 @@ const PageWithModuleTimeline = (props: PageProps & ModuleTimelineProps) => {
   return (
     <Grid container spacing={theme.spacing(0)} paddingRight={'24px'}>
       <Grid
-        item
         sx={{
           maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: 'calc(100% - 206px)', xl: 'calc(100% - 206px)' },
           width: '100%',
@@ -35,7 +34,7 @@ const PageWithModuleTimeline = (props: PageProps & ModuleTimelineProps) => {
           titleContainerStyle={titleContainerStyle}
         />
       </Grid>
-      <Grid item sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}>
+      <Grid sx={{ display: { xs: 'none', sm: 'none', md: 'none', lg: 'block', xl: 'block' } }} minWidth={'206px'}>
         <ModuleTimeline {...props} />
       </Grid>
     </Grid>

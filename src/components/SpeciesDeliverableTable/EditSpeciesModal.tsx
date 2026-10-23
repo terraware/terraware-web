@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -87,7 +87,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
       ]}
     >
       <Grid container textAlign={'left'}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography sx={{ fontSize: '14px', color: theme.palette.TwClrBaseGray600, marginBottom: 1.5 }}>
             {strings.SCIENTIFIC_NAME}
           </Typography>
@@ -98,7 +98,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
             {projectSpecies.species.scientificName}
           </Link>
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <Dropdown
             id='speciesNativeCategory'
             selectedValue={record?.participantProjectSpecies.speciesNativeCategory}
@@ -113,7 +113,7 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
             errorText={error && !record?.participantProjectSpecies.speciesNativeCategory ? error : ''}
           />
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <TextField
             required
             id='rationale'

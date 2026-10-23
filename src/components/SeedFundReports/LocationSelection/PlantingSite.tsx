@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -206,7 +206,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   return (
     <>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-planting-site-area`}
           label={strings.TOTAL_PLANTING_SITE_AREA_HA}
@@ -224,7 +224,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         />
       </Grid>
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-total-planted-area`}
           label={strings.TOTAL_PLANTED_AREA_HA}
@@ -242,9 +242,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         />
       </Grid>
 
-      <Grid item xs={smallItemGridWidth()} />
+      <Grid size={smallItemGridWidth()} />
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-total-trees-planted`}
           label={strings.TOTAL_TREES_PLANTED}
@@ -263,7 +263,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         />
       </Grid>
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-total-plants-planted`}
           label={strings.TOTAL_PLANTS_PLANTED_REQUIRED}
@@ -282,7 +282,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         />
       </Grid>
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-mortality-rate`}
           label={strings.MORTALITY_RATE_PERCENT_REQUIRED}
@@ -302,7 +302,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
       </Grid>
 
       {plantingSiteSpecies && (
-        <Grid item xs={12} marginBottom={3}>
+        <Grid marginBottom={3} size={12}>
           <Table
             id='reports-species-table'
             columns={columns}
@@ -319,7 +319,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
       {latestObservationResult && (
         <>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.MOST_RECENT_OBSERVATION}
@@ -327,7 +327,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION}
@@ -335,7 +335,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.CURRENT_NEXT_OBSERVATION}
@@ -343,7 +343,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.TOTAL_PLANTS_OBSERVED}
@@ -351,7 +351,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.LIVE_PLANTS_OBSERVED}
@@ -359,7 +359,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.DEAD_PLANTS_OBSERVED}
@@ -367,7 +367,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.SPECIES_OBSERVED}
@@ -375,7 +375,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.MARKED_AS_PLANTING_COMPLETE}
@@ -383,7 +383,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               sx={infoCardStyles}
             />
           </Grid>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.SURVIVAL_RATE}
@@ -396,7 +396,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             />
           </Grid>
           {!estimatedPlants && (
-            <Grid item xs={smallItemGridWidth()}>
+            <Grid size={smallItemGridWidth()}>
               <OverviewItemCard
                 isEditable={false}
                 title={strings.PLANTING_PROGRESS_PERCENT}
@@ -406,7 +406,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             </Grid>
           )}
           {plantingDensityForStrata && (
-            <Grid item xs={smallItemGridWidth()}>
+            <Grid size={smallItemGridWidth()}>
               <OverviewItemCard
                 isEditable={false}
                 title={strings.PLANT_DENSITY_OF_PLANTED_STRATA}
@@ -415,7 +415,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
               />
             </Grid>
           )}
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <OverviewItemCard
               isEditable={false}
               title={strings.EST_TOTAL_PLANTS_PLANT_DENSITY_AREA}

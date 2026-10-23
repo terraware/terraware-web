@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import Checkbox from 'src/components/common/Checkbox';
 import Divisor from 'src/components/common/Divisor';
@@ -162,7 +162,7 @@ export default function FilterCountWeight(props: Props): JSX.Element {
       }}
     >
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             id='seedCount'
             name='Seed Count'
@@ -171,19 +171,19 @@ export default function FilterCountWeight(props: Props): JSX.Element {
             onChange={(value) => onChange('seedCount', value)}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='countMinValue' value={countMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='countMaxValue' value={countMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='seeds' disabled={true} value={strings.SEEDS} onChange={onChange} label={strings.UNITS} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Divisor mt={0} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             id='seedWeight'
             name='Seed Weight'
@@ -192,13 +192,13 @@ export default function FilterCountWeight(props: Props): JSX.Element {
             onChange={(value) => onChange('seedWeight', value)}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='weightMinValue' value={weightMinValue} onChange={onChange} label={strings.MIN} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='weightMaxValue' value={weightMaxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Dropdown
             id='processingUnit'
             label={strings.UNITS}
@@ -207,10 +207,10 @@ export default function FilterCountWeight(props: Props): JSX.Element {
             onChange={(value) => onChange('processingUnit', value)}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Divisor mt={0} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             id='emptyFields'
             name='Empty Fields'
