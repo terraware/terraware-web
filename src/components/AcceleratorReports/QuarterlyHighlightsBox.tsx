@@ -3,20 +3,28 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
-import { API_PATHS } from 'src/constants';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { isAcceleratorReport } from 'src/types/AcceleratorReport';
+import { getImagePath } from 'src/utils/images';
+
+const THUMBNAIL_HEIGHT_PX = 72;
+const THUMBNAIL_WIDTH_PX = 144;
 
 type QuarterlyHighlightsBoxProps = {
   onViewHighlights: (quarter?: string) => void;
   projectId: number;
+  projectHighlightPhotoValueId?: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
 };
 
-const QuarterlyHighlightsBox = ({ onViewHighlights, projectId, report }: QuarterlyHighlightsBoxProps): JSX.Element => {
+const QuarterlyHighlightsBox = ({
+  onViewHighlights,
+  projectId,
+  projectHighlightPhotoValueId,
+  report,
+}: QuarterlyHighlightsBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
@@ -31,18 +39,13 @@ const QuarterlyHighlightsBox = ({ onViewHighlights, projectId, report }: Quarter
       : year;
   }, [report, strings]);
 
-  const coverPhotoUrl = useMemo(() => {
-    const fileId = report?.photos?.[0]?.fileId;
-    if (report === undefined || fileId === undefined) {
-      return undefined;
-    }
-
-    return isAcceleratorReport(report)
-      ? API_PATHS.ACCELERATOR_REPORT_PHOTO.replace('{projectId}', `${projectId}`)
-          .replace('{reportId}', `${report.id}`)
-          .replace('{fileId}', `${fileId}`)
-      : API_PATHS.FUNDER_REPORT_PHOTO.replace('{reportId}', `${report.reportId}`).replace('{fileId}', `${fileId}`);
-  }, [projectId, report]);
+  const coverPhotoUrl = useMemo(
+    () =>
+      projectHighlightPhotoValueId === undefined
+        ? undefined
+        : getImagePath(projectId, projectHighlightPhotoValueId, THUMBNAIL_HEIGHT_PX * 2, THUMBNAIL_WIDTH_PX * 2),
+    [projectHighlightPhotoValueId, projectId]
+  );
 
   const onClick = useCallback(() => onViewHighlights(quarterLabel), [onViewHighlights, quarterLabel]);
 
@@ -68,8 +71,8 @@ const QuarterlyHighlightsBox = ({ onViewHighlights, projectId, report }: Quarter
               : 'url(/assets/logo-terraformation.svg) center / 33% no-repeat, linear-gradient(180deg, #2C8658 0%, #123624 100%)',
             borderRadius: theme.spacing(1),
             flexShrink: 0,
-            height: '72px',
-            width: '144px',
+            height: `${THUMBNAIL_HEIGHT_PX}px`,
+            width: `${THUMBNAIL_WIDTH_PX}px`,
           }}
         />
 
