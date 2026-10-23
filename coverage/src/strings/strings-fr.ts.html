@@ -3271,8 +3271,52 @@
 <a name='L3206'></a><a href='#L3206'>3206</a>
 <a name='L3207'></a><a href='#L3207'>3207</a>
 <a name='L3208'></a><a href='#L3208'>3208</a>
-<a name='L3209'></a><a href='#L3209'>3209</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
+<a name='L3209'></a><a href='#L3209'>3209</a>
+<a name='L3210'></a><a href='#L3210'>3210</a>
+<a name='L3211'></a><a href='#L3211'>3211</a>
+<a name='L3212'></a><a href='#L3212'>3212</a>
+<a name='L3213'></a><a href='#L3213'>3213</a>
+<a name='L3214'></a><a href='#L3214'>3214</a>
+<a name='L3215'></a><a href='#L3215'>3215</a>
+<a name='L3216'></a><a href='#L3216'>3216</a>
+<a name='L3217'></a><a href='#L3217'>3217</a>
+<a name='L3218'></a><a href='#L3218'>3218</a>
+<a name='L3219'></a><a href='#L3219'>3219</a>
+<a name='L3220'></a><a href='#L3220'>3220</a>
+<a name='L3221'></a><a href='#L3221'>3221</a>
+<a name='L3222'></a><a href='#L3222'>3222</a>
+<a name='L3223'></a><a href='#L3223'>3223</a>
+<a name='L3224'></a><a href='#L3224'>3224</a>
+<a name='L3225'></a><a href='#L3225'>3225</a>
+<a name='L3226'></a><a href='#L3226'>3226</a>
+<a name='L3227'></a><a href='#L3227'>3227</a>
+<a name='L3228'></a><a href='#L3228'>3228</a>
+<a name='L3229'></a><a href='#L3229'>3229</a>
+<a name='L3230'></a><a href='#L3230'>3230</a>
+<a name='L3231'></a><a href='#L3231'>3231</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6758,6 +6802,7 @@ export const strings = {
   AWAITING_CHECK_IN: "En attente d'enregistrement",
   AWAITING_PROCESSING: 'En attente de traitement',
   BACK: 'Précédent',
+  BACK_TO_EDIT: 'Retour à la modification',
   BACK_TO_TERRAWARE: 'Retour à Terraware',
   BAG_ID: 'Identifiant du sac',
   BASELINE: 'Référence',
@@ -7150,6 +7195,9 @@ export const strings = {
   DOWNLOAD_THE_TERRAWARE_MOBILE_APP: "Télécharger l'application mobile Terraware",
   DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION:
     "Obtenez l'application mobile pour profiter des fonctionnalités de collecte de semences, de gestion des pépinières et de surveillance des plantes, que vous pouvez utiliser avec plus de flexibilité que depuis votre ordinateur de bureau !",
+  DRAFT_PLANTING_SITE_HAS_PROBLEMS: 'Ce brouillon présente des problèmes',
+  DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE:
+    'Vous pouvez tout de même enregistrer ces modifications, mais vous ne pourrez pas créer le site de plantation tant que ces problèmes ne seront pas résolus.',
   DRAFT_PLANTING_SITES: 'Sites de plantation en brouillon',
   DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE:
     'Ce site provisoire ne peut pas être utilisé pour la plantation ou les observations tant que la délimitation du site n’a pas été entièrement configurée.',
@@ -8290,7 +8338,24 @@ export const strings = {
     "Cette vidéo montre comment utiliser l'outil de dessin {0} pour tracer les limites du site de plantation.",
   PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE: 'Dessiner les limites du site',
   PLANTING_SITE_DELETED: 'Site de plantation supprimé !',
+  PLANTING_SITE_MAP_HAS_PROBLEMS:
+    'La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.',
+  PLANTING_SITE_MAP_SELF_INTERSECTS:
+    'Une forme sur la carte se croise elle-même. Redessinez-la afin que ses contours ne se croisent pas, puis réessayez.',
   PLANTING_SITE_NAME: 'Nom du site de plantation',
+  PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME: 'Plus d’un stratum porte le nom {0}.',
+  PLANTING_SITE_PROBLEM_DUPLICATE_SUBSTRATUM_NAME: 'Plus d’un substratum dans le stratum {0} porte le nom {1}.',
+  PLANTING_SITE_PROBLEM_EXCLUSION_WITHOUT_BOUNDARY: 'Les zones d’exclusion nécessitent une limite de site.',
+  PLANTING_SITE_PROBLEM_SITE_TOO_LARGE: 'La limite du site est trop grande.',
+  PLANTING_SITE_PROBLEM_STRATA_WITHOUT_SITE_BOUNDARY: 'Les strates nécessitent une limite de site.',
+  PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_OVERLAPS: 'Le stratum {0} chevauche {1}.',
+  PLANTING_SITE_PROBLEM_STRATUM_HAS_NO_SUBSTRATA: 'Le stratum {0} ne contient aucun substratum.',
+  PLANTING_SITE_PROBLEM_STRATUM_NOT_IN_SITE: 'Le stratum {0} n’est pas à l’intérieur de la limite du site.',
+  PLANTING_SITE_PROBLEM_STRATUM_TOO_SMALL: 'Le stratum {0} est trop petit.',
+  PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS: 'Le substratum {1} dans le stratum {0} chevauche {2}.',
+  PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA:
+    'Le substratum {1} dans le stratum {0} se trouve dans une zone d’exclusion.',
+  PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM: 'Le substratum {1} n’est pas à l’intérieur du stratum {0}.',
   PLANTING_SITE_SAVED: 'Site de plantation sauvegardé',
   PLANTING_SITE_STRATUM_NAME_HELP:
     'Des noms lisibles aideront les personnes sur le terrain à identifier les zones lorsqu’elles sont sur le terrain.',
@@ -8699,6 +8764,7 @@ export const strings = {
   SAVE_AND_REQUEST: 'Enregistrer et demander',
   SAVE_AND_REQUEST_TOOLTIP:
     'Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.',
+  SAVE_ANYWAY: 'Enregistrer quand même',
   SAVE_OBSERVATION_DATA: "Enregistrer les données d'observation",
   SAVE_OBSERVATION_DATA_DESCRIPTION:
     'Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?',
@@ -9694,7 +9760,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-23T18:19:13.885Z
+                at 2026-10-23T18:32:04.565Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -3192,8 +3192,48 @@
 <a name='L3127'></a><a href='#L3127'>3127</a>
 <a name='L3128'></a><a href='#L3128'>3128</a>
 <a name='L3129'></a><a href='#L3129'>3129</a>
-<a name='L3130'></a><a href='#L3130'>3130</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
+<a name='L3130'></a><a href='#L3130'>3130</a>
+<a name='L3131'></a><a href='#L3131'>3131</a>
+<a name='L3132'></a><a href='#L3132'>3132</a>
+<a name='L3133'></a><a href='#L3133'>3133</a>
+<a name='L3134'></a><a href='#L3134'>3134</a>
+<a name='L3135'></a><a href='#L3135'>3135</a>
+<a name='L3136'></a><a href='#L3136'>3136</a>
+<a name='L3137'></a><a href='#L3137'>3137</a>
+<a name='L3138'></a><a href='#L3138'>3138</a>
+<a name='L3139'></a><a href='#L3139'>3139</a>
+<a name='L3140'></a><a href='#L3140'>3140</a>
+<a name='L3141'></a><a href='#L3141'>3141</a>
+<a name='L3142'></a><a href='#L3142'>3142</a>
+<a name='L3143'></a><a href='#L3143'>3143</a>
+<a name='L3144'></a><a href='#L3144'>3144</a>
+<a name='L3145'></a><a href='#L3145'>3145</a>
+<a name='L3146'></a><a href='#L3146'>3146</a>
+<a name='L3147'></a><a href='#L3147'>3147</a>
+<a name='L3148'></a><a href='#L3148'>3148</a>
+<a name='L3149'></a><a href='#L3149'>3149</a>
+<a name='L3150'></a><a href='#L3150'>3150</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6596,6 +6636,7 @@ export const strings = {
   AWAITING_CHECK_IN: 'Awaiting Check-In',
   AWAITING_PROCESSING: 'Awaiting Processing',
   BACK: 'Back',
+  BACK_TO_EDIT: 'Back to Edit',
   BACK_TO_TERRAWARE: 'Back to Terraware',
   BAG_ID: 'Bag ID',
   BASELINE: 'Baseline',
@@ -6978,6 +7019,9 @@ export const strings = {
   DOWNLOAD_THE_TERRAWARE_MOBILE_APP: 'Download the Terraware Mobile App',
   DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION:
     'Get the mobile app to take advantage of Seed Collection, Nursery Management, and Plant Monitoring features you can use with more flexibility beyond your desktop!',
+  DRAFT_PLANTING_SITE_HAS_PROBLEMS: 'This Draft Has Problems',
+  DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE:
+    "You can save these changes anyway, but you won't be able to create the planting site until these problems are resolved.",
   DRAFT_PLANTING_SITES: 'Draft Planting Sites',
   DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE:
     'This draft site can’t be used for planting or Observations until a site boundary has been completely set up.',
@@ -8080,7 +8124,22 @@ export const strings = {
     'This video shows how to use the drawing {0} tool to draw the boundary of the planting site.',
   PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE: 'Drawing Site Boundaries',
   PLANTING_SITE_DELETED: 'Planting site deleted!',
+  PLANTING_SITE_MAP_HAS_PROBLEMS: 'The site map has problems that need to be fixed before it can be saved.',
+  PLANTING_SITE_MAP_SELF_INTERSECTS:
+    "A shape on the map crosses itself. Redraw it so its edges don't cross, then try again.",
   PLANTING_SITE_NAME: 'Planting site name',
+  PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME: 'More than one stratum is named {0}.',
+  PLANTING_SITE_PROBLEM_DUPLICATE_SUBSTRATUM_NAME: 'More than one substratum in stratum {0} is named {1}.',
+  PLANTING_SITE_PROBLEM_EXCLUSION_WITHOUT_BOUNDARY: 'Exclusion areas require a site boundary.',
+  PLANTING_SITE_PROBLEM_SITE_TOO_LARGE: 'The site boundary is too large.',
+  PLANTING_SITE_PROBLEM_STRATA_WITHOUT_SITE_BOUNDARY: 'Strata require a site boundary.',
+  PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_OVERLAPS: 'Stratum {0} overlaps {1}.',
+  PLANTING_SITE_PROBLEM_STRATUM_HAS_NO_SUBSTRATA: 'Stratum {0} has no substrata.',
+  PLANTING_SITE_PROBLEM_STRATUM_NOT_IN_SITE: 'Stratum {0} is not inside the site boundary.',
+  PLANTING_SITE_PROBLEM_STRATUM_TOO_SMALL: 'Stratum {0} is too small.',
+  PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS: 'Substratum {1} in stratum {0} overlaps {2}.',
+  PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA: 'Substratum {1} in stratum {0} is inside an exclusion area.',
+  PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM: 'Substratum {1} is not inside stratum {0}.',
   PLANTING_SITE_SAVED: 'Planting Site Saved',
   PLANTING_SITE_STRATUM_NAME_HELP: 'Readable names will help people in the field identify areas when out in the field.',
   PLANTING_SITES: 'Planting Sites',
@@ -8476,6 +8535,7 @@ export const strings = {
   SAVE_AND_REQUEST: 'Save &amp; Request',
   SAVE_AND_REQUEST_TOOLTIP:
     'Save &amp; Request will send a planting withdrawal request to the Nursery for this Planting Date.',
+  SAVE_ANYWAY: 'Save Anyway',
   SAVE_OBSERVATION_DATA: 'Save Observation Data',
   SAVE_OBSERVATION_DATA_DESCRIPTION:
     'Your edits will replace any previously entered data. Are you sure you want to make these edits?',
@@ -9457,7 +9517,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-23T18:19:13.885Z
+                at 2026-10-23T18:32:04.565Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
