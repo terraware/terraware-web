@@ -12,7 +12,7 @@ import {
   ObservationSpeciesDensityPayload,
   useGetPlotObservationDensitiesForPlantingSiteQuery,
 } from 'src/queries/generated/t0';
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';

@@ -21,7 +21,7 @@ import Button from '../../components/common/button/Button';
 import NurserySubLocations from './NurserySubLocations';
 
 export default function NurseryDetailsView(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, isFetchingOrganizations } = useOrganization();
   const theme = useTheme();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [nursery, setNursery] = useState<Facility>();
@@ -37,11 +37,11 @@ export default function NurseryDetailsView(): JSX.Element {
       });
       if (selectedNursery) {
         setNursery(selectedNursery);
-      } else {
+      } else if (!isFetchingOrganizations) {
         navigate(APP_PATHS.NURSERIES);
       }
     }
-  }, [nurseryId, selectedOrganization, navigate]);
+  }, [nurseryId, selectedOrganization, isFetchingOrganizations, navigate]);
 
   const goToEditNursery = () => {
     if (nurseryId) {
@@ -87,6 +87,7 @@ export default function NurseryDetailsView(): JSX.Element {
               priority='primary'
               size='medium'
               onClick={goToEditNursery}
+              disabled={isFetchingOrganizations}
             />
           )}
         </Grid>

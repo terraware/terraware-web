@@ -7,13 +7,15 @@ import { BusySpinner, Button } from '@terraware/web-components';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import Page from 'src/components/Page';
 import DatePicker from 'src/components/common/DatePicker';
+import { useSaveSubLocations } from 'src/components/common/SubLocations/useSaveSubLocations';
 import TextField from 'src/components/common/Textfield/Textfield';
 import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
-import { FacilityService, SubLocationService } from 'src/services';
+import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
@@ -41,7 +43,7 @@ const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
   JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
 
 export default function SeedBankView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization, isFetchingOrganizations } = useOrganization();
   const theme = useTheme();
   const [nameError, setNameError] = useState('');
   const [descriptionError, setDescriptionError] = useState('');
@@ -50,6 +52,9 @@ export default function SeedBankView(): JSX.Element {
   const [baselineSubLocations, setBaselineSubLocations] = useState<PartialSubLocation[]>();
   const [saving, setSaving] = useState(false);
   const snackbar = useSnackbar();
+  const [createFacility] = useCreateFacilityMutation();
+  const [updateFacility] = useUpdateFacilityMutation();
+  const saveSubLocations = useSaveSubLocations();
   const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToFacilityObject>({
     navigate: false,
     id: undefined,
@@ -63,6 +68,7 @@ export default function SeedBankView(): JSX.Element {
     connectionState: 'Not Connected',
   });
   const { seedBankId } = useParams<{ seedBankId: string }>();
+  const waitingForOrganizations = !!seedBankId && isFetchingOrganizations;
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const gridSize = isMobile ? 12 : 4;
@@ -146,35 +152,40 @@ export default function SeedBankView(): JSX.Element {
       return;
     }
 
+    const facilityPayload = {
+      buildCompletedDate: record.buildCompletedDate,
+      buildStartedDate: record.buildStartedDate,
+      description: record.description,
+      name: record.name,
+      operationStartedDate: record.operationStartedDate,
+      timeZone: record.timeZone,
+    };
+
     setSaving(true);
     let succeeded = false;
     try {
       if (selectedSeedBank) {
-        const response = await FacilityService.updateFacility({ ...record } as Facility);
-        if (response.requestSucceeded) {
-          if (editedSubLocations) {
-            await SubLocationService.saveEditedSubLocations(selectedSeedBank.id, editedSubLocations);
-          }
-          void reloadOrganizations(selectedOrganization?.id);
-          snackbar.toastSuccess(strings.CHANGES_SAVED);
-          succeeded = true;
-        } else {
-          snackbar.toastError();
+        await updateFacility({
+          facilityId: selectedSeedBank.id,
+          updateFacilityRequestPayload: facilityPayload,
+        }).unwrap();
+        if (editedSubLocations) {
+          await saveSubLocations(selectedSeedBank.id, editedSubLocations);
         }
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
-        const response = await FacilityService.createFacility({
-          ...record,
+        const response = await createFacility({
+          ...facilityPayload,
+          organizationId: selectedOrganization.id,
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
-        });
-        if (response.requestSucceeded) {
-          await reloadOrganizations(selectedOrganization?.id);
-          snackbar.toastSuccess(strings.SEED_BANK_ADDED);
-          id = response.facilityId || undefined;
-          succeeded = true;
-        } else {
-          snackbar.toastError();
-        }
+          type: record.type,
+        }).unwrap();
+        snackbar.toastSuccess(strings.SEED_BANK_ADDED);
+        id = response.id;
       }
+      succeeded = true;
+    } catch {
+      snackbar.toastError();
     } finally {
       setSaving(false);
     }
@@ -229,7 +240,7 @@ export default function SeedBankView(): JSX.Element {
         type='passive'
       />
       <Button
-        disabled={!isDirty || saving}
+        disabled={!isDirty || saving || waitingForOrganizations}
         id='saveCreateSeedBank'
         label={strings.SAVE}
         onClick={() => void saveSeedBank()}
@@ -240,7 +251,7 @@ export default function SeedBankView(): JSX.Element {
 
   return (
     <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={isDirty} title={title}>
-      {saving && <BusySpinner withSkrim={true} />}
+      {(saving || waitingForOrganizations) && <BusySpinner withSkrim={true} />}
       <Box
         sx={{
           backgroundColor: theme.palette.TwClrBg,

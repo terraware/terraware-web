@@ -21,7 +21,7 @@ import TfMain from '../../components/common/TfMain';
 import Button from '../../components/common/button/Button';
 
 export default function SeedBankDetailsView(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, isFetchingOrganizations } = useOrganization();
   const theme = useTheme();
   const { seedBankId } = useParams<{ seedBankId: string }>();
   const navigate = useSyncNavigate();
@@ -40,10 +40,10 @@ export default function SeedBankDetailsView(): JSX.Element {
   const tz = useLocationTimeZone().get(seedBank);
 
   useEffect(() => {
-    if (selectedOrganization && seedBankId && !seedBank) {
+    if (selectedOrganization && seedBankId && !seedBank && !isFetchingOrganizations) {
       navigate(APP_PATHS.SEED_BANKS);
     }
-  }, [seedBank, seedBankId, selectedOrganization, navigate]);
+  }, [seedBank, seedBankId, selectedOrganization, isFetchingOrganizations, navigate]);
 
   const goToEditSeedBank = () => {
     if (seedBankId) {
@@ -89,6 +89,7 @@ export default function SeedBankDetailsView(): JSX.Element {
               priority='primary'
               size='medium'
               onClick={goToEditSeedBank}
+              disabled={isFetchingOrganizations}
             />
           )}
         </Grid>

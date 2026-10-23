@@ -1,8 +1,8 @@
-import { components } from 'src/api/types/generated-schema';
+import { ProjectAcceleratorDetailsPayload } from 'src/queries/generated/acceleratorProjects';
 import strings from 'src/strings';
 
 // These will all change when the BE is done, some of the props might even come from different models
-export type AcceleratorProject = components['schemas']['ProjectAcceleratorDetailsPayload'];
+export type AcceleratorProject = ProjectAcceleratorDetailsPayload;
 
 export type CarbonCertifications = AcceleratorProject['carbonCertifications'];
 

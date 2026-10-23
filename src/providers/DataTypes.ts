@@ -25,6 +25,7 @@ export type ProvidedOrganizationData = {
   orgPreferences: PreferencesType;
   redirectAndNotify: (organization: Organization) => void;
   reloadOrganizations: (selectedOrgId?: number) => Promise<void>;
+  isFetchingOrganizations: boolean;
   bootstrapped: boolean;
 };
 

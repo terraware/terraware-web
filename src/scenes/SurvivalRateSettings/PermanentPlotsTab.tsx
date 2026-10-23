@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
+import { PlotsWithObservationsSearchResult } from 'src/scenes/SurvivalRateSettings/types';
 import strings from 'src/strings';
 import { PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 

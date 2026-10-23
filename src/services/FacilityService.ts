@@ -1,11 +1,9 @@
-import { paths } from 'src/api/types/generated-schema';
 import { Facility, FacilityType } from 'src/types/Facility';
 import { Organization } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { getAllNurseries, getAllSeedBanks } from 'src/utils/organization';
 import { parseSearchTerm } from 'src/utils/search';
 
-import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
 
 /**
@@ -29,53 +27,6 @@ type GetFacilityRequest = {
   type: FacilityType;
 };
 
-export type CreateFacilityResponse = Response & {
-  facilityId: number | null;
-};
-
-const FACILITIES_ENDPOINT = '/api/v1/facilities';
-const FACILITY_ENDPOINT = '/api/v1/facilities/{facilityId}';
-
-type CreateFacilityRequestPayload =
-  paths[typeof FACILITIES_ENDPOINT]['post']['requestBody']['content']['application/json'];
-type UpdateFacilityRequestPayload =
-  paths[typeof FACILITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
-
-type SubLocations = {
-  subLocationNames?: string[];
-};
-
-const httpFacilities = HttpService.root(FACILITIES_ENDPOINT);
-const httpFacility = HttpService.root(FACILITY_ENDPOINT);
-
-/**
- * create a facility
- */
-const createFacility = async (facility: Omit<Facility, 'id'> & SubLocations): Promise<CreateFacilityResponse> => {
-  const entity: CreateFacilityRequestPayload = {
-    name: facility.name,
-    description: facility.description,
-    organizationId: facility.organizationId,
-    type: facility.type,
-    timeZone: facility.timeZone,
-    subLocationNames: facility.subLocationNames,
-    buildStartedDate: facility.buildStartedDate,
-    buildCompletedDate: facility.buildCompletedDate,
-    operationStartedDate: facility.operationStartedDate,
-    capacity: facility.capacity,
-    location: facility.location,
-  };
-
-  const serverResponse: Response = await httpFacilities.post({ entity });
-
-  const response: CreateFacilityResponse = {
-    ...serverResponse,
-    facilityId: serverResponse.data?.id ?? null,
-  };
-
-  return response;
-};
-
 /**
  * get facility
  */
@@ -85,29 +36,6 @@ const getFacility = ({ organization, facilityId, type }: GetFacilityRequest): Fa
   } else if (type === 'Seed Bank') {
     return getAllSeedBanks(organization).find((n) => n?.id.toString() === facilityId.toString());
   }
-};
-
-/**
- * Update a facility
- */
-const updateFacility = async (facility: Facility): Promise<Response> => {
-  const entity: UpdateFacilityRequestPayload = {
-    name: facility.name,
-    description: facility.description,
-    timeZone: facility.timeZone,
-    buildStartedDate: facility.buildStartedDate,
-    buildCompletedDate: facility.buildCompletedDate,
-    operationStartedDate: facility.operationStartedDate,
-    capacity: facility.capacity,
-    location: facility.location,
-  };
-
-  return await httpFacility.put({
-    entity,
-    urlReplacements: {
-      '{facilityId}': facility.id.toString(),
-    },
-  });
 };
 
 /**
@@ -248,8 +176,6 @@ const facilityOperationStartedDateValid = (
 const FacilityService = {
   getFacilities,
   getFacility,
-  createFacility,
-  updateFacility,
   facilityBuildStartedDateValid,
   facilityBuildCompletedDateValid,
   facilityOperationStartedDateValid,

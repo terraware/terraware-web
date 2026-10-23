@@ -21,7 +21,6 @@ export default function PlantingSiteSelector({
   hideNoBoundary,
   onChange,
 }: PlantingSiteSelectorProps): JSX.Element {
-  // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedValue, setSelectedValue] = useState<SelectedValue>();
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization, orgPreferences } = useOrganization();

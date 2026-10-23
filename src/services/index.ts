@@ -1,4 +1,3 @@
-import AccessionService from './AccessionService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import MapService from './MapService';
@@ -9,13 +8,4 @@ import TrackingService from './TrackingService';
 
 export type { Response } from './HttpService';
 
-export {
-  AccessionService,
-  FacilityService,
-  HttpService,
-  MapService,
-  SearchService,
-  SpeciesService,
-  SubLocationService,
-  TrackingService,
-};
+export { FacilityService, HttpService, MapService, SearchService, SpeciesService, SubLocationService, TrackingService };

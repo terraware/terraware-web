@@ -3,9 +3,9 @@ import React, { type JSX } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
 
-import { AccessionService } from 'src/services';
 import strings from 'src/strings';
 import { Accession, AccessionState, stateName } from 'src/types/Accession';
+import { getTransitionToStates } from 'src/utils/accession';
 
 export interface EditStateProps {
   accession: Accession;
@@ -19,7 +19,7 @@ export default function EditState(props: EditStateProps): JSX.Element {
   const { accession, record, onChange, error } = props;
 
   const stateChanged = accession.state !== record.state;
-  const options = AccessionService.getTransitionToStates(accession.state).map((state: AccessionState) => ({
+  const options = getTransitionToStates(accession.state).map((state: AccessionState) => ({
     label: stateName(state),
     value: state,
   }));

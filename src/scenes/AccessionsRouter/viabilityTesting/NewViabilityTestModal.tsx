@@ -23,9 +23,12 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers/hooks';
-import { useCreateViabilityTestMutation, useUpdateViabilityTestMutation } from 'src/queries/generated/accessionsV2';
+import {
+  CreateViabilityTestRequestPayload,
+  useCreateViabilityTestMutation,
+  useUpdateViabilityTestMutation,
+} from 'src/queries/generated/accessionsV2';
 import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
-import { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { TEST_TYPES, seedTypes, testMethods, treatments } from 'src/types/Accession';
@@ -112,7 +115,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
   }, [selectedOrganization, accession.facilityId]);
 
   useEffect(() => {
-    const newViabilityTest: ViabilityTestPostRequest = {
+    const newViabilityTest: CreateViabilityTestRequestPayload = {
       testResults: [],
       withdrawnByUserId: user.id,
       testType: 'Lab',
