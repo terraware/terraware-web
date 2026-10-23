@@ -370,6 +370,17 @@ describe('TreesAndShrubsEditableTable species change', () => {
     expect(requests).toHaveLength(0);
     expect(screen.getAllByRole('cell', { name: 'Eucalyptus dalveenica' })).toHaveLength(2);
   });
+
+  it('does not promise to move values that belong to the species rather than the plant', async () => {
+    const { pickSpecies } = setupTrunks();
+
+    await pickSpecies('Eucalyptus dalveenica', ABUTILON.scientificName);
+
+    const dialog = within(screen.getByRole('dialog'));
+    expect(dialog.getByText(new RegExp(strings.GROWTH_FORM))).toBeInTheDocument();
+    expect(dialog.queryByText(new RegExp(strings.INVASIVE))).not.toBeInTheDocument();
+    expect(dialog.queryByText(new RegExp(strings.THREATENED))).not.toBeInTheDocument();
+  });
 });
 
 describe('TreesAndShrubsEditableTable removal', () => {

@@ -13,6 +13,7 @@ const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 const POSITION: QuadratPosition = 'NorthwestCorner';
 
 const ABUTILON = { id: 103, scientificName: 'Abutilon incanum' };
+const ACACIA = { id: 104, scientificName: 'Acacia koa' };
 
 const UNLISTED_SPECIES = 'Pennisetum setaceum';
 
@@ -45,7 +46,7 @@ const setupQuadrat = ({
   species = DEFAULT_SPECIES,
   updateFails = () => false,
 }: QuadratSetup = {}) => {
-  mockGet('/api/v1/species', { species: [ABUTILON] });
+  mockGet('/api/v1/species', { species: [ABUTILON, ACACIA] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: { id: 7, adHocPlot: { monitoringPlotId: 9 } },
   });
@@ -71,12 +72,27 @@ const setupQuadrat = ({
   const removeRow = async (speciesName: string) =>
     await user.click(screen.getByRole('button', { name: removeLabel(speciesName) }));
   const confirmRemoval = async () => await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+  /** Opens the species picker on a row and returns the list of species it offers. */
+  const openSpeciesEditor = async (speciesName: string) => {
+    await user.dblClick(await screen.findByRole('cell', { name: speciesName }));
+    await user.click(screen.getByPlaceholderText(speciesName));
+    return await screen.findByRole('list');
+  };
+  const pickSpecies = async (speciesName: string, newSpeciesName: string) => {
+    const options = await openSpeciesEditor(speciesName);
+    await user.click(within(options).getByText(newSpeciesName));
+  };
+  const confirmSpeciesChange = async () =>
+    await user.click(screen.getByRole('button', { name: strings.CHANGE_SPECIES }));
   return {
     user,
     requests,
     removeLabel,
     removeRow,
     confirmRemoval,
+    openSpeciesEditor,
+    pickSpecies,
+    confirmSpeciesChange,
     releaseUpdate: (requestNumber: number) => gates.get(requestNumber)?.(),
   };
 };
@@ -200,6 +216,235 @@ describe('QuadratSpeciesEditableTable removal', () => {
     await waitFor(() => expect(requests).toHaveLength(1));
 
     expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
+  });
+});
+
+describe('QuadratSpeciesEditableTable species change', () => {
+  it('does not offer a species change in the additional species table', async () => {
+    const { user } = setupQuadrat({ position: null });
+
+    await user.dblClick(await screen.findByRole('cell', { name: ABUTILON.scientificName }));
+
+    expect(screen.queryByPlaceholderText(ABUTILON.scientificName)).not.toBeInTheDocument();
+  });
+
+  it('does not offer a species change when the observation is not editable', async () => {
+    const { user } = setupQuadrat({ editable: false });
+
+    await user.dblClick(await screen.findByRole('cell', { name: ABUTILON.scientificName }));
+
+    expect(screen.queryByPlaceholderText(ABUTILON.scientificName)).not.toBeInTheDocument();
+  });
+
+  it('leaves the species the row already records out of the list', async () => {
+    const { openSpeciesEditor } = setupQuadrat();
+
+    const options = await openSpeciesEditor(ABUTILON.scientificName);
+
+    expect(within(options).getByText(ACACIA.scientificName)).toBeInTheDocument();
+    expect(within(options).queryByText(ABUTILON.scientificName)).not.toBeInTheDocument();
+  });
+
+  it('shows a species another row already records, but will not change to it', async () => {
+    const { user, requests, openSpeciesEditor } = setupQuadrat();
+    // The picker offers the organization species, so wait for them to arrive before opening it.
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    const options = await openSpeciesEditor(UNLISTED_SPECIES);
+
+    expect(within(options).getByText(strings.ALREADY_IN_THIS_TABLE)).toBeInTheDocument();
+    await user.click(within(options).getByText(ABUTILON.scientificName));
+
+    expect(screen.queryByText(strings.CHANGE_SPECIES_CONFIRMATION)).not.toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('will not change to a species another row records by name', async () => {
+    const { user, requests, openSpeciesEditor } = setupQuadrat({
+      species: [
+        { speciesId: ABUTILON.id, abundanceCount: 4, isInvasive: false, isThreatened: false },
+        { scientificName: ACACIA.scientificName, abundanceCount: 2, isInvasive: false, isThreatened: false },
+      ],
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    const options = await openSpeciesEditor(ABUTILON.scientificName);
+
+    expect(within(options).getByText(strings.ALREADY_IN_THIS_TABLE)).toBeInTheDocument();
+    await user.click(within(options).getByText(ACACIA.scientificName));
+
+    expect(screen.queryByText(strings.CHANGE_SPECIES_CONFIRMATION)).not.toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('describes the values that will move before changing a species', async () => {
+    const { requests, pickSpecies } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+
+    expect(screen.getByText(strings.CHANGE_SPECIES_CONFIRMATION)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        strings.formatString(
+          strings.CHANGE_SPECIES_CONFIRMATION_MESSAGE,
+          ABUTILON.scientificName,
+          ACACIA.scientificName
+        ) as string
+      )
+    ).toBeInTheDocument();
+    expect(screen.getByText(`${ABUTILON.scientificName} → ${ACACIA.scientificName}`)).toBeInTheDocument();
+    expect(screen.getByText(`${strings.ABUNDANCE} 4`)).toBeInTheDocument();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('does not promise to move values that belong to the species rather than the quadrat', async () => {
+    const { pickSpecies } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+
+    const dialog = within(screen.getByRole('dialog'));
+    expect(dialog.queryByText(new RegExp(strings.INVASIVE))).not.toBeInTheDocument();
+    expect(dialog.queryByText(new RegExp(strings.THREATENED))).not.toBeInTheDocument();
+  });
+
+  it('leaves the species alone when the change is cancelled', async () => {
+    const { user, requests, pickSpecies } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+
+    expect(requests).toHaveLength(0);
+    expect(screen.queryByText(strings.CHANGE_SPECIES_CONFIRMATION)).not.toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
+  });
+
+  it('moves the recorded abundance to the new species once confirmed', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    // One request, so the API either applies both operations or rejects the change as a whole.
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        { type: 'DeleteQuadratSpecies', position: POSITION, speciesId: ABUTILON.id },
+        { type: 'CreateQuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 4 },
+      ],
+    });
+    expect(await screen.findByRole('cell', { name: ACACIA.scientificName })).toBeInTheDocument();
+    expect(screen.queryByRole('cell', { name: ABUTILON.scientificName })).not.toBeInTheDocument();
+  });
+
+  it('identifies a species that is not in the species list by its name', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange } = setupQuadrat();
+    // The picker offers the organization species, so wait for them to arrive before opening it.
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(UNLISTED_SPECIES, ACACIA.scientificName);
+    await confirmSpeciesChange();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        { type: 'DeleteQuadratSpecies', position: POSITION, scientificName: UNLISTED_SPECIES },
+        { type: 'CreateQuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 2 },
+      ],
+    });
+  });
+
+  it('records no abundance for the new species when none was recorded for the old one', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange } = setupQuadrat({
+      species: [{ speciesId: ABUTILON.id, isInvasive: false, isThreatened: false }],
+    });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        { type: 'DeleteQuadratSpecies', position: POSITION, speciesId: ABUTILON.id },
+        { type: 'CreateQuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 0 },
+      ],
+    });
+  });
+
+  it('puts the old species back when the change fails', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange } = setupQuadrat({ updateFails: () => true });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    expect(await screen.findByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument();
+    expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument();
+  });
+
+  it('drops a flag edit that was sent for the species the change did not stick', async () => {
+    const { user, requests, pickSpecies, confirmSpeciesChange, releaseUpdate } = setupQuadrat({
+      species: [{ speciesId: ABUTILON.id, abundanceCount: 4, isInvasive: false, isThreatened: false }],
+      holdUpdates: (n) => n === 1,
+      updateFails: (n) => n === 1,
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await user.dblClick(cellsOf(1)[3]);
+    await user.click(screen.getByRole('combobox'));
+    await user.click(await screen.findByRole('option', { name: strings.YES }));
+    await user.tab();
+    await waitFor(() => expect(cellsOf(1)[3]).toHaveTextContent(strings.YES));
+
+    releaseUpdate(1);
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toMatchObject({
+      updates: [{ type: 'BiomassSpecies', speciesId: ACACIA.id, isInvasive: true }],
+    });
+
+    await waitFor(() => expect(screen.getByRole('cell', { name: ABUTILON.scientificName })).toBeInTheDocument());
+    expect(cellsOf(1)[3]).toHaveTextContent(strings.NO);
+  });
+
+  it('keeps an abundance edit made after a species change on the table', async () => {
+    const { user, requests, pickSpecies, confirmSpeciesChange } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await user.dblClick(cellsOf(1)[1]);
+    const abundance = screen.getByRole('spinbutton');
+    await user.clear(abundance);
+    await user.type(abundance, '7');
+    await user.tab();
+
+    await waitFor(() => expect(cellsOf(1)[1]).toHaveTextContent('7'));
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'QuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 7 }],
+    });
+  });
+
+  it('takes a row removed after a species change off the table', async () => {
+    const { requests, pickSpecies, confirmSpeciesChange, removeRow, confirmRemoval } = setupQuadrat();
+
+    await pickSpecies(ABUTILON.scientificName, ACACIA.scientificName);
+    await confirmSpeciesChange();
+    await screen.findByRole('cell', { name: ACACIA.scientificName });
+
+    await removeRow(ACACIA.scientificName);
+    await confirmRemoval();
+
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument());
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'DeleteQuadratSpecies', position: POSITION, speciesId: ACACIA.id }],
+    });
   });
 });
 

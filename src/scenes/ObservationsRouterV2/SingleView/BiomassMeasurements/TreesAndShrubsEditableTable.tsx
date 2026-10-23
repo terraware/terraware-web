@@ -192,7 +192,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const treeDetails = useCallback(
-    (row: TreeRow) =>
+    (row: TreeRow, { includeSpeciesFlags = true } = {}) =>
       [
         `${strings.GROWTH_FORM} ${growthFormLabel(row)}`,
         ...(row.treeGrowthForm === 'Shrub'
@@ -202,8 +202,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
               `${strings.POM_M} ${row.pointOfMeasurement ?? ''}`,
               `${strings.HEIGHT_M} ${row.height ?? ''}`,
             ]),
-        `${strings.INVASIVE} ${row.isInvasive ? strings.YES : strings.NO}`,
-        `${strings.THREATENED} ${row.isThreatened ? strings.YES : strings.NO}`,
+        ...(includeSpeciesFlags
+          ? [
+              `${strings.INVASIVE} ${row.isInvasive ? strings.YES : strings.NO}`,
+              `${strings.THREATENED} ${row.isThreatened ? strings.YES : strings.NO}`,
+            ]
+          : []),
         `${strings.DEAD} ${row.isDead ? strings.YES : strings.NO}`,
       ].join(strings.LIST_SEPARATOR),
     [growthFormLabel, strings]
@@ -837,7 +841,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       {pendingSpeciesChange && (
         <BiomassEditConfirmationModal
           confirmLabel={strings.CHANGE_SPECIES}
-          details={treeDetails(pendingSpeciesChange.row)}
+          details={treeDetails(pendingSpeciesChange.row, { includeSpeciesFlags: false })}
           detailsHeading={`${pendingSpeciesChange.row.speciesName ?? ''} \u2192 ${pendingSpeciesChange.species.scientificName}`}
           message={speciesChangeMessage(pendingSpeciesChange.row, pendingSpeciesChange.species)}
           onClose={() => setPendingSpeciesChange(undefined)}
