@@ -113,11 +113,7 @@ export default function RegionSelector({
         />
       </Grid>
       {!hideCountrySubdivisions && getSelectedCountry()?.subdivisions ? (
-        <Grid
-          marginTop={theme.spacing(-3)}
-          paddingBottom={paddingBottom}
-          size={gridSize()}
-        >
+        <Grid marginTop={theme.spacing(-3)} paddingBottom={paddingBottom} size={gridSize()}>
           <Dropdown
             id='countySubdivisionCode'
             placeholder={strings.SELECT}
