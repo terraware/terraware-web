@@ -1,3 +1,4 @@
+7d7acd33 SW-8988 Ability to remove entries trees & shrubs for Biomass Monitoring Observations (#6824)
 4a4d78f8 SW-7741 Migrate sub-location writes to RTK Query (#6822)
 912f0436 Point Accession types at RTK generated types and remove AccessionService (#6832)
 f2a02bcb Point Facility types at RTK generated types where available (#6837)
