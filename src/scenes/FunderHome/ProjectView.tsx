@@ -88,6 +88,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
         children: (
           <FunderReportTabV2
             onViewQuarterlyHighlights={hasHighlights ? goToQuarterlyHighlights : undefined}
+            projectHighlightPhotoValueId={projectDetails.projectHighlightPhotoValueId}
             selectedProjectId={projectDetails.projectId}
           />
         ),

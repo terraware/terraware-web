@@ -1,5 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 import { useEffect, useRef } from 'react';
+import { useLocation } from 'react-router';
 
 import {
   Box,
@@ -24,6 +25,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import { getRgbaFromHex } from 'src/utils/color';
+import { getOrganizationSwitchPath } from 'src/utils/organization';
 import useEnvironment from 'src/utils/useEnvironment';
 
 import AddNewOrganizationModal from './AddNewOrganizationModal';
@@ -43,6 +45,7 @@ export default function SmallDeviceUserMenu({
   const { user } = useUser();
   const docLinks = useDocLinks();
   const theme = useTheme();
+  const location = useLocation();
   const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
   const [open, setOpen] = React.useState(false);
@@ -110,7 +113,10 @@ export default function SmallDeviceUserMenu({
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
     if (newlySelectedOrg.id !== selectedOrganization?.id) {
-      navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
+      navigate({
+        pathname: getOrganizationSwitchPath(location.pathname),
+        search: `organizationId=${newlySelectedOrg.id}`,
+      });
     }
     setSelectedOrganization(newlySelectedOrg);
   };

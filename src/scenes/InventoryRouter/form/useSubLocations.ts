@@ -1,16 +1,19 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
+import { useFacilitySubLocations } from 'src/components/common/SubLocations/useFacilitySubLocations';
 import strings from 'src/strings';
+import { SubLocation } from 'src/types/Facility';
 import useSnackbar from 'src/utils/useSnackbar';
-
-import { SubLocationService } from '../../../services';
-import { SubLocationsResponse } from '../../../services/SubLocationService';
-import { SubLocation } from '../../../types/Facility';
 
 export const useSubLocations = (nurseryId?: number, record?: { subLocationIds?: number[]; facilityId?: number }) => {
   const snackbar = useSnackbar();
+  const { subLocations: availableSubLocations, isError } = useFacilitySubLocations(nurseryId || record?.facilityId);
 
-  const [availableSubLocations, setAvailableSubLocations] = useState<SubLocation[]>();
+  useEffect(() => {
+    if (isError) {
+      snackbar.toastError(strings.ERROR_LOAD_SUB_LOCATIONS);
+    }
+  }, [isError, snackbar]);
 
   const subLocationIds = record?.subLocationIds;
   const selectedSubLocations = useMemo<SubLocation[] | undefined>(
@@ -22,25 +25,6 @@ export const useSubLocations = (nurseryId?: number, record?: { subLocationIds?: 
         : undefined,
     [availableSubLocations, subLocationIds]
   );
-
-  const initSubLocations = useCallback(async () => {
-    const facilityId = nurseryId || record?.facilityId;
-    if (!facilityId) {
-      return;
-    }
-
-    const result: SubLocationsResponse = await SubLocationService.getSubLocations(facilityId);
-    if (!result.requestSucceeded || !result.subLocations) {
-      snackbar.toastError(strings.ERROR_LOAD_SUB_LOCATIONS);
-      return;
-    }
-
-    setAvailableSubLocations(result.subLocations);
-  }, [nurseryId, record?.facilityId, snackbar]);
-
-  useEffect(() => {
-    void initSubLocations();
-  }, [initSubLocations]);
 
   return { availableSubLocations, selectedSubLocations };
 };

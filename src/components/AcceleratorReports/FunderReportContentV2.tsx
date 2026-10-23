@@ -22,6 +22,7 @@ export type FunderReportContentV2Props = {
   indicators: ProgressIndicator[];
   onViewQuarterlyHighlights?: () => void;
   projectId: number;
+  projectHighlightPhotoValueId?: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
 };
 
@@ -30,6 +31,7 @@ const FunderReportContentV2 = ({
   indicators,
   onViewQuarterlyHighlights,
   projectId,
+  projectHighlightPhotoValueId,
   report,
 }: FunderReportContentV2Props): JSX.Element => {
   const theme = useTheme();
@@ -64,7 +66,12 @@ const FunderReportContentV2 = ({
       <AdditionalCommentsBox projectId={projectId} report={report} />
 
       {onViewQuarterlyHighlights && (
-        <QuarterlyHighlightsBox onViewHighlights={onViewQuarterlyHighlights} projectId={projectId} report={report} />
+        <QuarterlyHighlightsBox
+          onViewHighlights={onViewQuarterlyHighlights}
+          projectId={projectId}
+          projectHighlightPhotoValueId={projectHighlightPhotoValueId}
+          report={report}
+        />
       )}
     </Card>
   );
