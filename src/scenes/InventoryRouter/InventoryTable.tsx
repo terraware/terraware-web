@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
 import _, { isArray } from 'lodash';
 import {
@@ -645,10 +645,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           pillListPortalEl={pillListPortalEl}
         />
       </Box>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <div>
           <Grid container spacing={0} marginTop={0}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <EditableTable
                 clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
                 columns={editableColumns}

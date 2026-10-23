@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
@@ -127,7 +127,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   return (
     <Grid container spacing={3}>
       {getData().map((datum) => (
-        <Grid key={datum.label} item xs={datum.gridColumns}>
+        <Grid key={datum.label} size={datum.gridColumns}>
           <OverviewItemCard
             isEditable={false}
             title={datum.label}

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Card, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -102,7 +102,7 @@ const ModuleEventSessionView = () => {
       >
         {event && (
           <Grid container spacing={theme.spacing(1)}>
-            <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+            <Grid style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }} size={6}>
               <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                 {eventType}
               </Typography>
@@ -160,7 +160,7 @@ const ModuleEventSessionView = () => {
               )}
             </Grid>
 
-            <Grid item xs={6} style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+            <Grid style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }} size={6}>
               <Box
                 sx={{
                   backgroundColor: theme.palette.TwClrBgSecondary,
@@ -190,7 +190,7 @@ const ModuleEventSessionView = () => {
               </Box>
             </Grid>
 
-            <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+            <Grid style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }} size='grow'>
               <hr
                 style={{
                   border: 'none',
