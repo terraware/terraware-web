@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -29,7 +29,7 @@ const ProjectOverviewCard = ({ dealDescription, fileNaming, projectName, md }: P
         sx={{ backgroundColor: theme.palette.TwClrBaseGray050 }}
       >
         <Grid container alignContent={'center'}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography fontSize={'20px'} lineHeight={'28px'} fontWeight={600} marginBottom={theme.spacing(1)}>
               {strings.PROJECT_OVERVIEW}
             </Typography>

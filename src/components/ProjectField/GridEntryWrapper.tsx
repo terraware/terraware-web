@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid, SxProps, useTheme } from '@mui/material';
+import { Grid, SxProps, useTheme } from '@mui/material';
 
 interface GridEntryWrapperProps {
   children: JSX.Element;
@@ -15,14 +15,15 @@ const GridEntryWrapper = ({ children, height, md, rightBorder, sx }: GridEntryWr
 
   return (
     <Grid
-      item
-      xs={12}
-      md={md || 3}
       height={height}
       margin={`${theme.spacing(2)} 0`}
       sx={{
         borderRight: rightBorder ? `1px solid ${theme.palette.TwClrBaseGray100}` : 0,
         ...sx,
+      }}
+      size={{
+        xs: 12,
+        md: md || 3,
       }}
     >
       {children}

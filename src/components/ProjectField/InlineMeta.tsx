@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -38,7 +38,7 @@ const ProjectFieldInlineMeta = ({
   return (
     <FluidEntryWrapper>
       <Grid container alignContent={'center'} paddingX={theme.spacing(2)}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box>
             {dateLabel && (
               <Typography

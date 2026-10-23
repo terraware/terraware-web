@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Container, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
@@ -85,7 +85,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
             padding: theme.spacing(3),
           }}
         >
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Textfield
               id='name'
               value={localRecord.name}
@@ -103,7 +103,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
               required
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Textfield
               id='description'
               value={localRecord.description}
@@ -113,7 +113,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
             />
           </Grid>
           {showProjectLocation && (
-            <Grid item xs={12} container spacing={2} sx={{ marginTop: theme.spacing(1) }}>
+            <Grid container spacing={2} sx={{ marginTop: theme.spacing(1) }} size={12}>
               <CountryAndBotanicalCountrySelect
                 countryCode={localRecord.countryCode ?? undefined}
                 botanicalCountryCode={localRecord.botanicalCountryCode ?? undefined}

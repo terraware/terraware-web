@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 
@@ -82,7 +82,7 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
 
   return (
     <Grid container>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
           <Box width='300px'>
             <Textfield
@@ -105,7 +105,7 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
           )}
         </Box>
       </Grid>
-      <Grid item xs={12} display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }}>
+      <Grid display='flex' flexDirection='row' alignItems='center' sx={{ marginTop: theme.spacing(2) }} size={12}>
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
     </Grid>
