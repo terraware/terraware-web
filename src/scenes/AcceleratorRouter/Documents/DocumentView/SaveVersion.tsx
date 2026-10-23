@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
@@ -72,12 +72,12 @@ const SaveVersion = ({ docId, onFinish }: SaveVersionProps): JSX.Element => {
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='16px' fontWeight='400' textAlign='center' color={theme.palette.TwClrBaseGray800}>
             {strings.SAVE_VERSION_MESSAGE}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Textfield
             label={strings.NAME}
             type='text'

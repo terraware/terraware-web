@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -91,11 +91,11 @@ const SingleView = () => {
           )}
           <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
             <Grid container spacing={3} paddingBottom={theme.spacing(4)}>
-              <Grid item xs={4}>
+              <Grid size={4}>
                 <TextField label={strings.NAME} id='name' type='text' value={fundingEntity.name} display={true} />
               </Grid>
               {fundingEntity.projects?.map((project, idx) => (
-                <Grid key={idx} item xs={4}>
+                <Grid key={idx} size={4}>
                   <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrBaseGray500}>
                     {strings.PROJECT}
                   </Typography>

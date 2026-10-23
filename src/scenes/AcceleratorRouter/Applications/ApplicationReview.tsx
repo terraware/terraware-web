@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';

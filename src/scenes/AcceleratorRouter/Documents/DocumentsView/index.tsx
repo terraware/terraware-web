@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { IconName, Separator } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -54,15 +54,15 @@ export default function DocumentsView(): JSX.Element | null {
       activeLocale ? (
         <>
           <Grid container sx={{ marginTop: theme.spacing(0.5) }}>
-            <Grid item>
+            <Grid>
               <Separator height={'40px'} />
             </Grid>
-            <Grid item>
+            <Grid>
               <Typography sx={{ lineHeight: '40px' }} component={'span'}>
                 {strings.DEAL_NAME}
               </Typography>
             </Grid>
-            <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
+            <Grid sx={{ marginLeft: theme.spacing(1.5) }}>
               <ProjectsDropdown
                 allowUnselect
                 availableProjects={availableProjects}

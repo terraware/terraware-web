@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';

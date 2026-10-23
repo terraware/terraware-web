@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -89,7 +89,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
       scrolled
     >
       <Grid container textAlign={'left'} spacing={2}>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
+        <Grid sx={{ marginTop: theme.spacing(2), paddingRight: 1 }} size={6}>
           <DatePicker
             id='startTime'
             label={strings.START_DATE}
@@ -101,7 +101,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             showTime={true}
           />
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
+        <Grid sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }} size={6}>
           <DatePicker
             id='endTime'
             label={strings.END_DATE}
@@ -114,7 +114,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             errorText={record.endTime && dateError ? strings.INVALID_DATE : ''}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='meetingUrl'
             label={strings.MEETING_URL}
@@ -123,7 +123,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             onChange={onChangeCallback('meetingUrl')}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='recordingUrl'
             label={strings.RECORDING_URL}
@@ -132,7 +132,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             onChange={onChangeCallback('recordingUrl')}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='slidesUrl'
             label={strings.SLIDES_URL}
@@ -141,12 +141,12 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             onChange={onChangeCallback('slidesUrl')}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography marginTop={2} fontSize='20px' fontWeight={600}>
             {strings.PROJECTS}
           </Typography>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <MultiProjectsEdit
             projects={selectedProjects}
             allProjects={projectOptions}

@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -113,12 +113,12 @@ export default function NewIndicator(): JSX.Element {
         >
           <Card style={{ width: '568px', margin: 'auto' }}>
             <Grid container spacing={3}>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography fontSize='20px' fontWeight={600}>
                   {strings.ADD_INDICATOR}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Dropdown
                   fullWidth
                   id='indicatorKind'
@@ -128,7 +128,7 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={indicatorKind}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   errorText={validate && !newIndicator.name ? strings.REQUIRED_FIELD : ''}
                   id='name'
@@ -139,7 +139,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.name}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   id='description'
                   label={strings.DESCRIPTION}
@@ -148,7 +148,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.description}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Dropdown
                   fullWidth
                   id='level'
@@ -158,7 +158,7 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.level}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   id='unit'
                   label={strings.UNIT}
@@ -168,7 +168,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.unit}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   errorText={validate && !newIndicator.refId ? strings.REQUIRED_FIELD : ''}
                   id='refId'
@@ -179,7 +179,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.refId}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Dropdown
                   fullWidth
                   id='category'
@@ -190,7 +190,7 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.category}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   id='primaryDataSource'
                   label={strings.PRIMARY_DATA_SOURCE}
@@ -199,7 +199,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.primaryDataSource}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   id='tfOwner'
                   label={strings.TF_OWNER_REVIEWER}
@@ -208,7 +208,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.tfOwner}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Dropdown
                   fullWidth
                   id='classId'
@@ -218,7 +218,7 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.classId}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   id='notes'
                   label={strings.NOTES}
@@ -227,7 +227,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.notes}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Dropdown
                   fullWidth
                   id='frequency'
@@ -237,7 +237,7 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.frequency}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Checkbox
                   disabled={false}
                   id='isPublishable'
@@ -247,7 +247,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.isPublishable}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Checkbox
                   disabled={false}
                   id='active'
@@ -257,7 +257,7 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.active}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Checkbox
                   disabled={false}
                   id='isDecimal'
