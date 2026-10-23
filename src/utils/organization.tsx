@@ -1,7 +1,20 @@
+import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
+
+export const getOrganizationSwitchPath = (pathname: string): string => {
+  const staticPaths = new Set<string>(Object.values(APP_PATHS).filter((path) => !path.includes(':')));
+  const segments = pathname.split('/').filter((segment) => segment);
+  for (let length = segments.length; length > 0; length--) {
+    const candidate = `/${segments.slice(0, length).join('/')}`;
+    if (staticPaths.has(candidate)) {
+      return candidate;
+    }
+  }
+  return APP_PATHS.HOME;
+};
 
 const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
   let facilitiesByType: Facility[] = [];

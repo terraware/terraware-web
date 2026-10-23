@@ -1,12 +1,13 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import { useLocation } from 'react-router';
 
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
-import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
+import { getOrganizationSwitchPath } from 'src/utils/organization';
 
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 
@@ -14,6 +15,7 @@ export default function OrganizationsDropdown(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
     useOrganization();
+  const location = useLocation();
   const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
 
@@ -29,7 +31,10 @@ export default function OrganizationsDropdown(): JSX.Element {
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
     if (newlySelectedOrg.id !== selectedOrganization?.id) {
-      navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
+      navigate({
+        pathname: getOrganizationSwitchPath(location.pathname),
+        search: `organizationId=${newlySelectedOrg.id}`,
+      });
     }
     setSelectedOrganization(newlySelectedOrg);
   };
