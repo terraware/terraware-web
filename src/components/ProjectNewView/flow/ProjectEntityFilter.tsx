@@ -13,7 +13,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 export interface EntitySpecificFilterConfig {
   filterKey: string;
   label: string;
-  initialSelection: (string | number)[];
+  initialSelection: (string | number | null)[];
   options: (string | number)[];
   renderOption: (value: string | number | null) => string;
   pillModifier: (filters: ProjectEntityFilters) => PillListItemWithEmptyValue[];

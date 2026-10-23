@@ -1,5 +1,13 @@
+import { PlantingSiteSearchResult } from 'src/types/Tracking';
+import { parseSearchTerm } from 'src/utils/search';
+
 import { baseApi as api } from '../baseApi';
-import { SearchCountApiResponse, SearchSortOrderElement } from '../generated/search';
+import {
+  SearchApiResponse,
+  SearchCountApiResponse,
+  SearchNodePayload,
+  SearchSortOrderElement,
+} from '../generated/search';
 import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -83,6 +91,61 @@ const injectedRtkApi = api.injectEndpoints({
           projectName: result.project_name,
           timeZoneId: result.timeZone,
         })),
+    }),
+
+    searchPlantingSitesForProjectAssignment: build.query<
+      PlantingSiteSearchResult[],
+      SearchPlantingSitesForProjectAssignmentApiArgs
+    >({
+      query: (args) => {
+        const children: SearchNodePayload[] = [
+          { operation: 'field', field: 'organization_id', values: [`${args.organizationId}`] },
+        ];
+
+        if (args.projectIds?.length) {
+          children.push({
+            operation: 'field',
+            field: 'project_id',
+            type: 'Exact',
+            values: args.projectIds.map((id) => (id === null ? null : String(id))),
+          });
+        }
+
+        if (args.searchTerm) {
+          const { type, values } = parseSearchTerm(args.searchTerm);
+          children.push({ operation: 'field', field: 'name', type, values });
+        }
+
+        return {
+          url: '/api/v1/search',
+          method: 'POST',
+          body: {
+            prefix: 'plantingSites',
+            fields: [
+              'boundary',
+              'description',
+              'id',
+              'name',
+              'numStrata',
+              'numStrata(raw)',
+              'numSubstrata',
+              'numSubstrata(raw)',
+              'project_name',
+              'project_id',
+              'timeZone',
+              'totalPlants(raw)',
+            ],
+            search: { operation: 'and', children },
+            sortOrder: [args.sortOrder ?? { field: 'name', direction: 'Ascending' }],
+            count: 0,
+          },
+        };
+      },
+      providesTags: (results) => [
+        ...(results?.map((result) => ({ type: QueryTagTypes.PlantingSites, id: Number(result.id) })) ?? []),
+        { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+      ],
+      transformResponse: (response: SearchApiResponse) => response.results as PlantingSiteSearchResult[],
     }),
 
     searchPlantingSiteNames: build.query<PlantingSiteName[], number>({
@@ -260,6 +323,13 @@ type SearchPlantingSiteSummariesApiArgs = {
   searchTerm?: string;
 };
 
+type SearchPlantingSitesForProjectAssignmentApiArgs = {
+  organizationId: number;
+  projectIds?: (number | null)[];
+  searchTerm?: string;
+  sortOrder?: SearchSortOrderElement;
+};
+
 export type PlantingSiteSummary = {
   createdByName?: string;
   createdTime: string;
@@ -314,6 +384,7 @@ type ObservationDatesSearchResult = {
 export const {
   useLazyCountPlantingSitesQuery,
   useLazySearchPlantingSitesQuery,
+  useLazySearchPlantingSitesForProjectAssignmentQuery,
   useLazySearchPlantingSiteNamesQuery,
   useLazySearchPlantingSiteProjectsQuery,
   useSearchMonitoringPlotsQuery,

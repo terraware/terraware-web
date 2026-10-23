@@ -9,7 +9,7 @@ import ProjectEntitySearch, {
   PillListItemWithEmptyValue,
 } from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import {
-  ProjectEntityFilters,
+  ProjectEntitySearchArgs,
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import Card from 'src/components/common/Card';
@@ -18,7 +18,6 @@ import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers';
 import { NurseryBatchesSearchResponseElement, useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import { CreateProjectRequest } from 'src/types/Project';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getAllNurseries } from 'src/utils/organization';
 
 import { EntitySpecificFilterConfig } from './ProjectEntityFilter';
@@ -102,24 +101,16 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   );
 
   const getSearchResults = useCallback(
-    (
-      organizationId: number,
-      _searchFields: SearchNodePayload[],
-      searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntityFilters,
-      searchTerm?: string
-    ) =>
+    ({ organizationId, sortOrder, filters: searchFilters, searchTerm }: ProjectEntitySearchArgs) =>
       listAllBatches({
         organizationId,
-        sortOrder: searchSortOrder,
-        nurseryIds: searchFilters?.nurseryIds,
-        projectIds: searchFilters?.projectIds,
+        sortOrder,
+        nurseryIds: searchFilters.nurseryIds,
+        projectIds: searchFilters.projectIds,
         query: searchTerm,
       }).unwrap(),
     [listAllBatches]
   );
-
-  const getSearchFields = useCallback((): FieldNodePayload[] => [], []);
 
   const {
     entities,
@@ -137,7 +128,6 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
     setProjectEntities: setProjectBatches,
     onNext,
     getSearchResults,
-    getSearchFields,
   });
 
   const entitySpecificFilterConfigs: EntitySpecificFilterConfig[] = useMemo(
