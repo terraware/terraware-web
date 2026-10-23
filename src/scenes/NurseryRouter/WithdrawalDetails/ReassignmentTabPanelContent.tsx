@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { BatchPayload, DeliveryPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
@@ -63,7 +63,7 @@ export default function ReassignmentTabPanelContent({
       </Typography>
       <Grid container>
         {overviewCardData.map((item) => (
-          <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+          <Grid key={item.title} size={isMobile ? 12 : 4}>
             <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
           </Grid>
         ))}

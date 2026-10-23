@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -132,7 +132,7 @@ export default function WithdrawalOverview({
   return (
     <Grid container>
       {overviewCardData.map((item) => (
-        <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+        <Grid key={item.title} size={isMobile ? 12 : 4}>
           <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
         </Grid>
       ))}

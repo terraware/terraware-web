@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -71,7 +71,7 @@ export default function PersonDetailsView(): JSX.Element {
           <PersonModal open={editPersonModalOpened} onClose={() => setEditPersonModalOpened(false)} person={person} />
         )}
         <Grid container padding={theme.spacing(0, 0, 2, 0)}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <BackToLink
               id='back'
               to={APP_PATHS.PEOPLE}
@@ -80,8 +80,6 @@ export default function PersonDetailsView(): JSX.Element {
             />
           </Grid>
           <Grid
-            item
-            xs={12}
             padding={theme.spacing(0, 3)}
             sx={{
               display: 'flex',
@@ -89,8 +87,9 @@ export default function PersonDetailsView(): JSX.Element {
               justifyContent: 'space-between',
               alignItems: 'center',
             }}
+            size={12}
           >
-            <Grid item xs={9}>
+            <Grid size={9}>
               <Typography
                 fontSize='24px'
                 fontWeight={600}
@@ -102,7 +101,7 @@ export default function PersonDetailsView(): JSX.Element {
                 {person?.email}
               </Typography>
             </Grid>
-            <Grid item xs={3}>
+            <Grid size={3}>
               {isAdmin(selectedOrganization) &&
                 (isMobile ? (
                   <Button
@@ -124,7 +123,7 @@ export default function PersonDetailsView(): JSX.Element {
                 ))}
             </Grid>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PageSnackbar />
           </Grid>
         </Grid>
@@ -136,16 +135,16 @@ export default function PersonDetailsView(): JSX.Element {
             padding: theme.spacing(3),
           }}
         >
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
             <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />
           </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
             <TextField label={strings.FIRST_NAME} id='firstName' type='text' value={person?.firstName} display={true} />
           </Grid>
-          <Grid item xs={gridSize()} paddingBottom={theme.spacing(2)}>
+          <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
             <TextField label={strings.LAST_NAME} id='lastName' type='text' value={person?.lastName} display={true} />
           </Grid>
-          <Grid item xs={gridSize()} paddingBottom={isMobile ? theme.spacing(2) : 0}>
+          <Grid paddingBottom={isMobile ? theme.spacing(2) : 0} size={gridSize()}>
             <TextField
               label={strings.ROLE}
               id='role'
@@ -154,7 +153,7 @@ export default function PersonDetailsView(): JSX.Element {
               display={true}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <TextField label={strings.DATE_ADDED} id='addedTime' type='text' value={getDateAdded()} display={true} />
           </Grid>
         </Grid>

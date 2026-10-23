@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -288,7 +288,7 @@ export default function NurseryView(): JSX.Element {
         }}
       >
         <Grid container spacing={3}>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <TextField
               id='name'
               label={strings.NAME_REQUIRED}
@@ -298,7 +298,7 @@ export default function NurseryView(): JSX.Element {
               errorText={record.name ? '' : nameError}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <TextField
               id='description'
               label={strings.DESCRIPTION_REQUIRED}
@@ -308,14 +308,14 @@ export default function NurseryView(): JSX.Element {
               errorText={record.description ? '' : descriptionError}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <LocationTimeZoneSelector
               location={record}
               onChangeTimeZone={onChangeTimeZone}
               tooltip={strings.TOOLTIP_TIME_ZONE_NURSERY}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <DatePicker
               aria-label='date-picker'
               defaultTimeZone={timeZoneId}
@@ -336,7 +336,7 @@ export default function NurseryView(): JSX.Element {
               value={record.buildStartedDate ?? ''}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <DatePicker
               aria-label='date-picker'
               defaultTimeZone={timeZoneId}
@@ -358,7 +358,7 @@ export default function NurseryView(): JSX.Element {
               value={record.buildCompletedDate ?? ''}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <DatePicker
               aria-label='date-picker'
               defaultTimeZone={timeZoneId}
@@ -379,7 +379,7 @@ export default function NurseryView(): JSX.Element {
               value={record.operationStartedDate ?? ''}
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <TextField
               id={'capacity'}
               label={strings.NURSERY_CAPACITY}
@@ -390,7 +390,7 @@ export default function NurseryView(): JSX.Element {
               aria-label='date-picker'
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <TextField
               id={'latitude'}
               label={strings.LATITUDE}
@@ -399,7 +399,7 @@ export default function NurseryView(): JSX.Element {
               type='number'
             />
           </Grid>
-          <Grid item xs={gridSize()}>
+          <Grid size={gridSize()}>
             <TextField
               id={'longitude'}
               label={strings.LONGITUDE}

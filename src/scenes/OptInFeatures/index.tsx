@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
+import { Box, Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
 import TfMain from 'src/components/common/TfMain';
@@ -104,7 +104,7 @@ export default function OptInFeaturesView(): JSX.Element {
         <LinearProgress color='success' />
       ) : (
         <Page contentStyle={{ display: 'block' }}>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: 'flex',
@@ -131,7 +131,7 @@ export default function OptInFeaturesView(): JSX.Element {
                 key={i}
               >
                 <Grid container spacing={0}>
-                  <Grid item xs={gridSize()}>
+                  <Grid size={gridSize()}>
                     <Box
                       sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', whiteSpace: 'pre', alignSelf: 'center' }}
                     >
@@ -144,7 +144,7 @@ export default function OptInFeaturesView(): JSX.Element {
                       {f.enabled ? ' (Feature Ungated)' : ''}
                     </Box>
                   </Grid>
-                  <Grid item xs={gridSize()} sx={gridStyle(false)}>
+                  <Grid sx={gridStyle(false)} size={gridSize()}>
                     <Box sx={{ padding: isMobile ? 0 : '0 20px' }}>
                       <ul>
                         {f.description.map((d, index) => (
@@ -155,7 +155,7 @@ export default function OptInFeaturesView(): JSX.Element {
                       </ul>
                     </Box>
                   </Grid>
-                  <Grid item xs={gridSize()} sx={gridStyle(true)}>
+                  <Grid sx={gridStyle(true)} size={gridSize()}>
                     <ul>
                       {f.disclosure.map((d, index) => (
                         <li key={index}>

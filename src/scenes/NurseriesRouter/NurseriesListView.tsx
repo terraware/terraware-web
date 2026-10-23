@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useRef, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -88,12 +88,12 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(2)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
-          <Grid item xs={9} alignItems='center'>
+          <Grid alignItems='center' size={9}>
             <Typography fontSize='24px' fontWeight={600}>
               {strings.NURSERIES}
             </Typography>
           </Grid>
-          <Grid item xs={3} sx={{ textAlign: 'right' }}>
+          <Grid sx={{ textAlign: 'right' }} size={3}>
             {isAdmin(organization) &&
               (isMobile ? (
                 <Button id='new-nursery' icon='plus' onClick={goToNewNursery} size='medium' />
@@ -113,13 +113,12 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
       <Card flushMobile>
         <Grid container ref={contentRef}>
           <Grid
-            item
-            xs={12}
             marginBottom={theme.spacing(2)}
             flexDirection={'row'}
             sx={{
               display: 'flex',
             }}
+            size={12}
           >
             <Box width='300px'>
               <TextField
@@ -136,7 +135,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
             </Box>
             <TableSettingsButton />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             {results && (
               <Table
                 id='nurseries-table'

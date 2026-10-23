@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useMatch, useParams, useSearchParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -157,7 +157,7 @@ export default function PlantsDashboardView({
   const hasObservationResults = useMemo(() => !!plantingSite?.latestObservationId, [plantingSite]);
 
   const sectionHeader = (title: string) => (
-    <Grid item xs={12}>
+    <Grid size={12}>
       <Typography fontSize='20px' fontWeight={600}>
         {title}
       </Typography>
@@ -168,7 +168,7 @@ export default function PlantsDashboardView({
     () =>
       plantingSite || isProjectSelected ? (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: 'flex',
@@ -186,7 +186,7 @@ export default function PlantsDashboardView({
               )}
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <SurvivalRateCard
               plantingSiteId={plantingSite?.id}
               projectId={projectId}
@@ -200,7 +200,7 @@ export default function PlantsDashboardView({
 
   const renderTotalPlantsAndSpecies = () => (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Box
           sx={{
             display: 'flex',
@@ -225,7 +225,7 @@ export default function PlantsDashboardView({
           ) : null}
         </Box>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PlantsAndSpeciesCard
           plantingSiteId={selectedPlantingSiteId !== ALL_PLANTING_SITES ? plantingSite?.id : undefined}
           projectId={projectId}
@@ -240,7 +240,7 @@ export default function PlantsDashboardView({
     () =>
       plantingSite ? (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: 'flex',
@@ -259,7 +259,7 @@ export default function PlantsDashboardView({
               )}
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PlantingDensityCard hasObservations={hasObservationResults} plantingSiteId={plantingSite.id} />
           </Grid>
         </>
@@ -271,7 +271,7 @@ export default function PlantsDashboardView({
     () =>
       plantingSite ? (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}>
               <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
                 {strings.STRATUM_TRENDS}
@@ -280,7 +280,7 @@ export default function PlantsDashboardView({
               <Typography>{strings.ALL_OBSERVATIONS}</Typography>
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
           </Grid>
         </>
@@ -292,7 +292,7 @@ export default function PlantsDashboardView({
     () =>
       plantingSite ? (
         <>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: 'flex',
@@ -310,7 +310,7 @@ export default function PlantsDashboardView({
               )}
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 display: 'flex',
@@ -341,7 +341,7 @@ export default function PlantsDashboardView({
       plantingSite ? (
         <>
           {sectionHeader(strings.SITE_MAP)}
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box
               sx={{
                 background: theme.palette.TwClrBg,
@@ -379,7 +379,7 @@ export default function PlantsDashboardView({
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {survivalRateRecalculationInProgress && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
           </Grid>
         )}
@@ -394,7 +394,7 @@ export default function PlantsDashboardView({
         {(selectedPlantingSiteId === ALL_PLANTING_SITES || !plantingSite) && (
           <>
             {sectionHeader(strings.PROJECT_AREA_MAP)}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Box
                 sx={{
                   background: theme.palette.TwClrBg,

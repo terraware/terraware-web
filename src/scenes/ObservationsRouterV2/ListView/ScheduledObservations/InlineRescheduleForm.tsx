@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -54,7 +54,7 @@ const InlineRescheduleForm = ({ observation, onClose }: InlineRescheduleFormProp
   return (
     <Box marginTop={theme.spacing(1)}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <DatePicker
             aria-label='date-picker'
             errorText={errors.startDateError}
@@ -65,7 +65,7 @@ const InlineRescheduleForm = ({ observation, onClose }: InlineRescheduleFormProp
             value={startDate ?? ''}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <DatePicker
             aria-label='date-picker'
             errorText={errors.endDateError}

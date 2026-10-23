@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { PillList, PillListItem, TableColumnType, Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -134,10 +134,10 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
 
-      <Grid item xs={12} marginTop={2}>
+      <Grid marginTop={2} size={12}>
         <div>
           <Grid container spacing={4}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Table
                 id='planting-sites-table'
                 columns={tableColumns}

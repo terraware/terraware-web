@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -37,7 +37,7 @@ export default function PlantingSiteView(): JSX.Element {
       )}
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <PlantingSiteDetailsHeader onDelete={openModal} plantingSite={plantingSite} />
-        <Grid item xs={12}>
+        <Grid size={12}>
           <PageSnackbar />
         </Grid>
         <Box marginTop={theme.spacing(3)}>
