@@ -12,6 +12,7 @@ type EventLogProps = {
   emptyState?: ReactNode;
   events?: EventLogEntryPayload[];
   filterEvent?: (event: EventLogEntryPayload) => boolean;
+  flushTop?: boolean;
   getUpdatedFieldLabel?: (event: EventLogEntryPayload) => ReactNode;
   hideToggle?: boolean;
   isLoading?: boolean;
@@ -23,6 +24,7 @@ const EventLog = ({
   emptyState,
   events,
   filterEvent,
+  flushTop,
   getUpdatedFieldLabel,
   hideToggle,
   isLoading,
@@ -110,6 +112,7 @@ const EventLog = ({
                 display='flex'
                 gap='24px'
                 padding={2}
+                paddingTop={flushTop && index === 0 ? 0 : 2}
               >
                 <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
                   <Typography
