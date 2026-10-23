@@ -110,6 +110,7 @@ const EventLog = ({
                 display='flex'
                 gap='24px'
                 padding={2}
+                paddingTop={hideToggle && index === 0 ? 0 : 2}
               >
                 <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
                   <Typography
