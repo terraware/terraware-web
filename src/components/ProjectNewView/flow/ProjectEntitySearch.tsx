@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 

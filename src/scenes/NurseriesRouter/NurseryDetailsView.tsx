@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';

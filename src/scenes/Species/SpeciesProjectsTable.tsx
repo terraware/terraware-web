@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { TableRowType } from '@terraware/web-components';
 import { TableColumnType } from '@terraware/web-components/components/table/types';
 

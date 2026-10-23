@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Grid, SxProps, useTheme } from '@mui/material';
+import { GridLegacy as Grid, SxProps, useTheme } from '@mui/material';
 
 interface GridEntryWrapperProps {
   children: JSX.Element;

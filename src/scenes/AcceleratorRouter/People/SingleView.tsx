@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';

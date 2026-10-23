@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Container, Grid, useTheme } from '@mui/material';
+import { Container, GridLegacy as Grid, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';

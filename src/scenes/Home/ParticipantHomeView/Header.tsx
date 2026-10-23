@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';

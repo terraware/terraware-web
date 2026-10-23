@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';

@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';

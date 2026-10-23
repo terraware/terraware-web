@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import Metadata from 'src/components/DeliverableView/Metadata';

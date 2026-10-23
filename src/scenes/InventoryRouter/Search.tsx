@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Grid, Popover, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Popover, useTheme } from '@mui/material';
 import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 

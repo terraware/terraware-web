@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import SdgIcon from 'src/components/common/SDG/SdgIcon';
 import strings from 'src/strings';

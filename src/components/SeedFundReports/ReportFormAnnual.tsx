@@ -1,6 +1,6 @@
 import React, { type JSX, useRef, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';
 
 import { API_PATHS } from 'src/constants';
@@ -228,7 +228,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           />
         </Grid>
       ))}
-      <Grid item xs={12} paddingTop={0} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+      <Grid item xs={12} paddingTop={0} sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}>
         <Textfield
           label=''
           id='observations-months-validation'

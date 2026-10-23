@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 

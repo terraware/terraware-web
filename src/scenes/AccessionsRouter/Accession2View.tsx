@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 

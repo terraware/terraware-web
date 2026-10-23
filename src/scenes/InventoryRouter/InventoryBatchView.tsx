@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';

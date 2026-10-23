@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

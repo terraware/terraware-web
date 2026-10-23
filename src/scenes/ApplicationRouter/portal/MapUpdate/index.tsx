@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Card, Grid, useTheme } from '@mui/material';
+import { Box, Card, GridLegacy as Grid, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { BusySpinner, Button } from '@terraware/web-components';
 import area from '@turf/area';

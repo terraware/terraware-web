@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';

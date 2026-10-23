@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 

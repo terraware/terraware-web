@@ -6,7 +6,7 @@ import {
   Card,
   Checkbox,
   Chip,
-  Grid,
+  GridLegacy as Grid,
   IconButton,
   MenuItem,
   TextField,

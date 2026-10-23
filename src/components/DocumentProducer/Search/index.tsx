@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Grid, Popover, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Popover, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Tooltip } from '@terraware/web-components';
 import { Button, PillList } from '@terraware/web-components';

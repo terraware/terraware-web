@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
 import {
   MRT_Cell,

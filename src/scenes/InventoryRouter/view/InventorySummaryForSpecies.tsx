@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import strings from 'src/strings';

@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, GridLegacy as Grid } from '@mui/material';
 import { Button, PillList, Textfield, Tooltip } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 

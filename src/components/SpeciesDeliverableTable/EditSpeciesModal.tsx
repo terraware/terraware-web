@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';

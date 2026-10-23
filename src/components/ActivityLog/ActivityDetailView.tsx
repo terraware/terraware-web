@@ -1,6 +1,6 @@
 import React, { CSSProperties, type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
 import { Button, DialogBox, Icon } from '@terraware/web-components';
 import { DateTime } from 'luxon';

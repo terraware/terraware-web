@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, GridLegacy as Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';

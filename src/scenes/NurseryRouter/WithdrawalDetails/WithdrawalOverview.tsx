@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';

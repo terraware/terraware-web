@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import Page, { PageProps } from 'src/components/Page';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { Message, TableColumnType, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

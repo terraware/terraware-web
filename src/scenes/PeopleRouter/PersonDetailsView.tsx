@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 

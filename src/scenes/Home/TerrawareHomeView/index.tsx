@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, GridLegacy as Grid } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 

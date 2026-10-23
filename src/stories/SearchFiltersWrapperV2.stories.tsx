@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Container, Grid } from '@mui/material';
+import { Container, GridLegacy as Grid } from '@mui/material';
 import { StoryFn } from '@storybook/react';
 
 import Card from 'src/components/common/Card';
