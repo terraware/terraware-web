@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
@@ -273,7 +273,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       }
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12} sx={{ position: 'relative' }}>
+        <Grid sx={{ position: 'relative' }} size={12}>
           <>
             <OptionsMenu
               onOptionItemClick={onOptionItemClick}

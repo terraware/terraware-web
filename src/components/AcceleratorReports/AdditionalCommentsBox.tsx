@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import useBoolean from 'src/hooks/useBoolean';
@@ -81,7 +81,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
       onSave={onSave}
       isConsoleView={isConsoleView}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!isEditing && !additionalComments ? (
           <EmptyFieldPlaceholder text={strings.NO_ADDITIONAL_COMMENTS_ADDED} />
         ) : (

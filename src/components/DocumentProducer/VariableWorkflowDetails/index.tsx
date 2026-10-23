@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';
@@ -27,7 +27,7 @@ const VariableWorkflowDetails = ({
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Box
           sx={{
             border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
@@ -38,7 +38,7 @@ const VariableWorkflowDetails = ({
         />
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Box sx={{ marginBottom: '12px' }}>
           {display ? (
             <>
@@ -67,7 +67,7 @@ const VariableWorkflowDetails = ({
         </Box>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Textfield
           display={display}
           id='internal-comments'
@@ -85,7 +85,7 @@ const VariableWorkflowDetails = ({
       </Grid>
 
       {variableWorkflowDetails?.status && ['Rejected', 'In Review'].includes(variableWorkflowDetails.status) && (
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Textfield
             display={display}
             id='feedback'

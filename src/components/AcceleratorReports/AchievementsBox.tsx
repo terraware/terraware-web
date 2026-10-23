@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
@@ -44,10 +44,9 @@ const Achievement = ({
   return (
     <>
       <Grid
-        item
-        xs={editing ? 11.5 : 12}
         borderBottom={includeBorder && !editing ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
         marginBottom={1}
+        size={editing ? 11.5 : 12}
       >
         <Textfield
           type='textarea'
@@ -62,7 +61,7 @@ const Achievement = ({
         />
       </Grid>
       {editing && (
-        <Grid item xs={0.5} display={'flex'} flexDirection={'column'}>
+        <Grid display={'flex'} flexDirection={'column'} size={0.5}>
           <Link onClick={onRemove} style={{ height: '100%' }}>
             <Box paddingTop='8px'>
               <Icon name='iconSubtract' size='medium' />
@@ -179,7 +178,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       isConsoleView={isConsoleView}
     >
       {isEmpty ? (
-        <Grid item xs={12} marginBottom={1}>
+        <Grid marginBottom={1} size={12}>
           <EmptyFieldPlaceholder text={strings.NO_ACHIEVEMENTS_ADDED} />
         </Grid>
       ) : (

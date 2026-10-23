@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import useBoolean from 'src/hooks/useBoolean';
@@ -90,7 +90,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
       onSave={onSave}
       isConsoleView={isConsoleView}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!isEditing && !highlights ? (
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
             {strings.NO_HIGHLIGHTS_ADDED}
