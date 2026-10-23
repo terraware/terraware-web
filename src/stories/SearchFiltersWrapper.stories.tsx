@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { StoryFn } from '@storybook/react';
 
 import SearchFiltersWrapper, { SearchProps } from 'src/components/common/SearchFiltersWrapper';

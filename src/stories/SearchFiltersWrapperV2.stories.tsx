@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { Container, GridLegacy as Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 import { StoryFn } from '@storybook/react';
 
 import Card from 'src/components/common/Card';
@@ -17,7 +17,7 @@ const SearchFiltersWrapperV2Template: StoryFn<SearchProps> = (args) => {
     <TfMain>
       <Container maxWidth={false} sx={{ padding: 0 }}>
         <Card flushMobile>
-          <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
+          <Grid sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }} size={12}>
             <SearchFiltersWrapperV2
               search={search}
               onSearch={(val) => setSearch(val)}

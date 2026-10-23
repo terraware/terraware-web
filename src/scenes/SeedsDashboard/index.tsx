@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, CircularProgress, Container, GridLegacy as Grid, SxProps, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, SxProps, Typography, useTheme } from '@mui/material';
 import Cookies from 'cookies-js';
 
 import MainPaper from 'src/components/MainPaper';
@@ -70,7 +70,7 @@ export default function SeedSummary(): JSX.Element {
         {selectedOrganization && seedBankSummary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (
-              <Grid item xs={12} paddingBottom={theme.spacing(1)}>
+              <Grid paddingBottom={theme.spacing(1)} size={12}>
                 <Box
                   sx={{
                     background: theme.palette.TwClrBgInfoTertiary,
@@ -113,9 +113,9 @@ export default function SeedSummary(): JSX.Element {
                 </Box>
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Grid container spacing={3}>
-                <Grid item xs={cardGridSize()}>
+                <Grid size={cardGridSize()}>
                   <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='seedCount'
@@ -132,7 +132,7 @@ export default function SeedSummary(): JSX.Element {
                     />
                   </MainPaper>
                 </Grid>
-                <Grid item xs={cardGridSize()}>
+                <Grid size={cardGridSize()}>
                   <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='sessions'
@@ -145,7 +145,7 @@ export default function SeedSummary(): JSX.Element {
                     />
                   </MainPaper>
                 </Grid>
-                <Grid item xs={cardGridSize()}>
+                <Grid size={cardGridSize()}>
                   <MainPaper sx={paperStyles}>
                     <SummaryPaper
                       id='species'
@@ -158,7 +158,7 @@ export default function SeedSummary(): JSX.Element {
                     />
                   </MainPaper>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Box
                     sx={{
                       backgroundColor: theme.palette.TwClrBg,
@@ -180,7 +180,7 @@ export default function SeedSummary(): JSX.Element {
                     </Box>
                     <Grid container spacing={3} marginBottom={theme.spacing(3.5)}>
                       {cardStates.map((state) => (
-                        <Grid item xs={cardGridSize()} key={state}>
+                        <Grid key={state} size={cardGridSize()}>
                           <AccessionByStatus
                             label={stateName(state)}
                             status={stateName(state)}

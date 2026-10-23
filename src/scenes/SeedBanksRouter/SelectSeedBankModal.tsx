@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -64,7 +64,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
           marginTop: Number(theme.spacing(2)) / 2,
         }}
       >
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Select
             id='seedBank'
             selectedValue={selectedFacility?.name}
