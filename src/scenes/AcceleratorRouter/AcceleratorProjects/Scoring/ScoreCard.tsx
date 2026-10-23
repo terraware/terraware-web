@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -162,20 +162,18 @@ const ScoreCard = ({ score, isEditing, onChange }: ScoreCardProps) => {
           flexGrow={1}
           rowGap={theme.spacing(2)}
         >
-          <Grid item xs={2}>
+          <Grid size={2}>
             <Typography fontWeight={500} fontSize={'14px'} lineHeight={'20px'}>
               {strings.SCORE_SUMMARY}
             </Typography>
           </Grid>
-          <Grid item xs={10}>
-            {summary}
-          </Grid>
-          <Grid item xs={2}>
+          <Grid size={10}>{summary}</Grid>
+          <Grid size={2}>
             <Typography fontWeight={500} fontSize={'14px'} lineHeight={'20px'}>
               {strings.SCORE_DETAILS_LINK}
             </Typography>
           </Grid>
-          <Grid item xs={10}>
+          <Grid size={10}>
             <Typography fontWeight={400} fontSize={'14px'} lineHeight={'20px'}>
               {detailsUrl}
             </Typography>

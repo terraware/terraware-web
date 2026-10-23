@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -65,7 +65,7 @@ export default function AddInternalUserRoleModal({
       ]}
     >
       <Grid>
-        <Grid display='flex' item textAlign='left' xs={11}>
+        <Grid display='flex' textAlign='left' size={11}>
           <Textfield
             id='newContactType'
             label={strings.CONTACT_TYPE}

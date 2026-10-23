@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -72,7 +72,7 @@ export default function ContentAndMaterials({ module, deliverables }: contentAnd
         </Typography>
       </Box>
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.DELIVERABLES}
           </Typography>
@@ -84,13 +84,13 @@ export default function ContentAndMaterials({ module, deliverables }: contentAnd
             Renderer={DeliverablesRenderer}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.PREPARATION_MATERIALS}
           </Typography>
           <Box dangerouslySetInnerHTML={{ __html: module?.preparationMaterials || '' }} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {strings.ADDITIONAL_RESOURCES}
           </Typography>

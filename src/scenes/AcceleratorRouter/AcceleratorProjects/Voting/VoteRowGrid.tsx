@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -22,10 +22,8 @@ const VoteRowGrid = ({ leftChild, rightChild, style }: Props): JSX.Element => {
       flexGrow={1}
       sx={style}
     >
-      <Grid item xs={4}>
-        {leftChild}
-      </Grid>
-      <Grid item xs={8} marginTop={isMobile ? theme.spacing(1) : 0}>
+      <Grid size={4}>{leftChild}</Grid>
+      <Grid marginTop={isMobile ? theme.spacing(1) : 0} size={8}>
         {rightChild}
       </Grid>
     </Grid>

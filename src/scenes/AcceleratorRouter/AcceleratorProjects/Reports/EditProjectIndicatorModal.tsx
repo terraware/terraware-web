@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -83,7 +83,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
       scrolled
     >
       <Grid container textAlign={'left'} spacing={2}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='name'
             label={strings.NAME}
@@ -94,7 +94,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='description'
             label={strings.DESCRIPTION}
@@ -103,7 +103,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             value={record.description}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             id='level'
             label={strings.INDICATOR_LEVEL}
@@ -113,7 +113,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             fullWidth
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='unit'
             label={strings.UNIT}
@@ -123,7 +123,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             value={record.unit}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='refId'
             label={strings.REF_ID}
@@ -132,7 +132,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             value={record.refId}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             id='category'
             label={strings.CATEGORY}
@@ -143,7 +143,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             required
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='primaryDataSource'
             label={strings.PRIMARY_DATA_SOURCE}
@@ -152,7 +152,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             value={record.primaryDataSource}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='tfOwner'
             label={strings.TF_OWNER_REVIEWER}
@@ -161,7 +161,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             value={record.tfOwner}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             id='classId'
             label={strings.IS_CUMULATIVE}
@@ -171,7 +171,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             fullWidth
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='notes'
             label={strings.NOTES}
@@ -180,7 +180,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             value={record.notes}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             id='frequency'
             label={strings.FREQUENCY_OF_REPORTING}
@@ -190,7 +190,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             fullWidth
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             disabled={false}
             id='active'
@@ -200,7 +200,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             onChange={onChangeCallback('active')}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             disabled={false}
             id='isPublishable'
@@ -210,7 +210,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             onChange={onChangeCallback('isPublishable')}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             disabled={false}
             id='isDecimal'
