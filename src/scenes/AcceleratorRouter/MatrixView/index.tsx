@@ -893,7 +893,7 @@ const MatrixView = () => {
     renderTopToolbarCustomActions: () => {
       return (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid style={{ width: '250px' }}>
+          <Grid style={{ width: '242px' }}>
             <Dropdown
               id={'current-view'}
               label={strings.CURRENT_VIEW}
