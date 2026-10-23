@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -109,7 +109,7 @@ export default function SpeciesEditView(): JSX.Element {
               margin: 0,
             }}
           >
-            <Grid item xs={12} paddingBottom={theme.spacing(2)}>
+            <Grid paddingBottom={theme.spacing(2)} size={12}>
               <Dropdown
                 id='speciesNativeCategory'
                 selectedValue={acceleratorProjectSpeciesRecord?.speciesNativeCategory}
@@ -122,7 +122,7 @@ export default function SpeciesEditView(): JSX.Element {
                 required
               />
             </Grid>
-            <Grid item xs={12} paddingBottom={theme.spacing(3)}>
+            <Grid paddingBottom={theme.spacing(3)} size={12}>
               <TextField
                 label={strings.RATIONALE}
                 id='rationale'

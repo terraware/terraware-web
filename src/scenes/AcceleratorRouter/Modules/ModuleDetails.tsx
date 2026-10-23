@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -64,7 +64,6 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
       </Box>
       <Grid container>
         <Grid
-          item
           sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
           marginBottom={theme.spacing(3)}
           paddingBottom={theme.spacing(3)}
@@ -74,7 +73,7 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
           </Typography>
           <Box dangerouslySetInnerHTML={{ __html: module?.overview || '' }} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={1}>
             {strings.PROJECTS}
           </Typography>

@@ -1,7 +1,7 @@
 import React, { type JSX, useRef } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Tabs } from '@terraware/web-components';
 
 import BackToLink from 'src/components/common/BackToLink';
@@ -53,7 +53,7 @@ export default function ModuleView(): JSX.Element {
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(4), paddingLeft: theme.spacing(3) }}>
           <Grid container>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <BackToLink
                 id='back'
                 to={APP_PATHS.ACCELERATOR_MODULES}
@@ -61,7 +61,7 @@ export default function ModuleView(): JSX.Element {
                 style={{ marginBottom: theme.spacing(3) }}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography fontSize='24px' fontWeight={600}>
                 {module?.name}
               </Typography>
