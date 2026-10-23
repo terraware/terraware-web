@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -197,8 +197,8 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
       )}
 
       {!loading && (
-        <Grid container item xs={12} spacing={2} textAlign='left'>
-          <Grid item xs={12}>
+        <Grid container spacing={2} textAlign='left' size={12}>
+          <Grid size={12}>
             <Textfield
               id='accessionNumber'
               type='text'
@@ -229,13 +229,13 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
             dateError={collectedTimeError}
             value={record.collectedTime}
           />
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Collectors2 onChange={onChange} collectors={record.collectors} />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>{strings.SITE_DETAIL} </Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <CollectionSiteName
               onChange={onChange}
               collectionSiteName={record?.collectionSiteName}
@@ -243,7 +243,7 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
             />
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Textfield
               id='collectionSiteLandowner'
               type='text'
@@ -253,18 +253,18 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
             />
           </Grid>
           <Accession2Address record={record} onChange={onChange} opened={true} />
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>{strings.GPS_COORDINATES} </Typography>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Accession2GPS record={record} onChange={onChange} opened={true} />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography>{strings.PLANT_DETAIL} </Typography>
           </Grid>
           <Accession2PlantSiteDetails record={record} onChange={onChange} opened={true} />
 
-          <Grid padding={theme.spacing(2, 0, 0, 2)} xs={12}>
+          <Grid padding={theme.spacing(2, 0, 0, 2)} size={12}>
             <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
               {strings.PHOTOS}
             </Typography>

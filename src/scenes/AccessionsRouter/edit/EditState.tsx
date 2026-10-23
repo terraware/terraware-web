@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -26,8 +26,8 @@ export default function EditState(props: EditStateProps): JSX.Element {
 
   return (
     <>
-      <Grid item xs={12} textAlign='left'>
-        <Grid item xs={12}>
+      <Grid textAlign='left' size={12}>
+        <Grid size={12}>
           <Dropdown
             id={'accession-status'}
             label={strings.STATUS}

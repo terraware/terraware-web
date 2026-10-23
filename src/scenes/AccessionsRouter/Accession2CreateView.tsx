@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
-import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
@@ -266,7 +266,7 @@ export default function CreateAccession(): JSX.Element | null {
           }}
         >
           <Grid container>
-            <Grid item xs={12} display='flex' flexDirection='column'>
+            <Grid display='flex' flexDirection='column' size={12}>
               <Typography variant='h2' sx={SubTitleStyle}>
                 {strings.SEED_COLLECTION_DETAIL}
               </Typography>
@@ -274,7 +274,7 @@ export default function CreateAccession(): JSX.Element | null {
                 {strings.SEED_COLLECTION_DETAIL_DESC}
               </Typography>
             </Grid>
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <SpeciesSelector record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
             <CollectedReceivedDate2
@@ -289,20 +289,14 @@ export default function CreateAccession(): JSX.Element | null {
               maxDate={new Date()}
               dateError={collectedTimeError}
             />
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Collectors2 collectors={record.collectors} onChange={onChange} />
             </Grid>
-            <Grid
-              item
-              xs={12}
-              display='flex'
-              flexDirection={isMobile ? 'column' : 'row'}
-              justifyContent='space-between'
-            >
-              <Grid item xs={gridSize()} sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}>
+            <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between' size={12}>
+              <Grid sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }} size={gridSize()}>
                 <CollectionSiteName onChange={onChange} collectionSiteName={record?.collectionSiteName} />
               </Grid>
-              <Grid item xs={gridSize()} sx={marginTop}>
+              <Grid sx={marginTop} size={gridSize()}>
                 <Textfield
                   id='collectionSiteLandowner'
                   value={record.collectionSiteLandowner}
@@ -337,7 +331,7 @@ export default function CreateAccession(): JSX.Element | null {
               label={strings.RECEIVING_DATE_REQUIRED}
               dateError={receivedDateError}
             />
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Dropdown
                 id='state'
                 selectedValue={record.state}

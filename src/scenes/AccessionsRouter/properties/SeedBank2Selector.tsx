@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
@@ -51,8 +51,8 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
   }, [activeLocale, record.facilityId]);
 
   return (
-    <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
-      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: isMobile ? 0 : theme.spacing(2) }}>
+    <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between' size={12}>
+      <Grid sx={{ marginTop: theme.spacing(2), marginRight: isMobile ? 0 : theme.spacing(2) }} size={gridSize()}>
         <FacilitySelector
           id='location'
           label={strings.LOCATION_REQUIRED}
@@ -62,7 +62,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
           errorText={validate && !record.facilityId ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}>
+      <Grid sx={{ marginTop: theme.spacing(2) }} size={gridSize()}>
         <SubLocationSelector
           id='sub-location'
           label={strings.SUB_LOCATION}
