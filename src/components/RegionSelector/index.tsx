@@ -115,7 +115,6 @@ export default function RegionSelector({
       {!hideCountrySubdivisions && getSelectedCountry()?.subdivisions ? (
         <Grid
           marginTop={theme.spacing(-3)}
-          paddingLeft={isMobile ? 0 : theme.spacing(2)}
           paddingBottom={paddingBottom}
           size={gridSize()}
         >
@@ -132,7 +131,7 @@ export default function RegionSelector({
           />
         </Grid>
       ) : (
-        horizontalLayout && !isMobile && <Grid paddingLeft={isMobile ? 0 : theme.spacing(2)} size={gridSize()} />
+        horizontalLayout && !isMobile && <Grid size={gridSize()} />
       )}
     </>
   );
