@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -67,18 +67,18 @@ const SingleView = () => {
     <Page crumbs={crumbs} title={user?.email || ''} rightComponent={rightComponent}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <TextField label={strings.NAME} id='name' type='text' value={user?.email} display={true} />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <TextField label={strings.FIRST_NAME} id='firstName' type='text' value={user?.firstName} display={true} />
           </Grid>
-          <Grid item xs={4}>
+          <Grid size={4}>
             <TextField label={strings.LAST_NAME} id='lastName' type='text' value={user?.lastName} display={true} />
           </Grid>
         </Grid>
-        <Grid container spacing={3} sx={{ marginTop: theme.spacing(1) }}>
-          <Grid item xs={4}>
+        <Grid container spacing={3} sx={{ marginTop: theme.spacing(4) }}>
+          <Grid size={4}>
             <TextField
               label={strings.ROLE}
               id='globalRoles'
@@ -87,7 +87,7 @@ const SingleView = () => {
               display={true}
             />
           </Grid>
-          <Grid item xs={8}>
+          <Grid size={8}>
             <TextField
               id='internalInterests'
               label={strings.INTERNAL_INTERESTS}

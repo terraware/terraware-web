@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback } from 'react';
 
-import { GridLegacy as Grid, GridLegacyProps as GridProps, Typography, useTheme } from '@mui/material';
+import { Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -19,7 +19,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
 
   const GridItemWrapper = useCallback(
     ({ children, props }: { children: JSX.Element; props?: GridProps }) => (
-      <Grid item xs={12} paddingBottom={theme.spacing(3)} minHeight={'64px'} {...props}>
+      <Grid paddingBottom={theme.spacing(3)} minHeight={'64px'} size={12} {...props}>
         {children}
       </Grid>
     ),
@@ -28,7 +28,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
 
   const GridItemInput = useCallback(
     ({ children }: { children: JSX.Element }) => (
-      <GridItemWrapper props={{ paddingRight: theme.spacing(1), xs: 12, md: 4 }}>{children}</GridItemWrapper>
+      <GridItemWrapper props={{ paddingRight: theme.spacing(1), size: { xs: 12, md: 4 } }}>{children}</GridItemWrapper>
     ),
     [theme, GridItemWrapper]
   );

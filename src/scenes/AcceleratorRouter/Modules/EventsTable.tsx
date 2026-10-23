@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
@@ -213,10 +213,10 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
         />
       )}
       <Grid container spacing={3}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box dangerouslySetInnerHTML={{ __html: events?.[0]?.description || '' }} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box
             alignItems='center'
             display='flex'
@@ -237,7 +237,7 @@ export default function EventsTable(props: EventsTableProps): JSX.Element {
             />
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Table
             id='modules-table'
             columns={columns}
