@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { ErrorBox, TableColumnType } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -375,7 +375,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           paddingBottom: isMobile ? '185px' : '105px',
         }}
       >
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Typography sx={{ fontSize: '20px', fontWeight: 'bold', margin: theme.spacing(4, 3, 3) }}>
             {strings.SELECT_BATCHES}
           </Typography>
@@ -384,7 +384,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
           species.map((iSpecies: any) => {
             return (
               <Card flushMobile key={iSpecies.id} style={{ marginTop: theme.spacing(3) }}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Typography
                     variant='h2'
                     sx={{ fontSize: '16px', fontWeight: 600, marginBottom: theme.spacing(2), paddingTop: 1 }}
@@ -392,7 +392,7 @@ export default function SelectBatches(props: SelectBatchesWithdrawnQuantityProps
                     {iSpecies.scientificName} {iSpecies.commonName ? `(${iSpecies.commonName})` : null}
                   </Typography>
                 </Grid>
-                <Grid item xs={12} marginBottom={5}>
+                <Grid marginBottom={5} size={12}>
                   {record.length > 0 && (
                     <Table
                       id={`batch-withdraw-quantity-table${nurseryWithdrawal.purpose === OUTPLANT ? '-outplant' : ''}`}

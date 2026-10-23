@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -106,7 +106,7 @@ const DeliverableEditImages = (props: DeliverableEditImagesProps): JSX.Element =
             </Box>
           </Box>
         ))}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
       </Grid>
     </Grid>

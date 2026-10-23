@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Message } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -333,7 +333,7 @@ const QuestionBox = ({
 
         {editing && (
           <Grid container spacing={3} sx={{ marginBottom: '24px', padding: 0 }} textAlign='left'>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <DeliverableVariableDetailsInput
                 hideDescription
                 values={pendingValues || variable.values}
@@ -349,7 +349,7 @@ const QuestionBox = ({
                 validateFields={false}
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 type='textarea'
                 label={strings.INTERNAL_COMMENTS}
@@ -360,7 +360,7 @@ const QuestionBox = ({
               />
             </Grid>
             {workflowDetails.status === 'Rejected' && (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <TextField
                   type='textarea'
                   label={strings.FEEDBACK_SHARED_WITH_PROJECT}

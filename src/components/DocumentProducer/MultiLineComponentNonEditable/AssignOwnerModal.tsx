@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -58,7 +58,7 @@ export default function AssignOwnerModal(props: AssignOwnerModalProps): JSX.Elem
       ]}
     >
       <Grid container textAlign={'left'}>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <Dropdown
             id='document-owner'
             placeholder={strings.SELECT}

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -53,14 +53,14 @@ const ChallengeMitigationPlan = ({
   );
 
   return (
-    <Grid item xs={12} marginBottom={1}>
+    <Grid marginBottom={1} size={12}>
       <Grid
         container
         borderBottom={includeBorder && !editing ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
         marginBottom={1}
         marginTop={2}
       >
-        <Grid item xs={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
+        <Grid size={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
           <Box paddingRight={theme.spacing(2)} marginBottom={1}>
             <Textfield
               type='textarea'
@@ -82,13 +82,13 @@ const ChallengeMitigationPlan = ({
           </Box>
         </Grid>
         {funderReportView && isMobile && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography fontWeight={600} marginBottom={2} paddingTop={1} fontSize={funderReportView ? '20px' : '16px'}>
               {strings.MITIGATION_PLAN}
             </Typography>
           </Grid>
         )}
-        <Grid item xs={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
+        <Grid size={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
           <Box paddingRight={editing ? 0 : theme.spacing(2)} marginBottom={1}>
             <Textfield
               type='textarea'
@@ -110,7 +110,7 @@ const ChallengeMitigationPlan = ({
           </Box>
         </Grid>
         {editing && (
-          <Grid item xs={0.5} display={'flex'} flexDirection={'column'}>
+          <Grid display={'flex'} flexDirection={'column'} size={0.5}>
             <Link onClick={onRemove} style={{ height: '100%' }}>
               <Box paddingTop='8px'>
                 <Icon name='iconSubtract' size='medium' />
@@ -249,12 +249,12 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
       {!isEmpty && (
         <Box width={'100%'}>
           <Grid container marginBottom={1}>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}>
                 {strings.CHALLENGE}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}>
                 {strings.MITIGATION_PLAN}
               </Typography>
@@ -263,7 +263,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
         </Box>
       )}
       {isEmpty ? (
-        <Grid item xs={12} marginBottom={1}>
+        <Grid marginBottom={1} size={12}>
           <EmptyFieldPlaceholder text={strings.NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED} />
         </Grid>
       ) : (

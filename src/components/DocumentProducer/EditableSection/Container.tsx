@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Button, DialogBox, Textfield, theme } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -194,7 +194,7 @@ export default function EditableSectionContainer({
           ]}
         >
           <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 label={''}
                 type='textarea'
