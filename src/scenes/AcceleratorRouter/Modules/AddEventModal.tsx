@@ -89,7 +89,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
       scrolled
     >
       <Grid container textAlign={'left'} spacing={2}>
-        <Grid sx={{ marginTop: theme.spacing(2), paddingRight: 1 }} size={6}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={6}>
           <DatePicker
             id='startTime'
             label={strings.START_DATE}
@@ -101,7 +101,7 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
             showTime={true}
           />
         </Grid>
-        <Grid sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }} size={6}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={6}>
           <DatePicker
             id='endTime'
             label={strings.END_DATE}
