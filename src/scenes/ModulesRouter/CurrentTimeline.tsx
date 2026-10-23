@@ -47,10 +47,12 @@ const CurrentTimeline = ({ steps, currentIndex }: CurrentTimelineProps): JSX.Ele
         </Grid>
         <Grid>
           <Grid
+            container
             display={'flex'}
             flexDirection={isDesktop ? 'row' : 'column'}
             justifyContent={'space-between'}
             alignItems={'center'}
+            wrap='nowrap'
           >
             {displayPhases.map((step, index) => {
               const isActivePhase = index === currentIndex;
