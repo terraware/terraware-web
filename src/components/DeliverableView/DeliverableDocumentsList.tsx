@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 import Table from 'src/components/common/table';
 import { SortOrder } from 'src/components/common/table/sort';
@@ -46,7 +46,7 @@ const DeliverableDocumentsList = (props: DocumentsListProps): JSX.Element => {
 
   return (
     <Box display='flex' flexDirection='column'>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Table
           id={'documents-list' + isAcceleratorRoute ? '-admin' : ''}
           columns={() => props.columns}

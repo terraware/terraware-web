@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid, Popover, useTheme } from '@mui/material';
+import { Grid, Popover, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Tooltip } from '@terraware/web-components';
 import { Button, PillList } from '@terraware/web-components';
@@ -62,7 +62,7 @@ const Search = ({ searchValue, onSearch, filterProps, tableId }: SearchProps): J
 
   return (
     <Grid container>
-      <Grid item xs={12} sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }}>
+      <Grid sx={{ display: 'flex', marginBottom: '16px', alignItems: 'center' }} size={12}>
         <Textfield
           placeholder={strings.SEARCH}
           iconLeft='search'
@@ -122,7 +122,7 @@ const Search = ({ searchValue, onSearch, filterProps, tableId }: SearchProps): J
           </>
         )}
       </Grid>
-      <Grid item xs={12} display='flex'>
+      <Grid display='flex' size={12}>
         <PillList data={filterPillData} />
       </Grid>
     </Grid>

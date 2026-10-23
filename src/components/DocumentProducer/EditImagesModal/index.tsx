@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Button, DropdownItem, Textfield } from '@terraware/web-components';
 
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
@@ -204,7 +204,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
       }
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12} sx={{ position: 'relative' }}>
+        <Grid sx={{ position: 'relative' }} size={12}>
           <>
             <OptionsMenu
               onOptionItemClick={onOptionItemClick}
@@ -230,7 +230,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
           </>
           <Textfield label={strings.NAME} type='text' id='name' value={variable.name} display={true} />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Textfield
             label={strings.DESCRIPTION}
             type='text'
@@ -306,7 +306,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
             </Box>
           ))}
         {!display && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
           </Grid>
         )}

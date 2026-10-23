@@ -1,6 +1,6 @@
 import React, { CSSProperties, type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
 import { Button, DialogBox, Icon } from '@terraware/web-components';
 import { DateTime } from 'luxon';
@@ -598,7 +598,12 @@ const ActivityDetailView = ({
           message={strings.formatString(strings.PUBLISH_ACTIVITY_MODAL_MESSAGE, activityType, activity.payload.date)}
         />
       )}
-      <Grid item md={4} xs={12}>
+      <Grid
+        size={{
+          md: 4,
+          xs: 12,
+        }}
+      >
         {crumbs && (
           <Box marginBottom={theme.spacing(2)}>
             <BreadCrumbs crumbs={crumbs} />
@@ -606,7 +611,13 @@ const ActivityDetailView = ({
         )}
       </Grid>
 
-      <Grid item md={8} xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+      <Grid
+        sx={{ textAlign: { xs: 'left', md: 'right' } }}
+        size={{
+          md: 8,
+          xs: 12,
+        }}
+      >
         {isAllowedEditActivities && !isFunderRoute && (
           <Box display='flex' justifyContent={'end'}>
             <Button
@@ -632,7 +643,7 @@ const ActivityDetailView = ({
         )}
       </Grid>
 
-      <Grid item>
+      <Grid>
         <Box display='flex' flexDirection='row' alignItems='center'>
           <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
             {obsTitle ? (
@@ -659,7 +670,7 @@ const ActivityDetailView = ({
         </Box>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography>
           {activity.payload.date} {verifiedByLabel}
         </Typography>
@@ -674,12 +685,18 @@ const ActivityDetailView = ({
         />
       )}
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography>{activity.payload.description}</Typography>
       </Grid>
 
       {activity.payload.media.map((mediaFile, index) => (
-        <Grid item key={index} lg={6} xs={12}>
+        <Grid
+          key={index}
+          size={{
+            lg: 6,
+            xs: 12,
+          }}
+        >
           <ActivityMediaItem
             activity={activity}
             focusedFileId={focusedFileId}

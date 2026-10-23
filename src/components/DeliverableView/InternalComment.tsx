@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -81,7 +81,7 @@ function InternalComment<T extends { internalComment?: string }>({ entity, updat
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               label={''}
               type='textarea'

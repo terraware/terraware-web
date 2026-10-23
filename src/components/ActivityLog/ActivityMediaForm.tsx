@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, FormControlLabel, GridLegacy as Grid, Radio, Typography, useTheme } from '@mui/material';
+import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
 import {
   Button,
   Checkbox,
@@ -265,7 +265,12 @@ const ActivityPhotoPreview = ({
         </Typography>
       )}
       <Grid container spacing={2} textAlign='left'>
-        <Grid item sm='auto' xs={12}>
+        <Grid
+          size={{
+            sm: 'auto',
+            xs: 12,
+          }}
+        >
           <Box position='relative'>
             <PhotoPreview imgUrl={url} includeTrashIcon={false} onTrashClick={onDelete} />
             {isVideo && (
@@ -306,7 +311,12 @@ const ActivityPhotoPreview = ({
           </Box>
         </Grid>
 
-        <Grid item sm={true} xs={12}>
+        <Grid
+          size={{
+            sm: 'grow',
+            xs: 12,
+          }}
+        >
           <Box display='flex' flexDirection='column'>
             {isUndeletable && undeletableMessage && (
               <Box display='flex' alignItems='center' gap={1} marginBottom={theme.spacing(2)} width='100%'>
@@ -431,7 +441,7 @@ const ActivityPhotoPreview = ({
           </Box>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box alignItems='flex-start' display='flex' gap={1}>
             <Box flex={1}>
               <Textfield
@@ -766,7 +776,7 @@ export default function ActivityMediaForm({
           }
         />
       )}
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!fileLimitReached && (
           <FileChooser
             acceptFileType={'image/heic, image/jpeg, image/png, video/*'}
@@ -780,7 +790,7 @@ export default function ActivityMediaForm({
         )}
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         {mediaItems.map((mediaItem, index) => {
           // skip deleted existing photos
           if (mediaItem.type === 'existing' && mediaItem.isDeleted) {
