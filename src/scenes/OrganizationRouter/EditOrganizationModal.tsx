@@ -235,7 +235,7 @@ export default function EditOrganizationModal({
             paddingBottom={theme.spacing(4)}
           />
           {showBotanicalCountry && (
-            <Grid sx={{ paddingBottom: theme.spacing(4) }} size={12}>
+            <Grid sx={{ marginTop: theme.spacing(-3), paddingBottom: theme.spacing(4) }} size={12}>
               <Dropdown
                 id='botanicalCountry'
                 label={strings.BOTANICAL_COUNTRY}
@@ -249,7 +249,7 @@ export default function EditOrganizationModal({
               />
             </Grid>
           )}
-          <Grid size={12}>
+          <Grid marginTop={theme.spacing(-3)} size={12}>
             <TimeZoneSelector
               selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
               countryCode={organizationRecord.countryCode}
