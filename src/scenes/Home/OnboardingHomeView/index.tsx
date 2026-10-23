@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Container, GridLegacy as Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -132,7 +132,7 @@ const OnboardingHomeView = () => {
             />
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
               </Grid>

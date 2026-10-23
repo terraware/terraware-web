@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import DialogCloseButton from 'src/components/common/DialogCloseButton';
 import strings from 'src/strings';
@@ -23,7 +23,7 @@ const WelcomeBanner = ({ onClose }: WelcomeBannerProps) => {
       }}
     >
       <Grid container columnSpacing={theme.spacing(2)} paddingRight={0} justifyContent={'flex-start'}>
-        <Grid item xs={2}>
+        <Grid size={2}>
           <img
             src='/assets/accelerator-trees.svg'
             // TODO this might change
@@ -36,7 +36,7 @@ const WelcomeBanner = ({ onClose }: WelcomeBannerProps) => {
             }}
           />
         </Grid>
-        <Grid item xs={9}>
+        <Grid size={9}>
           <Typography fontSize={'24px'} fontWeight={600} lineHeight={'32px'}>
             {strings.ACCELERATOR_WELCOME_HEADER}
           </Typography>

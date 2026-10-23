@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, Container, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';
@@ -167,7 +167,7 @@ export default function CheckIn(): JSX.Element {
       <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
         <Grid container spacing={3}>
           {pendingAccessionsById && (
-            <Grid item xs={12}>
+            <Grid size={12}>
               {pendingAccessionsById.map((result) => {
                 return (
                   <Grid
@@ -184,7 +184,7 @@ export default function CheckIn(): JSX.Element {
                       },
                     }}
                   >
-                    <Grid item xs={isMobile ? 16 : 2} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                    <Grid marginBottom={isMobile ? theme.spacing(3) : 0} size={isMobile ? 16 : 2}>
                       {isMobile ? (
                         <Box display='flex' justifyContent='space-between'>
                           <TextField
@@ -221,7 +221,7 @@ export default function CheckIn(): JSX.Element {
                         />
                       )}
                     </Grid>
-                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                    <Grid marginBottom={isMobile ? theme.spacing(3) : 0} size={isMobile ? 16 : 3}>
                       <TextField
                         label={strings.SPECIES}
                         id='species'
@@ -232,7 +232,7 @@ export default function CheckIn(): JSX.Element {
                         display={true}
                       />
                     </Grid>
-                    <Grid item xs={isMobile ? 16 : 3} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                    <Grid marginBottom={isMobile ? theme.spacing(3) : 0} size={isMobile ? 16 : 3}>
                       <TextField
                         label={strings.SITE_LOCATION}
                         id='location'
@@ -241,7 +241,7 @@ export default function CheckIn(): JSX.Element {
                         display={true}
                       />
                     </Grid>
-                    <Grid item xs={isMobile ? 16 : 2} marginBottom={isMobile ? theme.spacing(3) : 0}>
+                    <Grid marginBottom={isMobile ? theme.spacing(3) : 0} size={isMobile ? 16 : 2}>
                       <TextField
                         label={strings.COLLECTION_TIME}
                         id='collected'
@@ -253,7 +253,7 @@ export default function CheckIn(): JSX.Element {
                         display={true}
                       />
                     </Grid>
-                    <Grid item xs={isMobile ? 16 : 2}>
+                    <Grid size={isMobile ? 16 : 2}>
                       <TextField
                         label={strings.RECEIVED_DATE}
                         id='received'
@@ -263,7 +263,7 @@ export default function CheckIn(): JSX.Element {
                       />
                     </Grid>
                     {!isMobile && (
-                      <Grid item xs={4}>
+                      <Grid size={4}>
                         <Box height='100%' display='flex' alignItems='center' justifyContent='flex-end'>
                           <Button
                             onClick={() => goToAccession(result.id! as string)}

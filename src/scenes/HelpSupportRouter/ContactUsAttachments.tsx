@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -59,7 +59,7 @@ const ContactUsAttachments = ({ maxFiles, onChange }: AttachmentsProps): JSX.Ele
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!attachmentLimitReached && (
           <FileChooser
             acceptFileType={'image/*, video/*'}

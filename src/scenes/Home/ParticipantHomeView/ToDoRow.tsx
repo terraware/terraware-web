@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { ToDoItem } from 'src/types/ProjectToDo';
@@ -55,13 +55,13 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
       justifyContent={'flex-start'}
       flexWrap={wrap()}
     >
-      <Grid item flexGrow={0} xs={gridSize()}>
+      <Grid flexGrow={0} size={gridSize()}>
         <ToDoStatusBadge status={toDo.getBadge()} />
       </Grid>
-      <Grid item flexGrow={0} xs={gridSize()}>
+      <Grid flexGrow={0} size={gridSize()}>
         <ToDoDate toDo={toDo} />
       </Grid>
-      <Grid item flexBasis={'content'} flexGrow={0} overflow={'hidden'} textOverflow={'ellipsis'}>
+      <Grid flexBasis={'content'} flexGrow={0} overflow={'hidden'} textOverflow={'ellipsis'}>
         <Typography
           display={'inline'}
           fontSize={'16px'}
@@ -83,7 +83,7 @@ const ToDoRow = ({ toDo }: ToDoRowProps) => {
           {toDo.getTitle()}
         </Typography>
       </Grid>
-      <Grid item flexGrow={0} xs={gridSize()} marginLeft={marginLeft()}>
+      <Grid flexGrow={0} marginLeft={marginLeft()} size={gridSize()}>
         <ToDoCta toDo={toDo} />
       </Grid>
     </Grid>
