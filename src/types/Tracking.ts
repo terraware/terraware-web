@@ -1,13 +1,29 @@
-import { components } from 'src/api/types/generated-schema';
+import { DeliveryPayload } from 'src/queries/generated/deliveries';
+import {
+  MultiPolygon,
+  PlantingSiteHistoryPayload,
+  PlantingSitePayload,
+  PlantingSiteReportedPlantsPayload,
+  Polygon,
+  StratumResponsePayload,
+  SubstratumResponsePayload,
+} from 'src/queries/generated/plantingSites';
+import {
+  AssignSiteT0DataRequestPayload,
+  AssignSiteT0TempDataRequestPayload,
+  PlotSpeciesDensitiesPayload,
+  PlotT0DataPayload,
+  SiteT0DataResponsePayload,
+  StratumT0DataPayload,
+} from 'src/queries/generated/t0';
 
 // planting site, stratum, substratum
-export type PlantingSite = components['schemas']['PlantingSitePayload'];
-export type Stratum = components['schemas']['StratumResponsePayload'];
-type Substratum = components['schemas']['SubstratumResponsePayload'];
+export type PlantingSite = PlantingSitePayload;
+export type Stratum = StratumResponsePayload;
+type Substratum = SubstratumResponsePayload;
 
 // geometry and types of geometries
-export type Polygon = components['schemas']['Polygon'];
-export type MultiPolygon = components['schemas']['MultiPolygon'];
+export type { MultiPolygon, Polygon };
 
 // Search API always returns strings
 export type PlantingSiteSearchResult = {
@@ -27,10 +43,10 @@ export type PlantingSiteSearchResult = {
 };
 
 // delivery and plantings
-export type Delivery = components['schemas']['DeliveryPayload'];
+export type Delivery = DeliveryPayload;
 
 // reported plants
-export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];
+export type PlantingSiteReportedPlants = PlantingSiteReportedPlantsPayload;
 
 // monitoring plots
 export type MonitoringPlotSearchResult = {
@@ -64,11 +80,11 @@ export type MinimalPlantingSite = Location & {
   projectId?: number;
 };
 
-export type PlantingSiteHistory = components['schemas']['PlantingSiteHistoryPayload'];
+export type PlantingSiteHistory = PlantingSiteHistoryPayload;
 
-export type PlotT0Data = components['schemas']['PlotT0DataPayload'];
-export type SiteT0Data = components['schemas']['SiteT0DataResponsePayload'];
-export type AssignSiteT0Data = components['schemas']['AssignSiteT0DataRequestPayload'];
-export type AssignSiteT0TempData = components['schemas']['AssignSiteT0TempDataRequestPayload'];
-export type StratumT0Data = components['schemas']['StratumT0DataPayload'];
-export type SpeciesPlot = components['schemas']['PlotSpeciesDensitiesPayload'];
+export type PlotT0Data = PlotT0DataPayload;
+export type SiteT0Data = SiteT0DataResponsePayload;
+export type AssignSiteT0Data = AssignSiteT0DataRequestPayload;
+export type AssignSiteT0TempData = AssignSiteT0TempDataRequestPayload;
+export type StratumT0Data = StratumT0DataPayload;
+export type SpeciesPlot = PlotSpeciesDensitiesPayload;
