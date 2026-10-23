@@ -1,12 +1,12 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useFacilitySubLocations } from 'src/components/common/SubLocations/useFacilitySubLocations';
+import { useOrganization } from 'src/providers/hooks';
 import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
-import { SubLocationService } from 'src/services';
 import strings from 'src/strings';
-import { Facility, SubLocation } from 'src/types/Facility';
+import { Facility } from 'src/types/Facility';
 import { getAllSeedBanks } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -20,9 +20,8 @@ type SeedBank2SelectorProps = {
 
 export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
   const { record, onChange, validate } = props;
-  const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
+  const { subLocations } = useFacilitySubLocations(record.facilityId);
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const seedBanks: Facility[] = selectedOrganization ? getAllSeedBanks(selectedOrganization) : [];
@@ -34,21 +33,6 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
       record.facilityId = seedBanks[0].id;
     }
   });
-
-  useEffect(() => {
-    const setLocation = async () => {
-      if (record.facilityId && activeLocale) {
-        const response = await SubLocationService.getSubLocations(record.facilityId);
-        if (response.requestSucceeded) {
-          const collator = new Intl.Collator(activeLocale);
-          setSubLocations(response.subLocations.sort((a, b) => collator.compare(a.name, b.name)));
-          return;
-        }
-      }
-      setSubLocations([]);
-    };
-    void setLocation();
-  }, [activeLocale, record.facilityId]);
 
   return (
     <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='space-between'>
@@ -67,7 +51,7 @@ export default function SeedBank2Selector(props: SeedBank2SelectorProps): JSX.El
           id='sub-location'
           label={strings.SUB_LOCATION}
           selectedSubLocation={record.subLocation}
-          subLocations={subLocations.map((obj) => obj.name)}
+          subLocations={(subLocations ?? []).map((obj) => obj.name)}
           onChange={(value: string) => onChange('subLocation', value)}
           disabled={!record.facilityId}
         />

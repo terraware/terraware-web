@@ -1,8 +1,8 @@
-import { components } from 'src/api/types/generated-schema';
+import { SubLocationPayload } from 'src/queries/generated/facilities';
 import { FacilityPayload, Point } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 
-export type SubLocation = components['schemas']['SubLocationPayload'];
+export type SubLocation = SubLocationPayload;
 
 export type PartialSubLocation = Partial<SubLocation>;
 

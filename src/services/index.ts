@@ -3,9 +3,8 @@ import HttpService from './HttpService';
 import MapService from './MapService';
 import SearchService from './SearchService';
 import SpeciesService from './SpeciesService';
-import SubLocationService from './SubLocationService';
 import TrackingService from './TrackingService';
 
 export type { Response } from './HttpService';
 
-export { FacilityService, HttpService, MapService, SearchService, SpeciesService, SubLocationService, TrackingService };
+export { FacilityService, HttpService, MapService, SearchService, SpeciesService, TrackingService };
