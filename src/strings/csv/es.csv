@@ -122,6 +122,7 @@ ADD_SUBSET_WEIGHT_AND_COUNT,Agregar peso y recuento del subconjunto,e1b6fdf2
 ADD_TEST,Añadir Prueba,2a608b3f
 ADD_TO_MAP,Agregar al mapa,325f5a77
 ADD_TO_PROJECT,Añadir al proyecto,3e56c71f
+ADD_TREE_OR_SHRUB,Agregar árbol o arbusto,d3fdc155
 ADD_VIABILITY,Añadir Viabilidad,a4672790
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,4648a184
 ADD_YOUR_FIRST_ACTIVITY,Agregue su primera Actividad,9df0e1e5
