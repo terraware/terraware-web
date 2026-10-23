@@ -6,12 +6,13 @@ import { Button, DialogBox } from '@terraware/web-components';
 import strings from 'src/strings';
 
 export type StartOverConfirmationProps = {
+  message?: string;
   onClose: () => void;
   onConfirm: () => void;
 };
 
 export default function StartOverConfirmation(props: StartOverConfirmationProps): JSX.Element {
-  const { onClose, onConfirm } = props;
+  const { message, onClose, onConfirm } = props;
 
   return (
     <DialogBox
@@ -36,7 +37,7 @@ export default function StartOverConfirmation(props: StartOverConfirmationProps)
           key='button-2'
         />,
       ]}
-      message={strings.START_OVER_WARNING}
+      message={message ?? strings.START_OVER_WARNING}
     >
       <Typography>{strings.START_OVER_CONFIRMATION}</Typography>
     </DialogBox>
