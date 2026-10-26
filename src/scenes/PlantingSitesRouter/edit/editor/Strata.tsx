@@ -148,7 +148,13 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
             if (existing && mode === 'edit') {
               return reconcileStratumSubstrata({ ...existing, boundary: multiPolygon, name }, nextSubstratumKey);
             }
-            return defaultStratumPayload({ boundary: multiPolygon, id, initialPlantingDensity, name });
+            return defaultStratumPayload({
+              boundary: multiPolygon,
+              id,
+              initialPlantingDensity,
+              name,
+              substratumId: mode === 'edit' ? nextSubstratumKey() : undefined,
+            });
           } else {
             return undefined;
           }

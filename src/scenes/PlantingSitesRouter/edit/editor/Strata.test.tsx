@@ -13,6 +13,7 @@ import { defaultStratumPayload } from 'src/scenes/PlantingSitesRouter/edit/edito
 import strings from 'src/strings';
 import { buildDraftPlantingSite, renderWithProviders } from 'src/test-utils';
 import type { PopupInfo } from 'src/types/Map';
+import type { MinimalStratum } from 'src/types/Tracking';
 
 // Mapbox needs a real GL context, so stand in for the map with buttons that open a stratum's
 // popup, delete a stratum, and draw the cutting polygon. Popups open and close the way EditableMap's
@@ -125,11 +126,11 @@ const stepperContext = {
   steps: [{ type: 'stratum_boundaries' as const, label: 'Strata' }],
 };
 
-const renderStrata = (mode: EditorMode, onValidate?: OnValidate) =>
+const renderStrata = (mode: EditorMode, onValidate?: OnValidate, editedSite = site) =>
   renderWithProviders(
     <EditorModeContext.Provider value={mode}>
       <EditorStepperContext.Provider value={stepperContext}>
-        <Strata onValidate={onValidate} site={site} />
+        <Strata onValidate={onValidate} site={editedSite} />
       </EditorStepperContext.Provider>
     </EditorModeContext.Provider>,
     {
@@ -192,6 +193,49 @@ describe('Strata', () => {
     expect(ids).not.toContain(11);
     expect(ids).toContain(10);
     expect(ids.filter((id) => id < 0)).toHaveLength(1);
+  });
+
+  it('gives a new stratum and a reconciled stratum different substratum keys', async () => {
+    // West's only substratum covers its western edge, so moving West's identity east leaves it with none
+    const [west, east] = site.strata!;
+    const partialSite = {
+      ...site,
+      strata: [
+        {
+          ...west,
+          substrata: [
+            {
+              ...west.substrata[0],
+              boundary: { type: 'MultiPolygon' as const, coordinates: [square(0, 0, 0.004, 0.01)] },
+              id: 20,
+            },
+          ],
+        },
+        { ...east, substrata: [{ ...east.substrata[0], id: 21 }] },
+      ],
+    };
+    mapEdit.cut = {
+      type: 'FeatureCollection',
+      features: [
+        {
+          type: 'Feature',
+          id: 'cut',
+          properties: {},
+          geometry: { type: 'Polygon', coordinates: square(0.005, -0.001, 0.03, 0.011) },
+        },
+      ],
+    };
+    const onValidate = { allowIncomplete: false, apply: rstest.fn() };
+    const { user } = renderStrata('edit', onValidate, partialSite);
+
+    await cutNewStratum(user);
+
+    await waitFor(() => expect(onValidate.apply.mock.lastCall?.[1]?.strata).toHaveLength(2));
+    const substratumIds: number[] = onValidate.apply.mock
+      .lastCall![1].strata.flatMap((stratum: MinimalStratum) => stratum.substrata)
+      .map((substratum: { id: number }) => substratum.id);
+    expect(substratumIds).toHaveLength(2);
+    expect(new Set(substratumIds).size).toBe(2);
   });
 
   it.each(['draft', 'edit'] as const)(
