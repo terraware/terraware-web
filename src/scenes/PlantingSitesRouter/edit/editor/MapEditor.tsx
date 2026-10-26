@@ -161,6 +161,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   const onStartOver = useCallback(() => {
     setEditorSite(initialSite);
     setIsDirty(false);
+    setSelectedIncompleteIds([]);
     setCurrentStep('site_boundary');
     setStartOverCount((count) => count + 1);
     setShowStartOver(false);
