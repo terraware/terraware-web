@@ -43,6 +43,7 @@ api.enhanceEndpoints({
           : [
               { type: QueryTagTypes.PlantingSites, id: siteApiArg.id },
               { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+              { type: QueryTagTypes.T0, id: siteApiArg.id },
               { type: QueryTagTypes.TrackingStats },
             ],
     },
