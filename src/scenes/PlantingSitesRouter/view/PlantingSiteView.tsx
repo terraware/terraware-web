@@ -59,7 +59,7 @@ export default function PlantingSiteView(): JSX.Element {
             flushMobile
             radius={theme.spacing(1)}
             rightComponent={
-              isEditPlantingSiteEnabled && isAdmin(selectedOrganization) ? (
+              isEditPlantingSiteEnabled && isAdmin(selectedOrganization) && plantingSite.strata?.length ? (
                 <Button
                   icon='iconEdit'
                   id='edit-site-boundary'
