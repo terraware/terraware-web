@@ -14,6 +14,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import { MixpanelUserProfile } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useGetEmailNotificationSettingsQuery } from 'src/queries/generated/emailNotificationSettings';
 import { store } from 'src/redux/store';
 import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
 import FunderRouter from 'src/scenes/FunderRouter';
@@ -63,7 +64,6 @@ function AppContent() {
           $country_code: user.countryCode,
           $timezone: user.timeZone,
           locale: user.locale,
-          email_notifs_enabled: user.emailNotificationsEnabled,
           user_type: user.userType,
           global_roles: user.globalRoles,
           is_internal_user: user.globalRoles.length > 0,
@@ -81,6 +81,19 @@ function AppContent() {
       }
     }
   }, [user, mixpanel]);
+
+  const { currentData: emailSettings } = useGetEmailNotificationSettingsQuery(undefined, {
+    skip: user?.cookiesConsented !== true,
+  });
+
+  useEffect(() => {
+    if (mixpanel && emailSettings && user?.cookiesConsented === true) {
+      const profile: Partial<MixpanelUserProfile> = {
+        email_notifs_enabled: emailSettings.emailNotificationsEnabled,
+      };
+      mixpanel.people.set(profile);
+    }
+  }, [emailSettings, mixpanel, user?.cookiesConsented]);
 
   // Keep org context registered as super properties whenever the active
   // organization changes. Re-registering with new values overwrites the old

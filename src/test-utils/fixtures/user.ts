@@ -13,7 +13,6 @@ export const buildUser = (overrides: Partial<User> = {}): User => ({
   email: 'test-user@terraware.io',
   firstName: 'Test',
   lastName: 'User',
-  emailNotificationsEnabled: false,
   globalRoles: [],
   locale: 'en',
   timeZone: 'America/Los_Angeles',

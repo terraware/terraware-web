@@ -16,7 +16,6 @@ describe('isAllowed', () => {
   it('has the correct permissions for a user with the Super Admin global role', () => {
     const user: User = {
       id: 1,
-      emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_SUPER_ADMIN],
       userType: 'Individual',
@@ -39,7 +38,6 @@ describe('isAllowed', () => {
   it('has the correct permissions for a user with the Accelerator Admin global role', () => {
     const user: User = {
       id: 1,
-      emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_ACCELERATOR_ADMIN],
       userType: 'Individual',
@@ -62,7 +60,6 @@ describe('isAllowed', () => {
   it('has the correct permissions for a user with the TF Expert global role', () => {
     const user: User = {
       id: 1,
-      emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_TF_EXPERT],
       userType: 'Individual',
@@ -87,7 +84,6 @@ describe('isAllowed', () => {
   it('has the correct permissions for a user with the Ready Only global role', () => {
     const user: User = {
       id: 1,
-      emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [GLOBAL_ROLE_READ_ONLY],
       userType: 'Individual',
@@ -112,7 +108,6 @@ describe('isAllowed', () => {
   it('has the correct permissions for VIEW_ORG_OBSERVATIONS', () => {
     const noRolesUser: User = {
       id: 1,
-      emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [],
       userType: 'Individual',
@@ -174,7 +169,6 @@ describe('isAllowed', () => {
   describe('accession permissions', () => {
     const user: User = {
       id: 1,
-      emailNotificationsEnabled: false,
       email: 'mock@email.com',
       globalRoles: [],
       userType: 'Individual',

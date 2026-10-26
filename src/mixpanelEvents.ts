@@ -1,3 +1,4 @@
+import { GetEmailNotificationSettingsResponsePayload } from 'src/queries/generated/emailNotificationSettings';
 import { BoundarySource } from 'src/types/PlantingSite';
 import { User } from 'src/types/User';
 
@@ -93,7 +94,7 @@ export type MixpanelUserProfile = {
   $country_code?: User['countryCode'];
   $timezone?: User['timeZone'];
   locale?: User['locale'];
-  email_notifs_enabled: User['emailNotificationsEnabled'];
+  email_notifs_enabled?: GetEmailNotificationSettingsResponsePayload['emailNotificationsEnabled'];
   user_type: User['userType'];
   global_roles: User['globalRoles'];
   is_internal_user: boolean;
