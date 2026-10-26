@@ -1,3 +1,6 @@
+c3c0d08e Search planting sites for project assignment through RTK Query (#6841)
+a93bb165 SW-8990 Let users opt into email notification categories (#6828)
+1d89add9 SW-8990 Add email notification settings queries (#6827)
 0673eece SW-9149: Remove top padding above accession history list (#6870)
 85dfafa8 Update generated API code from staging (#6888)
 1919c95f Bump fast-uri from 3.1.8 to 3.1.9 (#6891)
