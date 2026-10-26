@@ -30,7 +30,7 @@ export default function PlantingSiteMapEdit(): JSX.Element {
   const [initialSite, setInitialSite] = useState<PlantingSitePayload>();
 
   // the editor keeps its own copy of the site, so wait out any refetch of a stale cached site before starting it
-  if (!initialSite && currentData?.site && !isFetching) {
+  if (!initialSite && currentData?.site && !isFetching && !isError) {
     setInitialSite(currentData.site);
   }
 
