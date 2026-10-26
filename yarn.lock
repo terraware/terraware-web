@@ -10421,10 +10421,10 @@ slate-dom@^0.147.0:
     scroll-into-view-if-needed "^3.1.0"
     tiny-invariant "1.3.1"
 
-slate-react@^0.146.1:
-  version "0.146.1"
-  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.146.1.tgz#4a8458eb4fea05f151be2b6a0d31f68a12dd0898"
-  integrity sha512-FTgU50R5QSz08YDRzYBhg1ncELCSwy/Qln+x2sJbcKLuJJCjKUFP3X6foPGkABxnCnGZgotmjH51L8FtA9lZ4A==
+slate-react@^0.147.0:
+  version "0.147.3"
+  resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.147.3.tgz#d55b8423a62972c66f94a2b7d1f16aaea4448c67"
+  integrity sha512-9e4W21wgOGGCtLdt5XVjS/VrE/ZGe4/cxQRJ1gbgTSOd6YNl8B/ebSHOhgd8pdL+JUtwLZU+dNpysBPdA7V0Xg==
   dependencies:
     "@juggle/resize-observer" "^3.4.0"
     direction "^1.0.4"
