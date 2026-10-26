@@ -37,6 +37,7 @@ export type NurserySummarySpeciesPayload = {
 };
 export type NurserySummaryPayload = {
   activeGrowthQuantity: number;
+  batchesWithInventory: number;
   germinatingQuantity: number;
   germinationRate?: number;
   hardeningOffQuantity: number;
@@ -46,6 +47,7 @@ export type NurserySummaryPayload = {
   readyQuantity: number;
   /** Species currently present in the nursery. */
   species: NurserySummarySpeciesPayload[];
+  speciesWithInventory: number;
   /** Total number of plants that have been withdrawn due to death. */
   totalDead: number;
   /** Total number of germinated plants currently in inventory. */
@@ -85,6 +87,7 @@ export type GetSpeciesSummaryResponsePayload = {
 };
 export type OrganizationNurserySummaryPayload = {
   activeGrowthQuantity: number;
+  batchesWithInventory: number;
   germinatingQuantity: number;
   germinationRate?: number;
   hardeningOffQuantity: number;
@@ -92,6 +95,7 @@ export type OrganizationNurserySummaryPayload = {
   lossRate?: number;
   notReadyQuantity: number;
   readyQuantity: number;
+  speciesWithInventory: number;
   /** Total number of plants that have been withdrawn due to death. */
   totalDead: number;
   /** Total number of germinated plants currently in inventory. */
