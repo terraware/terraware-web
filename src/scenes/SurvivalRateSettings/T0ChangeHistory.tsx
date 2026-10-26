@@ -205,7 +205,7 @@ const T0ChangeHistory = ({ plantingSiteId }: T0ChangeHistoryProps): JSX.Element 
                       color={theme.palette.TwClrTxtSecondary}
                       sx={{ whiteSpace: { xs: 'normal', sm: 'nowrap' } }}
                     >
-                      {DateTime.fromISO(save.timestamp).toFormat('yyyy-MM-dd')} {strings.BY} {save.userName}
+                      {DateTime.fromISO(save.timestamp).toFormat('yyyy-MM-dd HH:mm')} {strings.BY} {save.userName}
                     </Typography>
                   </Box>
                   <Box flex={1}>

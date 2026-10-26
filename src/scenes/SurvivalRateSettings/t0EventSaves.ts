@@ -19,12 +19,16 @@ type T0Entry = {
 
 /**
  * The server has no id for a save operation, so saves are reconstructed from timestamps: entries
- * written by the same user within this window belong to the same save. One save sends the plot
- * densities, the stratum densities and the temporary plot setting as separate requests, so the
- * window has to be wider than a single request. A slow connection can still split a save in two,
- * which costs a duplicated row but no entries.
+ * written by the same user within this window of the save's first entry belong to that save. One
+ * save sends the plot densities, the stratum densities and the temporary plot setting as separate
+ * requests, so the window has to be wider than a single request, and it is measured from the first
+ * entry so that a run of saves can never chain into one unbounded row.
+ *
+ * A slow connection can still split a save in two, which costs a duplicated row but no entries.
+ * That is the cheaper error: merging two real saves would hide the earlier one's time and read as
+ * a single contradictory save.
  */
-export const SAVE_WINDOW_MS = 60_000;
+export const SAVE_WINDOW_MS = 30_000;
 
 /** Observation start dates are ISO dates; observation ids are plain numbers. */
 const ISO_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}/;
@@ -244,9 +248,9 @@ const toSave = (entries: T0Entry[]): T0Save => {
   };
 };
 
-const isSameSave = (previous: EventLogEntryPayload, next: EventLogEntryPayload): boolean =>
-  previous.userId === next.userId &&
-  new Date(next.timestamp).getTime() - new Date(previous.timestamp).getTime() <= SAVE_WINDOW_MS;
+const isSameSave = (first: EventLogEntryPayload, next: EventLogEntryPayload): boolean =>
+  first.userId === next.userId &&
+  new Date(next.timestamp).getTime() - new Date(first.timestamp).getTime() <= SAVE_WINDOW_MS;
 
 /**
  * Turns the site's t0 event log into one entry per save, most recent first. Entries arrive oldest
@@ -262,7 +266,7 @@ export const groupT0EventsIntoSaves = (events?: EventLogEntryPayload[]): T0Save[
   entries.forEach((t0Entry) => {
     const bucket = buckets[buckets.length - 1];
 
-    if (bucket && isSameSave(bucket[bucket.length - 1].entry, t0Entry.entry)) {
+    if (bucket && isSameSave(bucket[0].entry, t0Entry.entry)) {
       bucket.push(t0Entry);
     } else {
       buckets.push([t0Entry]);

@@ -205,15 +205,16 @@ describe('groupT0EventsIntoSaves', () => {
     });
   });
 
-  it('keeps entries in one save while each follows the one before it inside the window', () => {
+  it('measures the window from the first entry, so a run of saves cannot chain into one', () => {
     const saves = groupT0EventsIntoSaves([
       densitySet({ plotNumber: 1, speciesName: 'Acacia koa', density: '120', seconds: 0 }),
       densitySet({ plotNumber: 2, speciesName: 'Acacia koa', density: '120', seconds: WINDOW_SECONDS }),
       densitySet({ plotNumber: 3, speciesName: 'Acacia koa', density: '120', seconds: WINDOW_SECONDS * 2 }),
     ]);
 
-    expect(saves).toHaveLength(1);
-    expect(saves[0].plotCount).toBe(3);
+    expect(saves).toHaveLength(2);
+    expect(saves.map((save) => save.plotCount)).toEqual([1, 2]);
+    expect(saves.map((save) => save.timestamp)).toEqual([at(WINDOW_SECONDS * 2), at(WINDOW_SECONDS)]);
   });
 
   it('starts a new save when the next entry falls outside the window', () => {

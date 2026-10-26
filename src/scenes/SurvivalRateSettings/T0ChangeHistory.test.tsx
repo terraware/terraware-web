@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { screen, waitFor } from '@testing-library/react';
+import { DateTime } from 'luxon';
 
 import { EventLogEntryPayload } from 'src/queries/generated/events';
 import strings from 'src/strings';
@@ -97,6 +98,9 @@ const ALL_SAVES = [...SETTINGS_ONLY_SAVE, ...ONE_PLOT_SAVE, ...LATEST_SAVE];
 const lastModified = (date: string, userName: string) =>
   strings.formatString(strings.LAST_MODIFIED_ON_BY, date, userName) as string;
 
+const saveRow = (timestamp: string, user: typeof JENNIFER) =>
+  `${DateTime.fromISO(timestamp).toFormat('yyyy-MM-dd HH:mm')} ${strings.BY} ${user.userName}`;
+
 const summaryOf = (...parts: string[]) => parts.join(' · ');
 
 const LATEST_SUMMARY = summaryOf(
@@ -168,13 +172,13 @@ describe('T0ChangeHistory', () => {
   it('keeps the list of saves hidden until the change history is opened', async () => {
     const { user } = await renderHistory(ALL_SAVES);
 
-    expect(screen.queryByText(`2026-06-15 ${strings.BY} ${JENNIFER.userName}`)).not.toBeInTheDocument();
+    expect(screen.queryByText(saveRow('2026-06-15T12:00:00Z', JENNIFER))).not.toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: strings.CHANGE_HISTORY }));
 
-    expect(screen.getByText(`2026-06-15 ${strings.BY} ${JENNIFER.userName}`)).toBeInTheDocument();
-    expect(screen.getByText(`2026-06-10 ${strings.BY} ${RAFAEL.userName}`)).toBeInTheDocument();
-    expect(screen.getByText(`2026-06-01 ${strings.BY} ${RAFAEL.userName}`)).toBeInTheDocument();
+    expect(screen.getByText(saveRow('2026-06-15T12:00:00Z', JENNIFER))).toBeInTheDocument();
+    expect(screen.getByText(saveRow('2026-06-10T09:00:00Z', RAFAEL))).toBeInTheDocument();
+    expect(screen.getByText(saveRow('2026-06-01T08:00:00Z', RAFAEL))).toBeInTheDocument();
   });
 
   it('summarizes each save by its distinct plots, strata and site settings', async () => {
