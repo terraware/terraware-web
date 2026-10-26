@@ -204,6 +204,27 @@ export type PlantingSeasonWithdrawalSubjectPayload = {
     withdrawalDate: string;
     withdrawalId: number;
   };
+export type PlantingSiteSubjectPayload = {
+  type: 'PlantingSite';
+} & EventSubjectPayloadBase & {
+    plantingSiteId: number;
+  };
+export type PlotT0DensitySubjectPayload = {
+  type: 'PlotT0Density';
+} & EventSubjectPayloadBase & {
+    monitoringPlotId: number;
+    plantingSiteId: number;
+    plotNumber: number;
+    scientificName: string;
+    speciesId: number;
+  };
+export type PlotT0ObservationSubjectPayload = {
+  type: 'PlotT0Observation';
+} & EventSubjectPayloadBase & {
+    monitoringPlotId: number;
+    plantingSiteId: number;
+    plotNumber: number;
+  };
 export type ProjectSubjectPayload = {
   type: 'Project';
 } & EventSubjectPayloadBase & {
@@ -219,6 +240,15 @@ export type RecordedTreeSubjectPayload = {
     treeGrowthForm: 'Tree' | 'Shrub' | 'Trunk';
     treeNumber: number;
     trunkNumber: number;
+  };
+export type StratumT0DensitySubjectPayload = {
+  type: 'StratumT0Density';
+} & EventSubjectPayloadBase & {
+    plantingSiteId: number;
+    scientificName: string;
+    speciesId: number;
+    stratumId: number;
+    stratumName: string;
   };
 export type ViabilityTestSubjectPayload = {
   type: 'ViabilityTest';
@@ -256,8 +286,12 @@ export type EventLogEntryPayload = {
     | PlantingSeasonSpeciesTargetSubjectPayload
     | PlantingSeasonSubjectPayload
     | PlantingSeasonWithdrawalSubjectPayload
+    | PlantingSiteSubjectPayload
+    | PlotT0DensitySubjectPayload
+    | PlotT0ObservationSubjectPayload
     | ProjectSubjectPayload
     | RecordedTreeSubjectPayload
+    | StratumT0DensitySubjectPayload
     | ViabilityTestSubjectPayload
     | WithdrawalSubjectPayload;
   timestamp: string;
@@ -300,8 +334,12 @@ export type ListEventLogEntriesRequestPayload = {
     | 'PlantingSeasonScheduledDateSpecies'
     | 'PlantingSeasonSpeciesTarget'
     | 'PlantingSeasonWithdrawal'
+    | 'PlantingSite'
+    | 'PlotT0Density'
+    | 'PlotT0Observation'
     | 'Project'
     | 'RecordedTree'
+    | 'StratumT0Density'
     | 'ViabilityTest'
     | 'Withdrawal'
   )[];
