@@ -164,6 +164,8 @@ type TrunkSetup = {
   forestType?: string;
   /** Which updates hang until released, by 1-based request order, so work can overlap them. */
   holdUpdates?: (requestNumber: number) => boolean;
+  isInvasive?: boolean;
+  isThreatened?: boolean;
   speciesId?: number;
   trunkCount?: number;
   /** Which updates fail, by 1-based request order. */
@@ -173,6 +175,8 @@ type TrunkSetup = {
 const setupTrunks = ({
   forestType = 'Terrestrial',
   holdUpdates = () => false,
+  isInvasive,
+  isThreatened,
   speciesId,
   trunkCount = 2,
   updateFails = () => false,
@@ -190,6 +194,8 @@ const setupTrunks = ({
           trunkNumber,
           treeGrowthForm: trunkCount > 1 ? 'Trunk' : 'Tree',
           speciesId,
+          isInvasive,
+          isThreatened,
           speciesName: 'Eucalyptus dalveenica',
           diameterAtBreastHeight: 9,
           height: 7,
@@ -493,10 +499,21 @@ describe('TreesAndShrubsEditableTable adding', () => {
   const startAdd = async (user: ReturnType<typeof renderWithProviders>['user']) => {
     await user.click(await screen.findByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
     await user.click(screen.getByPlaceholderText(strings.SEARCH_SPECIES));
-    await user.click(await screen.findByText(ABUTILON.scientificName));
+    const options = await screen.findByRole('list');
+    await user.click(await within(options).findByText(ABUTILON.scientificName));
   };
+  const draftRow = () => screen.getAllByRole('row').at(-1) as HTMLElement;
+  const draftSelect = (index: number) => within(draftRow()).getAllByRole('combobox')[index];
   const chooseGrowthForm = async (user: ReturnType<typeof renderWithProviders>['user'], label: string) => {
-    await user.click(screen.getByRole('combobox'));
+    await user.click(draftSelect(0));
+    await user.click(await screen.findByRole('option', { name: label }));
+  };
+  const setDraftFlag = async (
+    user: ReturnType<typeof renderWithProviders>['user'],
+    flag: 'isInvasive' | 'isThreatened' | 'isDead',
+    label: string
+  ) => {
+    await user.click(draftSelect({ isInvasive: 1, isThreatened: 2, isDead: 3 }[flag]));
     await user.click(await screen.findByRole('option', { name: label }));
   };
   const fill = async (user: ReturnType<typeof renderWithProviders>['user'], values: number[]) => {
@@ -645,8 +662,7 @@ describe('TreesAndShrubsEditableTable adding', () => {
     await startAdd(user);
     await chooseGrowthForm(user, strings.TREE);
 
-    const draftRow = screen.getAllByRole('row').at(-1) as HTMLElement;
-    const notesCell = within(draftRow).getAllByRole('cell')[11];
+    const notesCell = within(draftRow()).getAllByRole('cell')[11];
     await user.dblClick(notesCell);
     expect(within(notesCell).queryByRole('textbox')).not.toBeInTheDocument();
     expect(within(notesCell).queryByRole('button')).not.toBeInTheDocument();
@@ -746,6 +762,42 @@ describe('TreesAndShrubsEditableTable adding', () => {
 
     await waitFor(() => expect(requests).toHaveLength(2));
     expect(submit).toBeDisabled();
+  });
+
+  it('records the flags set while adding, against the plant and against its species', async () => {
+    const { user, requests } = setupTrunks();
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await fill(user, [12, 1.3, 8]);
+
+    await setDraftFlag(user, 'isDead', strings.YES);
+    await setDraftFlag(user, 'isInvasive', strings.YES);
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        {
+          type: 'CreateRecordedTree',
+          speciesId: ABUTILON.id,
+          treeGrowthForm: 'Tree',
+          isDead: true,
+          diameterAtBreastHeight: 12,
+          pointOfMeasurement: 1.3,
+          height: 8,
+        },
+        { type: 'BiomassSpecies', speciesId: ABUTILON.id, isInvasive: true },
+      ],
+    });
+  });
+
+  it('starts the new plant from what the plot already records about its species', async () => {
+    const { user } = setupTrunks({ speciesId: ABUTILON.id, isInvasive: true, isThreatened: false, trunkCount: 1 });
+    await startAdd(user);
+
+    expect(draftSelect(1)).toHaveTextContent(strings.YES);
+    expect(draftSelect(2)).toHaveTextContent(strings.NO);
+    expect(draftSelect(3)).toHaveTextContent(strings.NO);
   });
 
   it('abandons the new plant when the add is cancelled', async () => {
