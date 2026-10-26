@@ -578,6 +578,23 @@ describe('QuadratSpeciesEditableTable request order', () => {
   });
 });
 
+describe('QuadratSpeciesEditableTable abundance editing', () => {
+  it('keeps the recorded abundance when an edit counts no squares', async () => {
+    const { requests, user } = setupQuadrat();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await user.dblClick(cellsOf(1)[1]);
+    const abundance = screen.getByRole('spinbutton');
+    await user.clear(abundance);
+    await user.type(abundance, '0');
+    await user.tab();
+
+    await waitFor(() => expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument());
+    expect(requests).toHaveLength(0);
+    expect(cellsOf(1)[1]).toHaveTextContent('4');
+  });
+});
+
 describe('QuadratSpeciesEditableTable flag editing', () => {
   it('records an invasive flag on an existing row as soon as one is chosen', async () => {
     const { user, requests } = setupQuadrat({
@@ -689,6 +706,22 @@ describe('QuadratSpeciesEditableTable adding', () => {
     expect(requests).toHaveLength(0);
   });
 
+  it('will not add a species until at least one square is counted', async () => {
+    const { addSpeciesButton, abundanceInput, requests, pickDraftSpecies, startAdd, user } = setupQuadrat();
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+
+    await startAdd();
+    await pickDraftSpecies(ACACIA.scientificName);
+
+    await user.type(abundanceInput(), '0');
+    expect(addSpeciesButton()).toBeDisabled();
+
+    await user.clear(abundanceInput());
+    await user.type(abundanceInput(), '1');
+    expect(addSpeciesButton()).toBeEnabled();
+    expect(requests).toHaveLength(0);
+  });
+
   it.each([
     ['30', 25],
     ['1.5', 1],
@@ -749,7 +782,7 @@ describe('QuadratSpeciesEditableTable adding', () => {
     await screen.findByRole('cell', { name: ABUTILON.scientificName });
 
     await startAdd();
-    await fillDraft(ACACIA.scientificName, '0');
+    await fillDraft(ACACIA.scientificName, '1');
     await setDraftFlag('isInvasive', strings.YES);
     await setDraftFlag('isThreatened', strings.NO);
     await submitAdd();
@@ -757,7 +790,7 @@ describe('QuadratSpeciesEditableTable adding', () => {
     await waitFor(() => expect(requests).toHaveLength(1));
     expect(await requests[0].json()).toEqual({
       updates: [
-        { type: 'CreateQuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 0 },
+        { type: 'CreateQuadratSpecies', position: POSITION, speciesId: ACACIA.id, abundance: 1 },
         { type: 'BiomassSpecies', speciesId: ACACIA.id, isInvasive: true, isThreatened: false },
       ],
     });
