@@ -1,3 +1,7 @@
+ca911899 SW-8988 Fix dropdown behind table issue (#6871)
+3dfdd5c5 Update dependency chokidar to v6 (#6886)
+c5d0fb12 Update dependency slate-dom to ^0.147.0 (#6884)
+a519b7ad Update Node.js to v24.22.1 (#6883)
 2acef50d SW-9124 Update playwright test to check draft site problems (#6850)
 7634151d SW-9124 Let users save draft planting sites that have validation problems (#6849)
 6f2a53f4 SW-9124 Show validation problems when a draft planting site map can't be saved (#6848)
