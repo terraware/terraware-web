@@ -27,9 +27,6 @@ const useUpdateCurrentUser = () => {
         locale: user.locale,
         countryCode: user.countryCode,
       };
-      if (user.emailNotificationsEnabled !== undefined) {
-        payload.emailNotificationsEnabled = user.emailNotificationsEnabled;
-      }
 
       const result = await updateMyself(payload);
       const succeeded = !('error' in result);
