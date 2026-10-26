@@ -53,6 +53,8 @@ type DraftFlagField = 'isDead' | 'isInvasive' | 'isThreatened';
 
 const SPECIES_SCOPED_FIELDS = ['speciesId', 'speciesName', 'isInvasive', 'isThreatened'] as const;
 
+type RecordedSpecies = { scientificName?: string; speciesId?: number; speciesName?: string };
+
 const WHOLE_NUMBER_FIELDS: DraftMeasurementField[] = ['shrubDiameter', 'treeCrownDiameter'];
 
 const isMeasurement = (value: string | undefined, field: DraftMeasurementField): boolean => {
@@ -383,14 +385,23 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     }
   }, [optimisticValues, pendingSpeciesChange, trunksOfTree, updateObservation]);
 
+  const updateDraftSpecies = useCallback(
+    (species: Species | undefined) =>
+      setDraft((previous) => {
+        if (!previous) {
+          return previous;
+        }
+        return previous.species?.id === species?.id
+          ? { ...previous, species }
+          : { ...previous, species, isInvasive: undefined, isThreatened: undefined };
+      }),
+    []
+  );
+
   const SpeciesCellEditor = useCallback(
     ({ row, table }: { row: { id: string; original: TreeRow }; table: { setEditingCell: (cell: null) => void } }) =>
       row.id === DRAFT_ROW_ID ? (
-        <SpeciesSearchSelect
-          id='addTreeSpecies'
-          onChange={(species) => updateDraft({ species })}
-          placeholder={strings.SEARCH_SPECIES}
-        />
+        <SpeciesSearchSelect id='addTreeSpecies' onChange={updateDraftSpecies} placeholder={strings.SEARCH_SPECIES} />
       ) : (
         <SpeciesSearchSelect
           id={`changeTreeSpecies-${row.original.id}`}
@@ -404,13 +415,27 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           placeholder={row.original.speciesName ?? strings.SEARCH_SPECIES}
         />
       ),
-    [strings.SEARCH_SPECIES, updateDraft]
+    [strings.SEARCH_SPECIES, updateDraftSpecies]
   );
 
   const recordedSpeciesFlag = useCallback(
     (fieldId: 'isInvasive' | 'isThreatened', species?: Species) => {
-      const recorded = results?.biomassMeasurements?.trees?.find((tree) => tree.speciesId === species?.id);
-      return recorded && (optimisticValues[recorded.id]?.[fieldId] ?? recorded[fieldId]) ? 'true' : 'false';
+      if (!species) {
+        return 'false';
+      }
+      const isSameSpecies = (candidate: RecordedSpecies) =>
+        candidate.speciesId === species.id ||
+        candidate.speciesName === species.scientificName ||
+        candidate.scientificName === species.scientificName;
+      const biomass = results?.biomassMeasurements;
+      const tree = biomass?.trees?.find(isSameSpecies);
+      if (tree) {
+        return (optimisticValues[tree.id]?.[fieldId] ?? tree[fieldId]) ? 'true' : 'false';
+      }
+      const recorded =
+        biomass?.additionalSpecies?.find(isSameSpecies) ??
+        biomass?.quadrats?.flatMap((quadrat) => quadrat.species).find(isSameSpecies);
+      return recorded?.[fieldId] ? 'true' : 'false';
     },
     [optimisticValues, results]
   );

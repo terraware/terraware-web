@@ -496,11 +496,14 @@ describe('TreesAndShrubsEditableTable request order', () => {
 });
 
 describe('TreesAndShrubsEditableTable adding', () => {
-  const startAdd = async (user: ReturnType<typeof renderWithProviders>['user']) => {
-    await user.click(await screen.findByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+  const pickDraftSpecies = async (user: ReturnType<typeof renderWithProviders>['user'], scientificName: string) => {
     await user.click(screen.getByPlaceholderText(strings.SEARCH_SPECIES));
     const options = await screen.findByRole('list');
-    await user.click(await within(options).findByText(ABUTILON.scientificName));
+    await user.click(await within(options).findByText(scientificName));
+  };
+  const startAdd = async (user: ReturnType<typeof renderWithProviders>['user']) => {
+    await user.click(await screen.findByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+    await pickDraftSpecies(user, ABUTILON.scientificName);
   };
   const draftRow = () => screen.getAllByRole('row').at(-1) as HTMLElement;
   const draftSelect = (index: number) => within(draftRow()).getAllByRole('combobox')[index];
@@ -798,6 +801,69 @@ describe('TreesAndShrubsEditableTable adding', () => {
     expect(draftSelect(1)).toHaveTextContent(strings.YES);
     expect(draftSelect(2)).toHaveTextContent(strings.NO);
     expect(draftSelect(3)).toHaveTextContent(strings.NO);
+  });
+
+  it('does not record a flag against a species the draft no longer names', async () => {
+    const { user, requests } = setupTrunks();
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await setDraftFlag(user, 'isInvasive', strings.YES);
+
+    await pickDraftSpecies(user, ACACIA.scientificName);
+    await fill(user, [12, 1.3, 8]);
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        {
+          type: 'CreateRecordedTree',
+          speciesId: ACACIA.id,
+          treeGrowthForm: 'Tree',
+          isDead: false,
+          diameterAtBreastHeight: 12,
+          pointOfMeasurement: 1.3,
+          height: 8,
+        },
+      ],
+    });
+  });
+
+  it('keeps the plant marked dead when the species changes', async () => {
+    const { user, requests } = setupTrunks();
+    await startAdd(user);
+    await chooseGrowthForm(user, strings.TREE);
+    await setDraftFlag(user, 'isDead', strings.YES);
+
+    await pickDraftSpecies(user, ACACIA.scientificName);
+    await fill(user, [12, 1.3, 8]);
+    await user.click(screen.getByRole('button', { name: strings.ADD_TREE_OR_SHRUB }));
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
+      updates: [
+        {
+          type: 'CreateRecordedTree',
+          speciesId: ACACIA.id,
+          treeGrowthForm: 'Tree',
+          isDead: true,
+          diameterAtBreastHeight: 12,
+          pointOfMeasurement: 1.3,
+          height: 8,
+        },
+      ],
+    });
+  });
+
+  it('shows what the plot records about the newly named species, not the flags chosen for the old one', async () => {
+    const { user } = setupTrunks({ speciesId: ACACIA.id, isInvasive: false, isThreatened: true, trunkCount: 1 });
+    await startAdd(user);
+    await setDraftFlag(user, 'isInvasive', strings.YES);
+
+    await pickDraftSpecies(user, ACACIA.scientificName);
+
+    expect(draftSelect(1)).toHaveTextContent(strings.NO);
+    expect(draftSelect(2)).toHaveTextContent(strings.YES);
   });
 
   it('abandons the new plant when the add is cancelled', async () => {
