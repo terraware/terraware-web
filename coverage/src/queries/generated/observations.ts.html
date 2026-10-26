@@ -1393,7 +1393,9 @@
 <a name='L1328'></a><a href='#L1328'>1328</a>
 <a name='L1329'></a><a href='#L1329'>1329</a>
 <a name='L1330'></a><a href='#L1330'>1330</a>
-<a name='L1331'></a><a href='#L1331'>1331</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1331'></a><a href='#L1331'>1331</a>
+<a name='L1332'></a><a href='#L1332'>1332</a>
+<a name='L1333'></a><a href='#L1333'>1333</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55x</span>
 <span class="cline-any cline-yes">55x</span>
@@ -1573,6 +1575,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">131x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3290,119 +3294,6 @@ export type CompleteAdHocObservationRequestPayload = {
   /** GPS coordinates for the South West corner of the ad-hoc plot. */
   swCorner: Point;
 };
-export type Polygon = {
-  type: 'Polygon';
-} &amp; GeometryBase &amp; {
-    coordinates: number[][][];
-    type: 'Polygon';
-  };
-export type ObservationMonitoringPlotCoordinatesPayload = {
-  gpsCoordinates: Point;
-  position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-};
-export type ObservationMonitoringPlotMediaPayload = {
-  caption?: string;
-  fileId: number;
-  gpsCoordinates?: Point;
-  /** If true, this file was uploaded as part of the original observation. If false, it was uploaded later. */
-  isOriginal: boolean;
-  mediaKind: 'Photo' | 'Video';
-  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-  type: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
-};
-export type ObservationSpeciesResultsPayload = {
-  certainty: 'Known' | 'Other' | 'Unknown';
-  /** Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if this is a plot-level result for a temporary monitoring plot. */
-  permanentLive: number;
-  /** If certainty is Known, the ID of the species. Null if certainty is Other or Unknown. */
-  speciesId?: number;
-  /** If certainty is Other, the user-supplied name of the species. Null if certainty is Known or Unknown. */
-  speciesName?: string;
-  /** Percentage of plants in permanent monitoring plots that have survived since the t0 point. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null. */
-  survivalRate?: number;
-  /** Number of dead plants observed in this observation. */
-  totalDead: number;
-  /** Number of existing plants observed in this observation. */
-  totalExisting: number;
-  /** Number of live plants observed in this observation, not including existing plants. */
-  totalLive: number;
-  /** Total number of live and existing plants of this species. */
-  totalPlants: number;
-};
-export type ObservationMonitoringPlotResultsPayload = {
-  boundary: Polygon;
-  claimedByName?: string;
-  claimedByUserId?: number;
-  completedTime?: string;
-  conditions: (
-    | 'AnimalDamage'
-    | 'FastGrowth'
-    | 'FavorableWeather'
-    | 'Fungus'
-    | 'Pests'
-    | 'SeedProduction'
-    | 'UnfavorableWeather'
-    | 'NaturalRegenerationWoody'
-    | 'Logging'
-    | 'Fire'
-    | 'Mining'
-    | 'Grazing'
-    | 'Infrastructure'
-    | 'ElectricalLines'
-    | 'SoilErosion'
-    | 'DifficultAccessibility'
-    | 'Contamination'
-    | 'SteepSlope'
-    | 'WaterBodies'
-  )[];
-  /** Observed coordinates, if any, up to one per position. */
-  coordinates: ObservationMonitoringPlotCoordinatesPayload[];
-  /** ID of the stratum the monitoring plot is currently located in, if any. This may differ from the stratum it was in at the time of the observation. */
-  currentStratumId?: number;
-  /** ID of the substratum the monitoring plot is currently located in, if any. This may differ from the substratum it was in at the time of the observation. */
-  currentSubstratumId?: number;
-  elevationMeters?: number;
-  isAdHoc: boolean;
-  /** True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
-  isPermanent: boolean;
-  media: ObservationMonitoringPlotMediaPayload[];
-  monitoringPlotId: number;
-  /** Full name of this monitoring plot, including stratum and substratum prefixes. */
-  monitoringPlotName: string;
-  /** Organization-unique number of this monitoring plot. */
-  monitoringPlotNumber: number;
-  notes?: string;
-  /** IDs of any newer monitoring plots that overlap with this one. */
-  overlappedByPlotIds: number[];
-  /** IDs of any older monitoring plots this one overlaps with. */
-  overlapsWithPlotIds: number[];
-  /** True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
-  pending: boolean;
-  photos: ObservationMonitoringPlotMediaPayload[];
-  /** Number of live plants per hectare. */
-  plantingDensity?: number;
-  plants?: RecordedPlantPayload[];
-  /** Length of each edge of the monitoring plot in meters. */
-  sizeMeters: number;
-  species: ObservationSpeciesResultsPayload[];
-  status: 'Unclaimed' | 'Claimed' | 'Completed' | 'Not Observed';
-  /** ID of the stratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a stratum or if the stratum has since been deleted. */
-  stratumId?: number;
-  /** Name of the stratum the monitoring plot was in at the time of the observation, if any. */
-  stratumName?: string;
-  /** ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted. */
-  substratumId?: number;
-  /** Name of the substratum the monitoring plot was in at the time of the observation, if any. */
-  substratumName?: string;
-  /** If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data. */
-  survivalRate?: number;
-  /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
-  totalPlants?: number;
-  /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies?: number;
-  /** Information about plants of unknown species, if any were observed. */
-  unknownSpecies?: ObservationSpeciesResultsPayload;
-};
 export type ExistingBiomassQuadratSpeciesPayload = {
   abundanceCount: number;
   /** Use abundanceCount instead. */
@@ -3493,6 +3384,120 @@ export type ExistingBiomassMeasurementPayload = {
   /** Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water. */
   waterDepth?: number;
 };
+export type Polygon = {
+  type: 'Polygon';
+} &amp; GeometryBase &amp; {
+    coordinates: number[][][];
+    type: 'Polygon';
+  };
+export type ObservationMonitoringPlotCoordinatesPayload = {
+  gpsCoordinates: Point;
+  position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+};
+export type ObservationMonitoringPlotMediaPayload = {
+  caption?: string;
+  fileId: number;
+  gpsCoordinates?: Point;
+  /** If true, this file was uploaded as part of the original observation. If false, it was uploaded later. */
+  isOriginal: boolean;
+  mediaKind: 'Photo' | 'Video';
+  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  type: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
+};
+export type ObservationSpeciesResultsPayload = {
+  certainty: 'Known' | 'Other' | 'Unknown';
+  /** Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if this is a plot-level result for a temporary monitoring plot. */
+  permanentLive: number;
+  /** If certainty is Known, the ID of the species. Null if certainty is Other or Unknown. */
+  speciesId?: number;
+  /** If certainty is Other, the user-supplied name of the species. Null if certainty is Known or Unknown. */
+  speciesName?: string;
+  /** Percentage of plants in permanent monitoring plots that have survived since the t0 point. If there are no permanent monitoring plots (or if this is a plot-level result for a temporary monitoring plot) this will be null. */
+  survivalRate?: number;
+  /** Number of dead plants observed in this observation. */
+  totalDead: number;
+  /** Number of existing plants observed in this observation. */
+  totalExisting: number;
+  /** Number of live plants observed in this observation, not including existing plants. */
+  totalLive: number;
+  /** Total number of live and existing plants of this species. */
+  totalPlants: number;
+};
+export type ObservationMonitoringPlotResultsPayload = {
+  biomassMeasurements?: ExistingBiomassMeasurementPayload;
+  boundary: Polygon;
+  claimedByName?: string;
+  claimedByUserId?: number;
+  completedTime?: string;
+  conditions: (
+    | 'AnimalDamage'
+    | 'FastGrowth'
+    | 'FavorableWeather'
+    | 'Fungus'
+    | 'Pests'
+    | 'SeedProduction'
+    | 'UnfavorableWeather'
+    | 'NaturalRegenerationWoody'
+    | 'Logging'
+    | 'Fire'
+    | 'Mining'
+    | 'Grazing'
+    | 'Infrastructure'
+    | 'ElectricalLines'
+    | 'SoilErosion'
+    | 'DifficultAccessibility'
+    | 'Contamination'
+    | 'SteepSlope'
+    | 'WaterBodies'
+  )[];
+  /** Observed coordinates, if any, up to one per position. */
+  coordinates: ObservationMonitoringPlotCoordinatesPayload[];
+  /** ID of the stratum the monitoring plot is currently located in, if any. This may differ from the stratum it was in at the time of the observation. */
+  currentStratumId?: number;
+  /** ID of the substratum the monitoring plot is currently located in, if any. This may differ from the substratum it was in at the time of the observation. */
+  currentSubstratumId?: number;
+  elevationMeters?: number;
+  isAdHoc: boolean;
+  /** True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
+  isPermanent: boolean;
+  media: ObservationMonitoringPlotMediaPayload[];
+  monitoringPlotId: number;
+  /** Full name of this monitoring plot, including stratum and substratum prefixes. */
+  monitoringPlotName: string;
+  /** Organization-unique number of this monitoring plot. */
+  monitoringPlotNumber: number;
+  notes?: string;
+  /** IDs of any newer monitoring plots that overlap with this one. */
+  overlappedByPlotIds: number[];
+  /** IDs of any older monitoring plots this one overlaps with. */
+  overlapsWithPlotIds: number[];
+  /** True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+  pending: boolean;
+  photos: ObservationMonitoringPlotMediaPayload[];
+  /** Number of live plants per hectare. */
+  plantingDensity?: number;
+  plants?: RecordedPlantPayload[];
+  /** Length of each edge of the monitoring plot in meters. */
+  sizeMeters: number;
+  species: ObservationSpeciesResultsPayload[];
+  status: 'Unclaimed' | 'Claimed' | 'Completed' | 'Not Observed';
+  /** ID of the stratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a stratum or if the stratum has since been deleted. */
+  stratumId?: number;
+  /** Name of the stratum the monitoring plot was in at the time of the observation, if any. */
+  stratumName?: string;
+  /** ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted. */
+  substratumId?: number;
+  /** Name of the substratum the monitoring plot was in at the time of the observation, if any. */
+  substratumName?: string;
+  /** If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data. */
+  survivalRate?: number;
+  /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
+  totalPlants?: number;
+  /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
+  totalSpecies?: number;
+  /** Information about plants of unknown species, if any were observed. */
+  unknownSpecies?: ObservationSpeciesResultsPayload;
+};
 export type ObservationSubstratumResultsPayload = {
   /** Area of this substratum in hectares. */
   areaHa: number;
@@ -3546,6 +3551,7 @@ export type ObservationStratumResultsPayload = {
 export type ObservationResultsPayload = {
   adHocPlot?: ObservationMonitoringPlotResultsPayload;
   areaHa?: number;
+  /** Use the plot-level biomassMeasurements field instead. */
   biomassMeasurements?: ExistingBiomassMeasurementPayload;
   completedTime?: string;
   /** Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the substrata in the site have been marked as having completed planting. */
@@ -4060,7 +4066,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-26T14:19:24.023Z
+                at 2026-10-26T15:39:20.277Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
