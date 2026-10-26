@@ -7845,7 +7845,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["AccessionPhotoSubjectPayload"] | components["schemas"]["AccessionSubjectPayload"] | components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"] | components["schemas"]["ViabilityTestSubjectPayload"] | components["schemas"]["WithdrawalSubjectPayload"];
+            subject: components["schemas"]["AccessionPhotoSubjectPayload"] | components["schemas"]["AccessionSubjectPayload"] | components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["PlantingSiteSubjectPayload"] | components["schemas"]["PlotT0DensitySubjectPayload"] | components["schemas"]["PlotT0ObservationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"] | components["schemas"]["StratumT0DensitySubjectPayload"] | components["schemas"]["ViabilityTestSubjectPayload"] | components["schemas"]["WithdrawalSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7879,6 +7879,10 @@ export interface components {
             /** Format: date */
             reportingStartDate: string;
         };
+        /**
+         * @deprecated
+         * @description Use the plot-level biomassMeasurements field instead.
+         */
         ExistingBiomassMeasurementPayload: {
             additionalSpecies: components["schemas"]["BiomassSpeciesPayload"][];
             description?: string;
@@ -9153,7 +9157,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("Accession" | "AccessionPhoto" | "BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "Project" | "RecordedTree" | "ViabilityTest" | "Withdrawal")[];
+            subjects?: ("Accession" | "AccessionPhoto" | "BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "PlantingSite" | "PlotT0Density" | "PlotT0Observation" | "Project" | "RecordedTree" | "StratumT0Density" | "ViabilityTest" | "Withdrawal")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9981,6 +9985,7 @@ export interface components {
         };
         /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
         ObservationMonitoringPlotResultsPayload: {
+            biomassMeasurements?: components["schemas"]["ExistingBiomassMeasurementPayload"];
             boundary: components["schemas"]["Polygon"];
             claimedByName?: string;
             /** Format: int64 */
@@ -10180,6 +10185,7 @@ export interface components {
         ObservationResultsPayload: {
             adHocPlot?: components["schemas"]["ObservationMonitoringPlotResultsPayload"];
             areaHa?: number;
+            /** @description Use the plot-level biomassMeasurements field instead. */
             biomassMeasurements?: components["schemas"]["ExistingBiomassMeasurementPayload"];
             /** Format: date-time */
             completedTime?: string;
@@ -10969,6 +10975,16 @@ export interface components {
              */
             targetPlants?: number;
         };
+        PlantingSiteSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSiteId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSite";
+        };
         PlantingSiteValidationProblemPayload: {
             /** @description If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
             conflictsWith?: string[];
@@ -11050,6 +11066,37 @@ export interface components {
             monitoringPlotId: number;
             /** Format: int64 */
             observationId?: number;
+        };
+        PlotT0DensitySubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            plotNumber: number;
+            scientificName: string;
+            /** Format: int64 */
+            speciesId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlotT0Density";
+        };
+        PlotT0ObservationSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            plotNumber: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlotT0Observation";
         };
         Point: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             /**
@@ -12250,6 +12297,22 @@ export interface components {
             densityData: components["schemas"]["SpeciesDensityPayload"][];
             /** Format: int64 */
             stratumId: number;
+        };
+        StratumT0DensitySubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSiteId: number;
+            scientificName: string;
+            /** Format: int64 */
+            speciesId: number;
+            /** Format: int64 */
+            stratumId: number;
+            stratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "StratumT0Density";
         };
         SubLocationPayload: {
             /**
