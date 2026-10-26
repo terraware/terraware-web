@@ -7,17 +7,21 @@ import strings from 'src/strings';
 import { EditedCompletedSubstratum } from 'src/utils/plantingSiteMapEditUtils';
 
 export type MarkSubstrataIncompleteModalProps = {
+  initialSelectedIds?: number[];
   onCancel: () => void;
   onSave: (substratumIds: number[]) => void;
   substrata: EditedCompletedSubstratum[];
 };
 
 export default function MarkSubstrataIncompleteModal({
+  initialSelectedIds = [],
   onCancel,
   onSave,
   substrata,
 }: MarkSubstrataIncompleteModalProps): JSX.Element {
-  const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
+  const [selectedIds, setSelectedIds] = useState<Set<number>>(
+    () => new Set(initialSelectedIds.filter((id) => substrata.some((substratum) => substratum.id === id)))
+  );
 
   const toggle = (id: number) =>
     setSelectedIds((previous) => {

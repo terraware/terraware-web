@@ -46,6 +46,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   const [showStartOver, setShowStartOver] = useState(false);
   const [problems, setProblems] = useState<PlantingSiteProblem[]>();
   const [substrataToConfirm, setSubstrataToConfirm] = useState<EditedCompletedSubstratum[]>();
+  const [selectedIncompleteIds, setSelectedIncompleteIds] = useState<number[]>([]);
 
   const completedOptionalSteps = useMemo(() => initializeOptionalStepsStatus(editorSite), [editorSite]);
   const steps = useEditorSteps(editorSite.siteType, completedOptionalSteps);
@@ -129,6 +130,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   const onSaveMarkIncomplete = useCallback(
     (substratumIds: number[]) => {
       setSubstrataToConfirm(undefined);
+      setSelectedIncompleteIds(substratumIds);
       void save(editorSite, substratumIds);
     },
     [editorSite, save]
@@ -195,6 +197,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
       )}
       {substrataToConfirm && (
         <MarkSubstrataIncompleteModal
+          initialSelectedIds={selectedIncompleteIds}
           onCancel={onCancelMarkIncomplete}
           onSave={onSaveMarkIncomplete}
           substrata={substrataToConfirm}

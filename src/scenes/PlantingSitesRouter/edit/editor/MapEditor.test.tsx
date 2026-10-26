@@ -331,6 +331,32 @@ describe('MapEditor', () => {
     expect(screen.getByTestId('location')).toHaveTextContent(SITE_VIEW_PATH);
   });
 
+  it('keeps substrata selected to mark incomplete after a failed save', async () => {
+    server.use(
+      http.put(MAP_URL, () =>
+        HttpResponse.json(
+          { error: { message: 'Conflict' }, problems: [{ problemType: 'SiteTooLarge' }], status: 'error' },
+          { status: 409 }
+        )
+      )
+    );
+    const { user } = renderMapEditor(completedSite);
+
+    await editSiteBoundary(user, SHRUNK_SITE_BOUNDARY);
+    await goToFinalStep(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    const dialog = await screen.findByRole('dialog', { name: strings.MARK_SUBSTRATA_INCOMPLETE });
+    await user.click(within(dialog).getByRole('checkbox', { name: 'East-1' }));
+    await user.click(within(dialog).getByRole('button', { name: strings.SAVE_CHANGES }));
+
+    await user.click(await screen.findByRole('button', { name: strings.BACK_TO_EDIT }));
+    await waitFor(() => expect(screen.queryByText(strings.PLANTING_SITE_MAP_PROBLEMS_TITLE)).not.toBeInTheDocument());
+    await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+
+    const retryDialog = await screen.findByRole('dialog', { name: strings.MARK_SUBSTRATA_INCOMPLETE });
+    expect(within(retryDialog).getByRole('checkbox', { name: 'East-1' })).toBeChecked();
+  });
+
   it('cancelling the substrata prompt keeps editing', async () => {
     const requests = captureSaves();
     const { user } = renderMapEditor(completedSite);
