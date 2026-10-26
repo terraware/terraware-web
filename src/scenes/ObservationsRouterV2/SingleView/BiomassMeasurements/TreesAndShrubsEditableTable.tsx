@@ -737,13 +737,17 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     }: {
       row: { id: string };
       table: { getState: () => { editingCell?: { row: { id: string } } | null } };
-    }) => ({
-      sx: {
-        cursor: 'default',
-        '& td': { borderBottom: 'none' },
-        ...(table.getState().editingCell?.row.id === row.id ? { zIndex: 3 } : {}),
-      },
-    }),
+    }) => {
+      const isDraftRow = row.id === DRAFT_ROW_ID;
+      return {
+        hover: !isDraftRow,
+        sx: {
+          cursor: 'default',
+          '& td': { borderBottom: 'none' },
+          ...(isDraftRow || table.getState().editingCell?.row.id === row.id ? { zIndex: 3 } : {}),
+        },
+      };
+    },
     []
   );
 
