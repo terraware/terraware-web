@@ -7,18 +7,16 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { FlowStates } from 'src/components/ProjectNewView';
 import ProjectEntitySearch from 'src/components/ProjectNewView/flow/ProjectEntitySearch';
 import {
-  ProjectEntityFilters,
+  ProjectEntitySearchArgs,
   useProjectEntitySelection,
 } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
-import { TrackingService } from 'src/services';
+import { useLazySearchPlantingSitesForProjectAssignmentQuery } from 'src/queries/search/plantingSites';
 import strings from 'src/strings';
 import { CreateProjectRequest } from 'src/types/Project';
-import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
-import { parseSearchTerm } from 'src/utils/search';
 
 type SelectPlantingSitesProps = {
   project: CreateProjectRequest;
@@ -69,41 +67,13 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
+  const [searchPlantingSites] = useLazySearchPlantingSitesForProjectAssignmentQuery();
+
   const getSearchResults = useCallback(
-    (
-      organizationId: number,
-      searchFields: SearchNodePayload[],
-      searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntityFilters
-    ) => {
-      const fields = [...searchFields];
-      const projectIds = searchFilters?.projectIds || [];
-
-      if (projectIds.length > 0) {
-        fields.push({
-          field: 'project_id',
-          operation: 'field',
-          type: 'Exact',
-          values: projectIds.map((id: number | null) => (id === null ? id : `${id}`)),
-        });
-      }
-
-      return TrackingService.searchPlantingSites(organizationId, fields, searchSortOrder);
-    },
-    []
+    ({ organizationId, sortOrder, filters: searchFilters, searchTerm }: ProjectEntitySearchArgs) =>
+      searchPlantingSites({ organizationId, projectIds: searchFilters.projectIds, searchTerm, sortOrder }).unwrap(),
+    [searchPlantingSites]
   );
-
-  const getSearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
-    const { type, values } = parseSearchTerm(debouncedSearchTerm);
-    return [
-      {
-        operation: 'field',
-        field: 'name',
-        type,
-        values,
-      },
-    ];
-  }, []);
 
   const {
     entities,
@@ -121,7 +91,6 @@ export default function SelectPlantingSites(props: SelectPlantingSitesProps): JS
     setProjectEntities: setProjectPlantingSites,
     onNext,
     getSearchResults,
-    getSearchFields,
   });
 
   if (flowState !== 'plantingSites') {
