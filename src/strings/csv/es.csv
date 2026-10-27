@@ -1153,6 +1153,8 @@ MARK_AS_UNREAD,Marcar como no leído,e4cb0534
 MARK_FULFILLED,Marcar como cumplida,cc3329c7
 MARK_PLANTING_DATE_FULFILLED,Marcar Fecha de Plantación como cumplida,bd99f61c
 MARK_PLANTING_DATE_FULFILLED_CONFIRM,Está a punto de marcar esta Fecha de Plantación como cumplida. Las solicitudes de retiro abiertas del Vivero se marcarán como cumplidas y ya no se podrán realizar Retiros de Plantación para esta fecha. Marcar una Fecha de Plantación como cumplida no se puede deshacer.,d6e4897d
+MARK_SUBSTRATA_INCOMPLETE,¿Marcar los sustratos como no plantados?,8905257b
+MARK_SUBSTRATA_INCOMPLETE_MESSAGE,Estos sustratos se marcaron como plantación completa y sus límites han cambiado. Seleccione aquellos que ya no deberían estar marcados como plantación completa.,472a163c
 MARKED_AS_PLANTING_COMPLETE,Marcadas como plantación completa (%),aee9023f
 MATCH_SPECIES,Verificar coincidencias,8dc1bd1d
 MATCH_SPECIES_MODAL_DESCRIPTION,"Seleccionar coincidencias para las especies no reconocidas. Una vez realizado, no podrá modificarla ni deshacerla.",788bcc85
