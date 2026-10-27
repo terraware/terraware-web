@@ -45,6 +45,8 @@ const REMOVE_BUTTON_CLASS = 'quadratSpeciesRemove';
 
 const DRAFT_ROW_ID = 'mrt-row-create';
 
+const MIN_ABUNDANCE = 1;
+
 const MAX_ABUNDANCE = 25;
 
 type DraftSpecies = {
@@ -284,7 +286,7 @@ export default function QuadratSpeciesEditableTable({
       return false;
     }
     const abundance = Number(draft.abundanceCount);
-    return Number.isInteger(abundance) && abundance >= 0 && abundance <= MAX_ABUNDANCE;
+    return Number.isInteger(abundance) && abundance >= MIN_ABUNDANCE && abundance <= MAX_ABUNDANCE;
   }, [draft, position]);
 
   const startAdding = useCallback((table: MRT_TableInstance<TableRow>) => {
@@ -517,7 +519,7 @@ export default function QuadratSpeciesEditableTable({
                     type='number'
                     defaultValue={row.original.abundanceCount ?? ''}
                     id={row.id === DRAFT_ROW_ID ? 'addQuadratSpeciesAbundance' : undefined}
-                    inputProps={{ min: 0, max: MAX_ABUNDANCE }}
+                    inputProps={{ min: MIN_ABUNDANCE, max: MAX_ABUNDANCE }}
                     placeholder={row.id === DRAFT_ROW_ID ? '1–25' : undefined}
                     onChange={(event) => {
                       const val = event.target.value;
@@ -537,8 +539,8 @@ export default function QuadratSpeciesEditableTable({
                       }
                       const numValue = Number(event.target.value);
                       if (
-                        !isNaN(numValue) &&
-                        numValue >= 0 &&
+                        Number.isInteger(numValue) &&
+                        numValue >= MIN_ABUNDANCE &&
                         numValue <= MAX_ABUNDANCE &&
                         (row.original.speciesId || row.original.scientificName || row.original.speciesName)
                       ) {
