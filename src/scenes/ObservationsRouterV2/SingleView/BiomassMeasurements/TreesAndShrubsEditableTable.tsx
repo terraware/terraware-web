@@ -343,7 +343,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
   const trunksOfTree = useCallback(
     (row: TreeRow) =>
-      (results?.biomassMeasurements?.trees ?? []).filter(
+      (results?.adHocPlot?.biomassMeasurements?.trees ?? []).filter(
         (tree) => tree.treeGrowthForm !== 'Shrub' && tree.treeNumber === row.treeNumber
       ),
     [results]
@@ -427,7 +427,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         candidate.speciesId === species.id ||
         candidate.speciesName === species.scientificName ||
         candidate.scientificName === species.scientificName;
-      const biomass = results?.biomassMeasurements;
+      const biomass = results?.adHocPlot?.biomassMeasurements;
       const tree = biomass?.trees?.find(isSameSpecies);
       if (tree) {
         return (optimisticValues[tree.id]?.[fieldId] ?? tree[fieldId]) ? 'true' : 'false';
