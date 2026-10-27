@@ -11,6 +11,8 @@ import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
+  BiomassQuadratSpeciesSubjectPayload,
+  BiomassSpeciesSubjectPayload,
   EventLogEntryPayload,
   MonitoringSpeciesSubjectPayload,
   ObservationPlotMediaSubjectPayload,
@@ -29,6 +31,34 @@ type EventLogProps = {
   plotId: number;
   isBiomass?: boolean;
 };
+
+const recordsALaterEdit = (subject: EventLogEntryPayload['subject']) =>
+  subject.type === 'ObservationPlotMedia' ? !subject.isOriginal : subject.type === 'BiomassQuadratSpecies';
+
+const speciesDeletionKey = (
+  entry: EventLogEntryPayload,
+  subject: BiomassQuadratSpeciesSubjectPayload | BiomassSpeciesSubjectPayload
+): string =>
+  [entry.timestamp, entry.userId, getMonitoringSpeciesKey(subject.speciesId, subject.scientificName)].join('|');
+
+const cascadedSpeciesDeletions = (events?: EventLogEntryPayload[]): Set<EventLogEntryPayload> => {
+  const removedFromAQuadrat = new Set(
+    (events ?? []).flatMap((entry) =>
+      entry.action.type === 'Deleted' && entry.subject.type === 'BiomassQuadratSpecies'
+        ? [speciesDeletionKey(entry, entry.subject)]
+        : []
+    )
+  );
+  return new Set(
+    (events ?? []).filter(
+      (entry) =>
+        entry.action.type === 'Deleted' &&
+        entry.subject.type === 'BiomassSpecies' &&
+        removedFromAQuadrat.has(speciesDeletionKey(entry, entry.subject))
+    )
+  );
+};
+
 const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
@@ -157,6 +187,8 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     [currentSpeciesTotals, events, monitoringPlot, resolveSpeciesName]
   );
 
+  const cascadedDeletions = useMemo(() => cascadedSpeciesDeletions(events), [events]);
+
   const filterEvent = useCallback(
     (event: EventLogEntryPayload) =>
       !(
@@ -164,12 +196,10 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         MangroveFields.includes(event.action.fieldName) &&
         !event.action.changedTo
       ) &&
-      !(
-        event.action.type === 'Created' &&
-        (event.subject.type !== 'ObservationPlotMedia' || event.subject.isOriginal)
-      ) &&
+      !(event.action.type === 'Created' && !recordsALaterEdit(event.subject)) &&
+      !cascadedDeletions.has(event) &&
       !redundantSpeciesEntries.has(event),
-    [MangroveFields, redundantSpeciesEntries]
+    [MangroveFields, cascadedDeletions, redundantSpeciesEntries]
   );
 
   const renderSpeciesSummary = useCallback(
