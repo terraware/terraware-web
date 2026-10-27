@@ -1,3 +1,6 @@
+4d0605b7 SW-8988 For abundance, allow values within 1-25 (#6894)
+484b5a1d SW-9090 Survival Rate Settings Change History Log (#6892)
+566769e2 SW-8988 Make invasive, threatened, and dead fields editable (#6893)
 c2b889b4 Point Tracking types at RTK generated types (#6842)
 0740d0c8 Update AGENTS.md to specify new commits (#6895)
 c3c0d08e Search planting sites for project assignment through RTK Query (#6841)
