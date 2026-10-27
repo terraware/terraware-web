@@ -495,7 +495,7 @@ export default function Accession2View(): JSX.Element {
           )}
         </>
       )}
-      <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
+      <PageHeaderWrapper nextElement={contentRef.current}>
         <>
           <Box>
             <BackToLink
