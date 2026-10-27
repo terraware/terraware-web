@@ -8,6 +8,7 @@ import { useOrganization } from 'src/providers';
 import { isAdmin } from 'src/utils/organization';
 
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
+import PlantingSiteMapEdit from './edit/PlantingSiteMapEdit';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
 import PlantingSiteView from './view/PlantingSiteView';
 import PlantingSitesList from './view/PlantingSitesList';
@@ -19,6 +20,7 @@ export default function PlantingSites(): JSX.Element {
   return (
     <Routes>
       <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />
+      <Route path={'/:plantingSiteId/edit'} element={<PlantingSiteMapEdit />} />
       <Route path={'/:plantingSiteId/*'} element={<PlantingSiteView />} />
       <Route path={'*'} element={<PlantingSitesList />} />
     </Routes>
