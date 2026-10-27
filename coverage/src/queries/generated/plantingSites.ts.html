@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.63% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/19</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.75% </span>
+                <span class="strong">41.17% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/16</span>
+                <span class='fraction'>7/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.63% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/19</span>
+                <span class='fraction'>10/20</span>
             </div>
         
             
@@ -611,7 +611,29 @@
 <a name='L546'></a><a href='#L546'>546</a>
 <a name='L547'></a><a href='#L547'>547</a>
 <a name='L548'></a><a href='#L548'>548</a>
-<a name='L549'></a><a href='#L549'>549</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L549'></a><a href='#L549'>549</a>
+<a name='L550'></a><a href='#L550'>550</a>
+<a name='L551'></a><a href='#L551'>551</a>
+<a name='L552'></a><a href='#L552'>552</a>
+<a name='L553'></a><a href='#L553'>553</a>
+<a name='L554'></a><a href='#L554'>554</a>
+<a name='L555'></a><a href='#L555'>555</a>
+<a name='L556'></a><a href='#L556'>556</a>
+<a name='L557'></a><a href='#L557'>557</a>
+<a name='L558'></a><a href='#L558'>558</a>
+<a name='L559'></a><a href='#L559'>559</a>
+<a name='L560'></a><a href='#L560'>560</a>
+<a name='L561'></a><a href='#L561'>561</a>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a>
+<a name='L564'></a><a href='#L564'>564</a>
+<a name='L565'></a><a href='#L565'>565</a>
+<a name='L566'></a><a href='#L566'>566</a>
+<a name='L567'></a><a href='#L567'>567</a>
+<a name='L568'></a><a href='#L568'>568</a>
+<a name='L569'></a><a href='#L569'>569</a>
+<a name='L570'></a><a href='#L570'>570</a>
+<a name='L571'></a><a href='#L571'>571</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
@@ -681,6 +703,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1135,7 +1163,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1229,6 +1273,12 @@ const injectedRtkApi = api.injectEndpoints({
           maxWaitSeconds: queryArg.maxWaitSeconds,
         },
       }),
+    }),
+    listPlantingSiteHistoryEvents: build.query&lt;
+      ListPlantingSiteHistoryEventsApiResponse,
+      ListPlantingSiteHistoryEventsApiArg
+    &gt;({
+      query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({ url: `/api/v1/tracking/sites/${queryArg}/history` }),</span></span>
     }),
     getPlantingSiteHistory: build.query&lt;GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg&gt;({
       query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
@@ -1328,6 +1378,9 @@ export type CompleteSurvivalRateCalculationApiArg = {
   /** Maximum number of seconds to wait for the recalculation to finish. Defaults to 600. */
   maxWaitSeconds?: number;
 };
+export type ListPlantingSiteHistoryEventsApiResponse =
+  /** status 200 OK */ ListPlantingSiteHistoryEventsResponsePayload;
+export type ListPlantingSiteHistoryEventsApiArg = number;
 export type GetPlantingSiteHistoryApiResponse = /** status 200 OK */ GetPlantingSiteHistoryResponsePayload;
 export type GetPlantingSiteHistoryApiArg = {
   id: number;
@@ -1595,6 +1648,17 @@ export type GetSurvivalRateCalculationInProgressResponsePayload = {
   calculationInProgress: boolean;
   status: SuccessOrError;
 };
+export type PlantingSiteHistoryEventPayload = {
+  date: string;
+  editedByName?: string;
+  editedByUserId: number;
+  historyId: number;
+  type: 'Created' | 'Edited';
+};
+export type ListPlantingSiteHistoryEventsResponsePayload = {
+  events: PlantingSiteHistoryEventPayload[];
+  status: SuccessOrError;
+};
 export type MonitoringPlotHistoryPayload = {
   boundary: Polygon;
   id: number;
@@ -1697,6 +1761,8 @@ export const {
   useGetSurvivalRateCalculationInProgressQuery,
   useLazyGetSurvivalRateCalculationInProgressQuery,
   useCompleteSurvivalRateCalculationMutation,
+  useListPlantingSiteHistoryEventsQuery,
+  useLazyListPlantingSiteHistoryEventsQuery,
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
   useUpdatePlantingSiteMapMutation,
@@ -1714,7 +1780,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-27T19:30:25.844Z
+                at 2026-10-27T21:47:57.578Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

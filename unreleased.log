@@ -1,3 +1,6 @@
+891a3a22 SW-8990 Drop email notification flag from the current user (#6904)
+b5d5f0cd SW-9069 Display change history for map updates (#6912)
+9748e8ee Regenerate Search API queries now that its OpenAPI schema is fixed (#6913)
 aadb7c54 SW-9068 Let users mark edited substrata as not finished planting (#6902)
 e19ebdff SW-9068 Add page to edit existing planting site maps (#6901)
 60dc938d SW-9068 Split the planting site editor layout from draft persistence (#6900)
