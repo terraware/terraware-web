@@ -1,12 +1,12 @@
 import { baseApi as api } from '../baseApi';
-import { SearchCountApiResponse, SearchNodePayload } from '../generated/search';
+import { PrefixedSearch, SearchCountApiResponse } from '../generated/search';
 import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     countObservations: build.query<number, CountObservationsApiArgs>({
       query: (args) => {
-        const searchChildren: SearchNodePayload[] = [
+        const searchChildren: PrefixedSearch['search'][] = [
           {
             operation: 'field',
             field: 'plantingSite.organization.id',

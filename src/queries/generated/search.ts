@@ -21,11 +21,13 @@ export type SearchCountApiResponse = /** status 200 OK */ SearchCountResponsePay
 export type SearchCountApiArg = SearchRequestPayload;
 export type SearchDistinctValuesApiResponse = /** status 200 OK */ SearchValuesResponsePayload;
 export type SearchDistinctValuesApiArg = SearchRequestPayload;
+export type SuccessOrError = 'ok' | 'error';
 export type SearchResponsePayload = {
   cursor?: string;
   results: {
     [key: string]: any;
   }[];
+  status: SuccessOrError;
 };
 export type SearchNodePayloadBase = {
   operation: string;
@@ -42,13 +44,12 @@ export type OrNodePayload = {
   operation: 'or';
 } & SearchNodePayloadBase & {
     /** List of criteria at least one of which must be satisfied */
-    children: SearchNodePayload[];
+    children: (AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload)[];
   };
-export type SearchNodePayload = AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
 export type NotNodePayload = {
   operation: 'not';
 } & SearchNodePayloadBase & {
-    child: SearchNodePayload;
+    child: AndNodePayload | FieldNodePayload | NotNodePayload | OrNodePayload;
   };
 export type AndNodePayload = {
   operation: 'and';
@@ -75,15 +76,22 @@ export type SearchRequestPayload = {
   filters?: PrefixedSearch[];
   /** Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. This is the name of a search table. */
   prefix?:
+    | 'acceleratorReportAutoCalculatedIndicators'
+    | 'acceleratorReportCommonIndicators'
+    | 'acceleratorReportProjectIndicators'
+    | 'acceleratorReports'
     | 'accessionCollectors'
     | 'accessions'
+    | 'applications'
+    | 'autoCalculatedIndicators'
     | 'bags'
     | 'batchSubLocations'
     | 'batchWithdrawals'
     | 'batches'
-    | 'cohortModules'
-    | 'cohorts'
+    | 'botanicalCountries'
+    | 'commonIndicators'
     | 'countries'
+    | 'countryBotanicalCountries'
     | 'countrySubdivisions'
     | 'deliverables'
     | 'deliveries'
@@ -97,49 +105,65 @@ export type SearchRequestPayload = {
     | 'geolocations'
     | 'internalTags'
     | 'inventories'
+    | 'mediaFiles'
     | 'modules'
     | 'monitoringPlotHistories'
     | 'monitoringPlots'
     | 'nurserySpeciesProjects'
+    | 'nurseryWithdrawalPhotos'
     | 'nurseryWithdrawals'
     | 'observationBiomassDetails'
     | 'observationBiomassQuadratSpecies'
     | 'observationBiomassSpecies'
     | 'observationPlotConditions'
+    | 'observationPlotResult'
     | 'observationPlots'
+    | 'observationSiteResult'
+    | 'observationStratumResult'
+    | 'observationSubstratumResult'
     | 'observations'
     | 'organizationInternalTags'
     | 'organizationUsers'
     | 'organizations'
     | 'participantProjectSpecies'
-    | 'participants'
+    | 'plantingDateRequestSpecies'
+    | 'plantingDateRequests'
+    | 'plantingSeasonAllocatedSpeciesTable'
+    | 'plantingSeasonScheduledDates'
+    | 'plantingSeasonSpeciesTargets'
     | 'plantingSeasons'
     | 'plantingSiteHistories'
     | 'plantingSitePopulations'
+    | 'plantingSiteSpeciesTargets'
     | 'plantingSites'
-    | 'plantingSubzoneHistories'
-    | 'plantingSubzonePopulations'
-    | 'plantingSubzones'
-    | 'plantingZoneHistories'
-    | 'plantingZonePopulations'
-    | 'plantingZones'
     | 'plantings'
     | 'projectAcceleratorDetails'
     | 'projectDeliverables'
+    | 'projectIndicators'
     | 'projectInternalUsers'
     | 'projectLandUseModelTypes'
+    | 'projectModules'
+    | 'projectSpecies'
     | 'projectVariableValues'
     | 'projectVariables'
     | 'projects'
     | 'recordedTrees'
-    | 'reports'
+    | 'scheduledPlantingDateSpeciesTable'
+    | 'seedFundReports'
     | 'species'
     | 'speciesEcosystemTypes'
     | 'speciesGrowthForms'
     | 'speciesPlantMaterialSourcingMethods'
     | 'speciesProblems'
     | 'speciesSuccessionalGroups'
+    | 'strata'
+    | 'stratumHistories'
+    | 'stratumPopulations'
+    | 'stratumSpeciesTargets'
     | 'subLocations'
+    | 'substrata'
+    | 'substratumHistories'
+    | 'substratumPopulations'
     | 'users'
     | 'variableSelectOptions'
     | 'viabilityTestResults'
@@ -151,16 +175,20 @@ export type SearchRequestPayload = {
 };
 export type SearchCountResponsePayload = {
   count: number;
+  status: SuccessOrError;
 };
 export type FieldValuesPayload = {
   /** If true, the list of values is too long to return in its entirety and "values" is a partial list. */
   partial: boolean;
-  /** List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
+  /** The values of the fields specified in the sortOrder of the request. Each element of this list corresponds to the element at the same position in the `values` list. Each element of the list is a list of values in the same order as the `sortOrder` list from the request. */
+  sortValues?: string[][];
+  /** All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
   values: (string | null)[];
 };
 export type SearchValuesResponsePayload = {
   results: {
     [key: string]: FieldValuesPayload;
   };
+  status: SuccessOrError;
 };
 export const { useSearchMutation, useSearchCountMutation, useSearchDistinctValuesMutation } = injectedRtkApi;

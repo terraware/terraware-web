@@ -215,21 +215,16 @@ const config: ConfigFile = {
     './src/queries/generated/projectVotes.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/accelerator/projects/{projectId}/votes',
     },
-    // Disable regenerating Search API until OpenAPI annotation fix is completed.
-    // './src/queries/generated/search.ts': {
-    //   filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
-    // },
+    './src/queries/generated/search.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
+    },
   },
   prettierConfigFile: '.prettierrc',
   flattenArg: true,
 };
 
 const generatedDir = './src/queries/generated';
-// search.ts is excluded while its generation is disabled above.
-const preservedFiles = ['search.ts'];
 
-readdirSync(generatedDir)
-  .filter((file) => !preservedFiles.includes(file))
-  .forEach((file) => rmSync(path.join(generatedDir, file), { force: true }));
+readdirSync(generatedDir).forEach((file) => rmSync(path.join(generatedDir, file), { force: true }));
 
 export default config;
