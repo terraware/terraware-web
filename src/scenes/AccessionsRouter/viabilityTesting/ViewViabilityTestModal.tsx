@@ -303,7 +303,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           )}
           {viabilityTest.testResults?.map((testResult, index) => {
             return (
-              <Grid key={`observation-${index}`} display='flex' paddingTop={1} size={12}>
+              <Grid key={`observation-${index}`} container spacing={0} display='flex' paddingTop={1} size={12}>
                 <Grid size={smallColumn}>
                   <Grid sx={titleStyle} size={12}>
                     {strings.CHECK_DATE}
