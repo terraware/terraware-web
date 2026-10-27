@@ -82,8 +82,18 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/sites/${queryArg.id}/map`,
         method: 'PUT',
         body: queryArg.updatePlantingSiteMapRequestPayload,
+      }),
+    }),
+    summarizePlantingSiteMapEdit: build.mutation<
+      SummarizePlantingSiteMapEditApiResponse,
+      SummarizePlantingSiteMapEditApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.id}/map/summary`,
+        method: 'POST',
+        body: queryArg.updatePlantingSiteMapRequestPayload,
         params: {
-          dryRun: queryArg.dryRun,
+          depth: queryArg.depth,
         },
       }),
     }),
@@ -177,8 +187,14 @@ export type UpdatePlantingSiteMapApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type UpdatePlantingSiteMapApiArg = {
   id: number;
-  /** If true, check whether the edit is valid without changing the site. */
-  dryRun?: boolean;
+  updatePlantingSiteMapRequestPayload: UpdatePlantingSiteMapRequestPayload;
+};
+export type SummarizePlantingSiteMapEditApiResponse =
+  /** status 200 The requested operation succeeded. */ SummarizePlantingSiteMapEditResponsePayload;
+export type SummarizePlantingSiteMapEditApiArg = {
+  id: number;
+  /** How much detail to include in the summary. */
+  depth?: 'Site' | 'Stratum' | 'Substratum' | 'Plot';
   updatePlantingSiteMapRequestPayload: UpdatePlantingSiteMapRequestPayload;
 };
 export type GetPlantingSiteReportedPlantsApiResponse =
@@ -498,8 +514,117 @@ export type UpdatePlantingSiteMapRequestPayload = {
   exclusion?: MultiPolygon | Polygon;
   /** Strata and substrata. Existing strata and substrata are matched by ID; those that are omitted are deleted. Must not be empty if the site already has strata. */
   strata: StratumMapEditPayload[];
-  /** IDs of edited substrata whose planting completed flags should be cleared. Ignored if dryRun is true. */
+  /** IDs of edited substrata whose planting completed flags should be cleared. Ignored when summarizing an edit. */
   substratumIdsToMarkIncomplete?: number[];
+};
+export type PlantingSiteEditSummaryItemPayloadBase = {
+  type: string;
+};
+export type ObservationsAbandonedPayload = {
+  type: 'ObservationsAbandoned';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    observationIds: number[];
+  };
+export type PermanentPlotCreatedPayload = {
+  type: 'PermanentPlotCreated';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    /** True if the plot would be in an area that was already part of the stratum. */
+    inExistingArea: boolean;
+    permanentIndex?: number;
+    stratumName: string;
+    /** Normally null; new plots are created at the stratum level. */
+    substratumName?: string;
+  };
+export type PlotAcceptedPayload = {
+  type: 'PlotAccepted';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    monitoringPlotId: number;
+    permanentIndex?: number;
+    stratumName: string;
+    substratumName: string;
+  };
+export type PlotAdoptedPayload = {
+  type: 'PlotAdopted';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    monitoringPlotId: number;
+    permanentIndex?: number;
+    stratumName: string;
+    substratumName: string;
+  };
+export type PlotEjectedPayload = {
+  type: 'PlotEjected';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    monitoringPlotId: number;
+    stratumName: string;
+    substratumName: string;
+  };
+export type SiteAreaChangedPayload = {
+  type: 'SiteAreaChanged';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    areaHaDifference: number;
+  };
+export type StratumCreatedPayload = {
+  type: 'StratumCreated';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    numPermanentPlots: number;
+    stableId: string;
+    stratumName: string;
+  };
+export type StratumDeletedPayload = {
+  type: 'StratumDeleted';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    stableId: string;
+    stratumName: string;
+  };
+export type StratumUpdatedPayload = {
+  type: 'StratumUpdated';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    areaHaDifference: number;
+    numPermanentPlots: number;
+    /** Percentage of the stratum's new boundary that overlaps with its existing boundary. */
+    overlapPercent: number;
+    stratumName: string;
+  };
+export type SubstratumCreatedPayload = {
+  type: 'SubstratumCreated';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    stableId: string;
+    stratumName: string;
+    substratumName: string;
+  };
+export type SubstratumDeletedPayload = {
+  type: 'SubstratumDeleted';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    stableId: string;
+    stratumName: string;
+    substratumName: string;
+  };
+export type SubstratumUpdatedPayload = {
+  type: 'SubstratumUpdated';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    areaHaDifference: number;
+    /** Percentage of the substratum's new boundary that overlaps with its existing boundary. */
+    overlapPercent: number;
+    stratumName: string;
+    substratumName: string;
+  };
+export type SummarizePlantingSiteMapEditResponsePayload = {
+  status: SuccessOrError;
+  /** Changes the edit would make. Site-wide items come first, followed by each stratum's items. */
+  summary: (
+    | ObservationsAbandonedPayload
+    | PermanentPlotCreatedPayload
+    | PlotAcceptedPayload
+    | PlotAdoptedPayload
+    | PlotEjectedPayload
+    | SiteAreaChangedPayload
+    | StratumCreatedPayload
+    | StratumDeletedPayload
+    | StratumUpdatedPayload
+    | SubstratumCreatedPayload
+    | SubstratumDeletedPayload
+    | SubstratumUpdatedPayload
+  )[];
 };
 export type GetPlantingSiteReportedPlantsResponsePayload = {
   site: PlantingSiteReportedPlantsPayload;
@@ -539,6 +664,7 @@ export const {
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
   useUpdatePlantingSiteMapMutation,
+  useSummarizePlantingSiteMapEditMutation,
   useGetPlantingSiteReportedPlantsQuery,
   useLazyGetPlantingSiteReportedPlantsQuery,
   useListPlantingSiteSpeciesTargetsQuery,

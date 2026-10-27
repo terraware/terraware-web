@@ -167,8 +167,6 @@ const editSiteBoundary = async (user: User, boundary: MultiPolygon) => {
   await waitFor(() => expect(lastMapRender()?.editableBoundary).toEqual(mapEdit.boundary));
 };
 
-const saveRequests = (requests: Request[]) => requests.filter((request) => !request.url.includes('dryRun=true'));
-
 const captureSaves = () => {
   const requests: Request[] = [];
   server.use(
@@ -241,8 +239,8 @@ describe('MapEditor', () => {
 
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
 
-    await waitFor(() => expect(saveRequests(requests)).toHaveLength(1));
-    expect(await saveRequests(requests)[0].json()).toEqual({
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({
       boundary: SITE_BOUNDARY,
       strata: [
         { id: 10, name: 'West', substrata: [{ boundary: WEST_BOUNDARY, id: 100, name: '1' }] },
@@ -281,8 +279,8 @@ describe('MapEditor', () => {
 
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
 
-    await waitFor(() => expect(saveRequests(requests)).toHaveLength(2));
-    const retried = (await saveRequests(requests)[1].json()) as { boundary: MultiPolygon };
+    await waitFor(() => expect(requests).toHaveLength(2));
+    const retried = (await requests[1].json()) as { boundary: MultiPolygon };
     expect(bbox(retried.boundary)).toEqual([0, 0, 0.01, 0.01]);
   });
 
@@ -316,7 +314,7 @@ describe('MapEditor', () => {
     expect(await screen.findByText(strings.MARK_SUBSTRATA_INCOMPLETE)).toBeInTheDocument();
     const dialog = dialogTitled(strings.MARK_SUBSTRATA_INCOMPLETE);
     expect(within(dialog).getByText(strings.MARK_SUBSTRATA_INCOMPLETE_MESSAGE)).toBeInTheDocument();
-    expect(saveRequests(requests)).toHaveLength(0);
+    expect(requests).toHaveLength(0);
 
     const checkbox = within(dialog).getByRole('checkbox', { name: 'East-1' });
     expect(checkbox).not.toBeChecked();
@@ -325,8 +323,8 @@ describe('MapEditor', () => {
     await user.click(checkbox);
     await user.click(within(dialog).getByRole('button', { name: strings.SAVE_CHANGES }));
 
-    await waitFor(() => expect(saveRequests(requests)).toHaveLength(1));
-    expect(await saveRequests(requests)[0].json()).toMatchObject({ substratumIdsToMarkIncomplete: [110] });
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toMatchObject({ substratumIdsToMarkIncomplete: [110] });
     expect(await screen.findByText(strings.CHANGES_SAVED)).toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent(SITE_VIEW_PATH);
   });
@@ -402,7 +400,7 @@ describe('MapEditor', () => {
     await user.click(within(dialog).getByRole('button', { name: strings.CANCEL }));
 
     await waitFor(() => expect(screen.queryByText(strings.MARK_SUBSTRATA_INCOMPLETE)).not.toBeInTheDocument());
-    expect(saveRequests(requests)).toHaveLength(0);
+    expect(requests).toHaveLength(0);
     expect(screen.getByTestId('location')).toHaveTextContent(EDIT_ROUTE);
     expect(screen.getByText('map layers: stratum,substratum')).toBeInTheDocument();
   });
@@ -428,8 +426,8 @@ describe('MapEditor', () => {
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
 
-    await waitFor(() => expect(saveRequests(requests)).toHaveLength(1));
-    expect(await saveRequests(requests)[0].json()).not.toHaveProperty('substratumIdsToMarkIncomplete');
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).not.toHaveProperty('substratumIdsToMarkIncomplete');
     expect(screen.queryByText(strings.MARK_SUBSTRATA_INCOMPLETE)).not.toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent(SITE_VIEW_PATH);
   });
