@@ -94,7 +94,7 @@ export default function PeopleListView(): JSX.Element {
             operation: 'field',
             field: 'project_organization_id',
             type: 'Exact',
-            values: [selectedOrganization.id],
+            values: [selectedOrganization.id.toString()],
           },
           {
             operation: 'field',
@@ -187,8 +187,9 @@ export default function PeopleListView(): JSX.Element {
               operation: 'field',
               field: 'organization_id',
               type: 'Exact',
-              values: [selectedOrganization.id],
+              values: [selectedOrganization.id.toString()],
             },
+            ...(searchField ? [searchField] : []),
           ],
         },
         sortOrder: [
@@ -198,10 +199,6 @@ export default function PeopleListView(): JSX.Element {
         ],
         count: 0,
       };
-
-      if (searchField) {
-        params.search.children.push(searchField);
-      }
 
       const searchResults = await SearchService.search(params);
       const usersResults: OrganizationUser[] = [];

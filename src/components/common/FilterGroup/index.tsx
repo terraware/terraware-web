@@ -5,7 +5,7 @@ import { Button } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
 import strings from 'src/strings';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import { FieldValuesPayload, SearchNodePayload, getChildNodes, getFieldNodeValues } from 'src/types/Search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FilterBoolean from './filters/FilterBoolean';
@@ -54,7 +54,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
   // the filters defined by this filter group
   const [filters, setFilters] = useState<Record<string, SearchNodePayload>>(initialFilters);
   const onFilterChange = (key: string, filter: SearchNodePayload) => {
-    if (filter.values.length) {
+    if ((getFieldNodeValues(filter) ?? getChildNodes(filter))?.length) {
       setFilters({ ...filters, [key]: filter });
     } else {
       onDeleteFilter(key);
@@ -109,7 +109,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
               {f.type === 'multiple_selection' && (
                 <MultipleSelection
                   field={f.name}
-                  values={filters[f.name]?.values ?? []}
+                  values={getFieldNodeValues(filters[f.name]) ?? []}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   options={options ?? getOptions(f.name, values || {})}
                   pillValueRenderer={f.pillValueRenderer}
@@ -118,7 +118,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
               {f.type === 'single_selection' && (
                 <SingleSelection
                   field={f.name}
-                  value={filters[f.name]?.values[0]}
+                  value={getFieldNodeValues(filters[f.name])?.[0] ?? null}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   options={getOptions(f.name, values || {})}
                   isBoolean={false}
@@ -130,7 +130,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   autoFocus={false}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   onDelete={() => onDeleteFilter(f.name)}
-                  value={filters[f.name]?.values[0]}
+                  value={getFieldNodeValues(filters[f.name])?.[0] ?? null}
                 />
               )}
               {f.type === 'date_range' && (
@@ -138,7 +138,7 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   field={f.name}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   onDelete={() => onDeleteFilter(f.name)}
-                  values={filters[f.name]?.values ?? []}
+                  values={getFieldNodeValues(filters[f.name]) ?? []}
                 />
               )}
               {f.type === 'number_range' && (
@@ -146,21 +146,21 @@ export default function FilterGroup(props: FilterGroupProps): JSX.Element {
                   field={f.name}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                   onDelete={() => onDeleteFilter(f.name)}
-                  values={filters[f.name]?.values ?? []}
+                  values={getFieldNodeValues(filters[f.name]) ?? []}
                 />
               )}
               {f.type === 'count_weight' && (
                 <FilterCountWeight
                   field={f.name}
                   onChange={(filter) => onFilterChange(f.name, filter)}
-                  payloads={filters[f.name]?.children ?? []}
+                  payloads={getChildNodes(filters[f.name]) ?? []}
                 />
               )}
               {f.type === 'boolean' && (
                 <FilterBoolean
                   field={f.name}
                   label={f.label}
-                  value={filters[f.name]?.values[0] === 'true'}
+                  value={getFieldNodeValues(filters[f.name])?.[0] === 'true'}
                   onChange={(filter) => onFilterChange(f.name, filter)}
                 />
               )}
