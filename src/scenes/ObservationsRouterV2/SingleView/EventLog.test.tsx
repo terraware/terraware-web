@@ -5,7 +5,12 @@ import * as webComponents from '@terraware/web-components' with { rstest: 'impor
 import { screen, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
-import { EventLogEntryPayload, RecordedTreeSubjectPayload } from 'src/queries/generated/events';
+import {
+  BiomassQuadratSpeciesSubjectPayload,
+  BiomassSpeciesSubjectPayload,
+  EventLogEntryPayload,
+  RecordedTreeSubjectPayload,
+} from 'src/queries/generated/events';
 import strings from 'src/strings';
 import {
   captureRequests,
@@ -398,5 +403,91 @@ describe('Observation EventLog media', () => {
     expect(
       screen.queryByText(status === 412 ? strings.VIDEO_PROCESSING : strings.GENERIC_ERROR)
     ).not.toBeInTheDocument();
+  });
+});
+
+const createdEvent = (subject: EventLogEntryPayload['subject']): EventLogEntryPayload => ({
+  action: { type: 'Created', fields: [] },
+  subject,
+  timestamp: '2026-06-15T12:00:00Z',
+  userId: 1,
+  userName: 'Jennifer Yim',
+});
+
+const quadratSpeciesSubject = (scientificName: string): BiomassQuadratSpeciesSubjectPayload => ({
+  type: 'BiomassQuadratSpecies',
+  position: 'SouthwestCorner',
+  scientificName,
+  monitoringPlotId: 2,
+  observationId: 1,
+  plantingSiteId: 3,
+  fullText: `Southwest quadrat species ${scientificName}`,
+  shortText: 'Species',
+});
+
+const biomassSpeciesSubject = (scientificName: string): BiomassSpeciesSubjectPayload => ({
+  type: 'BiomassSpecies',
+  scientificName,
+  monitoringPlotId: 2,
+  observationId: 1,
+  plantingSiteId: 3,
+  fullText: `Species ${scientificName}`,
+  shortText: 'Species',
+});
+
+const deletedEvent = (subject: EventLogEntryPayload['subject']): EventLogEntryPayload => ({
+  action: { type: 'Deleted' },
+  subject,
+  timestamp: '2026-06-15T12:00:00Z',
+  userId: 1,
+  userName: 'Jennifer Yim',
+});
+
+const createdText = (fullText: string) => strings.formatString(strings.EVENT_CREATED, fullText) as string;
+
+const deletedText = (fullText: string) => strings.formatString(strings.EVENT_DELETED, fullText) as string;
+
+describe('Observation EventLog biomass species', () => {
+  it('shows a species added to a quadrat after the observation was submitted', async () => {
+    await renderHistory([createdEvent(quadratSpeciesSubject('Artemisia californica'))]);
+
+    expect(screen.getByText(createdText('Southwest quadrat species Artemisia californica'))).toBeInTheDocument();
+  });
+
+  it('leaves the species recorded by the original biomass submission out of the log', async () => {
+    await renderHistory([
+      createdEvent(biomassSpeciesSubject('Rhizophora mangle')),
+      createdEvent(quadratSpeciesSubject('Artemisia californica')),
+    ]);
+
+    expect(screen.queryByText(createdText('Species Rhizophora mangle'))).not.toBeInTheDocument();
+    expect(screen.queryByText(/Rhizophora mangle/)).not.toBeInTheDocument();
+    expect(screen.getByText(createdText('Southwest quadrat species Artemisia californica'))).toBeInTheDocument();
+  });
+
+  it('reports removing a species from a quadrat once, naming the quadrat', async () => {
+    await renderHistory([
+      deletedEvent(quadratSpeciesSubject('Aa achalensis')),
+      deletedEvent(biomassSpeciesSubject('Aa achalensis')),
+    ]);
+
+    expect(screen.getByText(deletedText('Southwest quadrat species Aa achalensis'))).toBeInTheDocument();
+    expect(screen.queryByText(deletedText('Species Aa achalensis'))).not.toBeInTheDocument();
+  });
+
+  it('shows a species removed from the additional invasive and threatened list', async () => {
+    await renderHistory([deletedEvent(biomassSpeciesSubject('Aa achalensis'))]);
+
+    expect(screen.getByText(deletedText('Species Aa achalensis'))).toBeInTheDocument();
+  });
+
+  it('shows a species deletion logged beside a quadrat removal of a different species', async () => {
+    await renderHistory([
+      deletedEvent(quadratSpeciesSubject('Aa achalensis')),
+      deletedEvent(biomassSpeciesSubject('Rhizophora mangle')),
+    ]);
+
+    expect(screen.getByText(deletedText('Southwest quadrat species Aa achalensis'))).toBeInTheDocument();
+    expect(screen.getByText(deletedText('Species Rhizophora mangle'))).toBeInTheDocument();
   });
 });
