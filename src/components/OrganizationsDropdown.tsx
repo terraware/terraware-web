@@ -13,8 +13,7 @@ import AddNewOrganizationModal from './AddNewOrganizationModal';
 
 export default function OrganizationsDropdown(): JSX.Element {
   const { activeLocale } = useLocalization();
-  const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
-    useOrganization();
+  const { selectedOrganization, organizations, redirectAndNotify, reloadOrganizations } = useOrganization();
   const location = useLocation();
   const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
@@ -36,7 +35,6 @@ export default function OrganizationsDropdown(): JSX.Element {
         search: `organizationId=${newlySelectedOrg.id}`,
       });
     }
-    setSelectedOrganization(newlySelectedOrg);
   };
 
   const onCloseCreateOrganizationModal = () => {
