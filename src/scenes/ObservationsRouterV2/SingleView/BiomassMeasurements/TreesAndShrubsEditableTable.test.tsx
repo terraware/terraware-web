@@ -187,22 +187,24 @@ const setupTrunks = ({
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
       id: 7,
-      adHocPlot: { monitoringPlotId: 9 },
-      biomassMeasurements: {
-        forestType,
-        trees: Array.from({ length: trunkCount }, (_, index) => index + 1).map((trunkNumber) => ({
-          id: 100 + trunkNumber,
-          treeNumber: 5,
-          trunkNumber,
-          treeGrowthForm: trunkCount > 1 ? 'Trunk' : 'Tree',
-          speciesId,
-          isInvasive,
-          isThreatened,
-          speciesName: 'Eucalyptus dalveenica',
-          diameterAtBreastHeight: 9,
-          height: 7,
-          pointOfMeasurement: 1.3,
-        })),
+      adHocPlot: {
+        monitoringPlotId: 9,
+        biomassMeasurements: {
+          forestType,
+          trees: Array.from({ length: trunkCount }, (_, index) => index + 1).map((trunkNumber) => ({
+            id: 100 + trunkNumber,
+            treeNumber: 5,
+            trunkNumber,
+            treeGrowthForm: trunkCount > 1 ? 'Trunk' : 'Tree',
+            speciesId,
+            isInvasive,
+            isThreatened,
+            speciesName: 'Eucalyptus dalveenica',
+            diameterAtBreastHeight: 9,
+            height: 7,
+            pointOfMeasurement: 1.3,
+          })),
+        },
       },
     },
   });
