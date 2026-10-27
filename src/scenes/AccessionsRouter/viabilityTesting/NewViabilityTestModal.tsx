@@ -545,7 +545,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
           title={tooltipLearnMoreModalData?.title}
         />
         <Grid container spacing={2} textAlign='left' size={12}>
-          <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <Dropdown
               id={'test-method'}
               options={testMethods()}
@@ -558,7 +558,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               errorText={validateFields && !record?.testType ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
-          <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <Dropdown
               id={'seed-type'}
               label={strings.SEED_TYPE}
@@ -585,7 +585,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
           </Grid>
           {record?.testType !== 'Cut' && (
             <>
-              <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+              <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
                 <Dropdown
                   id={'treatment'}
                   label={strings.TREATMENT}
@@ -610,7 +610,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                   }
                 />
               </Grid>
-              <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+              <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
                 <Dropdown
                   id={'substrate'}
                   label={strings.SUBSTRATE}
@@ -636,7 +636,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                 />
               </Grid>
               {record?.substrate && (
-                <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+                <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
                   <Textfield
                     id='substrateNotes'
                     label={strings.SUBSTRATE_NOTES}
@@ -650,7 +650,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               )}
             </>
           )}
-          <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <SelectT<OrganizationUser>
               label={strings.TESTING_STAFF}
               placeholder={strings.SELECT}
@@ -714,7 +714,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
 
               {record?.testType === 'Cut' && (
                 <>
-                  <Grid display='flex' size={12}>
+                  <Grid container spacing={0} wrap='nowrap' display='flex' size={12}>
                     <Grid size={6}>
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_COMPROMISED_REQUIRED}
@@ -828,7 +828,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               )}
             </Grid>
           </Grid>
-          <Grid padding={theme.spacing(1, 3, 1, 5)} size={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <Textfield
               id='notes'
               value={record?.notes}
