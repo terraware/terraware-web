@@ -250,7 +250,7 @@ const PlantingDateListItem = ({
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
-  const [confirmingFulfilled, setConfirmingFulfilled] = useState(false);
+  const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false);
   const [fulfillPlantingDateRequest, { isLoading: fulfilling }] = useFulfillPlantingDateRequestMutation();
 
   const canMarkFulfilled = !readOnly && requestStatus !== undefined && requestStatus !== 'Fulfilled';
@@ -261,7 +261,7 @@ const PlantingDateListItem = ({
         plantingSeasonId,
         scheduledPlantingDateId: scheduledDate.scheduledPlantingDateId,
       }).unwrap();
-      setConfirmingFulfilled(false);
+      setFulfillDialogOpen(false);
     } catch (e) {
       if ((e as { status?: number })?.status === 409) {
         snackbar.toastError(strings.PLANTING_DATE_ALREADY_FULFILLED);
@@ -400,7 +400,7 @@ const PlantingDateListItem = ({
         {canMarkFulfilled && (
           <Button
             label={strings.MARK_FULFILLED}
-            onClick={() => setConfirmingFulfilled(true)}
+            onClick={() => setFulfillDialogOpen(true)}
             priority='secondary'
             type='productive'
             size={isMobile ? 'medium' : undefined}
@@ -408,11 +408,11 @@ const PlantingDateListItem = ({
           />
         )}
       </Box>
-      {confirmingFulfilled && (
+      {fulfillDialogOpen && (
         <MarkPlantingDateFulfilledModal
           open={true}
           busy={fulfilling}
-          onClose={() => setConfirmingFulfilled(false)}
+          onClose={() => setFulfillDialogOpen(false)}
           onConfirm={() => void onMarkFulfilled()}
         />
       )}
