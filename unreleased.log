@@ -1,3 +1,4 @@
+06916504 SW-8847 Planting Dates: Ability to manually mark Planting Dates as Fulfilled in Planting Season (#6907)
 8f290d86 Point Search types and SearchService at RTK generated types (#6844)
 63beaaf2 Update terraware-web strip action to match server (#6908)
 e131f053 Remove unused setSelectedOrganization from organization context (#6910)
