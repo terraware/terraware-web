@@ -1,3 +1,4 @@
+a5dbf660 Fix organization switcher not navigating on selection (#6909)
 9b3a685c SW-8988 Species added event in Quadrat tables and  species deleted fix (#6906)
 36d4b80c SW-8988 Make the fields that are not applicable visually darker (#6905)
 4d0605b7 SW-8988 For abundance, allow values within 1-25 (#6894)
