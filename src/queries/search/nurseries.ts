@@ -1,7 +1,7 @@
 import { Point } from 'src/queries/generated/nurseryWithdrawals';
 import {
+  PrefixedSearch,
   SearchCountApiResponse,
-  SearchNodePayload,
   SearchRequestPayload,
   SearchSortOrderElement,
 } from 'src/queries/generated/search';
@@ -23,7 +23,7 @@ const parseSearchNurseryWithdrawalsArgs = (
   args: SearchNurseryWithdrawalsApiArgs,
   fields: string[]
 ): SearchRequestPayload => {
-  const searchChildren: SearchNodePayload[] = [];
+  const searchChildren: PrefixedSearch['search'][] = [];
 
   if (args.organizationId) {
     searchChildren.push({

@@ -2,12 +2,7 @@ import { PlantingSiteSearchResult } from 'src/types/Tracking';
 import { parseSearchTerm } from 'src/utils/search';
 
 import { baseApi as api } from '../baseApi';
-import {
-  SearchApiResponse,
-  SearchCountApiResponse,
-  SearchNodePayload,
-  SearchSortOrderElement,
-} from '../generated/search';
+import { PrefixedSearch, SearchApiResponse, SearchCountApiResponse, SearchSortOrderElement } from '../generated/search';
 import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -98,7 +93,7 @@ const injectedRtkApi = api.injectEndpoints({
       SearchPlantingSitesForProjectAssignmentApiArgs
     >({
       query: (args) => {
-        const children: SearchNodePayload[] = [
+        const children: PrefixedSearch['search'][] = [
           { operation: 'field', field: 'organization_id', values: [`${args.organizationId}`] },
         ];
 
