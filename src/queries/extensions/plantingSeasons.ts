@@ -76,6 +76,12 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingDateRequests, id: 'LIST' },
       ],
     },
+    fulfillPlantingDateRequest: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasonDates, id: arg.plantingSeasonId },
+        { type: QueryTagTypes.PlantingDateRequests, id: 'LIST' },
+      ],
+    },
     deleteScheduledPlantingDate: {
       invalidatesTags: (_result, _error, arg) => [
         { type: QueryTagTypes.PlantingSeasonDates, id: arg.plantingSeasonId },

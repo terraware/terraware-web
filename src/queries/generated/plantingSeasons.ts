@@ -96,6 +96,14 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.scheduledPlantingDateRequestPayload,
       }),
     }),
+    fulfillPlantingDateRequest: build.mutation<FulfillPlantingDateRequestApiResponse, FulfillPlantingDateRequestApiArg>(
+      {
+        query: (queryArg) => ({
+          url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/scheduled-dates/${queryArg.scheduledPlantingDateId}/request/fulfill`,
+          method: 'POST',
+        }),
+      }
+    ),
     deleteSpeciesTarget: build.mutation<DeleteSpeciesTargetApiResponse, DeleteSpeciesTargetApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/species-targets`,
@@ -187,6 +195,12 @@ export type UpdateScheduledPlantingDateApiArg = {
   plantingSeasonId: number;
   scheduledPlantingDateId: number;
   scheduledPlantingDateRequestPayload: ScheduledPlantingDateRequestPayload;
+};
+export type FulfillPlantingDateRequestApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type FulfillPlantingDateRequestApiArg = {
+  plantingSeasonId: number;
+  scheduledPlantingDateId: number;
 };
 export type DeleteSpeciesTargetApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
@@ -347,6 +361,7 @@ export const {
   useGetSingleScheduledPlantingDateQuery,
   useLazyGetSingleScheduledPlantingDateQuery,
   useUpdateScheduledPlantingDateMutation,
+  useFulfillPlantingDateRequestMutation,
   useDeleteSpeciesTargetMutation,
   useGetSpeciesTargetsQuery,
   useLazyGetSpeciesTargetsQuery,

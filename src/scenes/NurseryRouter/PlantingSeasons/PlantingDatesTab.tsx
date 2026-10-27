@@ -18,6 +18,7 @@ import {
   SpeciesTargetPayload,
   useCreateScheduledPlantingDateMutation,
   useDeleteScheduledPlantingDateMutation,
+  useFulfillPlantingDateRequestMutation,
   useGetScheduledPlantingDatesQuery,
   useGetSpeciesTargetsQuery,
   useUpdateScheduledPlantingDateMutation,
@@ -39,6 +40,7 @@ import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import DeletePlantingDateModal from './DeletePlantingDateModal';
+import MarkPlantingDateFulfilledModal from './MarkPlantingDateFulfilledModal';
 import PlantingDateRequestStatusBadge from './PlantingDateRequestStatusBadge';
 import PlantingSeasonEventLog from './PlantingSeasonEventLog';
 import SaveAndNotifyNurseryModal from './SaveAndNotifyNurseryModal';
@@ -153,6 +155,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                   <PlantingDateListItem
                     key={scheduledDate.scheduledPlantingDateId}
                     scheduledDate={scheduledDate}
+                    plantingSeasonId={plantingSeason.id}
                     plantingSite={plantingSite}
                     requestStatus={requestStatusesByDate?.[scheduledDate.date]}
                     requestStatusKnown={requestStatusesByDate !== undefined}
@@ -226,6 +229,7 @@ const EmptyState = ({ onAdd, readOnly }: { onAdd: () => void; readOnly: boolean 
 
 type PlantingDateListItemProps = {
   scheduledDate: ScheduledDatePayload;
+  plantingSeasonId: number;
   plantingSite: PlantingSitePayload;
   requestStatus?: PlantingDateRequestStatus;
   requestStatusKnown: boolean;
@@ -235,6 +239,7 @@ type PlantingDateListItemProps = {
 
 const PlantingDateListItem = ({
   scheduledDate,
+  plantingSeasonId,
   plantingSite,
   requestStatus,
   requestStatusKnown,
@@ -244,10 +249,31 @@ const PlantingDateListItem = ({
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
+  const snackbar = useSnackbar();
+  const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false);
+  const [fulfillPlantingDateRequest, { isLoading: fulfilling }] = useFulfillPlantingDateRequestMutation();
+
+  const canMarkFulfilled = !readOnly && requestStatus !== undefined && requestStatus !== 'Fulfilled';
+
+  const onMarkFulfilled = async () => {
+    try {
+      await fulfillPlantingDateRequest({
+        plantingSeasonId,
+        scheduledPlantingDateId: scheduledDate.scheduledPlantingDateId,
+      }).unwrap();
+      setFulfillDialogOpen(false);
+    } catch (e) {
+      if ((e as { status?: number })?.status === 409) {
+        snackbar.toastError(strings.PLANTING_DATE_ALREADY_FULFILLED);
+      } else {
+        snackbar.toastError();
+      }
+    }
+  };
 
   const totalPlants = scheduledDate.species.reduce((sum, s) => sum + s.quantity, 0);
   const distinctSpecies = new Set(scheduledDate.species.map((s) => s.speciesId)).size;
-  const mobileEditButtonSx = useMemo(
+  const mobileActionButtonSx = useMemo(
     () =>
       isMobile
         ? {
@@ -368,10 +394,28 @@ const PlantingDateListItem = ({
             priority='secondary'
             type='productive'
             size={isMobile ? 'medium' : undefined}
-            sx={mobileEditButtonSx}
+            sx={mobileActionButtonSx}
+          />
+        )}
+        {canMarkFulfilled && (
+          <Button
+            label={strings.MARK_FULFILLED}
+            onClick={() => setFulfillDialogOpen(true)}
+            priority='secondary'
+            type='productive'
+            size={isMobile ? 'medium' : undefined}
+            sx={mobileActionButtonSx}
           />
         )}
       </Box>
+      {fulfillDialogOpen && (
+        <MarkPlantingDateFulfilledModal
+          open={true}
+          busy={fulfilling}
+          onClose={() => setFulfillDialogOpen(false)}
+          onConfirm={() => void onMarkFulfilled()}
+        />
+      )}
     </Box>
   );
 };
