@@ -53,6 +53,16 @@ const parseType = (typeString) => {
 
   const types = await openapiTS(`${root}/v3/api-docs`, {
     postTransform(schemaObject, metadata) {
+      // openapi-typescript generates the discriminator base instead of the union of its subtypes.
+      if (metadata.path.endsWith('/SearchNodePayload')) {
+        return parseType(
+          'components["schemas"]["AndNodePayload"]' +
+            ' | components["schemas"]["FieldNodePayload"]' +
+            ' | components["schemas"]["NotNodePayload"]' +
+            ' | components["schemas"]["OrNodePayload"]'
+        );
+      }
+
       // Work around https://github.com/openapi-ts/openapi-typescript/issues/1957
       if (metadata.path.endsWith('/CreateSavedDocumentVersionRequestPayload')) {
         return parseType('{isSubmitted?: boolean; name: string;}');
@@ -61,7 +71,13 @@ const parseType = (typeString) => {
   });
 
   const path = url.fileURLToPath(new URL('../src/api/types/generated-schema.ts', import.meta.url));
-  fs.writeFileSync(path, astToString(types));
+  // Search node types extend SearchNodePayload, which is overridden above as their union, so
+  // drop the base type to avoid a circular reference.
+  const content = astToString(types).replace(
+    /Omit<components\["schemas"\]\["SearchNodePayload"\], "operation"> & /g,
+    ''
+  );
+  fs.writeFileSync(path, content);
 
   console.log(`SUCCESSFULLY completed type overrides and wrote to ${path}`);
 })();

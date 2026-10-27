@@ -3266,6 +3266,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/planting-seasons/{plantingSeasonId}/scheduled-dates/{scheduledPlantingDateId}/request/fulfill": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Marks a scheduled date's nursery request as fulfilled.
+         * @description Use this for requests fulfilled in ways that withdrawal quantities do not reflect, such as species substitutions.
+         */
+        post: operations["fulfillPlantingDateRequest"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/planting-seasons/{plantingSeasonId}/species-targets": {
         parameters: {
             query?: never;
@@ -4834,6 +4854,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/sites/{id}/map": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Edits the map of an existing planting site.
+         * @description The request contains the site's full desired map. Existing strata and substrata are matched by ID; those that are omitted are deleted, and those without IDs are created.
+         */
+        put: operations["updatePlantingSiteMap"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites/{id}/reportedPlants": {
         parameters: {
             query?: never;
@@ -5918,15 +5958,9 @@ export interface components {
             type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
         /** @description Search criterion that matches results that meet all of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x AND y AND z. */
-        AndNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+        AndNodePayload: {
             /** @description List of criteria all of which must be satisfied */
-            children: components["schemas"]["SearchNodePayload"][];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "and";
+            children: (components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"])[];
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -7757,11 +7791,6 @@ export interface components {
              */
             variableManifestId?: number;
         };
-        DraftPlantingSiteMapInvalidResponsePayload: {
-            error: components["schemas"]["ErrorDetails"];
-            problems: components["schemas"]["PlantingSiteValidationProblemPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
         DraftPlantingSitePayload: {
             boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             boundarySource?: string;
@@ -8209,7 +8238,7 @@ export interface components {
             /** @enum {string} */
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
         };
-        FieldNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+        FieldNodePayload: {
             field: string;
             /**
              * @default Exact
@@ -8218,12 +8247,6 @@ export interface components {
             type: "Exact" | "Fuzzy" | "Partial" | "PartialOrFuzzy" | "PhraseMatch" | "Range";
             /** @description List of values to match. For exact, fuzzy and phrase match searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
             values: (string | null)[];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "field";
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -9177,7 +9200,7 @@ export interface components {
             fields: string[];
             /** Format: int64 */
             organizationId?: number;
-            search?: components["schemas"]["SearchNodePayload"];
+            search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         ListFieldValuesResponsePayload: {
             results: {
@@ -9830,14 +9853,8 @@ export interface components {
             type: string;
         };
         /** @description Search criterion that matches results that do not match a set of search criteria. */
-        NotNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
-            child: components["schemas"]["SearchNodePayload"];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "not";
+        NotNodePayload: {
+            child: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -10491,15 +10508,9 @@ export interface components {
             speciesId: number;
         };
         /** @description Search criterion that matches results that meet any of a set of other search criteria. That is, if the list of children is x, y, and z, this will require x OR y OR z. */
-        OrNodePayload: Omit<components["schemas"]["SearchNodePayload"], "operation"> & {
+        OrNodePayload: {
             /** @description List of criteria at least one of which must be satisfied */
-            children: components["schemas"]["SearchNodePayload"][];
-        } & {
-            /**
-             * @description discriminator enum property added by openapi-typescript
-             * @enum {string}
-             */
-            operation: "or";
+            children: (components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"])[];
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -10922,6 +10933,11 @@ export interface components {
             plantingSiteId: number;
             strata: components["schemas"]["StratumHistoryResponsePayload"][];
         };
+        PlantingSiteMapInvalidResponsePayload: {
+            error: components["schemas"]["ErrorDetails"];
+            problems: components["schemas"]["PlantingSiteValidationProblemPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         PlantingSitePayload: {
             adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
             /** @description Area of planting site in hectares. Only present if the site has strata. */
@@ -11156,7 +11172,7 @@ export interface components {
          */
         PrefixedSearch: {
             prefix: string;
-            search: components["schemas"]["SearchNodePayload"];
+            search: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         ProjectAcceleratorDetailsPayload: {
             accumulationRate?: number;
@@ -11916,17 +11932,62 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
-        SearchNodePayload: {
-            operation: "and" | "field" | "not" | "or";
-            [key: string]: any;
-        };
+        SearchNodePayload: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         SearchRequestPayload: {
-            count?: number;
+            /**
+             * Format: int32
+             * @description Maximum number of top-level search results to return. The system may impose a limit on this value. A separate system-imposed limit may also be applied to lists of child objects inside the top-level results. Use a value of 0 to return the maximum number of allowed results.
+             * @default 25
+             */
+            count: number;
+            /** @description Starting point for search results. If present, a previous search will be continued from where it left off. This should be the value of the cursor that was returned in the response to a previous search. */
             cursor?: string;
+            /**
+             * @description List of fields to return. Field names should be relative to the prefix. They may navigate the data hierarchy using '.' or '_' as delimiters.
+             * @example [
+             *       "processingStartDate",
+             *       "viabilityTests.seedsTested",
+             *       "facility_name"
+             *     ]
+             */
             fields: string[];
+            /**
+             * @description Search criteria to apply, only to the specified prefix. If the prefix is an empty string, apply the search to all results. If prefix is a sublist (no matter how nested), apply the search to the sublist results without affecting the top level results.
+             * @example [
+             *       {
+             *         "prefix": "species",
+             *         "search": {
+             *           "field": "name",
+             *           "operation": "field",
+             *           "values": [
+             *             "Species Name"
+             *           ]
+             *         }
+             *       },
+             *       {
+             *         "prefix": "viabilityTestResults",
+             *         "search": {
+             *           "field": "seedsGerminated",
+             *           "operation": "field",
+             *           "type": "Range",
+             *           "values": [
+             *             "30",
+             *             "40"
+             *           ]
+             *         }
+             *       }
+             *     ]
+             */
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "acceleratorReportAutoCalculatedIndicators" | "acceleratorReportCommonIndicators" | "acceleratorReportProjectIndicators" | "acceleratorReports" | "accessionCollectors" | "accessions" | "applications" | "autoCalculatedIndicators" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "commonIndicators" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSiteSpeciesTargets" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectIndicators" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectSpecies" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "scheduledPlantingDateSpeciesTable" | "seedFundReports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "stratumSpeciesTargets" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
-            search?: components["schemas"]["SearchNodePayload"];
+            /**
+             * @description Prefix for field names. This determines how field names are interpreted, and also how results are structured. Each element in the "results" array in the response will be an instance of whatever entity the prefix points to. This is the name of a search table.
+             * @default organizations
+             * @example accessions
+             * @enum {string}
+             */
+            prefix: "acceleratorReportAutoCalculatedIndicators" | "acceleratorReportCommonIndicators" | "acceleratorReportProjectIndicators" | "acceleratorReports" | "accessionCollectors" | "accessions" | "applications" | "autoCalculatedIndicators" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "commonIndicators" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSiteSpeciesTargets" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectIndicators" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectSpecies" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "scheduledPlantingDateSpeciesTable" | "seedFundReports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "stratumSpeciesTargets" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
+            /** @description How to sort the search results. This controls both the order of the top-level results and the order of any lists of child objects. */
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
         SearchResponsePayload: {
@@ -11937,8 +11998,12 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         SearchSortOrderElement: {
+            /**
+             * @default Ascending
+             * @enum {string}
+             */
+            direction: "Ascending" | "Descending";
             field: string;
-            direction?: "Ascending" | "Descending";
         };
         SearchValuesResponsePayload: {
             results: {
@@ -12256,6 +12321,18 @@ export interface components {
             stratumId?: number;
             substrata: components["schemas"]["SubstratumHistoryResponsePayload"][];
         };
+        /** @description Strata and substrata. Existing strata and substrata are matched by ID; those that are omitted are deleted. Must not be empty if the site already has strata. */
+        StratumMapEditPayload: {
+            /**
+             * Format: int64
+             * @description ID of the existing stratum this represents. Omit to create a stratum.
+             */
+            id?: number;
+            /** @description Name of this stratum. Two strata in the same planting site may not have the same name. */
+            name: string;
+            /** @description Substrata of this stratum. The stratum's boundary is the union of its substrata's boundaries. Must not be empty. */
+            substrata: components["schemas"]["SubstratumMapEditPayload"][];
+        };
         StratumReportedPlantsResponsePayload: {
             /** Format: int64 */
             id: number;
@@ -12374,6 +12451,17 @@ export interface components {
              */
             substratumId?: number;
         };
+        /** @description Substrata of this stratum. The stratum's boundary is the union of its substrata's boundaries. Must not be empty. */
+        SubstratumMapEditPayload: {
+            boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /**
+             * Format: int64
+             * @description ID of the existing substratum this represents. Omit to create a substratum.
+             */
+            id?: number;
+            /** @description Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
+            name: string;
+        };
         SubstratumReportedPlantsResponsePayload: {
             /** Format: int64 */
             id: number;
@@ -12425,7 +12513,7 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         SummarizeAccessionSearchRequestPayload: {
-            search?: components["schemas"]["SearchNodePayload"];
+            search?: components["schemas"]["AndNodePayload"] | components["schemas"]["FieldNodePayload"] | components["schemas"]["NotNodePayload"] | components["schemas"]["OrNodePayload"];
         };
         SummarizeAccessionSearchResponsePayload: {
             /** Format: int32 */
@@ -12957,6 +13045,15 @@ export interface components {
             /** Format: date */
             startDate: string;
         };
+        UpdatePlantingSiteMapRequestPayload: {
+            /** @description Site boundary. Required if the site has no strata; ignored otherwise, since the boundary of a site with strata is the union of its strata's boundaries. */
+            boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            /** @description Strata and substrata. Existing strata and substrata are matched by ID; those that are omitted are deleted. Must not be empty if the site already has strata. */
+            strata: components["schemas"]["StratumMapEditPayload"][];
+            /** @description IDs of edited substrata whose planting completed flags should be cleared. Ignored if dryRun is true. */
+            substratumIdsToMarkIncomplete?: number[];
+        };
         UpdatePlantingSiteRequestPayload: {
             /** @description Site boundary. Ignored if this is a detailed planting site. */
             boundary?: Omit<components["schemas"]["MultiPolygon"], "type">;
@@ -13181,8 +13278,6 @@ export interface components {
              * @example US
              */
             countryCode?: string;
-            /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." If null, leave the existing value as-is. */
-            emailNotificationsEnabled?: boolean;
             firstName: string;
             lastName: string;
             /**
@@ -13442,8 +13537,6 @@ export interface components {
              */
             countryCode?: string;
             email: string;
-            /** @description If true, the user wants to receive all the notifications for their organizations via email. This does not apply to certain kinds of notifications such as "You've been added to a new organization." */
-            emailNotificationsEnabled: boolean;
             firstName?: string;
             globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
             /**
@@ -19532,13 +19625,22 @@ export interface operations {
             };
         };
         responses: {
-            /** @description OK */
+            /** @description The requested operation succeeded. */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
                     "application/json": components["schemas"]["GetNurseryWithdrawalResponsePayload"];
+                };
+            };
+            /** @description The planting date request is already fulfilled. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };
@@ -20847,6 +20949,47 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    fulfillPlantingDateRequest: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+                scheduledPlantingDateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The planting season is closed or the request is already fulfilled. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };
@@ -22873,7 +23016,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["DraftPlantingSiteMapInvalidResponsePayload"];
+                    "application/json": components["schemas"]["PlantingSiteMapInvalidResponsePayload"];
                 };
             };
         };
@@ -24329,6 +24472,62 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetPlantingSiteHistoryResponsePayload"];
+                };
+            };
+        };
+    };
+    updatePlantingSiteMap: {
+        parameters: {
+            query?: {
+                /** @description If true, check whether the edit is valid without changing the site. */
+                dryRun?: boolean;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlantingSiteMapRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The edited map was malformed, e.g., it listed a stratum ID more than once. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The site, or a stratum or substratum in the edit, was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The edited map failed validation; nothing was changed. The problems list describes what is wrong. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlantingSiteMapInvalidResponsePayload"];
                 };
             };
         };
