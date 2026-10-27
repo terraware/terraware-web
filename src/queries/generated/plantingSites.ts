@@ -69,6 +69,12 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    listPlantingSiteHistoryEvents: build.query<
+      ListPlantingSiteHistoryEventsApiResponse,
+      ListPlantingSiteHistoryEventsApiArg
+    >({
+      query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}/history` }),
+    }),
     getPlantingSiteHistory: build.query<GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/sites/${queryArg.id}/history/${queryArg.historyId}`,
@@ -167,6 +173,9 @@ export type CompleteSurvivalRateCalculationApiArg = {
   /** Maximum number of seconds to wait for the recalculation to finish. Defaults to 600. */
   maxWaitSeconds?: number;
 };
+export type ListPlantingSiteHistoryEventsApiResponse =
+  /** status 200 OK */ ListPlantingSiteHistoryEventsResponsePayload;
+export type ListPlantingSiteHistoryEventsApiArg = number;
 export type GetPlantingSiteHistoryApiResponse = /** status 200 OK */ GetPlantingSiteHistoryResponsePayload;
 export type GetPlantingSiteHistoryApiArg = {
   id: number;
@@ -434,6 +443,17 @@ export type GetSurvivalRateCalculationInProgressResponsePayload = {
   calculationInProgress: boolean;
   status: SuccessOrError;
 };
+export type PlantingSiteHistoryEventPayload = {
+  date: string;
+  editedByName?: string;
+  editedByUserId: number;
+  historyId: number;
+  type: 'Created' | 'Edited';
+};
+export type ListPlantingSiteHistoryEventsResponsePayload = {
+  events: PlantingSiteHistoryEventPayload[];
+  status: SuccessOrError;
+};
 export type MonitoringPlotHistoryPayload = {
   boundary: Polygon;
   id: number;
@@ -536,6 +556,8 @@ export const {
   useGetSurvivalRateCalculationInProgressQuery,
   useLazyGetSurvivalRateCalculationInProgressQuery,
   useCompleteSurvivalRateCalculationMutation,
+  useListPlantingSiteHistoryEventsQuery,
+  useLazyListPlantingSiteHistoryEventsQuery,
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
   useUpdatePlantingSiteMapMutation,
