@@ -40,8 +40,7 @@ export default function SmallDeviceUserMenu({
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
   const { activeLocale } = useLocalization();
-  const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
-    useOrganization();
+  const { selectedOrganization, organizations, redirectAndNotify, reloadOrganizations } = useOrganization();
   const { user } = useUser();
   const docLinks = useDocLinks();
   const theme = useTheme();
@@ -118,7 +117,6 @@ export default function SmallDeviceUserMenu({
         search: `organizationId=${newlySelectedOrg.id}`,
       });
     }
-    setSelectedOrganization(newlySelectedOrg);
   };
 
   return (
