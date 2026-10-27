@@ -8,23 +8,27 @@ import strings from 'src/strings';
 import { PlantingSiteProblem } from 'src/types/PlantingSite';
 
 export type DraftProblemsConfirmationProps = {
+  message?: string;
   onBackToEdit: () => void;
-  onSaveAnyway: () => void;
+  onSaveAnyway?: () => void;
   problems: PlantingSiteProblem[];
+  title?: string;
 };
 
 export default function DraftProblemsConfirmation({
+  message,
   onBackToEdit,
   onSaveAnyway,
   problems,
+  title,
 }: DraftProblemsConfirmationProps): JSX.Element {
   return (
     <DialogBox
       onClose={onBackToEdit}
       open={true}
-      title={strings.DRAFT_PLANTING_SITE_HAS_PROBLEMS}
+      title={title ?? strings.DRAFT_PLANTING_SITE_HAS_PROBLEMS}
       size='medium'
-      message={strings.DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE}
+      message={message ?? strings.DRAFT_PLANTING_SITE_SAVE_ANYWAY_MESSAGE}
       middleButtons={[
         <Button
           id='back-to-edit-draft-planting-site'
@@ -34,7 +38,16 @@ export default function DraftProblemsConfirmation({
           priority='secondary'
           type='passive'
         />,
-        <Button id='save-draft-planting-site-anyway' key='save' label={strings.SAVE_ANYWAY} onClick={onSaveAnyway} />,
+        ...(onSaveAnyway
+          ? [
+              <Button
+                id='save-draft-planting-site-anyway'
+                key='save'
+                label={strings.SAVE_ANYWAY}
+                onClick={onSaveAnyway}
+              />,
+            ]
+          : []),
       ]}
     >
       <Box component='ul' textAlign='left' marginBottom={0} marginTop={2}>
