@@ -17,7 +17,9 @@ import {
   buildPlantingSite,
   buildStratum,
   buildSubstratum,
+  captureRequests,
   dialogTitled,
+  mockPost,
   renderWithProviders,
   server,
 } from 'src/test-utils';
@@ -117,6 +119,7 @@ const completedSite = buildSite(true);
 const SHRUNK_SITE_BOUNDARY = multiPolygon(square(0, 0, 0.015, 0.01));
 
 const MAP_URL = '/api/v1/tracking/sites/1/map';
+const SUMMARY_URL = '/api/v1/tracking/sites/1/map/summary';
 const EDIT_ROUTE = '/planting-sites/1/edit';
 const SITE_VIEW_PATH = '/planting-sites/1';
 
@@ -167,6 +170,25 @@ const editSiteBoundary = async (user: User, boundary: MultiPolygon) => {
   await waitFor(() => expect(lastMapRender()?.editableBoundary).toEqual(mapEdit.boundary));
 };
 
+const confirmSummary = async (user: User) => {
+  const dialog = await screen.findByRole('dialog', { name: strings.MAP_EDIT_SUMMARY_TITLE });
+  await user.click(within(dialog).getByRole('button', { name: strings.SAVE_CHANGES }));
+};
+
+const SITE_EDIT_BODY = {
+  boundary: SITE_BOUNDARY,
+  strata: [
+    { id: 10, name: 'West', substrata: [{ boundary: WEST_BOUNDARY, id: 100, name: '1' }] },
+    { id: 11, name: 'East', substrata: [{ boundary: EAST_BOUNDARY, id: 110, name: '1' }] },
+  ],
+};
+
+const conflictResponse = () =>
+  HttpResponse.json(
+    { error: { message: 'Conflict' }, problems: [{ problemType: 'SiteTooLarge' }], status: 'error' },
+    { status: 409 }
+  );
+
 const captureSaves = () => {
   const requests: Request[] = [];
   server.use(
@@ -182,6 +204,7 @@ describe('MapEditor', () => {
   beforeEach(() => {
     mapRenders.length = 0;
     mapEdit.boundary = undefined;
+    mockPost(SUMMARY_URL, { summary: [] });
   });
 
   it('shows Edit Planting Site with all four steps', async () => {
@@ -238,15 +261,10 @@ describe('MapEditor', () => {
     expect(requests).toHaveLength(0);
 
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     await waitFor(() => expect(requests).toHaveLength(1));
-    expect(await requests[0].json()).toEqual({
-      boundary: SITE_BOUNDARY,
-      strata: [
-        { id: 10, name: 'West', substrata: [{ boundary: WEST_BOUNDARY, id: 100, name: '1' }] },
-        { id: 11, name: 'East', substrata: [{ boundary: EAST_BOUNDARY, id: 110, name: '1' }] },
-      ],
-    });
+    expect(await requests[0].json()).toEqual(SITE_EDIT_BODY);
     expect(await screen.findByText(strings.CHANGES_SAVED)).toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent(SITE_VIEW_PATH);
   });
@@ -256,10 +274,7 @@ describe('MapEditor', () => {
     server.use(
       http.put(MAP_URL, ({ request }) => {
         requests.push(request.clone());
-        return HttpResponse.json(
-          { error: { message: 'Conflict' }, problems: [{ problemType: 'SiteTooLarge' }], status: 'error' },
-          { status: 409 }
-        );
+        return conflictResponse();
       })
     );
     const { user } = renderMapEditor();
@@ -267,6 +282,7 @@ describe('MapEditor', () => {
     await editSiteBoundary(user, WEST_BOUNDARY);
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     expect(await screen.findByText(strings.PLANTING_SITE_MAP_PROBLEMS_TITLE)).toBeInTheDocument();
     expect(screen.getByText(strings.PLANTING_SITE_PROBLEM_SITE_TOO_LARGE)).toBeInTheDocument();
@@ -278,6 +294,7 @@ describe('MapEditor', () => {
     expect(screen.getByTestId('location')).toHaveTextContent(EDIT_ROUTE);
 
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     await waitFor(() => expect(requests).toHaveLength(2));
     const retried = (await requests[1].json()) as { boundary: MultiPolygon };
@@ -310,6 +327,7 @@ describe('MapEditor', () => {
     await editSiteBoundary(user, SHRUNK_SITE_BOUNDARY);
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     expect(await screen.findByText(strings.MARK_SUBSTRATA_INCOMPLETE)).toBeInTheDocument();
     const dialog = dialogTitled(strings.MARK_SUBSTRATA_INCOMPLETE);
@@ -330,19 +348,13 @@ describe('MapEditor', () => {
   });
 
   it('keeps substrata selected to mark incomplete after a failed save', async () => {
-    server.use(
-      http.put(MAP_URL, () =>
-        HttpResponse.json(
-          { error: { message: 'Conflict' }, problems: [{ problemType: 'SiteTooLarge' }], status: 'error' },
-          { status: 409 }
-        )
-      )
-    );
+    server.use(http.put(MAP_URL, conflictResponse));
     const { user } = renderMapEditor(completedSite);
 
     await editSiteBoundary(user, SHRUNK_SITE_BOUNDARY);
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
     const dialog = await screen.findByRole('dialog', { name: strings.MARK_SUBSTRATA_INCOMPLETE });
     await user.click(within(dialog).getByRole('checkbox', { name: 'East-1' }));
     await user.click(within(dialog).getByRole('button', { name: strings.SAVE_CHANGES }));
@@ -350,25 +362,20 @@ describe('MapEditor', () => {
     await user.click(await screen.findByRole('button', { name: strings.BACK_TO_EDIT }));
     await waitFor(() => expect(screen.queryByText(strings.PLANTING_SITE_MAP_PROBLEMS_TITLE)).not.toBeInTheDocument());
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     const retryDialog = await screen.findByRole('dialog', { name: strings.MARK_SUBSTRATA_INCOMPLETE });
     expect(within(retryDialog).getByRole('checkbox', { name: 'East-1' })).toBeChecked();
   });
 
   it('starting over clears substrata selected to mark incomplete', async () => {
-    server.use(
-      http.put(MAP_URL, () =>
-        HttpResponse.json(
-          { error: { message: 'Conflict' }, problems: [{ problemType: 'SiteTooLarge' }], status: 'error' },
-          { status: 409 }
-        )
-      )
-    );
+    server.use(http.put(MAP_URL, conflictResponse));
     const { user } = renderMapEditor(completedSite);
 
     await editSiteBoundary(user, SHRUNK_SITE_BOUNDARY);
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
     const dialog = await screen.findByRole('dialog', { name: strings.MARK_SUBSTRATA_INCOMPLETE });
     await user.click(within(dialog).getByRole('checkbox', { name: 'East-1' }));
     await user.click(within(dialog).getByRole('button', { name: strings.SAVE_CHANGES }));
@@ -382,6 +389,7 @@ describe('MapEditor', () => {
     await editSiteBoundary(user, SHRUNK_SITE_BOUNDARY);
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     const newDialog = await screen.findByRole('dialog', { name: strings.MARK_SUBSTRATA_INCOMPLETE });
     expect(within(newDialog).getByRole('checkbox', { name: 'East-1' })).not.toBeChecked();
@@ -394,6 +402,7 @@ describe('MapEditor', () => {
     await editSiteBoundary(user, SHRUNK_SITE_BOUNDARY);
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     expect(await screen.findByText(strings.MARK_SUBSTRATA_INCOMPLETE)).toBeInTheDocument();
     const dialog = dialogTitled(strings.MARK_SUBSTRATA_INCOMPLETE);
@@ -425,10 +434,67 @@ describe('MapEditor', () => {
 
     await goToFinalStep(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    await confirmSummary(user);
 
     await waitFor(() => expect(requests).toHaveLength(1));
     expect(await requests[0].json()).not.toHaveProperty('substratumIdsToMarkIncomplete');
     expect(screen.queryByText(strings.MARK_SUBSTRATA_INCOMPLETE)).not.toBeInTheDocument();
     expect(screen.getByTestId('location')).toHaveTextContent(SITE_VIEW_PATH);
+  });
+
+  it('summarizes the edit before saving it', async () => {
+    const summaryRequests = captureRequests('post', SUMMARY_URL, {
+      summary: [{ type: 'StratumDeleted', stableId: 'east', stratumName: 'East' }],
+    });
+    const saves = captureSaves();
+    const { user } = renderMapEditor();
+
+    await goToFinalStep(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+
+    const dialog = await screen.findByRole('dialog', { name: strings.MAP_EDIT_SUMMARY_TITLE });
+    expect(
+      within(dialog).getByText(strings.formatString(strings.MAP_EDIT_SUMMARY_STRATUM_DELETED, 'East') as string)
+    ).toBeInTheDocument();
+    expect(summaryRequests).toHaveLength(1);
+    expect(await summaryRequests[0].json()).toEqual(SITE_EDIT_BODY);
+    expect(saves).toHaveLength(0);
+
+    await user.click(within(dialog).getByRole('button', { name: strings.SAVE_CHANGES }));
+
+    await waitFor(() => expect(saves).toHaveLength(1));
+    expect(await saves[0].json()).toEqual(SITE_EDIT_BODY);
+  });
+
+  it('going back to edit from the summary does not save', async () => {
+    const saves = captureSaves();
+    const { user } = renderMapEditor();
+
+    await editSiteBoundary(user, WEST_BOUNDARY);
+    await goToFinalStep(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+    const dialog = await screen.findByRole('dialog', { name: strings.MAP_EDIT_SUMMARY_TITLE });
+    await user.click(within(dialog).getByRole('button', { name: strings.BACK_TO_EDIT }));
+
+    await waitFor(() => expect(screen.queryByText(strings.MAP_EDIT_SUMMARY_TITLE)).not.toBeInTheDocument());
+    expect(saves).toHaveLength(0);
+    expect(screen.getByTestId('location')).toHaveTextContent(EDIT_ROUTE);
+    expect(screen.getByText('map layers: stratum,substratum')).toBeInTheDocument();
+  });
+
+  it('shows problems from the summary without saving', async () => {
+    server.use(http.post(SUMMARY_URL, conflictResponse));
+    const saves = captureSaves();
+    const { user } = renderMapEditor();
+
+    await editSiteBoundary(user, WEST_BOUNDARY);
+    await goToFinalStep(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE_CHANGES }));
+
+    expect(await screen.findByText(strings.PLANTING_SITE_MAP_PROBLEMS_TITLE)).toBeInTheDocument();
+    expect(screen.getByText(strings.PLANTING_SITE_PROBLEM_SITE_TOO_LARGE)).toBeInTheDocument();
+    expect(screen.queryByText(strings.MAP_EDIT_SUMMARY_TITLE)).not.toBeInTheDocument();
+    expect(saves).toHaveLength(0);
+    expect(screen.getByTestId('location')).toHaveTextContent(EDIT_ROUTE);
   });
 });

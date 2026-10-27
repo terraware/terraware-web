@@ -4,7 +4,11 @@ import { BusySpinner } from '@terraware/web-components';
 import _ from 'lodash';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { PlantingSitePayload, useUpdatePlantingSiteMapMutation } from 'src/queries/generated/plantingSites';
+import {
+  PlantingSitePayload,
+  useSummarizePlantingSiteMapEditMutation,
+  useUpdatePlantingSiteMapMutation,
+} from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { EditorPlantingSite, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
 import { getDraftMapProblems, getDraftSaveErrorMessage } from 'src/utils/draftPlantingSiteUtils';
@@ -19,6 +23,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CloseSetupConfirmation from './CloseSetupConfirmation';
 import DraftProblemsConfirmation from './DraftProblemsConfirmation';
 import EditorLayout from './EditorLayout';
+import MapEditSummaryModal, { MapEditSummaryItem } from './MapEditSummaryModal';
 import MarkSubstrataIncompleteModal from './MarkSubstrataIncompleteModal';
 import StartOverConfirmation from './StartOverConfirmation';
 import { initializeOptionalStepsStatus, useEditorSteps } from './editorSteps';
@@ -35,6 +40,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   const { goToPlantingSiteView } = useNavigateTo();
   const snackbar = useSnackbar();
   const [updatePlantingSiteMap, { isLoading: isSaving }] = useUpdatePlantingSiteMapMutation();
+  const [summarizePlantingSiteMapEdit, { isLoading: isSummarizing }] = useSummarizePlantingSiteMapEditMutation();
 
   const initialSite = useMemo(() => toEditorSite(site), [site]);
   const [editorSite, setEditorSite] = useState<EditorPlantingSite>(initialSite);
@@ -45,6 +51,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   const [showCloseConfirmation, setShowCloseConfirmation] = useState(false);
   const [showStartOver, setShowStartOver] = useState(false);
   const [problems, setProblems] = useState<PlantingSiteProblem[]>();
+  const [summary, setSummary] = useState<MapEditSummaryItem[]>();
   const [substrataToConfirm, setSubstrataToConfirm] = useState<EditedCompletedSubstratum[]>();
   const [selectedIncompleteIds, setSelectedIncompleteIds] = useState<number[]>([]);
 
@@ -67,6 +74,18 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
 
   const goToSiteView = useCallback(() => goToPlantingSiteView(site.id), [goToPlantingSiteView, site.id]);
 
+  const onRequestError = useCallback(
+    (error: unknown) => {
+      const mapProblems = getDraftMapProblems(error);
+      if (mapProblems?.length) {
+        setProblems(mapProblems);
+      } else {
+        snackbar.toastError(getDraftSaveErrorMessage(error));
+      }
+    },
+    [snackbar]
+  );
+
   const save = useCallback(
     async (edited: EditorPlantingSite, substratumIdsToMarkIncomplete?: number[]) => {
       try {
@@ -77,15 +96,26 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         goToSiteView();
       } catch (error) {
-        const mapProblems = getDraftMapProblems(error);
-        if (mapProblems?.length) {
-          setProblems(mapProblems);
-        } else {
-          snackbar.toastError(getDraftSaveErrorMessage(error));
-        }
+        onRequestError(error);
       }
     },
-    [goToSiteView, site, snackbar, updatePlantingSiteMap]
+    [goToSiteView, onRequestError, site, snackbar, updatePlantingSiteMap]
+  );
+
+  const summarize = useCallback(
+    async (edited: EditorPlantingSite) => {
+      try {
+        const response = await summarizePlantingSiteMapEdit({
+          id: site.id,
+          depth: 'Substratum',
+          updatePlantingSiteMapRequestPayload: toPlantingSiteMapEdit(edited, site),
+        }).unwrap();
+        setSummary(response.summary);
+      } catch (error) {
+        onRequestError(error);
+      }
+    },
+    [onRequestError, site, summarizePlantingSiteMapEdit]
   );
 
   const validateStep = useCallback(
@@ -113,18 +143,24 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
     () =>
       validateStep(false, (edited) => {
         if (stepIndex === steps.length - 1) {
-          const editedCompletedSubstrata = getEditedCompletedSubstrata(edited, site);
-          if (editedCompletedSubstrata.length) {
-            setSubstrataToConfirm(editedCompletedSubstrata);
-          } else {
-            void save(edited);
-          }
+          void summarize(edited);
         } else {
           setCurrentStep(steps[stepIndex + 1].type);
         }
       }),
-    [save, site, stepIndex, steps, validateStep]
+    [stepIndex, steps, summarize, validateStep]
   );
+
+  const onCloseSummary = useCallback(() => setSummary(undefined), []);
+  const onSaveSummary = useCallback(() => {
+    setSummary(undefined);
+    const editedCompletedSubstrata = getEditedCompletedSubstrata(editorSite, site);
+    if (editedCompletedSubstrata.length) {
+      setSubstrataToConfirm(editedCompletedSubstrata);
+    } else {
+      void save(editorSite);
+    }
+  }, [editorSite, save, site]);
 
   const onCancelMarkIncomplete = useCallback(() => setSubstrataToConfirm(undefined), []);
   const onSaveMarkIncomplete = useCallback(
@@ -169,7 +205,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
 
   return (
     <EditorLayout
-      busy={isSaving || !!onValidate}
+      busy={isSaving || isSummarizing || !!onValidate}
       closeButtonId='close-planting-site-edit'
       currentStep={currentStep}
       finishButtonId='save-planting-site-edit'
@@ -188,7 +224,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
       steps={steps}
       title={strings.EDIT_PLANTING_SITE}
     >
-      {isSaving && <BusySpinner withSkrim={true} />}
+      {(isSaving || isSummarizing) && <BusySpinner withSkrim={true} />}
       {showStartOver && (
         <StartOverConfirmation
           message={strings.EDIT_SITE_START_OVER_WARNING}
@@ -196,6 +232,7 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
           onConfirm={onStartOver}
         />
       )}
+      {summary && <MapEditSummaryModal onBackToEdit={onCloseSummary} onSave={onSaveSummary} summary={summary} />}
       {substrataToConfirm && (
         <MarkSubstrataIncompleteModal
           initialSelectedIds={selectedIncompleteIds}
