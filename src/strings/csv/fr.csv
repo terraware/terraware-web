@@ -212,6 +212,7 @@ ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,Êtes-vous sûr de vouloir supprimer cette date de plantation ?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,8f7cb65e
+ARE_YOU_SURE_MARK_PLANTING_DATE_FULFILLED,Êtes-vous sûr de vouloir marquer cette date de plantation comme accomplie ?,4ab03693
 AREA_HA,Superficie (ha),8ab5d500
 AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
@@ -1143,6 +1144,9 @@ MARK_AS_READ,Marquer comme lu,d91d4c14
 MARK_AS_SUBMITTED,Marquer comme soumis,b7f9a33e
 MARK_AS_SUBMITTED_UNDO,Annuler Marquer comme soumis,4ad82823
 MARK_AS_UNREAD,Marquer comme non lu,e4cb0534
+MARK_FULFILLED,Marquer comme accompli,cc3329c7
+MARK_PLANTING_DATE_FULFILLED,Marquer la date de plantation comme accomplie,bd99f61c
+MARK_PLANTING_DATE_FULFILLED_CONFIRM,"Vous êtes sur le point de marquer cette date de plantation comme accomplie. Les demandes de retrait en cours à la pépinière seront également marquées comme accomplies, et il ne sera plus possible d’effectuer des retraits de plantation pour cette date. Cette action est irréversible.",d6e4897d
 MARKED_AS_PLANTING_COMPLETE,Marqués comme ayant terminé la plantation (%),aee9023f
 MATCH_SPECIES,Associez les espèces,8dc1bd1d
 MATCH_SPECIES_MODAL_DESCRIPTION,"Sélectionnez les correspondances pour les espèces non reconnues. Une fois la correspondance des espèces établie, il n'est plus possible de la modifier ou de l'annuler.",788bcc85
@@ -1556,6 +1560,7 @@ PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,Pourcentage de « plantation termi
 PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat ?,a6bfac66
 PLANTING_DATE,Date de plantation,544c699c
 PLANTING_DATE_ADDED,Date de plantation ajoutée : {0}.,187cb611
+PLANTING_DATE_ALREADY_FULFILLED,Cette date de plantation a déjà été marquée comme accomplie.,13fa8cd6
 PLANTING_DATE_ALREADY_SCHEDULED,Cette date de plantation est déjà programmée.,b4006cc0
 PLANTING_DATE_DELETED,Date de plantation supprimée : {0}.,6a287532
 PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Quantité non définie,58200f42

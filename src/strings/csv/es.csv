@@ -213,6 +213,7 @@ ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
+ARE_YOU_SURE_MARK_PLANTING_DATE_FULFILLED,¿Está seguro de que desea marcar esta Fecha de Plantación como cumplida?,4ab03693
 AREA_HA,Área (ha),8ab5d500
 AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
@@ -1144,6 +1145,9 @@ MARK_AS_READ,Marcar como leído,d91d4c14
 MARK_AS_SUBMITTED,Marcar como enviado,b7f9a33e
 MARK_AS_SUBMITTED_UNDO,Deshacer marcar como enviado,4ad82823
 MARK_AS_UNREAD,Marcar como no leído,e4cb0534
+MARK_FULFILLED,Marcar como cumplida,cc3329c7
+MARK_PLANTING_DATE_FULFILLED,Marcar Fecha de Plantación como cumplida,bd99f61c
+MARK_PLANTING_DATE_FULFILLED_CONFIRM,Está a punto de marcar esta Fecha de Plantación como cumplida. Las solicitudes de retiro abiertas del Vivero se marcarán como cumplidas y ya no se podrán realizar Retiros de Plantación para esta fecha. Marcar una Fecha de Plantación como cumplida no se puede deshacer.,d6e4897d
 MARKED_AS_PLANTING_COMPLETE,Marcadas como plantación completa (%),aee9023f
 MATCH_SPECIES,Verificar coincidencias,8dc1bd1d
 MATCH_SPECIES_MODAL_DESCRIPTION,"Seleccionar coincidencias para las especies no reconocidas. Una vez realizado, no podrá modificarla ni deshacerla.",788bcc85
@@ -1557,6 +1561,7 @@ PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación compl
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
 PLANTING_DATE,Fecha de plantación,544c699c
 PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
+PLANTING_DATE_ALREADY_FULFILLED,Esa Fecha de Plantación ya ha sido marcada como cumplida.,13fa8cd6
 PLANTING_DATE_ALREADY_SCHEDULED,Esa fecha de plantación ya está programada.,b4006cc0
 PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
 PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Cantidad no establecida,58200f42
