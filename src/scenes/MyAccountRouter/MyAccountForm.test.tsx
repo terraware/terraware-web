@@ -43,9 +43,9 @@ const renderForm = (edit: boolean) => {
   return { ...result, returnedToView: () => returnedToView };
 };
 
-// MUI 6 renders a Switch as a checkbox input; each is named by its setting's title.
-const settingSwitch = (name: string) => screen.getByRole('checkbox', { name });
-const findMasterSwitch = () => screen.findByRole('checkbox', { name: strings.EMAIL_NOTIFICATIONS });
+// Each switch is named by its setting's title.
+const settingSwitch = (name: string) => screen.getByRole('switch', { name });
+const findMasterSwitch = () => screen.findByRole('switch', { name: strings.EMAIL_NOTIFICATIONS });
 
 describe('MyAccountForm email notification settings', () => {
   it('shows a switch only for the categories the server returns, in a fixed order', async () => {
@@ -58,13 +58,13 @@ describe('MyAccountForm email notification settings', () => {
     renderForm(false);
 
     const master = await findMasterSwitch();
-    expect(screen.getAllByRole('checkbox')).toEqual([
+    expect(screen.getAllByRole('switch')).toEqual([
       master,
       settingSwitch(strings.SEED_BANK),
       settingSwitch(strings.NURSERY),
       settingSwitch(strings.PLANTING_AND_OBSERVATIONS),
     ]);
-    expect(screen.queryByRole('checkbox', { name: strings.ACCELERATOR })).not.toBeInTheDocument();
+    expect(screen.queryByRole('switch', { name: strings.ACCELERATOR })).not.toBeInTheDocument();
   });
 
   it('reflects the saved settings and disables every switch when not editing', async () => {
@@ -76,7 +76,7 @@ describe('MyAccountForm email notification settings', () => {
     expect(master).toBeChecked();
     expect(settingSwitch(strings.NURSERY)).not.toBeChecked();
     expect(settingSwitch(strings.SEED_BANK)).toBeChecked();
-    for (const element of screen.getAllByRole('checkbox')) {
+    for (const element of screen.getAllByRole('switch')) {
       expect(element).toBeDisabled();
     }
   });
