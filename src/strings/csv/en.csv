@@ -644,6 +644,7 @@ EDIT_QUANTITY_DISABLED,"Quantity may not be edited when the status is ""Used Up"
 EDIT_SCORES,Edit Scores,
 EDIT_SEED_BANK,Edit Seed Bank,
 EDIT_SETTINGS,Edit Settings,
+EDIT_SITE_BOUNDARY,Edit Site Boundary,
 EDIT_SPECIES,Edit Species,
 EDIT_STATUS,Edit Status,
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Edit Survival Rate Settings for {0},

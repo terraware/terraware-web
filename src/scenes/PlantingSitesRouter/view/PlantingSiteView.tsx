@@ -2,13 +2,17 @@ import React, { type JSX, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
+import { useFeatureEnabled } from 'src/features';
+import useNavigateTo from 'src/hooks/useNavigateTo';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import { useOrganization } from 'src/providers';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
 
 import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
@@ -22,9 +26,16 @@ export default function PlantingSiteView(): JSX.Element {
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
   const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
+  const { selectedOrganization } = useOrganization();
+  const { goToPlantingSiteEdit } = useNavigateTo();
+  const isEditPlantingSiteEnabled = useFeatureEnabled('Edit Planting Site');
 
   const openModal = useCallback(() => setDeleteModalOpen(true), []);
   const closeModal = useCallback(() => setDeleteModalOpen(false), []);
+  const onEditBoundary = useCallback(
+    () => goToPlantingSiteEdit(plantingSiteId),
+    [goToPlantingSiteEdit, plantingSiteId]
+  );
 
   if (isLoading || !plantingSite) {
     return <BusySpinner withSkrim={true} />;
@@ -47,6 +58,19 @@ export default function PlantingSiteView(): JSX.Element {
           <Card
             flushMobile
             radius={theme.spacing(1)}
+            rightComponent={
+              isEditPlantingSiteEnabled && isAdmin(selectedOrganization) ? (
+                <Button
+                  icon='iconEdit'
+                  id='edit-site-boundary'
+                  label={strings.EDIT_SITE_BOUNDARY}
+                  onClick={onEditBoundary}
+                  priority='secondary'
+                  size='medium'
+                  type='passive'
+                />
+              ) : undefined
+            }
             style={{
               flexGrow: 1,
               display: 'flex',
