@@ -533,12 +533,13 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           onChange={(event) => updateDraft({ [fieldId]: event.target.value })}
           placeholder={required ? strings.REQUIRED : ''}
           size='small'
+          sx={{ '& .MuiInputBase-root.Mui-disabled': { backgroundColor: theme.palette.TwClrBgSecondary } }}
           type='number'
           value={draft?.[fieldId] ?? ''}
         />
       );
     },
-    [draft, isCrownDiameterEditable, strings.REQUIRED, updateDraft]
+    [draft, isCrownDiameterEditable, strings.REQUIRED, theme.palette.TwClrBgSecondary, updateDraft]
   );
 
   const measurementEditor = useCallback(
