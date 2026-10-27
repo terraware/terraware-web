@@ -17,6 +17,7 @@ import { isAdmin } from 'src/utils/organization';
 import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
 import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
+import PlantingSiteHistoryCard from './PlantingSiteHistoryCard';
 import PlantingSiteMapV2 from './PlantingSiteMapV2';
 
 export default function PlantingSiteView(): JSX.Element {
@@ -88,6 +89,7 @@ export default function PlantingSiteView(): JSX.Element {
             )}
           </Card>
         )}
+        {isEditPlantingSiteEnabled && <PlantingSiteHistoryCard plantingSiteId={plantingSite.id} />}
       </Box>
     </>
   );
