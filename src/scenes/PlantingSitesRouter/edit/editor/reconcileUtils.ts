@@ -240,6 +240,7 @@ export const reconcileStrata = (
         id: nextStratumKey(),
         initialPlantingDensity: 1500,
         name: stratumNameGenerator(new Set(), strings.STRATUM),
+        substratumId: nextSubstratumKey(),
       }),
     ];
   }

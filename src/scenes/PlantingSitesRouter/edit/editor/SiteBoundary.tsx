@@ -22,10 +22,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
+import { useEditorMode } from './EditorModeContext';
 import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
+import { NegativeIdGenerator, reconcileStrata } from './reconcileUtils';
 import { OnValidate } from './types';
 import { boundingAreaHectares, createDefaultStrata, findErrors } from './utils';
 
@@ -86,6 +88,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const trackEvent = useTrackEvent();
+  const mode = useEditorMode();
 
   const [method, setMethod] = useState<BoundaryMethod | undefined>();
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
@@ -141,6 +144,17 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       } else if (geometrySnapshot === initialGeometry && site.strata) {
         // keep strata from later steps when the boundary is unchanged
         onValidate.apply(false, { boundary, boundarySource });
+      } else if (mode === 'edit' && boundary && site.strata?.length) {
+        const nextStratumKey = NegativeIdGenerator(
+          [],
+          site.strata.map((stratum) => stratum.id)
+        );
+        const nextSubstratumKey = NegativeIdGenerator(
+          [],
+          site.strata.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id))
+        );
+        const strata = reconcileStrata(site.strata, boundary, nextStratumKey, nextSubstratumKey);
+        onValidate.apply(false, { boundary, boundarySource, strata });
       } else {
         // create one stratum per disjoint polygon in the site boundary
         onValidate.apply(false, { boundary, boundarySource, strata: createDefaultStrata(boundary) });
@@ -152,6 +166,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     errorAnnotations,
     geometrySnapshot,
     initialGeometry,
+    mode,
     onValidate,
     site.strata,
     snackbar,

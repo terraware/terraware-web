@@ -10,10 +10,10 @@ import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite, EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 
-export type DefaultStratumPayload = Omit<MinimalStratum, 'substrata'>;
+export type DefaultStratumPayload = Omit<MinimalStratum, 'substrata'> & { substratumId?: number };
 
 export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalStratum => {
-  const { boundary, id, name, initialPlantingDensity } = payload;
+  const { boundary, id, name, initialPlantingDensity, substratumId = id } = payload;
   const substratumName = substratumNameGenerator(new Set(), strings.SUBSTRATUM);
 
   return {
@@ -25,7 +25,7 @@ export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalSt
       {
         boundary,
         fullName: substratumName,
-        id,
+        id: substratumId,
         name: substratumName,
         plantingCompleted: false,
       },

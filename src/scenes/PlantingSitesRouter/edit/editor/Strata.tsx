@@ -17,8 +17,10 @@ import { EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorMode } from './EditorModeContext';
 import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import { NegativeIdGenerator, keepIdOnLargerPiece, reconcileStratumSubstrata } from './reconcileUtils';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
 import {
@@ -98,6 +100,8 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
   const snackbar = useSnackbar();
   const { exclusionsLayerStyle, sitesLayerStyle, strataLayerStyle } = useMapFeatureStyles();
   const activeLocale = useLocalization();
+  const mode = useEditorMode();
+  const siteStratumKeys = useMemo(() => (site.strata ?? []).map((stratum) => stratum.id), [site.strata]);
 
   const strata = useMemo<FeatureCollection | undefined>(
     () => strataData?.fixedBoundaries,
@@ -121,6 +125,11 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
         return;
       }
 
+      const nextSubstratumKey = NegativeIdGenerator(
+        [],
+        (site.strata ?? []).flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id))
+      );
+
       // populates strata
       const _strata = strata?.features
         .map((stratum, index) => {
@@ -136,7 +145,16 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
             if (existing && JSON.stringify(existing.boundary) === JSON.stringify(multiPolygon)) {
               return { ...existing, initialPlantingDensity, name };
             }
-            return defaultStratumPayload({ boundary: multiPolygon, id, initialPlantingDensity, name });
+            if (existing && mode === 'edit') {
+              return reconcileStratumSubstrata({ ...existing, boundary: multiPolygon, name }, nextSubstratumKey);
+            }
+            return defaultStratumPayload({
+              boundary: multiPolygon,
+              id,
+              initialPlantingDensity,
+              name,
+              substratumId: mode === 'edit' ? nextSubstratumKey() : undefined,
+            });
           } else {
             return undefined;
           }
@@ -146,14 +164,15 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       const data = _strata ? { strata: _strata } : undefined;
       onValidate.apply(data === undefined, data);
     }
-  }, [onValidate, site.strata, snackbar, strata, strataData?.errorAnnotations]);
+  }, [mode, onValidate, site.strata, snackbar, strata, strataData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<EditableMapBoundary[] | undefined>(() => {
     if (!strata?.features) {
       return undefined;
     }
 
-    const idGenerator = IdGenerator(strata.features);
+    const idGenerator =
+      mode === 'edit' ? NegativeIdGenerator(strata.features, siteStratumKeys) : IdGenerator(strata.features);
 
     const exclusionsBoundary: EditableMapBoundary[] = site.exclusion
       ? [
@@ -183,7 +202,17 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
         style: strataLayerStyle,
       },
     ];
-  }, [exclusionsLayerStyle, site.boundary, site.exclusion, site.id, sitesLayerStyle, strata, strataLayerStyle]);
+  }, [
+    exclusionsLayerStyle,
+    mode,
+    site.boundary,
+    site.exclusion,
+    site.id,
+    siteStratumKeys,
+    sitesLayerStyle,
+    strata,
+    strataLayerStyle,
+  ]);
 
   const description = useMemo<Description[]>(() => {
     if (!activeLocale) {
@@ -221,9 +250,12 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     const cutWithFeature = getLatestFeature(strataData?.editableBoundary, editableBoundary);
 
     // update state with cut strata on success
-    const onSuccess = (cutStrata: GeometryFeature[]) => {
+    const onSuccess = (cutResult: GeometryFeature[]) => {
+      // in edit mode the larger piece of a split stratum keeps its identity, and with it, its substrata
+      const cutStrata =
+        mode === 'edit' ? keepIdOnLargerPiece(strata?.features as GeometryFeature[], cutResult) : cutResult;
       // if it is feasible to cut strata without making them too small, create new fixed stratum boundaries and clear the cut geometry
-      const idGenerator = IdGenerator(cutStrata);
+      const idGenerator = mode === 'edit' ? NegativeIdGenerator(cutStrata, siteStratumKeys) : IdGenerator(cutStrata);
       const usedNames: Set<string> = new Set(
         (strata?.features ?? []).map((f) => f.properties?.name).filter((name) => !!name)
       );
@@ -352,12 +384,13 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
             onClose={close}
             onUpdate={onUpdate}
             initialPlantingDensity={initialPlantingDensity}
+            showDensity={mode !== 'edit'}
             stratumNamesInUse={stratumNamesInUse}
           />
         );
       },
     }),
-    [mapStyles.box, mapStyles.tooltip, setStrataData, strata]
+    [mapStyles.box, mapStyles.tooltip, mode, setStrataData, strata]
   );
 
   const drawerProps = useEditorStepperDrawer(
@@ -395,6 +428,7 @@ type TooltipContentsProps = {
   name?: string;
   onClose: () => void;
   onUpdate: (name: string, initialPlantingDensity: number) => void;
+  showDensity: boolean;
   stratumNamesInUse: Set<string>;
 };
 
@@ -403,6 +437,7 @@ const TooltipContents = ({
   onClose,
   onUpdate,
   initialPlantingDensity,
+  showDensity,
   stratumNamesInUse,
 }: TooltipContentsProps): JSX.Element => {
   const [stratumName, setStratumName] = useState<string>(name ?? '');
@@ -427,7 +462,9 @@ const TooltipContents = ({
       hasNameErrors = false;
     }
 
-    if (!density) {
+    if (!showDensity) {
+      hasDensityErrors = false;
+    } else if (!density) {
       setDensityError(strings.REQUIRED_FIELD);
     } else if (Number(density) <= 0) {
       setDensityError(strings.INVALID_VALUE);
@@ -437,7 +474,7 @@ const TooltipContents = ({
     }
 
     return !(hasNameErrors || hasDensityErrors);
-  }, [density, stratumName, stratumNamesInUse]);
+  }, [density, showDensity, stratumName, stratumNamesInUse]);
 
   const save = () => {
     if (!validate) {
@@ -474,15 +511,17 @@ const TooltipContents = ({
           errorText={nameError}
           sx={{ marginTop: theme.spacing(1.5) }}
         />
-        <Textfield
-          label={strings.INITIAL_PLANTING_DENSITY}
-          id='initial-planting-density'
-          type='number'
-          onChange={(value) => setDensity(value as number)}
-          value={density}
-          errorText={densityError}
-          sx={{ marginTop: theme.spacing(1.5) }}
-        />
+        {showDensity && (
+          <Textfield
+            label={strings.INITIAL_PLANTING_DENSITY}
+            id='initial-planting-density'
+            type='number'
+            onChange={(value) => setDensity(value as number)}
+            value={density}
+            errorText={densityError}
+            sx={{ marginTop: theme.spacing(1.5) }}
+          />
+        )}
       </Box>
     </MapTooltipDialog>
   );
