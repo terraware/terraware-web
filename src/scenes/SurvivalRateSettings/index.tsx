@@ -19,6 +19,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PermanentPlotsTab from './PermanentPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
+import T0ChangeHistory from './T0ChangeHistory';
 import TemporaryPlotsTab from './TemporaryPlotsTab';
 
 const SurvivalRateSettings = () => {
@@ -285,6 +286,8 @@ const SurvivalRateSettings = () => {
             },
           }}
         />
+
+        <T0ChangeHistory plantingSiteId={plantingSiteId} />
       </Card>
     </Page>
   );

@@ -2369,6 +2369,22 @@ SUSTAINABLE_DEVELOPMENT_GOALS,Sustainable Development Goals,
 SUSTAINABLE_TIMBER,Sustainable Timber,
 SW_CORNER,SW corner,
 T0_DATA_IS_SET,t0 data is set,
+T0_HISTORY_DENSITY_CHANGED,{0} changed from {1} to {2} plants/ha,One species' t0 plant density change: {0} is the species name
+T0_HISTORY_DENSITY_REMOVED,{0} removed,{0} is a species name whose t0 plant density is no longer set
+T0_HISTORY_DENSITY_SET,{0} set to {1} plants/ha,One species' first t0 plant density: {0} is the species name
+T0_HISTORY_OBSERVATION_CHANGED,t0 observation changed from {0} to {1},{0} and {1} are observation start dates
+T0_HISTORY_OBSERVATION_REMOVED,t0 observation changed from {0} to entered plant densities,{0} is an observation start date
+T0_HISTORY_OBSERVATION_SET,t0 observation set to {0},{0} is an observation start date
+T0_HISTORY_OBSERVATION_WITH_ID,{0} (ID {1}),Tells apart two observations with the same start date: {0} is the date and {1} the observation ID
+T0_HISTORY_PLOT,Plot {0},{0} is a monitoring plot number
+T0_HISTORY_PLOTS,{0} plots,Number of plots changed in one save
+T0_HISTORY_PLOTS_ONE,1 plot,
+T0_HISTORY_SITE_SETTINGS,survival rate settings,Part of a change history summary listing what a save changed
+T0_HISTORY_STRATA,{0} strata,Number of strata changed in one save
+T0_HISTORY_STRATA_ONE,1 stratum,
+T0_HISTORY_STRATUM,Stratum {0},{0} is a stratum name
+T0_HISTORY_UPDATED,Updated t0 data,
+T0_HISTORY_UPDATED_SETTINGS,Updated survival rate settings,
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 not set for Permanent Plots,
 T0_NOT_SET_FOR_TEMPORARY_PLOTS,t0 not set for Temporary Plots,
 T0_PLANT_DENSITY_WARNING,"Provide plant densities for all of the species to be used for survival rate calculations for this plot. Species from withdrawals are shown. This may not be the full list of species represented in the plot. To add other species, use Add Species.",

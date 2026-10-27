@@ -2368,6 +2368,22 @@ SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
 SW_CORNER,Coin SO,225bf8b3
 T0_DATA_IS_SET,Les données t0 sont définies,cf4c95a7
+T0_HISTORY_DENSITY_CHANGED,{0} est passé de {1} à {2} plants/ha,e9eb8c47
+T0_HISTORY_DENSITY_REMOVED,{0} supprimé,4b59fc82
+T0_HISTORY_DENSITY_SET,{0} défini à {1} plants/ha,a1bfb459
+T0_HISTORY_OBSERVATION_CHANGED,Observation t0 modifiée de {0} à {1},7d5eea7d
+T0_HISTORY_OBSERVATION_REMOVED,Observation t0 modifiée de {0} à densités de plantation saisies,9db8e888
+T0_HISTORY_OBSERVATION_SET,Observation t0 définie à {0},ea1fc65a
+T0_HISTORY_OBSERVATION_WITH_ID,{0} (ID {1}),4aeab345
+T0_HISTORY_PLOT,Parcelle {0},fb4fe372
+T0_HISTORY_PLOTS,{0} parcelles,37c37cb1
+T0_HISTORY_PLOTS_ONE,1 parcelle,13a3eade
+T0_HISTORY_SITE_SETTINGS,paramètres du taux de survie,01eca3c5
+T0_HISTORY_STRATA,{0} strates,d9617f2b
+T0_HISTORY_STRATA_ONE,1 strate,e7bb0b50
+T0_HISTORY_STRATUM,Strate {0},064ebb0f
+T0_HISTORY_UPDATED,Données t0 mises à jour,8d79b5db
+T0_HISTORY_UPDATED_SETTINGS,Paramètres du taux de survie mis à jour,cc2d94e3
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 non défini pour les Placettes permanentes,d1ad09a9
 T0_NOT_SET_FOR_TEMPORARY_PLOTS,t0 non défini pour les Placettes temporaires,6fc5b12c
 T0_PLANT_DENSITY_WARNING,"Indiquez les densités de plants pour toutes les espèces à utiliser dans le calcul du taux de survie pour cette parcelle. Les espèces issues des retraits sont affichées. Il se peut que cette liste ne représente pas toutes les espèces présentes dans la parcelle. Pour ajouter d'autres espèces, utilisez Ajouter une espèce.",8f270545

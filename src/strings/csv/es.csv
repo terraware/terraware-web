@@ -2368,6 +2368,22 @@ SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,905bfc54
 SUSTAINABLE_TIMBER,Madera sostenible,b9574821
 SW_CORNER,Esquina SO,225bf8b3
 T0_DATA_IS_SET,Los datos t0 están establecidos,cf4c95a7
+T0_HISTORY_DENSITY_CHANGED,{0} cambió de {1} a {2} plantas/ha,e9eb8c47
+T0_HISTORY_DENSITY_REMOVED,{0} eliminado,4b59fc82
+T0_HISTORY_DENSITY_SET,{0} establecido en {1} plantas/ha,a1bfb459
+T0_HISTORY_OBSERVATION_CHANGED,La observación t0 cambió de {0} a {1},7d5eea7d
+T0_HISTORY_OBSERVATION_REMOVED,La observación t0 cambió de {0} a densidades de plantas ingresadas,9db8e888
+T0_HISTORY_OBSERVATION_SET,Observación t0 establecida en {0},ea1fc65a
+T0_HISTORY_OBSERVATION_WITH_ID,{0} (ID {1}),4aeab345
+T0_HISTORY_PLOT,Parcela {0},fb4fe372
+T0_HISTORY_PLOTS,{0} parcelas,37c37cb1
+T0_HISTORY_PLOTS_ONE,1 parcela,13a3eade
+T0_HISTORY_SITE_SETTINGS,configuración de tasa de supervivencia,01eca3c5
+T0_HISTORY_STRATA,{0} estratos,d9617f2b
+T0_HISTORY_STRATA_ONE,1 estrato,e7bb0b50
+T0_HISTORY_STRATUM,Estrato {0},064ebb0f
+T0_HISTORY_UPDATED,Datos t0 actualizados,8d79b5db
+T0_HISTORY_UPDATED_SETTINGS,Configuración de tasa de supervivencia actualizada,cc2d94e3
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 no establecido para Parcelas Permanentes,d1ad09a9
 T0_NOT_SET_FOR_TEMPORARY_PLOTS,t0 no establecido para Parcelas Temporales,6fc5b12c
 T0_PLANT_DENSITY_WARNING,"Proporcione las densidades de plantas para todas las especies que se utilizarán en los cálculos de la tasa de supervivencia para esta parcela. Se muestran las especies a partir de retiros. Es posible que esta no sea la lista completa de especies representadas en la parcela. Para agregar otras especies, utilice Agregar especie.",8f270545
