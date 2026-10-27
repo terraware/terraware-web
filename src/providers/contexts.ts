@@ -38,12 +38,6 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // default no-op implementation
     return Promise.resolve();
   },
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  setSelectedOrganization: (org) => {
-    // no-op
-    return;
-  },
-
   selectedOrganization: undefined,
   bootstrapped: false,
 });

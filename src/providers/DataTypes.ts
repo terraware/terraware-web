@@ -20,7 +20,6 @@ export type ProvidedUserData = {
 
 export type ProvidedOrganizationData = {
   selectedOrganization: Organization | undefined;
-  setSelectedOrganization: (organization: Organization) => void;
   organizations: Organization[];
   orgPreferences: PreferencesType;
   redirectAndNotify: (organization: Organization) => void;

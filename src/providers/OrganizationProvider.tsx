@@ -44,10 +44,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     [organizations, selectedOrganizationId]
   );
 
-  const setSelectedOrganization = useCallback((organization: Organization) => {
-    setSelectedOrganizationId(organization.id);
-  }, []);
-
   const reloadOrganizations = useCallback(
     async (selectedOrgId?: number) => {
       const { data } = await refetchOrganizations();
@@ -154,7 +150,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const organizationData = useMemo<ProvidedOrganizationData>(
     () => ({
       selectedOrganization,
-      setSelectedOrganization,
       organizations: organizations ?? [],
       orgPreferences,
       redirectAndNotify,
@@ -164,7 +159,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     }),
     [
       selectedOrganization,
-      setSelectedOrganization,
       organizations,
       orgPreferences,
       redirectAndNotify,
