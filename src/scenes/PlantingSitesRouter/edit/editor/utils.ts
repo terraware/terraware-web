@@ -7,7 +7,7 @@ import { overlayAndSubtract, toFeature } from 'src/components/Map/utils';
 import { SQ_M_TO_HECTARES } from 'src/constants';
 import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { DraftPlantingSite, EditorPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 
 export type DefaultStratumPayload = Omit<MinimalStratum, 'substrata'>;
@@ -217,7 +217,7 @@ export type ErrorCheckLevel = 'site_boundary' | 'exclusion' | 'stratum' | 'subst
 export type CutData = {
   cutWithFeature?: GeometryFeature;
   errorCheckLevel: ErrorCheckLevel;
-  createDraftSiteWith: (cutBoundaries: GeometryFeature[]) => DraftPlantingSite;
+  createDraftSiteWith: (cutBoundaries: GeometryFeature[]) => EditorPlantingSite;
   source?: FeatureCollection;
 };
 export const cutOverlappingBoundaries = async (
@@ -254,7 +254,7 @@ export const cutOverlappingBoundaries = async (
  * TODO: replace error checking code with actual BE API request when it is ready
  */
 export const findErrors = async (
-  draft: DraftPlantingSite,
+  draft: EditorPlantingSite,
   errorCheckLevel: ErrorCheckLevel,
   cutBoundaries: GeometryFeature[] // TODO: remove this when switching to BE API, use the draft payload instead
   // eslint-disable-next-line @typescript-eslint/require-await

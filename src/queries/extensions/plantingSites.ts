@@ -36,6 +36,17 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.TrackingStats },
       ],
     },
+    updatePlantingSiteMap: {
+      invalidatesTags: (_result, _error, siteApiArg) =>
+        siteApiArg.dryRun
+          ? []
+          : [
+              { type: QueryTagTypes.PlantingSites, id: siteApiArg.id },
+              { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+              { type: QueryTagTypes.T0, id: siteApiArg.id },
+              { type: QueryTagTypes.TrackingStats },
+            ],
+    },
     getPlantingSiteHistory: {
       providesTags: (_result, _error, payload) => [{ type: QueryTagTypes.PlantingSites, id: payload.id }],
     },

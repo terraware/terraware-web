@@ -77,6 +77,16 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    updatePlantingSiteMap: build.mutation<UpdatePlantingSiteMapApiResponse, UpdatePlantingSiteMapApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.id}/map`,
+        method: 'PUT',
+        body: queryArg.updatePlantingSiteMapRequestPayload,
+        params: {
+          dryRun: queryArg.dryRun,
+        },
+      }),
+    }),
     getPlantingSiteReportedPlants: build.query<
       GetPlantingSiteReportedPlantsApiResponse,
       GetPlantingSiteReportedPlantsApiArg
@@ -162,6 +172,14 @@ export type GetPlantingSiteHistoryApiArg = {
   id: number;
   historyId: number;
   simplified?: boolean;
+};
+export type UpdatePlantingSiteMapApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdatePlantingSiteMapApiArg = {
+  id: number;
+  /** If true, check whether the edit is valid without changing the site. */
+  dryRun?: boolean;
+  updatePlantingSiteMapRequestPayload: UpdatePlantingSiteMapRequestPayload;
 };
 export type GetPlantingSiteReportedPlantsApiResponse =
   /** status 200 OK */ GetPlantingSiteReportedPlantsResponsePayload;
@@ -454,6 +472,35 @@ export type GetPlantingSiteHistoryResponsePayload = {
   site: PlantingSiteHistoryPayload;
   status: SuccessOrError;
 };
+export type PlantingSiteMapInvalidResponsePayload = {
+  error: ErrorDetails;
+  problems: PlantingSiteValidationProblemPayload[];
+  status: SuccessOrError;
+};
+export type SubstratumMapEditPayload = {
+  boundary: MultiPolygon | Polygon;
+  /** ID of the existing substratum this represents. Omit to create a substratum. */
+  id?: number;
+  /** Name of this substratum. Two substrata in the same stratum may not have the same name, but using the same substratum name in different strata is valid. */
+  name: string;
+};
+export type StratumMapEditPayload = {
+  /** ID of the existing stratum this represents. Omit to create a stratum. */
+  id?: number;
+  /** Name of this stratum. Two strata in the same planting site may not have the same name. */
+  name: string;
+  /** Substrata of this stratum. The stratum's boundary is the union of its substrata's boundaries. Must not be empty. */
+  substrata: SubstratumMapEditPayload[];
+};
+export type UpdatePlantingSiteMapRequestPayload = {
+  /** Site boundary. Required if the site has no strata; ignored otherwise, since the boundary of a site with strata is the union of its strata's boundaries. */
+  boundary?: MultiPolygon | Polygon;
+  exclusion?: MultiPolygon | Polygon;
+  /** Strata and substrata. Existing strata and substrata are matched by ID; those that are omitted are deleted. Must not be empty if the site already has strata. */
+  strata: StratumMapEditPayload[];
+  /** IDs of edited substrata whose planting completed flags should be cleared. Ignored if dryRun is true. */
+  substratumIdsToMarkIncomplete?: number[];
+};
 export type GetPlantingSiteReportedPlantsResponsePayload = {
   site: PlantingSiteReportedPlantsPayload;
   status: SuccessOrError;
@@ -491,6 +538,7 @@ export const {
   useCompleteSurvivalRateCalculationMutation,
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
+  useUpdatePlantingSiteMapMutation,
   useGetPlantingSiteReportedPlantsQuery,
   useLazyGetPlantingSiteReportedPlantsQuery,
   useListPlantingSiteSpeciesTargetsQuery,

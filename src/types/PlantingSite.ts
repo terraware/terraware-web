@@ -32,14 +32,20 @@ export type PlantingSiteProblem = PlantingSiteValidationProblemPayload;
 export type BoundarySource = 'drawn' | 'uploaded' | 'uploaded_edited';
 
 /**
+ * Planting site map as edited by the site editor steps.
+ */
+export type EditorPlantingSite = MinimalPlantingSite & {
+  boundarySource?: BoundarySource;
+  exclusion?: MultiPolygon;
+  siteType: SiteType;
+};
+
+/**
  * Client side draft planting site with first class properties.
  */
-export type DraftPlantingSite = MinimalPlantingSite & {
-  boundarySource?: BoundarySource;
+export type DraftPlantingSite = EditorPlantingSite & {
   createdBy: number; // user that created this draft
-  exclusion?: MultiPolygon;
   siteEditStep: SiteEditStep;
-  siteType: SiteType;
 };
 
 export type PlantingProgressType = {
