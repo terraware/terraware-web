@@ -89,7 +89,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         title={tooltipLearnMoreModalData?.title}
       />
       <Grid container spacing={2} textAlign='left' color={theme.palette.TwClrTxt} fontSize='14px' size={12}>
-        <Grid display='flex' size={12}>
+        <Grid container spacing={0} display='flex' size={12}>
           <Grid size={isEditable ? 6 : 12}>
             <Typography fontSize='20px'>
               {strings.TEST} #{viabilityTest.id}
@@ -113,7 +113,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
           ) : null}
         </Grid>
-        <Grid display='flex' size={12}>
+        <Grid container spacing={0} display='flex' size={12}>
           <Grid size={smallColumn}>
             <Grid sx={titleStyle} size={12}>
               {strings.TEST_METHOD}
@@ -173,7 +173,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             </Grid>
           )}
         </Grid>
-        <Grid display='flex' size={12}>
+        <Grid container spacing={0} display='flex' size={12}>
           {isMobile && viabilityTest.testType !== 'Cut' && (
             <Grid size={smallColumn}>
               <Grid sx={titleStyle} size={12}>
@@ -230,7 +230,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           )}
         </Grid>
         {isMobile && (
-          <Grid display='flex' size={12}>
+          <Grid container spacing={0} display='flex' size={12}>
             <Grid size={smallColumn}>
               <Grid sx={titleStyle} size={12}>
                 {strings.STAFF}
@@ -259,7 +259,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           }}
           size={12}
         >
-          <Grid display='flex' size={12}>
+          <Grid container spacing={0} display='flex' size={12}>
             <Grid size={smallColumn}>
               <Grid sx={titleStyle} size={12}>
                 {strings.START_DATE}
@@ -279,7 +279,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           </Grid>
           {viabilityTest.testType === 'Cut' && (
             <>
-              <Grid display='flex' paddingTop={2} size={12}>
+              <Grid container spacing={0} display='flex' paddingTop={2} size={12}>
                 <Grid size={smallColumn}>
                   <Grid sx={titleStyle} size={12}>
                     {strings.NUMBER_OF_SEEDS_COMPROMISED_V2}
