@@ -3246,8 +3246,32 @@
 <a name='L3181'></a><a href='#L3181'>3181</a>
 <a name='L3182'></a><a href='#L3182'>3182</a>
 <a name='L3183'></a><a href='#L3183'>3183</a>
-<a name='L3184'></a><a href='#L3184'>3184</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">92x</span>
+<a name='L3184'></a><a href='#L3184'>3184</a>
+<a name='L3185'></a><a href='#L3185'>3185</a>
+<a name='L3186'></a><a href='#L3186'>3186</a>
+<a name='L3187'></a><a href='#L3187'>3187</a>
+<a name='L3188'></a><a href='#L3188'>3188</a>
+<a name='L3189'></a><a href='#L3189'>3189</a>
+<a name='L3190'></a><a href='#L3190'>3190</a>
+<a name='L3191'></a><a href='#L3191'>3191</a>
+<a name='L3192'></a><a href='#L3192'>3192</a>
+<a name='L3193'></a><a href='#L3193'>3193</a>
+<a name='L3194'></a><a href='#L3194'>3194</a>
+<a name='L3195'></a><a href='#L3195'>3195</a>
+<a name='L3196'></a><a href='#L3196'>3196</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">98x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6846,6 +6870,8 @@ export const strings = {
   CLOSE_PLANTING_SEASON_CONFIRM:
     'You are about to close {0}. Closing will mark the season as closed and prevent further changes. This action cannot be undone.',
   CLOSE_SEASON: 'Close Season',
+  CLOSE_SITE_EDITOR: 'Close site editor?',
+  CLOSE_SITE_EDITOR_MESSAGE: 'Your changes to {0} haven’t been saved. Keep editing, or discard them.',
   CLOSE_SITE_SETUP: 'Close site setup?',
   CLOSED: 'Closed',
   COLLECTED_FROM: 'Collected from',
@@ -7146,12 +7172,16 @@ export const strings = {
   EDIT_PERSON: 'Edit Person',
   EDIT_PHOTOS_AND_VIDEOS: 'Edit Photos &amp; Videos',
   EDIT_PLANTING_SEASON: 'Edit Planting Season',
+  EDIT_PLANTING_SITE: 'Edit Planting Site',
   EDIT_PROJECT: 'Edit Project',
   EDIT_QUANTITY: 'Edit Quantity',
   EDIT_QUANTITY_DISABLED: 'Quantity may not be edited when the status is "Used Up".',
   EDIT_SCORES: 'Edit Scores',
   EDIT_SEED_BANK: 'Edit Seed Bank',
   EDIT_SETTINGS: 'Edit Settings',
+  EDIT_SITE_BOUNDARY: 'Edit Site Boundary',
+  EDIT_SITE_START_OVER_WARNING:
+    'All changes to the site boundary, exclusion areas, stratum and substratum boundaries will be discarded.',
   EDIT_SPECIES: 'Edit Species',
   EDIT_STATUS: 'Edit Status',
   EDIT_SURVIVAL_RATE_SETTINGS_FOR: 'Edit Survival Rate Settings for {0}',
@@ -7700,6 +7730,9 @@ export const strings = {
   MARK_PLANTING_DATE_FULFILLED: 'Mark Planting Date Fulfilled',
   MARK_PLANTING_DATE_FULFILLED_CONFIRM:
     'You are about to mark this Planting Date as fulfilled. Open Nursery withdrawal requests will be marked as fulfilled, and Planting Withdrawals will no longer be able to be done to the date. Marking a Planting Date as fulfilled cannot be undone.',
+  MARK_SUBSTRATA_INCOMPLETE: 'Mark Substrata as Not Planted?',
+  MARK_SUBSTRATA_INCOMPLETE_MESSAGE:
+    'These substrata were marked as planting complete and their boundaries changed. Select any that should no longer be marked as planting complete.',
   MARKED_AS_PLANTING_COMPLETE: 'Marked as Planting Complete (%)',
   MATCH_SPECIES: 'Match Species',
   MATCH_SPECIES_MODAL_DESCRIPTION:
@@ -8212,6 +8245,8 @@ export const strings = {
   PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE: 'Drawing Site Boundaries',
   PLANTING_SITE_DELETED: 'Planting site deleted!',
   PLANTING_SITE_MAP_HAS_PROBLEMS: 'The site map has problems that need to be fixed before it can be saved.',
+  PLANTING_SITE_MAP_NO_STRATA: "This planting site has no strata and can't be edited here.",
+  PLANTING_SITE_MAP_PROBLEMS_TITLE: 'This Map Has Problems',
   PLANTING_SITE_MAP_SELF_INTERSECTS:
     "A shape on the map crosses itself. Redraw it so its edges don't cross, then try again.",
   PLANTING_SITE_NAME: 'Planting site name',
@@ -8622,6 +8657,7 @@ export const strings = {
   SAVE_AND_REQUEST_TOOLTIP:
     'Save &amp; Request will send a planting withdrawal request to the Nursery for this Planting Date.',
   SAVE_ANYWAY: 'Save Anyway',
+  SAVE_CHANGES: 'Save Changes',
   SAVE_OBSERVATION_DATA: 'Save Observation Data',
   SAVE_OBSERVATION_DATA_DESCRIPTION:
     'Your edits will replace any previously entered data. Are you sure you want to make these edits?',
@@ -9619,7 +9655,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-27T18:56:45.705Z
+                at 2026-10-27T19:30:25.844Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -3328,8 +3328,34 @@
 <a name='L3263'></a><a href='#L3263'>3263</a>
 <a name='L3264'></a><a href='#L3264'>3264</a>
 <a name='L3265'></a><a href='#L3265'>3265</a>
-<a name='L3266'></a><a href='#L3266'>3266</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">92x</span>
+<a name='L3266'></a><a href='#L3266'>3266</a>
+<a name='L3267'></a><a href='#L3267'>3267</a>
+<a name='L3268'></a><a href='#L3268'>3268</a>
+<a name='L3269'></a><a href='#L3269'>3269</a>
+<a name='L3270'></a><a href='#L3270'>3270</a>
+<a name='L3271'></a><a href='#L3271'>3271</a>
+<a name='L3272'></a><a href='#L3272'>3272</a>
+<a name='L3273'></a><a href='#L3273'>3273</a>
+<a name='L3274'></a><a href='#L3274'>3274</a>
+<a name='L3275'></a><a href='#L3275'>3275</a>
+<a name='L3276'></a><a href='#L3276'>3276</a>
+<a name='L3277'></a><a href='#L3277'>3277</a>
+<a name='L3278'></a><a href='#L3278'>3278</a>
+<a name='L3279'></a><a href='#L3279'>3279</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">98x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7018,6 +7044,9 @@ export const strings = {
   CLOSE_PLANTING_SEASON_CONFIRM:
     'Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.',
   CLOSE_SEASON: 'Clore la saison',
+  CLOSE_SITE_EDITOR: 'Fermer l’éditeur de site ?',
+  CLOSE_SITE_EDITOR_MESSAGE:
+    'Vos modifications apportées à {0} n’ont pas été enregistrées. Continuez la modification ou abandonnez-les.',
   CLOSE_SITE_SETUP: 'Fermer la configuration du site ?',
   CLOSED: 'Fermé',
   COLLECTED_FROM: 'Collecté à partir de',
@@ -7325,12 +7354,16 @@ export const strings = {
   EDIT_PERSON: 'Modifier la personne',
   EDIT_PHOTOS_AND_VIDEOS: 'Modifier les photos et vidéos',
   EDIT_PLANTING_SEASON: 'Modifier la saison de plantation',
+  EDIT_PLANTING_SITE: 'Modifier le site de plantation',
   EDIT_PROJECT: 'Modifier le projet',
   EDIT_QUANTITY: 'Modifier la quantité',
   EDIT_QUANTITY_DISABLED: 'La quantité ne peut pas être modifiée lorsque le statut est « Épuisé ».',
   EDIT_SCORES: 'Modifier les scores',
   EDIT_SEED_BANK: 'Modifier la banque de semences',
   EDIT_SETTINGS: 'Modifier les paramètres',
+  EDIT_SITE_BOUNDARY: 'Modifier la limite du site',
+  EDIT_SITE_START_OVER_WARNING:
+    'Toutes les modifications apportées à la limite du site, aux zones d’exclusion, aux limites de strates et de sous-strates seront perdues.',
   EDIT_SPECIES: 'Modifier les espèces',
   EDIT_STATUS: 'Modifier le statut',
   EDIT_SURVIVAL_RATE_SETTINGS_FOR: 'Modifier les paramètres du taux de survie pour {0}',
@@ -7900,6 +7933,9 @@ export const strings = {
   MARK_PLANTING_DATE_FULFILLED: 'Marquer la date de plantation comme accomplie',
   MARK_PLANTING_DATE_FULFILLED_CONFIRM:
     'Vous êtes sur le point de marquer cette date de plantation comme accomplie. Les demandes de retrait en cours à la pépinière seront également marquées comme accomplies, et il ne sera plus possible d’effectuer des retraits de plantation pour cette date. Cette action est irréversible.',
+  MARK_SUBSTRATA_INCOMPLETE: 'Marquer les substrats comme non plantés ?',
+  MARK_SUBSTRATA_INCOMPLETE_MESSAGE:
+    'Ces substrats ont été marqués comme plantation terminée et leurs limites ont été modifiées. Sélectionnez ceux qui ne doivent plus être considérés comme plantation terminée.',
   MARKED_AS_PLANTING_COMPLETE: 'Marqués comme ayant terminé la plantation (%)',
   MATCH_SPECIES: 'Associez les espèces',
   MATCH_SPECIES_MODAL_DESCRIPTION:
@@ -8430,6 +8466,8 @@ export const strings = {
   PLANTING_SITE_DELETED: 'Site de plantation supprimé !',
   PLANTING_SITE_MAP_HAS_PROBLEMS:
     'La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.',
+  PLANTING_SITE_MAP_NO_STRATA: 'Ce site de plantation ne comporte aucune strate et ne peut pas être modifié ici.',
+  PLANTING_SITE_MAP_PROBLEMS_TITLE: 'Cette carte présente des problèmes',
   PLANTING_SITE_MAP_SELF_INTERSECTS:
     'Une forme sur la carte se croise elle-même. Redessinez-la afin que ses contours ne se croisent pas, puis réessayez.',
   PLANTING_SITE_NAME: 'Nom du site de plantation',
@@ -8854,6 +8892,7 @@ export const strings = {
   SAVE_AND_REQUEST_TOOLTIP:
     'Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.',
   SAVE_ANYWAY: 'Enregistrer quand même',
+  SAVE_CHANGES: 'Enregistrer les modifications',
   SAVE_OBSERVATION_DATA: "Enregistrer les données d'observation",
   SAVE_OBSERVATION_DATA_DESCRIPTION:
     'Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?',
@@ -9865,7 +9904,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-27T18:56:45.705Z
+                at 2026-10-27T19:30:25.844Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

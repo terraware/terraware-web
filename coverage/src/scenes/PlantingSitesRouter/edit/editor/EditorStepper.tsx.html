@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.15% </span>
+                <span class="strong">69.23% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>12/26</span>
+                <span class='fraction'>18/26</span>
             </div>
         
             
@@ -270,14 +270,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -288,16 +288,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">501x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -309,14 +309,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">735x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -371,7 +371,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -397,17 +397,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">99x</span>
+<span class="cline-any cline-yes">285x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -476,7 +476,7 @@ const EditorStepper = ({
   const activeStepContent = (
     &lt;&gt;
       {!collapsed &amp;&amp; description}
-      {status &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
+      {status &amp;&amp; (
         // zero width keeps the status from widening the collapsed drawer
         &lt;Box minWidth='100%' width={0}&gt;
           {status}
@@ -494,11 +494,11 @@ const EditorStepper = ({
           orientation='vertical'
           steps={steps.map((step, index) =&gt; ({
             ...step,
-            description: index === currentStepIndex ? activeStepContent : <span class="branch-1 cbranch-no" title="branch not covered" >undefined,</span>
+            description: index === currentStepIndex ? activeStepContent : undefined,
           }))}
           sx={{ padding: theme.spacing(1, 0) }}
         /&gt;
-        {onStartOver &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
+        {onStartOver &amp;&amp; (
           &lt;Button
             id='start-over'
             label={strings.RESET_BOUNDARY_SETUP}
@@ -513,11 +513,11 @@ const EditorStepper = ({
       &lt;Box
         display='flex'
         gap={theme.spacing(1)}
-        justifyContent={currentStepIndex &gt; 0 ? <span class="branch-0 cbranch-no" title="branch not covered" >'space-between' </span>: 'flex-end'}
+        justifyContent={currentStepIndex &gt; 0 ? 'space-between' : 'flex-end'}
         padding={theme.spacing(1, 0)}
         whiteSpace='nowrap'
       &gt;
-        {currentStepIndex &gt; 0 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
+        {currentStepIndex &gt; 0 &amp;&amp; (
           &lt;Button
             id='back-planting-site-create'
             label={strings.BACK}
@@ -528,7 +528,7 @@ const EditorStepper = ({
             size={buttonSize}
           /&gt;
         )}
-        {!isFinalStep &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
+        {!isFinalStep &amp;&amp; (
           &lt;Button
             id='next-planting-site-create'
             label={strings.NEXT}
@@ -598,7 +598,7 @@ export const useEditorStepperDrawer = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-27T18:56:45.705Z
+                at 2026-10-27T19:30:25.844Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
