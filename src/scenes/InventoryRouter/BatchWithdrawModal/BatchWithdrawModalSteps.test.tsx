@@ -259,6 +259,34 @@ describe('QuantitiesStep planting date', () => {
     fireEvent.change(input, { target: { value: '30' } });
 
     expect(quantities[1].readyQuantityWithdrawn).toBe(30);
-    expect(screen.queryByText(strings.formatString(strings.EXCEEDS_READY_TO_PLANT, 30, 100).toString())).toBeNull();
+    expect(screen.queryByText(strings.formatString(strings.EXCEEDS_AVAILABLE_X, 100).toString())).toBeNull();
+  });
+
+  it('says how many are ready to plant when a planting withdrawal exceeds them', () => {
+    mockPlantingDestinations();
+    const overReady = draft({
+      withdrawByBatch: {
+        1: {
+          germinatingQuantityWithdrawn: 0,
+          activeGrowthQuantityWithdrawn: 0,
+          hardeningOffQuantityWithdrawn: 0,
+          readyQuantityWithdrawn: 101,
+        },
+      },
+    });
+
+    renderWithProviders(
+      <QuantitiesStep
+        batches={[batch()]}
+        draft={overReady}
+        selectedPlantingDate={plantingDate()}
+        setWithdrawByBatch={() => undefined}
+      />
+    );
+
+    // A planting withdrawal goes to a single substratum, so the batch-wide message for withdrawals
+    // split across substrata would be misleading here.
+    expect(screen.getByText(strings.formatString(strings.EXCEEDS_AVAILABLE_X, 100).toString())).toBeInTheDocument();
+    expect(screen.queryByText(/across all substrata/)).not.toBeInTheDocument();
   });
 });
