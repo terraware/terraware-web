@@ -371,6 +371,38 @@ describe('WithdrawFromBatchesModal', () => {
     });
   });
 
+  it('attaches photos to the first saved withdrawal when a retry saves the rest', async () => {
+    let attempts = 0;
+    server.use(
+      http.post(CREATE_WITHDRAWAL_URL, () => {
+        attempts += 1;
+        // The first substratum saves as 101, the second fails once and then saves as 102.
+        return attempts === 2
+          ? HttpResponse.json({ status: 'error', error: { message: 'failed' } }, { status: 500 })
+          : HttpResponse.json({ status: 'ok', withdrawal: { id: attempts === 1 ? 101 : 102 } });
+      })
+    );
+    const uploads = captureRequests('post', UPLOAD_PHOTO_URL, { id: 1 });
+
+    let closed = false;
+    const { user } = renderModal(twoSubstratumRequest, () => (closed = true));
+
+    await goToQuantities(user);
+    await enterQuantity(user, BATCH_A.id, 1, 20);
+    await enterQuantity(user, BATCH_B.id, 2, 5);
+    await user.click(button(strings.NEXT));
+    const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
+    await user.upload(fileInput, new File(['x'], 'photo.jpg', { type: 'image/jpeg' }));
+    await user.click(button(strings.WITHDRAW));
+    await waitFor(() => expect(attempts).toBe(2));
+    await waitFor(() => expect(button(strings.WITHDRAW)).toBeEnabled());
+
+    await user.click(button(strings.WITHDRAW));
+
+    await waitFor(() => expect(closed).toBe(true));
+    expect(uploads.map((upload) => new URL(upload.url).pathname)).toEqual(['/api/v1/nursery/withdrawals/101/photos']);
+  });
+
   it('closes once the withdrawal is saved even if a photo fails to upload', async () => {
     mockPost(CREATE_WITHDRAWAL_URL, createdWithdrawal);
     mockError('post', UPLOAD_PHOTO_URL);

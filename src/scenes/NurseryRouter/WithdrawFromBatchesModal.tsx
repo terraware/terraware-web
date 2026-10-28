@@ -196,8 +196,11 @@ const WithdrawFromBatchesModal = ({
   );
 
   // What has been saved so far, across attempts, so a retry after a partial failure still reports
-  // the whole withdrawal when it succeeds.
-  const savedRef = useRef({ batchIds: new Set<number>(), total: 0 });
+  // the whole withdrawal and attaches photos to the same withdrawal when it succeeds.
+  const savedRef = useRef<{ batchIds: Set<number>; total: number; firstWithdrawalId?: number }>({
+    batchIds: new Set<number>(),
+    total: 0,
+  });
 
   const handleClose = useCallback(() => {
     setStep(0);
@@ -230,7 +233,6 @@ const WithdrawFromBatchesModal = ({
         bySubstratum.set(substratumId, existing);
       });
 
-      const withdrawalIds: number[] = [];
       for (const [substratumId, entries] of bySubstratum.entries()) {
         const response = await createBatchWithdrawal({
           batchWithdrawals: entries.map((e) => ({
@@ -248,9 +250,7 @@ const WithdrawFromBatchesModal = ({
           scheduledPlantingDateRequestId: scheduledPlantingDateId,
           withdrawnDate: withdrawDate,
         }).unwrap();
-        if (response?.withdrawal?.id) {
-          withdrawalIds.push(response.withdrawal.id);
-        }
+        savedRef.current.firstWithdrawalId ??= response?.withdrawal?.id;
 
         // Saved, so a retry after a later substratum fails must not send these again.
         entries.forEach((e) => {
@@ -266,11 +266,12 @@ const WithdrawFromBatchesModal = ({
 
       // Attach photos to the first withdrawal we created. The withdrawals are already saved, so a
       // failed upload must not keep the modal open for a retry that would withdraw them again.
-      if (photoFiles.length > 0 && withdrawalIds[0] !== undefined) {
+      const { firstWithdrawalId } = savedRef.current;
+      if (photoFiles.length > 0 && firstWithdrawalId !== undefined) {
         await Promise.allSettled(
           photoFiles.map((file) =>
             uploadWithdrawalPhotos({
-              withdrawalId: withdrawalIds[0],
+              withdrawalId: firstWithdrawalId,
               body: { file },
             }).unwrap()
           )
