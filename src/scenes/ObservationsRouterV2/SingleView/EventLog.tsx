@@ -35,6 +35,11 @@ type EventLogProps = {
 const recordsALaterEdit = (subject: EventLogEntryPayload['subject']) =>
   subject.type === 'ObservationPlotMedia' ? !subject.isOriginal : subject.type === 'BiomassQuadratSpecies';
 
+const isSpeciesSubject = (
+  subject: EventLogEntryPayload['subject']
+): subject is BiomassQuadratSpeciesSubjectPayload | BiomassSpeciesSubjectPayload | MonitoringSpeciesSubjectPayload =>
+  subject.type === 'BiomassQuadratSpecies' || subject.type === 'BiomassSpecies' || subject.type === 'MonitoringSpecies';
+
 const speciesDeletionKey = (
   entry: EventLogEntryPayload,
   subject: BiomassQuadratSpeciesSubjectPayload | BiomassSpeciesSubjectPayload
@@ -233,9 +238,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         {event.action.type === 'FieldUpdated' && (
           <Box>
             {renderSpeciesSummary(event) ??
-              (event.subject.type === 'BiomassSpecies' ||
-              event.subject.type === 'BiomassQuadratSpecies' ||
-              event.subject.type === 'MonitoringSpecies'
+              (isSpeciesSubject(event.subject)
                 ? strings.formatString(
                     strings.SPECIES_VALUE_CHANGED_FROM_TO,
                     <Typography display='inline' textTransform='capitalize'>
@@ -289,12 +292,17 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                 {strings.formatString(strings.EVENT_ADDED, event.subject.fullText)}
               </Link>
             ) : (
-              strings.formatString(strings.EVENT_CREATED, event.subject.fullText)
+              strings.formatString(strings.EVENT_ADDED, event.subject.fullText)
             )}
           </Box>
         )}
         {event.action.type === 'Deleted' && (
-          <Box>{strings.formatString(strings.EVENT_DELETED, event.subject.fullText)}</Box>
+          <Box>
+            {strings.formatString(
+              isSpeciesSubject(event.subject) ? strings.EVENT_REMOVED : strings.EVENT_DELETED,
+              event.subject.fullText
+            )}
+          </Box>
         )}
       </Box>
     ),

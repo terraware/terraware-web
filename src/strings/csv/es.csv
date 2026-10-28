@@ -715,7 +715,7 @@ ESTIMATED_READY_DATE,Fecha estimada de finalización,d37bedd1
 ESTIMATED_SEED_COUNT,Cantidad estimada de semillas,c9e614f6
 ESTIMATED_WEIGHT,Peso estimado,34a8dfe1
 EVENT,Evento,cc849cd0
-EVENT_ADDED,{0} ha sido añadido,b6bc301d
+EVENT_ADDED,Se agregó {0},b6bc301d
 EVENT_CALL_DESCRIPTION_1,"Hacer clic en ""{0}"" abrirá una ventana del navegador para unirse a una videollamada de Google Meet.",f8c40b21
 EVENT_CALL_DESCRIPTION_2,Para este {0} necesitarás:,89f84f4b
 EVENT_CALL_REQUIREMENTS_INTERNET,Una conexión a internet en tu dispositivo: banda ancha por cable o inalámbrica (3G o 4G/LTE),0f7a1688
@@ -728,6 +728,7 @@ EVENT_NAME_RECORDING,Grabación de {0},6c589671
 EVENT_NAME_SLIDES,Diapositivas de {0},a06fe761
 EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quieras y las veces que necesites.,1fe65a8a
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",b87be889
+EVENT_REMOVED,Se retiró {0},de56933b
 EVENT_SPECIES_ADDED,Se agregó {0} ({1}),34dfa577
 EVENT_SPECIES_CHANGED,Se cambió {0} a {1} ({2}),f716fc50
 EVENT_SPECIES_COUNT,{0} {1},42918d30
