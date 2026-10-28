@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { QueryStatus } from '@reduxjs/toolkit/query';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
@@ -634,6 +635,46 @@ describe('BatchWithdrawModal on a page that keeps it mounted while closed', () =
       expect(store.getState().snackbar.snackbars.toast?.msg).not.toBe(strings.NO_BATCHES_TO_WITHDRAW_FROM)
     );
     expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' });
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
+  });
+
+  it('does not offer a previous result to withdraw from while checking the batches again', async () => {
+    let searchState: 'ok' | 'held' = 'ok';
+    let failHeldSearch = () => undefined as void;
+    const heldSearch = new Promise<void>((resolve) => (failHeldSearch = resolve));
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', async () => {
+        if (searchState === 'held') {
+          await heldSearch;
+          return HttpResponse.json({ status: 'error', error: { message: 'failed' } }, { status: 500 });
+        }
+        return HttpResponse.json({ status: 'ok', results: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 10 })] });
+      })
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitForDialog();
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+    searchState = 'held';
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    // Anything entered now would be based on the earlier result, and lost or left behind if the
+    // search then fails.
+    await waitFor(() =>
+      expect(
+        Object.values(store.getState()['rtk-query'].queries).some(
+          (query) => query?.endpointName === 'listBatchesByIds' && query.status === QueryStatus.pending
+        )
+      ).toBe(true)
+    );
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
+
+    failHeldSearch();
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
     expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
   });
 

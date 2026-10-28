@@ -542,7 +542,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   }, [step, strings, canGoNextFromStep1, canGoNextFromStep2, handleClose, isCreating, onSubmit]);
 
   const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
-  const isLoadingBatches = open && batches === undefined;
+  // While the modal is checking the batches, a previous result may be on hand but out of date. Don't
+  // let the user start a withdrawal from it. After a withdrawal, the refetch runs behind the dialog.
+  const isCheckingBatches = open && isFetchingBatches && !hasWithdrawn;
+  const isLoadingBatches = open && (batches === undefined || isCheckingBatches);
 
   return (
     <>
@@ -555,7 +558,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       />
       {isLoadingBatches && <BusySpinner withSkrim={true} />}
       {/* Stay open after withdrawing, even if that emptied the batches, until the user is told. */}
-      {batches && (batches.length > 0 || hasWithdrawn) && !showEmptyBatchesModal && (
+      {batches && (batches.length > 0 || hasWithdrawn) && !isCheckingBatches && !showEmptyBatchesModal && (
         <DialogBox
           open={open}
           onClose={handleClose}
