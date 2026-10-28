@@ -79,6 +79,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       originalArgs: batchesArgs,
       requestId: batchesRequestId,
       isFetching: isFetchingBatches,
+      isSuccess: isBatchesSearchSuccess,
+      isError: isBatchesSearchError,
     },
   ] = useLazyListBatchesByIdsQuery();
   // The search started when the modal opened. Only its result says whether there is anything to
@@ -275,12 +277,30 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
     // refetched, and a batch we just emptied would otherwise toast over the success message.
     // Nothing has been entered yet, so there is no draft to reset.
-    const openingSearchDone = batchesRequestId === openingRequestIdRef.current && !isFetchingBatches;
-    if (open && !hasWithdrawn && openingSearchDone && searchedBatches && batches?.length === 0) {
+    if (!open || hasWithdrawn || batchesRequestId !== openingRequestIdRef.current || isFetchingBatches) {
+      return;
+    }
+    // A failed search keeps the previous result, which says nothing about the batches now.
+    if (isBatchesSearchError) {
+      snackbar.toastError();
+      onClose();
+    } else if (isBatchesSearchSuccess && searchedBatches && batches?.length === 0) {
       snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
       onClose();
     }
-  }, [batches, batchesRequestId, hasWithdrawn, isFetchingBatches, onClose, open, searchedBatches, snackbar, strings]);
+  }, [
+    batches,
+    batchesRequestId,
+    hasWithdrawn,
+    isBatchesSearchError,
+    isBatchesSearchSuccess,
+    isFetchingBatches,
+    onClose,
+    open,
+    searchedBatches,
+    snackbar,
+    strings,
+  ]);
 
   // A withdrawal can only be from a single nursery; filter selected batches down
   // to the chosen From: Nursery before showing them anywhere.

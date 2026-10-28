@@ -390,6 +390,16 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'success' });
   });
 
+  it('reports the failure and closes when the batches cannot be loaded', async () => {
+    mockModalData();
+    mockError('post', '/api/v1/search');
+    const { store, state } = renderModal();
+
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(store.getState().snackbar.snackbars.toast?.msg).not.toBe(strings.NO_BATCHES_TO_WITHDRAW_FROM);
+    expect(state.closeCount).toBe(1);
+  });
+
   it('tells the user there is nothing to withdraw and closes when every selected batch is empty', async () => {
     mockModalData({ batches: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] });
     const { store, state } = renderModal();
@@ -597,6 +607,34 @@ describe('BatchWithdrawModal on a page that keeps it mounted while closed', () =
 
     expect(await waitForDialog()).toBeInTheDocument();
     expect(await screen.findByText('B-001')).toBeInTheDocument();
+  });
+
+  it('reports a failed search instead of an empty batch when reopened', async () => {
+    let failSearch = false;
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', () =>
+        failSearch
+          ? HttpResponse.json({ status: 'error', error: { message: 'failed' } }, { status: 500 })
+          : HttpResponse.json({ status: 'ok', results: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] })
+      )
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ msg: strings.NO_BATCHES_TO_WITHDRAW_FROM })
+    );
+
+    // The earlier empty result is still cached, but it says nothing about the batch now.
+    failSearch = true;
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast?.msg).not.toBe(strings.NO_BATCHES_TO_WITHDRAW_FROM)
+    );
+    expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' });
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
   });
 
   it('keeps the success message after the user dismisses the empty-batch notice', async () => {
