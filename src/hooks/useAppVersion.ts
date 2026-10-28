@@ -10,7 +10,10 @@ const currentAppVersion = import.meta.env.PUBLIC_TERRAWARE_FE_BUILD_VERSION;
 export const useAppVersion = () => {
   const { currentData: version } = useGetAppVersionQuery(undefined, { pollingInterval: ONE_MINUTE_INTERVAL_MS });
 
-  const isStale = useMemo(() => !!version && version.toString().trim() !== currentAppVersion, [version]);
+  const isStale = useMemo(
+    () => !!version && !!currentAppVersion && version.toString().trim() !== currentAppVersion,
+    [version]
+  );
 
   return { version, isStale };
 };

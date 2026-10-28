@@ -197,8 +197,7 @@ curl http://localhost:3001  # optional: verify that nginx is running correctly
 ```
 
 Each time you change JS, Typescript, CSS, or other static resources,
-you must re-run `yarn build`. This is fairly slow, which is why it's
-not the normal developer workflow.
+you must re-run `yarn build`.
 
 When finished, shut down the prod-like build with:
 
