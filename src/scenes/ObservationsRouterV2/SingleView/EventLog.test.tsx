@@ -443,15 +443,15 @@ const deletedEvent = (subject: EventLogEntryPayload['subject']): EventLogEntryPa
   userName: 'Jennifer Yim',
 });
 
-const createdText = (fullText: string) => strings.formatString(strings.EVENT_CREATED, fullText) as string;
+const addedText = (fullText: string) => strings.formatString(strings.EVENT_ADDED, fullText) as string;
 
-const deletedText = (fullText: string) => strings.formatString(strings.EVENT_DELETED, fullText) as string;
+const removedText = (fullText: string) => strings.formatString(strings.EVENT_REMOVED, fullText) as string;
 
 describe('Observation EventLog biomass species', () => {
   it('shows a species added to a quadrat after the observation was submitted', async () => {
     await renderHistory([createdEvent(quadratSpeciesSubject('Artemisia californica'))]);
 
-    expect(screen.getByText(createdText('Southwest quadrat species Artemisia californica'))).toBeInTheDocument();
+    expect(screen.getByText(addedText('Southwest quadrat species Artemisia californica'))).toBeInTheDocument();
   });
 
   it('leaves the species recorded by the original biomass submission out of the log', async () => {
@@ -460,9 +460,9 @@ describe('Observation EventLog biomass species', () => {
       createdEvent(quadratSpeciesSubject('Artemisia californica')),
     ]);
 
-    expect(screen.queryByText(createdText('Species Rhizophora mangle'))).not.toBeInTheDocument();
+    expect(screen.queryByText(addedText('Species Rhizophora mangle'))).not.toBeInTheDocument();
     expect(screen.queryByText(/Rhizophora mangle/)).not.toBeInTheDocument();
-    expect(screen.getByText(createdText('Southwest quadrat species Artemisia californica'))).toBeInTheDocument();
+    expect(screen.getByText(addedText('Southwest quadrat species Artemisia californica'))).toBeInTheDocument();
   });
 
   it('reports removing a species from a quadrat once, naming the quadrat', async () => {
@@ -471,14 +471,14 @@ describe('Observation EventLog biomass species', () => {
       deletedEvent(biomassSpeciesSubject('Aa achalensis')),
     ]);
 
-    expect(screen.getByText(deletedText('Southwest quadrat species Aa achalensis'))).toBeInTheDocument();
-    expect(screen.queryByText(deletedText('Species Aa achalensis'))).not.toBeInTheDocument();
+    expect(screen.getByText(removedText('Southwest quadrat species Aa achalensis'))).toBeInTheDocument();
+    expect(screen.queryByText(removedText('Species Aa achalensis'))).not.toBeInTheDocument();
   });
 
   it('shows a species removed from the additional invasive and threatened list', async () => {
     await renderHistory([deletedEvent(biomassSpeciesSubject('Aa achalensis'))]);
 
-    expect(screen.getByText(deletedText('Species Aa achalensis'))).toBeInTheDocument();
+    expect(screen.getByText(removedText('Species Aa achalensis'))).toBeInTheDocument();
   });
 
   it('shows a species deletion logged beside a quadrat removal of a different species', async () => {
@@ -487,7 +487,7 @@ describe('Observation EventLog biomass species', () => {
       deletedEvent(biomassSpeciesSubject('Rhizophora mangle')),
     ]);
 
-    expect(screen.getByText(deletedText('Southwest quadrat species Aa achalensis'))).toBeInTheDocument();
-    expect(screen.getByText(deletedText('Species Rhizophora mangle'))).toBeInTheDocument();
+    expect(screen.getByText(removedText('Southwest quadrat species Aa achalensis'))).toBeInTheDocument();
+    expect(screen.getByText(removedText('Species Rhizophora mangle'))).toBeInTheDocument();
   });
 });
