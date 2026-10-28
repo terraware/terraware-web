@@ -36,11 +36,17 @@ const buildSearchResult = (overrides: Partial<SeedWithdrawalSearchResult> = {}):
   accession_facility_name: 'Main Seed Bank',
   accession_project_name: 'Hawaii Restoration',
   date: '2026-03-14',
-  destination: 'Kigali Nursery',
+  destination: '',
+  batch_facility_name: 'Kigali Nursery',
   notes: 'Shipped in two boxes',
   'purpose(raw)': 'Nursery',
   'quantity(raw)': '500',
   'units(raw)': 'Seeds',
+  withdrawnBy_firstName: 'Ada',
+  withdrawnBy_lastName: 'Lovelace',
+  'estimatedCount(raw)': '480',
+  'estimatedWeightQuantity(raw)': '12',
+  'estimatedWeightUnits(raw)': 'Grams',
   ...overrides,
 });
 
@@ -66,7 +72,7 @@ describe('SeedsWithdrawalsTable', () => {
     localStorage.clear();
   });
 
-  it('shows the withdrawal columns in order, with project and notes hidden', async () => {
+  it('shows the withdrawal columns in order, with the optional ones hidden', async () => {
     renderTable([buildSearchResult()]);
 
     expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeVisible();
@@ -79,6 +85,7 @@ describe('SeedsWithdrawalsTable', () => {
       strings.FROM_SEED_BANK,
       strings.QUANTITY,
       strings.DESTINATION,
+      strings.WITHDRAWN_BY,
     ];
     const headers = screen.getAllByRole('columnheader');
     expect(headers).toHaveLength(expectedHeaders.length);
@@ -86,6 +93,9 @@ describe('SeedsWithdrawalsTable', () => {
       expect(within(headers[index]).getByText(label)).toBeVisible();
     });
 
+    [strings.ESTIMATED_SEED_COUNT, strings.ESTIMATED_WEIGHT, strings.PROJECT, strings.NOTES].forEach((label) => {
+      expect(screen.queryByRole('columnheader', { name: new RegExp(label) })).not.toBeInTheDocument();
+    });
     expect(screen.queryByText('Hawaii Restoration')).not.toBeInTheDocument();
     expect(screen.queryByText('Shipped in two boxes')).not.toBeInTheDocument();
   });
@@ -99,11 +109,13 @@ describe('SeedsWithdrawalsTable', () => {
 
   it('names the destination nursery alongside the purpose, and only for nursery withdrawals', async () => {
     renderTable([
-      buildSearchResult({ 'purpose(raw)': 'Nursery', destination: 'Kigali Nursery' }),
+      buildSearchResult({ 'purpose(raw)': 'Nursery', destination: '', batch_facility_name: 'Kigali Nursery' }),
       buildSearchResult({
         accession_accessionNumber: 'ACC-002',
         'purpose(raw)': 'Viability Testing',
         destination: 'Lab bench 3',
+        batch_id: '',
+        batch_facility_name: '',
       }),
     ]);
 
@@ -258,5 +270,62 @@ describe('SeedsWithdrawalsTable', () => {
     await userEvent.click(screen.getByRole('button', { name: strings.EXPORT }));
 
     await waitFor(() => expect(exportCursors).toEqual([undefined, '1']), { timeout: WAIT_FOR_REQUEST_MS });
+  });
+  it('shows who withdrew, and the estimates once unhidden', async () => {
+    renderTable([buildSearchResult()]);
+
+    expect(await screen.findByRole('cell', { name: 'Ada Lovelace' })).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: /show.*hide columns/i }));
+    await userEvent.click(await screen.findByRole('checkbox', { name: new RegExp(strings.ESTIMATED_SEED_COUNT) }));
+    await userEvent.click(screen.getByRole('checkbox', { name: new RegExp(strings.ESTIMATED_WEIGHT) }));
+    await userEvent.keyboard('{Escape}');
+
+    expect(await screen.findByRole('cell', { name: '480' })).toBeVisible();
+    expect(screen.getByRole('cell', { name: `12 ${strings.G}` })).toBeVisible();
+  });
+  it('links a viability withdrawal to its test and a nursery one to its batch', async () => {
+    renderTable([
+      buildSearchResult({
+        'purpose(raw)': 'Viability Testing',
+        viabilityTest_id: '77',
+        destination: '',
+        batch_id: '',
+        batch_facility_name: '',
+      }),
+      buildSearchResult({
+        accession_accessionNumber: 'ACC-002',
+        'purpose(raw)': 'Nursery',
+        destination: '',
+        batch_id: '31',
+        batch_facility_name: 'Kigali Nursery',
+      }),
+    ]);
+
+    expect(await screen.findByRole('link', { name: strings.VIABILITY_TESTING })).toHaveAttribute(
+      'href',
+      '/accessions/42?viabilityTestId=77'
+    );
+    // Both links live on the purpose cell; the destination cell only names the nursery.
+    expect(screen.getByRole('link', { name: `${strings.NURSERY}: Kigali Nursery` })).toHaveAttribute(
+      'href',
+      '/inventory/batch/31'
+    );
+    expect(screen.getByRole('cell', { name: 'Kigali Nursery' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'Kigali Nursery' })).not.toBeInTheDocument();
+  });
+
+  it('leaves the purpose as plain text when no batch was created', async () => {
+    renderTable([
+      buildSearchResult({
+        'purpose(raw)': 'Other',
+        destination: 'Elsewhere',
+        batch_id: '',
+        batch_facility_name: '',
+      }),
+    ]);
+
+    expect(await screen.findByRole('cell', { name: 'Elsewhere' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'Elsewhere' })).not.toBeInTheDocument();
   });
 });

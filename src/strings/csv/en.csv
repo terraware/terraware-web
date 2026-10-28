@@ -712,6 +712,8 @@ EST_READY_DATE,Est. Ready Date,
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. Total Plants (Plant Density × Area), Estimated Total Plants
 ESTIMATED_BUDGET,Estimated Budget,
 ESTIMATED_READY_DATE,Estimated Ready Date,
+ESTIMATED_SEED_COUNT,Estimated Seed Count,
+ESTIMATED_WEIGHT,Estimated Weight,
 EVENT,Event,
 EVENT_ADDED,{0} added,
 EVENT_CALL_DESCRIPTION_1,"Clicking ""{0}"" will open up a browser window to join a Google Meet video call.",

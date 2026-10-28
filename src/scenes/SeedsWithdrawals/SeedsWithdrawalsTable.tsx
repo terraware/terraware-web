@@ -17,7 +17,7 @@ import {
   MRT_VisibilityState,
 } from 'material-react-table';
 
-import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS, VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -29,10 +29,15 @@ import {
   useLazySearchSeedWithdrawalsFilterOptionsQuery,
   useLazySearchSeedWithdrawalsQuery,
 } from 'src/queries/search/seedWithdrawals';
-import { exportSeedWithdrawals, seedWithdrawalQuantity } from 'src/scenes/SeedsWithdrawals/exportSeedWithdrawals';
+import {
+  exportSeedWithdrawals,
+  seedWithdrawalEstimatedWeight,
+  seedWithdrawalQuantity,
+} from 'src/scenes/SeedsWithdrawals/exportSeedWithdrawals';
 import { SeedWithdrawalPurpose } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import useDebounce from 'src/utils/useDebounce';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { SeedWithdrawalPurposes, seedWithdrawalPurposeLabel } from 'src/utils/withdrawalPurposes';
 
 const TABLE_STATE_STORAGE_KEY = 'seeds-withdrawals-table';
@@ -41,8 +46,12 @@ const ITEMS_PER_PAGE = 100;
 const EXPORT_PAGE_SIZE = 1000;
 const PROJECT_COLUMN_ID = 'projectName';
 const NOTES_COLUMN_ID = 'notes';
+const ESTIMATED_COUNT_COLUMN_ID = 'estimatedCount';
+const ESTIMATED_WEIGHT_COLUMN_ID = 'estimatedWeightQuantity';
 
 const DEFAULT_COLUMN_VISIBILITY: MRT_VisibilityState = {
+  [ESTIMATED_COUNT_COLUMN_ID]: false,
+  [ESTIMATED_WEIGHT_COLUMN_ID]: false,
   [PROJECT_COLUMN_ID]: false,
   [NOTES_COLUMN_ID]: false,
 };
@@ -55,11 +64,20 @@ const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
   'seedBankName',
   'quantity',
   'destination',
+  'withdrawnByName',
+  ESTIMATED_COUNT_COLUMN_ID,
+  ESTIMATED_WEIGHT_COLUMN_ID,
   PROJECT_COLUMN_ID,
   NOTES_COLUMN_ID,
 ];
 
 const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [{ field: 'date', direction: 'Descending' }];
+
+/** The accession page, optionally opening straight onto one of its viability tests. */
+const getAccessionLocation = (accessionId: number, viabilityTestId?: number): string => {
+  const path = APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', String(accessionId));
+  return viabilityTestId ? `${path}?${VIABILITY_TEST_QUERY_PARAM}=${viabilityTestId}` : path;
+};
 
 const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDate?: string } | undefined => {
   if (!dateFilterValue || !Array.isArray(dateFilterValue)) {
@@ -77,6 +95,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const { availableProjects: projects } = useProjects();
+  const numberFormatter = useNumberFormatter();
 
   const [searchFilterOptions, searchFilterOptionsResponse] = useLazySearchSeedWithdrawalsFilterOptionsQuery();
   const [searchSeedWithdrawals, searchSeedWithdrawalsResponse] = useLazySearchSeedWithdrawalsQuery();
@@ -161,10 +180,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       const row = cell.row.original;
       const value = cell.getValue() as string;
       return (
-        <Link
-          to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', String(row.accessionId))}
-          style={accessionLinkStyles}
-        >
+        <Link to={getAccessionLocation(row.accessionId)} style={accessionLinkStyles}>
           {value}
         </Link>
       );
@@ -177,10 +193,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       const row = cell.row.original;
       const value = cell.getValue() as string;
       return (
-        <Link
-          to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', String(row.accessionId))}
-          style={accessionLinkStyles}
-        >
+        <Link to={getAccessionLocation(row.accessionId)} style={accessionLinkStyles}>
           {value}
         </Link>
       );
@@ -193,15 +206,44 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       const row = cell.row.original;
       const label = seedWithdrawalPurposeLabel(cell.getValue() as SeedWithdrawalPurpose | undefined, strings);
 
-      return (
-        <span>
-          {row.purpose === 'Nursery' && row.destination
-            ? strings.formatString(strings.PURPOSE_WITH_DESTINATION, label, row.destination)
-            : label}
-        </span>
-      );
+      if (row.purpose === 'Viability Testing' && row.viabilityTestId) {
+        return (
+          <Link to={getAccessionLocation(row.accessionId, row.viabilityTestId)} style={accessionLinkStyles}>
+            {label}
+          </Link>
+        );
+      }
+
+      if (row.purpose === 'Nursery' && row.destination) {
+        const withNursery = strings.formatString(strings.PURPOSE_WITH_DESTINATION, label, row.destination);
+        // A nursery withdrawal creates the batch its seeds were transferred into.
+        return row.batchId ? (
+          <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(row.batchId))} style={accessionLinkStyles}>
+            {withNursery}
+          </Link>
+        ) : (
+          <span>{withNursery}</span>
+        );
+      }
+
+      return <span>{label}</span>;
     },
-    [strings]
+    [accessionLinkStyles, strings]
+  );
+
+  const EstimatedCountCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchSeedWithdrawalPayload> }) => {
+      const value = cell.getValue() as number | undefined;
+      return <span>{value !== undefined ? numberFormatter.format(value) : ''}</span>;
+    },
+    [numberFormatter]
+  );
+
+  const EstimatedWeightCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchSeedWithdrawalPayload> }) => (
+      <span>{seedWithdrawalEstimatedWeight(cell.row.original)}</span>
+    ),
+    []
   );
 
   const QuantityCell = useCallback(
@@ -278,6 +320,28 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         filterFn: () => true,
       },
       {
+        id: 'withdrawnByName',
+        header: strings.WITHDRAWN_BY,
+        accessorKey: 'withdrawnByName',
+        enableEditing: false,
+        filterVariant: 'text',
+        filterFn: () => true,
+      },
+      {
+        id: ESTIMATED_COUNT_COLUMN_ID,
+        header: strings.ESTIMATED_SEED_COUNT,
+        accessorKey: 'estimatedCount',
+        enableEditing: false,
+        Cell: EstimatedCountCell,
+      },
+      {
+        id: ESTIMATED_WEIGHT_COLUMN_ID,
+        header: strings.ESTIMATED_WEIGHT,
+        accessorKey: 'estimatedWeightQuantity',
+        enableEditing: false,
+        Cell: EstimatedWeightCell,
+      },
+      {
         id: PROJECT_COLUMN_ID,
         header: strings.PROJECT,
         accessorKey: 'projectName',
@@ -304,6 +368,8 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       seedBankOptions,
       QuantityCell,
       destinationOptions,
+      EstimatedCountCell,
+      EstimatedWeightCell,
       uniqueProjectNames,
     ]
   );
@@ -336,6 +402,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       destinations: filterValue('destination') as string[] | undefined,
       projectNames: filterValue(PROJECT_COLUMN_ID) as string[] | undefined,
       notes: filterValue(NOTES_COLUMN_ID) as string | undefined,
+      withdrawnByName: filterValue('withdrawnByName') as string | undefined,
       sortOrder,
     };
   }, [columnFilters, debouncedSearchTerm, purposeLabelToValue, selectedOrganization?.id, sorting]);
@@ -381,7 +448,8 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       searchArgs.projectNames?.length ||
       searchArgs.purposes?.length ||
       searchArgs.seedBankName ||
-      searchArgs.speciesNames?.length
+      searchArgs.speciesNames?.length ||
+      searchArgs.withdrawnByName
     );
 
     // The search service may cap how many rows one request returns, so follow the cursor it hands

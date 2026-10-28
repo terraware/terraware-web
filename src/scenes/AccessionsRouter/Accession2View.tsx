@@ -13,9 +13,10 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
@@ -29,7 +30,9 @@ import { getUnitName, isUnitInPreferredSystem } from 'src/units';
 import { getSeedBank } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
+import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -64,6 +67,10 @@ export default function Accession2View(): JSX.Element {
   const [openViewViabilityTestModal, setOpenViewViabilityTestModal] = useState(false);
   const [selectedTest, setSelectedTest] = useState<ViabilityTest>();
   const [age, setAge] = useState<string | null>(null);
+  const query = useQuery();
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
+  const seededViabilityTestFromUrl = useRef(false);
   const [dryingRelativeDate, setDryingRelativeDate] = useState<string | null>(null);
   const snackbar = useSnackbar();
   const accessionAcl = { organization: selectedOrganization, accession };
@@ -396,6 +403,25 @@ export default function Accession2View(): JSX.Element {
     tabs,
     viewIdentifier: 'accession',
   });
+
+  useEffect(() => {
+    const requestedTestId = query.get(VIABILITY_TEST_QUERY_PARAM);
+    if (seededViabilityTestFromUrl.current || !requestedTestId || !accession) {
+      return;
+    }
+    seededViabilityTestFromUrl.current = true;
+
+    const test = accession.viabilityTests?.find((candidate) => candidate.id === Number(requestedTestId));
+    query.delete(VIABILITY_TEST_QUERY_PARAM);
+
+    if (test) {
+      setSelectedTest(test);
+      setOpenViewViabilityTestModal(true);
+      query.set('tab', 'viabilityTesting');
+    }
+
+    navigate(getLocation(location.pathname, location, `?${query.toString()}`), { replace: true });
+  }, [accession, location, navigate, query]);
 
   return (
     <TfMain>

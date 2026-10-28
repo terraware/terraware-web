@@ -712,6 +712,8 @@ EST_READY_DATE,Fecha estimada de disponibilidad,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Total estimado de plantas (Densidad de plantación x Área),311a283f
 ESTIMATED_BUDGET,Presupuesto estimado,23c1c02a
 ESTIMATED_READY_DATE,Fecha estimada de finalización,d37bedd1
+ESTIMATED_SEED_COUNT,Cantidad estimada de semillas,c9e614f6
+ESTIMATED_WEIGHT,Peso estimado,34a8dfe1
 EVENT,Evento,cc849cd0
 EVENT_ADDED,{0} ha sido añadido,b6bc301d
 EVENT_CALL_DESCRIPTION_1,"Hacer clic en ""{0}"" abrirá una ventana del navegador para unirse a una videollamada de Google Meet.",f8c40b21

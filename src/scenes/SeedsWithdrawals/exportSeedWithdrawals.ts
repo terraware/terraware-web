@@ -14,6 +14,16 @@ export const seedWithdrawalQuantity = (withdrawal: SearchSeedWithdrawalPayload):
   return abbreviation ? `${withdrawal.quantity} ${abbreviation}` : `${withdrawal.quantity}`;
 };
 
+export const seedWithdrawalEstimatedWeight = (withdrawal: SearchSeedWithdrawalPayload): string => {
+  if (withdrawal.estimatedWeightQuantity === undefined) {
+    return '';
+  }
+  const abbreviation = withdrawal.estimatedWeightUnits ? unitAbbv()[withdrawal.estimatedWeightUnits] : undefined;
+  return abbreviation
+    ? `${withdrawal.estimatedWeightQuantity} ${abbreviation}`
+    : `${withdrawal.estimatedWeightQuantity}`;
+};
+
 const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]): Blob => {
   const columnHeaders = [
     { key: 'date', displayLabel: strings.DATE },
@@ -23,6 +33,9 @@ const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]):
     { key: 'seedBankName', displayLabel: strings.FROM_SEED_BANK },
     { key: 'quantity', displayLabel: strings.QUANTITY },
     { key: 'destination', displayLabel: strings.DESTINATION },
+    { key: 'withdrawnByName', displayLabel: strings.WITHDRAWN_BY },
+    { key: 'estimatedCount', displayLabel: strings.ESTIMATED_SEED_COUNT },
+    { key: 'estimatedWeight', displayLabel: strings.ESTIMATED_WEIGHT },
     { key: 'projectName', displayLabel: strings.PROJECT },
     { key: 'notes', displayLabel: strings.NOTES },
   ];
@@ -37,6 +50,9 @@ const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]):
     seedBankName: escapeCsvFormula(withdrawal.seedBankName),
     quantity: escapeCsvFormula(seedWithdrawalQuantity(withdrawal)),
     destination: escapeCsvFormula(withdrawal.destination),
+    withdrawnByName: escapeCsvFormula(withdrawal.withdrawnByName),
+    estimatedCount: withdrawal.estimatedCount,
+    estimatedWeight: escapeCsvFormula(seedWithdrawalEstimatedWeight(withdrawal)),
     projectName: escapeCsvFormula(withdrawal.projectName),
     notes: escapeCsvFormula(withdrawal.notes),
   }));

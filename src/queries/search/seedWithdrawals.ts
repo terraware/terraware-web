@@ -13,12 +13,20 @@ const SEED_WITHDRAWAL_FIELDS = [
   'accession_species_scientificName',
   'accession_facility_name',
   'accession_project_name',
+  'batch_id',
+  'batch_facility_name',
   'date',
   'destination',
+  'estimatedCount(raw)',
+  'estimatedWeightQuantity(raw)',
+  'estimatedWeightUnits(raw)',
   'notes',
   'purpose(raw)',
   'quantity(raw)',
   'units(raw)',
+  'viabilityTest_id',
+  'withdrawnBy_firstName',
+  'withdrawnBy_lastName',
 ];
 
 const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fields: string[]): SearchRequestPayload => {
@@ -41,6 +49,9 @@ const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fiel
         { operation: 'field', field: 'accession_species_scientificName', type, values },
         { operation: 'field', field: 'accession_facility_name', type, values },
         { operation: 'field', field: 'destination', type, values },
+        { operation: 'field', field: 'batch_facility_name', type, values },
+        { operation: 'field', field: 'withdrawnBy_firstName', type, values },
+        { operation: 'field', field: 'withdrawnBy_lastName', type, values },
       ],
     });
   }
@@ -95,10 +106,11 @@ const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fiel
 
   if (args.destinations?.length) {
     searchChildren.push({
-      operation: 'field',
-      field: 'destination',
-      type: 'Exact',
-      values: args.destinations,
+      operation: 'or',
+      children: [
+        { operation: 'field', field: 'destination', type: 'Exact', values: args.destinations },
+        { operation: 'field', field: 'batch_facility_name', type: 'Exact', values: args.destinations },
+      ],
     });
   }
 
@@ -111,23 +123,41 @@ const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fiel
     });
   }
 
+  if (args.withdrawnByName) {
+    const { type, values } = parseSearchTerm(args.withdrawnByName);
+    searchChildren.push({
+      operation: 'or',
+      children: [
+        { operation: 'field', field: 'withdrawnBy_firstName', type, values },
+        { operation: 'field', field: 'withdrawnBy_lastName', type, values },
+      ],
+    });
+  }
+
   if (args.notes) {
     const { type, values } = parseSearchTerm(args.notes);
     searchChildren.push({ operation: 'field', field: 'notes', type, values });
   }
 
-  const sortOrder = args.sortOrder?.map((orderOption) => {
+  const sortOrder = args.sortOrder?.flatMap((orderOption) => {
     switch (orderOption.field) {
       case 'accessionNumber':
-        return { ...orderOption, field: 'accession_accessionNumber' };
+        return [{ ...orderOption, field: 'accession_accessionNumber' }];
+      case 'destination':
+        return [
+          { ...orderOption, field: 'destination' },
+          { ...orderOption, field: 'batch_facility_name' },
+        ];
       case 'speciesName':
-        return { ...orderOption, field: 'accession_species_scientificName' };
+        return [{ ...orderOption, field: 'accession_species_scientificName' }];
       case 'seedBankName':
-        return { ...orderOption, field: 'accession_facility_name' };
+        return [{ ...orderOption, field: 'accession_facility_name' }];
       case 'projectName':
-        return { ...orderOption, field: 'accession_project_name' };
+        return [{ ...orderOption, field: 'accession_project_name' }];
+      case 'withdrawnByName':
+        return [{ ...orderOption, field: 'withdrawnBy_lastName' }];
       default:
-        return orderOption;
+        return [orderOption];
     }
   });
 
@@ -152,7 +182,7 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'withdrawals',
-          fields: ['accession_species_scientificName', 'accession_facility_name', 'destination'],
+          fields: ['accession_species_scientificName', 'accession_facility_name', 'destination', 'batch_facility_name'],
           search: {
             operation: 'field',
             field: 'accession_facility_organization_id',
@@ -170,7 +200,12 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (result: SearchSeedWithdrawalFilterOptionsApiResponse) => ({
         speciesNames: result.results.accession_species_scientificName.values.filter(isNonEmpty),
         seedBankNames: result.results.accession_facility_name.values.filter(isNonEmpty),
-        destinations: result.results.destination.values.filter(isNonEmpty),
+        destinations: Array.from(
+          new Set([
+            ...result.results.destination.values.filter(isNonEmpty),
+            ...result.results.batch_facility_name.values.filter(isNonEmpty),
+          ])
+        ).sort(),
       }),
     }),
 
@@ -191,8 +226,16 @@ const injectedRtkApi = api.injectEndpoints({
         results: response.results.map((result): SearchSeedWithdrawalPayload => ({
           accessionId: Number(result.accession_id),
           accessionNumber: result.accession_accessionNumber,
+          batchId: result.batch_id ? Number(result.batch_id) : undefined,
           date: result.date,
-          destination: result.destination,
+          estimatedCount:
+            result['estimatedCount(raw)'] !== undefined ? Number(result['estimatedCount(raw)']) : undefined,
+          estimatedWeightQuantity:
+            result['estimatedWeightQuantity(raw)'] !== undefined
+              ? Number(result['estimatedWeightQuantity(raw)'])
+              : undefined,
+          estimatedWeightUnits: result['estimatedWeightUnits(raw)'] as UnitType | undefined,
+          destination: result.batch_facility_name || result.destination,
           notes: result.notes,
           projectName: result.accession_project_name,
           purpose: result['purpose(raw)'] as SeedWithdrawalPurpose,
@@ -200,6 +243,10 @@ const injectedRtkApi = api.injectEndpoints({
           seedBankName: result.accession_facility_name,
           speciesName: result.accession_species_scientificName,
           units: result['units(raw)'] as UnitType | undefined,
+          viabilityTestId: result.viabilityTest_id ? Number(result.viabilityTest_id) : undefined,
+          // Older withdrawals predate user tracking; their free-text staffResponsible is not
+          // exposed by the search API, so they have no name to show.
+          withdrawnByName: [result.withdrawnBy_firstName, result.withdrawnBy_lastName].filter(Boolean).join(' '),
         })),
       }),
     }),
@@ -226,6 +273,7 @@ type SearchSeedWithdrawalFilterOptionsApiResponse = {
     accession_species_scientificName: { values: (string | null)[] };
     accession_facility_name: { values: (string | null)[] };
     destination: { values: (string | null)[] };
+    batch_facility_name: { values: (string | null)[] };
   };
 };
 
@@ -237,6 +285,14 @@ export type SeedWithdrawalFilterOptions = {
 
 type SeedWithdrawalApiResult = {
   accession_id: string;
+  batch_id?: string;
+  batch_facility_name?: string;
+  'estimatedCount(raw)'?: string;
+  'estimatedWeightQuantity(raw)'?: string;
+  'estimatedWeightUnits(raw)'?: string;
+  viabilityTest_id?: string;
+  withdrawnBy_firstName?: string;
+  withdrawnBy_lastName?: string;
   accession_accessionNumber: string;
   accession_species_scientificName?: string;
   accession_facility_name?: string;
@@ -271,6 +327,7 @@ export type SearchSeedWithdrawalsApiArgs = {
   destinations?: string[];
   projectNames?: string[];
   notes?: string;
+  withdrawnByName?: string;
   sortOrder?: SearchSortOrderElement[];
   limit?: number;
   offset?: number;
@@ -281,7 +338,11 @@ export type SearchSeedWithdrawalsApiArgs = {
 export type SearchSeedWithdrawalPayload = {
   accessionId: number;
   accessionNumber: string;
+  batchId?: number;
   date: string;
+  estimatedCount?: number;
+  estimatedWeightQuantity?: number;
+  estimatedWeightUnits?: UnitType;
   destination?: string;
   notes?: string;
   projectName?: string;
@@ -290,6 +351,8 @@ export type SearchSeedWithdrawalPayload = {
   seedBankName?: string;
   speciesName?: string;
   units?: UnitType;
+  viabilityTestId?: number;
+  withdrawnByName?: string;
 };
 
 export const {
