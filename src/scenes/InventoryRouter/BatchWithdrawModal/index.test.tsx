@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -339,9 +339,9 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     expect(new URL(uploads[0].url).pathname).toBe(`/api/v1/nursery/withdrawals/${WITHDRAWAL_ID}/photos`);
   });
 
-  it('tells the user there is nothing to withdraw when every selected batch is empty', async () => {
+  it('tells the user there is nothing to withdraw and closes when every selected batch is empty', async () => {
     mockModalData({ batches: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] });
-    const { store } = renderModal();
+    const { store, state } = renderModal();
 
     await waitFor(() =>
       expect(store.getState().snackbar.snackbars.toast).toMatchObject({
@@ -349,6 +349,8 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
         msg: strings.NO_BATCHES_TO_WITHDRAW_FROM,
       })
     );
+    expect(state.closeCount).toBe(1);
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
   });
 });
 
@@ -460,5 +462,62 @@ describe('BatchWithdrawModal purposes and validation', () => {
       expect(phaseInput(1, 'readyQuantityWithdrawn')).toHaveValue(null);
       expect(nextButton()).toBeDisabled();
     });
+  });
+});
+
+describe('BatchWithdrawModal on a page that keeps it mounted while closed', () => {
+  /** Mirrors InventoryBatchView, which renders the modal permanently and toggles `open`. */
+  const AlwaysMountedHost = ({ initiallyOpen }: { initiallyOpen: boolean }) => {
+    const [open, setOpen] = useState(initiallyOpen);
+    return (
+      <>
+        <button onClick={() => setOpen(true)}>Open withdrawal</button>
+        <BatchWithdrawModal open={open} batchIds={[1]} onClose={() => setOpen(false)} />
+      </>
+    );
+  };
+
+  // The lazy batch query registers in the store as soon as it is triggered, so this tells
+  // synchronously whether the closed modal started loading, before any response could arrive.
+  const hasRequestedBatches = (store: ReturnType<typeof renderWithProviders>['store']) =>
+    Object.values(store.getState()['rtk-query'].queries).some((query) => query?.endpointName === 'listBatchesByIds');
+
+  it('does not report an empty batch until the user tries to withdraw from it', async () => {
+    mockModalData({ batches: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] });
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    expect(hasRequestedBatches(store)).toBe(false);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({
+        priority: 'critical',
+        msg: strings.NO_BATCHES_TO_WITHDRAW_FROM,
+      })
+    );
+  });
+
+  it('keeps the success message after the user dismisses the empty-batch notice', async () => {
+    let rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 3 })];
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', () => HttpResponse.json({ status: 'ok', results: rows })),
+      http.post(WITHDRAWALS_URL, () => {
+        rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })];
+        return HttpResponse.json({ status: 'ok', withdrawal: { id: WITHDRAWAL_ID } });
+      })
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen />);
+
+    await waitForDialog();
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 3);
+    await clickNextWhenEnabled(user);
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+    await user.click(await screen.findByRole('button', { name: strings.GOT_IT }));
+
+    await waitFor(() => expect(screen.queryByText(strings.EMPTY_BATCHES_AFTER_WITHDRAW)).not.toBeInTheDocument());
+    expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'success' });
   });
 });

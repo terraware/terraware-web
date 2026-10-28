@@ -98,10 +98,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   });
 
   useEffect(() => {
-    if (selectedOrganization && batchIds.length > 0) {
+    if (open && selectedOrganization && batchIds.length > 0) {
       void listBatchesByIds({ organizationId: selectedOrganization.id, batchIds }, true);
     }
-  }, [batchIds, listBatchesByIds, selectedOrganization]);
+  }, [batchIds, listBatchesByIds, open, selectedOrganization]);
 
   const batches = useMemo(
     (): BatchInfo[] | undefined =>
@@ -128,14 +128,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0),
     [findSpeciesById, searchedBatches]
   );
-
-  useEffect(() => {
-    // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
-    // refetched, and a batch we just emptied would otherwise toast over the success message.
-    if (!hasWithdrawn && searchedBatches && batches?.length === 0) {
-      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
-    }
-  }, [batches, hasWithdrawn, searchedBatches, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
     setDraft((prev) => {
@@ -260,6 +252,16 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     setHasWithdrawn(false);
     onClose();
   }, [defaultDraft, onClose]);
+
+  useEffect(() => {
+    // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
+    // refetched, and a batch we just emptied would otherwise toast over the success message.
+    // Nothing has been entered yet, so there is no draft to reset.
+    if (open && !hasWithdrawn && searchedBatches && batches?.length === 0) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
+      onClose();
+    }
+  }, [batches, hasWithdrawn, onClose, open, searchedBatches, snackbar, strings]);
 
   // A withdrawal can only be from a single nursery; filter selected batches down
   // to the chosen From: Nursery before showing them anywhere.
@@ -512,7 +514,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         }}
       />
       {isLoadingBatches && <BusySpinner withSkrim={true} />}
-      {batches && !showEmptyBatchesModal && (
+      {!!batches?.length && !showEmptyBatchesModal && (
         <DialogBox
           open={open}
           onClose={handleClose}
