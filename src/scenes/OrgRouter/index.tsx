@@ -8,6 +8,7 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
@@ -41,6 +42,7 @@ import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
 import AcceleratorReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
+import SeedsWithdrawalsView from 'src/scenes/SeedsWithdrawals';
 import SettingsLayout from 'src/scenes/Settings/SettingsLayout';
 import SettingsRedirect from 'src/scenes/Settings/SettingsRedirect';
 import SpeciesRouter from 'src/scenes/Species';
@@ -83,6 +85,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const orgFeatures = useOrganizationFeatures();
   const isVirtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
+  const isSeedsWithdrawalLogEnabled = useFeatureEnabled('Seeds Withdrawal Log');
 
   const contentStyles = {
     height: '100%',
@@ -212,6 +215,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.BATCH_WITHDRAW} element={<BatchBulkWithdrawView />} />
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
+            {isSeedsWithdrawalLogEnabled && (
+              <Route path={APP_PATHS.SEEDS_WITHDRAWALS} element={<SeedsWithdrawalsView />} />
+            )}
             <Route path={APP_PATHS.PLANTING_PLANS + '/*'} element={<PlantingPlansRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
             <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />

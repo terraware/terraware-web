@@ -158,6 +158,7 @@ export enum APP_PATHS {
   SEED_FUND_REPORTS_SETTINGS_EDIT = '/seed-fund-reports/settings/edit',
   SEED_FUND_REPORTS_VIEW = '/seed-fund-reports/:reportId',
   SEEDS_DASHBOARD = '/seeds-dashboard',
+  SEEDS_WITHDRAWALS = '/seeds/withdrawals',
   SETTINGS = '/settings',
   SPECIES = '/species',
   SPECIES_DETAILS = '/species/:speciesId',

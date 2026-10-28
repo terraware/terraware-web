@@ -2067,10 +2067,12 @@ SEEDLING_BATCHES,Lotes de plántulas,040a561e
 SEEDLINGS,Plántulas,c87d3813
 SEEDLINGS_PLURAL,plántulas,8c6852cb
 SEEDLINGS_SINGULAR,plántula,16e3be66
+SEEDLINGS_WITHDRAWALS,Retiros de plántulas,057e5418
 SEEDLINGS_WITHDRAWN_FOR_PLANTING,Plántulas retiradas para plantación,5207ff63
 SEEDS,Semillas,f6362924
 SEEDS_DASHBOARD,Panel de control de semillas,1d59654c
 SEEDS_SOWN_DATE,Fecha de siembra de las semillas,91bf20b1
+SEEDS_WITHDRAWALS,Retiros de semillas,6bca02cf
 SELECT,Seleccionar...,1a789f9d
 SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS,Seleccione un tipo de contacto para todos los responsables internos.,e4c5c550
 SELECT_ACCESSIONS_FOR_PROJECT,Seleccione las accesiones para {0},dec51806
