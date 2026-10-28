@@ -14,10 +14,14 @@ import {
   buildBatchSearchRow,
   buildFacility,
   buildOrganization,
+  buildPlantingSite,
+  buildStratum,
+  buildSubstratum,
   captureRequests,
   mockError,
   mockGet,
   renderWithProviders,
+  selectDropdownOption,
   server,
 } from 'src/test-utils';
 import { Organization } from 'src/types/Organization';
@@ -27,6 +31,35 @@ const PHOTOS_URL = '/api/v1/nursery/withdrawals/:withdrawalId/photos';
 const WITHDRAWAL_ID = 900;
 
 const NURSERY_A = buildFacility({ id: 100, name: 'North Nursery' });
+const NURSERY_B = buildFacility({ id: 200, name: 'South Nursery', facilityNumber: 2 });
+
+const PLANTING_SITE_ID = 10;
+const PLANTING_SEASON_ID = 20;
+const STRATUM_ID = 40;
+const SUBSTRATUM_ID = 50;
+
+const PLANTING_SITE = buildPlantingSite({
+  id: PLANTING_SITE_ID,
+  name: 'Hillside',
+  strata: [
+    buildStratum({
+      id: STRATUM_ID,
+      name: 'Upper Stratum',
+      substrata: [buildSubstratum({ id: SUBSTRATUM_ID, name: 'Upper Substratum' })],
+    }),
+  ],
+});
+
+const PLANTING_SEASON: PlantingSeasonPayload = {
+  id: PLANTING_SEASON_ID,
+  name: 'Wet Season',
+  plantingSiteId: PLANTING_SITE_ID,
+  startDate: '2026-01-01',
+  endDate: '2027-06-01',
+  status: 'Active',
+  speciesTargets: [{ speciesId: 1, substratumId: SUBSTRATUM_ID, quantity: 50 }],
+};
+
 /** A batch with stock in every phase, so non-planting withdrawals have all four inputs to fill. */
 const MIXED_BATCH = buildBatchSearchRow(
   { id: '1', batchNumber: 'B-001' },
@@ -89,6 +122,11 @@ const renderModal = ({
 
 const waitForDialog = () => screen.findByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES });
 
+// The planting option's label carries an info tooltip whose text joins its accessible name.
+const isPlantingOption = (name: string) => name.startsWith(strings.PLANTING);
+const findPlantingRadio = () => screen.findByRole('radio', { name: isPlantingOption });
+const queryPlantingRadio = () => screen.queryByRole('radio', { name: isPlantingOption });
+
 const nextButton = () => screen.getByRole('button', { name: strings.NEXT });
 
 const clickNextWhenEnabled = async (user: UserEvent) => {
@@ -107,6 +145,8 @@ type Phase =
 
 const phaseInput = (batchId: number, phase: Phase) =>
   document.querySelector<HTMLInputElement>(`#withdraw-${batchId}-${phase} input`);
+
+const outplantInput = (batchId: number) => document.querySelector<HTMLInputElement>(`#withdraw-${batchId} input`);
 
 const typeQuantity = async (user: UserEvent, input: HTMLInputElement | null, value: number) => {
   if (!input) {
@@ -135,6 +175,15 @@ const advanceToPhotosWithOneSeedling = async (user: UserEvent) => {
   await clickNextWhenEnabled(user);
   await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 1);
   await clickNextWhenEnabled(user);
+};
+
+const chooseOutplantDestination = async (user: UserEvent) => {
+  await user.click(await findPlantingRadio());
+  await waitFor(() => expect(document.querySelector('#to-planting-site input')).not.toBeNull());
+  await selectDropdownOption(user, 'to-planting-site', PLANTING_SITE.name);
+  await selectDropdownOption(user, 'planting-season', PLANTING_SEASON.name);
+  await selectDropdownOption(user, 'stratum', 'Upper Stratum');
+  await selectDropdownOption(user, 'substratum', 'Upper Substratum');
 };
 
 describe('BatchWithdrawModal submitting a withdrawal', () => {
@@ -172,6 +221,47 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
         },
       ],
     });
+  });
+
+  it('sends only ready-to-plant seedlings and the planting destination for an out-plant withdrawal', async () => {
+    mockModalData({ sites: [PLANTING_SITE], seasons: [PLANTING_SEASON] });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    // Quantities entered for phases that cannot be planted, under a purpose that allows them...
+    await waitForDialog();
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'germinatingQuantityWithdrawn'), 1);
+    await typeQuantity(user, phaseInput(1, 'activeGrowthQuantityWithdrawn'), 2);
+    await typeQuantity(user, phaseInput(1, 'hardeningOffQuantityWithdrawn'), 3);
+    await user.click(screen.getByRole('button', { name: strings.BACK }));
+
+    // ...must not reach the server once the user switches to planting.
+    await chooseOutplantDestination(user);
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, outplantInput(1), 6);
+    await clickNextWhenEnabled(user);
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    const body = await withdrawals[0].json();
+    expect(body).toMatchObject({
+      purpose: 'Out Plant',
+      facilityId: NURSERY_A.id,
+      plantingSiteId: PLANTING_SITE_ID,
+      plantingSeasonId: PLANTING_SEASON_ID,
+      substratumId: SUBSTRATUM_ID,
+      batchWithdrawals: [
+        {
+          batchId: 1,
+          germinatingQuantityWithdrawn: 0,
+          activeGrowthQuantityWithdrawn: 0,
+          hardeningOffQuantityWithdrawn: 0,
+          readyQuantityWithdrawn: 6,
+        },
+      ],
+    });
+    expect(body).not.toHaveProperty('destinationFacilityId');
   });
 
   it('confirms how many batches and seedlings were withdrawn and closes', async () => {
@@ -259,5 +349,116 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
         msg: strings.NO_BATCHES_TO_WITHDRAW_FROM,
       })
     );
+  });
+});
+
+describe('BatchWithdrawModal purposes and validation', () => {
+  it('does not offer planting to contributors', async () => {
+    mockModalData({ sites: [PLANTING_SITE] });
+    renderModal({ organization: buildOrganization({ role: 'Contributor' }) });
+
+    expect(await screen.findByRole('radio', { name: strings.DEAD })).toBeInTheDocument();
+    expect(queryPlantingRadio()).not.toBeInTheDocument();
+  });
+
+  it.each(['Manager', 'Admin'] as const)('offers planting to a %s', async (role) => {
+    mockModalData({ sites: [PLANTING_SITE] });
+    renderModal({ organization: buildOrganization({ role }) });
+
+    const planting = await findPlantingRadio();
+    await waitFor(() => expect(planting).toBeEnabled());
+  });
+
+  it('requires a substratum before an out-plant withdrawal can continue', async () => {
+    mockModalData({ sites: [PLANTING_SITE] });
+    const { user } = renderModal();
+
+    await user.click(await findPlantingRadio());
+    await waitFor(() => expect(document.querySelector('#to-planting-site input')).not.toBeNull());
+    await selectDropdownOption(user, 'to-planting-site', PLANTING_SITE.name);
+    await selectDropdownOption(user, 'stratum', 'Upper Stratum');
+
+    expect(nextButton()).toBeDisabled();
+
+    await selectDropdownOption(user, 'substratum', 'Upper Substratum');
+
+    expect(nextButton()).toBeEnabled();
+  });
+
+  it('requires a destination nursery before a nursery transfer can continue', async () => {
+    mockModalData();
+    const { user } = renderModal({ organization: buildOrganization({ facilities: [NURSERY_A, NURSERY_B] }) });
+
+    await user.click(await screen.findByRole('radio', { name: strings.NURSERY_TRANSFER }));
+
+    expect(nextButton()).toBeDisabled();
+
+    await selectDropdownOption(user, 'to-nursery', NURSERY_B.name);
+
+    expect(nextButton()).toBeEnabled();
+  });
+
+  it('blocks continuing and explains why when a quantity exceeds what the batch holds', async () => {
+    mockModalData();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'germinatingQuantityWithdrawn'), 6);
+
+    expect(screen.getByText(strings.formatString(strings.EXCEEDS_AVAILABLE_X, 5).toString())).toBeInTheDocument();
+    expect(nextButton()).toBeDisabled();
+  });
+
+  describe('with batches in two nurseries', () => {
+    const NORTH_BATCH = buildBatchSearchRow({ id: '1', batchNumber: 'N-001' }, { readyQuantity: 20 });
+    const SOUTH_BATCH = buildBatchSearchRow(
+      { id: '2', batchNumber: 'S-001', facility_id: String(NURSERY_B.id), facility_name: NURSERY_B.name },
+      { readyQuantity: 30 }
+    );
+    const organization = buildOrganization({ facilities: [NURSERY_A, NURSERY_B] });
+
+    it('withdraws only from the nursery the user chose', async () => {
+      mockModalData({ batches: [NORTH_BATCH, SOUTH_BATCH] });
+      const withdrawals = captureWithdrawals();
+      const { user } = renderModal({ batchIds: [1, 2], organization });
+
+      await waitForDialog();
+      await selectDropdownOption(user, 'from-nursery', NURSERY_A.name);
+      await clickNextWhenEnabled(user);
+      await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 4);
+      await user.click(screen.getByRole('button', { name: strings.BACK }));
+
+      await selectDropdownOption(user, 'from-nursery', NURSERY_B.name);
+      await clickNextWhenEnabled(user);
+      expect(phaseInput(1, 'readyQuantityWithdrawn')).toBeNull();
+      await typeQuantity(user, phaseInput(2, 'readyQuantityWithdrawn'), 7);
+      await clickNextWhenEnabled(user);
+      await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+
+      await waitFor(() => expect(withdrawals).toHaveLength(1));
+      expect(await withdrawals[0].json()).toMatchObject({
+        facilityId: NURSERY_B.id,
+        batchWithdrawals: [expect.objectContaining({ batchId: 2, readyQuantityWithdrawn: 7 })],
+      });
+    });
+
+    it('clears entered quantities when the From nursery changes', async () => {
+      mockModalData({ batches: [NORTH_BATCH, SOUTH_BATCH] });
+      const { user } = renderModal({ batchIds: [1, 2], organization });
+
+      await waitForDialog();
+      await selectDropdownOption(user, 'from-nursery', NURSERY_A.name);
+      await clickNextWhenEnabled(user);
+      await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 4);
+      await user.click(screen.getByRole('button', { name: strings.BACK }));
+
+      await selectDropdownOption(user, 'from-nursery', NURSERY_B.name);
+      await selectDropdownOption(user, 'from-nursery', NURSERY_A.name);
+      await user.click(nextButton());
+
+      expect(phaseInput(1, 'readyQuantityWithdrawn')).toHaveValue(null);
+      expect(nextButton()).toBeDisabled();
+    });
   });
 });
