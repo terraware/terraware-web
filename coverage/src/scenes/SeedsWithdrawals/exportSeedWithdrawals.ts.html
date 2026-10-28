@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.44% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>17/18</span>
+                <span class='fraction'>22/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/8</span>
+                <span class='fraction'>7/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.75% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/16</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
@@ -124,7 +124,23 @@
 <a name='L59'></a><a href='#L59'>59</a>
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,11 +149,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">29x</span>
-<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -155,7 +181,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -201,6 +233,16 @@ export const seedWithdrawalQuantity = (withdrawal: SearchSeedWithdrawalPayload):
   return abbreviation ? `${withdrawal.quantity} ${abbreviation}` : <span class="branch-1 cbranch-no" title="branch not covered" >`${withdrawal.quantity}`;</span>
 };
 &nbsp;
+export const seedWithdrawalEstimatedWeight = (withdrawal: SearchSeedWithdrawalPayload): string =&gt; {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (withdrawal.estimatedWeightQuantity === undefined) {
+<span class="cstat-no" title="statement not covered" >    return '';</span>
+  }
+  const abbreviation = withdrawal.estimatedWeightUnits ? unitAbbv()[withdrawal.estimatedWeightUnits] : <span class="branch-1 cbranch-no" title="branch not covered" >undefined;</span>
+  return abbreviation
+    ? `${withdrawal.estimatedWeightQuantity} ${abbreviation}`
+    : <span class="branch-1 cbranch-no" title="branch not covered" >`${withdrawal.estimatedWeightQuantity}`;</span>
+};
+&nbsp;
 const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]): Blob =&gt; {
   const columnHeaders = [
     { key: 'date', displayLabel: strings.DATE },
@@ -210,6 +252,9 @@ const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]):
     { key: 'seedBankName', displayLabel: strings.FROM_SEED_BANK },
     { key: 'quantity', displayLabel: strings.QUANTITY },
     { key: 'destination', displayLabel: strings.DESTINATION },
+    { key: 'withdrawnByName', displayLabel: strings.WITHDRAWN_BY },
+    { key: 'estimatedCount', displayLabel: strings.ESTIMATED_SEED_COUNT },
+    { key: 'estimatedWeight', displayLabel: strings.ESTIMATED_WEIGHT },
     { key: 'projectName', displayLabel: strings.PROJECT },
     { key: 'notes', displayLabel: strings.NOTES },
   ];
@@ -224,6 +269,9 @@ const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]):
     seedBankName: escapeCsvFormula(withdrawal.seedBankName),
     quantity: escapeCsvFormula(seedWithdrawalQuantity(withdrawal)),
     destination: escapeCsvFormula(withdrawal.destination),
+    withdrawnByName: escapeCsvFormula(withdrawal.withdrawnByName),
+    estimatedCount: withdrawal.estimatedCount,
+    estimatedWeight: escapeCsvFormula(seedWithdrawalEstimatedWeight(withdrawal)),
     projectName: escapeCsvFormula(withdrawal.projectName),
     notes: escapeCsvFormula(withdrawal.notes),
   }));
@@ -253,7 +301,7 @@ export const exportSeedWithdrawals = async ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-28T19:17:14.050Z
+                at 2026-10-28T20:05:04.134Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
