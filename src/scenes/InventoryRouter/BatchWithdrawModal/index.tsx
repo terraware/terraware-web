@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -72,7 +72,19 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [step, setStep] = useState<FlowStep>(0);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
 
-  const [listBatchesByIds, { currentData: batchesResult, originalArgs: batchesArgs }] = useLazyListBatchesByIdsQuery();
+  const [
+    listBatchesByIds,
+    {
+      currentData: batchesResult,
+      originalArgs: batchesArgs,
+      requestId: batchesRequestId,
+      isFetching: isFetchingBatches,
+    },
+  ] = useLazyListBatchesByIdsQuery();
+  // The search started when the modal opened. Only its result says whether there is anything to
+  // withdraw; a cached result may be out of date, and the refetch after a withdrawal is expected to
+  // find emptied batches.
+  const openingRequestIdRef = useRef<string | undefined>(undefined);
   // The batch detail page keeps the modal mounted across batches, so the last result can be for a
   // different selection until the new search runs. Don't show or act on it.
   const searchedBatches =
@@ -105,7 +117,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   useEffect(() => {
     if (open && selectedOrganization && batchIds.length > 0) {
-      void listBatchesByIds({ organizationId: selectedOrganization.id, batchIds }, true);
+      openingRequestIdRef.current = listBatchesByIds({ organizationId: selectedOrganization.id, batchIds }).requestId;
     }
   }, [batchIds, listBatchesByIds, open, selectedOrganization]);
 
@@ -263,11 +275,12 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
     // refetched, and a batch we just emptied would otherwise toast over the success message.
     // Nothing has been entered yet, so there is no draft to reset.
-    if (open && !hasWithdrawn && searchedBatches && batches?.length === 0) {
+    const openingSearchDone = batchesRequestId === openingRequestIdRef.current && !isFetchingBatches;
+    if (open && !hasWithdrawn && openingSearchDone && searchedBatches && batches?.length === 0) {
       snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
       onClose();
     }
-  }, [batches, hasWithdrawn, onClose, open, searchedBatches, snackbar, strings]);
+  }, [batches, batchesRequestId, hasWithdrawn, isFetchingBatches, onClose, open, searchedBatches, snackbar, strings]);
 
   // A withdrawal can only be from a single nursery; filter selected batches down
   // to the chosen From: Nursery before showing them anywhere.
@@ -396,6 +409,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         notes: draft.notes ? draft.notes : undefined,
         withdrawnDate: draft.withdrawnDate,
       }).unwrap();
+      // Before the photo uploads: the withdrawal refetches the batches, and one it emptied must not
+      // look like an empty selection while the uploads are still running.
+      setHasWithdrawn(true);
 
       if (draft.photos.length > 0 && response?.withdrawal?.id) {
         await Promise.allSettled(
@@ -404,8 +420,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           )
         );
       }
-
-      setHasWithdrawn(true);
 
       const numBatches = batchWithdrawals.length;
       const totalWithdrawn = batchWithdrawals.reduce(
@@ -520,7 +534,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         }}
       />
       {isLoadingBatches && <BusySpinner withSkrim={true} />}
-      {!!batches?.length && !showEmptyBatchesModal && (
+      {/* Stay open after withdrawing, even if that emptied the batches, until the user is told. */}
+      {batches && (batches.length > 0 || hasWithdrawn) && !showEmptyBatchesModal && (
         <DialogBox
           open={open}
           onClose={handleClose}

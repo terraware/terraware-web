@@ -339,6 +339,57 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     expect(new URL(uploads[0].url).pathname).toBe(`/api/v1/nursery/withdrawals/${WITHDRAWAL_ID}/photos`);
   });
 
+  it('does not mistake a batch it just emptied for an empty selection while photos upload', async () => {
+    let rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 3 })];
+    let searches = 0;
+    let finishUpload = () => undefined as void;
+    const uploadHeld = new Promise<void>((resolve) => (finishUpload = resolve));
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', () => {
+        searches += 1;
+        return HttpResponse.json({ status: 'ok', results: rows });
+      }),
+      http.post(WITHDRAWALS_URL, () => {
+        rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })];
+        return HttpResponse.json({ status: 'ok', withdrawal: { id: WITHDRAWAL_ID } });
+      }),
+      http.post(PHOTOS_URL, async () => {
+        await uploadHeld;
+        return HttpResponse.json({ status: 'ok', id: 1 });
+      })
+    );
+    const { user, store, state } = renderModal();
+
+    await waitForDialog();
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 3);
+    await clickNextWhenEnabled(user);
+    await attachPhoto(user);
+    const searchesBeforeWithdrawing = searches;
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+
+    // The withdrawal refetches the batches, which come back empty while the photo is still uploading.
+    await waitFor(() => expect(searches).toBeGreaterThan(searchesBeforeWithdrawing));
+    await waitFor(() =>
+      expect(
+        Object.values(store.getState()['rtk-query'].queries).some(
+          (query) =>
+            query?.endpointName === 'listBatchesByIds' &&
+            (query.data as NurseryBatchesSearchResponseElement[] | undefined)?.[0]?.['readyQuantity(raw)'] === 0
+        )
+      ).toBe(true)
+    );
+    expect(store.getState().snackbar.snackbars.toast).toBeNull();
+    expect(state.closeCount).toBe(0);
+    expect(screen.getByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).toBeInTheDocument();
+
+    finishUpload();
+
+    expect(await screen.findByText(strings.EMPTY_BATCHES_AFTER_WITHDRAW)).toBeInTheDocument();
+    expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'success' });
+  });
+
   it('tells the user there is nothing to withdraw and closes when every selected batch is empty', async () => {
     mockModalData({ batches: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] });
     const { store, state } = renderModal();
@@ -527,6 +578,25 @@ describe('BatchWithdrawModal on a page that keeps it mounted while closed', () =
     expect(await waitForDialog()).toBeInTheDocument();
     expect(await screen.findByText('STOCKED-002')).toBeInTheDocument();
     expect(screen.queryByText('EMPTY-001')).not.toBeInTheDocument();
+  });
+
+  it('checks again when reopened for a batch that was empty last time', async () => {
+    let rows = [buildBatchSearchRow({ id: '1', batchNumber: 'B-001' }, { readyQuantity: 0 })];
+    mockModalData();
+    server.use(http.post('/api/v1/search', () => HttpResponse.json({ status: 'ok', results: rows })));
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ msg: strings.NO_BATCHES_TO_WITHDRAW_FROM })
+    );
+
+    // Stock added somewhere this page doesn't know about, such as another session.
+    rows = [buildBatchSearchRow({ id: '1', batchNumber: 'B-001' }, { readyQuantity: 10 })];
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    expect(await waitForDialog()).toBeInTheDocument();
+    expect(await screen.findByText('B-001')).toBeInTheDocument();
   });
 
   it('keeps the success message after the user dismisses the empty-batch notice', async () => {
