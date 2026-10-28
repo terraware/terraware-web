@@ -16,12 +16,18 @@ export const problemText = ({ conflictsWith, problemType, stratum, substratum }:
         stratum ?? '',
         substratum ?? ''
       ) as string;
+    case 'ExclusionInvalid':
+      return strings.PLANTING_SITE_PROBLEM_EXCLUSION_INVALID;
     case 'ExclusionWithoutBoundary':
       return strings.PLANTING_SITE_PROBLEM_EXCLUSION_WITHOUT_BOUNDARY;
+    case 'SiteBoundaryInvalid':
+      return strings.PLANTING_SITE_PROBLEM_SITE_BOUNDARY_INVALID;
     case 'SiteTooLarge':
       return strings.PLANTING_SITE_PROBLEM_SITE_TOO_LARGE;
     case 'StrataWithoutSiteBoundary':
       return strings.PLANTING_SITE_PROBLEM_STRATA_WITHOUT_SITE_BOUNDARY;
+    case 'StratumBoundaryInvalid':
+      return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_INVALID, stratum ?? '') as string;
     case 'StratumBoundaryOverlaps':
       return strings.formatString(
         strings.PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_OVERLAPS,
@@ -34,6 +40,12 @@ export const problemText = ({ conflictsWith, problemType, stratum, substratum }:
       return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_NOT_IN_SITE, stratum ?? '') as string;
     case 'StratumTooSmall':
       return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_TOO_SMALL, stratum ?? '') as string;
+    case 'SubstratumBoundaryInvalid':
+      return strings.formatString(
+        strings.PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_INVALID,
+        stratum ?? '',
+        substratum ?? ''
+      ) as string;
     case 'SubstratumBoundaryOverlaps':
       return strings.formatString(
         strings.PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,

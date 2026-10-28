@@ -1623,13 +1623,17 @@ PLANTING_SITE_MAP_SELF_INTERSECTS,"Une forme sur la carte se croise elle-même. 
 PLANTING_SITE_NAME,Nom du site de plantation,f3cb062b
 PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME,Plus d’un stratum porte le nom {0}.,14b61803
 PLANTING_SITE_PROBLEM_DUPLICATE_SUBSTRATUM_NAME,Plus d’un substratum dans le stratum {0} porte le nom {1}.,9e35127b
+PLANTING_SITE_PROBLEM_EXCLUSION_INVALID,Une zone d’exclusion se croise elle-même.,0b38bf61
 PLANTING_SITE_PROBLEM_EXCLUSION_WITHOUT_BOUNDARY,Les zones d’exclusion nécessitent une limite de site.,74f1b3d0
+PLANTING_SITE_PROBLEM_SITE_BOUNDARY_INVALID,La limite du site se croise elle-même.,b4623572
 PLANTING_SITE_PROBLEM_SITE_TOO_LARGE,La limite du site est trop grande.,d5f623ef
 PLANTING_SITE_PROBLEM_STRATA_WITHOUT_SITE_BOUNDARY,Les strates nécessitent une limite de site.,4287a3ed
+PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_INVALID,La limite du stratum {0} se croise elle-même.,b05d2cad
 PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_OVERLAPS,Le stratum {0} chevauche {1}.,6f3a3294
 PLANTING_SITE_PROBLEM_STRATUM_HAS_NO_SUBSTRATA,Le stratum {0} ne contient aucun substratum.,5e222c27
 PLANTING_SITE_PROBLEM_STRATUM_NOT_IN_SITE,Le stratum {0} n’est pas à l’intérieur de la limite du site.,71c17af9
 PLANTING_SITE_PROBLEM_STRATUM_TOO_SMALL,Le stratum {0} est trop petit.,4a394aec
+PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_INVALID,La limite du substratum {1} dans le stratum {0} se croise elle-même.,19799ba1
 PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,Le substratum {1} dans le stratum {0} chevauche {2}.,aed29223
 PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,Le substratum {1} dans le stratum {0} se trouve dans une zone d’exclusion.,64deeafa
 PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,Le substratum {1} n’est pas à l’intérieur du stratum {0}.,13641abf
