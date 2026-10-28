@@ -1,8 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
+import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
@@ -29,15 +29,16 @@ import {
   useLazySearchSeedWithdrawalsFilterOptionsQuery,
   useLazySearchSeedWithdrawalsQuery,
 } from 'src/queries/search/seedWithdrawals';
+import { exportSeedWithdrawals, seedWithdrawalQuantity } from 'src/scenes/SeedsWithdrawals/exportSeedWithdrawals';
 import { SeedWithdrawalPurpose } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
-import { unitAbbv } from 'src/units';
 import useDebounce from 'src/utils/useDebounce';
 import { SeedWithdrawalPurposes, seedWithdrawalPurposeLabel } from 'src/utils/withdrawalPurposes';
 
 const TABLE_STATE_STORAGE_KEY = 'seeds-withdrawals-table';
 
 const ITEMS_PER_PAGE = 100;
+const EXPORT_PAGE_SIZE = 1000;
 const PROJECT_COLUMN_ID = 'projectName';
 const NOTES_COLUMN_ID = 'notes';
 
@@ -60,14 +61,6 @@ const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
 
 const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [{ field: 'date', direction: 'Descending' }];
 
-const seedWithdrawalQuantity = (withdrawal: SearchSeedWithdrawalPayload): string => {
-  if (withdrawal.quantity === undefined) {
-    return '';
-  }
-  const abbreviation = withdrawal.units ? unitAbbv()[withdrawal.units] : undefined;
-  return abbreviation ? `${withdrawal.quantity} ${abbreviation}` : `${withdrawal.quantity}`;
-};
-
 const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDate?: string } | undefined => {
   if (!dateFilterValue || !Array.isArray(dateFilterValue)) {
     return undefined;
@@ -87,9 +80,12 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
 
   const [searchFilterOptions, searchFilterOptionsResponse] = useLazySearchSeedWithdrawalsFilterOptionsQuery();
   const [searchSeedWithdrawals, searchSeedWithdrawalsResponse] = useLazySearchSeedWithdrawalsQuery();
+  // Export needs its own trigger: reusing the one above would re-point the displayed page's
+  // subscription at the full unpaginated result set.
+  const [searchSeedWithdrawalsForExport] = useLazySearchSeedWithdrawalsQuery();
   const [countSeedWithdrawals, countSeedWithdrawalsResponse] = useLazyCountSeedWithdrawalsQuery();
 
-  const rows = useMemo(() => searchSeedWithdrawalsResponse?.data ?? [], [searchSeedWithdrawalsResponse]);
+  const rows = useMemo(() => searchSeedWithdrawalsResponse?.data?.results ?? [], [searchSeedWithdrawalsResponse]);
   const totalRowCount = useMemo(() => countSeedWithdrawalsResponse.currentData ?? 0, [countSeedWithdrawalsResponse]);
 
   useEffect(() => {
@@ -370,6 +366,47 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     setPagination((prev) => (prev.pageIndex === 0 ? prev : { ...prev, pageIndex: 0 }));
   }, [columnFilters, debouncedSearchTerm]);
 
+  const onExport = useCallback(async () => {
+    if (!selectedOrganization) {
+      return;
+    }
+
+    const isFiltered = !!(
+      debouncedSearchTerm !== '' ||
+      searchArgs.accessionNumber ||
+      searchArgs.date?.minDate ||
+      searchArgs.date?.maxDate ||
+      searchArgs.destinations?.length ||
+      searchArgs.notes ||
+      searchArgs.projectNames?.length ||
+      searchArgs.purposes?.length ||
+      searchArgs.seedBankName ||
+      searchArgs.speciesNames?.length
+    );
+
+    // The search service may cap how many rows one request returns, so follow the cursor it hands
+    // back until it stops coming rather than trusting a single request to hold the whole log.
+    const allRows: SearchSeedWithdrawalPayload[] = [];
+    let cursor: string | undefined;
+
+    for (;;) {
+      const page = await searchSeedWithdrawalsForExport({
+        ...searchArgs,
+        limit: EXPORT_PAGE_SIZE,
+        cursor,
+      }).unwrap();
+
+      allRows.push(...page.results);
+
+      if (!page.cursor || page.results.length === 0) {
+        break;
+      }
+      cursor = page.cursor;
+    }
+
+    void exportSeedWithdrawals({ isFiltered, seedWithdrawals: allRows });
+  }, [debouncedSearchTerm, searchArgs, searchSeedWithdrawalsForExport, selectedOrganization]);
+
   return (
     <EditableTable
       key='seeds-withdrawals-table'
@@ -419,6 +456,11 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         positionGlobalFilter: 'right',
         renderToolbarInternalActions: ({ table }) => (
           <Box display='flex' gap={0.5}>
+            <Tooltip title={strings.EXPORT}>
+              <IconButton onClick={() => void onExport()}>
+                <Icon name='iconExport' size='medium' />
+              </IconButton>
+            </Tooltip>
             <MRT_ToggleGlobalFilterButton table={table} />
             <MRT_ToggleFiltersButton table={table} />
             <MRT_ShowHideColumnsButton table={table} />

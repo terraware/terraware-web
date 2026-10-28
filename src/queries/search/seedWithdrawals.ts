@@ -139,7 +139,7 @@ const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fiel
       children: searchChildren,
     },
     count: args.limit,
-    cursor: args.offset?.toString(),
+    cursor: args.cursor ?? args.offset?.toString(),
     sortOrder: sortOrder ?? [{ field: 'date', direction: 'Descending' }],
   };
 };
@@ -174,7 +174,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
 
-    searchSeedWithdrawals: build.query<SearchSeedWithdrawalPayload[], SearchSeedWithdrawalsApiArgs>({
+    searchSeedWithdrawals: build.query<SeedWithdrawalSearchResults, SearchSeedWithdrawalsApiArgs>({
       query: (args) => ({
         url: '/api/v1/search',
         method: 'POST',
@@ -186,8 +186,9 @@ const injectedRtkApi = api.injectEndpoints({
         { type: QueryTagTypes.Species, id: 'LIST' },
         { type: QueryTagTypes.Projects, id: 'LIST' },
       ],
-      transformResponse: (response: SearchSeedWithdrawalApiResponse) =>
-        response.results.map((result): SearchSeedWithdrawalPayload => ({
+      transformResponse: (response: SearchSeedWithdrawalApiResponse) => ({
+        cursor: response.cursor,
+        results: response.results.map((result): SearchSeedWithdrawalPayload => ({
           accessionId: Number(result.accession_id),
           accessionNumber: result.accession_accessionNumber,
           date: result.date,
@@ -200,6 +201,7 @@ const injectedRtkApi = api.injectEndpoints({
           speciesName: result.accession_species_scientificName,
           units: result['units(raw)'] as UnitType | undefined,
         })),
+      }),
     }),
 
     countSeedWithdrawals: build.query<number, SearchSeedWithdrawalsApiArgs>({
@@ -248,7 +250,14 @@ type SeedWithdrawalApiResult = {
 };
 
 type SearchSeedWithdrawalApiResponse = {
+  /** Returned when the search service capped the response and more rows remain. */
+  cursor?: string;
   results: SeedWithdrawalApiResult[];
+};
+
+export type SeedWithdrawalSearchResults = {
+  cursor?: string;
+  results: SearchSeedWithdrawalPayload[];
 };
 
 export type SearchSeedWithdrawalsApiArgs = {
@@ -265,6 +274,8 @@ export type SearchSeedWithdrawalsApiArgs = {
   sortOrder?: SearchSortOrderElement[];
   limit?: number;
   offset?: number;
+  /** A cursor from a previous response, to continue that search where it left off. */
+  cursor?: string;
 };
 
 export type SearchSeedWithdrawalPayload = {
