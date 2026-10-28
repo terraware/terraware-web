@@ -4,7 +4,11 @@ import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName =
-  'Show Production View' | 'Virtual Monitoring Plots' | 'Clean Up Console Tabs' | 'Edit Planting Site';
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Clean Up Console Tabs'
+  | 'Edit Planting Site'
+  | 'Seeds Withdrawal Log';
 
 export type Feature = {
   name: FeatureName;
@@ -63,6 +67,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Edit the boundaries of existing planting sites.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Seeds Withdrawal Log',
+    preferenceName: 'seedsWithdrawalLog',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Log of seed withdrawals.'],
     disclosure: ['This is a WIP'],
   },
 ];
