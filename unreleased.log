@@ -1,3 +1,8 @@
+5a50753c SW-9071 Add end-to-end test for editing a planting site map (#6926)
+00b76434 Skip the stale app version check for unversioned builds (#6925)
+3cc40c25 SW-9071 Summarize planting site map edits before saving (#6916)
+f6c2e3f9 SW-9071 Add modal summarizing planting site map edits (#6915)
+4b807fec SW-9071 Add endpoint to summarize planting site map edits (#6914)
 41ceab72 SW-9167 Fix Activity Log nav not showing up correctly (#6937)
 28e7330b SW-8988 Use "added" and "removed" in species event (#6929)
 5582c701 SW-9155 Adding missing columns to table
