@@ -14,6 +14,19 @@ const ORG_ID = 1;
 // Mirrors EXPORT_PAGE_SIZE in the component, which is what marks a request as part of an export.
 const EXPORT_PAGE_SIZE = 1000;
 
+// The search term is debounced before it reaches a request, so polling for one has to outlast
+// that debounce on a loaded machine.
+const WAIT_FOR_REQUEST_MS = 5000;
+
+/** Cursors of the captured search requests whose criteria contain `term`, oldest first. */
+const cursorsFor = async (requests: Request[], term: string): Promise<(string | undefined)[]> => {
+  const bodies = (await Promise.all(requests.map((request) => request.clone().json()))) as {
+    cursor?: string;
+    search: unknown;
+  }[];
+  return bodies.filter((body) => JSON.stringify(body.search).includes(term)).map((body) => body.cursor);
+};
+
 type SeedWithdrawalSearchResult = Record<string, string>;
 
 const buildSearchResult = (overrides: Partial<SeedWithdrawalSearchResult> = {}): SeedWithdrawalSearchResult => ({
@@ -188,22 +201,21 @@ describe('SeedsWithdrawalsTable', () => {
     expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeVisible();
 
     await userEvent.click(screen.getByRole('button', { name: /go to next page/i }));
-    await waitFor(async () =>
-      expect(((await requests[requests.length - 1].clone().json()) as { cursor?: string }).cursor).toBe('100')
-    );
+    await waitFor(async () => expect(await cursorsFor(requests, '')).toContain('100'), {
+      timeout: WAIT_FOR_REQUEST_MS,
+    });
 
     await userEvent.click(screen.getByRole('button', { name: /show.*hide search/i }));
     await userEvent.type(screen.getByPlaceholderText('Search'), 'koa');
 
-    // Searching from page 2 would otherwise fetch offset 100 of a much shorter result set.
-    await waitFor(async () => {
-      const body = (await requests[requests.length - 1].clone().json()) as {
-        cursor?: string;
-        search: unknown;
-      };
-      expect(JSON.stringify(body.search)).toContain('koa');
-      expect(Number(body.cursor ?? 0)).toBe(0);
-    });
+    await waitFor(
+      async () => {
+        const cursors = await cursorsFor(requests, 'koa');
+        expect(cursors.length).toBeGreaterThan(0);
+        expect(Number(cursors[cursors.length - 1] ?? 0)).toBe(0);
+      },
+      { timeout: WAIT_FOR_REQUEST_MS }
+    );
   });
   it('follows the response cursor so a capped export still gets every row', async () => {
     // The search service caps the export at one row per request and hands back a cursor.
@@ -245,6 +257,6 @@ describe('SeedsWithdrawalsTable', () => {
     expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeVisible();
     await userEvent.click(screen.getByRole('button', { name: strings.EXPORT }));
 
-    await waitFor(() => expect(exportCursors).toEqual([undefined, '1']), { timeout: 5000 });
+    await waitFor(() => expect(exportCursors).toEqual([undefined, '1']), { timeout: WAIT_FOR_REQUEST_MS });
   });
 });
