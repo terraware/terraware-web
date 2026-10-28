@@ -540,6 +540,7 @@ export type PlotAcceptedPayload = {
 } & PlantingSiteEditSummaryItemPayloadBase & {
     monitoringPlotId: number;
     permanentIndex?: number;
+    plotNumber: number;
     stratumName: string;
     substratumName: string;
   };
@@ -548,6 +549,7 @@ export type PlotAdoptedPayload = {
 } & PlantingSiteEditSummaryItemPayloadBase & {
     monitoringPlotId: number;
     permanentIndex?: number;
+    plotNumber: number;
     stratumName: string;
     substratumName: string;
   };
@@ -555,6 +557,7 @@ export type PlotEjectedPayload = {
   type: 'PlotEjected';
 } & PlantingSiteEditSummaryItemPayloadBase & {
     monitoringPlotId: number;
+    plotNumber: number;
     stratumName: string;
     substratumName: string;
   };
