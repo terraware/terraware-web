@@ -821,6 +821,7 @@ FROM_GIS_DATABASE,(de la base de datos GIS),7b29f44f
 FROM_NURSERY,De: Vivero,21226e82
 FROM_NURSERY_REQUIRED,De: Vivero *,4bcef7f8
 FROM_PLANTING_SITE,De: Sitio de plantación,ac7278e5
+FROM_SEED_BANK,Del banco de semillas,a3a6f4d4
 FROM_SUBSTRATUM,De: Sustrato,d8e74cd4
 FULFILLED,Completado,9e0b0ecf
 FUNDER,Financiador,a66356e6
@@ -1775,6 +1776,7 @@ PUBLISHED_FUNDER_REPORT,Informe de financiador publicado,28419d0b
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
 PURPOSE,Propósito,ff06abab
 PURPOSE_REQUIRED,Propósito *,3f585469
+PURPOSE_WITH_DESTINATION,{0}: {1},b9a86233
 QUADRAT_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos del cuadrante.,264a9867
 QUADRAT_PHOTOS,Fotos de cuadrantes,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,24cf5aff

@@ -3,8 +3,10 @@ import React, { type JSX, useRef } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
+import SeedsWithdrawalsTable from 'src/scenes/SeedsWithdrawals/SeedsWithdrawalsTable';
 import strings from 'src/strings';
 
 const SeedsWithdrawalsView = (): JSX.Element => {
@@ -25,7 +27,11 @@ const SeedsWithdrawalsView = (): JSX.Element => {
             </Grid>
             <PageSnackbar />
           </PageHeaderWrapper>
-          <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} maxWidth='100%' />
+          <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} maxWidth='100%'>
+            <Card flushMobile radius={'8px'}>
+              <SeedsWithdrawalsTable />
+            </Card>
+          </Box>
         </Grid>
       </Box>
     </TfMain>

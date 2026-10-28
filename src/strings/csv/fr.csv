@@ -820,6 +820,7 @@ FROM_GIS_DATABASE,(à partir de la base de données SIG),7b29f44f
 FROM_NURSERY,De : Pépinière,21226e82
 FROM_NURSERY_REQUIRED,De : Pépinière *,4bcef7f8
 FROM_PLANTING_SITE,De : Site de plantation,ac7278e5
+FROM_SEED_BANK,Depuis la banque de semences,a3a6f4d4
 FROM_SUBSTRATUM,De : Substrat,d8e74cd4
 FULFILLED,Satisfait,9e0b0ecf
 FUNDER,Bailleurs de fonds,a66356e6
@@ -1774,6 +1775,7 @@ PUBLISHED_FUNDER_REPORT,Rapport de bailleur publié,28419d0b
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
 PURPOSE,But,ff06abab
 PURPOSE_REQUIRED,But *,3f585469
+PURPOSE_WITH_DESTINATION,{0} : {1},b9a86233
 QUADRAT_PHOTO_CANNOT_DELETE_INFO,Les photos de quadrat ne peuvent pas être supprimées.,264a9867
 QUADRAT_PHOTOS,Photos de quadrat,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,Les photos de quadrats ne peuvent pas être supprimées.,24cf5aff
