@@ -1152,7 +1152,7 @@ MARK_AS_SUBMITTED_UNDO,Annuler Marquer comme soumis,4ad82823
 MARK_AS_UNREAD,Marquer comme non lu,e4cb0534
 MARK_FULFILLED,Marquer comme accompli,cc3329c7
 MARK_PLANTING_DATE_FULFILLED,Marquer la date de plantation comme accomplie,bd99f61c
-MARK_PLANTING_DATE_FULFILLED_CONFIRM,"Vous êtes sur le point de marquer cette date de plantation comme accomplie. Les demandes de retrait en cours à la pépinière seront également marquées comme accomplies, et il ne sera plus possible d’effectuer des retraits de plantation pour cette date. Cette action est irréversible.",d6e4897d
+MARK_PLANTING_DATE_FULFILLED_CONFIRM,"Vous êtes sur le point de marquer cette date de plantation comme accomplie. Les demandes de retrait de pépinière en cours seront marquées comme accomplies, et il ne sera plus possible d’effectuer des retraits de plantation sur des demandes accomplies.",41450433
 MARK_SUBSTRATA_INCOMPLETE,Marquer les substrats comme non plantés ?,8905257b
 MARK_SUBSTRATA_INCOMPLETE_MESSAGE,Ces substrats ont été marqués comme plantation terminée et leurs limites ont été modifiées. Sélectionnez ceux qui ne doivent plus être considérés comme plantation terminée.,472a163c
 MARKED_AS_PLANTING_COMPLETE,Marqués comme ayant terminé la plantation (%),aee9023f

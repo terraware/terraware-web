@@ -345,10 +345,15 @@ const PlantingDateListItem = ({
       sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
     >
       <Box flex={1}>
-        <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+        <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
           <Typography fontSize='20px' fontWeight={600}>
             {getMediumDate(scheduledDate.date, activeLocale)}
           </Typography>
+          {requestStatusKnown && (
+            <Box paddingLeft={2}>
+              <PlantingDateRequestStatusBadge status={requestStatus} />
+            </Box>
+          )}
         </Box>
         <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
           {strings.formatString(strings.X_SPECIES_Y_PLANTS, distinctSpecies, totalPlants).toString()}
@@ -378,29 +383,32 @@ const PlantingDateListItem = ({
         </Typography>
         <Box>{locationNamesList(substrataNames, !isMobile)}</Box>
       </Box>
+      {/* Sharing the row evenly with the other columns keeps the strata and substrata aligned
+          down the list whether or not a row offers the Mark Fulfilled button. */}
       <Box
         display='flex'
         flexDirection={isMobile ? 'column' : 'row'}
         alignItems='flex-start'
+        flex={isMobile ? undefined : 1}
+        justifyContent={isMobile ? undefined : 'flex-end'}
         width={isMobile ? '100%' : undefined}
-        gap={theme.spacing(isMobile ? 1.5 : 2)}
+        gap={theme.spacing(isMobile ? 1.5 : 1)}
       >
-        {requestStatusKnown && <PlantingDateRequestStatusBadge status={requestStatus} />}
-        {!readOnly && (
+        {canMarkFulfilled && (
           <Button
-            icon='iconEdit'
-            label={strings.EDIT}
-            onClick={onEdit}
+            label={strings.MARK_FULFILLED}
+            onClick={() => setFulfillDialogOpen(true)}
             priority='secondary'
             type='productive'
             size={isMobile ? 'medium' : undefined}
             sx={mobileActionButtonSx}
           />
         )}
-        {canMarkFulfilled && (
+        {!readOnly && (
           <Button
-            label={strings.MARK_FULFILLED}
-            onClick={() => setFulfillDialogOpen(true)}
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={onEdit}
             priority='secondary'
             type='productive'
             size={isMobile ? 'medium' : undefined}
