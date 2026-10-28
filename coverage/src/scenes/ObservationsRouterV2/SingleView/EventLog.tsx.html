@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.05% </span>
+                <span class="strong">97.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>66/68</span>
+                <span class='fraction'>68/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.35% </span>
+                <span class="strong">82.69% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>84/102</span>
+                <span class='fraction'>86/104</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.66% </span>
+                <span class="strong">96.77% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>29/30</span>
+                <span class='fraction'>30/31</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.01% </span>
+                <span class="strong">97.1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>65/67</span>
+                <span class='fraction'>67/69</span>
             </div>
         
             
@@ -417,7 +417,15 @@
 <a name='L352'></a><a href='#L352'>352</a>
 <a name='L353'></a><a href='#L353'>353</a>
 <a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -453,6 +461,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -698,10 +711,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -807,6 +823,11 @@ type EventLogProps = {
 &nbsp;
 const recordsALaterEdit = (subject: EventLogEntryPayload['subject']) =&gt;
   subject.type === 'ObservationPlotMedia' ? !subject.isOriginal : subject.type === 'BiomassQuadratSpecies';
+&nbsp;
+const isSpeciesSubject = (
+  subject: EventLogEntryPayload['subject']
+): subject is BiomassQuadratSpeciesSubjectPayload | BiomassSpeciesSubjectPayload | MonitoringSpeciesSubjectPayload =&gt;
+  subject.type === 'BiomassQuadratSpecies' || subject.type === 'BiomassSpecies' || subject.type === 'MonitoringSpecies';
 &nbsp;
 const speciesDeletionKey = (
   entry: EventLogEntryPayload,
@@ -1006,22 +1027,20 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) =&gt; {
         {event.action.type === 'FieldUpdated' &amp;&amp; (
           &lt;Box&gt;
             {renderSpeciesSummary(event) ??
-              (event.subject.type === 'BiomassSpecies' ||
-              event.subject.type === 'BiomassQuadratSpecies' ||
-              event.subject.type === 'MonitoringSpecies'
+              (isSpeciesSubject(event.subject)
                 ? strings.formatString(
                     strings.SPECIES_VALUE_CHANGED_FROM_TO,
                     &lt;Typography display='inline' textTransform='capitalize'&gt;
-                      {event.subject.scientificName || <span class="branch-6 cbranch-no" title="branch not covered" >getSpeciesName(event.subject.speciesId)}</span>
+                      {event.subject.scientificName || <span class="branch-3 cbranch-no" title="branch not covered" >getSpeciesName(event.subject.speciesId)}</span>
                     &lt;/Typography&gt;,
                     &lt;Typography display='inline' textTransform='capitalize'&gt;
                       {event.action.fieldName}
                     &lt;/Typography&gt;,
                     &lt;Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}&gt;
-                      {event.action.changedFrom?.toString() || <span class="branch-8 cbranch-no" title="branch not covered" >strings.NONE}</span>
+                      {event.action.changedFrom?.toString() || <span class="branch-5 cbranch-no" title="branch not covered" >strings.NONE}</span>
                     &lt;/Typography&gt;,
                     &lt;Typography display='inline' color={theme.palette.TwClrTxtSuccess} fontWeight={600}&gt;
-                      {event.action.changedTo?.toString() || <span class="branch-10 cbranch-no" title="branch not covered" >strings.NONE}</span>
+                      {event.action.changedTo?.toString() || <span class="branch-7 cbranch-no" title="branch not covered" >strings.NONE}</span>
                     &lt;/Typography&gt;
                   )
                 : strings.formatString(
@@ -1040,10 +1059,10 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) =&gt; {
                           : event.action.fieldName}
                     &lt;/Typography&gt;,
                     &lt;Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}&gt;
-                      {event.action.changedFrom?.toString() || <span class="branch-12 cbranch-no" title="branch not covered" >strings.NONE}</span>
+                      {event.action.changedFrom?.toString() || <span class="branch-9 cbranch-no" title="branch not covered" >strings.NONE}</span>
                     &lt;/Typography&gt;,
                     &lt;Typography display='inline' color={theme.palette.TwClrTxtSuccess} fontWeight={600}&gt;
-                      {event.action.changedTo?.toString() || <span class="branch-14 cbranch-no" title="branch not covered" >strings.NONE}</span>
+                      {event.action.changedTo?.toString() || <span class="branch-11 cbranch-no" title="branch not covered" >strings.NONE}</span>
                     &lt;/Typography&gt;
                   ))}
           &lt;/Box&gt;
@@ -1062,12 +1081,17 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) =&gt; {
                 {strings.formatString(strings.EVENT_ADDED, event.subject.fullText)}
               &lt;/Link&gt;
             ) : (
-              strings.formatString(strings.EVENT_CREATED, event.subject.fullText)
+              strings.formatString(strings.EVENT_ADDED, event.subject.fullText)
             )}
           &lt;/Box&gt;
         )}
         {event.action.type === 'Deleted' &amp;&amp; (
-          &lt;Box&gt;{strings.formatString(strings.EVENT_DELETED, event.subject.fullText)}&lt;/Box&gt;
+          &lt;Box&gt;
+            {strings.formatString(
+              isSpeciesSubject(event.subject) ? strings.EVENT_REMOVED : strings.EVENT_DELETED,
+              event.subject.fullText
+            )}
+          &lt;/Box&gt;
         )}
       &lt;/Box&gt;
     ),
@@ -1132,7 +1156,7 @@ export default EventLog;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-28T20:05:04.134Z
+                at 2026-10-28T21:01:59.183Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
