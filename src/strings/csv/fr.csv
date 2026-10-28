@@ -1142,6 +1142,22 @@ MANAGER_INFO,"Un manager peut effectuer les opérations ci-dessus, modifier les 
 MANGROVE,Mangrove,e9e0158a
 MANGROVES,Mangroves,3511a098
 MAP,Carte,cc1fa56d
+MAP_EDIT_SUMMARY_MESSAGE,L'enregistrement appliquera ces modifications au site de plantation.,072017f7
+MAP_EDIT_SUMMARY_NO_CHANGES,"L'enregistrement ne modifiera pas la superficie, les strates, les sous-strates ou les placettes de suivi du site de plantation.",3f386e45
+MAP_EDIT_SUMMARY_OBSERVATIONS_ABANDONED,{0} observations en cours seront abandonnées.,6c2778ac
+MAP_EDIT_SUMMARY_PERMANENT_PLOT_CREATED_EXISTING_AREA,Une placette permanente sera ajoutée à la zone existante de la strate {0}.,9a1768f4
+MAP_EDIT_SUMMARY_PERMANENT_PLOT_CREATED_NEW_AREA,Une placette permanente sera ajoutée à la nouvelle zone de la strate {0}.,d3659b31
+MAP_EDIT_SUMMARY_PLOT_ACCEPTED,La placette de suivi {0} restera dans la sous-strate {1}.,4a51cea6
+MAP_EDIT_SUMMARY_PLOT_ADOPTED,La placette de suivi {0} sera déplacée dans la sous-strate {1}.,4747a657
+MAP_EDIT_SUMMARY_PLOT_EJECTED,La placette de suivi {0} ne sera plus dans la sous-strate {1}.,0f91ebea
+MAP_EDIT_SUMMARY_SITE_AREA_CHANGED,La superficie du site changera de {0} ha.,09a5e7a4
+MAP_EDIT_SUMMARY_STRATUM_CREATED,La strate {0} sera ajoutée avec {1} placettes permanentes.,e0e3886a
+MAP_EDIT_SUMMARY_STRATUM_DELETED,La strate {0} sera supprimée.,06ea4091
+MAP_EDIT_SUMMARY_STRATUM_UPDATED,"La strate {0} changera de {1} ha, et {2}% de sa nouvelle limite chevauche sa limite actuelle. Elle comptera {3} placettes permanentes.",74c19dab
+MAP_EDIT_SUMMARY_SUBSTRATUM_CREATED,La sous-strate {0} sera ajoutée.,18b5f9e6
+MAP_EDIT_SUMMARY_SUBSTRATUM_DELETED,La sous-strate {0} sera supprimée.,68a45214
+MAP_EDIT_SUMMARY_SUBSTRATUM_UPDATED,"La sous-strate {0} changera de {1} ha, et {2}% de sa nouvelle limite chevauche sa limite actuelle.",17b59d57
+MAP_EDIT_SUMMARY_TITLE,Vérifier les modifications de la carte,ba53ed3b
 MAP_NOT_UPLOADED,Carte non mise en ligne,2cc4bb13
 MAPS,Cartes,367c1e39
 MAPS_FOR,Cartes pour,31f1ee6a
