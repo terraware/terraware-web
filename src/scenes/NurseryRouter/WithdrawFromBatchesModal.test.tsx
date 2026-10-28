@@ -357,5 +357,9 @@ describe('WithdrawFromBatchesModal', () => {
     uploads.forEach((upload) => {
       expect(new URL(upload.url).pathname).toBe(`/api/v1/nursery/withdrawals/${WITHDRAWAL_ID}/photos`);
     });
+    const uploadedFiles = await Promise.all(
+      uploads.map(async (upload) => ((await upload.formData()).get('file') as File | null)?.name)
+    );
+    expect(uploadedFiles.sort()).toEqual(['first.jpg', 'second.jpg']);
   });
 });
