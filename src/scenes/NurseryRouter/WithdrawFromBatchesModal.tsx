@@ -15,7 +15,7 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
-import { ScheduledDatePayload, useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
+import { useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
 import {
   BatchForWithdraw,
   useLazyListBatchesForWithdrawQuery,
@@ -25,28 +25,11 @@ import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests'
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { getMediumDate } from 'src/utils/dateFormatter';
+import { findScheduledDateForRequest } from 'src/utils/plantingDates';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import NurserySummaryRow from './NurserySummaryRow';
 import RequestSpeciesBox from './RequestSpeciesBox';
-
-const scheduledDateSpeciesKey = ({ quantity, speciesId, substratumId }: ScheduledDatePayload['species'][0]) =>
-  `${substratumId}-${speciesId}-${quantity}`;
-
-const requestSpeciesKey = (substratumId: number, species: PlantingDateRequestRow['substrata'][0]['species'][0]) =>
-  `${substratumId}-${species.speciesId}-${species.quantity}`;
-
-const scheduledDateMatchesRequest = (scheduledDate: ScheduledDatePayload, request: PlantingDateRequestRow): boolean => {
-  const scheduledSpeciesKeys = scheduledDate.species.map(scheduledDateSpeciesKey).sort();
-  const requestSpeciesKeys = request.substrata
-    .flatMap((substratum) => substratum.species.map((species) => requestSpeciesKey(substratum.substratumId, species)))
-    .sort();
-
-  return (
-    scheduledSpeciesKeys.length === requestSpeciesKeys.length &&
-    scheduledSpeciesKeys.every((key, index) => key === requestSpeciesKeys[index])
-  );
-};
 
 type WithdrawFromBatchesModalProps = {
   open: boolean;
@@ -207,16 +190,10 @@ const WithdrawFromBatchesModal = ({
   const canGoNextFromStep1 = facilityId !== undefined && !!withdrawDate;
   const canGoNextFromStep2 = totalWithdrawing > 0 && !anyOverReady;
 
-  const scheduledPlantingDateId = useMemo(() => {
-    const dateMatches = (scheduledDatesData?.scheduledDates ?? []).filter(
-      (scheduledDate) => scheduledDate.date === request.date
-    );
-    if (dateMatches.length === 1) {
-      return dateMatches[0].scheduledPlantingDateId;
-    }
-    return dateMatches.find((scheduledDate) => scheduledDateMatchesRequest(scheduledDate, request))
-      ?.scheduledPlantingDateId;
-  }, [request, scheduledDatesData]);
+  const scheduledPlantingDateId = useMemo(
+    () => findScheduledDateForRequest(scheduledDatesData?.scheduledDates ?? [], request)?.scheduledPlantingDateId,
+    [request, scheduledDatesData]
+  );
 
   const handleClose = useCallback(() => {
     setStep(0);
