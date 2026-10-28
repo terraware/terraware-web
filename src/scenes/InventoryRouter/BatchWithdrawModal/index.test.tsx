@@ -469,10 +469,12 @@ describe('BatchWithdrawModal on a page that keeps it mounted while closed', () =
   /** Mirrors InventoryBatchView, which renders the modal permanently and toggles `open`. */
   const AlwaysMountedHost = ({ initiallyOpen }: { initiallyOpen: boolean }) => {
     const [open, setOpen] = useState(initiallyOpen);
+    const [batchId, setBatchId] = useState(1);
     return (
       <>
         <button onClick={() => setOpen(true)}>Open withdrawal</button>
-        <BatchWithdrawModal open={open} batchIds={[1]} onClose={() => setOpen(false)} />
+        <button onClick={() => setBatchId(2)}>Go to batch 2</button>
+        <BatchWithdrawModal open={open} batchIds={[batchId]} onClose={() => setOpen(false)} />
       </>
     );
   };
@@ -496,6 +498,35 @@ describe('BatchWithdrawModal on a page that keeps it mounted while closed', () =
         msg: strings.NO_BATCHES_TO_WITHDRAW_FROM,
       })
     );
+  });
+
+  it('opens for a batch with stock after an empty batch was checked on the same page', async () => {
+    const rowsById: Record<string, NurseryBatchesSearchResponseElement> = {
+      '1': buildBatchSearchRow({ id: '1', batchNumber: 'EMPTY-001' }, { readyQuantity: 0 }),
+      '2': buildBatchSearchRow({ id: '2', batchNumber: 'STOCKED-002' }, { readyQuantity: 10 }),
+    };
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', async ({ request }) => {
+        const body = (await request.json()) as { search: { children: { field: string; values: string[] }[] } };
+        const ids = body.search.children.find((child) => child.field === 'id')?.values ?? [];
+        return HttpResponse.json({ status: 'ok', results: ids.map((id) => rowsById[id]).filter(Boolean) });
+      })
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ msg: strings.NO_BATCHES_TO_WITHDRAW_FROM })
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Go to batch 2' }));
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    // The empty result for batch 1 must not close the modal before batch 2's result arrives.
+    expect(await waitForDialog()).toBeInTheDocument();
+    expect(await screen.findByText('STOCKED-002')).toBeInTheDocument();
+    expect(screen.queryByText('EMPTY-001')).not.toBeInTheDocument();
   });
 
   it('keeps the success message after the user dismisses the empty-batch notice', async () => {

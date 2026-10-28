@@ -72,7 +72,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [step, setStep] = useState<FlowStep>(0);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
 
-  const [listBatchesByIds, { currentData: searchedBatches }] = useLazyListBatchesByIdsQuery();
+  const [listBatchesByIds, { currentData: batchesResult, originalArgs: batchesArgs }] = useLazyListBatchesByIdsQuery();
+  // The batch detail page keeps the modal mounted across batches, so the last result can be for a
+  // different selection until the new search runs. Don't show or act on it.
+  const searchedBatches =
+    batchesArgs?.organizationId === selectedOrganization?.id && batchesArgs?.batchIds.join() === batchIds.join()
+      ? batchesResult
+      : undefined;
   const [listSpeciesTargets, speciesTargetsResult] = useLazyListSpeciesTargetsForSubstratumQuery();
   const [listPlantingDateRequests, plantingDateRequestsResult] = useLazyListPlantingDateRequestsQuery();
   const [createBatchWithdrawal, { isLoading: isCreating }] = useCreateBatchWithdrawalMutation();
