@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import strings from 'src/strings';
-import { buildOrganization, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
+import { buildOrganization, captureRequests, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
 
 import SeedsWithdrawalsTable from './SeedsWithdrawalsTable';
 
@@ -123,5 +123,41 @@ describe('SeedsWithdrawalsTable', () => {
     expect(screen.getByPlaceholderText(new RegExp(strings.ACCESSION, 'i'))).toBeVisible();
 
     expect(screen.queryByPlaceholderText(new RegExp(strings.QUANTITY, 'i'))).not.toBeInTheDocument();
+  });
+  it('returns to the first page when the search term changes', async () => {
+    mockGet('/api/v1/projects', { projects: [] });
+    mockPost('/api/v1/search/count', { count: 250 });
+    mockPost('/api/v1/search/values', {
+      results: {
+        accession_species_scientificName: { values: ['Acacia koa'] },
+        accession_facility_name: { values: ['Main Seed Bank'] },
+        destination: { values: ['Kigali Nursery'] },
+      },
+    });
+    const requests = captureRequests('post', '/api/v1/search', { results: [buildSearchResult()] });
+
+    renderWithProviders(<SeedsWithdrawalsTable />, {
+      organization: { selectedOrganization: buildOrganization({ id: ORG_ID }) },
+    });
+
+    expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeVisible();
+
+    await userEvent.click(screen.getByRole('button', { name: /go to next page/i }));
+    await waitFor(async () =>
+      expect(((await requests[requests.length - 1].clone().json()) as { cursor?: string }).cursor).toBe('100')
+    );
+
+    await userEvent.click(screen.getByRole('button', { name: /show.*hide search/i }));
+    await userEvent.type(screen.getByPlaceholderText('Search'), 'koa');
+
+    // Searching from page 2 would otherwise fetch offset 100 of a much shorter result set.
+    await waitFor(async () => {
+      const body = (await requests[requests.length - 1].clone().json()) as {
+        cursor?: string;
+        search: unknown;
+      };
+      expect(JSON.stringify(body.search)).toContain('koa');
+      expect(Number(body.cursor ?? 0)).toBe(0);
+    });
   });
 });

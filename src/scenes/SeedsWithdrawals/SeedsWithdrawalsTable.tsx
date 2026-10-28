@@ -145,13 +145,15 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     return Array.from(new Set(projectNames)).sort();
   }, [projects]);
 
+  // Rebuilt whenever the localized strings change, so a purpose picked after a language switch
+  // still maps back to the value the API expects rather than its translated label.
   const purposeLabelToValue = useMemo(() => {
     const map: Record<string, SeedWithdrawalPurpose> = {};
     SeedWithdrawalPurposes.forEach((purpose) => {
       map[seedWithdrawalPurposeLabel(purpose, strings)] = purpose;
     });
     return map;
-  }, []);
+  }, [strings]);
 
   const accessionLinkStyles = useMemo(
     () => ({ fontSize: '16px', color: theme.palette.TwClrTxtBrand, textDecoration: 'none' }),
@@ -361,9 +363,12 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     }
   }, [pagination.pageIndex, pagination.pageSize, searchArgs, searchSeedWithdrawals]);
 
+  // Anything that narrows the results has to send the user back to the first page, or the next
+  // query runs with an offset past the end of a now-shorter result set and the table renders an
+  // empty page under a non-zero total.
   useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [columnFilters]);
+    setPagination((prev) => (prev.pageIndex === 0 ? prev : { ...prev, pageIndex: 0 }));
+  }, [columnFilters, debouncedSearchTerm]);
 
   return (
     <EditableTable
