@@ -7,7 +7,7 @@ export type MapPoint = [number, number];
 
 export const BOUNDARY_FIXTURE = 'playwright/data/simpleSiteBoundary.geojson';
 
-// Suppresses the tutorial videos for this page only,
+// Suppresses the tutorial videos and enables editing existing sites for this page only,
 // without writing the preferences back to the server.
 export const enableSiteEditorPreferences = async (page: Page) => {
   await page.route(
@@ -23,6 +23,7 @@ export const enableSiteEditorPreferences = async (page: Page) => {
         ...json.preferences,
         'dont-show-site-boundary-instructions': true,
         'dont-show-site-stratum-boundaries-instructions': true,
+        editPlantingSite: true,
       };
       await route.fulfill({ response, json });
     }
@@ -56,7 +57,7 @@ export const detailsDialogButton = (page: Page, button: 'Cancel' | 'Save' | 'Sav
 
 export const editDraftDetailsButton = (page: Page) => page.locator('#edit-draft-planting-site-details');
 
-export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Create Planting Site') =>
+export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Create Planting Site' | 'Save Changes') =>
   page.getByRole('button', { name, exact: true });
 
 const mapCanvas = (page: Page) => page.locator('.mapboxgl-canvas');

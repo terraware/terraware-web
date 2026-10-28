@@ -469,4 +469,60 @@ test.describe('PlantingSiteTests', () => {
     await expect(page.getByText('Planting site deleted!')).toBeVisible();
     await expect(page.getByRole('link', { name: siteName })).toBeHidden({ timeout: 2000 });
   });
+
+  test('Existing site: add an exclusion area, review the changes, and save', async ({ page }) => {
+    await page.getByRole('link', { name: 'Planting Site', exact: true }).click();
+    await expect(page).toHaveURL(/\/planting-sites\/\d+(\?|$)/);
+    const sitePath = new URL(page.url()).pathname;
+    await page.locator('#edit-site-boundary').click();
+
+    await expect(page).toHaveURL(/\/planting-sites\/\d+\/edit(\?|$)/);
+    await expect(page.getByText('Edit Planting Site', { exact: true })).toBeVisible();
+    await expectActiveStep(page, 'Site Boundary');
+    await expect(editorButton(page, 'Save Changes')).toBeDisabled();
+    await editorButton(page, 'Next').click();
+
+    await expectActiveStep(page, 'Exclusion Areas');
+    await waitForMap(page);
+    await drawPolygon(page, [
+      [0.4, 0.4],
+      [0.5, 0.4],
+      [0.5, 0.5],
+      [0.4, 0.5],
+    ]);
+    await expect(page.getByText('Unsaved changes')).toBeVisible();
+
+    // Closing with unsaved changes asks first.
+    await editorButton(page, 'Close').click();
+    await expect(page.getByText('Close site editor?')).toBeVisible();
+    await page.getByRole('button', { name: 'Keep editing' }).click();
+    await expect(page.getByText('Close site editor?')).toBeHidden();
+
+    await editorButton(page, 'Next').click();
+    await expectActiveStep(page, 'Stratum Boundaries');
+    await editorButton(page, 'Next').click();
+    await expectActiveStep(page, 'Substratum Boundaries');
+    await editorButton(page, 'Save Changes').click();
+
+    const summaryDialog = page.getByRole('dialog').filter({ hasText: 'Review Map Changes' });
+    await expect(summaryDialog).toBeVisible();
+    await expect(summaryDialog.getByText('Saving will make these changes to the planting site.')).toBeVisible();
+    await expect(summaryDialog.getByText(/^Site area will change by -3.74 ha\.$/)).toBeVisible();
+    // The exclusion straddles the border between the strata, so it takes area from both.
+    await expect(summaryDialog.getByText(/^Stratum East will change by -1.9 ha,/)).toBeVisible();
+    await expect(summaryDialog.getByText(/^Stratum West will change by -1.84 ha,/)).toBeVisible();
+    await expect(summaryDialog.getByText(/will be (added|removed)/)).toHaveCount(0);
+
+    await summaryDialog.getByRole('button', { name: 'Back to Edit' }).click();
+    await expect(summaryDialog).toBeHidden();
+    await expectActiveStep(page, 'Substratum Boundaries');
+
+    await editorButton(page, 'Save Changes').click();
+    await expect(summaryDialog).toBeVisible();
+    await summaryDialog.locator('#save-map-edit-summary').click();
+
+    await expect(page.getByText('Changes Saved!')).toBeVisible();
+    await expect(page).toHaveURL((url) => url.pathname === sitePath);
+    await expect(page.locator('#edit-site-boundary')).toBeVisible();
+  });
 });
