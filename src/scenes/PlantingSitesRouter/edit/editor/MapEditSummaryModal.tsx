@@ -46,19 +46,19 @@ const MapEditSummaryModal = ({ onBackToEdit, onSave, summary }: MapEditSummaryMo
         case 'PlotAccepted':
           return format(
             strings.MAP_EDIT_SUMMARY_PLOT_ACCEPTED,
-            item.monitoringPlotId,
+            item.plotNumber,
             fullName(item.stratumName, item.substratumName)
           );
         case 'PlotAdopted':
           return format(
             strings.MAP_EDIT_SUMMARY_PLOT_ADOPTED,
-            item.monitoringPlotId,
+            item.plotNumber,
             fullName(item.stratumName, item.substratumName)
           );
         case 'PlotEjected':
           return format(
             strings.MAP_EDIT_SUMMARY_PLOT_EJECTED,
-            item.monitoringPlotId,
+            item.plotNumber,
             fullName(item.stratumName, item.substratumName)
           );
         case 'SiteAreaChanged':
