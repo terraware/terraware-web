@@ -161,7 +161,12 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: [{ type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' }],
+      providesTags: [
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: 'LIST' },
+        { type: QueryTagTypes.Species, id: 'LIST' },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+      ],
       transformResponse: (result: SearchSeedWithdrawalFilterOptionsApiResponse) => ({
         speciesNames: result.results.accession_species_scientificName.values.filter(isNonEmpty),
         seedBankNames: result.results.accession_facility_name.values.filter(isNonEmpty),
@@ -175,7 +180,12 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: parseSearchSeedWithdrawalsArgs(args, SEED_WITHDRAWAL_FIELDS),
       }),
-      providesTags: [{ type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' }],
+      providesTags: [
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: 'LIST' },
+        { type: QueryTagTypes.Species, id: 'LIST' },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+      ],
       transformResponse: (response: SearchSeedWithdrawalApiResponse) =>
         response.results.map((result): SearchSeedWithdrawalPayload => ({
           accessionId: Number(result.accession_id),
