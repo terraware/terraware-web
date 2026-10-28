@@ -12,6 +12,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -21,6 +22,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyCountNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
+import { useLazyCountSeedWithdrawalsQuery } from 'src/queries/search/seedWithdrawals';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -53,6 +55,7 @@ export default function NavBar({
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
+  const isSeedsWithdrawalsRoute = useMatch({ path: APP_PATHS.SEEDS_WITHDRAWALS + '/', end: false });
   const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
   const isCheckInRoute = useMatch({ path: APP_PATHS.CHECKIN + '/', end: false });
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
@@ -127,6 +130,20 @@ export default function NavBar({
       void countNurseryWithdrawals({ organizationId: selectedOrganization.id }, true);
     }
   }, [countNurseryWithdrawals, selectedOrganization]);
+
+  const isSeedsWithdrawalLogEnabled = useFeatureEnabled('Seeds Withdrawal Log');
+
+  const [countSeedWithdrawals, countSeedWithdrawalsResponse] = useLazyCountSeedWithdrawalsQuery();
+  const showSeedsWithdrawals = useMemo(
+    () => isSeedsWithdrawalLogEnabled && !!countSeedWithdrawalsResponse?.currentData,
+    [isSeedsWithdrawalLogEnabled, countSeedWithdrawalsResponse?.currentData]
+  );
+
+  useEffect(() => {
+    if (selectedOrganization && isSeedsWithdrawalLogEnabled) {
+      void countSeedWithdrawals({ organizationId: selectedOrganization.id }, true);
+    }
+  }, [countSeedWithdrawals, isSeedsWithdrawalLogEnabled, selectedOrganization]);
 
   const [listPlantingSeasonsForNav, plantingSeasonsForNavResponse] = useLazyListPlantingSeasonsQuery();
   const hasPlantingSeasonWithTargets = useMemo(
@@ -409,22 +426,34 @@ export default function NavBar({
         onClick={(open) => persistNavSection('seeds', !!open)}
       >
         <SubNavbar>
-          <NavItem
-            label={strings.DASHBOARD}
-            selected={!!isAccessionDashboardRoute}
-            onClick={() => {
-              closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
-            }}
-            id='seeds-dashboard'
-          />
-          <NavItem
-            label={strings.ACCESSIONS}
-            selected={isAccessionsRoute || isCheckInRoute ? true : false}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.ACCESSIONS);
-            }}
-            id='accessions'
-          />
+          <>
+            <NavItem
+              label={strings.DASHBOARD}
+              selected={!!isAccessionDashboardRoute}
+              onClick={() => {
+                closeAndNavigateTo(isAccessionDashboardRoute ? '' : APP_PATHS.SEEDS_DASHBOARD);
+              }}
+              id='seeds-dashboard'
+            />
+            <NavItem
+              label={strings.ACCESSIONS}
+              selected={isAccessionsRoute || isCheckInRoute ? true : false}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.ACCESSIONS);
+              }}
+              id='accessions'
+            />
+            {showSeedsWithdrawals && (
+              <NavItem
+                label={strings.WITHDRAWALS}
+                selected={!!isSeedsWithdrawalsRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.SEEDS_WITHDRAWALS);
+                }}
+                id='seeds-withdrawals'
+              />
+            )}
+          </>
         </SubNavbar>
       </NavItem>
       <NavItem

@@ -2066,10 +2066,12 @@ SEEDLING_BATCHES,Lots de semis,040a561e
 SEEDLINGS,Semis,c87d3813
 SEEDLINGS_PLURAL,semis,8c6852cb
 SEEDLINGS_SINGULAR,semis,16e3be66
+SEEDLINGS_WITHDRAWALS,Retraits de plants,057e5418
 SEEDLINGS_WITHDRAWN_FOR_PLANTING,Semis retirés pour la plantation,5207ff63
 SEEDS,Semences,f6362924
 SEEDS_DASHBOARD,Tableau de bord des semis,1d59654c
 SEEDS_SOWN_DATE,Date du semis,91bf20b1
+SEEDS_WITHDRAWALS,Retraits de semences,6bca02cf
 SELECT,Sélectionnez...,1a789f9d
 SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS,Sélectionnez un type de contact pour tous les responsables internes.,e4c5c550
 SELECT_ACCESSIONS_FOR_PROJECT,Sélectionner les accessions pour {0},dec51806
