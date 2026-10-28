@@ -2,13 +2,17 @@ import React from 'react';
 
 import { screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { buildOrganization, captureRequests, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
+import { buildOrganization, captureRequests, mockGet, mockPost, renderWithProviders, server } from 'src/test-utils';
 
 import SeedsWithdrawalsTable from './SeedsWithdrawalsTable';
 
 const ORG_ID = 1;
+
+// Mirrors EXPORT_PAGE_SIZE in the component, which is what marks a request as part of an export.
+const EXPORT_PAGE_SIZE = 1000;
 
 type SeedWithdrawalSearchResult = Record<string, string>;
 
@@ -114,6 +118,47 @@ describe('SeedsWithdrawalsTable', () => {
     expect(await screen.findByText('No records to display')).toBeVisible();
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
+  it('leaves the displayed page alone when exporting', async () => {
+    const pageRows = [buildSearchResult()];
+    const exportOnlyRow = buildSearchResult({ accession_accessionNumber: 'ACC-EXPORT-ONLY' });
+    const exportRequestCount = { value: 0 };
+
+    mockGet('/api/v1/projects', { projects: [] });
+    mockPost('/api/v1/search/count', { count: 2 });
+    mockPost('/api/v1/search/values', {
+      results: {
+        accession_species_scientificName: { values: ['Acacia koa'] },
+        accession_facility_name: { values: ['Main Seed Bank'] },
+        destination: { values: ['Kigali Nursery'] },
+      },
+    });
+    server.use(
+      http.post('/api/v1/search', async ({ request }) => {
+        const body = (await request.json()) as { count?: number };
+        const isExport = body.count === EXPORT_PAGE_SIZE;
+        if (isExport) {
+          exportRequestCount.value += 1;
+        }
+        return HttpResponse.json({
+          status: 'ok',
+          results: isExport ? [...pageRows, exportOnlyRow] : pageRows,
+        });
+      })
+    );
+
+    renderWithProviders(<SeedsWithdrawalsTable />, {
+      organization: { selectedOrganization: buildOrganization({ id: ORG_ID }) },
+    });
+
+    expect(await screen.findByRole('cell', { name: 'ACC-001' })).toBeVisible();
+    expect(screen.queryByText('ACC-EXPORT-ONLY')).not.toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: strings.EXPORT }));
+    await waitFor(() => expect(exportRequestCount.value).toBe(1));
+
+    expect(screen.queryByText('ACC-EXPORT-ONLY')).not.toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'ACC-001' })).toBeVisible();
+  });
   it('gives the text columns a filter input, and leaves quantity unfiltered', async () => {
     renderTable([buildSearchResult()]);
 
@@ -159,5 +204,47 @@ describe('SeedsWithdrawalsTable', () => {
       expect(JSON.stringify(body.search)).toContain('koa');
       expect(Number(body.cursor ?? 0)).toBe(0);
     });
+  });
+  it('follows the response cursor so a capped export still gets every row', async () => {
+    // The search service caps the export at one row per request and hands back a cursor.
+    const exportCursors: (string | undefined)[] = [];
+    server.use(
+      http.post('/api/v1/search', async ({ request }) => {
+        const body = (await request.json()) as { count?: number; cursor?: string };
+        if (body.count !== EXPORT_PAGE_SIZE) {
+          return HttpResponse.json({ status: 'ok', results: [buildSearchResult()] });
+        }
+        exportCursors.push(body.cursor);
+        return body.cursor === '1'
+          ? HttpResponse.json({
+              status: 'ok',
+              results: [buildSearchResult({ accession_accessionNumber: 'ACC-SECOND-PAGE' })],
+            })
+          : HttpResponse.json({
+              status: 'ok',
+              cursor: '1',
+              results: [buildSearchResult({ accession_accessionNumber: 'ACC-FIRST-PAGE' })],
+            });
+      })
+    );
+
+    mockGet('/api/v1/projects', { projects: [] });
+    mockPost('/api/v1/search/count', { count: 2 });
+    mockPost('/api/v1/search/values', {
+      results: {
+        accession_species_scientificName: { values: ['Acacia koa'] },
+        accession_facility_name: { values: ['Main Seed Bank'] },
+        destination: { values: ['Kigali Nursery'] },
+      },
+    });
+
+    renderWithProviders(<SeedsWithdrawalsTable />, {
+      organization: { selectedOrganization: buildOrganization({ id: ORG_ID }) },
+    });
+
+    expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeVisible();
+    await userEvent.click(screen.getByRole('button', { name: strings.EXPORT }));
+
+    await waitFor(() => expect(exportCursors).toEqual([undefined, '1']), { timeout: 5000 });
   });
 });
