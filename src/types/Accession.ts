@@ -7,6 +7,7 @@ export type Accession = AccessionPayloadV2Read;
 export type ViabilityTest = GetViabilityTestPayload;
 export type ViabilityTestResult = Required<GetViabilityTestPayload>['testResults'][0];
 export type Withdrawal = Required<Accession>['withdrawals'][0];
+export type SeedWithdrawalPurpose = NonNullable<Withdrawal['purpose']>;
 export type { Geolocation };
 
 export type AccessionState = Accession['state'];

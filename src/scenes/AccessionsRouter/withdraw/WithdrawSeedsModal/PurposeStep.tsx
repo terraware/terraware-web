@@ -159,7 +159,7 @@ const PurposeStep = ({
           {`${strings.PURPOSE} *`}
         </Typography>
         <RadioGroup row name='withdraw-purpose' value={draft.purpose} onChange={onChangePurpose}>
-          {withdrawalPurposes().map((option) => {
+          {withdrawalPurposes(strings).map((option) => {
             const viabilityDisabled = option.value === 'Viability Testing' && isBulk;
             const nurseryDisabled = option.value === 'Nursery' && hasNoNurseries;
             const label = viabilityDisabled
