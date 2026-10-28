@@ -32,9 +32,16 @@ const UPLOAD_PHOTO_URL = '/api/v1/nursery/withdrawals/:withdrawalId/photos';
 const NURSERY_WITH_READY_PLANTS = buildFacility({ id: 100, name: 'Hilltop Nursery' });
 const NURSERY_WITH_NO_READY_PLANTS = buildFacility({ id: 200, name: 'Riverside Nursery' });
 const NURSERY_WITHOUT_BATCHES = buildFacility({ id: 300, name: 'Valley Nursery' });
+const NURSERY_WITH_OTHER_SPECIES = buildFacility({ id: 400, name: 'Lakeside Nursery' });
 
 const organization = buildOrganization({
-  facilities: [NURSERY_WITH_READY_PLANTS, NURSERY_WITH_NO_READY_PLANTS, NURSERY_WITHOUT_BATCHES, buildSeedBank()],
+  facilities: [
+    NURSERY_WITH_READY_PLANTS,
+    NURSERY_WITH_NO_READY_PLANTS,
+    NURSERY_WITHOUT_BATCHES,
+    NURSERY_WITH_OTHER_SPECIES,
+    buildSeedBank(),
+  ],
 });
 
 type RequestSubstratum = PlantingDateRequestRow['substrata'][0];
@@ -84,18 +91,27 @@ const buildBatchForWithdrawResult = (overrides: {
   batchNumber: string;
   facility: { id: number; name: string };
   readyQuantity: number;
+  speciesId?: number;
 }) => ({
   id: `${overrides.id}`,
   batchNumber: overrides.batchNumber,
   facility_id: `${overrides.facility.id}`,
   facility_name: overrides.facility.name,
-  species_id: `${SPECIES_ID}`,
+  species_id: `${overrides.speciesId ?? SPECIES_ID}`,
   species_scientificName: 'Acacia koa',
   'readyQuantity(raw)': `${overrides.readyQuantity}`,
 });
 
 const BATCH_A = { id: 10, batchNumber: '26-2-1-001', facility: NURSERY_WITH_READY_PLANTS, readyQuantity: 50 };
 const BATCH_B = { id: 20, batchNumber: '26-2-1-002', facility: NURSERY_WITH_READY_PLANTS, readyQuantity: 30 };
+/** Ready to plant, but not a species the request asks for. */
+const BATCH_OF_OTHER_SPECIES = {
+  id: 40,
+  batchNumber: '26-2-1-004',
+  facility: NURSERY_WITH_OTHER_SPECIES,
+  readyQuantity: 25,
+  speciesId: SPECIES_ID + 1,
+};
 const BATCH_WITH_NOTHING_READY = {
   id: 30,
   batchNumber: '26-2-1-003',
@@ -113,7 +129,7 @@ const buildScheduledDate = (overrides: Partial<ScheduledDatePayload> = {}): Sche
 const createdWithdrawal = { withdrawal: { id: WITHDRAWAL_ID } };
 
 beforeEach(() => {
-  const batches = [BATCH_A, BATCH_B, BATCH_WITH_NOTHING_READY].map(buildBatchForWithdrawResult);
+  const batches = [BATCH_A, BATCH_B, BATCH_WITH_NOTHING_READY, BATCH_OF_OTHER_SPECIES].map(buildBatchForWithdrawResult);
 
   mockGet('/api/v1/projects', { projects: [] });
   mockGet(`/api/v1/planting-seasons/${PLANTING_SEASON_ID}/scheduled-dates`, {
@@ -122,11 +138,14 @@ beforeEach(() => {
 
   server.use(
     http.post('/api/v1/search', async ({ request }) => {
-      const body = (await request.json()) as Record<string, any>;
-      const facilityFilter = body.search.children.find((child: { field: string }) => child.field === 'facility_id');
-      const results = facilityFilter
-        ? batches.filter((batch) => facilityFilter.values.includes(batch.facility_id))
-        : batches;
+      // Apply the facility and species filters the way the server would, so a missing or wrong
+      // filter in the request changes what the modal is given.
+      const body = (await request.json()) as { search: { children: { field: string; values: string[] }[] } };
+      const results = batches.filter((batch) =>
+        body.search.children.every(
+          ({ field, values }) => !(field in batch) || values.includes(batch[field as keyof typeof batch])
+        )
+      );
       return HttpResponse.json({ status: 'ok', results });
     })
   );
@@ -199,6 +218,7 @@ describe('WithdrawFromBatchesModal', () => {
     expect(within(options).getByText(NURSERY_WITH_READY_PLANTS.name)).toBeInTheDocument();
     expect(within(options).queryByText(NURSERY_WITH_NO_READY_PLANTS.name)).not.toBeInTheDocument();
     expect(within(options).queryByText(NURSERY_WITHOUT_BATCHES.name)).not.toBeInTheDocument();
+    expect(within(options).queryByText(NURSERY_WITH_OTHER_SPECIES.name)).not.toBeInTheDocument();
     expect(within(options).queryByText(buildSeedBank().name)).not.toBeInTheDocument();
   });
 
