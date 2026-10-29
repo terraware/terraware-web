@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { navigateToProjectProfile } from '../../utils/navigation';
+import { clickProjectProfileLink, navigateToProjectProfile } from '../../utils/navigation';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 import { waitFor } from '../../utils/utils';
 
@@ -11,9 +11,9 @@ test.describe('ProjectVariablesTests', () => {
 
   test('View Project Variables Table', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
-    await page.getByRole('button', { name: 'Variables', exact: true }).click();
+    await clickProjectProfileLink('Variables', page);
 
-    await expect(page.getByRole('heading', { name: 'Variables' })).toBeVisible();
+    await expect(page.getByText('Variables for Phase 2 Project Deal')).toBeVisible();
     await expect(page.locator("[id*='search-table-content-']")).toBeVisible();
 
     // table column headers
@@ -29,7 +29,7 @@ test.describe('ProjectVariablesTests', () => {
 
   test('Edit Project Variable', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
-    await page.getByRole('button', { name: 'Variables', exact: true }).click();
+    await clickProjectProfileLink('Variables', page);
 
     // wait for table rows to load
     await waitFor(page, '#row1');

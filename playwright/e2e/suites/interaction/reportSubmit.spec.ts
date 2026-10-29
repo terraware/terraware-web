@@ -115,8 +115,9 @@ test.describe('ReportSubmitTests', () => {
     await expect(page.getByRole('button', { name: 'View Reports' })).toBeVisible({ timeout: 10000 });
     await page.getByRole('button', { name: 'View Reports' }).click();
 
-    // The reports page opens the latest report.
-    await page.waitForURL(new RegExp(`/reports/${reportId}$`), { timeout: 10000 });
+    // The project page's Reports tab opens the latest report.
+    await page.waitForURL(new RegExp(`tab=reports`), { timeout: 10000 });
+    await page.waitForURL(new RegExp(`reportId=${reportId}`), { timeout: 10000 });
     await expect(page.getByText('Submitted', exactOptions)).toBeVisible({ timeout: 10000 });
     await expect(page.getByRole('button', { name: 'Approve' })).toBeVisible();
 

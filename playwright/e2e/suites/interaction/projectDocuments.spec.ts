@@ -1,23 +1,24 @@
 import { expect, test } from '@playwright/test';
 
 import { APP_PATHS } from '../../../../src/constants';
-import { navigateToProjectProfile } from '../../utils/navigation';
+import { clickProjectProfileLink, navigateToProjectProfile } from '../../utils/navigation';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 
 test.describe('ProjectDocumentsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
     await navigateToProjectProfile('Phase 2 Project Deal', page);
-    await page.getByRole('button', { name: 'Documents', exact: true }).click();
+    await clickProjectProfileLink('Documents', page);
   });
 
   test('View Project Documents Table', async ({ page }, testInfo) => {
-    await expect(page.getByRole('heading', { name: 'Documents' })).toBeVisible();
+    await expect(page).toHaveURL(/\/accelerator\/documents\?dealName=/);
     await expect(page.getByRole('button', { name: 'Add Document' })).toBeVisible();
     await expect(page.locator('#search-documents-list')).toBeVisible();
 
     // table column headers
-    await expect(page.getByRole('columnheader', { name: 'Name' })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Name', exact: true })).toBeVisible();
+    await expect(page.getByRole('columnheader', { name: 'Deal Name', exact: true })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Document Template' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Version' })).toBeVisible();
     await expect(page.getByRole('columnheader', { name: 'Created' })).toBeVisible();
