@@ -2,15 +2,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
-import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
+import { useListAcceleratorOrganizationsQuery } from 'src/queries/generated/acceleratorOrganizations';
 import { useLazyGetProjectAcceleratorDetailsQuery } from 'src/queries/generated/acceleratorProjects';
 import { useGetUserQuery } from 'src/queries/generated/users';
 import strings from 'src/strings';
-import { AcceleratorOrg } from 'src/types/Accelerator';
 import { AcceleratorProject } from 'src/types/AcceleratorProject';
 import { ProjectMeta } from 'src/types/Project';
+import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
 
 import { AcceleratorProjectContext, AcceleratorProjectData } from './AcceleratorProjectContext';
@@ -22,7 +22,14 @@ type Props = {
 const AcceleratorProjectProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
-  const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs();
+  const snackbar = useSnackbar();
+  const { currentData: acceleratorOrgsData, isError: isAcceleratorOrgsError } = useListAcceleratorOrganizationsQuery();
+
+  useEffect(() => {
+    if (isAcceleratorOrgsError) {
+      snackbar.toastError();
+    }
+  }, [isAcceleratorOrgsError, snackbar]);
 
   const [getProjectAcceleratorDetails, projectAcceleratorDetailsResponse] = useLazyGetProjectAcceleratorDetailsQuery();
 
@@ -51,7 +58,10 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
   const modifiedByUser = modifiedByData?.user;
   const [projectMeta, setProjectMeta] = useState<ProjectMeta>({});
 
-  const [organization, setOrganization] = useState<AcceleratorOrg>();
+  const organization = useMemo(
+    () => acceleratorOrgsData?.organizations.find((org) => org.id === project?.organizationId),
+    [acceleratorOrgsData, project?.organizationId]
+  );
 
   const crumbs: Crumb[] = useMemo(
     () => (activeLocale ? [{ name: strings.PROJECTS, to: `${APP_PATHS.ACCELERATOR_PROJECTS}` }] : []),
@@ -59,11 +69,10 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
   );
 
   const reload = useCallback(() => {
-    reloadAll();
     if (projectId !== -1) {
       void getProjectAcceleratorDetails(projectId);
     }
-  }, [projectId, reloadAll, getProjectAcceleratorDetails]);
+  }, [projectId, getProjectAcceleratorDetails]);
 
   useEffect(() => {
     setProjectMeta({
@@ -71,14 +80,6 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
       modifiedByUserName: getUserDisplayName(modifiedByUser),
     });
   }, [createdByUser, modifiedByUser]);
-
-  useEffect(() => {
-    if (!acceleratorOrgs || !project?.organizationId) {
-      return;
-    }
-
-    setOrganization(acceleratorOrgs.find((org) => org.id === project.organizationId));
-  }, [acceleratorOrgs, project?.organizationId]);
 
   const acceleratorProjectDataValues = useMemo(
     () => ({

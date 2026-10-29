@@ -3,7 +3,6 @@ import { Action, combineReducers } from '@reduxjs/toolkit';
 import { baseApi } from 'src/queries/baseApi';
 import { rtkReducers } from 'src/queries/reducers';
 
-import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
@@ -14,7 +13,6 @@ import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 
 // assembly of app reducers
 const reducers = {
-  ...acceleratorReducers,
   ...funderProjectsReducers,
   ...messageReducers,
   ...matrixViewReducers,

@@ -11,6 +11,9 @@ const config: ConfigFile = {
   exportName: 'api',
   hooks: { queries: true, lazyQueries: true, mutations: true },
   outputFiles: {
+    './src/queries/generated/acceleratorOrganizations.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/organizations'),
+    },
     './src/queries/generated/acceleratorProjects.ts': {
       filterEndpoints: (_, operation) =>
         operation.path === '/api/v1/accelerator/projects' ||
