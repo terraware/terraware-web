@@ -8,7 +8,6 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import { useFeatureEnabled } from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -29,10 +28,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from './AcceleratorProjectContext';
 import ProjectActivityLogView from './ProjectActivityLogView';
-import ProjectDeliverablesView from './ProjectDeliverablesView';
-import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
-import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
 import ReportActions from './Reports/ReportActions';
 import ReportsContent, { ReportsSegment } from './Reports/ReportsContent';
@@ -43,7 +39,7 @@ const ProjectPage = () => {
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useAcceleratorProjectData();
-  const { goToAcceleratorActivityCreate, goToAcceleratorProjectEdit, goToDocumentNew } = useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToAcceleratorProjectEdit } = useNavigateTo();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
   const dispatch = useAppDispatch();
@@ -53,7 +49,6 @@ const ProjectPage = () => {
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
-  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
   const location = useStateLocation();
   const navigate = useSyncNavigate();
 
@@ -96,7 +91,6 @@ const ProjectPage = () => {
     const _activityId = query.get('activityId');
     return _activityId ? Number(_activityId) : undefined;
   }, [query]);
-  const [highlightsModalOpen, setHighlightsModalOpen] = useState(query.get('showHighlights') === 'true');
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
   const { currentData: projectApplicationsData } = useListApplicationsQuery({ projectId: projectData.projectId });
@@ -109,7 +103,7 @@ const ProjectPage = () => {
     currentData: activitiesData,
     isError: activitiesError,
     isFetching: activitiesFetching,
-  } = useAdminListActivitiesQuery({ projectId: projectData.projectId, depth: 'All' }, { skip: !cleanUpTabsEnabled });
+  } = useAdminListActivitiesQuery({ projectId: projectData.projectId, depth: 'All' });
   const activities = useMemo<TypedActivity[]>(
     () => activitiesData?.activities?.map((payload) => ({ type: 'admin' as const, payload })) ?? [],
     [activitiesData]
@@ -118,7 +112,7 @@ const ProjectPage = () => {
   const tabs = useMemo(() => {
     const profileTab = {
       id: 'projectProfile',
-      label: cleanUpTabsEnabled ? strings.PROFILE : strings.PROJECT_PROFILE,
+      label: strings.PROFILE,
       children: (
         <ProjectProfileView
           {...projectData}
@@ -127,20 +121,18 @@ const ProjectPage = () => {
           projectScore={projectScore}
           phaseVotes={phaseVotes}
           publishedReports={publishedReports || []}
-          reportsPath={cleanUpTabsEnabled ? `${location.pathname}?tab=reports` : undefined}
+          reportsPath={`${location.pathname}?tab=reports`}
         />
       ),
     };
 
     const activityTab = {
       id: 'activityLog',
-      label: cleanUpTabsEnabled ? strings.ACTIVITY : strings.PROJECT_ACTIVITY,
+      label: strings.ACTIVITY,
       children: (
         <ProjectActivityLogView
-          highlightsModalOpen={highlightsModalOpen}
           projectDealName={projectData.acceleratorProject?.dealName}
           projectId={projectData.projectId}
-          setHighlightsModalOpen={setHighlightsModalOpen}
         />
       ),
     };
@@ -156,66 +148,41 @@ const ProjectPage = () => {
       ),
     };
 
-    if (cleanUpTabsEnabled) {
-      return [
-        profileTab,
-        {
-          id: 'reports',
-          label: strings.REPORTS,
-          children: (
-            <ReportsContent
-              onChangeSegment={onChangeReportsSegment}
-              onSelectReport={onSelectReport}
-              segment={reportsSegment}
-              selectedReportId={selectedReportId}
-            />
-          ),
-        },
-        activityTab,
-        {
-          id: 'quarterlyHighlights',
-          label: strings.QUARTERLY_HIGHLIGHTS,
-          children: (
-            <ActivityHighlightsContent
-              activities={activities}
-              busy={activitiesFetching}
-              fitToWindow
-              onDropdownDataReady={setQuarterDropdownData}
-              projectId={projectData.projectId}
-              showDropdownInline={false}
-            />
-          ),
-        },
-        plantsDashboardTab,
-      ];
-    }
-
     return [
       profileTab,
+      {
+        id: 'reports',
+        label: strings.REPORTS,
+        children: (
+          <ReportsContent
+            onChangeSegment={onChangeReportsSegment}
+            onSelectReport={onSelectReport}
+            segment={reportsSegment}
+            selectedReportId={selectedReportId}
+          />
+        ),
+      },
       activityTab,
       {
-        id: 'deliverables',
-        label: strings.DELIVERABLES,
-        children: <ProjectDeliverablesView projectId={projectData.projectId} />,
-      },
-      {
-        id: 'documents',
-        label: strings.DOCUMENTS,
-        children: <ProjectDocumentsView projectId={projectData.projectId} />,
-      },
-      {
-        id: 'variables',
-        label: strings.VARIABLES,
-        children: <ProjectVariablesView projectId={projectData.projectId} />,
+        id: 'quarterlyHighlights',
+        label: strings.QUARTERLY_HIGHLIGHTS,
+        children: (
+          <ActivityHighlightsContent
+            activities={activities}
+            busy={activitiesFetching}
+            fitToWindow
+            onDropdownDataReady={setQuarterDropdownData}
+            projectId={projectData.projectId}
+            showDropdownInline={false}
+          />
+        ),
       },
       plantsDashboardTab,
     ];
   }, [
     activities,
     activitiesFetching,
-    cleanUpTabsEnabled,
     location.pathname,
-    highlightsModalOpen,
     onChangeReportsSegment,
     onSelectReport,
     phaseVotes,
@@ -256,14 +223,7 @@ const ProjectPage = () => {
     goToAcceleratorActivityCreate(projectData.projectId);
   }, [goToAcceleratorActivityCreate, projectData.projectId]);
 
-  const openActivityHighlightsPreview = useCallback(() => {
-    if (cleanUpTabsEnabled) {
-      onChangeTab('quarterlyHighlights');
-      return;
-    }
-
-    setHighlightsModalOpen(true);
-  }, [cleanUpTabsEnabled, onChangeTab]);
+  const openActivityHighlightsPreview = useCallback(() => onChangeTab('quarterlyHighlights'), [onChangeTab]);
 
   const closePublishDialog = useCallback(() => setOpenPublishDialog(false), []);
 
@@ -382,26 +342,12 @@ const ProjectPage = () => {
                 selectedValue={quarterDropdownData.selectedQuarter}
               />
             )}
-
-          {activeTab === 'documents' && (
-            <Button
-              icon='plus'
-              id='createDocument'
-              label={strings.ADD_DOCUMENT}
-              onClick={goToDocumentNew}
-              priority='primary'
-              size='medium'
-              sx={{ whiteSpace: 'nowrap' }}
-              type='productive'
-            />
-          )}
         </Box>
       </Box>
     ),
     [
       activeTab,
       activityId,
-      goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
       isAllowedCreateActivities,

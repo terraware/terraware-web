@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import { Box, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
-import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
 import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
@@ -19,7 +18,6 @@ import ReportMessages from 'src/components/AcceleratorReports/ReportMessages';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -43,7 +41,6 @@ type ReportTabV2Props = {
 const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: ReportTabV2Props): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
   const trackEvent = useTrackEvent();
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const navigate = useSyncNavigate();
@@ -59,14 +56,8 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
   const goToQuarterlyHighlights = useCallback(
     (quarter?: string) => {
       const projectViewPath = APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`);
-      const params = new URLSearchParams(cleanUpTabsEnabled && inProjectTab ? location.search : '');
-
-      if (cleanUpTabsEnabled) {
-        params.set('tab', 'quarterlyHighlights');
-      } else {
-        params.set('tab', 'activityLog');
-        params.set('showHighlights', 'true');
-      }
+      const params = new URLSearchParams(inProjectTab ? location.search : '');
+      params.set('tab', 'quarterlyHighlights');
 
       if (quarter) {
         params.set('highlightsQuarter', quarter);
@@ -74,7 +65,7 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
 
       navigate(getLocation(projectViewPath, location, `?${params.toString()}`));
     },
-    [cleanUpTabsEnabled, inProjectTab, location, navigate, projectId]
+    [inProjectTab, location, navigate, projectId]
   );
 
   const selectReport = useCallback(
@@ -142,7 +133,6 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
         display: 'flex',
         flexDirection: 'column',
         flexGrow: 1,
-        marginTop: cleanUpTabsEnabled ? 0 : theme.spacing(3),
       }}
     >
       {header && <Box marginBottom={theme.spacing(3)}>{header}</Box>}
@@ -154,8 +144,6 @@ const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: Repor
           <Box marginBottom={theme.spacing(3)} {...{ [SCROLL_ANCHOR]: 'reportTitle' }}>
             <Box alignItems='center' display='flex' justifyContent='space-between'>
               <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
-
-              {!cleanUpTabsEnabled && selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
             </Box>
 
             {lastPublished && (
