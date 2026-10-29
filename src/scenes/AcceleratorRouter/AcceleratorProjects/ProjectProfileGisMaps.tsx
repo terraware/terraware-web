@@ -14,9 +14,7 @@ import { MapLayer } from 'src/components/common/MapLayerSelect';
 import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { requestGetGis } from 'src/redux/features/gis/gisAsyncThunks';
-import { selectGisRequest } from 'src/redux/features/gis/gisSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetGisFeaturesQuery } from 'src/queries/gis/wfs';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapEntity, MapSourceProperties } from 'src/types/Map';
@@ -29,24 +27,23 @@ type StratumOrSiteOption = { name: string; type: 'stratum' | 'site'; showSeparat
 const ProjectProfileGisMaps = () => {
   const projectData = useAcceleratorProjectData();
   const theme = useTheme();
-  const [plantingSitesRequestId, setPlantingSitesRequestId] = useState('');
-  const [boundariesRequestId, setBoundariesRequestId] = useState('');
-  const gisPlantingSitesResponse = useAppSelector(selectGisRequest(plantingSitesRequestId));
-  const gisBoundariesResponse = useAppSelector(selectGisRequest(boundariesRequestId));
-  const dispatch = useAppDispatch();
-  const plantingSitesData = useMemo(
-    () =>
-      gisPlantingSitesResponse?.data
-        ? (gisPlantingSitesResponse.data as unknown as FeatureCollection<MultiPolygon>)
-        : undefined,
-    [gisPlantingSitesResponse]
+  const projectBoundariesCql = projectData.acceleratorProject?.projectBoundariesCql;
+  const plantingSitesCql = projectData.acceleratorProject?.plantingSitesCql;
+  const { currentData: plantingSitesData } = useGetGisFeaturesQuery(
+    {
+      cqlFilter: plantingSitesCql ?? '',
+      typeNames: 'tf_accelerator:planting_sites',
+      propertyName: 'fid,strata,substrata,site,geom,created_at',
+    },
+    { skip: !plantingSitesCql, refetchOnMountOrArgChange: true }
   );
-  const boundariesData = useMemo(
-    () =>
-      gisBoundariesResponse?.data
-        ? (gisBoundariesResponse.data as unknown as FeatureCollection<MultiPolygon>)
-        : undefined,
-    [gisBoundariesResponse]
+  const { currentData: boundariesData } = useGetGisFeaturesQuery(
+    {
+      cqlFilter: projectBoundariesCql ?? '',
+      typeNames: 'tf_accelerator:project_boundaries',
+      propertyName: 'fid,geom,boundary_name',
+    },
+    { skip: !projectBoundariesCql, refetchOnMountOrArgChange: true }
   );
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
@@ -59,34 +56,7 @@ const ProjectProfileGisMaps = () => {
   const { isDesktop } = useDeviceInfo();
   const [selectedLayer, setSelectedLayer] = useState<MapLayer>();
 
-  useEffect(() => {
-    const projectDetails = projectData.acceleratorProject;
-    if (projectDetails && projectDetails.projectBoundariesCql) {
-      const requestBoundaries = dispatch(
-        requestGetGis({
-          cqlFilter: projectDetails.projectBoundariesCql,
-          typeNames: 'tf_accelerator:project_boundaries',
-          propertyName: 'fid,geom,boundary_name',
-        })
-      );
-      setBoundariesRequestId(requestBoundaries.requestId);
-    }
-
-    if (projectDetails && projectDetails.plantingSitesCql) {
-      const requestPlantingSites = dispatch(
-        requestGetGis({
-          cqlFilter: projectDetails.plantingSitesCql,
-          typeNames: 'tf_accelerator:planting_sites',
-          propertyName: 'fid,strata,substrata,site,geom,created_at',
-        })
-      );
-      setPlantingSitesRequestId(requestPlantingSites.requestId);
-    }
-  }, [dispatch, projectData]);
-
-  const mapsNotUploaded = useMemo(() => {
-    return !projectData.acceleratorProject?.projectBoundariesCql && !projectData.acceleratorProject?.plantingSitesCql;
-  }, [projectData]);
+  const mapsNotUploaded = !projectBoundariesCql && !plantingSitesCql;
 
   const plantingMapData = useMemo(() => {
     if (plantingSitesData) {
