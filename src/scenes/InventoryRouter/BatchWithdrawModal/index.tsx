@@ -14,12 +14,13 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
-import { ScheduledDatePayload, useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
+import { useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListBatchesByIdsQuery } from 'src/queries/search/batches';
-import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
+import { useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
 import { useLazyListSpeciesTargetsForSubstratumQuery } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
+import { findScheduledDateForRequest } from 'src/utils/plantingDates';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import AddPhotosStep from './AddPhotosStep';
@@ -59,24 +60,6 @@ const batchQuantityForField = (batch: BatchInfo, field: keyof BatchWithdrawQuant
       return batch.readyQuantity;
   }
   return 0;
-};
-
-const scheduledDateSpeciesKey = ({ quantity, speciesId, substratumId }: ScheduledDatePayload['species'][0]) =>
-  `${substratumId}-${speciesId}-${quantity}`;
-
-const requestSpeciesKey = (substratumId: number, species: PlantingDateRequestRow['substrata'][0]['species'][0]) =>
-  `${substratumId}-${species.speciesId}-${species.quantity}`;
-
-const scheduledDateMatchesRequest = (scheduledDate: ScheduledDatePayload, request: PlantingDateRequestRow): boolean => {
-  const scheduledSpeciesKeys = scheduledDate.species.map(scheduledDateSpeciesKey).sort();
-  const requestSpeciesKeys = request.substrata
-    .flatMap((substratum) => substratum.species.map((species) => requestSpeciesKey(substratum.substratumId, species)))
-    .sort();
-
-  return (
-    scheduledSpeciesKeys.length === requestSpeciesKeys.length &&
-    scheduledSpeciesKeys.every((key, index) => key === requestSpeciesKeys[index])
-  );
 };
 
 const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps): JSX.Element => {
@@ -242,13 +225,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     }
 
     return (plantingDateRequestsResult.currentData ?? []).flatMap((request) => {
-      const dateMatches = (scheduledDatesData?.scheduledDates ?? []).filter(
-        (candidate) => candidate.date === request.date
-      );
-      const scheduledDate =
-        dateMatches.length === 1
-          ? dateMatches[0]
-          : dateMatches.find((candidate) => scheduledDateMatchesRequest(candidate, request));
+      const scheduledDate = findScheduledDateForRequest(scheduledDatesData?.scheduledDates ?? [], request);
       return scheduledDate ? [{ ...request, scheduledPlantingDateId: scheduledDate.scheduledPlantingDateId }] : [];
     });
   }, [draft.plantingSeasonId, plantingDateRequestsResult, scheduledDatesData]);
