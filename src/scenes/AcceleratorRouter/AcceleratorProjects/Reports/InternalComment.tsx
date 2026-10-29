@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -108,7 +108,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               label={strings.INTERNAL_COMMENTS}
               type='textarea'
@@ -118,7 +118,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
               preserveNewlines
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Dropdown
               fullWidth={true}
               label={strings.STATUS}

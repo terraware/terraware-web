@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -126,7 +126,7 @@ export default function EditCommonIndicatorModal({
         title={strings.EDIT_COMMON_INDICATOR}
       />
       <Grid container spacing={2} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
             id='name'
@@ -137,7 +137,7 @@ export default function EditCommonIndicatorModal({
             value={record.name}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='description'
             label={strings.DESCRIPTION}
@@ -146,7 +146,7 @@ export default function EditCommonIndicatorModal({
             value={record.description}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             fullWidth
             id='level'
@@ -156,7 +156,7 @@ export default function EditCommonIndicatorModal({
             selectedValue={record.level}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='unit'
             label={strings.UNIT}
@@ -166,7 +166,7 @@ export default function EditCommonIndicatorModal({
             value={record.unit}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             errorText={validate && !record.refId ? strings.REQUIRED_FIELD : ''}
             id='refId'
@@ -177,7 +177,7 @@ export default function EditCommonIndicatorModal({
             value={record.refId}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             fullWidth
             id='category'
@@ -188,7 +188,7 @@ export default function EditCommonIndicatorModal({
             selectedValue={record.category}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='primaryDataSource'
             label={strings.PRIMARY_DATA_SOURCE}
@@ -197,7 +197,7 @@ export default function EditCommonIndicatorModal({
             value={record.primaryDataSource}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='tfOwner'
             label={strings.TF_OWNER_REVIEWER}
@@ -206,7 +206,7 @@ export default function EditCommonIndicatorModal({
             value={record.tfOwner}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             fullWidth
             id='classId'
@@ -216,7 +216,7 @@ export default function EditCommonIndicatorModal({
             selectedValue={record.classId}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='notes'
             label={strings.NOTES}
@@ -225,7 +225,7 @@ export default function EditCommonIndicatorModal({
             value={record.notes}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             fullWidth
             id='frequency'
@@ -235,7 +235,7 @@ export default function EditCommonIndicatorModal({
             selectedValue={record.frequency}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             disabled={false}
             id='active'
@@ -245,7 +245,7 @@ export default function EditCommonIndicatorModal({
             value={record.active}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             disabled={false}
             id='isPublishable'
@@ -255,7 +255,7 @@ export default function EditCommonIndicatorModal({
             value={record.isPublishable}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Checkbox
             disabled={false}
             id='isDecimal'

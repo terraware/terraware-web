@@ -1,7 +1,7 @@
 import React, { type JSX, type ReactNode, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Badge, Button, EditableTable, EditableTableColumn, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { MRT_Cell } from 'material-react-table';
@@ -410,7 +410,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
         )}
         <Grid container sx={gridStyle}>
           {data.map((datum, index) => (
-            <Grid key={index} item xs={gridSize} marginTop={2}>
+            <Grid key={index} marginTop={2} size={gridSize}>
               <Textfield
                 id={`plot-observation-${index}`}
                 label={datum.label}
@@ -421,7 +421,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
               />
             </Grid>
           ))}
-          <Grid item xs={gridSize} marginTop={2}>
+          <Grid marginTop={2} size={gridSize}>
             <Box>
               <Typography
                 fontSize={'14px'}

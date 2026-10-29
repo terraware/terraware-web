@@ -1,6 +1,6 @@
 import React, { Fragment, type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Box, GridLegacy as Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import AddLink from 'src/components/common/AddLink';
@@ -59,7 +59,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
     <Grid container key='projects' spacing={2}>
       {rows.map((project, index) => (
         <Fragment key={index}>
-          <Grid item xs={11} rowSpacing={2}>
+          <Grid rowSpacing={2} size={11}>
             <ProjectsDropdown
               placeholder={strings.SELECT}
               availableProjects={allProjects
@@ -81,7 +81,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
               autoComplete
             />
           </Grid>
-          <Grid item xs={1} display={'flex'} flexDirection={'column-reverse'}>
+          <Grid display={'flex'} flexDirection={'column-reverse'} size={1}>
             <Link onClick={() => onDeleteProject(index)}>
               <Box paddingTop='8px'>
                 <Icon name='iconSubtract' size='medium' />
@@ -90,7 +90,7 @@ const MultiProjectsEdit = (props: ProjectsEditProps): JSX.Element => {
           </Grid>
         </Fragment>
       ))}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <AddLink onClick={onAddProject} key='addProject' text={strings.ADD_PROJECT} large={true} />
       </Grid>
     </Grid>

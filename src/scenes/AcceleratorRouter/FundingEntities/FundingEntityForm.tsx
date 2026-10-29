@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Container, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
@@ -67,7 +67,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
         }}
       >
         <Card style={{ width: '800px', margin: 'auto' }}>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <Textfield
               id='name'
               label={strings.NAME}
@@ -77,7 +77,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
               required={true}
             />
           </Grid>
-          <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+          <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
             <MultiProjectsEdit
               projects={localRecord.projects || []}
               allProjects={publishedProjects || []}

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
@@ -573,7 +573,7 @@ const ProjectProfileEdit = () => {
           }}
         >
           <Grid container>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <ProjectFieldTextfield
                 height='auto'
                 id={'dealName'}
@@ -583,7 +583,13 @@ const ProjectProfileEdit = () => {
                 value={acceleratorProjectRecord?.dealName}
               />
             </Grid>
-            <Grid item md={6} display={'flex'} flexDirection={'column'}>
+            <Grid
+              display={'flex'}
+              flexDirection={'column'}
+              size={{
+                md: 6,
+              }}
+            >
               <Box width={'100%'}>
                 <CountrySelect
                   id={'countryCode'}
@@ -595,7 +601,7 @@ const ProjectProfileEdit = () => {
                 />
               </Box>
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <ProjectFieldTextfield
                 height='auto'
                 id={'fileNaming'}
@@ -607,7 +613,13 @@ const ProjectProfileEdit = () => {
                 validate={!!acceleratorProjectRecord?.phase && validateFields}
               />
             </Grid>
-            <Grid item md={6} display={'flex'} flexDirection={'column'}>
+            <Grid
+              display={'flex'}
+              flexDirection={'column'}
+              size={{
+                md: 6,
+              }}
+            >
               <Box width={'100%'}>
                 <ProjectFieldSelect
                   id={'phase'}
@@ -621,7 +633,11 @@ const ProjectProfileEdit = () => {
             </Grid>
 
             {isInternalUsersRequestSuccess && (
-              <Grid item md={12}>
+              <Grid
+                size={{
+                  md: 12,
+                }}
+              >
                 <Box border='1px solid gray' borderRadius='8px' marginX={theme.spacing(2)} padding={theme.spacing(2)}>
                   <Box borderBottom='1px solid gray' marginBottom='16px' paddingBottom='8px'>
                     <Typography fontSize='16px' fontWeight={600} lineHeight='24px'>
@@ -630,7 +646,11 @@ const ProjectProfileEdit = () => {
                   </Box>
 
                   <Grid container marginBottom='4px'>
-                    <Grid item md={6}>
+                    <Grid
+                      size={{
+                        md: 6,
+                      }}
+                    >
                       <Typography
                         color={theme.palette.TwClrTxtSecondary}
                         fontSize='14px'
@@ -640,7 +660,11 @@ const ProjectProfileEdit = () => {
                         {strings.PERSON}
                       </Typography>
                     </Grid>
-                    <Grid item md={6}>
+                    <Grid
+                      size={{
+                        md: 6,
+                      }}
+                    >
                       <Typography
                         color={theme.palette.TwClrTxtSecondary}
                         fontSize='14px'
@@ -659,7 +683,12 @@ const ProjectProfileEdit = () => {
                       !globalUsersOptions.some((opt) => opt.value === user.userId);
                     return (
                       <Grid container key={`internal-user-${index}`} marginBottom='8px'>
-                        <Grid item md={6} paddingRight='8px'>
+                        <Grid
+                          paddingRight='8px'
+                          size={{
+                            md: 6,
+                          }}
+                        >
                           <Dropdown
                             autocomplete
                             fullWidth
@@ -678,7 +707,11 @@ const ProjectProfileEdit = () => {
                           )}
                         </Grid>
 
-                        <Grid item md={showDeleteInternalUserButton ? 5 : 6}>
+                        <Grid
+                          size={{
+                            md: showDeleteInternalUserButton ? 5 : 6,
+                          }}
+                        >
                           <Dropdown
                             autocomplete
                             fullWidth
@@ -693,7 +726,7 @@ const ProjectProfileEdit = () => {
                         </Grid>
 
                         {showDeleteInternalUserButton && (
-                          <Grid item xs={1} display={'flex'} flexDirection={'column'}>
+                          <Grid display={'flex'} flexDirection={'column'} size={1}>
                             <Link onClick={getOnRemoveInternalUser(index)} style={{ height: '100%' }}>
                               <Box paddingTop='8px'>
                                 <Icon name='iconSubtract' size='medium' />
@@ -706,7 +739,11 @@ const ProjectProfileEdit = () => {
                   })}
 
                   <Grid container>
-                    <Grid item md={6}>
+                    <Grid
+                      size={{
+                        md: 6,
+                      }}
+                    >
                       <Button
                         icon='iconAdd'
                         label={strings.EDITABLE_TABLE_ADD_ROW}
@@ -718,7 +755,12 @@ const ProjectProfileEdit = () => {
                       />
                     </Grid>
 
-                    <Grid item md={6} textAlign='right'>
+                    <Grid
+                      textAlign='right'
+                      size={{
+                        md: 6,
+                      }}
+                    >
                       <Button
                         icon='plus'
                         label={strings.OTHER_CONTACT}
@@ -739,7 +781,11 @@ const ProjectProfileEdit = () => {
               onChange={onChangeAcceleratorProject}
               value={acceleratorProjectRecord?.dealDescription}
             />
-            <Grid item md={12}>
+            <Grid
+              size={{
+                md: 12,
+              }}
+            >
               <LandUseMultiSelect
                 id={'landUseModelTypes'}
                 md={6}
@@ -761,7 +807,7 @@ const ProjectProfileEdit = () => {
             ))}
 
             <Box marginX={theme.spacing(2)} width={'100%'}>
-              <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Grid marginTop={theme.spacing(2)} size={12}>
                 <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                   {strings.LAND_DATA}
                 </Typography>
@@ -814,7 +860,7 @@ const ProjectProfileEdit = () => {
             />
 
             <Box marginX={theme.spacing(2)} width={'100%'}>
-              <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Grid marginTop={theme.spacing(2)} size={12}>
                 <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                   {strings.CARBON}
                 </Typography>
@@ -885,7 +931,7 @@ const ProjectProfileEdit = () => {
             )}
 
             <Box marginX={theme.spacing(2)} width={'100%'}>
-              <Grid item xs={12} marginTop={theme.spacing(2)}>
+              <Grid marginTop={theme.spacing(2)} size={12}>
                 <Typography fontSize='20px' fontWeight={600} lineHeight='28px'>
                   {strings.PROJECT_LINKS}
                 </Typography>
@@ -965,7 +1011,11 @@ const ProjectProfileEdit = () => {
           </Grid>
 
           <Grid container>
-            <Grid item md={12}>
+            <Grid
+              size={{
+                md: 12,
+              }}
+            >
               <PhotoSelectorWithPreview
                 title={'Main Photo'}
                 onPhotoChanged={setMainPhoto}
@@ -985,7 +1035,11 @@ const ProjectProfileEdit = () => {
             </Grid>
           </Grid>
           <Grid container>
-            <Grid item md={12}>
+            <Grid
+              size={{
+                md: 12,
+              }}
+            >
               <PhotoSelectorWithPreview
                 title={'Map Photo'}
                 onPhotoChanged={setMapPhoto}

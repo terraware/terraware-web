@@ -6,7 +6,7 @@ import {
   Card,
   Checkbox,
   Chip,
-  GridLegacy as Grid,
+  Grid,
   IconButton,
   MenuItem,
   TextField,
@@ -893,7 +893,7 @@ const MatrixView = () => {
     renderTopToolbarCustomActions: () => {
       return (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid item style={{ width: '250px' }}>
+          <Grid style={{ width: '242px' }}>
             <Dropdown
               id={'current-view'}
               label={strings.CURRENT_VIEW}
@@ -908,7 +908,7 @@ const MatrixView = () => {
           </Grid>
 
           {(!columnFiltersAreEmpty || !!globalFilter) && (
-            <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+            <Grid style={{ display: 'flex', alignItems: 'center' }}>
               <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
                 {strings.FILTERS_APPLIED.toUpperCase()}
               </Typography>
