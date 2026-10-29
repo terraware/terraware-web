@@ -36,7 +36,7 @@ const tableColumns: TableColumnType[] = [
 ];
 
 const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
-  const { column, row, index, reloadData } = props;
+  const { column, row, index } = props;
 
   if (column.key === 'date') {
     if (props.value) {
@@ -49,12 +49,7 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
       <CellRenderer
         column={column}
         value={
-          <DocumentHistoryRowMenu
-            documentId={row.documentId}
-            versionId={row.versionId}
-            isSubmitted={row.isSubmitted}
-            reloadData={reloadData}
-          />
+          <DocumentHistoryRowMenu documentId={row.documentId} versionId={row.versionId} isSubmitted={row.isSubmitted} />
         }
         row={row}
         index={index}
@@ -80,7 +75,7 @@ const DocumentHistoryTab = (): JSX.Element => {
   const [searchValue, setSearchValue] = useState<string>('');
   const onSearch = (str: string) => setSearchValue(str);
 
-  const { currentData: historyData, isError, refetch } = useGetDocumentHistoryQuery(documentId);
+  const { currentData: historyData, isError } = useGetDocumentHistoryQuery(documentId);
 
   useEffect(() => {
     if (isError) {
@@ -104,7 +99,6 @@ const DocumentHistoryTab = (): JSX.Element => {
       tableOrderBy: 'date',
       tableColumns,
       tableCellRenderer,
-      tableReloadData: () => void refetch(),
     },
   };
 

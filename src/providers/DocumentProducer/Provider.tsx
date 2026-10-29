@@ -88,7 +88,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
     (hasProject && variablesOwners === undefined && !ownersQuery.isError) ||
     (hasDocument && hasProject && documentVariables === undefined && !documentVariablesResult.isError);
 
-  const reloadDocument = useCallback(() => {
+  const reload = useCallback(() => {
     if (hasDocument) {
       void refetchDocument();
     }
@@ -110,9 +110,8 @@ const DocumentProducerProvider = ({ children }: Props) => {
       getUsedSections,
       isLoading,
       projectId,
-      reload: reloadDocument,
+      reload,
       variablesOwners,
-      reloadDocument,
     }),
     [
       allVariables,
@@ -125,7 +124,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
       isLoading,
       projectId,
       variablesOwners,
-      reloadDocument,
+      reload,
     ]
   );
 
