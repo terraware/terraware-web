@@ -1058,7 +1058,7 @@ export default function PlantsDashboardView({
   const hasObservationResults = useMemo(() =&gt; !!plantingSite?.latestObservationId, [plantingSite]);
 &nbsp;
   const sectionHeader = (title: string) =&gt; (
-    &lt;Grid item xs={12}&gt;
+    &lt;Grid size={12}&gt;
       &lt;Typography fontSize='20px' fontWeight={600}&gt;
         {title}
       &lt;/Typography&gt;
@@ -1069,7 +1069,7 @@ export default function PlantsDashboardView({
 <span class="fstat-no" title="function not covered" >    () =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      plantingSite || isProjectSelected ? (</span>
         &lt;&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Box
               sx={{
                 display: 'flex',
@@ -1087,7 +1087,7 @@ export default function PlantsDashboardView({
               )}
             &lt;/Box&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;SurvivalRateCard
               plantingSiteId={plantingSite?.id}
               projectId={projectId}
@@ -1101,7 +1101,7 @@ export default function PlantsDashboardView({
 &nbsp;
   const renderTotalPlantsAndSpecies = () =&gt; (
     &lt;&gt;
-      &lt;Grid item xs={12}&gt;
+      &lt;Grid size={12}&gt;
         &lt;Box
           sx={{
             display: 'flex',
@@ -1126,7 +1126,7 @@ export default function PlantsDashboardView({
           ) : null}
         &lt;/Box&gt;
       &lt;/Grid&gt;
-      &lt;Grid item xs={12}&gt;
+      &lt;Grid size={12}&gt;
         &lt;PlantsAndSpeciesCard
           plantingSiteId={selectedPlantingSiteId !== ALL_PLANTING_SITES ? plantingSite?.id : undefined}
           projectId={projectId}
@@ -1141,7 +1141,7 @@ export default function PlantsDashboardView({
 <span class="fstat-no" title="function not covered" >    () =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      plantingSite ? (</span>
         &lt;&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Box
               sx={{
                 display: 'flex',
@@ -1160,7 +1160,7 @@ export default function PlantsDashboardView({
               )}
             &lt;/Box&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;PlantingDensityCard hasObservations={hasObservationResults} plantingSiteId={plantingSite.id} /&gt;
           &lt;/Grid&gt;
         &lt;/&gt;
@@ -1172,7 +1172,7 @@ export default function PlantsDashboardView({
 <span class="fstat-no" title="function not covered" >    () =&gt;</span>
 <span class="cstat-no" title="statement not covered" >      plantingSite ? (</span>
         &lt;&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Box sx={{ display: 'flex', alignItems: 'center', paddingLeft: theme.spacing(3) }}&gt;
               &lt;Typography fontWeight={600} fontSize={'20px'} paddingRight={1}&gt;
                 {strings.STRATUM_TRENDS}
@@ -1181,7 +1181,7 @@ export default function PlantsDashboardView({
               &lt;Typography&gt;{strings.ALL_OBSERVATIONS}&lt;/Typography&gt;
             &lt;/Box&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} /&gt;
           &lt;/Grid&gt;
         &lt;/&gt;
@@ -1193,7 +1193,7 @@ export default function PlantsDashboardView({
     () =&gt;
       plantingSite ? (
         &lt;&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Box
               sx={{
                 display: 'flex',
@@ -1211,7 +1211,7 @@ export default function PlantsDashboardView({
               )}
             &lt;/Box&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Box
               sx={{
                 display: 'flex',
@@ -1242,7 +1242,7 @@ export default function PlantsDashboardView({
 <span class="cstat-no" title="statement not covered" >      plantingSite ? (</span>
         &lt;&gt;
           {sectionHeader(strings.SITE_MAP)}
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Box
               sx={{
                 background: theme.palette.TwClrBg,
@@ -1280,7 +1280,7 @@ export default function PlantsDashboardView({
     &gt;
       &lt;Grid container spacing={3} alignItems='flex-start' height='fit-content'&gt;
         {survivalRateRecalculationInProgress &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} /&gt;
           &lt;/Grid&gt;
         )}
@@ -1295,7 +1295,7 @@ export default function PlantsDashboardView({
         {(selectedPlantingSiteId === ALL_PLANTING_SITES || !plantingSite) &amp;&amp; (
           &lt;&gt;
             {sectionHeader(strings.PROJECT_AREA_MAP)}
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12}&gt;
               &lt;Box
                 sx={{
                   background: theme.palette.TwClrBg,
@@ -1324,7 +1324,7 @@ export default function PlantsDashboardView({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T19:03:21.131Z
+                at 2026-10-29T23:46:51.600Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

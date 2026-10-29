@@ -400,8 +400,7 @@
 <a name='L335'></a><a href='#L335'>335</a>
 <a name='L336'></a><a href='#L336'>336</a>
 <a name='L337'></a><a href='#L337'>337</a>
-<a name='L338'></a><a href='#L338'>338</a>
-<a name='L339'></a><a href='#L339'>339</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L338'></a><a href='#L338'>338</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -611,7 +610,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -829,9 +827,9 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
         open={tooltipLearnMoreModalOpen}
         title={tooltipLearnMoreModalData?.title}
       /&gt;
-      &lt;Grid container item xs={12} spacing={2} textAlign='left' color={theme.palette.TwClrTxt} fontSize='14px'&gt;
-        &lt;Grid item xs={12} display='flex'&gt;
-          &lt;Grid xs={isEditable ? 6 : <span class="branch-1 cbranch-no" title="branch not covered" >12}</span>&gt;
+      &lt;Grid container spacing={2} textAlign='left' color={theme.palette.TwClrTxt} fontSize='14px' size={12}&gt;
+        &lt;Grid container spacing={0} display='flex' size={12}&gt;
+          &lt;Grid size={isEditable ? 6 : <span class="branch-1 cbranch-no" title="branch not covered" >12}</span>&gt;
             &lt;Typography fontSize='20px'&gt;
               {strings.TEST} #{viabilityTest.id}
             &lt;/Typography&gt;
@@ -840,7 +838,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             &lt;/Typography&gt;
           &lt;/Grid&gt;
           {isEditable ? (
-            &lt;Grid xs={6} textAlign='right'&gt;
+            &lt;Grid textAlign='right' size={6}&gt;
               &lt;Box marginRight={1} display='inline-block'&gt;
                 &lt;Button
                   type='passive'
@@ -854,15 +852,15 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             &lt;/Grid&gt;
           ) : <span class="branch-1 cbranch-no" title="branch not covered" >null}</span>
         &lt;/Grid&gt;
-        &lt;Grid item xs={12} display='flex'&gt;
-          &lt;Grid xs={smallColumn}&gt;
-            &lt;Grid xs={12} sx={titleStyle}&gt;
+        &lt;Grid container spacing={0} display='flex' size={12}&gt;
+          &lt;Grid size={smallColumn}&gt;
+            &lt;Grid sx={titleStyle} size={12}&gt;
               {strings.TEST_METHOD}
             &lt;/Grid&gt;
-            &lt;Grid xs={12}&gt;{getFullTestType(viabilityTest.testType)}&lt;/Grid&gt;
+            &lt;Grid size={12}&gt;{getFullTestType(viabilityTest.testType)}&lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid xs={smallColumn}&gt;
-            &lt;Grid xs={12} sx={titleStyle}&gt;
+          &lt;Grid size={smallColumn}&gt;
+            &lt;Grid sx={titleStyle} size={12}&gt;
               {strings.SEED_TYPE}
               &lt;IconTooltip
                 title={
@@ -880,19 +878,19 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                 }
               /&gt;
             &lt;/Grid&gt;
-            &lt;Grid xs={12}&gt;{viabilityTest.seedType}&lt;/Grid&gt;
+            &lt;Grid size={12}&gt;{viabilityTest.seedType}&lt;/Grid&gt;
           &lt;/Grid&gt;
           {!isMobile &amp;&amp; viabilityTest.testType === 'Cut' &amp;&amp; (
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.STAFF}
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.withdrawnByName}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.withdrawnByName}&lt;/Grid&gt;
             &lt;/Grid&gt;
           )}
           {!isMobile &amp;&amp; viabilityTest.testType !== 'Cut' &amp;&amp; (
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.TREATMENT}
                 &lt;IconTooltip
                   title={
@@ -910,14 +908,14 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 /&gt;
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.treatment}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.treatment}&lt;/Grid&gt;
             &lt;/Grid&gt;
           )}
         &lt;/Grid&gt;
-        &lt;Grid item xs={12} display='flex'&gt;
+        &lt;Grid container spacing={0} display='flex' size={12}&gt;
           {isMobile &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >viabilityTest.testType !== 'Cut' </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >(</span>
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.TREATMENT}
                 &lt;IconTooltip
                   title={
@@ -935,12 +933,12 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 /&gt;
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.treatment}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.treatment}&lt;/Grid&gt;
             &lt;/Grid&gt;
           )}
           {viabilityTest.testType !== 'Cut' &amp;&amp; (
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.SUBSTRATE}
                 &lt;IconTooltip
                   title={
@@ -958,41 +956,39 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 /&gt;
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.substrate}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.substrate}&lt;/Grid&gt;
             &lt;/Grid&gt;
           )}
           {!isMobile &amp;&amp; viabilityTest.testType !== 'Cut' &amp;&amp; (
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.STAFF}
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.withdrawnByName}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.withdrawnByName}&lt;/Grid&gt;
             &lt;/Grid&gt;
           )}
         &lt;/Grid&gt;
         {isMobile &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid item xs={12} display='flex'&gt;
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+          &lt;Grid container spacing={0} display='flex' size={12}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.STAFF}
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.withdrawnByName}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.withdrawnByName}&lt;/Grid&gt;
             &lt;/Grid&gt;
           &lt;/Grid&gt;
         )}
         {viabilityTest.substrateNotes &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid item xs={12}&gt;
-            &lt;Grid xs={12} sx={titleStyle}&gt;
+          &lt;Grid size={12}&gt;
+            &lt;Grid sx={titleStyle} size={12}&gt;
               {strings.SUBSTRATE_NOTES}
             &lt;/Grid&gt;
-            &lt;Grid xs={12} sx={{ whiteSpace: 'pre-wrap' }}&gt;
+            &lt;Grid sx={{ whiteSpace: 'pre-wrap' }} size={12}&gt;
               {viabilityTest.substrateNotes}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
         )}
         &lt;Grid
-          item
-          xs={12}
           sx={{
             background: theme.palette.TwClrBgSecondary,
             borderRadius: '16px',
@@ -1000,19 +996,20 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             marginTop: 2,
             marginLeft: 1,
           }}
+          size={12}
         &gt;
-          &lt;Grid xs={12} display='flex'&gt;
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+          &lt;Grid container spacing={0} display='flex' size={12}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {strings.START_DATE}
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;{viabilityTest.startDate}&lt;/Grid&gt;
+              &lt;Grid size={12}&gt;{viabilityTest.startDate}&lt;/Grid&gt;
             &lt;/Grid&gt;
-            &lt;Grid xs={smallColumn}&gt;
-              &lt;Grid xs={12} sx={titleStyle}&gt;
+            &lt;Grid size={smallColumn}&gt;
+              &lt;Grid sx={titleStyle} size={12}&gt;
                 {viabilityTest.testType === 'Cut' ? strings.NUMBER_OF_SEEDS_FILLED_V2 : strings.NUMBER_OF_SEEDS_TESTED}
               &lt;/Grid&gt;
-              &lt;Grid xs={12}&gt;
+              &lt;Grid size={12}&gt;
                 {numberFormatter.format(
                   viabilityTest.testType === 'Cut' ? viabilityTest.seedsFilled : viabilityTest.seedsTested
                 )}
@@ -1021,57 +1018,57 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           &lt;/Grid&gt;
           {viabilityTest.testType === 'Cut' &amp;&amp; (
             &lt;&gt;
-              &lt;Grid xs={12} display='flex' paddingTop={2}&gt;
-                &lt;Grid xs={smallColumn}&gt;
-                  &lt;Grid xs={12} sx={titleStyle}&gt;
+              &lt;Grid container spacing={0} display='flex' paddingTop={2} size={12}&gt;
+                &lt;Grid size={smallColumn}&gt;
+                  &lt;Grid sx={titleStyle} size={12}&gt;
                     {strings.NUMBER_OF_SEEDS_COMPROMISED_V2}
                   &lt;/Grid&gt;
-                  &lt;Grid xs={12}&gt;{numberFormatter.format(viabilityTest.seedsCompromised)}&lt;/Grid&gt;
+                  &lt;Grid size={12}&gt;{numberFormatter.format(viabilityTest.seedsCompromised)}&lt;/Grid&gt;
                 &lt;/Grid&gt;
-                &lt;Grid xs={smallColumn}&gt;
-                  &lt;Grid xs={12} sx={titleStyle}&gt;
+                &lt;Grid size={smallColumn}&gt;
+                  &lt;Grid sx={titleStyle} size={12}&gt;
                     {strings.NUMBER_OF_SEEDS_EMPTY_V2}
                   &lt;/Grid&gt;
-                  &lt;Grid xs={12}&gt;{numberFormatter.format(viabilityTest.seedsEmpty)}&lt;/Grid&gt;
+                  &lt;Grid size={12}&gt;{numberFormatter.format(viabilityTest.seedsEmpty)}&lt;/Grid&gt;
                 &lt;/Grid&gt;
               &lt;/Grid&gt;
-              &lt;Grid xs={12} paddingTop={2}&gt;
-                &lt;Grid xs={12} sx={titleStyle}&gt;
+              &lt;Grid paddingTop={2} size={12}&gt;
+                &lt;Grid sx={titleStyle} size={12}&gt;
                   #{strings.TOTAL_SEEDS_TESTED}
                 &lt;/Grid&gt;
-                &lt;Grid xs={12}&gt;{numberFormatter.format(viabilityTest.seedsTested)}&lt;/Grid&gt;
+                &lt;Grid size={12}&gt;{numberFormatter.format(viabilityTest.seedsTested)}&lt;/Grid&gt;
               &lt;/Grid&gt;
             &lt;/&gt;
           )}
           {viabilityTest.testResults?.map(<span class="fstat-no" title="function not covered" >(testResult, index) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >            return (</span>
-              &lt;Grid xs={12} key={`observation-${index}`} display='flex' paddingTop={1}&gt;
-                &lt;Grid xs={smallColumn}&gt;
-                  &lt;Grid xs={12} sx={titleStyle}&gt;
+              &lt;Grid key={`observation-${index}`} container spacing={0} display='flex' paddingTop={1} size={12}&gt;
+                &lt;Grid size={smallColumn}&gt;
+                  &lt;Grid sx={titleStyle} size={12}&gt;
                     {strings.CHECK_DATE}
                   &lt;/Grid&gt;
-                  &lt;Grid xs={12}&gt;{testResult.recordingDate}&lt;/Grid&gt;
+                  &lt;Grid size={12}&gt;{testResult.recordingDate}&lt;/Grid&gt;
                 &lt;/Grid&gt;
-                &lt;Grid xs={smallColumn}&gt;
-                  &lt;Grid xs={12} sx={titleStyle}&gt;
+                &lt;Grid size={smallColumn}&gt;
+                  &lt;Grid sx={titleStyle} size={12}&gt;
                     {strings.NUMBER_OF_SEEDS_GERMINATED}
                   &lt;/Grid&gt;
-                  &lt;Grid xs={12}&gt;{numberFormatter.format(testResult.seedsGerminated)}&lt;/Grid&gt;
+                  &lt;Grid size={12}&gt;{numberFormatter.format(testResult.seedsGerminated)}&lt;/Grid&gt;
                 &lt;/Grid&gt;
               &lt;/Grid&gt;
             );
           })}
         &lt;/Grid&gt;
         {viabilityTest.testResults &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >viabilityTest.testResults.length &gt; 0 </span>? <span class="branch-0 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;ObservationsChart observations={viabilityTest.testResults} /&gt;
           &lt;/Grid&gt;
         ) : null}
-        &lt;Grid item xs={12}&gt;
-          &lt;Grid xs={12} sx={titleStyle}&gt;
+        &lt;Grid size={12}&gt;
+          &lt;Grid sx={titleStyle} size={12}&gt;
             {strings.NOTES}
           &lt;/Grid&gt;
-          &lt;Grid xs={12}&gt;{viabilityTest.notes}&lt;/Grid&gt;
+          &lt;Grid size={12}&gt;{viabilityTest.notes}&lt;/Grid&gt;
         &lt;/Grid&gt;
       &lt;/Grid&gt;
     &lt;/DialogBox&gt;
@@ -1084,7 +1081,7 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T19:03:21.131Z
+                at 2026-10-29T23:46:51.600Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

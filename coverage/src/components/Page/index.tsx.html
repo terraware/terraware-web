@@ -274,7 +274,11 @@
 <a name='L209'></a><a href='#L209'>209</a>
 <a name='L210'></a><a href='#L210'>210</a>
 <a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L212'></a><a href='#L212'>212</a>
+<a name='L213'></a><a href='#L213'>213</a>
+<a name='L214'></a><a href='#L214'>214</a>
+<a name='L215'></a><a href='#L215'>215</a>
+<a name='L216'></a><a href='#L216'>216</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -363,6 +367,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">403x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -596,25 +604,26 @@ export default function Page({
         &gt;
           {title &amp;&amp; typeof title !== 'string' &amp;&amp; (
             &lt;Grid
-              item
-              xs={leftComponentGridSize !== undefined &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined </span>? 12 : 8}
-              md={
-                leftComponentGridSize !== undefined &amp;&amp; <span class="branch-5 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined</span>
-                  ? 12 - (leftComponentGridSize + rightComponentGridSize)
-                  : undefined
-              }
+              size={{
+                xs: leftComponentGridSize !== undefined &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined </span>? 12 : 8,
+&nbsp;
+                md:
+                  leftComponentGridSize !== undefined &amp;&amp; <span class="branch-5 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined</span>
+                    ? 12 - (leftComponentGridSize + rightComponentGridSize)
+                    : undefined,
+              }}
             &gt;
               {title}
             &lt;/Grid&gt;
           )}
           {title &amp;&amp; typeof title === 'string' &amp;&amp; (
             &lt;Grid
-              item
-              md={
-                leftComponentGridSize !== undefined &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined</span>
-                  ? 12 - (leftComponentGridSize + rightComponentGridSize)
-                  : undefined
-              }
+              size={{
+                md:
+                  leftComponentGridSize !== undefined &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined</span>
+                    ? 12 - (leftComponentGridSize + rightComponentGridSize)
+                    : undefined,
+              }}
             &gt;
               &lt;Typography
                 sx={{
@@ -631,20 +640,22 @@ export default function Page({
           )}
           {leftComponent &amp;&amp; (
             &lt;Grid
-              item
-              md={<span class="branch-1 cbranch-no" title="branch not covered" >leftComponentGridSize </span>?? <span class="branch-2 cbranch-no" title="branch not covered" >4}</span>
-              xs={12}
               style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}
+              size={{
+                md: <span class="branch-1 cbranch-no" title="branch not covered" >leftComponentGridSize </span>?? <span class="branch-2 cbranch-no" title="branch not covered" >4,</span>
+                xs: 12,
+              }}
             &gt;
               {leftComponent}
             &lt;/Grid&gt;
           )}
           {rightComponent &amp;&amp; (
             &lt;Grid
-              item
-              md={rightComponentGridSize ?? 4}
-              xs={12}
               sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              size={{
+                md: rightComponentGridSize ?? 4,
+                xs: 12,
+              }}
             &gt;
               {rightComponent}
             &lt;/Grid&gt;
@@ -652,10 +663,11 @@ export default function Page({
 &nbsp;
           {primaryButton &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
             &lt;Grid
-              item
-              md={4}
-              xs={12}
               sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              size={{
+                md: 4,
+                xs: 12,
+              }}
             &gt;
               &lt;Button
                 id={`${primaryButton.title}_id}`}
@@ -668,12 +680,12 @@ export default function Page({
           )}
         &lt;/Grid&gt;
         {subHeader &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}&gt;
+          &lt;Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}&gt;
             &lt;Box sx={{ paddingLeft: theme.spacing(3) }}&gt;{subHeader}&lt;/Box&gt;
           &lt;/Grid&gt;
         )}
         {description ? <span class="branch-0 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}&gt;
+          &lt;Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}&gt;
             &lt;Typography
               margin={0}
               fontSize='14px'
@@ -687,7 +699,7 @@ export default function Page({
           ''
         )}
       &lt;/PageHeaderWrapper&gt;
-      &lt;Grid item xs={12} ref={firstRowRef}&gt;
+      &lt;Grid ref={firstRowRef} size={12}&gt;
         &lt;PageSnackbar /&gt;
       &lt;/Grid&gt;
       &lt;Grid container sx={contentStyle}&gt;
@@ -703,7 +715,7 @@ export default function Page({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T19:03:21.131Z
+                at 2026-10-29T23:46:51.600Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

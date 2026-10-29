@@ -679,41 +679,41 @@ export default function DetailPanel(): JSX.Element {
         &lt;Accession2EditModal open={openEditAccessionModal} onClose={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >setOpenEditAccessionModal(false)}</span></span> /&gt;
       )}
       &lt;Grid container&gt;
-        &lt;Grid item xs={9}&gt;
-          &lt;Grid item xs={12} sx={headerStyle}&gt;
+        &lt;Grid size={9}&gt;
+          &lt;Grid sx={headerStyle} size={12}&gt;
             {strings.ACCESSION_DETAILS}
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.COLLECTION_TIME}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle}&gt;
+            &lt;Grid sx={valueStyle} size={gridRightSide}&gt;
               {accession.collectedTime
                 ? <span class="branch-0 cbranch-no" title="branch not covered" >getDateTimeDisplayValue(new Date(accession.collectedTime).getTime(), timeZone)</span>
                 : '- -'}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.RECEIVED_DATE}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle}&gt;
+            &lt;Grid sx={valueStyle} size={gridRightSide}&gt;
               {accession.receivedDate}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.COLLECTORS}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle}&gt;
+            &lt;Grid sx={valueStyle} size={gridRightSide}&gt;
               {accession.collectors &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >accession.collectors.length &gt; 0 </span>? <span class="branch-0 cbranch-no" title="branch not covered" >accession.collectors.join(', ') </span>: ''}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.COLLECTION_SITE}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle}&gt;
+            &lt;Grid sx={valueStyle} size={gridRightSide}&gt;
               {accession.collectionSiteName}
               {getCollectionSiteAddress()}
 &nbsp;
@@ -745,19 +745,19 @@ export default function DetailPanel(): JSX.Element {
               )}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.LANDOWNER}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle}&gt;
+            &lt;Grid sx={valueStyle} size={gridRightSide}&gt;
               {accession.collectionSiteLandowner}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.PLANT_LABEL}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle}&gt;
+            &lt;Grid sx={valueStyle} size={gridRightSide}&gt;
               {`${strings.COLLECTED_FROM}${numPlants === undefined ? '' : <span class="branch-1 cbranch-no" title="branch not covered" >' ' + numPlants}</span>${
                 collectionSource &amp;&amp; collectionSource !== 'Other' ? <span class="branch-0 cbranch-no" title="branch not covered" >' ' + collectionSource </span>: ''
               } ${isNotPlural ? <span class="branch-0 cbranch-no" title="branch not covered" >strings.PLANT </span>: strings.PLANTS.toLowerCase()}`}
@@ -782,18 +782,18 @@ export default function DetailPanel(): JSX.Element {
               ) : null}
             &lt;/Grid&gt;
           &lt;/Grid&gt;
-          &lt;Grid item xs={12} sx={gridRowStyle}&gt;
-            &lt;Grid item xs={gridLeftSide} sx={categoryStyle}&gt;
+          &lt;Grid sx={gridRowStyle} size={12}&gt;
+            &lt;Grid sx={categoryStyle} size={gridLeftSide}&gt;
               {strings.PHOTOS}
             &lt;/Grid&gt;
-            &lt;Grid item xs={gridRightSide} sx={valueStyle} display='flex'&gt;
+            &lt;Grid sx={valueStyle} display='flex' size={gridRightSide}&gt;
               &lt;PhotosList photoUrls={photoUrls} /&gt;
             &lt;/Grid&gt;
           &lt;/Grid&gt;
         &lt;/Grid&gt;
 &nbsp;
         &lt;Grid /&gt;
-        &lt;Grid item xs={3} sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }}&gt;
+        &lt;Grid sx={{ display: 'flex', justifyContent: 'end', alignItems: 'center' }} size={3}&gt;
           {userCanEdit ? (
             &lt;Box height='32px'&gt;
               &lt;Button
@@ -820,7 +820,7 @@ export default function DetailPanel(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T19:03:21.131Z
+                at 2026-10-29T23:46:51.600Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

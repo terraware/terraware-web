@@ -1950,12 +1950,12 @@ const MyAccountForm = ({
       &gt;
         &lt;Box sx={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >{ width: 'calc(100vw - 72px)' } </span>: {}}&gt;
           &lt;Grid container spacing={3}&gt;
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12}&gt;
               &lt;Typography fontSize='20px' fontWeight={600}&gt;
                 {userIsFunder ? <span class="branch-0 cbranch-no" title="branch not covered" >strings.FUNDER </span>: strings.GENERAL}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 4}&gt;
+            &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 4}&gt;
               &lt;TextField
                 label={strings.FIRST_NAME}
                 id='firstName'
@@ -1965,7 +1965,7 @@ const MyAccountForm = ({
                 onChange={onChangeCallback('firstName')}
               /&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 4}&gt;
+            &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 4}&gt;
               &lt;TextField
                 label={strings.LAST_NAME}
                 id='lastName'
@@ -1975,7 +1975,7 @@ const MyAccountForm = ({
                 onChange={onChangeCallback('lastName')}
               /&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 4}&gt;
+            &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 4}&gt;
               &lt;TextField
                 label={strings.EMAIL}
                 id='email'
@@ -1985,13 +1985,13 @@ const MyAccountForm = ({
                 readonly={true}
               /&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12}&gt;
               &lt;Typography fontSize='20px' fontWeight={600}&gt;
                 {userIsFunder ? <span class="branch-0 cbranch-no" title="branch not covered" >strings.REGION </span>: strings.LANGUAGE_AND_REGION}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
             {!userIsFunder &amp;&amp; (
-              &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
+              &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
                 {edit ? (
                   &lt;LocaleSelector
                     onChangeLocale={<span class="fstat-no" title="function not covered" >(newValue) =&gt; <span class="cstat-no" title="statement not covered" >setLocaleSelected(newValue)}</span></span>
@@ -2009,7 +2009,7 @@ const MyAccountForm = ({
                 )}
               &lt;/Grid&gt;
             )}
-            &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
+            &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
               {edit ? (
                 &lt;RegionSelector
                   selectedCountryCode={countryCodeSelected}
@@ -2029,7 +2029,7 @@ const MyAccountForm = ({
               )}
             &lt;/Grid&gt;
             {!userIsFunder &amp;&amp; (
-              &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
+              &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
                 {edit ? (
                   &lt;WeightSystemSelector
                     onChange={<span class="fstat-no" title="function not covered" >(newValue) =&gt; <span class="cstat-no" title="statement not covered" >setPreferredWeightSystemSelected(newValue)}</span></span>
@@ -2047,7 +2047,7 @@ const MyAccountForm = ({
                 )}
               &lt;/Grid&gt;
             )}
-            &lt;Grid item xs={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
+            &lt;Grid size={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >12 </span>: 3}&gt;
               {edit ? (
                 &lt;TimeZoneSelector
                   onTimeZoneSelected={onTimeZoneChange}
@@ -2066,7 +2066,7 @@ const MyAccountForm = ({
                 /&gt;
               )}
             &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12}&gt;
               &lt;Typography fontSize='20px' fontWeight={600}&gt;
                 {strings.NOTIFICATIONS}
               &lt;/Typography&gt;
@@ -2075,7 +2075,7 @@ const MyAccountForm = ({
               )}
             &lt;/Grid&gt;
             {userIsFunder &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >disclaimer </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >(</span>
-              &lt;Grid item xs={12}&gt;
+              &lt;Grid size={12}&gt;
                 &lt;Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}&gt;
                   {strings.FUNDER_DISCLAIMER_TITLE}
                 &lt;/Typography&gt;
@@ -2090,7 +2090,7 @@ const MyAccountForm = ({
                 &lt;/Typography&gt;
               &lt;/Grid&gt;
             )}
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12}&gt;
               &lt;Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1.5)}&gt;
                 {strings.COOKIES}
               &lt;/Typography&gt;
@@ -2099,7 +2099,7 @@ const MyAccountForm = ({
                 onChange={<span class="fstat-no" title="function not covered" >(_event, value) =&gt; <span class="cstat-no" title="statement not covered" >onChange('cookiesConsented', value === 'true')}</span></span>
                 value={record.cookiesConsented}
               &gt;
-                &lt;Grid item xs={12} textAlign='left' display='flex' flexDirection='row'&gt;
+                &lt;Grid textAlign='left' display='flex' flexDirection='row' size={12}&gt;
                   &lt;FormControlLabel control={&lt;Radio /&gt;} disabled={!edit} label={strings.COOKIES_ACCEPT} value={true} /&gt;
                   &lt;FormControlLabel
                     control={&lt;Radio /&gt;}
@@ -2116,13 +2116,13 @@ const MyAccountForm = ({
         &lt;/Box&gt;
         {organizations &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >organizations.length &gt; 0 </span>? <span class="branch-0 cbranch-no" title="branch not covered" >(</span>
           &lt;Grid container spacing={4}&gt;
-            &lt;Grid item xs={12} /&gt;
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12} /&gt;
+            &lt;Grid size={12}&gt;
               &lt;Typography fontSize='20px' fontWeight={600}&gt;
                 {strings.ORGANIZATIONS}
               &lt;/Typography&gt;
             &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid size={12}&gt;
               {organizations &amp;&amp; (
                 &lt;Table
                   id='organizations-table'
@@ -2158,7 +2158,7 @@ export default MyAccountForm;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T19:03:21.131Z
+                at 2026-10-29T23:46:51.600Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

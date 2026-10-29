@@ -2477,7 +2477,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             padding: theme.spacing(3),
           }}
         &gt;
-          &lt;Grid item xs={12}&gt;
+          &lt;Grid size={12}&gt;
             &lt;Typography variant='h2' sx={{ fontSize: '18px', fontWeight: 'bold', marginBottom: theme.spacing(2) }}&gt;
               {strings.WITHDRAWAL_DETAILS}
             &lt;/Typography&gt;
@@ -2549,7 +2549,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             &lt;/Grid&gt;
 &nbsp;
             &lt;Grid display='flex'&gt;
-              &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
+              &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={12}&gt;
                 &lt;Dropdown
                   id='fromFacilityId'
                   placeholder={strings.SELECT}
@@ -2565,7 +2565,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 &nbsp;
             {isNurseryTransfer &amp;&amp; (
               &lt;Grid display='flex' flexDirection={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >'column' </span>: 'row'}&gt;
-                &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
+                &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={12}&gt;
                   &lt;Dropdown
                     id='destinationFacilityId'
                     placeholder={strings.SELECT}
@@ -2582,7 +2582,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 &nbsp;
             {!isSingleBatch &amp;&amp; (<span class="branch-1 cbranch-no" title="branch not covered" >availableProjects </span>|| <span class="branch-2 cbranch-no" title="branch not covered" >[])</span>.length &gt; 0 &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >(</span>
               &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
+                &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={12}&gt;
                   &lt;ProjectsDropdown&lt;{ projectId?: number }&gt;
                     availableProjects={availableProjects}
                     label={strings.PROJECT}
@@ -2636,7 +2636,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             &lt;Grid display='flex' flexDirection={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >'column' </span>: 'row'}&gt;
               {isSingleBatch &amp;&amp; isOutplant &amp;&amp; (
                 &lt;&gt;
-                  &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }}&gt;
+                  &lt;Grid sx={{ marginTop: theme.spacing(2), marginRight: theme.spacing(2) }} size={gridSize()}&gt;
                     &lt;Textfield
                       label={strings.WITHDRAW_QUANTITY_REQUIRED}
                       id='withdrawnQuantity'
@@ -2651,7 +2651,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       }}
                     /&gt;
                   &lt;/Grid&gt;
-                  &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: 1}&gt;
+                  &lt;Grid sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: 1} size={gridSize()}&gt;
                     &lt;Textfield
                       label={strings.TOTAL_READY_TO_PLANT_QUANTITY}
                       id='totalReadyQuantity'
@@ -2667,7 +2667,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
               {isSingleBatch &amp;&amp; !isOutplant &amp;&amp; (
                 &lt;&gt;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
+                    &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={gridSize()}&gt;
                       &lt;Textfield
                         label={strings
                           .formatString(
@@ -2692,7 +2692,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   &lt;/Grid&gt;
 &nbsp;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1}&gt;
+                    &lt;Grid sx={{ marginTop: theme.spacing(2) }} paddingRight={isMobile ? 0 : 1} size={gridSize()}&gt;
                       &lt;Textfield
                         label={strings
                           .formatString(
@@ -2715,7 +2715,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                       /&gt;
                     &lt;/Grid&gt;
                     {isNurseryTransfer &amp;&amp; (
-                      &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}&gt;
+                      &lt;Grid sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1} size={gridSize()}&gt;
                         &lt;DatePicker
                           id='readyByDate'
                           label={strings.ESTIMATED_READY_DATE}
@@ -2729,7 +2729,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   &lt;/Grid&gt;
 &nbsp;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
+                    &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={gridSize()}&gt;
                       &lt;Textfield
                         label={strings
                           .formatString(
@@ -2754,7 +2754,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   &lt;/Grid&gt;
 &nbsp;
                   &lt;Grid display='flex' flexDirection={isMobile ? 'column' : 'row'}&gt;
-                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingRight={1}&gt;
+                    &lt;Grid sx={{ marginTop: theme.spacing(2) }} paddingRight={1} size={gridSize()}&gt;
                       &lt;Textfield
                         label={strings
                           .formatString(strings.READY_TO_PLANT_QUANTITY_REMAINING, String(batches[0].readyQuantity))
@@ -2773,7 +2773,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         }}
                       /&gt;
                     &lt;/Grid&gt;
-                    &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1}&gt;
+                    &lt;Grid sx={{ marginTop: theme.spacing(2) }} paddingLeft={isMobile ? 0 : 1} size={gridSize()}&gt;
                       &lt;Textfield
                         label={strings.WITHDRAW_QUANTITY}
                         id='withdrawQuantity'
@@ -2787,7 +2787,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                   &lt;/Grid&gt;
                 &lt;/&gt;
               )}
-              &lt;Grid item xs={gridSize()} sx={{ marginTop: theme.spacing(2) }}&gt;
+              &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={gridSize()}&gt;
                 &lt;DatePicker
                   id='withdrawnDate'
                   label={strings.WITHDRAW_DATE_REQUIRED}
@@ -2799,7 +2799,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 /&gt;
               &lt;/Grid&gt;
             &lt;/&gt;
-            &lt;Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}&gt;
+            &lt;Grid sx={{ marginTop: theme.spacing(2) }} size={12}&gt;
               &lt;Textfield
                 id='notes'
                 value={localRecord.notes}
@@ -2821,7 +2821,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T19:03:21.131Z
+                at 2026-10-29T23:46:51.600Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
