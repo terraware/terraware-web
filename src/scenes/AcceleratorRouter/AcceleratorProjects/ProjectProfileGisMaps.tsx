@@ -35,7 +35,7 @@ const ProjectProfileGisMaps = () => {
       typeNames: 'tf_accelerator:planting_sites',
       propertyName: 'fid,strata,substrata,site,geom,created_at',
     },
-    { skip: !plantingSitesCql }
+    { skip: !plantingSitesCql, refetchOnMountOrArgChange: true }
   );
   const { currentData: boundariesData } = useGetGisFeaturesQuery(
     {
@@ -43,7 +43,7 @@ const ProjectProfileGisMaps = () => {
       typeNames: 'tf_accelerator:project_boundaries',
       propertyName: 'fid,geom,boundary_name',
     },
-    { skip: !projectBoundariesCql }
+    { skip: !projectBoundariesCql, refetchOnMountOrArgChange: true }
   );
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
