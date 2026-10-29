@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">92.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>12/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>14/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.69% </span>
+                <span class="strong">92.3% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/13</span>
+                <span class='fraction'>12/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -161,36 +161,27 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,7 +189,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,50 +244,50 @@ type NurserySummaryRowProps = {
 &nbsp;
 type Coverage = 'COVERED' | 'PARTIALLY_COVERED' | 'NOT_COVERED' | 'NOT_NEEDED';
 &nbsp;
-const NurserySummaryRow = <span class="fstat-no" title="function not covered" >({ species, ready }: NurserySummaryRowProps): JSX.Element =&gt; {</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Element =&gt; {
+  const theme = useTheme();
+  const { strings } = useLocalization();
 &nbsp;
   const remaining = useMemo(
-<span class="fstat-no" title="function not covered" >    () =&gt; <span class="cstat-no" title="statement not covered" >Math.max(0, species.requestedQuantity - species.withdrawnQuantity),</span></span>
+    () =&gt; Math.max(0, species.requestedQuantity - species.withdrawnQuantity),
     [species.requestedQuantity, species.withdrawnQuantity]
   );
 &nbsp;
-  const coverage: Coverage = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (remaining &lt;= 0) {</span>
+  const coverage: Coverage = useMemo(() =&gt; {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (remaining &lt;= 0) {
 <span class="cstat-no" title="statement not covered" >      return 'NOT_NEEDED';</span>
     }
-<span class="cstat-no" title="statement not covered" >    if (ready === 0) {</span>
-<span class="cstat-no" title="statement not covered" >      return 'NOT_COVERED';</span>
+    if (ready === 0) {
+      return 'NOT_COVERED';
     }
-<span class="cstat-no" title="statement not covered" >    return ready &gt;= remaining ? 'COVERED' : 'PARTIALLY_COVERED';</span>
+    return ready &gt;= remaining ? <span class="branch-0 cbranch-no" title="branch not covered" >'COVERED' </span>: 'PARTIALLY_COVERED';
   }, [ready, remaining]);
 &nbsp;
   const coverageColor =
-<span class="cstat-no" title="statement not covered" >    coverage === 'NOT_NEEDED'</span>
-      ? theme.palette.TwClrTxt
+    coverage === 'NOT_NEEDED'
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >theme.palette.TwClrTxt</span>
       : coverage === 'COVERED'
-        ? theme.palette.TwClrTxtSuccess
+        ? <span class="branch-0 cbranch-no" title="branch not covered" >theme.palette.TwClrTxtSuccess</span>
         : coverage === 'PARTIALLY_COVERED'
           ? theme.palette.TwClrTxtWarning
           : theme.palette.TwClrTxtDanger;
 &nbsp;
   const coverageLabel =
-<span class="cstat-no" title="statement not covered" >    coverage === 'NOT_NEEDED'</span>
-      ? strings.NOT_NEEDED
+    coverage === 'NOT_NEEDED'
+      ? <span class="branch-0 cbranch-no" title="branch not covered" >strings.NOT_NEEDED</span>
       : coverage === 'COVERED'
-        ? strings.COVERED
+        ? <span class="branch-0 cbranch-no" title="branch not covered" >strings.COVERED</span>
         : coverage === 'PARTIALLY_COVERED'
           ? strings.PARTIALLY_COVERED
           : strings.NOT_COVERED;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Box display='grid' gridTemplateColumns='2fr 1fr 1fr 1fr' gap={theme.spacing(1)} padding={theme.spacing(1, 2)}&gt;
       &lt;Box&gt;
         &lt;Typography fontSize='16px' color={theme.palette.TwClrBaseBlack} textAlign='left' fontWeight={400}&gt;
           {species.scientificName}
         &lt;/Typography&gt;
-        {species.commonName &amp;&amp; (
+        {species.commonName &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
           &lt;Typography fontSize='16px' color={theme.palette.TwClrTxt} textAlign='left' fontWeight={400}&gt;
             ({species.commonName})
           &lt;/Typography&gt;
@@ -303,7 +303,7 @@ const NurserySummaryRow = <span class="fstat-no" title="function not covered" >(
         fontSize='16px'
         textAlign='right'
         color={coverageColor}
-        fontWeight={coverage === 'NOT_NEEDED' ? 400 : 600}
+        fontWeight={coverage === 'NOT_NEEDED' ? <span class="branch-0 cbranch-no" title="branch not covered" >400 </span>: 600}
       &gt;
         {coverageLabel}
       &lt;/Typography&gt;
@@ -319,7 +319,7 @@ export default NurserySummaryRow;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T15:57:21.994Z
+                at 2026-10-29T17:02:41.587Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

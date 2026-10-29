@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.76% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -216,9 +216,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,7 +230,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,10 +239,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -302,11 +302,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-yes">118x</span>
+<span class="cline-any cline-yes">118x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -328,7 +328,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -374,7 +374,7 @@ type RequestSpeciesBoxProps = {
   cellKey: (batchId: number, substratumId: number) =&gt; string;
 };
 &nbsp;
-const RequestSpeciesBox = <span class="fstat-no" title="function not covered" >({</span>
+const RequestSpeciesBox = ({
   species,
   substratumId,
   batches,
@@ -383,10 +383,10 @@ const RequestSpeciesBox = <span class="fstat-no" title="function not covered" >(
   setWithdrawByBatchSubstratum,
   cellKey,
 }: RequestSpeciesBoxProps): JSX.Element =&gt; {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
+  const theme = useTheme();
+  const { strings } = useLocalization();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}&gt;
       &lt;Box
         padding={theme.spacing(1.5, 2)}
@@ -400,7 +400,7 @@ const RequestSpeciesBox = <span class="fstat-no" title="function not covered" >(
       &gt;
         &lt;Typography fontSize='16px' fontWeight={400} textAlign='left'&gt;
           {species.scientificName}
-          {species.commonName ? ` (${species.commonName})` : ''}
+          {species.commonName ? <span class="branch-0 cbranch-no" title="branch not covered" >` (${species.commonName})` </span>: ''}
         &lt;/Typography&gt;
         &lt;Box
           display={'flex'}
@@ -438,19 +438,19 @@ const RequestSpeciesBox = <span class="fstat-no" title="function not covered" >(
           {strings.WITHDRAW}
         &lt;/Typography&gt;
       &lt;/Box&gt;
-      {batches.length === 0 ? (
+      {batches.length === 0 ? <span class="branch-0 cbranch-no" title="branch not covered" >(</span>
         &lt;Box padding={theme.spacing(2)}&gt;
           &lt;Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}&gt;
             -
           &lt;/Typography&gt;
         &lt;/Box&gt;
       ) : (
-        batches.map(<span class="fstat-no" title="function not covered" >(batch) =&gt; {</span>
-          const key = <span class="cstat-no" title="statement not covered" >cellKey(batch.batchId, substratumId);</span>
-          const value = <span class="cstat-no" title="statement not covered" >withdrawByBatchSubstratum[key] ?? 0;</span>
-          const batchTotal = <span class="cstat-no" title="statement not covered" >totalByBatch.get(batch.batchId) ?? 0;</span>
-          const exceeds = <span class="cstat-no" title="statement not covered" >batchTotal &gt; batch.readyQuantity;</span>
-<span class="cstat-no" title="statement not covered" >          return (</span>
+        batches.map((batch) =&gt; {
+          const key = cellKey(batch.batchId, substratumId);
+          const value = withdrawByBatchSubstratum[key] ?? 0;
+          const batchTotal = totalByBatch.get(batch.batchId) ?? 0;
+          const exceeds = batchTotal &gt; batch.readyQuantity;
+          return (
             &lt;Box
               key={batch.batchId}
               display='grid'
@@ -471,10 +471,10 @@ const RequestSpeciesBox = <span class="fstat-no" title="function not covered" >(
                   type='number'
                   label=''
                   value={value === 0 ? '' : value.toString()}
-                  onChange={<span class="fstat-no" title="function not covered" >(v) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >                    setWithdrawByBatchSubstratum(<span class="fstat-no" title="function not covered" >(prev) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span></span>
+                  onChange={(v) =&gt;
+                    setWithdrawByBatchSubstratum((prev) =&gt; ({
                       ...prev,
-                      [key]: Math.max(0, Number(v ?? 0)),
+                      [key]: Math.max(0, Number(v ?? <span class="branch-1 cbranch-no" title="branch not covered" >0)</span>),
                     }))
                   }
                   min={0}
@@ -502,7 +502,7 @@ export default RequestSpeciesBox;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T15:57:21.994Z
+                at 2026-10-29T17:02:41.587Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
