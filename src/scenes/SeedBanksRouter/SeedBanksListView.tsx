@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useRef, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
@@ -90,7 +90,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
     <TfMain>
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Grid container paddingBottom={theme.spacing(2)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
-          <Grid item xs={8}>
+          <Grid size={8}>
             <h1
               style={{
                 marginTop: 0,
@@ -103,14 +103,13 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
             </h1>
           </Grid>
           <Grid
-            item
-            xs={4}
             sx={{
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'flex-end',
             }}
+            size={4}
           >
             {isAdmin(organization) &&
               (isMobile ? (
@@ -131,12 +130,11 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
       <Card flushMobile>
         <Grid container ref={contentRef}>
           <Grid
-            item
-            xs={12}
             sx={{
               display: 'flex',
               marginBottom: '16px',
             }}
+            size={12}
           >
             <TextField
               placeholder={strings.SEARCH}
@@ -152,10 +150,10 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
             />
             <TableSettingsButton />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <div>
               <Grid container spacing={4}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Table
                     id='seed-banks-table'
                     columns={columns}

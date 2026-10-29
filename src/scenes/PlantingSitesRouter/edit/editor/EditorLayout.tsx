@@ -1,6 +1,6 @@
 import React, { type JSX, ReactNode, useCallback, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -169,7 +169,7 @@ export default function EditorLayout({
           )}
         </Box>
       </PageHeaderWrapper>
-      <Grid item xs={12} ref={contentRef}>
+      <Grid size={12} ref={contentRef}>
         <PageSnackbar />
       </Grid>
       {!isEditorAvailable && (
