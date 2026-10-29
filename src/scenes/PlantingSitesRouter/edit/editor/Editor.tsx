@@ -43,6 +43,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     initializeOptionalStepsStatus(site)
   );
   const [isDirty, setIsDirty] = useState(false);
+  const [hasBoundary, setHasBoundary] = useState(!!site.boundary);
   const [plantingSite, setPlantingSite] = useState(site);
   const [showCloseConfirmation, setShowCloseConfirmation] = useState<boolean>(false);
 
@@ -84,6 +85,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (updatedDraft) {
       setPlantingSite(updatedDraft.draft);
       setIsDirty(false);
+      setHasBoundary(!!updatedDraft.draft.boundary);
       setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
@@ -218,7 +220,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   return (
     <EditorLayout
       busy={busy}
-      canFinish={!!plantingSite.boundary}
+      canFinish={hasBoundary}
       closeButtonId='close-planting-site-create'
       closeLabel={strings.CANCEL}
       currentStep={currentStep}
@@ -229,6 +231,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       onClose={onClose}
       onDirtyChange={setIsDirty}
       onFinish={onFinish}
+      onHasBoundaryChange={setHasBoundary}
       onLeave={goToPlantingSites}
       onNext={onNext}
       onStartOver={showStartOverButton ? onOpenStartOver : undefined}

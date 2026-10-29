@@ -166,12 +166,17 @@ const stepperContext = {
   steps: [{ type: 'site_boundary' as const, label: 'Site Boundary' }],
 };
 
-const renderSiteBoundary = (siteToRender = site, onValidate?: OnValidate, mode: EditorMode = 'draft') =>
+const renderSiteBoundary = (
+  siteToRender = site,
+  onValidate?: OnValidate,
+  mode: EditorMode = 'draft',
+  onHasBoundaryChange?: (hasBoundary: boolean) => void
+) =>
   renderWithProviders(
     <EditorModeContext.Provider value={mode}>
       <EditorStepperContext.Provider value={stepperContext}>
         <ToastSnackbar />
-        <SiteBoundary onValidate={onValidate} site={siteToRender} />
+        <SiteBoundary onHasBoundaryChange={onHasBoundaryChange} onValidate={onValidate} site={siteToRender} />
       </EditorStepperContext.Provider>
     </EditorModeContext.Provider>,
     {
@@ -600,6 +605,41 @@ describe('SiteBoundary', () => {
     const [hasErrors, data] = onValidate.apply.mock.lastCall!;
     expect(hasErrors).toBe(false);
     expect(data.strata.map((stratum: { id: number }) => stratum.id)).toEqual([10, 11]);
+  });
+
+  // the create flow enables its Save button from this, before the step is saved back to the site
+  describe('reporting whether a boundary exists', () => {
+    it('reports a boundary as soon as one is drawn on a site that had none', async () => {
+      const onHasBoundaryChange = rstest.fn();
+      const { user } = renderSiteBoundary(site, undefined, 'draft', onHasBoundaryChange);
+
+      expect(onHasBoundaryChange).toHaveBeenLastCalledWith(false);
+
+      await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+      await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+
+      await waitFor(() => expect(onHasBoundaryChange).toHaveBeenLastCalledWith(true));
+    });
+
+    it('reports no boundary again when the drawn boundary is cleared', async () => {
+      const onHasBoundaryChange = rstest.fn();
+      const { user } = renderSiteBoundary(site, undefined, 'draft', onHasBoundaryChange);
+
+      await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+      await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+      await waitFor(() => expect(onHasBoundaryChange).toHaveBeenLastCalledWith(true));
+
+      await user.click(screen.getByRole('button', { name: 'map clear boundary' }));
+
+      await waitFor(() => expect(onHasBoundaryChange).toHaveBeenLastCalledWith(false));
+    });
+
+    it('reports a boundary on mount for a site that already has one', () => {
+      const onHasBoundaryChange = rstest.fn();
+      renderSiteBoundary(buildDraftPlantingSite({ boundary: TWO_POLYGONS }), undefined, 'draft', onHasBoundaryChange);
+
+      expect(onHasBoundaryChange).toHaveBeenLastCalledWith(true);
+    });
   });
 
   describe('refitting the map to the uploaded file', () => {

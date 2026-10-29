@@ -36,6 +36,7 @@ export type EditorLayoutProps = {
   onClose: () => void;
   onDirtyChange: (isDirty: boolean) => void;
   onFinish: () => void;
+  onHasBoundaryChange?: (hasBoundary: boolean) => void;
   onLeave: () => void;
   onNext: () => void;
   onStartOver?: () => void;
@@ -60,6 +61,7 @@ export default function EditorLayout({
   onClose,
   onDirtyChange,
   onFinish,
+  onHasBoundaryChange,
   onLeave,
   onNext,
   onStartOver,
@@ -212,7 +214,13 @@ export default function EditorLayout({
             }}
           >
             {currentStep === 'site_boundary' && (
-              <SiteBoundary key={stepKey} onDirtyChange={onDirtyChange} onValidate={onValidate} site={site} />
+              <SiteBoundary
+                key={stepKey}
+                onDirtyChange={onDirtyChange}
+                onHasBoundaryChange={onHasBoundaryChange}
+                onValidate={onValidate}
+                site={site}
+              />
             )}
             {currentStep === 'exclusion_areas' && (
               <Exclusions onDirtyChange={onDirtyChange} onValidate={onValidate} site={site} />
