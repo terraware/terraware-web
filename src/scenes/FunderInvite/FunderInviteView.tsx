@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Container, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -99,12 +99,12 @@ const FunderInviteView = () => {
           }}
         >
           <Card style={{ width: '800px', margin: 'auto' }}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Typography fontSize='20px' fontWeight={600} lineHeight='20px'>
                 {fundingEntity?.name}
               </Typography>
             </Grid>
-            <Grid item xs={12} sx={{ marginTop: theme.spacing(4) }}>
+            <Grid sx={{ marginTop: theme.spacing(4) }} size={12}>
               <Textfield
                 id='email'
                 label={strings.EMAIL}
@@ -115,10 +115,10 @@ const FunderInviteView = () => {
                 errorText={emailError}
               />
             </Grid>
-            <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
               <Textfield id='firstName' label={strings.FIRST_NAME} type='text' value={'--'} disabled />
             </Grid>
-            <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+            <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
               <Textfield id='lastName' label={strings.LAST_NAME} type='text' value={'--'} disabled />
             </Grid>
           </Card>
