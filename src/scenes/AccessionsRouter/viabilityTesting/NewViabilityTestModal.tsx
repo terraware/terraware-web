@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Close } from '@mui/icons-material';
-import { Box, GridLegacy as Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';
@@ -544,8 +544,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
           open={tooltipLearnMoreModalOpen}
           title={tooltipLearnMoreModalData?.title}
         />
-        <Grid container item xs={12} spacing={2} textAlign='left'>
-          <Grid item xs={12} padding={theme.spacing(1, 3, 1, 5)}>
+        <Grid container spacing={2} textAlign='left' size={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <Dropdown
               id={'test-method'}
               options={testMethods()}
@@ -558,7 +558,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               errorText={validateFields && !record?.testType ? strings.REQUIRED_FIELD : ''}
             />
           </Grid>
-          <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <Dropdown
               id={'seed-type'}
               label={strings.SEED_TYPE}
@@ -585,7 +585,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
           </Grid>
           {record?.testType !== 'Cut' && (
             <>
-              <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+              <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
                 <Dropdown
                   id={'treatment'}
                   label={strings.TREATMENT}
@@ -610,7 +610,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                   }
                 />
               </Grid>
-              <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+              <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
                 <Dropdown
                   id={'substrate'}
                   label={strings.SUBSTRATE}
@@ -636,7 +636,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                 />
               </Grid>
               {record?.substrate && (
-                <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+                <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
                   <Textfield
                     id='substrateNotes'
                     label={strings.SUBSTRATE_NOTES}
@@ -650,7 +650,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               )}
             </>
           )}
-          <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <SelectT<OrganizationUser>
               label={strings.TESTING_STAFF}
               placeholder={strings.SELECT}
@@ -670,10 +670,10 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
             />
           </Grid>
 
-          <Grid item xs={12}>
-            <Grid item sx={{ background: theme.palette.TwClrBgSecondary, borderRadius: '16px', padding: 3 }}>
+          <Grid size={12}>
+            <Grid sx={{ background: theme.palette.TwClrBgSecondary, borderRadius: '16px', padding: 3 }}>
               <Box sx={{ display: isMobile ? 'block' : 'flex', alignItems: 'baseline' }} mb={2}>
-                <Grid item xs={12} marginBottom={isMobile ? 1 : 0}>
+                <Grid marginBottom={isMobile ? 1 : 0} size={12}>
                   <DatePicker
                     id='startDate'
                     label={record?.testType === 'Cut' ? strings.TEST_DATE_REQUIRED : strings.START_DATE_REQUIRED}
@@ -685,7 +685,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                     defaultTimeZone={tz.id}
                   />
                 </Grid>
-                <Grid item xs={12} marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0}>
+                <Grid marginLeft={isMobile ? 0 : 1} marginBottom={isMobile ? 1 : 0} size={12}>
                   {record?.testType === 'Cut' ? (
                     <Textfield
                       label={strings.NUMBER_OF_SEEDS_FILLED_REQUIRED}
@@ -714,8 +714,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
 
               {record?.testType === 'Cut' && (
                 <>
-                  <Grid item xs={12} display='flex'>
-                    <Grid item xs={6}>
+                  <Grid container spacing={0} wrap='nowrap' display='flex' size={12}>
+                    <Grid size={6}>
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_COMPROMISED_REQUIRED}
                         type='text'
@@ -725,7 +725,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                         errorText={validateFields && !record?.seedsCompromised ? strings.REQUIRED_FIELD : ''}
                       />
                     </Grid>
-                    <Grid item xs={6} marginLeft={1}>
+                    <Grid marginLeft={1} size={6}>
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_EMPTY_REQUIRED}
                         type='text'
@@ -736,7 +736,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                       />
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} display='flex' alignItems='center' sx={{ paddingTop: 2 }}>
+                  <Grid display='flex' alignItems='center' sx={{ paddingTop: 2 }} size={12}>
                     <Typography sx={{ color: theme.palette.TwClrTxtSecondary, paddingRight: 1, fontSize: '14px' }}>
                       # {strings.TOTAL_SEEDS_TESTED}:
                     </Typography>
@@ -753,7 +753,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                   alignItems='baseline'
                   marginRight={isMobile ? '24px' : 0}
                 >
-                  <Grid item xs={12} marginBottom={isMobile ? 1 : 0}>
+                  <Grid marginBottom={isMobile ? 1 : 0} size={12}>
                     <DatePicker
                       id='recordingDate'
                       label={strings.CHECK_DATE_REQUIRED}
@@ -765,7 +765,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                       defaultTimeZone={tz.id}
                     />
                   </Grid>
-                  <Grid item xs={12} marginLeft={isMobile ? 0 : 1} display={isMobile ? 'block' : 'flex'}>
+                  <Grid marginLeft={isMobile ? 0 : 1} display={isMobile ? 'block' : 'flex'} size={12}>
                     <Box sx={{ position: 'relative', display: isMobile ? 'block' : 'flex' }}>
                       <Textfield
                         label={strings.NUMBER_OF_SEEDS_GERMINATED_REQUIRED}
@@ -828,7 +828,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               )}
             </Grid>
           </Grid>
-          <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+          <Grid padding={theme.spacing(0, 3, 1, 0)} size={12}>
             <Textfield
               id='notes'
               value={record?.notes}

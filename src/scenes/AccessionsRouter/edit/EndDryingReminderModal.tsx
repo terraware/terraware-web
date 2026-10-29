@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -120,7 +120,7 @@ function EndDryingReminderModalForm({ accession, open, onClose }: EndDryingRemin
         <Button id='saveDryingReminder' onClick={() => void saveState()} label={strings.SET_REMINDER} key='button-2' />,
       ]}
     >
-      <Grid item xs={12} textAlign='left'>
+      <Grid textAlign='left' size={12}>
         <DatePicker
           aria-label={strings.END_DRYING_REMINDER}
           defaultTimeZone={timeZoneId}

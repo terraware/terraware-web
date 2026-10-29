@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import AddLink from 'src/components/common/AddLink';
 import Autocomplete from 'src/components/common/Autocomplete';
@@ -76,7 +76,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
 
   if (!isOpen) {
     return (
-      <Grid item xs={12} marginTop={theme.spacing(2)}>
+      <Grid marginTop={theme.spacing(2)} size={12}>
         <Box display='flex' justifyContent='flex-start'>
           <AddLink id='addAddress' onClick={() => setIsOpen(true)} large={true} text={strings.ADD_ADDRESS} />
         </Box>
@@ -85,8 +85,8 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
   }
 
   return (
-    <Grid item xs={12} display='flex' flexDirection={'column'} marginTop={theme.spacing(2)}>
-      <Grid item xs={12}>
+    <Grid display='flex' flexDirection={'column'} marginTop={theme.spacing(2)} size={12}>
+      <Grid size={12}>
         <Textfield
           id='collectionSiteCity'
           value={record.collectionSiteCity}
@@ -96,8 +96,8 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
         />
       </Grid>
       {countries !== undefined && (
-        <Grid item xs={12} display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)}>
-          <Grid item xs={gridSize()} sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }}>
+        <Grid display='flex' flexDirection={isMobile ? 'column' : 'row'} marginTop={theme.spacing(2)} size={12}>
+          <Grid sx={{ marginRight: isMobile ? 0 : theme.spacing(2) }} size={gridSize()}>
             <Autocomplete
               id='collectionSiteCountryCode'
               selected={getSelectedCountry()?.name || temporalCountryValue}
@@ -108,7 +108,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
               freeSolo={true}
             />
           </Grid>
-          <Grid item xs={gridSize()} sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }}>
+          <Grid sx={{ marginTop: isMobile ? theme.spacing(2) : 0 }} size={gridSize()}>
             {getSelectedCountry()?.subdivisions ? (
               <Autocomplete
                 id='collectionSiteCountrySubdivision'
@@ -131,7 +131,7 @@ export default function Accession2Address(props: Accession2AddressProps): JSX.El
           </Grid>
         </Grid>
       )}
-      <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+      <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
         <Textfield
           id='collectionSiteNotes'
           value={record.collectionSiteNotes}
