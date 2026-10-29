@@ -206,7 +206,9 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
   return (
     <EditorLayout
       busy={isSaving || isSummarizing || !!onValidate}
+      canFinish={stepIndex === steps.length - 1}
       closeButtonId='close-planting-site-edit'
+      closeLabel={strings.CLOSE}
       currentStep={currentStep}
       finishButtonId='save-planting-site-edit'
       finishLabel={strings.SAVE_CHANGES}

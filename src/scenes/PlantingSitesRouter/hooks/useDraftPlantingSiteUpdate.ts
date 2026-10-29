@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   useGetDraftPlantingSiteQuery,
   useUpdateDraftPlantingSiteMutation,
@@ -44,7 +42,6 @@ type PendingRefetch = {
 
 type PendingSave = {
   problems: PlantingSiteProblem[];
-  redirectToDraft: boolean;
   request: Data;
 };
 
@@ -54,18 +51,16 @@ export type Response = {
   onFinishUpdate: () => void;
   onSaveAnyway: () => void;
   problems?: PlantingSiteProblem[];
-  updateDraft: (draft: Data, redirectToDraft: boolean) => void;
+  updateDraft: (draft: Data) => void;
   updatedDraft?: Data;
 };
 
 /**
  * Hook to isolate workflow logic to update a draft planting site.
  * Returns update function, whether the request is in flight and the updated draft site.
- * Optionally redirects to draft after update.
  * If the draft has validation problems, the save waits for onSaveAnyway or onCancelSave.
  */
 export default function useDraftPlantingSiteUpdate(draftId: number): Response {
-  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const showProblems = usePlantingSiteProblemsToast();
 
@@ -82,7 +77,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   }, [requestId]);
 
   const save = useCallback(
-    async (request: Data, redirectToDraft: boolean) => {
+    async (request: Data) => {
       try {
         const requestIdBeforeSave = latestRequestId.current;
 
@@ -94,12 +89,8 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
           ),
         }).unwrap();
 
-        if (redirectToDraft) {
-          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-          navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${request.draft.id}`));
-        } else {
-          setPendingRefetch({ request, requestIdBeforeSave });
-        }
+        snackbar.toastInfo(strings.PLANTING_SITE_SAVED_AS_DRAFT);
+        setPendingRefetch({ request, requestIdBeforeSave });
       } catch (error) {
         const problems = getDraftMapProblems(error);
         if (problems?.length) {
@@ -109,11 +100,11 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         }
       }
     },
-    [currentData, navigate, showProblems, snackbar, updateDraftPlantingSite]
+    [currentData, showProblems, snackbar, updateDraftPlantingSite]
   );
 
   const updateDraft = useCallback(
-    (request: Data, redirectToDraft: boolean) => {
+    (request: Data) => {
       const update = async () => {
         let problems: PlantingSiteProblem[];
         try {
@@ -124,9 +115,9 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         }
 
         if (problems.length) {
-          setPendingSave({ problems, redirectToDraft, request });
+          setPendingSave({ problems, request });
         } else {
-          await save(request, redirectToDraft);
+          await save(request);
         }
       };
 
@@ -138,7 +129,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   const onSaveAnyway = useCallback(() => {
     if (pendingSave) {
       setPendingSave(undefined);
-      void save(pendingSave.request, pendingSave.redirectToDraft);
+      void save(pendingSave.request);
     }
   }, [pendingSave, save]);
 

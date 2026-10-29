@@ -20,7 +20,7 @@ import StartOverConfirmation from './StartOverConfirmation';
 import { initializeOptionalStepsStatus, useEditorSteps } from './editorSteps';
 import { OnValidate } from './types';
 
-type SaveAction = 'back' | 'draft' | 'next';
+type SaveAction = 'back' | 'finish' | 'next';
 
 export type EditorProps = {
   site: DraftPlantingSite;
@@ -48,9 +48,10 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const onFinalizeSuccess = useCallback(
     (plantingSiteId: number) => {
+      snackbar.toastSuccess(strings.NEW_PLANTING_SITE_CREATED);
       goToPlantingSiteView(plantingSiteId);
     },
-    [goToPlantingSiteView]
+    [goToPlantingSiteView, snackbar]
   );
 
   const onFinalizeError = useCallback(
@@ -132,19 +133,18 @@ export default function Editor(props: EditorProps): JSX.Element {
       }
       const stepIndex = getCurrentStepIndex();
       const isLastStep = stepIndex === steps.length - 1;
-      const isFinalizing = action === 'next' && isLastStep;
-      const redirect = action === 'draft' || isFinalizing;
+      // the user can finish from any step once the required steps are done, skipping the optional ones that are left
+      const isFinalizing = action === 'finish' || (action === 'next' && isLastStep);
 
       const getNextStep = (): SiteEditStep => {
         if (action === 'back') {
           return steps[stepIndex - 1].type;
         }
-        // if user saves a draft we want to bring user back to the same step in the flow on next visit
-        return redirect ? currentStep : steps[stepIndex + 1].type;
+        return isFinalizing ? currentStep : steps[stepIndex + 1].type;
       };
 
       setOnValidate({
-        allowIncomplete: action !== 'next',
+        allowIncomplete: action === 'back',
         apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>) => {
           setOnValidate(undefined);
           if (!hasErrors) {
@@ -159,7 +159,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               // user is done with create wizard, create the site and delete the draft
               finalize(draft);
             } else {
-              updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) }, redirect);
+              updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) });
             }
           }
         },
@@ -176,11 +176,6 @@ export default function Editor(props: EditorProps): JSX.Element {
     }
   }, [getCurrentStepIndex, isDirty, onSave, steps]);
 
-  const onSaveAsDraft = useCallback(() => {
-    setShowCloseConfirmation(false);
-    onSave('draft')();
-  }, [onSave]);
-
   /**
    * On start over, data is reset to clear all boundaries and only keep the details information.
    * Optional steps completion state is reset.
@@ -188,7 +183,6 @@ export default function Editor(props: EditorProps): JSX.Element {
    */
   const onStartOver = useCallback(() => {
     const nextStep = 'site_boundary';
-    const redirect = false;
 
     const draft: DraftPlantingSite = {
       ...plantingSite,
@@ -204,7 +198,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     const optionalSteps = initializeOptionalStepsStatus(draft);
 
     isStartingOver.current = true;
-    updateDraft({ draft, nextStep, optionalSteps }, redirect);
+    updateDraft({ draft, nextStep, optionalSteps });
     setShowStartOver(false);
   }, [plantingSite, updateDraft]);
 
@@ -217,21 +211,24 @@ export default function Editor(props: EditorProps): JSX.Element {
   const onCloseStartOver = useCallback(() => setShowStartOver(false), []);
 
   const busy = isUpdating || isPending || !!onValidate;
+  const onFinish = useMemo(() => onSave('finish'), [onSave]);
   const onNext = useMemo(() => onSave('next'), [onSave]);
   const showStartOverButton = currentStep !== 'site_boundary' || !!plantingSite.boundary;
 
   return (
     <EditorLayout
       busy={busy}
+      canFinish={!!plantingSite.boundary}
       closeButtonId='close-planting-site-create'
+      closeLabel={strings.CANCEL}
       currentStep={currentStep}
       finishButtonId='save-planting-site-create'
-      finishLabel={strings.CREATE_PLANTING_SITE}
+      finishLabel={strings.SAVE}
       isDirty={isDirty}
       onBack={onBack}
       onClose={onClose}
       onDirtyChange={setIsDirty}
-      onFinish={onNext}
+      onFinish={onFinish}
       onLeave={goToPlantingSites}
       onNext={onNext}
       onStartOver={showStartOverButton ? onOpenStartOver : undefined}
@@ -251,7 +248,6 @@ export default function Editor(props: EditorProps): JSX.Element {
         <CloseSetupConfirmation
           onDiscard={goToPlantingSites}
           onKeepEditing={onKeepEditing}
-          onSaveAsDraft={onSaveAsDraft}
           siteName={plantingSite.name.trim()}
         />
       )}

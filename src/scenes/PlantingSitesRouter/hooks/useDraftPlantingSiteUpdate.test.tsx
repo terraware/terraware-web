@@ -84,10 +84,10 @@ const renderWithProblems = async () => {
   await waitFor(() => expect(rendered.result.current.cached.isSuccess).toBe(true));
 
   act(() =>
-    rendered.result.current.update.updateDraft(
-      { draft: buildDraftPlantingSite({ boundary, siteEditStep: 'exclusion_areas' }), nextStep: 'exclusion_areas' },
-      false
-    )
+    rendered.result.current.update.updateDraft({
+      draft: buildDraftPlantingSite({ boundary, siteEditStep: 'exclusion_areas' }),
+      nextStep: 'exclusion_areas',
+    })
   );
   await waitFor(() => expect(rendered.result.current.update.problems).toEqual(problems));
 
@@ -110,10 +110,10 @@ describe('useDraftPlantingSiteUpdate', () => {
     await waitFor(() => expect(result.current.cached.isSuccess).toBe(true));
 
     act(() =>
-      result.current.update.updateDraft(
-        { draft: buildDraftPlantingSite({ boundary, siteEditStep: 'exclusion_areas' }), nextStep: 'exclusion_areas' },
-        false
-      )
+      result.current.update.updateDraft({
+        draft: buildDraftPlantingSite({ boundary, siteEditStep: 'exclusion_areas' }),
+        nextStep: 'exclusion_areas',
+      })
     );
 
     await waitFor(() => expect(result.current.update.updatedDraft).toBeDefined());

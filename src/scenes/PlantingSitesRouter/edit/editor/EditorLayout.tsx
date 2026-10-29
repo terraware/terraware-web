@@ -23,8 +23,11 @@ import { OnValidate } from './types';
 
 export type EditorLayoutProps = {
   busy: boolean;
+  /** Whether the site is complete enough to finish the flow. */
+  canFinish: boolean;
   children?: ReactNode;
   closeButtonId: string;
+  closeLabel: string;
   currentStep: SiteEditStep;
   finishButtonId: string;
   finishLabel: string;
@@ -45,8 +48,10 @@ export type EditorLayoutProps = {
 
 export default function EditorLayout({
   busy,
+  canFinish,
   children,
   closeButtonId,
+  closeLabel,
   currentStep,
   finishButtonId,
   finishLabel,
@@ -73,7 +78,11 @@ export default function EditorLayout({
   const dispatch = useAppDispatch();
   const [stepperCollapsed, setStepperCollapsed] = useState<boolean>(false);
 
-  const onFinalStep = steps.findIndex((step) => step.type === currentStep) === steps.length - 1;
+  const currentStepIndex = Math.max(
+    steps.findIndex((step) => step.type === currentStep),
+    0
+  );
+  const onFinalStep = currentStepIndex === steps.length - 1;
 
   const onOpenStartOver = useMemo(
     () =>
@@ -87,35 +96,16 @@ export default function EditorLayout({
   );
   const onHeaderButtonClick = useCallback(() => dispatch(clearSnackbar({ type: 'toast' })), [dispatch]);
   const onToggleStepperCollapsed = useCallback(() => setStepperCollapsed((collapsed) => !collapsed), []);
-  const onStepperBack = useCallback(() => {
-    dispatch(clearSnackbar({ type: 'toast' }));
-    onBack();
-  }, [dispatch, onBack]);
-  const onStepperNext = useCallback(() => {
-    dispatch(clearSnackbar({ type: 'toast' }));
-    onNext();
-  }, [dispatch, onNext]);
   const stepperContext = useMemo(
     () => ({
       busy,
       collapsed: stepperCollapsed,
       currentStep,
-      onBack: onStepperBack,
-      onNext: onStepperNext,
       onStartOver: onOpenStartOver,
       onToggleCollapsed: onToggleStepperCollapsed,
       steps,
     }),
-    [
-      busy,
-      currentStep,
-      onOpenStartOver,
-      onStepperBack,
-      onStepperNext,
-      onToggleStepperCollapsed,
-      stepperCollapsed,
-      steps,
-    ]
+    [busy, currentStep, onOpenStartOver, onToggleStepperCollapsed, stepperCollapsed, steps]
   );
 
   return (
@@ -151,18 +141,38 @@ export default function EditorLayout({
             >
               <Button
                 id={closeButtonId}
-                label={strings.CLOSE}
+                label={closeLabel}
                 onClick={onClose}
                 disabled={busy}
                 priority='secondary'
                 type='passive'
                 size='medium'
               />
+              {currentStepIndex > 0 && (
+                <Button
+                  id='back-planting-site-create'
+                  label={strings.BACK}
+                  onClick={onBack}
+                  disabled={busy}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                />
+              )}
+              {!onFinalStep && (
+                <Button
+                  id='next-planting-site-create'
+                  label={strings.NEXT}
+                  onClick={onNext}
+                  disabled={busy}
+                  size='medium'
+                />
+              )}
               <Button
                 id={finishButtonId}
                 label={finishLabel}
                 onClick={onFinish}
-                disabled={busy || !onFinalStep}
+                disabled={busy || !canFinish}
                 size='medium'
               />
             </Box>

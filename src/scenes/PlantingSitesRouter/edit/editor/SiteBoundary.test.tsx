@@ -162,8 +162,6 @@ const stepperContext = {
   busy: false,
   collapsed: false,
   currentStep: 'site_boundary' as const,
-  onBack: rstest.fn(),
-  onNext: rstest.fn(),
   onToggleCollapsed: rstest.fn(),
   steps: [{ type: 'site_boundary' as const, label: 'Site Boundary' }],
 };

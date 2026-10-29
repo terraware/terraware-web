@@ -305,6 +305,8 @@ BY_SPECIES,Por especies,602624ab
 BY_TARGET_PLANT_DENSITY,por densidad objetivo de plantas,161882a6
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
+CANCEL_DRAFT_SITE_SETUP_MESSAGE,Sus cambios en {0} no se han guardado. Continúe editando o descarte sus cambios.,76c916e0
+CANCEL_SITE_SETUP,¿Cancelar la configuración del sitio?,e633e7fc
 CANCEL_SPECIES_CHECK,Cancelar verificación de especies,fd764c88
 CANCEL_SPECIES_CHECK_MESSAGE,Está a punto de cancelar la verificación de especies. Todos los cambios se descartarán. ¿Está seguro?,3cc2bad6
 CANNOT_BE_CALCULATED,No se puede calcular,19dafba4
@@ -362,13 +364,11 @@ CLICK_UP_LINK,Enlace de ClickUp,787363a6
 CLIMATE,Clima,63ba44ee
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
-CLOSE_DRAFT_SITE_SETUP_MESSAGE,Sus cambios en {0} no se han guardado. Guárdelos en su borrador o descártelos.,2fc3437d
 CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
 CLOSE_SEASON,Cerrar temporada,72b4448a
 CLOSE_SITE_EDITOR,¿Cerrar el editor de sitios?,b12bdd39
 CLOSE_SITE_EDITOR_MESSAGE,Sus cambios en {0} no se han guardado. Continúe editando o descártelos.,2ebd3a7b
-CLOSE_SITE_SETUP,¿Cerrar la configuración del sitio?,1304ca0d
 CLOSED,Cerrado,7b8d0429
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -436,7 +436,6 @@ CREATE_NEW_PROJECT,Crear proyecto nuevo,b709ff33
 CREATE_ORGANIZATION,Crear organización,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno de los siguientes aspectos? Marque todo lo que corresponda.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
-CREATE_PLANTING_SITE,Crear sitio de plantación,02edc4b1
 CREATE_SEASON,Crear temporada,413117ea
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
@@ -1268,6 +1267,7 @@ NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
 NEW_PLANTING_SITE,Nuevo Sitio de Plantación,ec2cbd8f
+NEW_PLANTING_SITE_CREATED,Se creó un nuevo sitio de plantación.,119bf0b7
 NEW_SITE,Nuevo Sitio,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos.,7c3d77c9
 NEW_STRATUM,Nuevo Estrato,84292d1f
@@ -1656,6 +1656,7 @@ PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,El sustrato {1} en el estrato
 PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,El sustrato {1} en el estrato {0} está dentro de un área de exclusión.,64deeafa
 PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,El sustrato {1} no está dentro del estrato {0}.,13641abf
 PLANTING_SITE_SAVED,Sitio de plantación guardado,70f9ae14
+PLANTING_SITE_SAVED_AS_DRAFT,El sitio de plantación se guardó como borrador.,6e806a34
 PLANTING_SITE_STRATUM_NAME_HELP,Los nombres legibles ayudarán al personal de campo a identificar las áreas cuando se encuentren sobre el terreno.,63445c3d
 PLANTING_SITES,Sitios de plantación,3799d2eb
 PLANTING_TARGET,Meta de Plantación,7df4b251

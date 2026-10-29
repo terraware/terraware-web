@@ -1,9 +1,10 @@
 import React, { type JSX, ReactNode, createContext, useContext } from 'react';
 
 import { Box, ButtonBase, useTheme } from '@mui/material';
-import { Button, Icon, Stepper } from '@terraware/web-components';
+import { Icon, Stepper } from '@terraware/web-components';
 
 import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
+import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 import { SiteEditStep } from 'src/types/PlantingSite';
 
@@ -22,8 +23,6 @@ type EditorStepperContextValue = {
   busy: boolean;
   collapsed: boolean;
   currentStep: SiteEditStep;
-  onBack: () => void;
-  onNext: () => void;
   onStartOver?: () => void;
   onToggleCollapsed: () => void;
   steps: PlantingSiteStep[];
@@ -41,8 +40,6 @@ const EditorStepper = ({
   collapsed,
   currentStep,
   description,
-  onBack,
-  onNext,
   onStartOver,
   status,
   steps,
@@ -52,10 +49,6 @@ const EditorStepper = ({
     steps.findIndex((step) => step.type === currentStep),
     0
   );
-  const isFinalStep = currentStepIndex === steps.length - 1;
-
-  const buttonSize = collapsed ? 'small' : 'medium';
-
   const activeStepContent = (
     <>
       {!collapsed && description}
@@ -70,6 +63,16 @@ const EditorStepper = ({
 
   return (
     <Box display='flex' flexDirection='column' height='100%'>
+      {onStartOver && !collapsed && (
+        <Box display='flex' justifyContent='flex-end' paddingBottom={theme.spacing(1)}>
+          <Link disabled={busy} id='start-over' onClick={onStartOver}>
+            <Box component='span' display='inline-flex' alignItems='center' gap={theme.spacing(0.5)}>
+              <Icon name='iconSynced' size='small' style={{ fill: theme.palette.TwClrTxtBrand }} />
+              {strings.RESET_BOUNDARY_SETUP}
+            </Box>
+          </Link>
+        </Box>
+      )}
       {/* zero basis keeps the steps from growing the map past its own height, so they scroll instead */}
       <Box flexBasis={0} flexGrow={1} overflow='auto'>
         <Stepper
@@ -81,45 +84,6 @@ const EditorStepper = ({
           }))}
           sx={{ padding: theme.spacing(1, 0) }}
         />
-        {onStartOver && (
-          <Button
-            id='start-over'
-            label={strings.RESET_BOUNDARY_SETUP}
-            onClick={onStartOver}
-            disabled={busy}
-            priority='secondary'
-            type='passive'
-            size={buttonSize}
-          />
-        )}
-      </Box>
-      <Box
-        display='flex'
-        gap={theme.spacing(1)}
-        justifyContent={currentStepIndex > 0 ? 'space-between' : 'flex-end'}
-        padding={theme.spacing(1, 0)}
-        whiteSpace='nowrap'
-      >
-        {currentStepIndex > 0 && (
-          <Button
-            id='back-planting-site-create'
-            label={strings.BACK}
-            onClick={onBack}
-            disabled={busy}
-            priority='secondary'
-            type='passive'
-            size={buttonSize}
-          />
-        )}
-        {!isFinalStep && (
-          <Button
-            id='next-planting-site-create'
-            label={strings.NEXT}
-            onClick={onNext}
-            disabled={busy}
-            size={buttonSize}
-          />
-        )}
       </Box>
     </Box>
   );

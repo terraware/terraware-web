@@ -304,6 +304,8 @@ BY_SPECIES,Par espèce,602624ab
 BY_TARGET_PLANT_DENSITY,par densité de plantation cible,161882a6
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
+CANCEL_DRAFT_SITE_SETUP_MESSAGE,Vos modifications apportées à {0} n'ont pas été enregistrées. Continuez la modification ou abandonnez vos changements.,76c916e0
+CANCEL_SITE_SETUP,Annuler la configuration du site ?,e633e7fc
 CANCEL_SPECIES_CHECK,Annuler la vérification des espèces,fd764c88
 CANCEL_SPECIES_CHECK_MESSAGE,Vous êtes sur le point d'annuler la vérification des espèces. Toutes les modifications seront perdues. Êtes-vous sûr ?,3cc2bad6
 CANNOT_BE_CALCULATED,Impossible à calculer,19dafba4
@@ -361,13 +363,11 @@ CLICK_UP_LINK,Lien ClickUp,787363a6
 CLIMATE,Climat,63ba44ee
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
-CLOSE_DRAFT_SITE_SETUP_MESSAGE,Vos modifications apportées à {0} n'ont pas été enregistrées. Enregistrez-les dans votre brouillon ou abandonnez-les.,2fc3437d
 CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
 CLOSE_SEASON,Clore la saison,72b4448a
 CLOSE_SITE_EDITOR,Fermer l’éditeur de site ?,b12bdd39
 CLOSE_SITE_EDITOR_MESSAGE,Vos modifications apportées à {0} n’ont pas été enregistrées. Continuez la modification ou abandonnez-les.,2ebd3a7b
-CLOSE_SITE_SETUP,Fermer la configuration du site ?,1304ca0d
 CLOSED,Fermé,7b8d0429
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
@@ -435,7 +435,6 @@ CREATE_NEW_PROJECT,Créer un nouveau projet,b709ff33
 CREATE_ORGANIZATION,Créer une organisation,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,Votre organisation gère-t-elle l'un des éléments suivants ? Cochez toutes les cases correspondantes.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,Lequel des éléments suivants décrit le mieux votre organisation ?,ac93bf9a
-CREATE_PLANTING_SITE,Créer un site de plantation,02edc4b1
 CREATE_SEASON,Créer une saison,413117ea
 CREATE_SPECIES_LIST,Créer une liste d'espèces,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Créer une parcelle virtuelle,aea239a2
@@ -1267,6 +1266,7 @@ NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
 NEW_PLANTING_SITE,Nouveau site de plantation,ec2cbd8f
+NEW_PLANTING_SITE_CREATED,Un nouveau site de plantation a été créé.,119bf0b7
 NEW_SITE,Nouveau site,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nouveaux objectifs d'espèces ajoutés.,7c3d77c9
 NEW_STRATUM,Nouvelle strate,84292d1f
@@ -1655,6 +1655,7 @@ PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,Le substratum {1} dans le str
 PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,Le substratum {1} dans le stratum {0} se trouve dans une zone d’exclusion.,64deeafa
 PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,Le substratum {1} n’est pas à l’intérieur du stratum {0}.,13641abf
 PLANTING_SITE_SAVED,Site de plantation sauvegardé,70f9ae14
+PLANTING_SITE_SAVED_AS_DRAFT,Le site de plantation a été enregistré comme brouillon.,6e806a34
 PLANTING_SITE_STRATUM_NAME_HELP,Des noms lisibles aideront les personnes sur le terrain à identifier les zones lorsqu’elles sont sur le terrain.,63445c3d
 PLANTING_SITES,Sites de plantation,3799d2eb
 PLANTING_TARGET,Objectif de plantation,7df4b251

@@ -8,7 +8,6 @@ export type CloseSetupConfirmationProps = {
   onDiscard: () => void;
   message?: string;
   onKeepEditing: () => void;
-  onSaveAsDraft?: () => void;
   siteName: string;
   title?: string;
 };
@@ -17,7 +16,6 @@ export default function CloseSetupConfirmation({
   message,
   onDiscard,
   onKeepEditing,
-  onSaveAsDraft,
   siteName,
   title,
 }: CloseSetupConfirmationProps): JSX.Element {
@@ -25,9 +23,9 @@ export default function CloseSetupConfirmation({
     <DialogBox
       onClose={onKeepEditing}
       open={true}
-      title={title ?? strings.CLOSE_SITE_SETUP}
+      title={title ?? strings.CANCEL_SITE_SETUP}
       size='large'
-      message={strings.formatString(message ?? strings.CLOSE_DRAFT_SITE_SETUP_MESSAGE, siteName) as string}
+      message={strings.formatString(message ?? strings.CANCEL_DRAFT_SITE_SETUP_MESSAGE, siteName) as string}
       leftButton={
         <Button
           id='keep-editing-planting-site'
@@ -47,16 +45,6 @@ export default function CloseSetupConfirmation({
           priority='secondary'
           type='destructive'
         />,
-        ...(onSaveAsDraft
-          ? [
-              <Button
-                id='save-planting-site-as-draft'
-                key='save'
-                label={strings.SAVE_AND_CLOSE}
-                onClick={onSaveAsDraft}
-              />,
-            ]
-          : []),
       ]}
     />
   );
