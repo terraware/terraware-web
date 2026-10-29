@@ -1,6 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { TableColumnType } from '@terraware/web-components';
 import CellRenderer, { TableRowType } from '@terraware/web-components/components/table/TableCellRenderer';
 import { RendererProps } from '@terraware/web-components/components/table/types';
@@ -10,12 +11,10 @@ import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { selectDocumentSearch } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestSearchDocuments } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useListDocumentsQuery } from 'src/queries/generated/documentProducerDocuments';
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { Document } from 'src/types/documentProducer/Document';
+import { searchAndSort } from 'src/utils/searchAndSort';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -30,16 +29,22 @@ const defaultSearchOrder: SearchSortOrder = {
 };
 
 export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.Element | null {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
-  const [tableRows, setTableRows] = useState<Document[]>([]);
   const [tableSelectedRows, tableSetSelectedRows] = useState<TableRowType[]>([]);
-  const [requestId, setRequestId] = useState('');
+  const [searchRequest, setSearchRequest] = useState<{
+    locale: string | null;
+    search: SearchNodePayload;
+    sortOrder: SearchSortOrder;
+  }>();
   const query = useQuery();
 
-  const documentsResponse = useAppSelector(selectDocumentSearch(requestId));
+  const {
+    currentData: documentsData,
+    isFetching,
+    isError,
+  } = useListDocumentsQuery(searchRequest ? undefined : skipToken);
 
   const tableCellRenderer = useCallback((props: RendererProps<TableRowType>): JSX.Element => {
     switch (props.column.key) {
@@ -69,12 +74,21 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
   }, []);
 
   const dispatchSearchRequest = useCallback(
-    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
-      const request = dispatch(requestSearchDocuments({ locale, search, searchSortOrder }));
-      setRequestId(request.requestId);
-    },
-    [dispatch]
+    (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) =>
+      setSearchRequest({ locale, search, sortOrder: searchSortOrder }),
+    []
   );
+
+  const tableRows = useMemo(() => {
+    if (!documentsData || !searchRequest) {
+      return [];
+    }
+    return searchAndSort(documentsData.documents, searchRequest.search, {
+      locale: searchRequest.locale,
+      sortOrder: searchRequest.sortOrder,
+      numberFields: ['id'],
+    });
+  }, [documentsData, searchRequest]);
 
   const extraTableFilters: SearchNodePayload[] = useMemo(() => {
     if (projectId) {
@@ -117,16 +131,10 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
   );
 
   useEffect(() => {
-    if (!documentsResponse) {
-      return;
-    }
-
-    if (documentsResponse?.status === 'success' && documentsResponse?.data) {
-      setTableRows(documentsResponse.data ?? []);
-    } else if (documentsResponse?.status === 'error') {
+    if (isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [snackbar, documentsResponse]);
+  }, [isError, snackbar]);
 
   return (
     <Box>
@@ -145,6 +153,7 @@ export default function DocumentsTable({ projectId }: DocumentsTableProps): JSX.
       )}
 
       <TableWithSearchFilters
+        busy={isFetching}
         columns={() => columns()}
         defaultSearchOrder={defaultSearchOrder}
         dispatchSearchRequest={dispatchSearchRequest}
