@@ -1,3 +1,4 @@
+import { NurseryBatchesSearchResponseElement } from 'src/queries/search/batches';
 import { Batch } from 'src/types/Batch';
 
 /**
@@ -23,3 +24,59 @@ export const buildBatch = (overrides: Partial<Batch> = {}): Batch => ({
   version: 1,
   ...overrides,
 });
+
+type BatchSearchRowQuantities = {
+  germinatingQuantity?: number;
+  activeGrowthQuantity?: number;
+  hardeningOffQuantity?: number;
+  readyQuantity?: number;
+};
+
+/**
+ * A batch as the search API returns it (`POST /api/v1/search` with prefix `batches`, e.g.
+ * `listBatchesByIds`): string-valued fields alongside `(raw)` numeric quantities. `facility_id`
+ * matches the nursery in `buildOrganization`.
+ *
+ * Pass quantities as numbers in the second argument; both the display and `(raw)` fields are
+ * filled in from them, and `totalQuantity` is derived the way the server does (everything but
+ * germinating).
+ */
+export const buildBatchSearchRow = (
+  overrides: Partial<NurseryBatchesSearchResponseElement> = {},
+  quantities: BatchSearchRowQuantities = {}
+): NurseryBatchesSearchResponseElement => {
+  const {
+    germinatingQuantity = 0,
+    activeGrowthQuantity = 0,
+    hardeningOffQuantity = 0,
+    readyQuantity = 100,
+  } = quantities;
+  const totalQuantity = activeGrowthQuantity + hardeningOffQuantity + readyQuantity;
+
+  return {
+    id: '1',
+    addedDate: '2024-01-01',
+    batchNumber: '24-1-1-001',
+    facility_id: '100',
+    facility_name: 'Test Nursery',
+    germinationStartedDate: '',
+    notes: '',
+    readyByDate: '',
+    seedsSownDate: '',
+    species_id: '1',
+    species_scientificName: 'Acacia koa',
+    species_commonName: '',
+    version: '1',
+    germinatingQuantity: String(germinatingQuantity),
+    'germinatingQuantity(raw)': germinatingQuantity,
+    activeGrowthQuantity: String(activeGrowthQuantity),
+    'activeGrowthQuantity(raw)': activeGrowthQuantity,
+    hardeningOffQuantity: String(hardeningOffQuantity),
+    'hardeningOffQuantity(raw)': hardeningOffQuantity,
+    readyQuantity: String(readyQuantity),
+    'readyQuantity(raw)': readyQuantity,
+    totalQuantity: String(totalQuantity),
+    'totalQuantity(raw)': totalQuantity,
+    ...overrides,
+  };
+};
