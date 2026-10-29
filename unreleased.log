@@ -1,3 +1,5 @@
+88cf0f2b SE-8988 Fix added and removed events for trees and shrubs (#6940)
+c676be16 SW-9173 Remove console tab cleanup feature flag (#6939)
 5a50753c SW-9071 Add end-to-end test for editing a planting site map (#6926)
 00b76434 Skip the stale app version check for unversioned builds (#6925)
 3cc40c25 SW-9071 Summarize planting site map edits before saving (#6916)
