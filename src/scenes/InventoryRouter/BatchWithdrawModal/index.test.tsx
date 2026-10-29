@@ -1,8 +1,8 @@
 import React from 'react';
 
+import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
-import { DateTime } from 'luxon';
 import { HttpResponse, http } from 'msw/http';
 
 import { PlantingSeasonPayload } from 'src/queries/generated/plantingSeasons';
@@ -33,7 +33,20 @@ const MIXED_BATCH = buildBatchSearchRow(
   { germinatingQuantity: 5, activeGrowthQuantity: 10, hardeningOffQuantity: 8, readyQuantity: 20 }
 );
 
-const today = () => DateTime.local().toISODate();
+/**
+ * The modal's default withdrawal date depends on the time zone Luxon is set to when it opens, which
+ * the app's date picker changes. Tests that care about the date enter it rather than relying on the
+ * default.
+ */
+const enterWithdrawDate = async (user: UserEvent, date: string) => {
+  const dateInput = screen.getByLabelText(strings.WITHDRAW_DATE_REQUIRED);
+  await user.click(dateInput);
+  await user.keyboard('{Control>}a{/Control}');
+  await user.paste(date);
+};
+
+/** "Today" as the modal decides whether a withdrawal emptied a batch today. */
+const modalToday = () => getTodaysDateFormatted();
 
 type MockOptions = {
   batches?: NurseryBatchesSearchResponseElement[];
@@ -131,6 +144,7 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     const { user } = renderModal();
 
     await waitForDialog();
+    await enterWithdrawDate(user, '2026-03-14');
     await user.type(notesField(), 'Root rot');
     await clickNextWhenEnabled(user);
 
@@ -146,7 +160,7 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     expect(body).toEqual({
       purpose: 'Dead',
       facilityId: NURSERY_A.id,
-      withdrawnDate: today(),
+      withdrawnDate: '2026-03-14',
       notes: 'Root rot',
       batchWithdrawals: [
         {
@@ -187,6 +201,7 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     const { user, state } = renderModal();
 
     await waitForDialog();
+    await enterWithdrawDate(user, modalToday());
     await clickNextWhenEnabled(user);
     await typeQuantity(user, phaseInput(1, 'germinatingQuantityWithdrawn'), 5);
     await typeQuantity(user, phaseInput(1, 'activeGrowthQuantityWithdrawn'), 10);
