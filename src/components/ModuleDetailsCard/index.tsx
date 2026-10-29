@@ -1,6 +1,6 @@
 import React, { ReactNode, useMemo } from 'react';
 
-import { Box, Card, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -169,15 +169,15 @@ const ModuleDetailsCard = ({
       }}
     >
       <Grid container spacing={theme.spacing(1)}>
-        <Grid item xs style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }}>
+        <Grid style={{ flexGrow: 1, padding: `${theme.spacing(1)} ${theme.spacing(3)}` }} size='grow'>
           <ModuleContentSection>
             <Grid container>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography fontSize={'16px'} fontWeight={500} lineHeight={'24px'}>
                   {module.title}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography fontSize={'24px'} lineHeight={'32px'} fontWeight={600}>
                   {module.name}
                 </Typography>
@@ -210,7 +210,7 @@ const ModuleDetailsCard = ({
                     flexWrap={wrap()}
                   >
                     {deliverable.useButton ? (
-                      <Grid item flexGrow={0} xs={12}>
+                      <Grid flexGrow={0} size={12}>
                         <Box display={'flex'} alignItems={'center'} justifyContent={'space-between'} width={'50%'}>
                           <Box display={'flex'} alignItems={'center'}>
                             <DeliverableStatusBadge
@@ -226,13 +226,13 @@ const ModuleDetailsCard = ({
                       </Grid>
                     ) : (
                       <>
-                        <Grid item flexGrow={0} xs={gridSize()}>
+                        <Grid flexGrow={0} size={gridSize()}>
                           <DeliverableStatusBadge
                             showSimplifiedStatus={showSimplifiedStatus}
                             status={deliverable.status || 'Not Submitted'}
                           />
                         </Grid>
-                        <Grid item flexGrow={0} xs={gridSize()}>
+                        <Grid flexGrow={0} size={gridSize()}>
                           <Link fontSize='16px' onClick={deliverable.onClick} style={{ textAlign: 'left' }}>
                             {deliverable.name}
                           </Link>
@@ -240,7 +240,7 @@ const ModuleDetailsCard = ({
                       </>
                     )}
                     {deliverable.dueDate && activeLocale && (
-                      <Grid item flexGrow={0} xs={gridSize()}>
+                      <Grid flexGrow={0} size={gridSize()}>
                         <Typography
                           component='span'
                           fontSize={'16px'}
@@ -281,7 +281,7 @@ const ModuleDetailsCard = ({
         </Grid>
 
         {!!events?.length && (
-          <Grid item>
+          <Grid>
             {events.map((event) => (
               <ModuleEventSessionCard
                 key={event.id}

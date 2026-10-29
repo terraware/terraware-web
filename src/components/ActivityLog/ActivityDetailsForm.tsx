@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
@@ -745,7 +745,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             onActivityMarkerClick={onActivityMarkerClick}
           >
             <Grid container spacing={2} textAlign='left'>
-              <Grid item xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+              <Grid sx={{ textAlign: { xs: 'left', md: 'right' } }} size={12}>
                 {isEditing && activity && !isObsActivity && isAllowedDeleteActivitiesNonPublished && (
                   <Button
                     label={strings.DELETE_ACTIVITY}
@@ -761,7 +761,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 )}
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Box
                   display='flex'
                   alignItems={isMobile ? 'start' : 'center'}
@@ -784,7 +784,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
 
               {isObsActivity && obsMonthYear && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Box display='flex' alignItems='flex-start' gap={1}>
                     <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
                     <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
@@ -795,14 +795,19 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               )}
 
               {isObsActivity && obsTitle && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Typography fontSize='16px' fontWeight={500}>
                     {obsTitle}
                   </Typography>
                 </Grid>
               )}
 
-              <Grid item lg={6} xs={12}>
+              <Grid
+                size={{
+                  lg: 6,
+                  xs: 12,
+                }}
+              >
                 {isObsActivity ? (
                   <ActivityStatField
                     title={strings.ACTIVITY_TYPE}
@@ -826,7 +831,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 )}
               </Grid>
 
-              <Grid item lg={5} xs={12}>
+              <Grid
+                size={{
+                  lg: 5,
+                  xs: 12,
+                }}
+              >
                 {isObsActivity ? (
                   <ActivityStatField title={strings.DATE} contents={record.date ?? ''} isEditing />
                 ) : (
@@ -857,7 +867,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 />
               )}
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Textfield
                   errorText={validateFields && !record?.description && !isObsActivity ? strings.REQUIRED_FIELD : ''}
                   id='description'
@@ -871,7 +881,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Grid>
 
               {isAcceleratorRoute && (
-                <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                <Grid
+                  sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}
+                  size={{
+                    xs: 12,
+                    sm: 6,
+                  }}
+                >
                   <Dropdown
                     required
                     label={strings.STATUS}
@@ -885,14 +901,15 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
               {isAcceleratorRoute && (
                 <Grid
-                  item
-                  xs={12}
-                  sm={6}
                   sx={{
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     marginTop: isMobile ? 0 : '8px',
+                  }}
+                  size={{
+                    xs: 12,
+                    sm: 6,
                   }}
                 >
                   <Checkbox

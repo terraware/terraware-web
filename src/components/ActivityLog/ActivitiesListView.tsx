@@ -1,7 +1,7 @@
 import React, { Fragment, type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, GridLegacy as Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
 import { ColumnHeader } from 'export-to-csv';
 import { DateTime } from 'luxon';
@@ -117,7 +117,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         cursor: 'pointer',
       }}
     >
-      <Grid item paddingRight={theme.spacing(2)} xs='auto'>
+      <Grid paddingRight={theme.spacing(2)} size='auto'>
         <img
           alt={coverPhoto?.caption}
           height='100'
@@ -130,13 +130,13 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
         />
       </Grid>
 
-      <Grid item xs={true}>
+      <Grid size='grow'>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
             {obsListTitle ?? activityType}
           </Typography>
           {isDesktop && (
-            <Grid item xs='auto'>
+            <Grid size='auto'>
               <Typography>{activity.payload.date}</Typography>
             </Grid>
           )}

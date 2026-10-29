@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import { useLocalization } from 'src/providers/hooks';
@@ -27,7 +27,12 @@ export default function ObservationStatsPanel({
   return (
     <>
       {typeof livePlants === 'number' && (
-        <Grid item xs={12} sm={4}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 4,
+          }}
+        >
           <ActivityStatField
             title={strings.LIVE_PLANTS}
             contents={(livePlants ?? 0).toString()}
@@ -36,12 +41,22 @@ export default function ObservationStatsPanel({
         </Grid>
       )}
       {typeof plantDensity === 'number' && (
-        <Grid item xs={12} sm={4}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 4,
+          }}
+        >
           <ActivityStatField title={strings.PLANT_DENSITY} contents={plantDensity.toString()} isEditing={isEditing} />
         </Grid>
       )}
       {typeof survivalRate === 'number' && (
-        <Grid item xs={12} sm={4}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 4,
+          }}
+        >
           <ActivityStatField
             title={strings.SURVIVAL_RATE}
             contents={<PendingSurvivalRate pending={survivalRatePending}>{`${survivalRate}%`}</PendingSurvivalRate>}

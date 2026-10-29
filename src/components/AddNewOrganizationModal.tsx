@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
@@ -204,7 +204,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             label={strings.ORGANIZATION_NAME_REQUIRED}
             type='text'
@@ -218,7 +218,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           />
         </Grid>
         {isApplication !== true && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               label={strings.DESCRIPTION}
               type='text'
@@ -246,7 +246,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           countrySubdivisionError={stateError}
           paddingBottom={theme.spacing(4)}
         />
-        <Grid item xs={12} sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}>
+        <Grid marginTop={theme.spacing(-3)} size={12}>
           <TimeZoneSelector
             label={strings.TIME_ZONE_REQUIRED}
             onTimeZoneSelected={onTimeZoneChange}
@@ -257,7 +257,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           />
         </Grid>
         {isApplication !== true && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               type='text'
               label={strings.CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES}
@@ -279,7 +279,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
             </Box>
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Dropdown
             required
             label={strings.CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE}
@@ -308,7 +308,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           )}
         </Grid>
         {isApplication !== true && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               type='text'
               label={strings.ORGANIZATION_WEBSITE}
@@ -320,7 +320,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           </Grid>
         )}
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize={'14px'} fontWeight={400} lineHeight={'20px'} marginTop={'16px'}>
           {strings.ADD_NEW_ORGANIZATION_FOOTNOTE}
         </Typography>
