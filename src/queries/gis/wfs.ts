@@ -14,8 +14,7 @@ const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     getGisFeatures: build.query<FeatureCollection<MultiPolygon>, GetGisFeaturesApiArg>({
       query: ({ cqlFilter, propertyName, typeNames }) => ({
-        // The server proxies arbitrary WFS parameters through to GeoServer, so the OpenAPI schema
-        // doesn't describe them or the GeoJSON response and codegen can't produce a usable endpoint.
+        // Not code generated, so that it can pass the WFS parameters through.
         url: '/api/v1/gis/wfs',
         params: {
           service: 'wfs',
