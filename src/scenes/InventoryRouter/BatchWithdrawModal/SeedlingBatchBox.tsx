@@ -203,9 +203,7 @@ const SeedlingBatchBox = ({
                     min={0}
                     max={batch.readyQuantity}
                     errorText={
-                      exceeds
-                        ? strings.formatString(strings.EXCEEDS_READY_TO_PLANT, value, batch.readyQuantity).toString()
-                        : ''
+                      exceeds ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, batch.readyQuantity).toString() : ''
                     }
                   />
                 </Box>
