@@ -1,6 +1,6 @@
 import React, { type JSX, useRef } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
@@ -19,7 +19,7 @@ const SeedsWithdrawalsView = (): JSX.Element => {
         <Grid container spacing={3} sx={{ marginTop: 0 }} display='flex' flexDirection='column' flexGrow={1}>
           <PageHeaderWrapper nextElement={contentRef.current}>
             <Grid container spacing={3} sx={{ paddingLeft: theme.spacing(3), paddingBottom: theme.spacing(2) }}>
-              <Grid item xs={8}>
+              <Grid size={8}>
                 <Typography sx={{ marginTop: 0, marginBottom: 0, fontSize: '24px', fontWeight: 600 }}>
                   {strings.SEEDS_WITHDRAWALS}
                 </Typography>
