@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { Box, GridLegacy as Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -84,12 +84,12 @@ const PageHeaderProjectFilter = ({
       }}
     >
       {isDesktop && (
-        <Grid item>
+        <Grid>
           <Separator height='40px' />
         </Grid>
       )}
       {projects?.length > 0 && (
-        <Grid item>
+        <Grid>
           {projects?.length > 1 ? (
             <Box display='flex'>
               <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>

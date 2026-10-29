@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import { GenericMap } from 'src/components/Map';
@@ -108,7 +108,14 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
   }, [projectId, navigate]);
 
   return (
-    <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)} position={'relative'}>
+    <Grid
+      paddingX={theme.spacing(1)}
+      position={'relative'}
+      size={{
+        md: md || 12,
+        xs: 12,
+      }}
+    >
       <Box
         sx={{
           position: 'absolute',

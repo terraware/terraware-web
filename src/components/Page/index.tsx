@@ -1,6 +1,6 @@
 import React, { CSSProperties, type JSX, useCallback, useState } from 'react';
 
-import { Box, CircularProgress, GridLegacy as Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -109,25 +109,26 @@ export default function Page({
         >
           {title && typeof title !== 'string' && (
             <Grid
-              item
-              xs={leftComponentGridSize !== undefined && rightComponentGridSize !== undefined ? 12 : 8}
-              md={
-                leftComponentGridSize !== undefined && rightComponentGridSize !== undefined
-                  ? 12 - (leftComponentGridSize + rightComponentGridSize)
-                  : undefined
-              }
+              size={{
+                xs: leftComponentGridSize !== undefined && rightComponentGridSize !== undefined ? 12 : 8,
+
+                md:
+                  leftComponentGridSize !== undefined && rightComponentGridSize !== undefined
+                    ? 12 - (leftComponentGridSize + rightComponentGridSize)
+                    : undefined,
+              }}
             >
               {title}
             </Grid>
           )}
           {title && typeof title === 'string' && (
             <Grid
-              item
-              md={
-                leftComponentGridSize !== undefined && rightComponentGridSize !== undefined
-                  ? 12 - (leftComponentGridSize + rightComponentGridSize)
-                  : undefined
-              }
+              size={{
+                md:
+                  leftComponentGridSize !== undefined && rightComponentGridSize !== undefined
+                    ? 12 - (leftComponentGridSize + rightComponentGridSize)
+                    : undefined,
+              }}
             >
               <Typography
                 sx={{
@@ -144,20 +145,22 @@ export default function Page({
           )}
           {leftComponent && (
             <Grid
-              item
-              md={leftComponentGridSize ?? 4}
-              xs={12}
               style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}
+              size={{
+                md: leftComponentGridSize ?? 4,
+                xs: 12,
+              }}
             >
               {leftComponent}
             </Grid>
           )}
           {rightComponent && (
             <Grid
-              item
-              md={rightComponentGridSize ?? 4}
-              xs={12}
               sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              size={{
+                md: rightComponentGridSize ?? 4,
+                xs: 12,
+              }}
             >
               {rightComponent}
             </Grid>
@@ -165,10 +168,11 @@ export default function Page({
 
           {primaryButton && (
             <Grid
-              item
-              md={4}
-              xs={12}
               sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              size={{
+                md: 4,
+                xs: 12,
+              }}
             >
               <Button
                 id={`${primaryButton.title}_id}`}
@@ -181,12 +185,12 @@ export default function Page({
           )}
         </Grid>
         {subHeader && (
-          <Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}>
+          <Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}>
             <Box sx={{ paddingLeft: theme.spacing(3) }}>{subHeader}</Box>
           </Grid>
         )}
         {description ? (
-          <Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}>
+          <Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}>
             <Typography
               margin={0}
               fontSize='14px'
@@ -200,7 +204,7 @@ export default function Page({
           ''
         )}
       </PageHeaderWrapper>
-      <Grid item xs={12} ref={firstRowRef}>
+      <Grid ref={firstRowRef} size={12}>
         <PageSnackbar />
       </Grid>
       <Grid container sx={contentStyle}>

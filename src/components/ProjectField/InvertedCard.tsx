@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import { ProjectFieldProps, ProjectFieldValue } from '.';
 import GridEntryWrapper from './GridEntryWrapper';
@@ -22,14 +22,14 @@ const InvertedCard = ({ label, md, value, backgroundColor, units, rightLabel }: 
         sx={{ backgroundColor }}
       >
         <Grid container alignContent={'left'}>
-          <Grid item xs={rightLabel ? 6 : 12}>
+          <Grid size={rightLabel ? 6 : 12}>
             <ProjectFieldValue value={value} units={units} />
             <Typography fontSize={'16px'} lineHeight={'24px'} fontWeight={600} marginTop={theme.spacing(1)}>
               {label}
             </Typography>
           </Grid>
           {rightLabel && (
-            <Grid item xs={6} display={'flex'} alignItems={'flex-end'} justifyContent={'flex-end'}>
+            <Grid display={'flex'} alignItems={'flex-end'} justifyContent={'flex-end'} size={6}>
               <Typography
                 fontSize={'16px'}
                 lineHeight={'24px'}
