@@ -363,6 +363,7 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     const { user, store, state } = renderModal();
 
     await waitForDialog();
+    await enterWithdrawDate(user, modalToday());
     await clickNextWhenEnabled(user);
     await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 3);
     await clickNextWhenEnabled(user);
@@ -691,6 +692,7 @@ describe('BatchWithdrawModal on a page that keeps it mounted while closed', () =
     const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen />);
 
     await waitForDialog();
+    await enterWithdrawDate(user, modalToday());
     await clickNextWhenEnabled(user);
     await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 3);
     await clickNextWhenEnabled(user);
