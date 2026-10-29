@@ -1,3 +1,4 @@
+bb0aafac SW-9124 Add new failure types to draft site problems (#6938)
 93b72abb SW-9165 Fix the over-limit message when withdrawing ready-to-plant seedlings (#6936)
 f8d93af1 SW-9165 Don't withdraw plants twice when retrying a planting date withdrawal (#6935)
 9c88f430 SW-9165 Only check withdrawable batches while the withdrawal modal is open (#6934)

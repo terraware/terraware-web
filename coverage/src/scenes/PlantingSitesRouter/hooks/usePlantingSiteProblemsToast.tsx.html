@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">29.16% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/20</span>
+                <span class='fraction'>7/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.5% </span>
+                <span class="strong">6% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/40</span>
+                <span class='fraction'>3/50</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.57% </span>
+                <span class="strong">26.08% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/19</span>
+                <span class='fraction'>6/23</span>
             </div>
         
             
@@ -137,7 +137,19 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,12 +170,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,6 +191,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,38 +253,50 @@ export const problemText = ({ conflictsWith, problemType, stratum, substratum }:
         stratum ?? '',
         substratum ?? ''
       ) as string;
-<span class="branch-2 cbranch-no" title="branch not covered" >    case 'ExclusionWithoutBoundary':</span>
+<span class="branch-2 cbranch-no" title="branch not covered" >    case 'ExclusionInvalid':</span>
+<span class="cstat-no" title="statement not covered" >      return strings.PLANTING_SITE_PROBLEM_EXCLUSION_INVALID;</span>
+<span class="branch-3 cbranch-no" title="branch not covered" >    case 'ExclusionWithoutBoundary':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.PLANTING_SITE_PROBLEM_EXCLUSION_WITHOUT_BOUNDARY;</span>
+<span class="branch-4 cbranch-no" title="branch not covered" >    case 'SiteBoundaryInvalid':</span>
+<span class="cstat-no" title="statement not covered" >      return strings.PLANTING_SITE_PROBLEM_SITE_BOUNDARY_INVALID;</span>
     case 'SiteTooLarge':
       return strings.PLANTING_SITE_PROBLEM_SITE_TOO_LARGE;
-<span class="branch-4 cbranch-no" title="branch not covered" >    case 'StrataWithoutSiteBoundary':</span>
+<span class="branch-6 cbranch-no" title="branch not covered" >    case 'StrataWithoutSiteBoundary':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.PLANTING_SITE_PROBLEM_STRATA_WITHOUT_SITE_BOUNDARY;</span>
-<span class="branch-5 cbranch-no" title="branch not covered" >    case 'StratumBoundaryOverlaps':</span>
+<span class="branch-7 cbranch-no" title="branch not covered" >    case 'StratumBoundaryInvalid':</span>
+<span class="cstat-no" title="statement not covered" >      return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_INVALID, stratum ?? '') as string;</span>
+<span class="branch-8 cbranch-no" title="branch not covered" >    case 'StratumBoundaryOverlaps':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(</span>
         strings.PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_OVERLAPS,
         stratum ?? '',
         conflicts
       ) as string;
-<span class="branch-6 cbranch-no" title="branch not covered" >    case 'StratumHasNoSubstrata':</span>
+<span class="branch-9 cbranch-no" title="branch not covered" >    case 'StratumHasNoSubstrata':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_HAS_NO_SUBSTRATA, stratum ?? '') as string;</span>
-<span class="branch-7 cbranch-no" title="branch not covered" >    case 'StratumNotInSite':</span>
+<span class="branch-10 cbranch-no" title="branch not covered" >    case 'StratumNotInSite':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_NOT_IN_SITE, stratum ?? '') as string;</span>
-<span class="branch-8 cbranch-no" title="branch not covered" >    case 'StratumTooSmall':</span>
+<span class="branch-11 cbranch-no" title="branch not covered" >    case 'StratumTooSmall':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(strings.PLANTING_SITE_PROBLEM_STRATUM_TOO_SMALL, stratum ?? '') as string;</span>
-<span class="branch-9 cbranch-no" title="branch not covered" >    case 'SubstratumBoundaryOverlaps':</span>
+<span class="branch-12 cbranch-no" title="branch not covered" >    case 'SubstratumBoundaryInvalid':</span>
+<span class="cstat-no" title="statement not covered" >      return strings.formatString(</span>
+        strings.PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_INVALID,
+        stratum ?? '',
+        substratum ?? ''
+      ) as string;
+<span class="branch-13 cbranch-no" title="branch not covered" >    case 'SubstratumBoundaryOverlaps':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(</span>
         strings.PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,
         stratum ?? '',
         substratum ?? '',
         conflicts
       ) as string;
-<span class="branch-10 cbranch-no" title="branch not covered" >    case 'SubstratumInExclusionArea':</span>
+<span class="branch-14 cbranch-no" title="branch not covered" >    case 'SubstratumInExclusionArea':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(</span>
         strings.PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,
         stratum ?? '',
         substratum ?? ''
       ) as string;
-<span class="branch-11 cbranch-no" title="branch not covered" >    case 'SubstratumNotInStratum':</span>
+<span class="branch-15 cbranch-no" title="branch not covered" >    case 'SubstratumNotInStratum':</span>
 <span class="cstat-no" title="statement not covered" >      return strings.formatString(</span>
         strings.PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,
         stratum ?? '',
@@ -292,7 +328,7 @@ export default function usePlantingSiteProblemsToast(): (problems: PlantingSiteP
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T17:02:41.587Z
+                at 2026-10-29T17:46:04.636Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
