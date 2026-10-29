@@ -19,7 +19,6 @@ export default function FunderHome() {
   const [selectedProjectId, setSelectedProjectId] = useState<number>();
   const { currentData: funderProjectsData } = useGetProjectsQuery(fundingEntityProjectIds, {
     skip: !fundingEntityProjectIds.length,
-    refetchOnMountOrArgChange: true,
   });
   const funderProjects = useMemo(
     () =>
