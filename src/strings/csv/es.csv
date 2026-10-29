@@ -1641,13 +1641,17 @@ PLANTING_SITE_MAP_SELF_INTERSECTS,Una figura en el mapa se cruza a sí misma. Vu
 PLANTING_SITE_NAME,Nombre del sitio de plantación,f3cb062b
 PLANTING_SITE_PROBLEM_DUPLICATE_STRATUM_NAME,Más de un estrato se llama {0}.,14b61803
 PLANTING_SITE_PROBLEM_DUPLICATE_SUBSTRATUM_NAME,Más de un sustrato en el estrato {0} se llama {1}.,9e35127b
+PLANTING_SITE_PROBLEM_EXCLUSION_INVALID,Un área de exclusión se cruza consigo misma.,0b38bf61
 PLANTING_SITE_PROBLEM_EXCLUSION_WITHOUT_BOUNDARY,Las áreas de exclusión requieren un límite del sitio.,74f1b3d0
+PLANTING_SITE_PROBLEM_SITE_BOUNDARY_INVALID,El límite del sitio se cruza consigo mismo.,b4623572
 PLANTING_SITE_PROBLEM_SITE_TOO_LARGE,El límite del sitio es demasiado grande.,d5f623ef
 PLANTING_SITE_PROBLEM_STRATA_WITHOUT_SITE_BOUNDARY,Los estratos requieren un límite del sitio.,4287a3ed
+PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_INVALID,El límite del estrato {0} se cruza consigo mismo.,b05d2cad
 PLANTING_SITE_PROBLEM_STRATUM_BOUNDARY_OVERLAPS,El estrato {0} se superpone con {1}.,6f3a3294
 PLANTING_SITE_PROBLEM_STRATUM_HAS_NO_SUBSTRATA,El estrato {0} no tiene sustratos.,5e222c27
 PLANTING_SITE_PROBLEM_STRATUM_NOT_IN_SITE,El estrato {0} no está dentro del límite del sitio.,71c17af9
 PLANTING_SITE_PROBLEM_STRATUM_TOO_SMALL,El estrato {0} es demasiado pequeño.,4a394aec
+PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_INVALID,El límite del subestrato {1} en el estrato {0} se cruza consigo mismo.,19799ba1
 PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,El sustrato {1} en el estrato {0} se superpone con {2}.,aed29223
 PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,El sustrato {1} en el estrato {0} está dentro de un área de exclusión.,64deeafa
 PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,El sustrato {1} no está dentro del estrato {0}.,13641abf
