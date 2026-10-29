@@ -10,7 +10,7 @@ test.describe('ProjectDeliverablesTests', () => {
 
   test('View Project Deliverables Table', async ({ page }, testInfo) => {
     await navigateToProjectProfile('Phase 2 Project Deal', page);
-    await page.getByRole('tab', { name: 'Deliverables' }).click();
+    await page.getByRole('button', { name: 'Deliverables', exact: true }).click();
 
     await expect(page.getByRole('heading', { name: 'Deliverables' })).toBeVisible();
     await expect(page.locator('#search-participantDeliverablesTable')).toBeVisible();

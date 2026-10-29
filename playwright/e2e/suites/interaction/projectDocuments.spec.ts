@@ -8,7 +8,7 @@ test.describe('ProjectDocumentsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
     await navigateToProjectProfile('Phase 2 Project Deal', page);
-    await page.getByRole('tab', { name: 'Documents' }).click();
+    await page.getByRole('button', { name: 'Documents', exact: true }).click();
   });
 
   test('View Project Documents Table', async ({ page }, testInfo) => {

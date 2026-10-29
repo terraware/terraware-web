@@ -9,7 +9,6 @@ import { MRT_Cell } from 'material-react-table';
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
-import { useFeatureEnabled } from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
@@ -45,7 +44,6 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   const [editCommonIndicatorModalOpened, , openEditCommonIndicatorModal, closeEditCommonIndicatorModal] =
     useBoolean(false);
   const { isAllowed } = useUser();
-  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
 
   const listProjectReportConfigResponse = useListAcceleratorReportConfigQuery(projectId);
   const projectReportConfig = useMemo(
@@ -396,7 +394,6 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}
-        title={cleanUpTabsEnabled ? undefined : strings.SETTINGS}
         rightComponent={header ? undefined : editSettingsButton}
       >
         {header && (
@@ -440,7 +437,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
             </Box>
           </Grid>
         </Grid>
-        {cleanUpTabsEnabled && isAllowed('UPDATE_REPORTS_SETTINGS') && (
+        {isAllowed('UPDATE_REPORTS_SETTINGS') && (
           <Box display='flex' justifyContent='flex-end' marginBottom={theme.spacing(2)}>
             <Button icon='plus' label={strings.ADD_INDICATOR} onClick={goToAddIndicator} priority='secondary' />
           </Box>

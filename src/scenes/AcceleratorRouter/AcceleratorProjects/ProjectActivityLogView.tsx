@@ -6,18 +6,11 @@ import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
 import Card from 'src/components/common/Card';
 
 type ProjectActivityLogViewProps = {
-  highlightsModalOpen: boolean;
   projectDealName?: string;
   projectId: number;
-  setHighlightsModalOpen: (open: boolean) => void;
 };
 
-const ProjectActivityLogView = ({
-  highlightsModalOpen,
-  projectDealName,
-  projectId,
-  setHighlightsModalOpen,
-}: ProjectActivityLogViewProps) => {
+const ProjectActivityLogView = ({ projectDealName, projectId }: ProjectActivityLogViewProps) => {
   const theme = useTheme();
 
   return (
@@ -28,13 +21,7 @@ const ProjectActivityLogView = ({
         width: '100%',
       }}
     >
-      <ActivitiesListView
-        highlightsModalOpen={highlightsModalOpen}
-        overrideHeightOffsetPx={336}
-        projectDealName={projectDealName}
-        projectId={projectId}
-        setHighlightsModalOpen={setHighlightsModalOpen}
-      />
+      <ActivitiesListView overrideHeightOffsetPx={336} projectDealName={projectDealName} projectId={projectId} />
     </Card>
   );
 };

@@ -3,7 +3,6 @@ import React, { type JSX, useCallback, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
-import { useFeatureEnabled } from 'src/features';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useLocalization, useUser } from 'src/providers';
 import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
@@ -21,7 +20,6 @@ const ReportInternalComment = ({ projectId, report }: ReportInternalCommentProps
   const theme = useTheme();
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
-  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
   const snackbar = useSnackbar();
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
@@ -64,7 +62,7 @@ const ReportInternalComment = ({ projectId, report }: ReportInternalCommentProps
           <InternalComment entity={report} update={onUpdateInternalComment} disabled={!isAllowed('EDIT_REPORTS')} />
         </Box>
 
-        {cleanUpTabsEnabled && <AcceleratorReportStatusBadge status={report.status} />}
+        <AcceleratorReportStatusBadge status={report.status} />
       </Box>
     </Box>
   );

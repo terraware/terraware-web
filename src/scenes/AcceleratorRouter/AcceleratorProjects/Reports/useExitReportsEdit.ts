@@ -1,37 +1,28 @@
 import { useCallback } from 'react';
 
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
-import { ReportsSegment, SEGMENT_PATHS } from './ReportsContent';
+import { ReportsSegment } from './ReportsContent';
 
 const useExitReportsEdit = (projectId: number) => {
-  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
   const navigate = useSyncNavigate();
 
   return useCallback(
     (segment: ReportsSegment, reportId?: number) => {
-      if (cleanUpTabsEnabled) {
-        const params = new URLSearchParams({ tab: 'reports' });
+      const params = new URLSearchParams({ tab: 'reports' });
 
-        if (segment !== 'reports') {
-          params.set('reportsSegment', segment);
-        }
-
-        if (reportId !== undefined) {
-          params.set('reportId', `${reportId}`);
-        }
-
-        navigate(`${APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`)}?${params.toString()}`);
-        return;
+      if (segment !== 'reports') {
+        params.set('reportsSegment', segment);
       }
 
-      const reportsPath = APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`);
+      if (reportId !== undefined) {
+        params.set('reportId', `${reportId}`);
+      }
 
-      navigate(`${reportsPath}${SEGMENT_PATHS[segment]}${reportId === undefined ? '' : `/${reportId}`}`);
+      navigate(`${APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`)}?${params.toString()}`);
     },
-    [cleanUpTabsEnabled, navigate, projectId]
+    [navigate, projectId]
   );
 };
 
