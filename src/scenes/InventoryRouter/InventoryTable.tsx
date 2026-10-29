@@ -29,6 +29,7 @@ import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
 import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
+import { TABLES, TableDefinition } from 'src/types/Tables';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllNurseries } from 'src/utils/organization';
@@ -46,13 +47,19 @@ interface InventoryTableProps {
   allowSelectionProjectAssign?: boolean;
   columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
-  origin: OriginPage;
+  origin: Extract<OriginPage, 'Batches' | 'Nursery' | 'Species'>;
   results: SearchResponseElement[];
   setFilters: (f: InventoryFiltersUnion) => void;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
   temporalSearchValue: string;
   emptyTableMessage?: string;
 }
+
+const TABLES_BY_ORIGIN: Record<InventoryTableProps['origin'], TableDefinition> = {
+  Batches: TABLES.inventoryByBatch,
+  Nursery: TABLES.inventoryByNursery,
+  Species: TABLES.inventoryBySpecies,
+};
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
   const {
@@ -91,7 +98,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   });
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
 
-  const tableStateStorageKey = `inventoryTable_${origin.toLowerCase()}`;
+  const tableDefinition = TABLES_BY_ORIGIN[origin];
 
   // Filter-related state
   const initialFilters: Record<string, SearchNodePayload> = useMemo(() => {
@@ -573,7 +580,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(tableStateStorageKey, {
+  } = useTableState(tableDefinition, {
     persistPageIndex: {},
   });
 
@@ -658,7 +665,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enableGlobalFilter={true}
                 enableColumnFilters={true}
                 stickyFilters={true}
-                storageKey={tableStateStorageKey}
+                storageKey={tableDefinition.storageKey}
                 enablePagination={true}
                 enableTopToolbar={true}
                 enableBottomToolbar={true}
