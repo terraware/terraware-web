@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSelection';
 import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
@@ -19,7 +19,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
 
   return (
     <>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-nursery-capacity`}
           label={strings.NURSERY_CAPACITY_REQUIRED}
@@ -33,7 +33,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
           tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
         />
       </Grid>
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <OverviewItemCard
           isEditable={false}
           title={strings.TOTAL_NUMBER_OF_PLANTS_PROPAGATED}
@@ -42,7 +42,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
         />
       </Grid>
       {projectName && (
-        <Grid item xs={smallItemGridWidth()}>
+        <Grid size={smallItemGridWidth()}>
           <OverviewItemCard
             isEditable={false}
             title={strings.formatString(strings.TOTAL_NUMBER_OF_PLANTS_PROPAGATED_FOR_PROJECT, projectName) as string}
@@ -51,7 +51,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
           />
         </Grid>
       )}
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <OverviewItemCard
           isEditable={false}
           title={strings.NURSERY_MORTALITY_RATE}
@@ -61,8 +61,8 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
       </Grid>
       {projectName && !isMobile && (
         <>
-          <Grid item xs={smallItemGridWidth()} />
-          <Grid item xs={smallItemGridWidth()} />
+          <Grid size={smallItemGridWidth()} />
+          <Grid size={smallItemGridWidth()} />
         </>
       )}
     </>

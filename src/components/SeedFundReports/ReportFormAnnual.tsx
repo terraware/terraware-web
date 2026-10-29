@@ -1,6 +1,6 @@
 import React, { type JSX, useRef, useState } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';
 
 import { API_PATHS } from 'src/constants';
@@ -190,19 +190,19 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       container
       spacing={theme.spacing(3)}
       borderRadius={theme.spacing(3)}
-      padding={theme.spacing(0, 3, 3, 0)}
+      padding={theme.spacing(3)}
       margin={0}
       width='100%'
       sx={{
         backgroundColor: theme.palette.TwClrBg,
       }}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize='20px' fontWeight={600}>
           {strings.REPORT_ANNUAL_DETAILS_TITLE}
         </Typography>
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography id='observation-months' fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
           {strings.BEST_MONTHS_FOR_OBSERVATIONS}
         </Typography>
@@ -217,7 +217,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         </Typography>
       </Grid>
       {MONTHS.map((monthName, index) => (
-        <Grid item key={`month-${index.toString()}`} xs={smallItemGridWidth()}>
+        <Grid key={`month-${index.toString()}`} size={smallItemGridWidth()}>
           <Checkbox
             id={`month-${index.toString()}`}
             disabled={!editable}
@@ -228,7 +228,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           />
         </Grid>
       ))}
-      <Grid item xs={12} paddingTop={0} sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}>
+      <Grid marginTop={theme.spacing(-3)} paddingTop={0} size={12}>
         <Textfield
           label=''
           id='observations-months-validation'
@@ -250,7 +250,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           }}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='project-summary'
           title={strings.PROJECT_SUMMARY_REQUIRED}
@@ -282,7 +282,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           </Typography>
         )}
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='project-impact'
           title={strings.PROJECT_IMPACT_REQUIRED}
@@ -299,7 +299,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.projectImpact ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='budget-narrative'
           title={strings.BUDGET_NARRATIVE_SUMMARY_REQUIRED}
@@ -316,7 +316,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.budgetNarrativeSummary ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={12} ref={divRef}>
+      <Grid ref={divRef} size={12}>
         <input type='file' ref={inputRef} value='' onChange={onFileChosen} style={{ display: 'none' }} />
         <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
           {strings.BUDGET_DOCUMENT_XLS}
@@ -353,7 +353,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           </Box>
         ))}
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='social-impact'
           title={strings.SOCIAL_IMPACT_REQUIRED}
@@ -370,7 +370,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.socialImpact ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography id='sdg' fontSize='20px' fontWeight={600}>
           {strings.SUSTAINABLE_DEVELOPMENT_GOALS}
         </Typography>
@@ -378,7 +378,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
       {Object.keys(SDG_STRING).map((key) => {
         const sdgKey = Number(key) as SustainableDevelopmentGoal;
         return (
-          <Grid key={key} item xs={smallItemGridWidth()}>
+          <Grid key={key} size={smallItemGridWidth()}>
             <Checkbox
               id={key}
               disabled={!editable}
@@ -430,7 +430,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         );
       })}
       <br />
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='challenges'
           title={strings.CHALLENGES_REQUIRED}
@@ -447,7 +447,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.challenges ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='key-lessons'
           title={strings.KEY_LESSONS_REQUIRED}
@@ -464,7 +464,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.keyLessons ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='success-stories'
           title={strings.SUCCESS_STORIES_REQUIRED}
@@ -481,7 +481,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.successStories ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(1)}>
           {strings.CATALYTIC_DETAIL}
         </Typography>
@@ -495,7 +495,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
         />
       </Grid>
       {isCatalytic && (
-        <Grid item xs={mediumItemGridWidth()}>
+        <Grid size={mediumItemGridWidth()}>
           <Textfield
             id={'catalytic-detail'}
             type='textarea'
@@ -518,7 +518,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           />
         </Grid>
       )}
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='opportunities'
           title={strings.OPPORTUNITIES_REQUIRED}
@@ -535,7 +535,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
           errorText={validate && !report.annualDetails?.opportunities ? strings.REQUIRED_FIELD : ''}
         />
       </Grid>
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <ReportField
           id='next-steps'
           title={strings.NEXT_STEPS_REQUIRED}

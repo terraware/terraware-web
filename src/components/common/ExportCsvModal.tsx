@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { GridLegacy as Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -53,7 +53,7 @@ export default function ExportCsvModal(props: ExportCsvModalProps): JSX.Element 
       message={strings.DOWNLOAD_REPORT_DESCRIPTION}
     >
       <Grid container spacing={4} paddingTop='20px'>
-        <Grid item xs={12} textAlign='left'>
+        <Grid textAlign='left' size={12}>
           <TextField
             type='text'
             id='reportName'

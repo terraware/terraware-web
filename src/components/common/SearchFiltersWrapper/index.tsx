@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { Button, PillList, Textfield, Tooltip } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
@@ -140,7 +140,7 @@ export default function SearchFiltersWrapper({
 
   return (
     <Grid container width={width}>
-      <Grid item xs={12} display='flex' alignItems='center'>
+      <Grid display='flex' alignItems='center' size={12}>
         <Box width={isMobile ? '200px' : '300px'} display='inline-flex' flexDirection='column'>
           <Textfield
             placeholder={strings.SEARCH}
@@ -177,7 +177,7 @@ export default function SearchFiltersWrapper({
       </Grid>
 
       {filterPillData.length > 0 && (
-        <Grid item xs={12} display='flex' marginTop={1}>
+        <Grid display='flex' marginTop={1} size={12}>
           <PillList data={filterPillData} />
         </Grid>
       )}

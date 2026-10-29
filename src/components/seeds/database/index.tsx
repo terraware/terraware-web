@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Container, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message, Tabs } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';
@@ -192,7 +192,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
     return emptyState;
   };
 
-  const emptyStateSpacer = () => <Grid item xs={12} padding={theme.spacing(3)} />;
+  const emptyStateSpacer = () => <Grid padding={theme.spacing(3)} size={12} />;
 
   const messageStyles = {
     margin: '0 auto',
@@ -294,7 +294,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           >
             {null}
             {hasNewPendingAccessions && (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Message
                   onClose={dismissCheckInBanner}
                   showCloseButton

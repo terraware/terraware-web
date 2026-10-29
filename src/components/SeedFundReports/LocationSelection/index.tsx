@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import { InfoField } from 'src/components/SeedFundReports/LocationSelection/InfoField';
@@ -61,7 +61,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
     <>
       {['seedBank', 'nursery'].includes(locationType) && (
         <>
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-${locationType}-buildStartDate`}
               label={
@@ -86,7 +86,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             />
           </Grid>
 
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-${locationType}-buildCompletedDate`}
               label={
@@ -112,7 +112,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
             />
           </Grid>
 
-          <Grid item xs={smallItemGridWidth()}>
+          <Grid size={smallItemGridWidth()}>
             <InfoField
               id={`${location.id}-${locationType}-operationStartDate`}
               label={
@@ -143,7 +143,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
       {locationType === 'seedBank' && <LocationSectionSeedBank {...props} />}
       {locationType === 'plantingSite' && <LocationSectionPlantingSite {...props} />}
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-workers-paid-engaged`}
           label={strings.WORKERS_PAID_ENGAGED}
@@ -162,7 +162,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
         />
       </Grid>
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-${locationType}-paid-female`}
           label={strings.WORKERS_PAID_FEMALE}
@@ -181,7 +181,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
         />
       </Grid>
 
-      <Grid item xs={smallItemGridWidth()}>
+      <Grid size={smallItemGridWidth()}>
         <InfoField
           id={`${location.id}-${locationType}-volunteer`}
           label={strings.WORKERS_VOLUNTEERS}
@@ -200,7 +200,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
         />
       </Grid>
 
-      <Grid item xs={mediumItemGridWidth()}>
+      <Grid size={mediumItemGridWidth()}>
         <Textfield
           label={getNotesLabel()}
           id={`${location.id}-notes`}

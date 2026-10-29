@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { FieldNodePayload } from 'src/types/Search';
@@ -53,10 +53,10 @@ export default function NumberRange(props: Props): JSX.Element {
   return (
     <Box sx={{ padding: theme.spacing(1.75) }}>
       <Grid container spacing={2}>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='minValue' value={minValue} onChange={onChange} label={strings.MIN} />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <TextField id='maxValue' value={maxValue} onChange={onChange} label={strings.MAX} />
         </Grid>
       </Grid>
