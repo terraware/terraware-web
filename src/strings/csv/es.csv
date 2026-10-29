@@ -492,6 +492,7 @@ DEAD_PLANTS,Plantas muertas,faa0988b
 DEAD_PLANTS_OBSERVED,Plantas muertas observadas,3ff4f3af
 DEAL_NAME,Nombre de la operación,be1bd4c5
 DECLINE,Rechazar,67618a4e
+DEFAULT,Predeterminado,1df379f4
 DEFAULT_LANGUAGE_SELECTED,Idioma predeterminado: {0},74d18404
 DEFINITION,Definición,b17769ee
 DELETE,Borrar,43cbbd0c
@@ -1249,6 +1250,7 @@ MOVE,Mover,abe6be41
 MRV_CYCLE,Ciclo MRV,ab7e636c
 MULTIPLE_FORMS,Múltiples formas,abad8008
 MY_ACCOUNT,Mi cuenta,8e57f7ad
+MY_VIEWS,Mis vistas,d3f6da64
 N_IMAGES,{0} imagen(es),098eae0e
 N_ROWS,{0} fila(s),2bb73684
 NA,No aplica,627f660e
@@ -1718,6 +1720,7 @@ PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED,Actualización preliminar de la 
 PREPARATION_MATERIALS,Materiales de preparación,c6fd2575
 PRESCREEN,Preselección,9a38127f
 PRESCREEN_FAILED,Prueba de selección fallida,2a2dc3e9
+PRESET_VIEWS,Vistas predefinidas,61b20adc
 PREVIEW,Vista previa,a2aefa10
 PREVIEW_FUNDER_REPORT,Previsualizar informe para financiadores,17fa74c8
 PREVIEW_HIGHLIGHTS,Vista previa de aspectos destacados,248bb9ae
