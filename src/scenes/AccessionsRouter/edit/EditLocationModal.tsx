@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import { useFacilitySubLocations } from 'src/components/common/SubLocations/useFacilitySubLocations';

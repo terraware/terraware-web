@@ -79,7 +79,7 @@ const SettingRow = ({ checked, description, disabled, example, id, onChange, tit
           checked={checked}
           disabled={disabled}
           onChange={(_event, value) => onChange(value)}
-          inputProps={{ 'aria-labelledby': titleId }}
+          slotProps={{ input: { 'aria-labelledby': titleId } }}
         />
       </Box>
     </Box>

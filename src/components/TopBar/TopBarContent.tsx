@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 
-import { Box, Grid, IconButton, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, IconButton, useTheme } from '@mui/material';
 import { Svg } from '@terraware/web-components';
 
 import KnowledgeBaseLink from 'src/components/KnowledgeBaseLink';

@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { preventDefaultEvent } from '@terraware/web-components/utils';
 

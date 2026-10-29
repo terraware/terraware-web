@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';

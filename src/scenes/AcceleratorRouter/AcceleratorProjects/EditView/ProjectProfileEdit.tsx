@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';

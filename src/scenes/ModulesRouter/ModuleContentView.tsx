@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Card, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';

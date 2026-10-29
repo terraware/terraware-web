@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, GlobalStyles, Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, GlobalStyles, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Message } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';

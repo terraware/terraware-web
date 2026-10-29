@@ -1,6 +1,15 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, FormControlLabel, Grid, Radio, RadioGroup, Tooltip, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  FormControlLabel,
+  GridLegacy as Grid,
+  Radio,
+  RadioGroup,
+  Tooltip,
+  Typography,
+  useTheme,
+} from '@mui/material';
 import { Dropdown, Icon, SelectT, Textfield } from '@terraware/web-components';
 
 import DatePicker from 'src/components/common/DatePicker';

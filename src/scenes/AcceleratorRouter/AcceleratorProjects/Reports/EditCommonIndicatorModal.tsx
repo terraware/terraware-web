@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';

@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';

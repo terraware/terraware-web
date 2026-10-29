@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { TableColumnType } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';

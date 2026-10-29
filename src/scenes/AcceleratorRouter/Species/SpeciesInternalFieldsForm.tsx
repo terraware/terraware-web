@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback } from 'react';
 
-import { Grid, GridProps, Typography, useTheme } from '@mui/material';
+import { GridLegacy as Grid, GridLegacyProps as GridProps, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import TextField from 'src/components/common/Textfield/Textfield';

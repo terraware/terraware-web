@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 import { Autocomplete, DatePicker, DropdownItem } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 

@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Divider, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Icon } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';

@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 

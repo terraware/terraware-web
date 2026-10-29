@@ -5,7 +5,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  Grid,
+  GridLegacy as Grid,
   Radio,
   RadioGroup,
   Typography,

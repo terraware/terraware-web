@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, Container, Grid, useTheme } from '@mui/material';
+import { Box, Container, GridLegacy as Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';

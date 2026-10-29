@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, Textfield } from '@terraware/web-components';
 
 import VariableStatusBadge from 'src/components/Variables/VariableStatusBadge';

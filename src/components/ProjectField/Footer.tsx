@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { Project, ProjectMeta } from 'src/types/Project';

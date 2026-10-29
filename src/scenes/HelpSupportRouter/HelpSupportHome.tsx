@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';

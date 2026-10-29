@@ -1,6 +1,6 @@
 import React, { type JSX, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { GridLegacy as Grid, useTheme } from '@mui/material';
 
 import { useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';

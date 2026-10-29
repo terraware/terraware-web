@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { Separator } from '@terraware/web-components';
 
 import DeliverablesTable from 'src/components/DeliverablesTable';

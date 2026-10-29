@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';

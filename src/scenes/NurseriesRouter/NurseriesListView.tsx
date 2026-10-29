@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useRef, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';

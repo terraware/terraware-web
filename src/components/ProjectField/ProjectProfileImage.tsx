@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, Grid, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, useTheme } from '@mui/material';
 
 import { getImagePath } from 'src/utils/images';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

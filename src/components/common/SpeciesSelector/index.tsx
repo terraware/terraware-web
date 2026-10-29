@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
-import { Grid, Typography } from '@mui/material';
+import { GridLegacy as Grid, Typography } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';

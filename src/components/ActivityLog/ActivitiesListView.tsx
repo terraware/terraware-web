@@ -1,7 +1,7 @@
 import React, { Fragment, type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box, Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
 import { ColumnHeader } from 'export-to-csv';
 import { DateTime } from 'luxon';

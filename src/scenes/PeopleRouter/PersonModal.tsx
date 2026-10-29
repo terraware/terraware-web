@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Dropdown } from '@terraware/web-components';
 

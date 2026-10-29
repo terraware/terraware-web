@@ -1,6 +1,6 @@
 import React, { type JSX, useId } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, GridLegacy as Grid } from '@mui/material';
 import { SortOrder, TableColumnType, TableRowType } from '@terraware/web-components';
 import { TopBarButton } from '@terraware/web-components/components/table';
 import { RendererProps } from '@terraware/web-components/components/table/types';

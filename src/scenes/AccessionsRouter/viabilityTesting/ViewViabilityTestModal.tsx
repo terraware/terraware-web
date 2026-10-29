@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 import { useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, IconTooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import { Grid } from '@mui/material';
+import { GridLegacy as Grid } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import usePlantingSite from 'src/hooks/usePlantingSite';

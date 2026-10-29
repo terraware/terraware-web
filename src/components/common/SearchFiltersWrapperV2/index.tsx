@@ -1,6 +1,6 @@
 import React, { type JSX, ReactNode, useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, GridLegacy as Grid } from '@mui/material';
 import { PillList, PillListItem, Textfield } from '@terraware/web-components';
 
 import { FilterField } from 'src/components/common/FilterGroup';

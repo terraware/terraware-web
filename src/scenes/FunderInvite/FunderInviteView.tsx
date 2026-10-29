@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
