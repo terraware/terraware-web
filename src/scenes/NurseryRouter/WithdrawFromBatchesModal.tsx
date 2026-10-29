@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Tooltip, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
@@ -195,6 +195,13 @@ const WithdrawFromBatchesModal = ({
     [request, scheduledDatesData]
   );
 
+  // What has been saved so far, across attempts, so a retry after a partial failure still reports
+  // the whole withdrawal and attaches photos to the same withdrawal when it succeeds.
+  const savedRef = useRef<{ batchIds: Set<number>; total: number; firstWithdrawalId?: number }>({
+    batchIds: new Set<number>(),
+    total: 0,
+  });
+
   const handleClose = useCallback(() => {
     setStep(0);
     setFacilityId(undefined);
@@ -202,6 +209,7 @@ const WithdrawFromBatchesModal = ({
     setWithdrawDate(DateTime.local().toISODate() ?? '');
     setWithdrawByBatchSubstratum({});
     setPhotoFiles([]);
+    savedRef.current = { batchIds: new Set<number>(), total: 0 };
     onClose();
   }, [onClose]);
 
@@ -225,7 +233,6 @@ const WithdrawFromBatchesModal = ({
         bySubstratum.set(substratumId, existing);
       });
 
-      const withdrawalIds: number[] = [];
       for (const [substratumId, entries] of bySubstratum.entries()) {
         const response = await createBatchWithdrawal({
           batchWithdrawals: entries.map((e) => ({
@@ -243,26 +250,54 @@ const WithdrawFromBatchesModal = ({
           scheduledPlantingDateRequestId: scheduledPlantingDateId,
           withdrawnDate: withdrawDate,
         }).unwrap();
-        if (response?.withdrawal?.id) {
-          withdrawalIds.push(response.withdrawal.id);
-        }
+        savedRef.current.firstWithdrawalId ??= response?.withdrawal?.id;
+
+        // Saved, so a retry after a later substratum fails must not send these again.
+        entries.forEach((e) => {
+          savedRef.current.batchIds.add(e.batchId);
+          savedRef.current.total += e.quantity;
+        });
+        setWithdrawByBatchSubstratum((prev) => {
+          const next = { ...prev };
+          entries.forEach((e) => delete next[cellKey(e.batchId, substratumId)]);
+          return next;
+        });
       }
 
-      // Attach photos to the first withdrawal we created.
-      if (photoFiles.length > 0 && withdrawalIds[0] !== undefined) {
-        await Promise.all(
+      // Attach photos to the first withdrawal we created. The withdrawals are already saved, so a
+      // failed upload must not keep the modal open for a retry that would withdraw them again.
+      const { firstWithdrawalId } = savedRef.current;
+      if (photoFiles.length > 0 && firstWithdrawalId !== undefined) {
+        await Promise.allSettled(
           photoFiles.map((file) =>
             uploadWithdrawalPhotos({
-              withdrawalId: withdrawalIds[0],
+              withdrawalId: firstWithdrawalId,
               body: { file },
             }).unwrap()
           )
         );
       }
 
+      const numBatches = savedRef.current.batchIds.size;
+      const { total } = savedRef.current;
+      snackbar.toastSuccess(
+        strings
+          .formatString(
+            strings.BATCH_WITHDRAW_SUCCESS,
+            String(numBatches),
+            numBatches === 1 ? strings.BATCHES_SINGULAR : strings.BATCHES_PLURAL,
+            String(total),
+            total === 1 ? strings.SEEDLINGS_SINGULAR : strings.SEEDLINGS_PLURAL
+          )
+          .toString()
+      );
       handleClose();
     } catch (e) {
-      snackbar.toastError();
+      if (savedRef.current.total > 0) {
+        snackbar.toastError(strings.WITHDRAWAL_PARTIALLY_SAVED);
+      } else {
+        snackbar.toastError();
+      }
     }
   }, [
     createBatchWithdrawal,
