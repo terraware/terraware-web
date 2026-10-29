@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
@@ -190,7 +190,7 @@ export default function EditOrganizationModal({
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id='name'
               label={strings.ORGANIZATION_NAME_REQUIRED}
@@ -203,7 +203,7 @@ export default function EditOrganizationModal({
               errorText={nameError}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id='description'
               label={strings.DESCRIPTION}
@@ -235,7 +235,7 @@ export default function EditOrganizationModal({
             paddingBottom={theme.spacing(4)}
           />
           {showBotanicalCountry && (
-            <Grid item xs={12} sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 }, paddingBottom: theme.spacing(4) }}>
+            <Grid sx={{ marginTop: theme.spacing(-3), paddingBottom: theme.spacing(4) }} size={12}>
               <Dropdown
                 id='botanicalCountry'
                 label={strings.BOTANICAL_COUNTRY}
@@ -249,7 +249,7 @@ export default function EditOrganizationModal({
               />
             </Grid>
           )}
-          <Grid item xs={12} sx={{ '&.MuiGridLegacy-item': { paddingTop: 0 } }}>
+          <Grid marginTop={theme.spacing(-3)} size={12}>
             <TimeZoneSelector
               selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
               countryCode={organizationRecord.countryCode}
@@ -258,7 +258,7 @@ export default function EditOrganizationModal({
               tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Dropdown
               required
               label={strings.ORGANIZATION_TYPE}
@@ -286,7 +286,7 @@ export default function EditOrganizationModal({
               />
             )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               type='text'
               label={strings.ORGANIZATION_WEBSITE}

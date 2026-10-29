@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -132,7 +132,7 @@ export default function PlantsAndSpeciesCard({
 
   return (
     <Grid container spacing={3}>
-      <Grid item xs={isDesktop ? 4 : 12}>
+      <Grid size={isDesktop ? 4 : 12}>
         <Card radius='8px'>
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
@@ -181,7 +181,7 @@ export default function PlantsAndSpeciesCard({
           </Box>
         </Card>
       </Grid>
-      <Grid item xs={isDesktop ? 4 : 12}>
+      <Grid size={isDesktop ? 4 : 12}>
         <Card radius='8px' style={{ height: '100%' }}>
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
@@ -217,7 +217,7 @@ export default function PlantsAndSpeciesCard({
           </Box>
         </Card>
       </Grid>
-      <Grid item xs={isDesktop ? 4 : 12}>
+      <Grid size={isDesktop ? 4 : 12}>
         <Card radius='8px' style={{ height: '100%' }}>
           <Box>
             <Box display={'flex'} alignItems={'center'}>
@@ -255,7 +255,7 @@ export default function PlantsAndSpeciesCard({
         </Card>
       </Grid>
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
           <Box flexBasis='100%'>
             <PlantsReportedPerSpeciesCard
