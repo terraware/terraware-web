@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, GridLegacy as Grid, GridLegacyProps as GridProps, Typography, useTheme } from '@mui/material';
+import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
@@ -149,7 +149,7 @@ export default function SpeciesDetailView(): JSX.Element {
 
   const GridItemWrapper = useCallback(
     ({ children, props }: { children: JSX.Element; props?: GridProps }) => (
-      <Grid item xs={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}>
+      <Grid size={gridSize} {...props} minHeight={'64px'} paddingBottom={theme.spacing(2)}>
         {children}
       </Grid>
     ),
@@ -240,7 +240,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   display={true}
                 />
               </GridItemWrapper>
-              <GridItemWrapper props={{ xs: 12 }}>
+              <GridItemWrapper props={{ size: 12 }}>
                 <TextField
                   label={strings.RATIONALE}
                   id='rationale'
@@ -396,7 +396,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   }
                 />
               </GridItemWrapper>
-              <GridItemWrapper props={{ xs: isMobile ? 12 : 8 }}>
+              <GridItemWrapper props={{ size: isMobile ? 12 : 8 }}>
                 <TextField
                   id={'otherFacts'}
                   label={strings.OTHER_FACTS}
@@ -430,13 +430,13 @@ export default function SpeciesDetailView(): JSX.Element {
                     margin: 0,
                   }}
                 >
-                  <Grid item xs={12} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={12}>
                     <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'}>
                       {strings.ADDITIONAL_SPECIES_DATA}
                     </Typography>
                   </Grid>
 
-                  <Grid item xs={5} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={5}>
                     <TextField
                       label={strings.HEIGHT_AT_MATURITY}
                       id='heightAtMaturityValue'
@@ -445,7 +445,7 @@ export default function SpeciesDetailView(): JSX.Element {
                       display={true}
                     />
                   </Grid>
-                  <Grid item xs={7} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={7}>
                     <TextField
                       label={strings.REFERENCE}
                       id='heightAtMaturitySource'
@@ -455,7 +455,7 @@ export default function SpeciesDetailView(): JSX.Element {
                     />
                   </Grid>
 
-                  <Grid item xs={5} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={5}>
                     <TextField
                       label={strings.DIAMETER_AT_BREAST_HEIGHT}
                       id='dbhValue'
@@ -464,7 +464,7 @@ export default function SpeciesDetailView(): JSX.Element {
                       display={true}
                     />
                   </Grid>
-                  <Grid item xs={7} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={7}>
                     <TextField
                       label={strings.REFERENCE}
                       id='dbhSource'
@@ -474,7 +474,7 @@ export default function SpeciesDetailView(): JSX.Element {
                     />
                   </Grid>
 
-                  <Grid item xs={5} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={5}>
                     <TextField
                       label={strings.AVERAGE_WOOD_DENSITY}
                       id='averageWoodDensity'
@@ -483,7 +483,7 @@ export default function SpeciesDetailView(): JSX.Element {
                       display={true}
                     />
                   </Grid>
-                  <Grid item xs={7} paddingBottom={theme.spacing(2)} minHeight={'64px'}>
+                  <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={7}>
                     <TextField
                       label={strings.WOOD_DENSITY_LEVEL}
                       id='woodDensityLevel'

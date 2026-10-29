@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { GridLegacy as Grid, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import { Autocomplete, DatePicker, DropdownItem } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
@@ -95,7 +95,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
       ]}
     >
       <Grid container textAlign={'left'}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             id='title'
             label={strings.NAME}
@@ -105,7 +105,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             errorText={validate && !record.title ? strings.REQUIRED_FIELD : undefined}
           />
         </Grid>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <Autocomplete
             label={strings.MODULE}
             onChange={(option) => {
@@ -118,7 +118,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             disabled={selectedModule !== undefined}
           />
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingRight: 1 }}>
+        <Grid sx={{ marginTop: theme.spacing(2), paddingRight: 1 }} size={6}>
           <DatePicker
             id='startDate'
             label={strings.START_DATE_REQUIRED}
@@ -130,7 +130,7 @@ export default function AddModuleModal(props: AddModuleModalProps): JSX.Element 
             errorText={validate ? strings.INVALID_DATE : undefined}
           />
         </Grid>
-        <Grid item xs={6} sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }}>
+        <Grid sx={{ marginTop: theme.spacing(2), paddingLeft: 1 }} size={6}>
           <DatePicker
             id='endDate'
             label={strings.END_DATE_REQUIRED}
