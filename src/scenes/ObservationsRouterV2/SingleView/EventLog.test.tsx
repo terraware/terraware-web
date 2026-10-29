@@ -70,7 +70,7 @@ type PlotSpecies = { scientificName?: string; totalDead: number; totalExisting: 
 const renderHistory = async (
   events = [mediaEvent('Video', 7592)],
   plotSpecies: PlotSpecies[] = [],
-  { plotFound = true } = {}
+  { plotFound = true, completedTime }: { plotFound?: boolean; completedTime?: string } = {}
 ) => {
   mockGet('/api/v1/species', { species: [] });
   mockPost('/api/v1/events/list', { events });
@@ -87,6 +87,7 @@ const renderHistory = async (
               monitoringPlots: [
                 {
                   monitoringPlotId: plotFound ? 2 : 999,
+                  completedTime,
                   species: plotSpecies.map(({ scientificName, ...totals }) => ({
                     certainty: scientificName ? 'Other' : 'Unknown',
                     speciesName: scientificName,
@@ -259,6 +260,24 @@ describe('Observation EventLog species changes', () => {
   });
 });
 
+/** When the plot was marked complete; the trees it was submitted with are recorded just before this. */
+const PLOT_COMPLETED_TIME = '2026-06-15T12:00:00Z';
+const DURING_SUBMISSION = '2026-06-15T11:59:59Z';
+const AFTER_SUBMISSION = '2026-06-16T09:00:00Z';
+
+const recordedTreeSubject = (treeNumber: number): RecordedTreeSubjectPayload => ({
+  type: 'RecordedTree',
+  fullText: `Tree ${treeNumber}`,
+  shortText: 'Tree',
+  treeGrowthForm: 'Tree',
+  treeNumber,
+  trunkNumber: 1,
+  recordedTreeId: 120 + treeNumber,
+  observationId: 1,
+  monitoringPlotId: 2,
+  plantingSiteId: 3,
+});
+
 describe('Observation EventLog trees and shrubs', () => {
   it.each([
     {
@@ -320,6 +339,53 @@ describe('Observation EventLog trees and shrubs', () => {
     expect(screen.getByText(expectedLabel)).toBeInTheDocument();
     expect(screen.getByText('1,500')).toBeInTheDocument();
     expect(screen.getByText('1,499')).toBeInTheDocument();
+  });
+
+  it('shows a tree added to the plot after it was submitted', async () => {
+    await renderHistory([createdEvent(recordedTreeSubject(5), AFTER_SUBMISSION)], [], {
+      completedTime: PLOT_COMPLETED_TIME,
+    });
+
+    expect(screen.getByText(addedText('Tree 5'))).toBeInTheDocument();
+  });
+
+  it('leaves the trees recorded by the original submission out of the log', async () => {
+    await renderHistory([createdEvent(recordedTreeSubject(5), DURING_SUBMISSION)], [], {
+      completedTime: PLOT_COMPLETED_TIME,
+    });
+
+    expect(screen.queryByText(/Tree 5/)).not.toBeInTheDocument();
+  });
+
+  it('shows only the tree added after submission when the submitted trees are in the log too', async () => {
+    await renderHistory(
+      [
+        createdEvent(recordedTreeSubject(1), DURING_SUBMISSION),
+        createdEvent(recordedTreeSubject(2), DURING_SUBMISSION),
+        createdEvent(recordedTreeSubject(3), AFTER_SUBMISSION),
+      ],
+      [],
+      { completedTime: PLOT_COMPLETED_TIME }
+    );
+
+    expect(screen.getByText(addedText('Tree 3'))).toBeInTheDocument();
+    expect(screen.queryByText(/Tree 1/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Tree 2/)).not.toBeInTheDocument();
+  });
+
+  it('reports a tree taken out of the plot as removed rather than deleted', async () => {
+    await renderHistory([deletedEvent(recordedTreeSubject(5), AFTER_SUBMISSION)], [], {
+      completedTime: PLOT_COMPLETED_TIME,
+    });
+
+    expect(screen.getByText(removedText('Tree 5'))).toBeInTheDocument();
+    expect(screen.queryByText(deletedText('Tree 5'))).not.toBeInTheDocument();
+  });
+
+  it('leaves trees out of the log while the plot has no submission time to compare against', async () => {
+    await renderHistory([createdEvent(recordedTreeSubject(5), AFTER_SUBMISSION)]);
+
+    expect(screen.queryByText(/Tree 5/)).not.toBeInTheDocument();
   });
 });
 
@@ -406,10 +472,13 @@ describe('Observation EventLog media', () => {
   });
 });
 
-const createdEvent = (subject: EventLogEntryPayload['subject']): EventLogEntryPayload => ({
+const createdEvent = (
+  subject: EventLogEntryPayload['subject'],
+  timestamp = '2026-06-15T12:00:00Z'
+): EventLogEntryPayload => ({
   action: { type: 'Created', fields: [] },
   subject,
-  timestamp: '2026-06-15T12:00:00Z',
+  timestamp,
   userId: 1,
   userName: 'Jennifer Yim',
 });
@@ -435,10 +504,13 @@ const biomassSpeciesSubject = (scientificName: string): BiomassSpeciesSubjectPay
   shortText: 'Species',
 });
 
-const deletedEvent = (subject: EventLogEntryPayload['subject']): EventLogEntryPayload => ({
+const deletedEvent = (
+  subject: EventLogEntryPayload['subject'],
+  timestamp = '2026-06-15T12:00:00Z'
+): EventLogEntryPayload => ({
   action: { type: 'Deleted' },
   subject,
-  timestamp: '2026-06-15T12:00:00Z',
+  timestamp,
   userId: 1,
   userName: 'Jennifer Yim',
 });
@@ -446,6 +518,8 @@ const deletedEvent = (subject: EventLogEntryPayload['subject']): EventLogEntryPa
 const addedText = (fullText: string) => strings.formatString(strings.EVENT_ADDED, fullText) as string;
 
 const removedText = (fullText: string) => strings.formatString(strings.EVENT_REMOVED, fullText) as string;
+
+const deletedText = (fullText: string) => strings.formatString(strings.EVENT_DELETED, fullText) as string;
 
 describe('Observation EventLog biomass species', () => {
   it('shows a species added to a quadrat after the observation was submitted', async () => {

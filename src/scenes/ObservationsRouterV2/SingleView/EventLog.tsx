@@ -32,13 +32,24 @@ type EventLogProps = {
   isBiomass?: boolean;
 };
 
-const recordsALaterEdit = (subject: EventLogEntryPayload['subject']) =>
-  subject.type === 'ObservationPlotMedia' ? !subject.isOriginal : subject.type === 'BiomassQuadratSpecies';
+const recordsALaterEdit = (event: EventLogEntryPayload, submittedTime?: string) => {
+  if (event.subject.type === 'ObservationPlotMedia') {
+    return !event.subject.isOriginal;
+  }
+  if (event.subject.type === 'RecordedTree') {
+    // The server records the submitted plants before it stamps the plot complete.
+    return submittedTime !== undefined && Date.parse(event.timestamp) > Date.parse(submittedTime);
+  }
+  return event.subject.type === 'BiomassQuadratSpecies';
+};
 
 const isSpeciesSubject = (
   subject: EventLogEntryPayload['subject']
 ): subject is BiomassQuadratSpeciesSubjectPayload | BiomassSpeciesSubjectPayload | MonitoringSpeciesSubjectPayload =>
   subject.type === 'BiomassQuadratSpecies' || subject.type === 'BiomassSpecies' || subject.type === 'MonitoringSpecies';
+
+const usesRemovedWording = (subject: EventLogEntryPayload['subject']) =>
+  isSpeciesSubject(subject) || subject.type === 'RecordedTree';
 
 const speciesDeletionKey = (
   entry: EventLogEntryPayload,
@@ -201,10 +212,10 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         MangroveFields.includes(event.action.fieldName) &&
         !event.action.changedTo
       ) &&
-      !(event.action.type === 'Created' && !recordsALaterEdit(event.subject)) &&
+      !(event.action.type === 'Created' && !recordsALaterEdit(event, monitoringPlot?.completedTime)) &&
       !cascadedDeletions.has(event) &&
       !redundantSpeciesEntries.has(event),
-    [MangroveFields, cascadedDeletions, redundantSpeciesEntries]
+    [MangroveFields, cascadedDeletions, monitoringPlot?.completedTime, redundantSpeciesEntries]
   );
 
   const renderSpeciesSummary = useCallback(
@@ -299,7 +310,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         {event.action.type === 'Deleted' && (
           <Box>
             {strings.formatString(
-              isSpeciesSubject(event.subject) ? strings.EVENT_REMOVED : strings.EVENT_DELETED,
+              usesRemovedWording(event.subject) ? strings.EVENT_REMOVED : strings.EVENT_DELETED,
               event.subject.fullText
             )}
           </Box>
