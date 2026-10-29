@@ -58,6 +58,9 @@ const config: ConfigFile = {
         operation.path === '/api/v1/users/me' ||
         operation.path === '/api/v1/users/{userId}',
     },
+    './src/queries/generated/documentProducerTemplates.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/document-producer/templates',
+    },
     './src/queries/generated/documentProducerValues.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/document-producer/projects/{projectId}/values') ||
