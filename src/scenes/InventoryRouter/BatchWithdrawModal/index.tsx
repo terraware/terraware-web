@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -72,7 +72,27 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [step, setStep] = useState<FlowStep>(0);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
 
-  const [listBatchesByIds, { currentData: searchedBatches }] = useLazyListBatchesByIdsQuery();
+  const [
+    listBatchesByIds,
+    {
+      currentData: batchesResult,
+      originalArgs: batchesArgs,
+      requestId: batchesRequestId,
+      isFetching: isFetchingBatches,
+      isSuccess: isBatchesSearchSuccess,
+      isError: isBatchesSearchError,
+    },
+  ] = useLazyListBatchesByIdsQuery();
+  // The search started when the modal opened. Only its result says whether there is anything to
+  // withdraw; a cached result may be out of date, and the refetch after a withdrawal is expected to
+  // find emptied batches.
+  const openingRequestIdRef = useRef<string | undefined>(undefined);
+  // The batch detail page keeps the modal mounted across batches, so the last result can be for a
+  // different selection until the new search runs. Don't show or act on it.
+  const searchedBatches =
+    batchesArgs?.organizationId === selectedOrganization?.id && batchesArgs?.batchIds.join() === batchIds.join()
+      ? batchesResult
+      : undefined;
   const [listSpeciesTargets, speciesTargetsResult] = useLazyListSpeciesTargetsForSubstratumQuery();
   const [listPlantingDateRequests, plantingDateRequestsResult] = useLazyListPlantingDateRequestsQuery();
   const [createBatchWithdrawal, { isLoading: isCreating }] = useCreateBatchWithdrawalMutation();
@@ -98,10 +118,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   });
 
   useEffect(() => {
-    if (selectedOrganization && batchIds.length > 0) {
-      void listBatchesByIds({ organizationId: selectedOrganization.id, batchIds }, true);
+    if (open && selectedOrganization && batchIds.length > 0) {
+      openingRequestIdRef.current = listBatchesByIds({ organizationId: selectedOrganization.id, batchIds }).requestId;
     }
-  }, [batchIds, listBatchesByIds, selectedOrganization]);
+  }, [batchIds, listBatchesByIds, open, selectedOrganization]);
 
   const batches = useMemo(
     (): BatchInfo[] | undefined =>
@@ -128,14 +148,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0),
     [findSpeciesById, searchedBatches]
   );
-
-  useEffect(() => {
-    // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
-    // refetched, and a batch we just emptied would otherwise toast over the success message.
-    if (!hasWithdrawn && searchedBatches && batches?.length === 0) {
-      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
-    }
-  }, [batches, hasWithdrawn, searchedBatches, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
     setDraft((prev) => {
@@ -260,6 +272,35 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     setHasWithdrawn(false);
     onClose();
   }, [defaultDraft, onClose]);
+
+  useEffect(() => {
+    // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
+    // refetched, and a batch we just emptied would otherwise toast over the success message.
+    // Nothing has been entered yet, so there is no draft to reset.
+    if (!open || hasWithdrawn || batchesRequestId !== openingRequestIdRef.current || isFetchingBatches) {
+      return;
+    }
+    // A failed search keeps the previous result, which says nothing about the batches now.
+    if (isBatchesSearchError) {
+      snackbar.toastError();
+      onClose();
+    } else if (isBatchesSearchSuccess && searchedBatches && batches?.length === 0) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
+      onClose();
+    }
+  }, [
+    batches,
+    batchesRequestId,
+    hasWithdrawn,
+    isBatchesSearchError,
+    isBatchesSearchSuccess,
+    isFetchingBatches,
+    onClose,
+    open,
+    searchedBatches,
+    snackbar,
+    strings,
+  ]);
 
   // A withdrawal can only be from a single nursery; filter selected batches down
   // to the chosen From: Nursery before showing them anywhere.
@@ -388,6 +429,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         notes: draft.notes ? draft.notes : undefined,
         withdrawnDate: draft.withdrawnDate,
       }).unwrap();
+      // Before the photo uploads: the withdrawal refetches the batches, and one it emptied must not
+      // look like an empty selection while the uploads are still running.
+      setHasWithdrawn(true);
 
       if (draft.photos.length > 0 && response?.withdrawal?.id) {
         await Promise.allSettled(
@@ -396,8 +440,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           )
         );
       }
-
-      setHasWithdrawn(true);
 
       const numBatches = batchWithdrawals.length;
       const totalWithdrawn = batchWithdrawals.reduce(
@@ -500,7 +542,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   }, [step, strings, canGoNextFromStep1, canGoNextFromStep2, handleClose, isCreating, onSubmit]);
 
   const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
-  const isLoadingBatches = open && batches === undefined;
+  // While the modal is checking the batches, a previous result may be on hand but out of date. Don't
+  // let the user start a withdrawal from it. After a withdrawal, the refetch runs behind the dialog.
+  const isCheckingBatches = open && isFetchingBatches && !hasWithdrawn;
+  const isLoadingBatches = open && (batches === undefined || isCheckingBatches);
 
   return (
     <>
@@ -512,7 +557,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         }}
       />
       {isLoadingBatches && <BusySpinner withSkrim={true} />}
-      {batches && !showEmptyBatchesModal && (
+      {/* Stay open after withdrawing, even if that emptied the batches, until the user is told. */}
+      {batches && (batches.length > 0 || hasWithdrawn) && !isCheckingBatches && !showEmptyBatchesModal && (
         <DialogBox
           open={open}
           onClose={handleClose}

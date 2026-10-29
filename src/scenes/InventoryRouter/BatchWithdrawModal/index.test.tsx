@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import { QueryStatus } from '@reduxjs/toolkit/query';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
@@ -339,9 +340,71 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     expect(new URL(uploads[0].url).pathname).toBe(`/api/v1/nursery/withdrawals/${WITHDRAWAL_ID}/photos`);
   });
 
-  it('tells the user there is nothing to withdraw when every selected batch is empty', async () => {
+  it('does not mistake a batch it just emptied for an empty selection while photos upload', async () => {
+    let rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 3 })];
+    let searches = 0;
+    let finishUpload = () => undefined as void;
+    const uploadHeld = new Promise<void>((resolve) => (finishUpload = resolve));
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', () => {
+        searches += 1;
+        return HttpResponse.json({ status: 'ok', results: rows });
+      }),
+      http.post(WITHDRAWALS_URL, () => {
+        rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })];
+        return HttpResponse.json({ status: 'ok', withdrawal: { id: WITHDRAWAL_ID } });
+      }),
+      http.post(PHOTOS_URL, async () => {
+        await uploadHeld;
+        return HttpResponse.json({ status: 'ok', id: 1 });
+      })
+    );
+    const { user, store, state } = renderModal();
+
+    await waitForDialog();
+    await enterWithdrawDate(user, modalToday());
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 3);
+    await clickNextWhenEnabled(user);
+    await attachPhoto(user);
+    const searchesBeforeWithdrawing = searches;
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+
+    // The withdrawal refetches the batches, which come back empty while the photo is still uploading.
+    await waitFor(() => expect(searches).toBeGreaterThan(searchesBeforeWithdrawing));
+    await waitFor(() =>
+      expect(
+        Object.values(store.getState()['rtk-query'].queries).some(
+          (query) =>
+            query?.endpointName === 'listBatchesByIds' &&
+            (query.data as NurseryBatchesSearchResponseElement[] | undefined)?.[0]?.['readyQuantity(raw)'] === 0
+        )
+      ).toBe(true)
+    );
+    expect(store.getState().snackbar.snackbars.toast).toBeNull();
+    expect(state.closeCount).toBe(0);
+    expect(screen.getByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).toBeInTheDocument();
+
+    finishUpload();
+
+    expect(await screen.findByText(strings.EMPTY_BATCHES_AFTER_WITHDRAW)).toBeInTheDocument();
+    expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'success' });
+  });
+
+  it('reports the failure and closes when the batches cannot be loaded', async () => {
+    mockModalData();
+    mockError('post', '/api/v1/search');
+    const { store, state } = renderModal();
+
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(store.getState().snackbar.snackbars.toast?.msg).not.toBe(strings.NO_BATCHES_TO_WITHDRAW_FROM);
+    expect(state.closeCount).toBe(1);
+  });
+
+  it('tells the user there is nothing to withdraw and closes when every selected batch is empty', async () => {
     mockModalData({ batches: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] });
-    const { store } = renderModal();
+    const { store, state } = renderModal();
 
     await waitFor(() =>
       expect(store.getState().snackbar.snackbars.toast).toMatchObject({
@@ -349,6 +412,8 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
         msg: strings.NO_BATCHES_TO_WITHDRAW_FROM,
       })
     );
+    expect(state.closeCount).toBe(1);
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
   });
 });
 
@@ -460,5 +525,181 @@ describe('BatchWithdrawModal purposes and validation', () => {
       expect(phaseInput(1, 'readyQuantityWithdrawn')).toHaveValue(null);
       expect(nextButton()).toBeDisabled();
     });
+  });
+});
+
+describe('BatchWithdrawModal on a page that keeps it mounted while closed', () => {
+  /** Mirrors InventoryBatchView, which renders the modal permanently and toggles `open`. */
+  const AlwaysMountedHost = ({ initiallyOpen }: { initiallyOpen: boolean }) => {
+    const [open, setOpen] = useState(initiallyOpen);
+    const [batchId, setBatchId] = useState(1);
+    return (
+      <>
+        <button onClick={() => setOpen(true)}>Open withdrawal</button>
+        <button onClick={() => setBatchId(2)}>Go to batch 2</button>
+        <BatchWithdrawModal open={open} batchIds={[batchId]} onClose={() => setOpen(false)} />
+      </>
+    );
+  };
+
+  // The lazy batch query registers in the store as soon as it is triggered, so this tells
+  // synchronously whether the closed modal started loading, before any response could arrive.
+  const hasRequestedBatches = (store: ReturnType<typeof renderWithProviders>['store']) =>
+    Object.values(store.getState()['rtk-query'].queries).some((query) => query?.endpointName === 'listBatchesByIds');
+
+  it('does not report an empty batch until the user tries to withdraw from it', async () => {
+    mockModalData({ batches: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] });
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    expect(hasRequestedBatches(store)).toBe(false);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({
+        priority: 'critical',
+        msg: strings.NO_BATCHES_TO_WITHDRAW_FROM,
+      })
+    );
+  });
+
+  it('opens for a batch with stock after an empty batch was checked on the same page', async () => {
+    const rowsById: Record<string, NurseryBatchesSearchResponseElement> = {
+      '1': buildBatchSearchRow({ id: '1', batchNumber: 'EMPTY-001' }, { readyQuantity: 0 }),
+      '2': buildBatchSearchRow({ id: '2', batchNumber: 'STOCKED-002' }, { readyQuantity: 10 }),
+    };
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', async ({ request }) => {
+        const body = (await request.json()) as { search: { children: { field: string; values: string[] }[] } };
+        const ids = body.search.children.find((child) => child.field === 'id')?.values ?? [];
+        return HttpResponse.json({ status: 'ok', results: ids.map((id) => rowsById[id]).filter(Boolean) });
+      })
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ msg: strings.NO_BATCHES_TO_WITHDRAW_FROM })
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Go to batch 2' }));
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    // The empty result for batch 1 must not close the modal before batch 2's result arrives.
+    expect(await waitForDialog()).toBeInTheDocument();
+    expect(await screen.findByText('STOCKED-002')).toBeInTheDocument();
+    expect(screen.queryByText('EMPTY-001')).not.toBeInTheDocument();
+  });
+
+  it('checks again when reopened for a batch that was empty last time', async () => {
+    let rows = [buildBatchSearchRow({ id: '1', batchNumber: 'B-001' }, { readyQuantity: 0 })];
+    mockModalData();
+    server.use(http.post('/api/v1/search', () => HttpResponse.json({ status: 'ok', results: rows })));
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ msg: strings.NO_BATCHES_TO_WITHDRAW_FROM })
+    );
+
+    // Stock added somewhere this page doesn't know about, such as another session.
+    rows = [buildBatchSearchRow({ id: '1', batchNumber: 'B-001' }, { readyQuantity: 10 })];
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    expect(await waitForDialog()).toBeInTheDocument();
+    expect(await screen.findByText('B-001')).toBeInTheDocument();
+  });
+
+  it('reports a failed search instead of an empty batch when reopened', async () => {
+    let failSearch = false;
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', () =>
+        failSearch
+          ? HttpResponse.json({ status: 'error', error: { message: 'failed' } }, { status: 500 })
+          : HttpResponse.json({ status: 'ok', results: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })] })
+      )
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ msg: strings.NO_BATCHES_TO_WITHDRAW_FROM })
+    );
+
+    // The earlier empty result is still cached, but it says nothing about the batch now.
+    failSearch = true;
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    await waitFor(() =>
+      expect(store.getState().snackbar.snackbars.toast?.msg).not.toBe(strings.NO_BATCHES_TO_WITHDRAW_FROM)
+    );
+    expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' });
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
+  });
+
+  it('does not offer a previous result to withdraw from while checking the batches again', async () => {
+    let searchState: 'ok' | 'held' = 'ok';
+    let failHeldSearch = () => undefined as void;
+    const heldSearch = new Promise<void>((resolve) => (failHeldSearch = resolve));
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', async () => {
+        if (searchState === 'held') {
+          await heldSearch;
+          return HttpResponse.json({ status: 'error', error: { message: 'failed' } }, { status: 500 });
+        }
+        return HttpResponse.json({ status: 'ok', results: [buildBatchSearchRow({ id: '1' }, { readyQuantity: 10 })] });
+      })
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen={false} />);
+
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+    await waitForDialog();
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+
+    searchState = 'held';
+    await user.click(screen.getByRole('button', { name: 'Open withdrawal' }));
+
+    // Anything entered now would be based on the earlier result, and lost or left behind if the
+    // search then fails.
+    await waitFor(() =>
+      expect(
+        Object.values(store.getState()['rtk-query'].queries).some(
+          (query) => query?.endpointName === 'listBatchesByIds' && query.status === QueryStatus.pending
+        )
+      ).toBe(true)
+    );
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
+
+    failHeldSearch();
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(screen.queryByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).not.toBeInTheDocument();
+  });
+
+  it('keeps the success message after the user dismisses the empty-batch notice', async () => {
+    let rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 3 })];
+    mockModalData();
+    server.use(
+      http.post('/api/v1/search', () => HttpResponse.json({ status: 'ok', results: rows })),
+      http.post(WITHDRAWALS_URL, () => {
+        rows = [buildBatchSearchRow({ id: '1' }, { readyQuantity: 0 })];
+        return HttpResponse.json({ status: 'ok', withdrawal: { id: WITHDRAWAL_ID } });
+      })
+    );
+    const { user, store } = renderWithProviders(<AlwaysMountedHost initiallyOpen />);
+
+    await waitForDialog();
+    await enterWithdrawDate(user, modalToday());
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 3);
+    await clickNextWhenEnabled(user);
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+    await user.click(await screen.findByRole('button', { name: strings.GOT_IT }));
+
+    await waitFor(() => expect(screen.queryByText(strings.EMPTY_BATCHES_AFTER_WITHDRAW)).not.toBeInTheDocument());
+    expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'success' });
   });
 });
