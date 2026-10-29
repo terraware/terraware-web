@@ -23,7 +23,12 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const snackbar = useSnackbar();
-  const { currentData: acceleratorOrgsData, isError: isAcceleratorOrgsError } = useListAcceleratorOrganizationsQuery();
+  const { currentData: acceleratorOrgsData, isError: isAcceleratorOrgsError } = useListAcceleratorOrganizationsQuery(
+    undefined,
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   useEffect(() => {
     if (isAcceleratorOrgsError) {
