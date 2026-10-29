@@ -24,6 +24,7 @@ export enum QueryTagTypes {
   Documents = 'Documents',
   EmailNotificationSettings = 'EmailNotificationSettings',
   FunderActivities = 'FunderActivities',
+  FunderProjects = 'FunderProjects',
   InventoryPlanning = 'InventoryPlanning',
   CommonIndicators = 'CommonIndicators',
   ProjectIndicators = 'ProjectIndicators',

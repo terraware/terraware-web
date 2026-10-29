@@ -15,10 +15,8 @@ import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization, useUser } from 'src/providers';
 import { useAdminListActivitiesQuery } from 'src/queries/generated/activities';
 import { useListApplicationsQuery } from 'src/queries/generated/applications';
+import { usePublishProjectProfileMutation } from 'src/queries/generated/funderProjects';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
-import { requestPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
-import { selectPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
@@ -42,11 +40,9 @@ const ProjectPage = () => {
   const { goToAcceleratorActivityCreate, goToAcceleratorProjectEdit } = useNavigateTo();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
-  const dispatch = useAppDispatch();
   const query = useQuery();
   const [openPublishDialog, setOpenPublishDialog] = useState(false);
-  const [publishRequestId, setPublishRequestId] = useState('');
-  const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
+  const [publishProjectProfile] = usePublishProjectProfileMutation();
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
   const location = useStateLocation();
@@ -237,9 +233,24 @@ const ProjectPage = () => {
       indicatorProgress: projectData.acceleratorProject?.indicatorProgress ?? [],
       sdgList: projectData.acceleratorProject?.sdgList || [],
     };
-    const request = dispatch(requestPublishFunderProject(funderProjectDetails));
-    setPublishRequestId(request.requestId);
-  }, [dispatch, projectData.acceleratorProject, projectData.projectId]);
+    void publishProjectProfile({
+      projectId: projectData.projectId,
+      publishProjectProfileRequestPayload: { details: funderProjectDetails },
+    })
+      .unwrap()
+      .then(() => {
+        snackbar.toastSuccess(strings.PROJECT_PROFILE_PUBLISHED);
+        closePublishDialog();
+      })
+      .catch(() => snackbar.toastError());
+  }, [
+    closePublishDialog,
+    projectData.acceleratorProject,
+    projectData.projectId,
+    publishProjectProfile,
+    snackbar,
+    strings.PROJECT_PROFILE_PUBLISHED,
+  ]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     if (optionItem.value === 'publish') {
@@ -252,17 +263,6 @@ const ProjectPage = () => {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [activitiesError, snackbar, strings.GENERIC_ERROR]);
-
-  useEffect(() => {
-    if (publishProfileResponse?.status === 'error') {
-      snackbar.toastError();
-      return;
-    }
-    if (publishProfileResponse?.status === 'success') {
-      snackbar.toastSuccess(strings.PROJECT_PROFILE_PUBLISHED);
-      closePublishDialog();
-    }
-  }, [closePublishDialog, snackbar, publishProfileResponse, strings.PROJECT_PROFILE_PUBLISHED]);
 
   const rightComponent = useMemo(
     () => (
