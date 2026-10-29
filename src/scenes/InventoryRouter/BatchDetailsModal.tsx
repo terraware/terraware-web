@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Container, Divider, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Dropdown, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue from '@terraware/web-components/utils/date';
@@ -299,7 +299,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
       scrolled={true}
     >
       <Grid container spacing={2} textAlign='left'>
-        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
+        <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize}>
           <DatePicker
             id='seedsSownDate'
             label={strings.SEEDS_SOWN_DATE}
@@ -309,8 +309,8 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             defaultTimeZone={timeZone}
           />
         </Grid>
-        <Grid item xs={gridSize} sx={marginTop} />
-        <Grid item xs={gridSize} sx={marginTop}>
+        <Grid sx={marginTop} size={gridSize} />
+        <Grid sx={marginTop} size={gridSize}>
           <Textfield
             id='germinatingQuantity'
             value={record.germinatingQuantity}
@@ -322,7 +322,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             min={0}
           />
         </Grid>
-        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
+        <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize}>
           <DatePicker
             id='germinationStartedDate'
             label={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
@@ -332,7 +332,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             defaultTimeZone={timeZone}
           />
         </Grid>
-        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
           <Textfield
             id='activeGrowthQuantity'
             value={record.activeGrowthQuantity}
@@ -344,7 +344,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             min={0}
           />
         </Grid>
-        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
+        <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize}>
           <DatePicker
             id='readyByDate'
             label={strings.ESTIMATED_READY_DATE}
@@ -355,7 +355,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
           />
         </Grid>
 
-        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
           <Textfield
             id='hardeningOffQuantity'
             value={record.hardeningOffQuantity}
@@ -368,9 +368,9 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
           />
         </Grid>
 
-        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
+        <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize} />
 
-        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
           <Textfield
             id='readyQuantity'
             value={record.readyQuantity}
@@ -383,8 +383,8 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
           />
         </Grid>
 
-        <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
-        <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize} />
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
           <Textfield
             id='totalQuantity'
             value={numberFormatter.format(totalQuantity)}
@@ -394,7 +394,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
           />
         </Grid>
-        <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+        <Grid sx={marginTop} paddingRight={paddingSeparator} size={12}>
           <Textfield
             id='quantityNotes'
             value={quantityNotes}
@@ -406,11 +406,11 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             required
           />
         </Grid>
-        <Grid item xs={12} sx={marginTop}>
+        <Grid sx={marginTop} size={12}>
           <Divider />
         </Grid>
 
-        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} size={gridSize}>
           <Dropdown
             id='substrate'
             label={strings.SUBSTRATE}
@@ -420,7 +420,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             fullWidth={true}
           />
         </Grid>
-        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize} sx={{ alignSelf: 'flex-end' }}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize}>
           {record.substrate === strings.OTHER && (
             <Textfield
               preserveNewlines={true}
@@ -432,7 +432,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             />
           )}
         </Grid>
-        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} size={gridSize}>
           <Dropdown
             id='treatment'
             label={strings.TREATMENT}
@@ -442,7 +442,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             fullWidth={true}
           />
         </Grid>
-        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={gridSize} sx={{ alignSelf: 'flex-end' }}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize}>
           {record.treatment === strings.OTHER && (
             <Textfield
               id='treatmentNotes'
@@ -453,10 +453,10 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
             />
           )}
         </Grid>
-        <Grid item xs={12} sx={marginTop}>
+        <Grid sx={marginTop} size={12}>
           <Divider />
         </Grid>
-        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={12}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} size={12}>
           <Textfield
             id='notes'
             value={record?.notes}
@@ -466,7 +466,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
           />
         </Grid>
 
-        <Grid item padding={theme.spacing(2, 0, 0, 2)} xs={12}>
+        <Grid padding={theme.spacing(2, 0, 0, 2)} size={12}>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.PHOTOS}
           </Typography>

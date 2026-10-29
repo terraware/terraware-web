@@ -1,7 +1,7 @@
 import React, { type JSX, useRef } from 'react';
 import { useParams } from 'react-router';
 
-import { GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Grid, Typography, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
@@ -64,13 +64,13 @@ export default function InventoryForNurseryView(): JSX.Element {
               selectedOrganization ? getNurseryName(nurseryId, selectedOrganization) : ''
             )}
           </Typography>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PageSnackbar />
           </Grid>
         </Grid>
       </PageHeaderWrapper>
       <Grid container ref={contentRef}>
-        <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
           <InventorySummaryForNursery nurseryId={nurseryId} />
 
           <Card flushMobile style={{ marginTop: theme.spacing(3) }}>

@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Container, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -259,13 +259,13 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ paddingBottom: theme.spacing(2), paddingLeft: theme.spacing(3) }}>
           <Grid container>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <Typography fontSize='24px' fontWeight={600}>
                 {strings.INVENTORY}
               </Typography>
             </Grid>
             {isOnboarded ? (
-              <Grid item xs={6} sx={{ textAlign: 'right' }}>
+              <Grid sx={{ textAlign: 'right' }} size={6}>
                 {isMobile ? (
                   <Button id='new-inventory' icon='plus' onClick={navigateToInventoryCreateView} size='medium' />
                 ) : (
@@ -316,7 +316,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
           <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
         ) : (
           <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-            {!isMobile && <Grid item xs={12} padding={theme.spacing(3)} />}
+            {!isMobile && <Grid padding={theme.spacing(3)} size={12} />}
             {isAdmin(selectedOrganization) ? (
               <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
             ) : (

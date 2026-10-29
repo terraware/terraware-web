@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Box, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';
@@ -27,7 +27,7 @@ const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
       sx={{ '&:last-child': { border: 'none' } }}
     >
       <Grid container display={'flex'} justifyContent={'space-between'} marginBottom={theme.spacing(1)}>
-        <Grid item xs={isDesktop ? undefined : 12}>
+        <Grid size={isDesktop ? undefined : 12}>
           <Typography
             component={'span'}
             fontSize={'20px'}
@@ -48,7 +48,7 @@ const ModuleEntry = ({ module, projectId }: ModuleEntryProps) => {
           )}
         </Grid>
 
-        <Grid item xs={isDesktop ? undefined : 12}>
+        <Grid size={isDesktop ? undefined : 12}>
           <Button
             onClick={() => goToModule(projectId, module.id)}
             label={strings.VIEW}

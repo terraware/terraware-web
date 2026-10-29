@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Divider, GridLegacy as Grid, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
@@ -314,14 +314,14 @@ export default function BatchDetailsForm({
     <>
       {record && (
         <>
-          <Grid container item xs={12} spacing={1} textAlign='left'>
+          <Grid container spacing={1} textAlign='left' size={12}>
             {['InventoryAdd', 'Nursery'].includes(origin) && (
-              <Grid item xs={12} padding={dropdownPadding}>
+              <Grid padding={dropdownPadding} size={12}>
                 <SpeciesDropdown<FormRecord> record={record} setRecord={setRecord} validateFields={validateFields} />
               </Grid>
             )}
 
-            <Grid item xs={12} padding={dropdownPadding}>
+            <Grid padding={dropdownPadding} size={12}>
               <AccessionsDropdown<FormRecord>
                 availableAccessions={availableAccessions}
                 record={record}
@@ -347,7 +347,7 @@ export default function BatchDetailsForm({
             </Grid>
 
             {['InventoryAdd', 'Species'].includes(origin) && (
-              <Grid item xs={12} padding={dropdownPadding}>
+              <Grid padding={dropdownPadding} size={12}>
                 <NurseryDropdownV2
                   availableNurseries={availableNurseries}
                   record={record}
@@ -358,7 +358,7 @@ export default function BatchDetailsForm({
             )}
 
             {availableSubLocations && availableSubLocations.length > 0 && (
-              <Grid item xs={12} padding={dropdownPadding}>
+              <Grid padding={dropdownPadding} size={12}>
                 <SubLocationsDropdown<FormRecord>
                   availableSubLocations={availableSubLocations}
                   record={record}
@@ -368,7 +368,7 @@ export default function BatchDetailsForm({
             )}
 
             {availableProjects && availableProjects.length > 0 && (
-              <Grid item xs={12} padding={dropdownPadding}>
+              <Grid padding={dropdownPadding} size={12}>
                 <ProjectsDropdown<FormRecord>
                   availableProjects={availableProjects}
                   record={record}
@@ -377,7 +377,7 @@ export default function BatchDetailsForm({
               </Grid>
             )}
 
-            <Grid item xs={gridSize} paddingLeft={paddingSeparator}>
+            <Grid paddingLeft={paddingSeparator} size={gridSize}>
               <DatePicker
                 id='addedDate'
                 label={strings.DATE_ADDED_REQUIRED}
@@ -389,15 +389,14 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Divider />
             </Grid>
 
             <Grid
-              item
-              xs={gridSize}
               sx={{ ...marginTop, marginRight: isMobile ? 0 : theme.spacing(2) }}
               paddingLeft={paddingSeparator}
+              size={gridSize}
             >
               <DatePicker
                 id='seedsSownDate'
@@ -409,7 +408,7 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} paddingRight={paddingSeparator} sx={marginTop}>
+            <Grid paddingRight={paddingSeparator} sx={marginTop} size={gridSize}>
               <Textfield
                 id='germinatingQuantity'
                 value={record.germinatingQuantity}
@@ -429,7 +428,7 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
+            <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize}>
               <DatePicker
                 id='germinationStartedDate'
                 label={strings.GERMINATION_ESTABLISHMENT_STARTED_DATE}
@@ -440,7 +439,7 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
               <Textfield
                 id='activeGrowthQuantity'
                 value={record.activeGrowthQuantity}
@@ -460,7 +459,7 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator}>
+            <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize}>
               <DatePicker
                 id='readyByDate'
                 label={strings.ESTIMATED_READY_DATE}
@@ -471,7 +470,7 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
               <Textfield
                 errorText={
                   validateFields
@@ -491,9 +490,9 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
+            <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize} />
 
-            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
               <Textfield
                 id='readyQuantity'
                 value={record.readyQuantity}
@@ -513,9 +512,9 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={gridSize} sx={marginTop} paddingLeft={paddingSeparator} />
+            <Grid sx={marginTop} paddingLeft={paddingSeparator} size={gridSize} />
 
-            <Grid item xs={gridSize} sx={marginTop} paddingRight={paddingSeparator}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize}>
               <Textfield
                 id='totalQuantity'
                 value={numberFormatter.format(totalQuantity)}
@@ -526,11 +525,11 @@ export default function BatchDetailsForm({
               />
             </Grid>
 
-            <Grid item xs={12} sx={marginTop}>
+            <Grid sx={marginTop} size={12}>
               <Divider />
             </Grid>
 
-            <Grid item xs={12} padding={theme.spacing(3, 0, 1, 2)}>
+            <Grid padding={theme.spacing(3, 0, 1, 2)} size={12}>
               <Textfield
                 id='notes'
                 value={record?.notes}
