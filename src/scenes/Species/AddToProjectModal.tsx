@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { useLazySearchSpeciesDeliverablesQuery } from 'src/queries/search/speciesDeliverables';
+import { SpeciesDeliverable, useLazySearchSpeciesDeliverablesQuery } from 'src/queries/search/speciesDeliverables';
 import strings from 'src/strings';
 import { getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 import { Project } from 'src/types/Project';
@@ -42,6 +42,14 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
   const [projectsWithDeliverables, setProjectsWithDeliverables] = useState<Project[]>([]);
 
   const [searchSpeciesDeliverables, { isFetching: isBusy }] = useLazySearchSpeciesDeliverablesQuery();
+  const isMountedRef = useRef(false);
+
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleOnSubmit = useCallback(() => {
     onSubmit(projectsSpeciesAdded);
@@ -59,15 +67,23 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
     }
 
     // We need to determine if these have an active or recent deliverable before we actually save them
-    const result = await searchSpeciesDeliverables({
-      projectIds: projectsSpeciesAdded.map((value) => value.project.id),
-    });
-    if (!result.data) {
-      snackbar.toastError(strings.GENERIC_ERROR);
+    let deliverables: SpeciesDeliverable[];
+    try {
+      deliverables = await searchSpeciesDeliverables({
+        projectIds: projectsSpeciesAdded.map((value) => value.project.id),
+      }).unwrap();
+    } catch {
+      if (isMountedRef.current) {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
       return;
     }
 
-    const activeOrPastDeliverables = result.data.filter(
+    if (!isMountedRef.current) {
+      return;
+    }
+
+    const activeOrPastDeliverables = deliverables.filter(
       (deliverable) => DateTime.fromISO(deliverable.moduleStartDate).toUTC().startOf('day') <= today
     );
 
