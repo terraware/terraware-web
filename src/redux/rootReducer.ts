@@ -6,7 +6,6 @@ import { rtkReducers } from 'src/queries/reducers';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
-import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
 import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
@@ -16,7 +15,6 @@ const reducers = {
   ...funderProjectsReducers,
   ...messageReducers,
   ...matrixViewReducers,
-  ...projectSpeciesReducers,
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
   ...userAnalyticsReducers,
