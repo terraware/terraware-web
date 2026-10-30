@@ -1,9 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Button } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
-import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useDraftPlantingSiteFinalize from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteFinalize';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
@@ -15,12 +14,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 import CloseSetupConfirmation from './CloseSetupConfirmation';
 import DraftProblemsConfirmation from './DraftProblemsConfirmation';
 import EditorLayout from './EditorLayout';
-import { PlantingSiteStep } from './EditorStepper';
+import SkipRemainingStepsConfirmation, { SkippedStep } from './SkipRemainingStepsConfirmation';
 import StartOverConfirmation from './StartOverConfirmation';
 import { initializeOptionalStepsStatus, useEditorSteps } from './editorSteps';
 import { OnValidate } from './types';
 
-type SaveAction = 'back' | 'draft' | 'next';
+type StepAction = 'back' | 'create' | 'exit' | 'next';
 
 export type EditorProps = {
   site: DraftPlantingSite;
@@ -30,7 +29,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { site } = props;
   const { siteEditStep, siteType } = site;
   const navigate = useSyncNavigate();
-  const { goToPlantingSiteView } = useNavigateTo();
   const snackbar = useSnackbar();
   const showProblems = usePlantingSiteProblemsToast();
 
@@ -42,16 +40,21 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
     initializeOptionalStepsStatus(site)
   );
-  const [isDirty, setIsDirty] = useState(false);
+  const [stepIsDirty, setStepIsDirty] = useState(false);
+  const [hasCarriedEdits, setHasCarriedEdits] = useState(false);
+  const [hasBoundary, setHasBoundary] = useState(!!site.boundary);
   const [plantingSite, setPlantingSite] = useState(site);
-  const [showCloseConfirmation, setShowCloseConfirmation] = useState<boolean>(false);
+  const [showCancelConfirmation, setShowCancelConfirmation] = useState<boolean>(false);
+  const [stepToSkip, setStepToSkip] = useState<SkippedStep | undefined>();
 
-  const onFinalizeSuccess = useCallback(
-    (plantingSiteId: number) => {
-      goToPlantingSiteView(plantingSiteId);
-    },
-    [goToPlantingSiteView]
-  );
+  const hasUnsavedEdits = stepIsDirty || hasCarriedEdits;
+
+  const goToPlantingSites = useCallback(() => navigate(APP_PATHS.PLANTING_SITES), [navigate]);
+
+  const onFinalizeSuccess = useCallback(() => {
+    snackbar.toastSuccess(strings.PLANTING_SITE_CREATED);
+    goToPlantingSites();
+  }, [goToPlantingSites, snackbar]);
 
   const onFinalizeError = useCallback(
     (problems?: PlantingSiteProblem[]) => {
@@ -72,17 +75,31 @@ export default function Editor(props: EditorProps): JSX.Element {
     onFinishUpdate,
     onSaveAnyway,
     problems: draftProblems,
+    saveStepPosition,
     updateDraft,
     isUpdating,
     updatedDraft,
   } = useDraftPlantingSiteUpdate(site.id);
   const { finalize, isPending } = useDraftPlantingSiteFinalize(onFinalizeSuccess, onFinalizeError);
 
+  const steps = useEditorSteps(siteType, completedOptionalSteps);
+  const stepIndex = useMemo(
+    () =>
+      Math.max(
+        steps.findIndex((step) => step.type === currentStep),
+        0
+      ),
+    [currentStep, steps]
+  );
+  const isLastStep = stepIndex === steps.length - 1;
+
   // update local state when draft is updated
   useEffect(() => {
     if (updatedDraft) {
       setPlantingSite(updatedDraft.draft);
-      setIsDirty(false);
+      setStepIsDirty(false);
+      setHasCarriedEdits(false);
+      setHasBoundary(!!updatedDraft.draft.boundary);
       setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
@@ -95,91 +112,111 @@ export default function Editor(props: EditorProps): JSX.Element {
     }
   }, [updatedDraft, onFinishUpdate]);
 
-  const steps = useEditorSteps(siteType, completedOptionalSteps);
-
-  const goToPlantingSites = useCallback(() => {
-    navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${plantingSite.id}`));
-  }, [navigate, plantingSite.id]);
-
-  const getCurrentStepIndex = useCallback((): number => {
-    let stepIndex = 0;
-    steps.find((step: PlantingSiteStep, index: number) => {
-      if (currentStep === step.type) {
-        stepIndex = index;
-        return true;
-      }
-      return false;
-    });
-
-    return stepIndex;
-  }, [currentStep, steps]);
-
-  const onClose = useCallback(() => {
-    if (isDirty) {
-      setShowCloseConfirmation(true);
-    } else {
-      goToPlantingSites();
-    }
-  }, [goToPlantingSites, isDirty]);
-
-  const onKeepEditing = useCallback(() => setShowCloseConfirmation(false), []);
-
-  const onSave = useCallback(
-    (action: SaveAction) => () => {
-      // wait for component to return
+  const runStep = useCallback(
+    (action: StepAction) => {
+      // wait for the step component to hand its data back
       if (onValidate) {
         return;
       }
-      const stepIndex = getCurrentStepIndex();
-      const isLastStep = stepIndex === steps.length - 1;
-      const isFinalizing = action === 'next' && isLastStep;
-      const redirect = action === 'draft' || isFinalizing;
 
-      const getNextStep = (): SiteEditStep => {
-        if (action === 'back') {
-          return steps[stepIndex - 1].type;
-        }
-        // if user saves a draft we want to bring user back to the same step in the flow on next visit
-        return redirect ? currentStep : steps[stepIndex + 1].type;
-      };
+      const nextStep =
+        action === 'back' ? steps[stepIndex - 1].type : action === 'next' ? steps[stepIndex + 1].type : currentStep;
 
       setOnValidate({
-        allowIncomplete: action !== 'next',
+        allowIncomplete: action === 'back' || action === 'exit',
         apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>) => {
           setOnValidate(undefined);
-          if (!hasErrors) {
-            const nextStep = getNextStep();
-            const draft: DraftPlantingSite = {
-              ...plantingSite,
-              ...(data ?? {}),
-              siteEditStep: nextStep,
-            };
+          if (hasErrors) {
+            return;
+          }
 
-            if (isFinalizing) {
-              // user is done with create wizard, create the site and delete the draft
-              finalize(draft);
-            } else {
-              updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) }, redirect);
-            }
+          const draft: DraftPlantingSite = { ...plantingSite, ...(data ?? {}), siteEditStep: nextStep };
+
+          if (action === 'create') {
+            finalize(draft);
+          } else if (action === 'back') {
+            setPlantingSite(draft);
+            setHasCarriedEdits(true);
+            setCurrentStep(nextStep);
+          } else {
+            updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) }, action === 'exit');
           }
         },
       });
     },
-    [currentStep, finalize, getCurrentStepIndex, onValidate, plantingSite, steps, updateDraft]
+    [currentStep, finalize, onValidate, plantingSite, stepIndex, steps, updateDraft]
   );
 
-  const onBack = useCallback(() => {
-    if (isDirty) {
-      onSave('back')();
+  const onCancel = useCallback(() => {
+    if (stepIndex === 0 && !hasBoundary && !hasUnsavedEdits) {
+      goToPlantingSites();
     } else {
-      setCurrentStep(steps[getCurrentStepIndex() - 1].type);
+      setShowCancelConfirmation(true);
     }
-  }, [getCurrentStepIndex, isDirty, onSave, steps]);
+  }, [goToPlantingSites, hasBoundary, hasUnsavedEdits, stepIndex]);
 
-  const onSaveAsDraft = useCallback(() => {
-    setShowCloseConfirmation(false);
-    onSave('draft')();
-  }, [onSave]);
+  const onKeepEditing = useCallback(() => setShowCancelConfirmation(false), []);
+
+  const onBack = useCallback(() => {
+    if (hasUnsavedEdits) {
+      runStep('back');
+    } else {
+      setCurrentStep(steps[stepIndex - 1].type);
+    }
+  }, [hasUnsavedEdits, runStep, stepIndex, steps]);
+
+  const onNext = useCallback(() => {
+    if (hasUnsavedEdits) {
+      runStep('next');
+      return;
+    }
+
+    // nothing to save, but the draft still has to remember where the user got to
+    const nextStep = steps[stepIndex + 1].type;
+    setPlantingSite((current) => ({ ...current, siteEditStep: nextStep }));
+    saveStepPosition(nextStep);
+    setCurrentStep(nextStep);
+  }, [hasUnsavedEdits, runStep, saveStepPosition, stepIndex, steps]);
+
+  const onSaveAndExit = useCallback(() => runStep('exit'), [runStep]);
+
+  const skippableStep = useMemo<SkippedStep | undefined>(() => {
+    const isSettled = (step: OptionalSiteEditStep) => completedOptionalSteps[step];
+
+    if (siteType !== 'Detailed' || isLastStep) {
+      return undefined;
+    }
+    if (currentStep === 'exclusion_areas' && !isSettled('stratum_boundaries')) {
+      return 'stratum_boundaries';
+    }
+    if (
+      (currentStep === 'exclusion_areas' || currentStep === 'stratum_boundaries') &&
+      !isSettled('substratum_boundaries')
+    ) {
+      return 'substratum_boundaries';
+    }
+    return undefined;
+  }, [completedOptionalSteps, currentStep, isLastStep, siteType]);
+
+  const onCreateSite = useCallback(() => {
+    if (skippableStep) {
+      setStepToSkip(skippableStep);
+    } else {
+      runStep('create');
+    }
+  }, [runStep, skippableStep]);
+
+  const onCloseSkipConfirmation = useCallback(() => setStepToSkip(undefined), []);
+
+  const onContinueSetup = useCallback(() => {
+    setStepToSkip(undefined);
+    onNext();
+  }, [onNext]);
+
+  const onCreateSiteAnyway = useCallback(() => {
+    setStepToSkip(undefined);
+    runStep('create');
+  }, [runStep]);
 
   /**
    * On start over, data is reset to clear all boundaries and only keep the details information.
@@ -188,7 +225,6 @@ export default function Editor(props: EditorProps): JSX.Element {
    */
   const onStartOver = useCallback(() => {
     const nextStep = 'site_boundary';
-    const redirect = false;
 
     const draft: DraftPlantingSite = {
       ...plantingSite,
@@ -204,7 +240,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     const optionalSteps = initializeOptionalStepsStatus(draft);
 
     isStartingOver.current = true;
-    updateDraft({ draft, nextStep, optionalSteps }, redirect);
+    updateDraft({ draft, nextStep, optionalSteps });
     setShowStartOver(false);
   }, [plantingSite, updateDraft]);
 
@@ -217,23 +253,69 @@ export default function Editor(props: EditorProps): JSX.Element {
   const onCloseStartOver = useCallback(() => setShowStartOver(false), []);
 
   const busy = isUpdating || isPending || !!onValidate;
-  const onNext = useMemo(() => onSave('next'), [onSave]);
   const showStartOverButton = currentStep !== 'site_boundary' || !!plantingSite.boundary;
+  const siteName = plantingSite.name.trim();
+
+  const actions = (
+    <>
+      <Button
+        id='cancel-planting-site-create'
+        label={strings.CANCEL}
+        onClick={onCancel}
+        disabled={busy}
+        priority='secondary'
+        type='passive'
+        size='medium'
+      />
+      {stepIndex > 0 && (
+        <Button
+          id='back-planting-site-create'
+          label={strings.BACK}
+          onClick={onBack}
+          disabled={busy}
+          priority='secondary'
+          type='passive'
+          size='medium'
+        />
+      )}
+      <Button
+        id='save-and-exit-planting-site-create'
+        label={strings.SAVE_AND_EXIT}
+        onClick={onSaveAndExit}
+        disabled={busy || !hasBoundary}
+        priority='secondary'
+        type='passive'
+        size='medium'
+      />
+      <Button
+        id='create-planting-site'
+        label={strings.CREATE_SITE}
+        onClick={onCreateSite}
+        disabled={busy || currentStep === 'site_boundary'}
+        priority={isLastStep ? 'primary' : 'secondary'}
+        size='medium'
+      />
+      {!isLastStep && (
+        <Button
+          id='next-planting-site-create'
+          label={strings.NEXT}
+          onClick={onNext}
+          disabled={busy || !hasBoundary}
+          size='medium'
+        />
+      )}
+    </>
+  );
 
   return (
     <EditorLayout
+      actions={actions}
       busy={busy}
-      closeButtonId='close-planting-site-create'
       currentStep={currentStep}
-      finishButtonId='save-planting-site-create'
-      finishLabel={strings.CREATE_PLANTING_SITE}
-      isDirty={isDirty}
-      onBack={onBack}
-      onClose={onClose}
-      onDirtyChange={setIsDirty}
-      onFinish={onNext}
+      isDirty={hasUnsavedEdits}
+      onDirtyChange={setStepIsDirty}
+      onHasBoundaryChange={setHasBoundary}
       onLeave={goToPlantingSites}
-      onNext={onNext}
       onStartOver={showStartOverButton ? onOpenStartOver : undefined}
       onValidate={onValidate}
       site={plantingSite}
@@ -247,12 +329,25 @@ export default function Editor(props: EditorProps): JSX.Element {
       {draftProblems && (
         <DraftProblemsConfirmation onBackToEdit={onBackToEdit} onSaveAnyway={onSaveAnyway} problems={draftProblems} />
       )}
-      {showCloseConfirmation && (
+      {stepToSkip && (
+        <SkipRemainingStepsConfirmation
+          onClose={onCloseSkipConfirmation}
+          onContinueSetup={onContinueSetup}
+          onCreateSite={onCreateSiteAnyway}
+          skippedStep={stepToSkip}
+        />
+      )}
+      {showCancelConfirmation && (
         <CloseSetupConfirmation
+          message={
+            hasUnsavedEdits
+              ? strings.CANCEL_DRAFT_SITE_SETUP_MESSAGE
+              : strings.CANCEL_DRAFT_SITE_SETUP_NO_CHANGES_MESSAGE
+          }
+          nothingToDiscard={!hasUnsavedEdits}
           onDiscard={goToPlantingSites}
           onKeepEditing={onKeepEditing}
-          onSaveAsDraft={onSaveAsDraft}
-          siteName={plantingSite.name.trim()}
+          siteName={siteName}
         />
       )}
     </EditorLayout>
