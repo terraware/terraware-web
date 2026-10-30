@@ -111,7 +111,6 @@ Before putting up a pull request, make sure to run the following commands. The C
 completed.
 
 ```shell
-yarn generate-types  # generate types for any server side API changes
 yarn format          # run code formatter
 yarn lint:dev        # run linter for local development (CI runs the stricter `yarn lint`)
 yarn ts              # run the typescript types checker
@@ -124,7 +123,7 @@ yarn test            # run the rstest (unit and integration) tests
 Tip: you can run everything except the end-to-end tests using:
 
 ```shell
-yarn generate-types && yarn format && yarn lint:dev && yarn ts && yarn test
+yarn format && yarn lint:dev && yarn ts && yarn test
 ```
 
 ## How to Run the End-to-End Tests
