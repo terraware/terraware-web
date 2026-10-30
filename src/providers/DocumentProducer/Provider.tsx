@@ -7,9 +7,8 @@ import _ from 'lodash';
 
 import useDocumentVariablesWithValues from 'src/hooks/variables/useDocumentVariablesWithValues';
 import useProjectVariablesWithValues from 'src/hooks/variables/useProjectVariablesWithValues';
+import { useListDocumentTemplatesQuery } from 'src/queries/generated/documentProducerTemplates';
 import { useListVariableOwnersQuery } from 'src/queries/generated/documentProducerVariables';
-import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
-import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestGetDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -40,7 +39,11 @@ const DocumentProducerProvider = ({ children }: Props) => {
 
   const projectId = (pathParams.projectId ? Number(pathParams.projectId) : document?.projectId) ?? -1;
   const documentTemplateId = document?.documentTemplateId ?? -1;
-  const documentTemplate = useAppSelector((state) => selectDocumentTemplate(state, documentTemplateId));
+  const { currentData: documentTemplatesData } = useListDocumentTemplatesQuery();
+  const documentTemplate = useMemo(
+    () => documentTemplatesData?.documentTemplates.find((template) => template.id === documentTemplateId),
+    [documentTemplatesData, documentTemplateId]
+  );
 
   const snackbar = useSnackbar();
   const documentResult = useAppSelector(selectGetDocument(documentId));
@@ -88,10 +91,6 @@ const DocumentProducerProvider = ({ children }: Props) => {
     (hasProject && projectVariables.variablesWithValues === undefined && !projectVariables.isError) ||
     (hasProject && variablesOwners === undefined && !ownersQuery.isError) ||
     (hasDocument && hasProject && documentVariables === undefined && !documentVariablesResult.isError);
-
-  useEffect(() => {
-    void dispatch(requestListDocumentTemplates());
-  }, [dispatch]);
 
   const reloadDocument = useCallback(() => {
     if (hasDocument) {

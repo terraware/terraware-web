@@ -1,5 +1,3 @@
-import { components } from 'src/api/types/generated-schema';
+import { DocumentTemplatePayload } from 'src/queries/generated/documentProducerTemplates';
 
-export type DocumentTemplate = components['schemas']['DocumentTemplatePayload'];
-
-export type DocumentTemplateListResponse = components['schemas']['ListDocumentTemplatesResponsePayload'];
+export type DocumentTemplate = DocumentTemplatePayload;
