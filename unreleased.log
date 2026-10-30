@@ -1,3 +1,4 @@
+80a65caf SW-9183 Add a registry of tables with stable ids (#6955)
 3b21084c SW-9185 Send the growth phase move quantity as a number (#6953)
 73866ceb SW-9009 Test opening growth phase changes from batch tables and details (#6952)
 74970ac8 SW-9009 Test moving seedlings between growth phases in a batch (#6951)
