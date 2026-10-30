@@ -979,7 +979,7 @@ const ObservationMap = ({
     (isDead: boolean): MapMarker[] => {
       if (isBiomass || hasBiomassResults) {
         return adHocObservationResults.flatMap((observation) => {
-          const trees = observation.biomassMeasurements?.trees ?? [];
+          const trees = observation.adHocPlot?.biomassMeasurements?.trees ?? [];
           return trees
             .filter((tree) => tree.isDead === isDead)
             .map((tree): MapMarker | undefined => {

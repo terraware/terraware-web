@@ -97,7 +97,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const observationId = Number(params.observationId);
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const forestType = results?.biomassMeasurements?.forestType;
+  const forestType = results?.adHocPlot?.biomassMeasurements?.forestType;
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
@@ -343,7 +343,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
   const trunksOfTree = useCallback(
     (row: TreeRow) =>
-      (results?.biomassMeasurements?.trees ?? []).filter(
+      (results?.adHocPlot?.biomassMeasurements?.trees ?? []).filter(
         (tree) => tree.treeGrowthForm !== 'Shrub' && tree.treeNumber === row.treeNumber
       ),
     [results]
@@ -427,7 +427,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         candidate.speciesId === species.id ||
         candidate.speciesName === species.scientificName ||
         candidate.scientificName === species.scientificName;
-      const biomass = results?.biomassMeasurements;
+      const biomass = results?.adHocPlot?.biomassMeasurements;
       const tree = biomass?.trees?.find(isSameSpecies);
       if (tree) {
         return (optimisticValues[tree.id]?.[fieldId] ?? tree[fieldId]) ? 'true' : 'false';
@@ -876,7 +876,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const treesWithData = useMemo(() => {
-    return results?.biomassMeasurements?.trees
+    return results?.adHocPlot?.biomassMeasurements?.trees
       ?.filter((tree) => !removedTreeIds.includes(tree.id))
       .map((tree) => {
         const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };
