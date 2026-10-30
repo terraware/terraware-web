@@ -181,24 +181,7 @@ describe('ChangeQuantityModal', () => {
       await save(user);
 
       await waitFor(() => expect(requests).toHaveLength(1));
-      const { quantity, ...rest } = await requests[0].json();
-      expect(rest).toEqual({ previousPhase, newPhase: to });
-      // Compared as a number because the modal currently sends the typed text; see the skipped test
-      // below.
-      expect(Number(quantity)).toBe(5);
-    });
-
-    // Skipped: the modal sends the Move field's text as-is, so the body carries `"quantity": "5"`
-    // where the API declares an integer. It works today only because the server coerces the string.
-    it.skip('sends the quantity as a number', async () => {
-      const requests = captureRequests('post', CHANGE_STATUSES_URL);
-      const { user } = renderModal('germinating');
-
-      await enterMove(user, '5');
-      await save(user);
-
-      await waitFor(() => expect(requests).toHaveLength(1));
-      expect(await requests[0].json()).toMatchObject({ quantity: 5 });
+      expect(await requests[0].json()).toEqual({ previousPhase, newPhase: to, quantity: 5 });
     });
 
     it('accepts moving every seedling out of the phase', async () => {
@@ -209,7 +192,7 @@ describe('ChangeQuantityModal', () => {
       await save(user);
 
       await waitFor(() => expect(requests).toHaveLength(1));
-      expect(Number((await requests[0].json()).quantity)).toBe(20);
+      expect(await requests[0].json()).toMatchObject({ quantity: 20 });
     });
 
     it('reloads the batch data and closes after a successful save', async () => {

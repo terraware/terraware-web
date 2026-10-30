@@ -129,8 +129,8 @@ export default function ChangeQuantityModal({
 
   const onChangeMovedValue = useCallback(
     (value: unknown) => {
-      const valueNumber = value as number;
-      if (value && !isNaN(valueNumber) && valueNumber > 0) {
+      const valueNumber = Number(value);
+      if (!isNaN(valueNumber) && valueNumber > 0) {
         setMovedValue(valueNumber);
       } else {
         setMovedValue(undefined);
