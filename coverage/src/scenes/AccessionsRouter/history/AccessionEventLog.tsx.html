@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">60.6% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/36</span>
+                <span class='fraction'>20/33</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.44% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/9</span>
+                <span class='fraction'>4/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.55% </span>
+                <span class="strong">60.6% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/36</span>
+                <span class='fraction'>20/33</span>
             </div>
         
             
@@ -240,15 +240,7 @@
 <a name='L175'></a><a href='#L175'>175</a>
 <a name='L176'></a><a href='#L176'>176</a>
 <a name='L177'></a><a href='#L177'>177</a>
-<a name='L178'></a><a href='#L178'>178</a>
-<a name='L179'></a><a href='#L179'>179</a>
-<a name='L180'></a><a href='#L180'>180</a>
-<a name='L181'></a><a href='#L181'>181</a>
-<a name='L182'></a><a href='#L182'>182</a>
-<a name='L183'></a><a href='#L183'>183</a>
-<a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L178'></a><a href='#L178'>178</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -350,19 +342,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -378,7 +357,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -533,21 +517,8 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 <span class="cstat-no" title="statement not covered" >        return description;</span>
       }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      if (target.kind === 'photo') {</span>
-<span class="cstat-no" title="statement not covered" >        if (findTrailingFilename(target.fullText, accession?.photoFilenames) === undefined) {</span>
-<span class="cstat-no" title="statement not covered" >          return description;</span>
-        }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        return (</span>
-          &lt;Link
-            component='button'
-            onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >setOpenedTarget(target)}</span></span>
-            sx={{ color: theme.palette.TwClrTxtBrand, textAlign: 'left' }}
-            underline='hover'
-          &gt;
-            {description}
-          &lt;/Link&gt;
-        );
+<span class="cstat-no" title="statement not covered" >      if (target.kind === 'photo' &amp;&amp; findTrailingFilename(target.fullText, accession?.photoFilenames) === undefined) {</span>
+<span class="cstat-no" title="statement not covered" >        return description;</span>
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      if (target.kind === 'batch') {</span>
@@ -563,7 +534,12 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
       }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >      return (</span>
-        &lt;Link component='button' onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >setOpenedTarget(target)}</span></span> sx={{ textAlign: 'left' }} underline='hover'&gt;
+        &lt;Link
+          component='button'
+          onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >setOpenedTarget(target)}</span></span>
+          sx={{ color: theme.palette.TwClrTxtBrand, textAlign: 'left' }}
+          underline='hover'
+        &gt;
           {description}
         &lt;/Link&gt;
       );
@@ -625,7 +601,7 @@ export default AccessionEventLog;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-29T23:46:51.600Z
+                at 2026-10-30T15:23:48.416Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
