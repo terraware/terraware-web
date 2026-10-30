@@ -20,7 +20,7 @@ export type Stratum = StratumResponsePayload;
 type Substratum = SubstratumResponsePayload;
 
 // geometry and types of geometries
-export type { MultiPolygon, Polygon };
+export type { MultiPolygon };
 
 // Search API always returns strings
 export type PlantingSiteSearchResult = {
