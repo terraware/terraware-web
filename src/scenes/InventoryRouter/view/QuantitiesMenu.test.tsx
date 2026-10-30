@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { screen, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import QuantitiesMenu from 'src/scenes/InventoryRouter/view/QuantitiesMenu';
 import strings from 'src/strings';
-import { buildBatchSearchRow, renderWithProviders } from 'src/test-utils';
+import { buildBatchSearchRow, captureRequests, renderWithProviders } from 'src/test-utils';
 import { ModalValuesType } from 'src/types/Batch';
 
 /**
@@ -84,5 +84,18 @@ describe('QuantitiesMenu', () => {
     const dialog = await screen.findByRole('dialog', { name: strings[item] });
     // The first read-only quantity in the dialog is the phase seedlings move out of.
     expect(dialog).toHaveTextContent(`${strings[fromLabel]}${fromQuantity}`);
+  });
+
+  it('changes the status of the batch in its row', async () => {
+    const requests = captureRequests('post', '/api/v1/nursery/batches/314/changeStatuses');
+    const { user, openMenu } = renderMenu(buildBatchSearchRow({ id: '314' }, { activeGrowthQuantity: 10 }));
+
+    await openMenu();
+    await user.click(await screen.findByRole('menuitem', { name: strings.CHANGE_ACTIVE_GROWTH_STATUS }));
+    const dialog = await screen.findByRole('dialog', { name: strings.CHANGE_ACTIVE_GROWTH_STATUS });
+    await user.type(dialog.querySelector('#movedValue input') as HTMLInputElement, '2');
+    await user.click(within(dialog).getByRole('button', { name: strings.SAVE }));
+
+    await waitFor(() => expect(requests).toHaveLength(1));
   });
 });
