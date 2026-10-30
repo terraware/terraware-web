@@ -2,6 +2,7 @@
   "extends": "./base-tsconfig.json",
   "compilerOptions": {
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "target": "es2017",
     "lib": [
       "dom",
