@@ -1,18 +1,16 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Dropdown, SelectT } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { requestSpeciesDeliverables } from 'src/redux/features/projectSpecies/projectSpeciesAsyncThunks';
-import { selectSpeciesDeliverables } from 'src/redux/features/projectSpecies/projectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { SpeciesDeliverable, useLazySearchSpeciesDeliverablesQuery } from 'src/queries/search/speciesDeliverables';
 import strings from 'src/strings';
 import { getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 import { Project } from 'src/types/Project';
-import { SpeciesDeliverable } from 'src/types/ProjectSpecies';
 import { today } from 'src/utils/dateUtils';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -33,7 +31,6 @@ export type ProjectSpecies = {
 export default function AddToProjectModal(props: AddToProjectModalProps): JSX.Element {
   const { onClose, onSubmit, projects } = props;
 
-  const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
   const theme = useTheme();
@@ -44,53 +41,65 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
   const [isOpenConfirmAddToProjectModal, setIsOpenConfirmAddToProjectModal] = useState(false);
   const [projectsWithDeliverables, setProjectsWithDeliverables] = useState<Project[]>([]);
 
-  const [deliverableSearchRequestId, setDeliverableSearchRequestId] = useState('');
-  const deliverableSearchRequest = useAppSelector(selectSpeciesDeliverables(deliverableSearchRequestId));
+  const [searchSpeciesDeliverables, { isFetching: isBusy }] = useLazySearchSpeciesDeliverablesQuery();
+  const isMountedRef = useRef(false);
 
-  const isBusy = deliverableSearchRequest?.status === 'pending';
-
-  const save = () => {
-    if (projectsSpeciesAdded.length > 0) {
-      if (!projectsSpeciesAdded.every((ps) => ps.nativeCategory)) {
-        setError(strings.REQUIRED_FIELD);
-        return;
-      }
-
-      // We need to determine if these have an active or recent deliverable before we actually save them
-      const deliverableRequest = dispatch(
-        requestSpeciesDeliverables({ projectIds: projectsSpeciesAdded.map((value) => value.project.id) })
-      );
-      setDeliverableSearchRequestId(deliverableRequest.requestId);
-    }
-  };
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   const handleOnSubmit = useCallback(() => {
     onSubmit(projectsSpeciesAdded);
     onClose();
   }, [onClose, onSubmit, projectsSpeciesAdded]);
 
-  useEffect(() => {
-    if (deliverableSearchRequest?.status === 'success') {
-      const activeOrPastDeliverables = (deliverableSearchRequest?.data || []).filter(
-        (deliverable: SpeciesDeliverable) => deliverable.moduleStartDate.toUTC().startOf('day') <= today
-      );
-
-      if (activeOrPastDeliverables.length > 0) {
-        // If there are active or recent deliverables, we need to show the confirm modal
-        // The confirm modal will submit the original list if the user confirms
-        setIsOpenConfirmAddToProjectModal(true);
-        const activeProjects = projects.filter(
-          (project) => activeOrPastDeliverables.findIndex((deliverable) => deliverable.projectId === project.id) >= 0
-        );
-        setProjectsWithDeliverables(activeProjects);
-      } else {
-        // If there are not, no need to show the confirm modal, submit the original list
-        handleOnSubmit();
-      }
-    } else if (deliverableSearchRequest?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
+  const save = useCallback(async () => {
+    if (projectsSpeciesAdded.length === 0) {
+      return;
     }
-  }, [deliverableSearchRequest, handleOnSubmit, projects, snackbar]);
+
+    if (!projectsSpeciesAdded.every((ps) => ps.nativeCategory)) {
+      setError(strings.REQUIRED_FIELD);
+      return;
+    }
+
+    // We need to determine if these have an active or recent deliverable before we actually save them
+    let deliverables: SpeciesDeliverable[];
+    try {
+      deliverables = await searchSpeciesDeliverables({
+        projectIds: projectsSpeciesAdded.map((value) => value.project.id),
+      }).unwrap();
+    } catch {
+      if (isMountedRef.current) {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+      return;
+    }
+
+    if (!isMountedRef.current) {
+      return;
+    }
+
+    const activeOrPastDeliverables = deliverables.filter(
+      (deliverable) => DateTime.fromISO(deliverable.moduleStartDate).toUTC().startOf('day') <= today
+    );
+
+    if (activeOrPastDeliverables.length > 0) {
+      // If there are active or recent deliverables, we need to show the confirm modal
+      // The confirm modal will submit the original list if the user confirms
+      setIsOpenConfirmAddToProjectModal(true);
+      const activeProjects = projects.filter(
+        (project) => activeOrPastDeliverables.findIndex((deliverable) => deliverable.projectId === project.id) >= 0
+      );
+      setProjectsWithDeliverables(activeProjects);
+    } else {
+      // If there are not, no need to show the confirm modal, submit the original list
+      handleOnSubmit();
+    }
+  }, [handleOnSubmit, projects, projectsSpeciesAdded, searchSpeciesDeliverables, snackbar]);
 
   const onAddProjectSpecies = () => {
     const updatedProjects = [...projectsSpeciesAdded];
@@ -130,7 +139,7 @@ export default function AddToProjectModal(props: AddToProjectModalProps): JSX.El
             priority='secondary'
             key='button-1'
           />,
-          <Button id='save' onClick={save} label={strings.ADD} key='button-2' />,
+          <Button id='save' onClick={() => void save()} label={strings.ADD} key='button-2' />,
         ]}
       >
         <Grid container textAlign={'left'}>
