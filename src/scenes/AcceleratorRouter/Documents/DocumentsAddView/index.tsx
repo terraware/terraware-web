@@ -5,18 +5,16 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import PageForm from 'src/components/DocumentProducer/PageForm';
 import Page from 'src/components/Page';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { selectDocumentRequest } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestCreateDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import {
+  CreateDocumentRequestPayload,
+  useCreateDocumentMutation,
+} from 'src/queries/generated/documentProducerDocuments';
 import strings from 'src/strings';
-import { CreateDocumentPayload } from 'src/types/documentProducer/Document';
+import { toWorkflowState } from 'src/utils/mutationStatus';
 
 const DocumentsAddView = (): JSX.Element => {
-  const dispatch = useAppDispatch();
   const { goToDocuments } = useNavigateTo();
-
-  const [requestId, setRequestId] = useState('');
-  const createDocSelector = useAppSelector(selectDocumentRequest(requestId));
+  const [createDocument, createDocumentResult] = useCreateDocumentMutation();
 
   const [documentTemplateId, setDocumentTemplateId] = useState('');
   const [documentName, setDocumentName] = useState('');
@@ -28,14 +26,13 @@ const DocumentsAddView = (): JSX.Element => {
   const isFormValid = () => documentTemplateId && documentName && documentOwner;
 
   const saveNewDoc = () => {
-    const doc: CreateDocumentPayload = {
+    const doc: CreateDocumentRequestPayload = {
       documentTemplateId: parseInt(documentTemplateId, 10),
       name: documentName,
       ownedBy: parseInt(documentOwner, 10),
       projectId: parseInt(projectId, 10),
     };
-    const request = dispatch(requestCreateDocument(doc));
-    setRequestId(request.requestId);
+    void createDocument(doc);
   };
 
   const onSave = () => {
@@ -60,7 +57,7 @@ const DocumentsAddView = (): JSX.Element => {
   return (
     <Page title={strings.ADD_DOCUMENT}>
       <PageForm
-        workflowState={createDocSelector}
+        workflowState={toWorkflowState(createDocumentResult)}
         onSave={onSave}
         onCancel={goToDocuments}
         onSuccess={goToDocuments}

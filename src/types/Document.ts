@@ -1,4 +1,4 @@
-import { components } from 'src/api/types/generated-schema';
+import { DocumentPayload } from 'src/queries/generated/documentProducerDocuments';
 
-export type DocumentStatusType = components['schemas']['DocumentPayload']['status'];
+export type DocumentStatusType = DocumentPayload['status'];
 export const DocumentStatuses: DocumentStatusType[] = ['Draft', 'Locked', 'Published', 'Ready', 'Submitted'];

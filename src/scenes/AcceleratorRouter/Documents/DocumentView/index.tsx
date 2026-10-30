@@ -10,8 +10,7 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
-import { requestUpgradeManifest } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useAppDispatch } from 'src/redux/store';
+import { useUpgradeManifestMutation } from 'src/queries/generated/documentProducerDocuments';
 import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -24,7 +23,7 @@ import DocumentVariablesTab from './DocumentVariablesTab';
 
 export default function DocumentView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
-  const dispatch = useAppDispatch();
+  const [upgradeManifest] = useUpgradeManifestMutation();
   const { activeLocale } = useLocalization();
   const { document, documentId, documentTemplate, reload } = useDocumentProducerData();
 
@@ -48,14 +47,11 @@ export default function DocumentView(): JSX.Element {
 
   const onUpgradeManifest = useCallback(async () => {
     if (documentId && latestManifestId) {
-      await dispatch(
-        requestUpgradeManifest({ id: `${documentId}`, payload: { variableManifestId: latestManifestId } })
-      );
-      reload();
+      await upgradeManifest({ documentId, upgradeManifestRequestPayload: { variableManifestId: latestManifestId } });
     }
 
     setShowUpgradeModal(false);
-  }, [dispatch, documentId, latestManifestId, reload]);
+  }, [documentId, latestManifestId, upgradeManifest]);
 
   const onDismissUpgradeManifest = useCallback(() => {
     setShowUpgradeModal(false);

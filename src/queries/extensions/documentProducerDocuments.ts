@@ -1,6 +1,12 @@
 import { api } from '../generated/documentProducerDocuments';
 import { QueryTagTypes } from '../tags';
 
+const documentTags = (documentId: number) => [
+  { type: QueryTagTypes.Documents, id: documentId },
+  { type: QueryTagTypes.Documents, id: 'LIST' },
+  { type: QueryTagTypes.DocumentHistory, id: documentId },
+];
+
 api.enhanceEndpoints({
   endpoints: {
     listDocuments: {
@@ -14,6 +20,25 @@ api.enhanceEndpoints({
     },
     getDocumentHistory: {
       providesTags: (_result, _error, documentId) => [{ type: QueryTagTypes.DocumentHistory, id: documentId }],
+    },
+    createDocument: {
+      invalidatesTags: [{ type: QueryTagTypes.Documents, id: 'LIST' }],
+    },
+    updateDocument: {
+      invalidatesTags: (_result, _error, { id }) => documentTags(id),
+    },
+    upgradeManifest: {
+      invalidatesTags: (_result, _error, { documentId }) => [
+        ...documentTags(documentId),
+        QueryTagTypes.Variables,
+        QueryTagTypes.VariableValues,
+      ],
+    },
+    createSavedDocumentVersion: {
+      invalidatesTags: (_result, _error, { documentId }) => documentTags(documentId),
+    },
+    updateSavedDocumentVersion: {
+      invalidatesTags: (_result, _error, { documentId }) => documentTags(documentId),
     },
   },
 });
