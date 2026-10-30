@@ -21,9 +21,12 @@ const rows: Row[] = Array.from({ length: 50 }, (_, index) => ({
 }));
 
 const Table = ({ data, isLoading = false }: { data: Row[]; isLoading?: boolean }) => {
-  const { pagination, onPaginationChange, autoResetPageIndex, isLoadingPage } = useTableState(storageKey, {
-    persistPageIndex: { isLoading },
-  });
+  const { pagination, onPaginationChange, autoResetPageIndex, isLoadingPage } = useTableState(
+    { storageKey, stableId: storageKey },
+    {
+      persistPageIndex: { isLoading },
+    }
+  );
 
   return (
     <EditableTable

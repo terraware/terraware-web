@@ -25,12 +25,13 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useReassignPlotModal } from 'src/scenes/ObservationsRouterV2/Reassign';
 import { ObservationState, getPlotStatus } from 'src/types/Observations';
+import { TABLES } from 'src/types/Tables';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const STORAGE_KEY = 'observation-stratum-monitoring-plot-table';
+const TABLE = TABLES.observationMonitoringPlots;
 
 type MonitoringPlotRow = {
   observationId: number;
@@ -95,7 +96,7 @@ export default function MonitoringPlotList(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(STORAGE_KEY, { persistFilters: true });
+  } = useTableState(TABLE, { persistFilters: true });
 
   const { data: observationResultsResponse, isLoading } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -336,7 +337,7 @@ export default function MonitoringPlotList(): JSX.Element {
         enableGlobalFilter={true}
         enableColumnFilters={true}
         enableColumnOrdering={true}
-        storageKey={STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}

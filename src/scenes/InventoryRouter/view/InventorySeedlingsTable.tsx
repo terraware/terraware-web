@@ -26,6 +26,7 @@ import { useListBatchesForNurseryQuery, useListBatchesForSpeciesQuery } from 'sr
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import { FieldNodePayload, SearchResponseElement } from 'src/types/Search';
+import { TABLES, TableDefinition } from 'src/types/Tables';
 import { downloadCsv } from 'src/utils/csv';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -44,10 +45,15 @@ export interface InventorySeedlingsTableProps {
   facilityId?: number;
   openBatchNumber: string | null;
   onUpdateOpenBatch: (batchNum: string | null) => void;
-  origin: OriginPage;
+  origin: Extract<OriginPage, 'Nursery' | 'Species'>;
   columns: TableColumnType[] | (() => TableColumnType[]);
   isSelectionBulkWithdrawable: (selectedRows: SearchResponseElement[]) => boolean;
 }
+
+const TABLES_BY_ORIGIN: Record<InventorySeedlingsTableProps['origin'], TableDefinition> = {
+  Nursery: TABLES.inventoryBatchesForNursery,
+  Species: TABLES.inventoryBatchesForSpecies,
+};
 
 export default function InventorySeedlingsTable(props: InventorySeedlingsTableProps): JSX.Element {
   const { openBatchNumber, onUpdateOpenBatch, origin, columns, isSelectionBulkWithdrawable } = props;
@@ -64,7 +70,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const navigate = useSyncNavigate();
   const numberFormatter = useNumberFormatter();
   const [deleteBatch] = useDeleteBatchMutation();
-  const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
+  const tableDefinition = TABLES_BY_ORIGIN[origin];
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -406,7 +412,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(tableStorageKey, {
+  } = useTableState(tableDefinition, {
     persistPageIndex: {
       isLoading: skipSearch || speciesLoading || (isNurseryOrigin ? nurseryBatchesLoading : speciesBatchesLoading),
       scope: String(originId),
@@ -487,7 +493,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             enableGlobalFilter={true}
             enableColumnFilters={true}
             stickyFilters={true}
-            storageKey={tableStorageKey}
+            storageKey={tableDefinition.storageKey}
             enablePagination={true}
             enableTopToolbar={true}
             enableBottomToolbar={true}
