@@ -1,3 +1,6 @@
+3b21084c SW-9185 Send the growth phase move quantity as a number (#6953)
+73866ceb SW-9009 Test opening growth phase changes from batch tables and details (#6952)
+74970ac8 SW-9009 Test moving seedlings between growth phases in a batch (#6951)
 f08f7b29 SW-9180 Seed Accessions: History links should all be green (#6950)
 73cca1f8 Migrate seed bank and species views to Grid v2 (#6882)
 afc84d1f Migrate nursery, planting site and organization views to Grid v2 (#6881)
