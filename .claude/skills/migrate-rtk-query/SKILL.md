@@ -22,7 +22,6 @@ Task Progress:
 - [ ] Remove the redux store if needed.
 - [ ] Replace context providers that only fetch and share data with a `useSomeData` hook, if applicable (see below).
 - [ ] Remove the service methods used to do the old querying/mutating.
-- [ ] Reroute related type declarations in `src/types/*` to use the RTK Query generated types (import from `src/queries/generated/*`) instead of `generated-schema`.
 - [ ] Remove type declarations that become unused after the old service/redux code is deleted.
 ```
 
