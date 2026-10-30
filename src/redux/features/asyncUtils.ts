@@ -4,10 +4,6 @@ export type Statuses = 'error' | 'partial-success' | 'pending' | 'success';
 
 export type StatusT<T> = { status: Statuses; data?: T };
 
-// Type used across all async thunks
-export type AsyncRequest = StatusT<unknown>; // when data is not relevant in the response
-export type AsyncRequestT<T> = StatusT<T>; // This is identical to StatusT, just renamed
-
 export const buildReducers =
   <T>(asyncThunk: AsyncThunk<any, any, any>, useArgAsKey?: boolean, compositeKeyFn?: (args: unknown) => string) =>
   (builder: CaseReducers<any, any> | ActionReducerMapBuilder<any>) =>
