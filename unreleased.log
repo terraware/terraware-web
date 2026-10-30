@@ -1,3 +1,4 @@
+439c8bd9 SW-9137 Fetch accelerator organizations through RTK Query (#6943)
 765c77fa SW-9138 Write documents through RTK Query (#6947)
 178cbb60 SW-9138 Read documents through RTK Query (#6946)
 821d3b8b SW-9139 Fetch document templates through RTK Query (#6945)
