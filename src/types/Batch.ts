@@ -1,4 +1,3 @@
-import { CreateNurseryTransferRequestPayload } from 'src/queries/generated/accessionsV2';
 import {
   BatchPayload,
   BatchPhotoPayload,
@@ -50,7 +49,6 @@ export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpos
 
 export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPurposes);
 
-export type NurseryTransfer = CreateNurseryTransferRequestPayload;
 export type NurseryWithdrawalRequest = CreateNurseryWithdrawalRequestPayload;
 export type NurseryWithdrawalRequestPurpose = NurseryWithdrawalRequest['purpose'];
 export type BatchWithdrawalPayload = GeneratedBatchWithdrawalPayload;

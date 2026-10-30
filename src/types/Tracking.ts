@@ -1,9 +1,6 @@
-import { DeliveryPayload } from 'src/queries/generated/deliveries';
 import {
   MultiPolygon,
-  PlantingSiteHistoryPayload,
   PlantingSitePayload,
-  PlantingSiteReportedPlantsPayload,
   Polygon,
   StratumResponsePayload,
   SubstratumResponsePayload,
@@ -43,17 +40,6 @@ export type PlantingSiteSearchResult = {
 };
 
 // delivery and plantings
-export type Delivery = DeliveryPayload;
-
-// reported plants
-export type PlantingSiteReportedPlants = PlantingSiteReportedPlantsPayload;
-
-// monitoring plots
-export type MonitoringPlotSearchResult = {
-  id: number;
-  plotNumber: number;
-};
-
 export type Location = {
   timeZone?: string;
 };
@@ -79,8 +65,6 @@ export type MinimalPlantingSite = Location & {
   strata?: MinimalStratum[];
   projectId?: number;
 };
-
-export type PlantingSiteHistory = PlantingSiteHistoryPayload;
 
 export type PlotT0Data = PlotT0DataPayload;
 export type SiteT0Data = SiteT0DataResponsePayload;
