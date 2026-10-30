@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { TableColumnType } from '@terraware/web-components';
 import { RendererProps } from '@terraware/web-components/components/table/types';
@@ -8,13 +8,11 @@ import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
+import { useGetDocumentHistoryQuery } from 'src/queries/generated/documentProducerDocuments';
 import { useGetUserQuery } from 'src/queries/generated/users';
-import { searchHistory } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestListHistory } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useSelectorProcessor } from 'src/redux/hooks/useSelectorProcessor';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DocumentHistoryEvent } from 'src/types/documentProducer/Document';
+import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
 
 import DocumentHistoryRowMenu from './DocumentHistoryRowMenu';
@@ -76,20 +74,24 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 };
 
 const DocumentHistoryTab = (): JSX.Element => {
-  const dispatch = useAppDispatch();
   const { documentId } = useDocumentProducerData();
+  const snackbar = useSnackbar();
 
-  const [tableRows, setTableRows] = useState<DocumentHistoryEvent[]>([]);
   const [searchValue, setSearchValue] = useState<string>('');
   const onSearch = (str: string) => setSearchValue(str);
 
-  // select history data
-  const history = useAppSelector((state) => searchHistory(state, documentId, searchValue));
-  useSelectorProcessor(history, setTableRows);
+  const { currentData: historyData, isError, refetch } = useGetDocumentHistoryQuery(documentId);
 
   useEffect(() => {
-    void dispatch(requestListHistory(documentId));
-  }, [dispatch, documentId]);
+    if (isError) {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [isError, snackbar]);
+
+  const tableRows = useMemo<DocumentHistoryEvent[]>(
+    () => (historyData?.history ?? []).map((event) => ({ ...event, docId: documentId, documentId })),
+    [historyData, documentId]
+  );
 
   const props = {
     searchProps: {
@@ -102,7 +104,7 @@ const DocumentHistoryTab = (): JSX.Element => {
       tableOrderBy: 'date',
       tableColumns,
       tableCellRenderer,
-      tableReloadData: () => dispatch(requestListHistory(documentId)),
+      tableReloadData: () => void refetch(),
     },
   };
 
