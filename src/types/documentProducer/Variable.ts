@@ -4,7 +4,6 @@ import {
   DateVariablePayload,
   EmailVariablePayload,
   ExistingValuePayloadBase,
-  GetVariableWorkflowHistoryResponsePayload,
   ImageVariablePayload,
   LinkVariablePayload,
   ListVariableOwnersResponsePayload,
@@ -15,7 +14,6 @@ import {
   SelectVariablePayload,
   TableVariablePayload,
   TextVariablePayload,
-  UpdateVariableOwnerRequestPayload,
   UpdateVariableWorkflowDetailsRequestPayload,
 } from 'src/queries/generated/documentProducerVariables';
 
@@ -102,11 +100,7 @@ export const isSectionVariableWithValues = (input: unknown): input is SectionVar
     isArray((input as SectionVariableWithValues).children)
   );
 
-export type GetVariableHistoryResponse = GetVariableWorkflowHistoryResponsePayload;
-
 export type UpdateVariableWorkflowDetailsPayload = UpdateVariableWorkflowDetailsRequestPayload;
-
-export type UpdateVariableOwnerPayload = UpdateVariableOwnerRequestPayload;
 
 export type VariableStatusType = UpdateVariableWorkflowDetailsRequestPayload['status'];
 
@@ -118,8 +112,6 @@ export const NonSectionVariableStatuses: VariableStatusType[] = [
   'Not Submitted',
   'Rejected',
 ];
-
-export type VariableOwnersListResponse = ListVariableOwnersResponsePayload;
 
 export type VariableOwners = ListVariableOwnersResponsePayload['variables'][0];
 

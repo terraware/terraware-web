@@ -5,16 +5,7 @@ import { Feature, FeatureCollection, MultiPolygon as GeoJsonMultiPolygon, Polygo
 import { DateTime } from 'luxon';
 
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
-import {
-  AdHocObservationResults,
-  ObservationMonitoringPlotResults,
-  ObservationMonitoringPlotResultsPayload,
-  ObservationResultsWithLastObv,
-  ObservationStratumResults,
-  ObservationSubstratumResults,
-} from 'src/types/Observations';
-import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
-import { isAfter } from 'src/utils/dateUtils';
+import { MinimalPlantingSite, MultiPolygon } from 'src/types/Tracking';
 
 /**
  * Map related service
@@ -160,52 +151,6 @@ const extractPlantingSite = (site: MinimalPlantingSite): MapSourceBaseData => {
 };
 
 /**
- * Transform planting sites geometry data into UI model
- */
-const extractPlantingSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
-  const sitesEntities: MapEntity[] = [];
-  sites.forEach((ps) => {
-    const { id, name, description, boundary } = ps;
-    sitesEntities.push({
-      properties: { id, name, description, type: 'site' },
-      boundary: getPolygons(boundary),
-      id,
-    });
-  });
-
-  return {
-    entities: sitesEntities,
-    id: 'sites',
-  };
-};
-
-/**
- * Transform multiple sites strata geometry data into UI model
- */
-const extractStrataFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
-  const strataEntities: MapEntity[] = [];
-
-  sites.forEach((ps) => {
-    const strataData = ps.strata?.map((stratum) => {
-      const { id, name, boundary } = stratum;
-      return {
-        properties: { id, name, type: 'stratum', recency: 0 },
-        boundary: getPolygons(boundary),
-        id,
-      };
-    });
-    if (strataData) {
-      strataEntities.push(...strataData);
-    }
-  });
-
-  return {
-    entities: strataEntities,
-    id: 'strata',
-  };
-};
-
-/**
  * Transform strata geometry data into UI model
  */
 const extractStrata = (site: MinimalPlantingSite): MapSourceBaseData => {
@@ -222,35 +167,6 @@ const extractStrata = (site: MinimalPlantingSite): MapSourceBaseData => {
   return {
     entities: strataData,
     id: 'strata',
-  };
-};
-
-/**
- * Transform multiple sites substrata geometry data into UI model
- */
-const extractSubstrataFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
-  const substratumEntities: MapEntity[] = [];
-
-  sites.forEach((ps) => {
-    const allSubstrataData = ps.strata?.flatMap((stratum) => {
-      const { substrata } = stratum;
-      return substrata.map((substratum) => {
-        const { id, name, fullName, boundary } = substratum;
-        return {
-          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id },
-          boundary: getPolygons(boundary),
-          id,
-        };
-      });
-    });
-    if (allSubstrataData) {
-      substratumEntities.push(...allSubstrataData);
-    }
-  });
-
-  return {
-    entities: substratumEntities,
-    id: 'substrata',
   };
 };
 
@@ -501,20 +417,6 @@ const extractSubstrataFromGis = (gisPlantingSiteData: FeatureCollection): MapSou
 };
 
 /**
- * Extract Planting Sites, Strata, Substrata from planting sites data
- */
-const getMapDataFromPlantingSites = (plantingSites: PlantingSite[]): MapData => {
-  return {
-    site: extractPlantingSites(plantingSites),
-    stratum: extractStrataFromSites(plantingSites),
-    substratum: extractSubstrataFromSites(plantingSites),
-    permanentPlot: undefined,
-    temporaryPlot: undefined,
-    adHocPlot: undefined,
-  };
-};
-
-/**
  * Extract Planting Site, Strata, Substrata from planting site data
  */
 const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData => {
@@ -529,160 +431,12 @@ const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData 
 };
 
 /**
- * Extract Planting Site, Strata, Substrata, and Plots from an ObservationResult
- */
-const getMapDataFromObservation = (
-  observation: ObservationResultsWithLastObv | AdHocObservationResults,
-  plantingSiteHistory: PlantingSiteHistory
-): MapData => {
-  const plantingSiteEntities = [
-    {
-      id: observation.plantingSiteId,
-      properties: {
-        id: observation.plantingSiteId,
-        name: observation.plantingSiteName,
-        type: 'site',
-      },
-      boundary: getPolygons(plantingSiteHistory.boundary),
-    },
-  ];
-
-  const plantingSiteHistoryStrata = plantingSiteHistory.strata.filter((_stratum) => _stratum.stratumId !== undefined);
-  const stratumEntities = plantingSiteHistoryStrata.map((stratum) => {
-    const stratumFromObservation = observation.strata.find((_stratum) => _stratum.stratumName === stratum.name);
-    return {
-      // -1 should never be set because undefined ids are filtered before
-      id: stratum.stratumId || -1,
-      properties: {
-        id: stratum.stratumId || -1,
-        name: stratumFromObservation?.stratumName || stratum.name || '',
-        type: 'stratum',
-        survivalRate: stratumFromObservation?.survivalRate,
-        hasObservedPermanentPlots: stratumFromObservation?.hasObservedPermanentPlots,
-      },
-      boundary: getPolygons(stratum.boundary),
-    };
-  });
-
-  const plantingSiteHistorySubstrata = plantingSiteHistoryStrata
-    .flatMap((_stratum) =>
-      _stratum.substrata.flatMap((_substratum) => ({ ..._substratum, stratumName: _stratum.name }))
-    )
-    .filter((_substratum) => _substratum.name !== undefined);
-  const substratumEntities = plantingSiteHistorySubstrata?.map((substratum) => {
-    const stratumFromObservation = observation.strata.find((_stratum) => _stratum.name === substratum.stratumName);
-    const substratumFromObservation = stratumFromObservation?.substrata?.find(
-      (_substratum) => _substratum.substratumName === substratum.name
-    );
-    return {
-      // -1 should never be set because undefined ids are filtered before
-      id: substratum.substratumId || -1,
-      properties: {
-        id: substratum.substratumId || -1,
-        name: substratumFromObservation?.substratumName || substratum.name || '',
-        survivalRate: stratumFromObservation?.survivalRate,
-        type: 'substratum',
-      },
-      boundary: getPolygons(substratum.boundary),
-      lastObv: substratumFromObservation?.lastObv,
-    };
-  });
-  const substratumEntitiesWithRecency = () => {
-    const orderedSubstratumEntities = substratumEntities?.sort((a, b) => {
-      // Check for undefined and compare valid dates
-      if (a.lastObv && b.lastObv) {
-        return isAfter(b.lastObv, a.lastObv) ? 1 : -1;
-      }
-      return 0; // In case both are undefined (should not happen here)
-    });
-
-    const entitiesToReturn: {
-      properties: { recency: number; id: number; name: string; type: string };
-      id: number;
-      boundary: MapGeometry;
-      lastObv: string | undefined;
-    }[] = [];
-    let lastProcecedDate = orderedSubstratumEntities?.[0]?.lastObv;
-    let recencyToSet = 1;
-
-    orderedSubstratumEntities?.forEach((entity) => {
-      if (entity.lastObv !== lastProcecedDate) {
-        recencyToSet = recencyToSet + 1;
-        lastProcecedDate = entity.lastObv;
-      }
-
-      entitiesToReturn.push({
-        ...entity,
-        properties: { ...entity.properties, recency: recencyToSet },
-      });
-    });
-
-    return entitiesToReturn;
-  };
-
-  const permanentPlotEntities = observation.strata.flatMap((stratum: ObservationStratumResults) =>
-    stratum.substrata.flatMap((_substratum: ObservationSubstratumResults) =>
-      getMonitoringPlotMapData(_substratum.monitoringPlots, true)
-    )
-  );
-
-  const temporaryPlotEntities = observation.strata.flatMap((stratum: ObservationStratumResults) =>
-    stratum.substrata.flatMap((_substratum: ObservationSubstratumResults) =>
-      getMonitoringPlotMapData(_substratum.monitoringPlots, false)
-    )
-  );
-
-  const adHocPlot = observation.adHocPlot;
-  const addHocPlotEntities = adHocPlot
-    ? [
-        {
-          id: adHocPlot.monitoringPlotId,
-          properties: {
-            id: adHocPlot.monitoringPlotId,
-            name: adHocPlot.monitoringPlotNumber,
-            type: 'adHocPlot',
-          },
-          boundary: [adHocPlot.boundary.coordinates],
-        },
-      ]
-    : [];
-
-  return {
-    site: { id: 'sites', entities: plantingSiteEntities },
-    stratum: { id: 'strata', entities: stratumEntities || [] },
-    substratum: { id: 'substrata', entities: substratumEntitiesWithRecency() },
-    permanentPlot: { id: 'permanentPlots', entities: permanentPlotEntities },
-    temporaryPlot: { id: 'temporaryPlots', entities: temporaryPlotEntities },
-    adHocPlot: { id: 'adHocPlots', entities: addHocPlotEntities },
-  };
-};
-
-// private util
-const getMonitoringPlotMapData = (
-  monitoringPlots: (ObservationMonitoringPlotResults | ObservationMonitoringPlotResultsPayload)[],
-  permanent: boolean
-) =>
-  monitoringPlots
-    .filter((plot) => plot.isPermanent === permanent)
-    .map((plot) => ({
-      id: plot.monitoringPlotId,
-      properties: {
-        id: plot.monitoringPlotId,
-        name: plot.monitoringPlotNumber,
-        type: permanent ? 'permanentPlot' : 'temporaryPlot',
-      },
-      boundary: [plot.boundary.coordinates],
-    }));
-
-/**
  * Exported functions
  */
 const MapService = {
   getBoundingBox,
   getMapDataFromGisPlantingSites,
   getMapDataFromPlantingSite,
-  getMapDataFromPlantingSites,
-  getMapDataFromObservation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   getRecencyFromTime,

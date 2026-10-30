@@ -1,5 +1,3 @@
-import { FunderProjectDetailsPayload, PublishedProjectPayload } from 'src/queries/generated/funderProjects';
-
-export type PublishedProject = PublishedProjectPayload;
+import { FunderProjectDetailsPayload } from 'src/queries/generated/funderProjects';
 
 export type FunderProjectDetails = FunderProjectDetailsPayload;
