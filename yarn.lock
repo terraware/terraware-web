@@ -140,7 +140,7 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/core@^8.0.9":
+"@babel/core@^8.0.10":
   version "8.0.10"
   resolved "https://registry.yarnpkg.com/@babel/core/-/core-8.0.10.tgz#b02ced26bcc8f87e564143d7ca964993f9d4fad7"
   integrity sha512-T6dEcoMJ3L1hyLuNfRXcVlqQrN79kU/SB5bDygVgQNIOUgStdyEGzigtRA9K+9Coh7SZUSt543oWRBxvqYdyuQ==
@@ -1275,7 +1275,7 @@
     "@datadog/browser-core" "7.16.2"
     "@datadog/js-core" "0.0.19"
 
-"@datadog/browser-rum-react@^7.16.1":
+"@datadog/browser-rum-react@^7.16.2":
   version "7.16.2"
   resolved "https://registry.yarnpkg.com/@datadog/browser-rum-react/-/browser-rum-react-7.16.2.tgz#61270b97bbd1b24772e682b342c109400bddb534"
   integrity sha512-49Hd2m62cefS407f+Rc88EnO5hxJN7P7EpvGZyyOli5OPmrFZrQPVR1WpRvl8YAWbeG8CJ8ax5ednpcgHBqJ1A==
@@ -1284,7 +1284,7 @@
     "@datadog/browser-rum-core" "7.16.2"
     "@datadog/js-core" "0.0.19"
 
-"@datadog/browser-rum@^7.16.1":
+"@datadog/browser-rum@^7.16.2":
   version "7.16.2"
   resolved "https://registry.yarnpkg.com/@datadog/browser-rum/-/browser-rum-7.16.2.tgz#bb636e27be7cf9bbde914d00591ea01d29c17272"
   integrity sha512-Qc+KAfmaWaGdE0sj350Bmhzf824gLgnisrLoP9HcCOn3b/OSj9Pi19QUQWf+x24ioJfdAfBwUUH9YTZi7Q0QHg==
@@ -3639,7 +3639,7 @@
   resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.1.0.tgz#a79b55dbaf8604812f52d140b2c9ab41bc150bb8"
   integrity sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==
 
-"@storybook/addon-docs@^10.6.3":
+"@storybook/addon-docs@^10.6.5":
   version "10.6.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-docs/-/addon-docs-10.6.5.tgz#456c8727652e2d280f823e881539baddc5b36f0f"
   integrity sha512-Kt0pGLA+nwdu2g80p8jbdoiiKXxwQbhrY6uzMzq/0G1lytxpJUzrOQAM+GDcEbqyvpKr0u5d1q05/LPem/uooQ==
@@ -3652,7 +3652,7 @@
     ts-dedent "^2.0.0"
     unplugin "^2.3.5"
 
-"@storybook/addon-links@^10.6.3":
+"@storybook/addon-links@^10.6.5":
   version "10.6.5"
   resolved "https://registry.yarnpkg.com/@storybook/addon-links/-/addon-links-10.6.5.tgz#8537a366296112dbdaf97524362a84b658054351"
   integrity sha512-O0DN6C3tRmrpMRZIuMD2SDLAgS02zI7Yca0h4RBiBKPxm7i6a9lwc7gqrZ9HCJHVFbfapub0bhj7BD3FK0XDsA==
@@ -3687,7 +3687,7 @@
   resolved "https://registry.yarnpkg.com/@storybook/react-dom-shim/-/react-dom-shim-10.6.5.tgz#501efa6a06da077e5a9acad13ffce630a1db7437"
   integrity sha512-Qbbkp+5Otg32w8Ddav6rH6MGPiYVfEzrgn0HqbqlqS8kY+DRXo+NYXJwZTVSDSwrYPrfH+Ok2tV4uE8Zo0c3cg==
 
-"@storybook/react@^10.6.0", "@storybook/react@^10.6.3":
+"@storybook/react@^10.6.0", "@storybook/react@^10.6.5":
   version "10.6.5"
   resolved "https://registry.yarnpkg.com/@storybook/react/-/react-10.6.5.tgz#051163108152ea12a9a3a70b5dea76d5db3fc1ce"
   integrity sha512-vvRjRe/O8NRiQbGyA7Ne6h2jbD6GjwNZFkMdHl+0kZH8Z/S9ZWWmKmjCySvH/OmgighdCOQ98tcfND7m65WQBg==
@@ -6435,7 +6435,7 @@ eslint-plugin-react@^7.37.5:
     string.prototype.matchall "^4.0.12"
     string.prototype.repeat "^1.0.0"
 
-eslint-plugin-storybook@^10.6.3:
+eslint-plugin-storybook@^10.6.5:
   version "10.6.5"
   resolved "https://registry.yarnpkg.com/eslint-plugin-storybook/-/eslint-plugin-storybook-10.6.5.tgz#769d1ebd809174eb13af70288687208fed89eb2c"
   integrity sha512-sQSRwmbqcyGVtjVGUSOPTM5TFjopoit3blQxMcsHeqmmR1PJsciLH/WjgG7CT+u2/F0HMJFsQa+TqJSFDxXwWQ==
@@ -8411,7 +8411,7 @@ klaw-sync@^6.0.0:
   dependencies:
     graceful-fs "^4.1.11"
 
-knip@^6.43.0:
+knip@^6.44.0:
   version "6.44.0"
   resolved "https://registry.yarnpkg.com/knip/-/knip-6.44.0.tgz#85838de02a17509d0a849f1ab62a549c262d5866"
   integrity sha512-mT0fl71Mqrko91azUO2Jw/uhYKwldORKT4liRq6yV0ZAtt6G2eYusdnvx8eBSQJDjvhRGKkpKUUx+vUG6syV4w==
@@ -10329,7 +10329,7 @@ sass@1.105.2:
   optionalDependencies:
     "@parcel/watcher" "^2.4.1"
 
-sass@^1.106.1, sass@^1.75.0:
+sass@^1.107.0, sass@^1.75.0:
   version "1.107.0"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.107.0.tgz#2fc0e6fb63fcddb478bd9a7b05cfe7c08a2d3e5e"
   integrity sha512-+whPilvVNoAD57xvdIPLQT0gXo4RD1lHYw+Uw8zYHlojaeaMDxK14tc0JmEsz/XMns48h3lpypisMP+3E8eHQA==
@@ -10645,7 +10645,7 @@ slate-dom@^0.147.3:
     scroll-into-view-if-needed "^3.1.0"
     tiny-invariant "1.3.1"
 
-slate-react@^0.147.3:
+slate-react@^0.147.5:
   version "0.147.5"
   resolved "https://registry.yarnpkg.com/slate-react/-/slate-react-0.147.5.tgz#3d7241aa648d4b8e3ef9f86183d26a700527b8a8"
   integrity sha512-XTMz12tMWOi/hRs8PtH9FFEndPt5ZGiPmWcRLmcXACngPo8qtufiBwd7PYG0xRhYo0AsR0g5Ps9NtnBIq8s6lg==
@@ -10814,7 +10814,7 @@ storybook-react-rsbuild@^3.6.1:
     storybook-builder-rsbuild "3.6.1"
     tsconfig-paths "^4.2.0"
 
-storybook@^10.6.3:
+storybook@^10.6.5:
   version "10.6.5"
   resolved "https://registry.yarnpkg.com/storybook/-/storybook-10.6.5.tgz#9fc7e7de1275156f84d9055f6be98ade10c55b92"
   integrity sha512-qurC38Nx4PDF9YIq6GO95dpUx8a3B9AZwlcHBo4cOI9At09ifjQRsqcwcdOf2YX0cpVhFKmHkI20SWCrxqYQrg==
