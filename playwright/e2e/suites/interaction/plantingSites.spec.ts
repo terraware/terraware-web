@@ -291,10 +291,10 @@ test.describe('PlantingSiteTests', () => {
     await expectActiveStep(page, 'Exclusion Areas');
     await waitForMap(page);
     await drawPolygon(page, [
-      [0.75, 0.75],
-      [0.9, 0.75],
+      [0.62, 0.62],
+      [0.9, 0.62],
       [0.9, 0.9],
-      [0.75, 0.9],
+      [0.62, 0.9],
     ]);
     await expect(page.getByText('Unsaved changes')).toBeVisible();
     await editorButton(page, 'Next').click();
@@ -373,12 +373,13 @@ test.describe('PlantingSiteTests', () => {
     await featurePopupButton(page, 'Cancel').click();
 
     // A substratum inside the exclusion area is a problem. Saving lists it, and the user can go back to editing or
-    // save anyway.
+    // save anyway. The exclusion was drawn a step earlier, where the header wraps to a different height and so
+    // leaves the map a different size, so stay well inside it rather than hugging its edges.
     await drawPolygon(page, [
-      [0.78, 0.78],
-      [0.87, 0.78],
-      [0.87, 0.87],
-      [0.78, 0.87],
+      [0.72, 0.72],
+      [0.8, 0.72],
+      [0.8, 0.8],
+      [0.72, 0.8],
     ]);
     await expect(substratumNameInput).toBeVisible();
     await substratumNameInput.fill(excludedSubstratumName);
@@ -412,7 +413,7 @@ test.describe('PlantingSiteTests', () => {
 
     // Deleting the substratum fixes the problem, so the next save goes through without asking.
     await waitForMap(page);
-    await openFeaturePopup(page, [0.825, 0.825], substratumNameInput);
+    await openFeaturePopup(page, [0.76, 0.76], substratumNameInput);
     await expect(substratumNameInput).toHaveValue(excludedSubstratumName);
     await deleteMapFeature(page);
     await expect(substratumNameInput).toBeHidden();

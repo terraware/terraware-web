@@ -37,7 +37,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   const isStartingOver = useRef(false);
   const [startOverCount, setStartOverCount] = useState(0);
   const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
-  const [visitedSteps, setVisitedSteps] = useState<Set<SiteEditStep>>(() => new Set([siteEditStep]));
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
     initializeOptionalStepsStatus(site)
   );
@@ -76,6 +75,7 @@ export default function Editor(props: EditorProps): JSX.Element {
     onFinishUpdate,
     onSaveAnyway,
     problems: draftProblems,
+    saveStepPosition,
     updateDraft,
     isUpdating,
     updatedDraft,
@@ -93,11 +93,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   );
   const isLastStep = stepIndex === steps.length - 1;
 
-  const goToStep = useCallback((step: SiteEditStep) => {
-    setCurrentStep(step);
-    setVisitedSteps((visited) => (visited.has(step) ? visited : new Set(visited).add(step)));
-  }, []);
-
   // update local state when draft is updated
   useEffect(() => {
     if (updatedDraft) {
@@ -105,7 +100,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       setStepIsDirty(false);
       setHasCarriedEdits(false);
       setHasBoundary(!!updatedDraft.draft.boundary);
-      goToStep(updatedDraft.nextStep);
+      setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
       }
@@ -115,7 +110,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       }
       onFinishUpdate();
     }
-  }, [updatedDraft, goToStep, onFinishUpdate]);
+  }, [updatedDraft, onFinishUpdate]);
 
   const runStep = useCallback(
     (action: StepAction) => {
@@ -142,23 +137,23 @@ export default function Editor(props: EditorProps): JSX.Element {
           } else if (action === 'back') {
             setPlantingSite(draft);
             setHasCarriedEdits(true);
-            goToStep(nextStep);
+            setCurrentStep(nextStep);
           } else {
             updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) }, action === 'exit');
           }
         },
       });
     },
-    [currentStep, finalize, goToStep, onValidate, plantingSite, stepIndex, steps, updateDraft]
+    [currentStep, finalize, onValidate, plantingSite, stepIndex, steps, updateDraft]
   );
 
   const onCancel = useCallback(() => {
-    if (stepIndex === 0 && !hasBoundary) {
+    if (stepIndex === 0 && !hasBoundary && !hasUnsavedEdits) {
       goToPlantingSites();
     } else {
       setShowCancelConfirmation(true);
     }
-  }, [goToPlantingSites, hasBoundary, stepIndex]);
+  }, [goToPlantingSites, hasBoundary, hasUnsavedEdits, stepIndex]);
 
   const onKeepEditing = useCallback(() => setShowCancelConfirmation(false), []);
 
@@ -166,22 +161,27 @@ export default function Editor(props: EditorProps): JSX.Element {
     if (hasUnsavedEdits) {
       runStep('back');
     } else {
-      goToStep(steps[stepIndex - 1].type);
+      setCurrentStep(steps[stepIndex - 1].type);
     }
-  }, [goToStep, hasUnsavedEdits, runStep, stepIndex, steps]);
+  }, [hasUnsavedEdits, runStep, stepIndex, steps]);
 
   const onNext = useCallback(() => {
     if (hasUnsavedEdits) {
       runStep('next');
-    } else {
-      goToStep(steps[stepIndex + 1].type);
+      return;
     }
-  }, [goToStep, hasUnsavedEdits, runStep, stepIndex, steps]);
+
+    // nothing to save, but the draft still has to remember where the user got to
+    const nextStep = steps[stepIndex + 1].type;
+    setPlantingSite((current) => ({ ...current, siteEditStep: nextStep }));
+    saveStepPosition(nextStep);
+    setCurrentStep(nextStep);
+  }, [hasUnsavedEdits, runStep, saveStepPosition, stepIndex, steps]);
 
   const onSaveAndExit = useCallback(() => runStep('exit'), [runStep]);
 
   const skippableStep = useMemo<SkippedStep | undefined>(() => {
-    const isSettled = (step: OptionalSiteEditStep) => visitedSteps.has(step) || completedOptionalSteps[step];
+    const isSettled = (step: OptionalSiteEditStep) => completedOptionalSteps[step];
 
     if (siteType !== 'Detailed' || isLastStep) {
       return undefined;
@@ -196,7 +196,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       return 'substratum_boundaries';
     }
     return undefined;
-  }, [completedOptionalSteps, currentStep, isLastStep, siteType, visitedSteps]);
+  }, [completedOptionalSteps, currentStep, isLastStep, siteType]);
 
   const onCreateSite = useCallback(() => {
     if (skippableStep) {

@@ -91,9 +91,14 @@ const siteAtStep = (siteEditStep: SiteEditStep, siteType: DraftPlantingSite['sit
  * Stands in for the draft the server holds: the GET reflects whatever the last PUT stored, which is
  * what the editor reads back after saving a step.
  */
-const mockDraftServer = (site: DraftPlantingSite) => {
+const mockDraftServer = (site: DraftPlantingSite, persisted: DraftPlantingSite = site) => {
   const puts: Request[] = [];
-  let stored = { ...fromDraft(site), createdBy: site.createdBy, id: site.id, strata: fromDraft(site).strata ?? [] };
+  let stored = {
+    ...fromDraft(persisted),
+    createdBy: persisted.createdBy,
+    id: persisted.id,
+    strata: fromDraft(persisted).strata ?? [],
+  };
 
   server.use(
     http.get(DRAFT_URL, () => HttpResponse.json({ site: stored, status: 'ok' })),
@@ -108,8 +113,8 @@ const mockDraftServer = (site: DraftPlantingSite) => {
   return puts;
 };
 
-const renderEditor = (site: DraftPlantingSite = buildDraftPlantingSite()) => {
-  const puts = mockDraftServer(site);
+const renderEditor = (site: DraftPlantingSite = buildDraftPlantingSite(), persisted?: DraftPlantingSite) => {
+  const puts = mockDraftServer(site, persisted ?? site);
   const result = renderWithProviders(
     <>
       <ToastSnackbar />
@@ -204,14 +209,27 @@ describe('Editor', () => {
       expect(await screen.findByText('map layers: site')).toBeInTheDocument();
     });
 
-    it('moves on without saving when nothing changed', async () => {
+    it('records the step it moved to without reporting a save when nothing changed', async () => {
       const { puts, user } = renderEditor(siteAtStep('exclusion_areas'));
 
       await clickButton(user, strings.NEXT);
 
       expect(await screen.findByText('map layers: site,stratum')).toBeInTheDocument();
-      expect(puts).toHaveLength(0);
+      await waitFor(() => expect(puts).toHaveLength(1));
+      expect(await puts[0].json()).toMatchObject({ siteEditStep: 'stratum_boundaries' });
       expect(screen.queryByText(strings.PLANTING_SITE_SAVED_AS_DRAFT)).not.toBeInTheDocument();
+    });
+
+    it('records the step against the draft the server holds, not the copy the editor started with', async () => {
+      const site = siteAtStep('exclusion_areas');
+      // another editor reshaped the site after this editor was handed its copy
+      const theirBoundary = multiPolygon(square(0, 0, 0.03, 0.02));
+      const { puts, user } = renderEditor(site, { ...site, boundary: theirBoundary });
+
+      await clickButton(user, strings.NEXT);
+
+      await waitFor(() => expect(puts).toHaveLength(1));
+      expect(await puts[0].json()).toMatchObject({ boundary: theirBoundary, siteEditStep: 'stratum_boundaries' });
     });
   });
 
@@ -253,6 +271,19 @@ describe('Editor', () => {
 
       expect(currentPath()).toBe(PLANTING_SITES);
       expect(screen.queryByText(strings.CANCEL_SITE_SETUP)).not.toBeInTheDocument();
+    });
+
+    it('asks before discarding the removal of a saved boundary', async () => {
+      const { user } = renderEditor(siteAtStep('site_boundary'));
+
+      mapEdit.boundary = undefined;
+      await user.click(await screen.findByRole('button', { name: 'map edit boundary' }));
+      await waitFor(() => expect(screen.getByRole('button', { name: strings.NEXT })).toBeDisabled());
+      await clickButton(user, strings.CANCEL);
+
+      const dialog = await screen.findByRole('dialog', { name: strings.CANCEL_SITE_SETUP });
+      expect(within(dialog).getByRole('button', { name: strings.DISCARD_CHANGES })).toBeInTheDocument();
+      expect(currentPath()).toBe(EDIT_ROUTE);
     });
 
     it('keeps the drawn boundary when the user chooses to keep editing', async () => {
@@ -335,6 +366,21 @@ describe('Editor', () => {
       expect(posts).toHaveLength(0);
     });
 
+    it('still warns after the user has looked at the strata step without drawing any', async () => {
+      const posts = creates();
+      const { user } = renderEditor(siteAtStep('exclusion_areas'));
+
+      await clickButton(user, strings.NEXT);
+      expect(await screen.findByText('map layers: site,stratum')).toBeInTheDocument();
+      await clickButton(user, strings.BACK);
+      expect(await screen.findByText('map layers: site')).toBeInTheDocument();
+
+      await clickButton(user, strings.CREATE_SITE);
+
+      expect(await screen.findByRole('dialog', { name: strings.CREATE_SITE_WITHOUT_STRATA })).toBeInTheDocument();
+      expect(posts).toHaveLength(0);
+    });
+
     it('does not warn a simple site, which has no strata step to skip', async () => {
       const posts = creates();
       mockDelete(DRAFT_URL);
@@ -345,6 +391,53 @@ describe('Editor', () => {
       await waitFor(() => expect(posts).toHaveLength(1));
       expect(screen.queryByText(strings.CREATE_SITE_WITHOUT_STRATA)).not.toBeInTheDocument();
       expect(await screen.findByText(strings.PLANTING_SITE_CREATED)).toBeInTheDocument();
+    });
+  });
+
+  describe('a draft the server reports problems with', () => {
+    const EXCLUDED_SUBSTRATUM = {
+      problemType: 'SubstratumInExclusionArea',
+      stratum: 'Stratum 01',
+      substratum: 'Excluded',
+    };
+    const problemText = 'Substratum Excluded in stratum Stratum 01 is inside an exclusion area.';
+
+    it('lists the problems instead of saving when the user saves and exits', async () => {
+      mockPost(VALIDATE_URL, { isValid: false, problems: [EXCLUDED_SUBSTRATUM] });
+      const { puts, user } = renderEditor(siteAtStep('substratum_boundaries'));
+
+      await clickButton(user, strings.SAVE_AND_EXIT);
+
+      const dialog = await screen.findByRole('dialog', { name: strings.DRAFT_PLANTING_SITE_HAS_PROBLEMS });
+      expect(within(dialog).getByText(problemText)).toBeInTheDocument();
+      expect(puts).toHaveLength(0);
+      expect(currentPath()).toBe(EDIT_ROUTE);
+    });
+
+    it('returns to the step being edited when the user goes back to edit', async () => {
+      mockPost(VALIDATE_URL, { isValid: false, problems: [EXCLUDED_SUBSTRATUM] });
+      const { puts, user } = renderEditor(siteAtStep('substratum_boundaries'));
+
+      await clickButton(user, strings.SAVE_AND_EXIT);
+      const dialog = await screen.findByRole('dialog', { name: strings.DRAFT_PLANTING_SITE_HAS_PROBLEMS });
+      await user.click(within(dialog).getByRole('button', { name: strings.BACK_TO_EDIT }));
+
+      await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+      expect(puts).toHaveLength(0);
+      expect(currentPath()).toBe(EDIT_ROUTE);
+    });
+
+    it('saves and leaves anyway when the user confirms', async () => {
+      mockPost(VALIDATE_URL, { isValid: false, problems: [EXCLUDED_SUBSTRATUM] });
+      const { puts, user } = renderEditor(siteAtStep('substratum_boundaries'));
+
+      await clickButton(user, strings.SAVE_AND_EXIT);
+      const dialog = await screen.findByRole('dialog', { name: strings.DRAFT_PLANTING_SITE_HAS_PROBLEMS });
+      await user.click(within(dialog).getByRole('button', { name: strings.SAVE_ANYWAY }));
+
+      await waitFor(() => expect(puts).toHaveLength(1));
+      expect(await screen.findByText(strings.PLANTING_SITE_SAVED_AS_DRAFT)).toBeInTheDocument();
+      expect(currentPath()).toBe(PLANTING_SITES);
     });
   });
 

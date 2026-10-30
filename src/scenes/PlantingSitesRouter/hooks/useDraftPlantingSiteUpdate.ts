@@ -54,6 +54,7 @@ export type Response = {
   onFinishUpdate: () => void;
   onSaveAnyway: () => void;
   problems?: PlantingSiteProblem[];
+  saveStepPosition: (siteEditStep: SiteEditStep) => void;
   updateDraft: (draft: Data, exit?: boolean) => void;
   updatedDraft?: Data;
 };
@@ -136,6 +137,23 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
     [save, snackbar, validatePlantingSite]
   );
 
+  const saveStepPosition = useCallback(
+    (siteEditStep: SiteEditStep) => {
+      if (!currentData) {
+        return;
+      }
+
+      const persisted = toDraft(currentData.site);
+      void updateDraftPlantingSite({
+        id: persisted.id,
+        updateDraftPlantingSiteRequestPayload: fromDraft({ ...persisted, siteEditStep }, persisted),
+      })
+        .unwrap()
+        .catch(() => undefined);
+    },
+    [currentData, updateDraftPlantingSite]
+  );
+
   const onSaveAnyway = useCallback(() => {
     if (pendingSave) {
       setPendingSave(undefined);
@@ -163,6 +181,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
       onFinishUpdate,
       onSaveAnyway,
       problems: pendingSave?.problems,
+      saveStepPosition,
       updateDraft,
       updatedDraft,
     }),
@@ -174,6 +193,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
       onSaveAnyway,
       pendingRefetch,
       pendingSave,
+      saveStepPosition,
       updateDraft,
       updatedDraft,
     ]
