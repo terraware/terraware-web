@@ -3,7 +3,6 @@ import { Action, combineReducers } from '@reduxjs/toolkit';
 import { baseApi } from 'src/queries/baseApi';
 import { rtkReducers } from 'src/queries/reducers';
 
-import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -13,7 +12,6 @@ import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 // assembly of app reducers
 const reducers = {
   ...messageReducers,
-  ...matrixViewReducers,
   ...projectSpeciesReducers,
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
