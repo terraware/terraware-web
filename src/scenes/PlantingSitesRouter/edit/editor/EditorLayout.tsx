@@ -22,23 +22,14 @@ import Substrata from './Substrata';
 import { OnValidate } from './types';
 
 export type EditorLayoutProps = {
+  actions: ReactNode;
   busy: boolean;
-  /** Whether the site is complete enough to finish the flow. */
-  canFinish: boolean;
   children?: ReactNode;
-  closeButtonId: string;
-  closeLabel: string;
   currentStep: SiteEditStep;
-  finishButtonId: string;
-  finishLabel: string;
   isDirty: boolean;
-  onBack: () => void;
-  onClose: () => void;
   onDirtyChange: (isDirty: boolean) => void;
-  onFinish: () => void;
   onHasBoundaryChange?: (hasBoundary: boolean) => void;
   onLeave: () => void;
-  onNext: () => void;
   onStartOver?: () => void;
   onValidate?: OnValidate;
   site: EditorPlantingSite;
@@ -48,22 +39,14 @@ export type EditorLayoutProps = {
 };
 
 export default function EditorLayout({
+  actions,
   busy,
-  canFinish,
   children,
-  closeButtonId,
-  closeLabel,
   currentStep,
-  finishButtonId,
-  finishLabel,
   isDirty,
-  onBack,
-  onClose,
   onDirtyChange,
-  onFinish,
   onHasBoundaryChange,
   onLeave,
-  onNext,
   onStartOver,
   onValidate,
   site,
@@ -79,12 +62,6 @@ export default function EditorLayout({
   const isEditorAvailable = isDesktop && !isNarrowPortrait;
   const dispatch = useAppDispatch();
   const [stepperCollapsed, setStepperCollapsed] = useState<boolean>(false);
-
-  const currentStepIndex = Math.max(
-    steps.findIndex((step) => step.type === currentStep),
-    0
-  );
-  const onFinalStep = currentStepIndex === steps.length - 1;
 
   const onOpenStartOver = useMemo(
     () =>
@@ -141,42 +118,7 @@ export default function EditorLayout({
               gap={theme.spacing(1)}
               onClickCapture={onHeaderButtonClick}
             >
-              <Button
-                id={closeButtonId}
-                label={closeLabel}
-                onClick={onClose}
-                disabled={busy}
-                priority='secondary'
-                type='passive'
-                size='medium'
-              />
-              {currentStepIndex > 0 && (
-                <Button
-                  id='back-planting-site-create'
-                  label={strings.BACK}
-                  onClick={onBack}
-                  disabled={busy}
-                  priority='secondary'
-                  type='passive'
-                  size='medium'
-                />
-              )}
-              {!onFinalStep && (
-                <Button
-                  id='next-planting-site-create'
-                  label={strings.NEXT}
-                  onClick={onNext}
-                  disabled={busy}
-                  size='medium'
-                />
-              )}
-              <Button
-                id={finishButtonId}
-                label={finishLabel}
-                onClick={onFinish}
-                disabled={busy || !canFinish}
-                size='medium'
-              />
+              {actions}
             </Box>
           )}
         </Box>

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   useGetDraftPlantingSiteQuery,
   useUpdateDraftPlantingSiteMutation,
@@ -41,6 +43,7 @@ type PendingRefetch = {
 };
 
 type PendingSave = {
+  exit: boolean;
   problems: PlantingSiteProblem[];
   request: Data;
 };
@@ -51,16 +54,18 @@ export type Response = {
   onFinishUpdate: () => void;
   onSaveAnyway: () => void;
   problems?: PlantingSiteProblem[];
-  updateDraft: (draft: Data) => void;
+  updateDraft: (draft: Data, exit?: boolean) => void;
   updatedDraft?: Data;
 };
 
 /**
  * Hook to isolate workflow logic to update a draft planting site.
  * Returns update function, whether the request is in flight and the updated draft site.
+ * Saving with `exit` closes the flow and returns to the planting sites list.
  * If the draft has validation problems, the save waits for onSaveAnyway or onCancelSave.
  */
 export default function useDraftPlantingSiteUpdate(draftId: number): Response {
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const showProblems = usePlantingSiteProblemsToast();
 
@@ -77,7 +82,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   }, [requestId]);
 
   const save = useCallback(
-    async (request: Data) => {
+    async (request: Data, exit: boolean) => {
       try {
         const requestIdBeforeSave = latestRequestId.current;
 
@@ -89,8 +94,13 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
           ),
         }).unwrap();
 
-        snackbar.toastInfo(strings.PLANTING_SITE_SAVED_AS_DRAFT);
-        setPendingRefetch({ request, requestIdBeforeSave });
+        snackbar.toastSuccess(strings.PLANTING_SITE_SAVED_AS_DRAFT);
+
+        if (exit) {
+          navigate(APP_PATHS.PLANTING_SITES);
+        } else {
+          setPendingRefetch({ request, requestIdBeforeSave });
+        }
       } catch (error) {
         const problems = getDraftMapProblems(error);
         if (problems?.length) {
@@ -100,11 +110,11 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         }
       }
     },
-    [currentData, showProblems, snackbar, updateDraftPlantingSite]
+    [currentData, navigate, showProblems, snackbar, updateDraftPlantingSite]
   );
 
   const updateDraft = useCallback(
-    (request: Data) => {
+    (request: Data, exit = false) => {
       const update = async () => {
         let problems: PlantingSiteProblem[];
         try {
@@ -115,9 +125,9 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         }
 
         if (problems.length) {
-          setPendingSave({ problems, request });
+          setPendingSave({ exit, problems, request });
         } else {
-          await save(request);
+          await save(request, exit);
         }
       };
 
@@ -129,7 +139,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   const onSaveAnyway = useCallback(() => {
     if (pendingSave) {
       setPendingSave(undefined);
-      void save(pendingSave.request);
+      void save(pendingSave.request, pendingSave.exit);
     }
   }, [pendingSave, save]);
 

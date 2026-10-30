@@ -305,7 +305,8 @@ BY_SPECIES,Por especies,602624ab
 BY_TARGET_PLANT_DENSITY,por densidad objetivo de plantas,161882a6
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
-CANCEL_DRAFT_SITE_SETUP_MESSAGE,Sus cambios en {0} no se han guardado. Continúe editando o descarte sus cambios.,76c916e0
+CANCEL_DRAFT_SITE_SETUP_MESSAGE,Los cambios en este paso no se guardarán. {0} permanecerá en sus borradores con todo lo que haya guardado hasta ahora.,dac6e6fb
+CANCEL_DRAFT_SITE_SETUP_NO_CHANGES_MESSAGE,{0} permanecerá en sus borradores con todo lo que haya guardado hasta ahora.,d0b6250f
 CANCEL_SITE_SETUP,¿Cancelar la configuración del sitio?,e633e7fc
 CANCEL_SPECIES_CHECK,Cancelar verificación de especies,fd764c88
 CANCEL_SPECIES_CHECK_MESSAGE,Está a punto de cancelar la verificación de especies. Todos los cambios se descartarán. ¿Está seguro?,3cc2bad6
@@ -409,6 +410,7 @@ CONTINUE,Continuar,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuar y restablecer estado,5f35516c
 CONTINUE_APPLICATION,Continuar solicitud,bd87b380
 CONTINUE_BOUNDARY_SETUP,Continuar con la configuración de límites,13d17477
+CONTINUE_SETUP,Continuar configuración,979483ea
 CONTINUE_TO_APPLICATION,Continuar a la Solicitud,bc4ca333
 CONTINUE_WITH_EXCLUSION_AREAS,Continuar con las áreas de exclusión,c263fd4c
 CONTINUE_WITH_STRATUM_BOUNDARIES,Continuar con los límites de estrato,f705c34f
@@ -437,6 +439,11 @@ CREATE_ORGANIZATION,Crear organización,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno de los siguientes aspectos? Marque todo lo que corresponda.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
 CREATE_SEASON,Crear temporada,413117ea
+CREATE_SITE,Crear sitio,abe9d18e
+CREATE_SITE_WITHOUT_STRATA,¿Crear sitio sin estratos?,b80a2bf5
+CREATE_SITE_WITHOUT_STRATA_MESSAGE,No ha configurado los límites de los Estratos. El sitio se creará con un solo Estrato que lo cubrirá. Estos no se pueden modificar después de crear el sitio.,5d6294ba
+CREATE_SITE_WITHOUT_SUBSTRATA,¿Crear sitio sin subestratos?,a9c5376a
+CREATE_SITE_WITHOUT_SUBSTRATA_MESSAGE,No ha configurado los límites de los Subestratos. Cada Estrato se creará con un solo Subestrato que lo cubrirá. Estos no se pueden modificar después de crear el sitio.,5432974d
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
 CREATE_VIRTUAL_WALKTHROUGH,Crear Recorrido Virtual,5e786aea
@@ -746,6 +753,7 @@ EXISTING_PROJECT_PLANTING_SITES_TITLE,Proyecto existente con sitios de plantaci�
 EXISTING_SPECIES_MSG,"""{0}"" ya está en su lista de especies.",92747058
 EXIT,Salir,5d64d7c7
 EXIT_APPLICATION,Salir de la solicitud,71aff49c
+EXIT_SETUP,Salir de la configuración,5cab2f45
 EXITING_PERMANENT_PLOTS,Saliendo de Parcelas Permanentes,30ae747d
 EXITING_TEMPORARY_PLOTS,Saliendo de Parcelas Temporales,73a70b68
 EXPAND,Expandir,2ecfd856
@@ -1267,7 +1275,6 @@ NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
 NEW_PLANTING_SITE,Nuevo Sitio de Plantación,ec2cbd8f
-NEW_PLANTING_SITE_CREATED,Se creó un nuevo sitio de plantación.,119bf0b7
 NEW_SITE,Nuevo Sitio,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos.,7c3d77c9
 NEW_STRATUM,Nuevo Estrato,84292d1f
@@ -1633,6 +1640,7 @@ PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,Este video muestra cóm
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Trazado de los límites de zonas de exclusión,84651b2d
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de dibujo {0} para dibujar el límite del lugar de plantación.,a539970b
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,1200219a
+PLANTING_SITE_CREATED,El sitio de plantación fue creado.,a5edda3b
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,61c0d69a
 PLANTING_SITE_MAP_HAS_PROBLEMS,El mapa del sitio tiene problemas que deben corregirse antes de poder guardarlo.,fd9e2ab8
 PLANTING_SITE_MAP_NO_STRATA,Este sitio de plantación no tiene estratos y no se puede editar aquí.,8ee4e8d0
@@ -1656,7 +1664,7 @@ PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,El sustrato {1} en el estrato
 PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,El sustrato {1} en el estrato {0} está dentro de un área de exclusión.,64deeafa
 PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,El sustrato {1} no está dentro del estrato {0}.,13641abf
 PLANTING_SITE_SAVED,Sitio de plantación guardado,70f9ae14
-PLANTING_SITE_SAVED_AS_DRAFT,El sitio de plantación se guardó como borrador.,6e806a34
+PLANTING_SITE_SAVED_AS_DRAFT,El sitio de plantación se guardó como borrador.,9f813f39
 PLANTING_SITE_STRATUM_NAME_HELP,Los nombres legibles ayudarán al personal de campo a identificar las áreas cuando se encuentren sobre el terreno.,63445c3d
 PLANTING_SITES,Sitios de plantación,3799d2eb
 PLANTING_TARGET,Meta de Plantación,7df4b251
@@ -2004,6 +2012,7 @@ SAND_PETRI_DISH,Pula el Disco de Petri,25b60fb2
 SATELLITE,Satélite,14d51868
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_CONTINUE,Guardar y continuar,a900547e
+SAVE_AND_EXIT,Guardar y salir,391aa283
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e

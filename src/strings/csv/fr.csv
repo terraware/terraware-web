@@ -304,7 +304,8 @@ BY_SPECIES,Par espèce,602624ab
 BY_TARGET_PLANT_DENSITY,par densité de plantation cible,161882a6
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
-CANCEL_DRAFT_SITE_SETUP_MESSAGE,Vos modifications apportées à {0} n'ont pas été enregistrées. Continuez la modification ou abandonnez vos changements.,76c916e0
+CANCEL_DRAFT_SITE_SETUP_MESSAGE,Les modifications apportées à cette étape ne seront pas enregistrées. {0} restera dans vos brouillons avec tout ce que vous avez déjà sauvegardé.,dac6e6fb
+CANCEL_DRAFT_SITE_SETUP_NO_CHANGES_MESSAGE,{0} restera dans vos brouillons avec tout ce que vous avez déjà sauvegardé.,d0b6250f
 CANCEL_SITE_SETUP,Annuler la configuration du site ?,e633e7fc
 CANCEL_SPECIES_CHECK,Annuler la vérification des espèces,fd764c88
 CANCEL_SPECIES_CHECK_MESSAGE,Vous êtes sur le point d'annuler la vérification des espèces. Toutes les modifications seront perdues. Êtes-vous sûr ?,3cc2bad6
@@ -408,6 +409,7 @@ CONTINUE,Continuer,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuer et réinitialiser le statut,5f35516c
 CONTINUE_APPLICATION,Continuer la candidature,bd87b380
 CONTINUE_BOUNDARY_SETUP,Continuer la configuration des limites,13d17477
+CONTINUE_SETUP,Continuer la configuration,979483ea
 CONTINUE_TO_APPLICATION,Continuer vers la demande,bc4ca333
 CONTINUE_WITH_EXCLUSION_AREAS,Continuer avec les zones d’exclusion,c263fd4c
 CONTINUE_WITH_STRATUM_BOUNDARIES,Continuer avec les limites de strates,f705c34f
@@ -436,6 +438,11 @@ CREATE_ORGANIZATION,Créer une organisation,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,Votre organisation gère-t-elle l'un des éléments suivants ? Cochez toutes les cases correspondantes.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,Lequel des éléments suivants décrit le mieux votre organisation ?,ac93bf9a
 CREATE_SEASON,Créer une saison,413117ea
+CREATE_SITE,Créer un site,abe9d18e
+CREATE_SITE_WITHOUT_STRATA,Créer un site sans strates ?,b80a2bf5
+CREATE_SITE_WITHOUT_STRATA_MESSAGE,Vous n’avez pas défini de limites de Strate. Le site sera créé avec une seule Strate qui le couvrira. Ces paramètres ne pourront pas être modifiés après la création du site.,5d6294ba
+CREATE_SITE_WITHOUT_SUBSTRATA,Créer un site sans sous-strates ?,a9c5376a
+CREATE_SITE_WITHOUT_SUBSTRATA_MESSAGE,Vous n’avez pas défini de limites de Sous-strate. Chaque Strate sera créée avec une seule Sous-strate qui la couvrira. Ces paramètres ne pourront pas être modifiés après la création du site.,5432974d
 CREATE_SPECIES_LIST,Créer une liste d'espèces,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Créer une parcelle virtuelle,aea239a2
 CREATE_VIRTUAL_WALKTHROUGH,Créer une visite virtuelle,5e786aea
@@ -745,6 +752,7 @@ EXISTING_PROJECT_PLANTING_SITES_TITLE,Projet existant avec sites de plantation,b
 EXISTING_SPECIES_MSG,« {0} » est déjà dans votre liste d'espèces.,92747058
 EXIT,Quitter,5d64d7c7
 EXIT_APPLICATION,Fermer la candidature,71aff49c
+EXIT_SETUP,Quitter la configuration,5cab2f45
 EXITING_PERMANENT_PLOTS,Sortie des Parcelles Permanentes,30ae747d
 EXITING_TEMPORARY_PLOTS,Sortie des Parcelles Temporaires,73a70b68
 EXPAND,Développer,2ecfd856
@@ -1266,7 +1274,6 @@ NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
 NEW_PLANTING_SITE,Nouveau site de plantation,ec2cbd8f
-NEW_PLANTING_SITE_CREATED,Un nouveau site de plantation a été créé.,119bf0b7
 NEW_SITE,Nouveau site,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nouveaux objectifs d'espèces ajoutés.,7c3d77c9
 NEW_STRATUM,Nouvelle strate,84292d1f
@@ -1632,6 +1639,7 @@ PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre com
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Dessiner les limites des zones d'exclusion,84651b2d
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de dessin {0} pour tracer les limites du site de plantation.,a539970b
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Dessiner les limites du site,1200219a
+PLANTING_SITE_CREATED,Le site de plantation a été créé.,a5edda3b
 PLANTING_SITE_DELETED,Site de plantation supprimé !,61c0d69a
 PLANTING_SITE_MAP_HAS_PROBLEMS,La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.,fd9e2ab8
 PLANTING_SITE_MAP_NO_STRATA,Ce site de plantation ne comporte aucune strate et ne peut pas être modifié ici.,8ee4e8d0
@@ -1655,7 +1663,7 @@ PLANTING_SITE_PROBLEM_SUBSTRATUM_BOUNDARY_OVERLAPS,Le substratum {1} dans le str
 PLANTING_SITE_PROBLEM_SUBSTRATUM_IN_EXCLUSION_AREA,Le substratum {1} dans le stratum {0} se trouve dans une zone d’exclusion.,64deeafa
 PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM,Le substratum {1} n’est pas à l’intérieur du stratum {0}.,13641abf
 PLANTING_SITE_SAVED,Site de plantation sauvegardé,70f9ae14
-PLANTING_SITE_SAVED_AS_DRAFT,Le site de plantation a été enregistré comme brouillon.,6e806a34
+PLANTING_SITE_SAVED_AS_DRAFT,Le site de plantation a été enregistré comme brouillon.,9f813f39
 PLANTING_SITE_STRATUM_NAME_HELP,Des noms lisibles aideront les personnes sur le terrain à identifier les zones lorsqu’elles sont sur le terrain.,63445c3d
 PLANTING_SITES,Sites de plantation,3799d2eb
 PLANTING_TARGET,Objectif de plantation,7df4b251
@@ -2003,6 +2011,7 @@ SAND_PETRI_DISH,Boîte de Petri avec sable,25b60fb2
 SATELLITE,Satellite,14d51868
 SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
 SAVE_AND_CONTINUE,Enregistrer et continuer,a900547e
+SAVE_AND_EXIT,Enregistrer et quitter,391aa283
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
