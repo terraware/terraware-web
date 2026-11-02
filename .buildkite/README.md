@@ -51,6 +51,8 @@ https://buildkite.com/docs/pipelines/configure/managing-log-output
 ## Vercel previews
 
 Previews are opt-in: add the "Vercel preview" label to the pull request, then re-run the build.
+The deploy step posts the branch preview URL, commit, and deployment time as a PR comment, and
+updates that same comment on later deployments.
 
 ## Caching and artifacts
 

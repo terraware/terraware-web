@@ -73,3 +73,55 @@ buildkite-agent annotate \
     --style info \
     --context vercel-preview \
     "Vercel preview: [https://${branch_url}](https://${branch_url})"
+
+echo "--- :github: Post preview URL as PR comment"
+github_api="https://api.github.com/repos/terraware/terraware-web"
+comment_marker='<!-- vercel-preview-comment -->'
+deployed_at=$(date -u +'%Y-%m-%d %H:%M:%S UTC')
+
+comment_body=$(cat <<BODY
+${comment_marker}
+### :rocket: Vercel preview
+
+| | |
+| --- | --- |
+| **Preview URL** | https://${branch_url} |
+| **Commit** | [\`${BUILDKITE_COMMIT:0:12}\`](https://github.com/terraware/terraware-web/commit/${BUILDKITE_COMMIT}) |
+| **Last deployed** | ${deployed_at} |
+| **Build** | [#${BUILDKITE_BUILD_NUMBER}](${BUILDKITE_BUILD_URL}) |
+BODY
+)
+
+github_api_request() {
+    local method="$1" url="$2"
+    shift 2
+    curl -sS --fail --max-time 30 -X "$method" \
+        -H "Authorization: token ${GITHUB_TOKEN}" \
+        -H "Accept: application/vnd.github.v3+json" \
+        "$@" "$url"
+}
+
+existing_comment_id=""
+page=1
+while [[ -z "$existing_comment_id" ]]; do
+    comments=$(github_api_request GET \
+        "${github_api}/issues/${BUILDKITE_PULL_REQUEST}/comments?per_page=100&page=${page}")
+    if [[ $(jq 'length' <<< "$comments") -eq 0 ]]; then
+        break
+    fi
+    existing_comment_id=$(jq -r --arg marker "$comment_marker" \
+        'first(.[] | select(.body | startswith($marker)) | .id) // empty' <<< "$comments")
+    page=$((page + 1))
+done
+
+payload=$(jq -n --arg body "$comment_body" '{body: $body}')
+
+if [[ -n "$existing_comment_id" ]]; then
+    echo "Updating existing comment ${existing_comment_id}"
+    github_api_request PATCH "${github_api}/issues/comments/${existing_comment_id}" \
+        -d "$payload" > /dev/null
+else
+    echo "Creating new comment"
+    github_api_request POST "${github_api}/issues/${BUILDKITE_PULL_REQUEST}/comments" \
+        -d "$payload" > /dev/null
+fi
