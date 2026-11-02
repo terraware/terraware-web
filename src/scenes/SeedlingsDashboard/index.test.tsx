@@ -69,6 +69,7 @@ describe('SeedlingsDashboard', () => {
       within(screen.getByRole('region', { name: strings.TOTAL_SEEDLINGS })).queryByRole('link')
     ).not.toBeInTheDocument();
     expect(screen.queryByText('0')).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.SEEDLINGS_DASHBOARD_MESSAGE_TITLE)).not.toBeInTheDocument();
     expect(await screen.findByRole('link', { name: '12,960' })).toBeInTheDocument();
   });
 
@@ -101,6 +102,7 @@ describe('SeedlingsDashboard', () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
     expect(screen.queryByText('0')).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.SEEDLINGS_DASHBOARD_MESSAGE_TITLE)).not.toBeInTheDocument();
   });
 
   it('formats quantities using the active locale', async () => {
@@ -109,6 +111,46 @@ describe('SeedlingsDashboard', () => {
     });
 
     expect(await screen.findByText('12\u202f960', { normalizer: (text) => text.trim() })).toBeInTheDocument();
+  });
+
+  it('shows the onboarding banner and zero cards when no batches contain inventory', async () => {
+    mockGet(SUMMARY_URL, {
+      summary: {
+        ...summary,
+        totalQuantity: 0,
+        batchesWithInventory: 0,
+        speciesWithInventory: 0,
+        germinatingQuantity: 0,
+        activeGrowthQuantity: 0,
+        hardeningOffQuantity: 0,
+        readyQuantity: 0,
+      },
+    });
+    renderWithProviders(<SeedlingsDashboard />);
+
+    expect(await screen.findByText(strings.SEEDLINGS_DASHBOARD_MESSAGE_TITLE)).toBeInTheDocument();
+    expect(screen.getByText(strings.SEEDLINGS_DASHBOARD_MESSAGE)).toBeInTheDocument();
+    expect(screen.getAllByText('0')).toHaveLength(7);
+    expect(screen.getByRole('button', { name: strings.ADD_INVENTORY })).toBeInTheDocument();
+  });
+
+  it('does not show onboarding when the inventory is only germinating', async () => {
+    mockGet(SUMMARY_URL, {
+      summary: {
+        ...summary,
+        totalQuantity: 0,
+        activeGrowthQuantity: 0,
+        hardeningOffQuantity: 0,
+        readyQuantity: 0,
+      },
+    });
+    renderWithProviders(<SeedlingsDashboard />);
+
+    expect(await screen.findByRole('link', { name: '0' })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '15' })).toBeInTheDocument();
+    expect(within(screen.getByRole('region', { name: strings.GERMINATING })).getByText('1,200')).toBeInTheDocument();
+    expect(screen.queryByText(strings.SEEDLINGS_DASHBOARD_MESSAGE_TITLE)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: strings.ADD_INVENTORY })).not.toBeInTheDocument();
   });
 
   it('does not request or show metrics until an organization is selected', () => {
