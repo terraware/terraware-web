@@ -2,9 +2,10 @@ import React from 'react';
 
 import { rs } from '@rstest/core';
 import { act, fireEvent, screen, waitFor } from '@testing-library/react';
+import { http } from 'msw';
 
 import ThumbnailImage, { type ThumbnailImageProps } from 'src/components/common/ThumbnailImage';
-import { mockImage, renderWithProviders } from 'src/test-utils';
+import { mockImage, renderWithProviders, server } from 'src/test-utils';
 
 // jsdom will not follow a navigation, so the redirect is observed rather than taken.
 const login = rs.hoisted(() => ({ redirectToLogin: rs.fn() }));
@@ -150,6 +151,30 @@ describe('ThumbnailImage', () => {
 
     expect(thumbnail()).toHaveAttribute('src', PLACEHOLDER_IMAGE);
     expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not go back to an image it has already thrown away when the src returns', async () => {
+    const onError = rs.fn();
+    const OTHER_PHOTO_URL = '/api/v1/nursery/batches/42/photos/100';
+
+    mockImage(PHOTO_URL);
+    // The second photo never answers, so the component is still between images when the first one
+    // is asked for again, and its object URL has been revoked in the meantime.
+    server.use(http.get(OTHER_PHOTO_URL, () => new Promise<never>(() => undefined)));
+
+    const { rerender } = renderWithProviders(<ThumbnailImage alt={ALT_TEXT} onError={onError} src={PHOTO_URL} />);
+    await waitFor(() => expect(thumbnail()).toHaveAttribute('src', expect.stringMatching(/^blob:/)));
+    const revokedUrl = thumbnail().getAttribute('src');
+
+    rerender(<ThumbnailImage alt={ALT_TEXT} onError={onError} src={OTHER_PHOTO_URL} />);
+    await waitFor(() => expect(thumbnail()).not.toHaveAttribute('src'));
+
+    rerender(<ThumbnailImage alt={ALT_TEXT} onError={onError} src={PHOTO_URL} />);
+
+    expect(thumbnail()).not.toHaveAttribute('src');
+    await waitFor(() => expect(thumbnail()).toHaveAttribute('src', expect.stringMatching(/^blob:/)));
+    expect(thumbnail().getAttribute('src')).not.toBe(revokedUrl);
+    expect(onError).not.toHaveBeenCalled();
   });
 
   it('sizes the image in pixels when height and width come without a unit', async () => {

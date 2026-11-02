@@ -103,6 +103,7 @@ export const useThumbnailSrc = (src?: string, onError?: () => void): ImageState 
       if (objectUrl) {
         URL.revokeObjectURL(objectUrl);
       }
+      setResult({ status: 'loading' });
     };
   }, [src]);
 
