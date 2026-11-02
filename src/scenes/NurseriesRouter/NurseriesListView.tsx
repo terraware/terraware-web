@@ -60,19 +60,19 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
     setTemporalSearchValue(value as string);
   };
 
-  const { data, isError } = useSearchFacilitiesQuery({
+  const { currentData } = useSearchFacilitiesQuery({
     query: debouncedSearchTerm,
     organizationId: organization.id,
     type: 'Nursery',
   });
 
-  const results = useMemo(() => {
-    // After a failed request `data` still holds the previous search's results.
-    if (isError) {
-      return [];
-    }
-    return data ? (data.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[]) : undefined;
-  }, [data, isError, timeZones, defaultTimeZone]);
+  const results = useMemo(
+    () =>
+      currentData
+        ? (currentData.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[])
+        : undefined,
+    [currentData, timeZones, defaultTimeZone]
+  );
 
   return (
     <TfMain>

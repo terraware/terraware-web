@@ -61,19 +61,19 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
     setTemporalSearchValue(value as string);
   };
 
-  const { data, isError } = useSearchFacilitiesQuery({
+  const { currentData } = useSearchFacilitiesQuery({
     query: debouncedSearchTerm,
     organizationId: organization.id,
     type: 'Seed Bank',
   });
 
-  const results = useMemo(() => {
-    // After a failed request `data` still holds the previous search's results.
-    if (isError) {
-      return [];
-    }
-    return data ? (data.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[]) : [];
-  }, [data, isError, timeZones, defaultTimeZone]);
+  const results = useMemo(
+    () =>
+      currentData
+        ? (currentData.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[])
+        : [],
+    [currentData, timeZones, defaultTimeZone]
+  );
 
   return (
     <TfMain>
