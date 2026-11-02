@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useMemo, useRef, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -15,12 +15,11 @@ import { APP_PATHS } from 'src/constants';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTimeZones } from 'src/providers';
-import { FacilityService } from 'src/services';
+import { useSearchFacilitiesQuery } from 'src/queries/search/facilities';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { Organization } from 'src/types/Organization';
 import { isAdmin } from 'src/utils/organization';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -44,7 +43,6 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [results, setResults] = useState<Facility[]>([]);
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
 
@@ -63,28 +61,17 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
     setTemporalSearchValue(value as string);
   };
 
-  useEffect(() => {
-    const refreshSearch = async () => {
-      const requestId = Math.random().toString();
-      setRequestId('searchSeedbanks', requestId);
+  const { data: facilities } = useSearchFacilitiesQuery({
+    query: debouncedSearchTerm,
+    organizationId: organization.id,
+    type: 'Seed Bank',
+  });
 
-      const seedBanksResults = await FacilityService.getFacilities({
-        query: debouncedSearchTerm,
-        organizationId: organization.id,
-        type: 'Seed Bank',
-      });
-
-      const transformedResults = seedBanksResults.map((seedBank) =>
-        setTimeZone(seedBank, timeZones, defaultTimeZone)
-      ) as Facility[];
-
-      if (getRequestId('searchSeedbanks') === requestId) {
-        setResults(transformedResults);
-      }
-    };
-
-    void refreshSearch();
-  }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
+  const results = useMemo(
+    () =>
+      facilities ? (facilities.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[]) : [],
+    [facilities, timeZones, defaultTimeZone]
+  );
 
   return (
     <TfMain>
