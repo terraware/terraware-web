@@ -4,7 +4,6 @@ import { OrganizationUser } from 'src/types/User';
 import { parseSearchTerm } from 'src/utils/search';
 
 import { baseApi as api } from '../baseApi';
-import { QueryTagTypes } from '../tags';
 
 export type ProjectInternalUserRoleSearchResult = {
   project_name: string;
@@ -57,9 +56,6 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: (_result, _error, { organizationId }) => [
-        { type: QueryTagTypes.OrganizationUsers, id: organizationId },
-      ],
       transformResponse: (response: { results: SearchResponseElement[] }): OrganizationUser[] =>
         response.results.map((result) => ({
           firstName: result.user_firstName as string,
@@ -96,7 +92,6 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: [{ type: QueryTagTypes.ProjectInternalUsers, id: 'LIST' }],
       transformResponse: (response: { results: ProjectInternalUserRoleSearchResult[] }) => response.results,
     }),
   }),
