@@ -1,5 +1,7 @@
+import { MultiPolygon } from 'geojson';
+
 import { MapBounds } from './types';
-import { getBoundingBoxFromPoints, getBoundsZoomLevel, isBoundsValid } from './utils';
+import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints, getBoundsZoomLevel, isBoundsValid } from './utils';
 
 describe('isBoundsValid', () => {
   test.each([
@@ -231,5 +233,101 @@ describe('getBoundingBoxFromPoints', () => {
         { lat: 0, lng: -Infinity },
       ])
     ).toEqual(getBoundingBoxFromPoints([]));
+  });
+});
+
+describe('getBoundingBoxFromMultiPolygons', () => {
+  const multipolygon: MultiPolygon = {
+    type: 'MultiPolygon',
+    coordinates: [
+      [
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+          [0, 0],
+        ],
+        [
+          [2, 2],
+          [2, 4],
+          [4, 4],
+          [4, 2],
+          [2, 2],
+        ],
+      ],
+      [
+        [
+          [20, -10],
+          [30, -10],
+          [30, -5],
+          [20, -10],
+        ],
+      ],
+    ],
+  };
+
+  test('includes multiple polygons and rings, with holes leaving outer bounds unchanged', () => {
+    expect(getBoundingBoxFromMultiPolygons([multipolygon])).toEqual({
+      minLat: -10,
+      maxLat: 10,
+      minLng: 0,
+      maxLng: 30,
+    });
+  });
+
+  test('combines all multipolygons', () => {
+    expect(
+      getBoundingBoxFromMultiPolygons([
+        multipolygon,
+        {
+          type: 'MultiPolygon',
+          coordinates: [
+            [
+              [
+                [-30, 20],
+                [-20, 20],
+                [-20, 40],
+                [-30, 20],
+              ],
+            ],
+          ],
+        },
+      ])
+    ).toEqual({ minLat: -10, maxLat: 40, minLng: -30, maxLng: 30 });
+  });
+
+  test('unwraps antimeridian polygons to the narrowest span', () => {
+    expect(
+      getBoundingBoxFromMultiPolygons([
+        {
+          type: 'MultiPolygon',
+          coordinates: [
+            [
+              [
+                [179, -2],
+                [-179, -2],
+                [-179, 3],
+                [179, -2],
+              ],
+            ],
+          ],
+        },
+      ])
+    ).toEqual({ minLat: -2, maxLat: 3, minLng: 179, maxLng: 181 });
+  });
+
+  test.each<MultiPolygon[][]>([
+    [[]],
+    [[{ type: 'MultiPolygon', coordinates: [] }]],
+    [[{ type: 'MultiPolygon', coordinates: [[]] }]],
+    [[{ type: 'MultiPolygon', coordinates: [[[]]] }]],
+  ])('returns infinite extrema for empty geometry: %j', (multipolygons) => {
+    expect(getBoundingBoxFromMultiPolygons(multipolygons)).toEqual({
+      minLat: Infinity,
+      maxLat: -Infinity,
+      minLng: Infinity,
+      maxLng: -Infinity,
+    });
   });
 });
