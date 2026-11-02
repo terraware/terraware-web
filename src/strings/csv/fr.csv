@@ -2030,6 +2030,7 @@ SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
 SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Vous êtes en train de modifier les photos et vidéos associées à cette parcelle d’Observation. Êtes-vous sûr de vouloir effectuer ces modifications ?,8cfdcf97
 SAVE_PLANT_DENSITY,Enregistrer la densité de plantation,73135113
 SAVE_PROJECT_BOUNDARIES,Sauvegarder les limites du projet,d206ddd9
+SAVE_TABLE_NEW_VIEW,Enregistrer le tableau actuel comme nouvelle vue,cbdc26c6
 SAVE_TOOLTIP,Enregistrer mettra uniquement à jour les informations modifiées et n’enverra pas de demande de retrait de plants à la pépinière pour cette date de plantation.,0a966017
 SAVE_VERSION,Enregistrer la version,5afacff0
 SAVE_VERSION_ELLIPSIS,Enregistrer la version...,f3ac25ba

@@ -68,3 +68,12 @@ WithoutDefaultView.args = {
   presetViews,
   selected: 'acceleratorProjects',
 };
+
+export const WithSaveButton = CurrentViewTemplate.bind({});
+
+WithSaveButton.args = {
+  myViews,
+  presetViews,
+  selected: 'acceleratorProjects',
+  showSave: true,
+};

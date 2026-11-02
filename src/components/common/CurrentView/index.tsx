@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
+import { useFeatureEnabled } from 'src/features';
+
 import CurrentViewSelect, { DEFAULT_VIEW, ViewOption } from './CurrentViewSelect';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
@@ -20,6 +22,7 @@ const CurrentView = ({
   onPresetChange,
   presetViews,
 }: CurrentViewProps) => {
+  const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [preset, setPreset] = useState(defaultPreset);
 
   const handleChange = useCallback(
@@ -37,6 +40,7 @@ const CurrentView = ({
       onChange={handleChange}
       presetViews={presetViews}
       selected={preset}
+      showSave={isSavedTableViewsEnabled}
     />
   );
 };
