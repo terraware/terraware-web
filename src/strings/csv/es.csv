@@ -2036,7 +2036,11 @@ SAVE_TOOLTIP,Guardar solo actualizará la información editada y no enviará una
 SAVE_VERSION,Guardar versión,5afacff0
 SAVE_VERSION_ELLIPSIS,Guardar versión...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Guardar una versión equivale a crear una captura de pantalla del aspecto actual del documento. Puede seguir editando el documento, pero no podrá editar la versión guardada.",90b2fd9b
+SAVE_VIEW,Guardar vista,c4a3bd9f
+SAVE_VIEW_BUTTON,Guardar vista,0059102f
 SAVED,Guardado,3324fd4d
+SAVED_VIEW_CREATED,{0} se guardó en Mis vistas,e8a17db1
+SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
@@ -2782,6 +2786,7 @@ VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca
 VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_MAP,Ver mapa,8ef1dcc4
+VIEW_NAME,Nombre de la vista,0ea3fd0d
 VIEW_ON_MAP,Ver en el mapa,fb873a55
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6

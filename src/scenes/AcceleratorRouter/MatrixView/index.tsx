@@ -1001,7 +1001,7 @@ const MatrixView = () => {
         void columnMenuItemsCopy.pop();
         return columnMenuItemsCopy;
       },
-      renderTopToolbarCustomActions: () => (
+      renderTopToolbarCustomActions: ({ table }) => (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
           <Grid style={{ width: '242px' }}>
             <CurrentView
@@ -1011,6 +1011,8 @@ const MatrixView = () => {
                 { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
                 { label: strings.APPLICANTS, value: 'applicants' },
               ]}
+              table={table}
+              tableDefinition={TABLES.matrixView}
             />
           </Grid>
 
