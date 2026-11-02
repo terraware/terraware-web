@@ -32,7 +32,8 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
 
   const { data: suggestedSpecies } = useSearchSpeciesSuggestionsQuery(
     { organizationId: selectedOrganization?.id ?? -1, query: debouncedSearchTerm },
-    { skip: !selectedOrganization }
+    // Species can change outside RTK Query (e.g. CSV imports), so fetch fresh suggestions on mount.
+    { skip: !selectedOrganization, refetchOnMountOrArgChange: true }
   );
   const speciesList = useMemo(
     () => [...(suggestedSpecies ?? [])].sort((a, b) => a.scientificName.localeCompare(b.scientificName)),
