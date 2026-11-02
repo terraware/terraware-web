@@ -3378,8 +3378,34 @@
 <a name='L3313'></a><a href='#L3313'>3313</a>
 <a name='L3314'></a><a href='#L3314'>3314</a>
 <a name='L3315'></a><a href='#L3315'>3315</a>
-<a name='L3316'></a><a href='#L3316'>3316</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">109x</span>
+<a name='L3316'></a><a href='#L3316'>3316</a>
+<a name='L3317'></a><a href='#L3317'>3317</a>
+<a name='L3318'></a><a href='#L3318'>3318</a>
+<a name='L3319'></a><a href='#L3319'>3319</a>
+<a name='L3320'></a><a href='#L3320'>3320</a>
+<a name='L3321'></a><a href='#L3321'>3321</a>
+<a name='L3322'></a><a href='#L3322'>3322</a>
+<a name='L3323'></a><a href='#L3323'>3323</a>
+<a name='L3324'></a><a href='#L3324'>3324</a>
+<a name='L3325'></a><a href='#L3325'>3325</a>
+<a name='L3326'></a><a href='#L3326'>3326</a>
+<a name='L3327'></a><a href='#L3327'>3327</a>
+<a name='L3328'></a><a href='#L3328'>3328</a>
+<a name='L3329'></a><a href='#L3329'>3329</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">111x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7046,6 +7072,11 @@ export const strings = {
   CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS: 'Densité de plants calculée à partir des retraits',
   CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP:
     'Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.',
+  CANCEL_DRAFT_SITE_SETUP_MESSAGE:
+    'Les modifications apportées à cette étape ne seront pas enregistrées. {0} restera dans vos brouillons avec tout ce que vous avez déjà sauvegardé.',
+  CANCEL_DRAFT_SITE_SETUP_NO_CHANGES_MESSAGE:
+    '{0} restera dans vos brouillons avec tout ce que vous avez déjà sauvegardé.',
+  CANCEL_SITE_SETUP: 'Annuler la configuration du site ?',
   CANCEL_SPECIES_CHECK: 'Annuler la vérification des espèces',
   CANCEL_SPECIES_CHECK_MESSAGE:
     "Vous êtes sur le point d'annuler la vérification des espèces. Toutes les modifications seront perdues. Êtes-vous sûr ?",
@@ -7112,8 +7143,6 @@ export const strings = {
   CLIMATE: 'Climat',
   CLOSE: 'Fermer',
   CLOSE_AND_EDIT: 'Fermer et modifier',
-  CLOSE_DRAFT_SITE_SETUP_MESSAGE:
-    "Vos modifications apportées à {0} n'ont pas été enregistrées. Enregistrez-les dans votre brouillon ou abandonnez-les.",
   CLOSE_PLANTING_SEASON: 'Clore la saison de plantation',
   CLOSE_PLANTING_SEASON_CONFIRM:
     'Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.',
@@ -7121,7 +7150,6 @@ export const strings = {
   CLOSE_SITE_EDITOR: 'Fermer l’éditeur de site ?',
   CLOSE_SITE_EDITOR_MESSAGE:
     'Vos modifications apportées à {0} n’ont pas été enregistrées. Continuez la modification ou abandonnez-les.',
-  CLOSE_SITE_SETUP: 'Fermer la configuration du site ?',
   CLOSED: 'Fermé',
   COLLECTED_FROM: 'Collecté à partir de',
   COLLECTING_SITE: 'Site de collecte',
@@ -7164,6 +7192,7 @@ export const strings = {
   CONTINUE_AND_RESET_STATUS: 'Continuer et réinitialiser le statut',
   CONTINUE_APPLICATION: 'Continuer la candidature',
   CONTINUE_BOUNDARY_SETUP: 'Continuer la configuration des limites',
+  CONTINUE_SETUP: 'Continuer la configuration',
   CONTINUE_TO_APPLICATION: 'Continuer vers la demande',
   CONTINUE_WITH_EXCLUSION_AREAS: 'Continuer avec les zones d’exclusion',
   CONTINUE_WITH_STRATUM_BOUNDARIES: 'Continuer avec les limites de strates',
@@ -7195,8 +7224,14 @@ export const strings = {
   CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES:
     "Votre organisation gère-t-elle l'un des éléments suivants ? Cochez toutes les cases correspondantes.",
   CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE: 'Lequel des éléments suivants décrit le mieux votre organisation ?',
-  CREATE_PLANTING_SITE: 'Créer un site de plantation',
   CREATE_SEASON: 'Créer une saison',
+  CREATE_SITE: 'Créer un site',
+  CREATE_SITE_WITHOUT_STRATA: 'Créer un site sans strates ?',
+  CREATE_SITE_WITHOUT_STRATA_MESSAGE:
+    'Vous n’avez pas défini de limites de Strate. Le site sera créé avec une seule Strate qui le couvrira. Ces paramètres ne pourront pas être modifiés après la création du site.',
+  CREATE_SITE_WITHOUT_SUBSTRATA: 'Créer un site sans sous-strates ?',
+  CREATE_SITE_WITHOUT_SUBSTRATA_MESSAGE:
+    'Vous n’avez pas défini de limites de Sous-strate. Chaque Strate sera créée avec une seule Sous-strate qui la couvrira. Ces paramètres ne pourront pas être modifiés après la création du site.',
   CREATE_SPECIES_LIST: "Créer une liste d'espèces",
   CREATE_VIRTUAL_PLOT: 'Créer une parcelle virtuelle',
   CREATE_VIRTUAL_WALKTHROUGH: 'Créer une visite virtuelle',
@@ -7554,6 +7589,7 @@ export const strings = {
   EXISTING_SPECIES_MSG: "« {0} » est déjà dans votre liste d'espèces.",
   EXIT: 'Quitter',
   EXIT_APPLICATION: 'Fermer la candidature',
+  EXIT_SETUP: 'Quitter la configuration',
   EXITING_PERMANENT_PLOTS: 'Sortie des Parcelles Permanentes',
   EXITING_TEMPORARY_PLOTS: 'Sortie des Parcelles Temporaires',
   EXPAND: 'Développer',
@@ -8563,6 +8599,7 @@ export const strings = {
   PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION:
     "Cette vidéo montre comment utiliser l'outil de dessin {0} pour tracer les limites du site de plantation.",
   PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE: 'Dessiner les limites du site',
+  PLANTING_SITE_CREATED: 'Le site de plantation a été créé.',
   PLANTING_SITE_DELETED: 'Site de plantation supprimé !',
   PLANTING_SITE_MAP_HAS_PROBLEMS:
     'La carte du site présente des problèmes qui doivent être corrigés avant de pouvoir être enregistrée.',
@@ -8590,6 +8627,7 @@ export const strings = {
     'Le substratum {1} dans le stratum {0} se trouve dans une zone d’exclusion.',
   PLANTING_SITE_PROBLEM_SUBSTRATUM_NOT_IN_STRATUM: 'Le substratum {1} n’est pas à l’intérieur du stratum {0}.',
   PLANTING_SITE_SAVED: 'Site de plantation sauvegardé',
+  PLANTING_SITE_SAVED_AS_DRAFT: 'Le site de plantation a été enregistré comme brouillon.',
   PLANTING_SITE_STRATUM_NAME_HELP:
     'Des noms lisibles aideront les personnes sur le terrain à identifier les zones lorsqu’elles sont sur le terrain.',
   PLANTING_SITES: 'Sites de plantation',
@@ -8993,6 +9031,7 @@ export const strings = {
   SATELLITE: 'Satellite',
   SAVE_AND_CLOSE: 'Enregistrer et fermer',
   SAVE_AND_CONTINUE: 'Enregistrer et continuer',
+  SAVE_AND_EXIT: 'Enregistrer et quitter',
   SAVE_AND_NEXT: 'Sauvegarder et suivant',
   SAVE_AND_REQUEST: 'Enregistrer et demander',
   SAVE_AND_REQUEST_TOOLTIP:
@@ -10015,7 +10054,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-30T20:34:51.184Z
+                at 2026-11-02T13:44:04.295Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
