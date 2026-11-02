@@ -10,11 +10,18 @@ const latToY = (lat: number): number => {
 const isBoundsValid = (bounds: MapBounds) => {
   const { minLat, maxLat, minLng, maxLng } = bounds;
 
+  if (![minLat, maxLat, minLng, maxLng].every(Number.isFinite)) {
+    return false;
+  }
+
   // Latitude must be within [-90, 90] and min <= max
   const latValid = -90 <= minLat && minLat <= maxLat && maxLat <= 90;
 
-  // Longitude must be within [-180, 180]; allow crossing antimeridian
-  const lngValid = -180 <= minLng && minLng <= 180 && -180 <= maxLng && maxLng <= 180;
+  // Allow wrapped and unwrapped antimeridian bounds.
+  const lngValid =
+    -180 <= minLng &&
+    minLng <= 180 &&
+    ((-180 <= maxLng && maxLng <= 180) || (minLng < maxLng && maxLng <= minLng + 360));
 
   return latValid && lngValid;
 };
