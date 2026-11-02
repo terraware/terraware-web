@@ -4206,7 +4206,10 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Saves a draft of an in-progress planting site. */
+        /**
+         * Saves a draft of an in-progress planting site.
+         * @description The map is saved even if it has validation problems such as overlapping strata or self-intersecting polygons. Use the planting site validation endpoint to find them.
+         */
         post: operations["createDraftPlantingSite"];
         delete?: never;
         options?: never;
@@ -4243,7 +4246,10 @@ export interface paths {
         };
         /** Gets the details of a saved draft of a planting site. */
         get: operations["getDraftPlantingSite"];
-        /** Updates an existing draft of an in-progress planting site. */
+        /**
+         * Updates an existing draft of an in-progress planting site.
+         * @description The map is saved even if it has validation problems such as overlapping strata or self-intersecting polygons. Use the planting site validation endpoint to find them.
+         */
         put: operations["updateDraftPlantingSite"];
         post?: never;
         /** Deletes an existing draft of an in-progress planting site. */
@@ -4837,6 +4843,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/sites/{id}/history": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Lists the changes to a planting site's map.
+         * @description The earliest version of the map is reported as the site's creation; later versions are reported as edits. Events are returned newest first. Sites that have never had a map have no events.
+         */
+        get: operations["listPlantingSiteHistoryEvents"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites/{id}/history/{historyId}": {
         parameters: {
             query?: never;
@@ -4868,6 +4894,26 @@ export interface paths {
          */
         put: operations["updatePlantingSiteMap"];
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/sites/{id}/map/summary": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Summarizes the changes an edit to a planting site's map would make.
+         * @description Takes the same map as the edit endpoint, but does not change the site. Use this to show the user the effects of an edit before applying it.
+         */
+        post: operations["summarizePlantingSiteMapEdit"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6502,6 +6548,23 @@ export interface components {
             /** Format: int32 */
             readyQuantityWithdrawn: number;
         };
+        BiomassAdditionalSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId?: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "BiomassAdditionalSpecies";
+        };
         BiomassDetailsSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
             monitoringPlotId: number;
@@ -6719,6 +6782,8 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CompletePlotObservationRequestPayload: {
+            /** @description Biomass measurements. Required for biomass observations; omitted for monitoring observations. */
+            biomassMeasurements?: components["schemas"]["NewBiomassMeasurementPayload"];
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather" | "NaturalRegenerationWoody" | "Logging" | "Fire" | "Mining" | "Grazing" | "Infrastructure" | "ElectricalLines" | "SoilErosion" | "DifficultAccessibility" | "Contamination" | "SteepSlope" | "WaterBodies")[];
             /** @description Use longitude first in coordinate system. Defaults to false. */
             lngFirst?: boolean;
@@ -6728,7 +6793,8 @@ export interface components {
              * @description Date and time the observation was performed in the field.
              */
             observedTime: string;
-            plants: components["schemas"]["RecordedPlantPayload"][];
+            /** @description Recorded plants. Required for monitoring observations; omitted or empty for biomass observations. */
+            plants?: components["schemas"]["RecordedPlantPayload"][];
         };
         CoordinatePayload: {
             m?: number;
@@ -7874,7 +7940,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["AccessionPhotoSubjectPayload"] | components["schemas"]["AccessionSubjectPayload"] | components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["PlantingSiteSubjectPayload"] | components["schemas"]["PlotT0DensitySubjectPayload"] | components["schemas"]["PlotT0ObservationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"] | components["schemas"]["StratumT0DensitySubjectPayload"] | components["schemas"]["ViabilityTestSubjectPayload"] | components["schemas"]["WithdrawalSubjectPayload"];
+            subject: components["schemas"]["AccessionPhotoSubjectPayload"] | components["schemas"]["AccessionSubjectPayload"] | components["schemas"]["BiomassAdditionalSpeciesSubjectPayload"] | components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["PlantingSiteSubjectPayload"] | components["schemas"]["PlotT0DensitySubjectPayload"] | components["schemas"]["PlotT0ObservationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"] | components["schemas"]["StratumT0DensitySubjectPayload"] | components["schemas"]["ViabilityTestSubjectPayload"] | components["schemas"]["WithdrawalSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -9180,7 +9246,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("Accession" | "AccessionPhoto" | "BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "PlantingSite" | "PlotT0Density" | "PlotT0Observation" | "Project" | "RecordedTree" | "StratumT0Density" | "ViabilityTest" | "Withdrawal")[];
+            subjects?: ("Accession" | "AccessionPhoto" | "BiomassAdditionalSpecies" | "BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "PlantingSite" | "PlotT0Density" | "PlotT0Observation" | "Project" | "RecordedTree" | "StratumT0Density" | "ViabilityTest" | "Withdrawal")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9278,6 +9344,10 @@ export interface components {
         };
         ListPlantingSeasonsResponsePayload: {
             seasons: components["schemas"]["PlantingSeasonPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListPlantingSiteHistoryEventsResponsePayload: {
+            events: components["schemas"]["PlantingSiteHistoryEventPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListPlantingSiteReportedPlantsResponsePayload: {
@@ -10502,6 +10572,16 @@ export interface components {
         ObservationUpdateOperationPayload: {
             type: string;
         };
+        /** @description In-progress observations would be abandoned because they have incomplete plots in edited strata. */
+        ObservationsAbandonedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            observationIds: number[];
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ObservationsAbandoned";
+        };
         OptionalSpeciesDensityPayload: {
             density?: number;
             /** Format: int64 */
@@ -10710,6 +10790,21 @@ export interface components {
             speciesNativeCategory?: "Native" | "Non-native";
             /** @enum {string} */
             submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
+        };
+        PermanentPlotCreatedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            /** @description True if the plot would be in an area that was already part of the stratum. */
+            inExistingArea: boolean;
+            /** Format: int32 */
+            permanentIndex?: number;
+            stratumName: string;
+            /** @description Normally null; new plots are created at the stratum level. */
+            substratumName?: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PermanentPlotCreated";
         };
         PhaseScores: {
             /** @enum {string} */
@@ -10921,6 +11016,21 @@ export interface components {
              */
             type: "PlantingSeasonWithdrawal";
         };
+        /** @description One change that a planting site map edit would make. The type property determines which other properties are present. */
+        PlantingSiteEditSummaryItemPayload: {
+            type: string;
+        };
+        PlantingSiteHistoryEventPayload: {
+            /** Format: date-time */
+            date: string;
+            editedByName?: string;
+            /** Format: int64 */
+            editedByUserId: number;
+            /** Format: int64 */
+            historyId: number;
+            /** @enum {string} */
+            type: "Created" | "Edited";
+        };
         PlantingSiteHistoryPayload: {
             areaHa?: number;
             boundary: components["schemas"]["MultiPolygon"];
@@ -11005,7 +11115,7 @@ export interface components {
             /** @description If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
             conflictsWith?: string[];
             /** @enum {string} */
-            problemType: "DuplicateSubstratumName" | "DuplicateStratumName" | "ExclusionWithoutBoundary" | "SiteTooLarge" | "SubstratumBoundaryOverlaps" | "SubstratumInExclusionArea" | "SubstratumNotInStratum" | "StratumBoundaryOverlaps" | "StratumHasNoSubstrata" | "StratumNotInSite" | "StratumTooSmall" | "StrataWithoutSiteBoundary";
+            problemType: "DuplicateSubstratumName" | "DuplicateStratumName" | "ExclusionInvalid" | "ExclusionWithoutBoundary" | "SiteBoundaryInvalid" | "SiteTooLarge" | "SubstratumBoundaryInvalid" | "SubstratumBoundaryOverlaps" | "SubstratumInExclusionArea" | "SubstratumNotInStratum" | "StratumBoundaryInvalid" | "StratumBoundaryOverlaps" | "StratumHasNoSubstrata" | "StratumNotInSite" | "StratumTooSmall" | "StrataWithoutSiteBoundary";
             /** @description If the problem relates to a particular stratum, its name. */
             stratum?: string;
             /** @description If the problem relates to a particular substratum, its name. If this is present, stratum will also be present and will be the name of the stratum that contains this substratum. */
@@ -11065,6 +11175,55 @@ export interface components {
             numTemporaryPlots: number;
             plantingSubzones: components["schemas"]["PlantingSubzonePayload"][];
             targetPlantingDensity: number;
+        };
+        /** @description An existing monitoring plot would stay in its substratum with the same permanent index. */
+        PlotAcceptedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int32 */
+            permanentIndex?: number;
+            /** Format: int64 */
+            plotNumber: number;
+            stratumName: string;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlotAccepted";
+        };
+        /** @description An existing monitoring plot would move into this substratum and/or get a new permanent index. */
+        PlotAdoptedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int32 */
+            permanentIndex?: number;
+            /** Format: int64 */
+            plotNumber: number;
+            stratumName: string;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlotAdopted";
+        };
+        /** @description An existing monitoring plot would no longer be in any substratum. */
+        PlotEjectedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            plotNumber: number;
+            stratumName: string;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlotEjected";
         };
         PlotObservationSpeciesDensityPayload: {
             /** Format: int64 */
@@ -11545,6 +11704,7 @@ export interface components {
             failures?: components["schemas"]["TimeseriesValuesErrorPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        /** @description Recorded plants. Required for monitoring observations; omitted or empty for biomass observations. */
         RecordedPlantPayload: {
             /** @enum {string} */
             certainty: "Known" | "Other" | "Unknown";
@@ -11860,6 +12020,12 @@ export interface components {
              */
             endDate: string;
             /**
+             * @description Which type of observation to schedule.
+             * @default Monitoring
+             * @enum {string}
+             */
+            observationType: "Monitoring" | "Biomass Measurements";
+            /**
              * Format: int64
              * @description Which planting site this observation needs to be scheduled for.
              */
@@ -12109,6 +12275,16 @@ export interface components {
             /** Format: int64 */
             userId: number;
         };
+        /** @description Net change in the site's plantable area. */
+        SiteAreaChangedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            areaHaDifference: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "SiteAreaChanged";
+        };
         SiteT0DataResponsePayload: {
             /** Format: int64 */
             plantingSiteId: number;
@@ -12308,6 +12484,28 @@ export interface components {
             position: components["schemas"]["CoordinatePayload"];
             title: string;
         };
+        StratumCreatedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            /** Format: int32 */
+            numPermanentPlots: number;
+            stableId: string;
+            stratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "StratumCreated";
+        };
+        StratumDeletedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            stableId: string;
+            stratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "StratumDeleted";
+        };
         StratumHistoryResponsePayload: {
             areaHa: number;
             boundary: components["schemas"]["MultiPolygon"];
@@ -12391,6 +12589,23 @@ export interface components {
              */
             type: "StratumT0Density";
         };
+        StratumUpdatedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            areaHaDifference: number;
+            /** Format: int32 */
+            numPermanentPlots: number;
+            /**
+             * Format: double
+             * @description Percentage of the stratum's new boundary that overlaps with its existing boundary.
+             */
+            overlapPercent: number;
+            stratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "StratumUpdated";
+        };
         SubLocationPayload: {
             /**
              * Format: int32
@@ -12436,6 +12651,28 @@ export interface components {
         SubmitSupportRequestResponsePayload: {
             issueKey: string;
             status: components["schemas"]["SuccessOrError"];
+        };
+        SubstratumCreatedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            stableId: string;
+            stratumName: string;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "SubstratumCreated";
+        };
+        SubstratumDeletedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            stableId: string;
+            stratumName: string;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "SubstratumDeleted";
         };
         SubstratumHistoryResponsePayload: {
             areaHa: number;
@@ -12504,6 +12741,22 @@ export interface components {
             id: number;
             scientificName: string;
         };
+        SubstratumUpdatedPayload: Omit<components["schemas"]["PlantingSiteEditSummaryItemPayload"], "type"> & {
+            areaHaDifference: number;
+            /**
+             * Format: double
+             * @description Percentage of the substratum's new boundary that overlaps with its existing boundary.
+             */
+            overlapPercent: number;
+            stratumName: string;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "SubstratumUpdated";
+        };
         /**
          * @description Indicates of success or failure of the requested operation.
          * @enum {string}
@@ -12522,6 +12775,11 @@ export interface components {
             /** Format: int32 */
             species: number;
             status: components["schemas"]["SuccessOrError"];
+        };
+        SummarizePlantingSiteMapEditResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            /** @description Changes the edit would make. Site-wide items come first, followed by each stratum's items. */
+            summary: (components["schemas"]["ObservationsAbandonedPayload"] | components["schemas"]["PermanentPlotCreatedPayload"] | components["schemas"]["PlotAcceptedPayload"] | components["schemas"]["PlotAdoptedPayload"] | components["schemas"]["PlotEjectedPayload"] | components["schemas"]["SiteAreaChangedPayload"] | components["schemas"]["StratumCreatedPayload"] | components["schemas"]["StratumDeletedPayload"] | components["schemas"]["StratumUpdatedPayload"] | components["schemas"]["SubstratumCreatedPayload"] | components["schemas"]["SubstratumDeletedPayload"] | components["schemas"]["SubstratumUpdatedPayload"])[];
         };
         /** @description Summary of important statistics about the seed bank for the Summary page. */
         SummaryResponsePayload: {
@@ -13051,7 +13309,7 @@ export interface components {
             exclusion?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             /** @description Strata and substrata. Existing strata and substrata are matched by ID; those that are omitted are deleted. Must not be empty if the site already has strata. */
             strata: components["schemas"]["StratumMapEditPayload"][];
-            /** @description IDs of edited substrata whose planting completed flags should be cleared. Ignored if dryRun is true. */
+            /** @description IDs of edited substrata whose planting completed flags should be cleared. Ignored when summarizing an edit. */
             substratumIdsToMarkIncomplete?: number[];
         };
         UpdatePlantingSiteRequestPayload: {
@@ -23010,15 +23268,6 @@ export interface operations {
                     "application/json": components["schemas"]["CreateDraftPlantingSiteResponsePayload"];
                 };
             };
-            /** @description The typed map fields failed validation; nothing was saved. The problems list describes what is wrong. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["PlantingSiteMapInvalidResponsePayload"];
-                };
-            };
         };
     };
     parseDraftPlantingSiteBoundary: {
@@ -24451,6 +24700,28 @@ export interface operations {
             };
         };
     };
+    listPlantingSiteHistoryEvents: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSiteHistoryEventsResponsePayload"];
+                };
+            };
+        };
+    };
     getPlantingSiteHistory: {
         parameters: {
             query?: {
@@ -24478,10 +24749,7 @@ export interface operations {
     };
     updatePlantingSiteMap: {
         parameters: {
-            query?: {
-                /** @description If true, check whether the edit is valid without changing the site. */
-                dryRun?: boolean;
-            };
+            query?: never;
             header?: never;
             path: {
                 id: number;
@@ -24501,6 +24769,62 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The edited map was malformed, e.g., it listed a stratum ID more than once. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The site, or a stratum or substratum in the edit, was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The edited map failed validation; nothing was changed. The problems list describes what is wrong. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PlantingSiteMapInvalidResponsePayload"];
+                };
+            };
+        };
+    };
+    summarizePlantingSiteMapEdit: {
+        parameters: {
+            query?: {
+                /** @description How much detail to include in the summary. */
+                depth?: "Site" | "Stratum" | "Substratum" | "Plot";
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlantingSiteMapRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SummarizePlantingSiteMapEditResponsePayload"];
                 };
             };
             /** @description The edited map was malformed, e.g., it listed a stratum ID more than once. */

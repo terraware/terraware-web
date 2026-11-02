@@ -395,6 +395,8 @@ export type ScheduleObservationResponsePayload = {
 export type ScheduleObservationRequestPayload = {
   /** The end date for this observation, should be limited to 2 months from the start date. */
   endDate: string;
+  /** Which type of observation to schedule. */
+  observationType?: 'Monitoring' | 'Biomass Measurements';
   /** Which planting site this observation needs to be scheduled for. */
   plantingSiteId: number;
   /** The IDs of the substrata this observation should cover. */
@@ -1214,6 +1216,8 @@ export type UpdateObservationRequestPayload = {
   )[];
 };
 export type CompletePlotObservationRequestPayload = {
+  /** Biomass measurements. Required for biomass observations; omitted for monitoring observations. */
+  biomassMeasurements?: NewBiomassMeasurementPayload;
   conditions: (
     | 'AnimalDamage'
     | 'FastGrowth'
@@ -1240,7 +1244,8 @@ export type CompletePlotObservationRequestPayload = {
   notes?: string;
   /** Date and time the observation was performed in the field. */
   observedTime: string;
-  plants: RecordedPlantPayload[];
+  /** Recorded plants. Required for monitoring observations; omitted or empty for biomass observations. */
+  plants?: RecordedPlantPayload[];
 };
 export type UpdatePlotObservationRequestPayload = {
   /** Observed coordinates, if any, up to one per position. */
