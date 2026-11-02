@@ -3,7 +3,9 @@ import { MultiPolygon } from 'geojson';
 import { MapBounds, MapPoint } from './types';
 
 const latToY = (lat: number): number => {
-  const rad = (lat * Math.PI) / 180;
+  const MERCATOR_LAT_LIMIT = 85.0511287798;
+  const clampedLat = Math.max(-MERCATOR_LAT_LIMIT, Math.min(MERCATOR_LAT_LIMIT, lat));
+  const rad = (clampedLat * Math.PI) / 180;
   return Math.log(Math.tan(Math.PI / 4 + rad / 2));
 };
 
@@ -27,6 +29,16 @@ const isBoundsValid = (bounds: MapBounds) => {
 };
 
 const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: number): number => {
+  if (
+    !isBoundsValid(bounds) ||
+    !Number.isFinite(mapWidth) ||
+    !Number.isFinite(mapHeight) ||
+    mapWidth <= 0 ||
+    mapHeight <= 0
+  ) {
+    return 0;
+  }
+
   const TILE_SIZE = 256;
 
   // Latitude fraction (north–south span)
@@ -44,7 +56,7 @@ const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: numb
   const lngZoom = Math.log2(mapWidth / TILE_SIZE / lngFraction);
 
   // Use the smaller zoom so the whole box fits
-  return Math.floor(Math.min(latZoom, lngZoom));
+  return Math.max(0, Math.min(22, Math.floor(Math.min(latZoom, lngZoom))));
 };
 
 const getBoundingBoxFromMultiPolygons = (multipolygons: MultiPolygon[]): MapBounds => {
