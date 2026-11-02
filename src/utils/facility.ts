@@ -1,33 +1,5 @@
-import { Facility, FacilityType } from 'src/types/Facility';
-import { Organization } from 'src/types/Organization';
-import { getAllNurseries, getAllSeedBanks } from 'src/utils/organization';
-
-/**
- * Service for facility related functionality
- */
-
-/**
- * Types exported from service
- */
-type GetFacilityRequest = {
-  organization: Organization;
-  facilityId: number | string;
-  type: FacilityType;
-};
-
-/**
- * get facility
- */
-const getFacility = ({ organization, facilityId, type }: GetFacilityRequest): Facility | undefined => {
-  if (type === 'Nursery') {
-    return getAllNurseries(organization).find((n) => n?.id.toString() === facilityId.toString());
-  } else if (type === 'Seed Bank') {
-    return getAllSeedBanks(organization).find((n) => n?.id.toString() === facilityId.toString());
-  }
-};
-
 /** Return true by default since we don't require setting the field in the facility view */
-const facilityBuildStartedDateValid = (
+export const facilityBuildStartedDateValid = (
   buildStart: string | undefined,
   buildComplete: string | undefined,
   opStart: string | undefined
@@ -44,7 +16,7 @@ const facilityBuildStartedDateValid = (
 };
 
 /** Return true by default since we don't require setting the field in the facility view */
-const facilityBuildCompletedDateValid = (
+export const facilityBuildCompletedDateValid = (
   buildStart: string | undefined,
   buildComplete: string | undefined,
   opStart: string | undefined
@@ -61,7 +33,7 @@ const facilityBuildCompletedDateValid = (
 };
 
 /** Return true by default since we don't require setting the field in the facility view */
-const facilityOperationStartedDateValid = (
+export const facilityOperationStartedDateValid = (
   buildStart: string | undefined,
   buildComplete: string | undefined,
   opStart: string | undefined
@@ -76,15 +48,3 @@ const facilityOperationStartedDateValid = (
   }
   return afterBuildStartedConditionMet && afterBuildCompletedConditionMet;
 };
-
-/**
- * Exported functions
- */
-const FacilityService = {
-  getFacility,
-  facilityBuildStartedDateValid,
-  facilityBuildCompletedDateValid,
-  facilityOperationStartedDateValid,
-};
-
-export default FacilityService;

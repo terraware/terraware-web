@@ -19,9 +19,9 @@ import { useAccessions } from 'src/scenes/InventoryRouter/form/useAccessions';
 import { useNurseries } from 'src/scenes/InventoryRouter/form/useNurseries';
 import { useSpeciesForm } from 'src/scenes/InventoryRouter/form/useSpeciesForm';
 import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
-import FacilityService from 'src/services/FacilityService';
 import { stateName } from 'src/types/Accession';
 import { CreateBatchRequestPayload } from 'src/types/Batch';
+import { getNurseryById } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -91,11 +91,7 @@ export default function BatchDetailsForm({
       return '';
     }
 
-    const facility = FacilityService.getFacility({
-      organization: selectedOrganization,
-      facilityId,
-      type: 'Nursery',
-    });
+    const facility = getNurseryById(selectedOrganization, Number(facilityId));
 
     const tz = locationTimezone.get(facility);
     return tz.id;

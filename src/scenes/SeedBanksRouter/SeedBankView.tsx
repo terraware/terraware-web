@@ -15,10 +15,14 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
-import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import {
+  facilityBuildCompletedDateValid,
+  facilityBuildStartedDateValid,
+  facilityOperationStartedDateValid,
+} from 'src/utils/facility';
 import { getAllSeedBanks } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -130,17 +134,13 @@ export default function SeedBankView(): JSX.Element {
     if (
       !record.name ||
       !record.description ||
-      !FacilityService.facilityBuildStartedDateValid(
+      !facilityBuildStartedDateValid(record.buildStartedDate, record.buildCompletedDate, record.operationStartedDate) ||
+      !facilityBuildCompletedDateValid(
         record.buildStartedDate,
         record.buildCompletedDate,
         record.operationStartedDate
       ) ||
-      !FacilityService.facilityBuildCompletedDateValid(
-        record.buildStartedDate,
-        record.buildCompletedDate,
-        record.operationStartedDate
-      ) ||
-      !FacilityService.facilityOperationStartedDateValid(
+      !facilityOperationStartedDateValid(
         record.buildStartedDate,
         record.buildCompletedDate,
         record.operationStartedDate
@@ -297,7 +297,7 @@ export default function SeedBankView(): JSX.Element {
               aria-label='date-picker'
               errorText={
                 validateDates &&
-                !FacilityService.facilityBuildStartedDateValid(
+                !facilityBuildStartedDateValid(
                   record.buildStartedDate,
                   record.buildCompletedDate,
                   record.operationStartedDate
@@ -317,7 +317,7 @@ export default function SeedBankView(): JSX.Element {
               aria-label='date-picker'
               errorText={
                 validateDates &&
-                !FacilityService.facilityBuildCompletedDateValid(
+                !facilityBuildCompletedDateValid(
                   record.buildStartedDate,
                   record.buildCompletedDate,
                   record.operationStartedDate
@@ -338,7 +338,7 @@ export default function SeedBankView(): JSX.Element {
               aria-label='date-picker'
               errorText={
                 validateDates &&
-                !FacilityService.facilityOperationStartedDateValid(
+                !facilityOperationStartedDateValid(
                   record.buildStartedDate,
                   record.buildCompletedDate,
                   record.operationStartedDate
