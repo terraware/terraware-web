@@ -43,6 +43,7 @@ import {
   conservationCategories,
   getConservationCategoryString,
 } from 'src/types/Species';
+import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -54,7 +55,7 @@ import { NATIVITY_VALUES, Nativity, getNativityLabel } from './SpeciesCheck/type
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
-const TABLE_STATE_STORAGE_KEY = 'species-list-table';
+const TABLE = TABLES.species;
 const EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID: Record<number, string[]> = {};
 
 const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
@@ -287,7 +288,7 @@ export default function SpeciesListView(): JSX.Element {
     showColumnFilters,
     showGlobalFilter,
     sorting,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+  } = useTableState(TABLE, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
     persistPageIndex: {
       isLoading:
@@ -898,7 +899,7 @@ export default function SpeciesListView(): JSX.Element {
           enableColumnFilters={true}
           enableColumnOrdering={true}
           stickyFilters={true}
-          storageKey={TABLE_STATE_STORAGE_KEY}
+          storageKey={TABLE.storageKey}
           enablePagination={true}
           enableTopToolbar={true}
           enableBottomToolbar={true}

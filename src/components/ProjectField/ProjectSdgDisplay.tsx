@@ -16,7 +16,14 @@ const ProjectSdgDisplay = ({ sdgList }: { sdgList?: SustainableDevelopmentGoal[]
   return sdgList
     .toSorted((a, b) => Number(a) - Number(b))
     .map((sdg, i) => (
-      <Grid item md={1} key={`sdg-${i}`} paddingRight={theme.spacing(1)} component={'span'}>
+      <Grid
+        key={`sdg-${i}`}
+        paddingRight={theme.spacing(1)}
+        component={'span'}
+        size={{
+          md: 1,
+        }}
+      >
         <SdgIcon goal={sdg} size={128} />
       </Grid>
     ));

@@ -11,7 +11,7 @@ const FluidEntryWrapper = ({ height, children }: FluidWrapperProps) => {
   const theme = useTheme();
 
   return (
-    <Grid item width={'fit-content'} height={height} margin={`${theme.spacing(2)} 0`}>
+    <Grid width={'fit-content'} height={height} margin={`${theme.spacing(2)} 0`}>
       {children}
     </Grid>
   );

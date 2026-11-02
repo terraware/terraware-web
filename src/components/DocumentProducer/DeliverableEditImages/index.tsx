@@ -106,7 +106,7 @@ const DeliverableEditImages = (props: DeliverableEditImagesProps): JSX.Element =
             </Box>
           </Box>
         ))}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PhotoSelector onPhotosChanged={onFilesChanged} multipleSelection={variable.isList} />
       </Grid>
     </Grid>

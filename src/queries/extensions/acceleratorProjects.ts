@@ -13,6 +13,7 @@ api.enhanceEndpoints({
       invalidatesTags: (_result, _error, payload) => [
         { type: QueryTagTypes.AcceleratorProjects, id: payload.projectId },
         { type: QueryTagTypes.AcceleratorProjects, id: 'LIST' },
+        { type: QueryTagTypes.AcceleratorOrganizations, id: 'LIST' },
       ],
     },
   },

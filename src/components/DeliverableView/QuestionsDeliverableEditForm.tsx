@@ -71,7 +71,7 @@ const QuestionBox = ({
   return (
     <Box key={index} data-variable-id={variable.id}>
       <Grid container spacing={2} sx={{ marginBottom: '32px', padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box
             sx={{
               alignItems: 'center',
@@ -114,7 +114,7 @@ const QuestionBox = ({
           </Box>
         </Grid>
 
-        <Grid item xs={12}>
+        <Grid size={12}>
           {!!firstVariableValue?.feedback && firstVariableValue?.status === 'Rejected' && (
             <Box marginBottom={2}>
               <Message body={firstVariableValue.feedback} priority='critical' type='page' />

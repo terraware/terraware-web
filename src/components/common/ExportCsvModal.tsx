@@ -53,7 +53,7 @@ export default function ExportCsvModal(props: ExportCsvModalProps): JSX.Element 
       message={strings.DOWNLOAD_REPORT_DESCRIPTION}
     >
       <Grid container spacing={4} paddingTop='20px'>
-        <Grid item xs={12} textAlign='left'>
+        <Grid textAlign='left' size={12}>
           <TextField
             type='text'
             id='reportName'

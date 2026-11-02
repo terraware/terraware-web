@@ -23,6 +23,7 @@ import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
+import { TABLES } from 'src/types/Tables';
 import { MultiPolygon } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -32,7 +33,7 @@ import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import SelectObservationButton from './SelectObservationButton';
 
-const STORAGE_KEY = 'observations-ad-hoc-table';
+const TABLE = TABLES.adHocObservations;
 
 const DEFAULT_COLUMN_ORDER = [
   'monitoringPlotNumber',
@@ -103,7 +104,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { activeFilterCount, observationType } = useObservationFilters();
   const { downloadAdHocObservationsZip } = useObservationExports();
-  const tableState = useTableState(STORAGE_KEY, {
+  const tableState = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
   });
@@ -322,7 +323,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         enableSorting
         enableTopToolbar
         initialSorting={[{ id: 'completedDate', desc: true }]}
-        storageKey={STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         sx={{ padding: 0 }}
         tableOptions={{
           defaultColumn: { enableEditing: false },

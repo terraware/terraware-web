@@ -162,7 +162,7 @@ const MapUpdateView = () => {
     >
       {isSaving && <BusySpinner withSkrim={true} />}
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
-        <Grid item xs={4}>
+        <Grid size={4}>
           <StepTitleDescription
             description={description}
             dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
@@ -172,7 +172,7 @@ const MapUpdateView = () => {
             tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid size={8}>
           <EditableMap
             // the map only fits to its initial boundaries, so remount once the country boundary loads
             key={countryBoundary ? 'country' : 'none'}

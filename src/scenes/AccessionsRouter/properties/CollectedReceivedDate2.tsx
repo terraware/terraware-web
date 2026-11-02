@@ -75,7 +75,7 @@ export default function CollectedReceivedDate2({
   }, [validate, dateValue, validateDate]);
 
   return (
-    <Grid item xs={12} sx={datePickerStyle}>
+    <Grid sx={datePickerStyle} size={12}>
       <DatePicker
         id={id}
         label={label}

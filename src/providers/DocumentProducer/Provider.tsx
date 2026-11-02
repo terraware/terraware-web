@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -7,14 +7,10 @@ import _ from 'lodash';
 
 import useDocumentVariablesWithValues from 'src/hooks/variables/useDocumentVariablesWithValues';
 import useProjectVariablesWithValues from 'src/hooks/variables/useProjectVariablesWithValues';
+import { useGetDocumentQuery } from 'src/queries/generated/documentProducerDocuments';
+import { useListDocumentTemplatesQuery } from 'src/queries/generated/documentProducerTemplates';
 import { useListVariableOwnersQuery } from 'src/queries/generated/documentProducerVariables';
-import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
-import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
-import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestGetDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { Document as DocumentType } from 'src/types/documentProducer/Document';
 import {
   SectionVariableWithValues,
   VariableWithValues,
@@ -30,29 +26,32 @@ type Props = {
 };
 
 const DocumentProducerProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
   const pathParams = useParams<{ documentId: string; projectId: string }>();
   const documentId = Number(pathParams.documentId || -1);
 
-  const [loadedDocument, setDocument] = useState<DocumentType>();
-  // The provider stays mounted across document routes, so a document loaded for a previous id isn't this one.
-  const document = loadedDocument?.id === documentId ? loadedDocument : undefined;
+  const hasDocument = documentId !== -1;
+  const {
+    currentData: documentData,
+    isError: isDocumentError,
+    refetch: refetchDocument,
+  } = useGetDocumentQuery(documentId, { skip: !hasDocument });
+  const document = documentData?.document;
 
   const projectId = (pathParams.projectId ? Number(pathParams.projectId) : document?.projectId) ?? -1;
   const documentTemplateId = document?.documentTemplateId ?? -1;
-  const documentTemplate = useAppSelector((state) => selectDocumentTemplate(state, documentTemplateId));
+  const { currentData: documentTemplatesData } = useListDocumentTemplatesQuery();
+  const documentTemplate = useMemo(
+    () => documentTemplatesData?.documentTemplates.find((template) => template.id === documentTemplateId),
+    [documentTemplatesData, documentTemplateId]
+  );
 
   const snackbar = useSnackbar();
-  const documentResult = useAppSelector(selectGetDocument(documentId));
   useEffect(() => {
-    if (documentResult?.status === 'success') {
-      setDocument(documentResult.data);
-    } else if (documentResult?.status === 'error') {
+    if (isDocumentError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [documentResult, snackbar]);
+  }, [isDocumentError, snackbar]);
 
-  const hasDocument = documentId !== -1;
   const hasProject = projectId !== -1;
 
   const projectVariables = useProjectVariablesWithValues(hasProject ? projectId : undefined);
@@ -84,24 +83,16 @@ const DocumentProducerProvider = ({ children }: Props) => {
   );
 
   const isLoading =
-    (hasDocument && !document && documentResult?.status !== 'error') ||
+    (hasDocument && !document && !isDocumentError) ||
     (hasProject && projectVariables.variablesWithValues === undefined && !projectVariables.isError) ||
     (hasProject && variablesOwners === undefined && !ownersQuery.isError) ||
     (hasDocument && hasProject && documentVariables === undefined && !documentVariablesResult.isError);
 
-  useEffect(() => {
-    void dispatch(requestListDocumentTemplates());
-  }, [dispatch]);
-
-  const reloadDocument = useCallback(() => {
+  const reload = useCallback(() => {
     if (hasDocument) {
-      void dispatch(requestGetDocument(documentId));
+      void refetchDocument();
     }
-  }, [dispatch, documentId, hasDocument]);
-
-  useEffect(() => {
-    reloadDocument();
-  }, [reloadDocument]);
+  }, [hasDocument, refetchDocument]);
 
   const getUsedSections = useCallback(
     (variableId: number) => documentSectionVariables.reduce(getContainingSections(variableId), []),
@@ -119,9 +110,8 @@ const DocumentProducerProvider = ({ children }: Props) => {
       getUsedSections,
       isLoading,
       projectId,
-      reload: reloadDocument,
+      reload,
       variablesOwners,
-      reloadDocument,
     }),
     [
       allVariables,
@@ -134,7 +124,7 @@ const DocumentProducerProvider = ({ children }: Props) => {
       isLoading,
       projectId,
       variablesOwners,
-      reloadDocument,
+      reload,
     ]
   );
 

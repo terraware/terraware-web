@@ -173,7 +173,7 @@ export default function SearchFiltersWrapperV2({
 
   return (
     <Grid container>
-      <Grid item xs={12} display='flex' alignItems='center'>
+      <Grid display='flex' alignItems='center' size={12}>
         <Box width={isMobile ? '200px' : '300px'} display='inline-flex' flexDirection='column'>
           <Textfield
             placeholder={searchPlaceholder || strings.SEARCH}
@@ -207,7 +207,7 @@ export default function SearchFiltersWrapperV2({
       </Grid>
 
       {filterPillData.length > 0 && (
-        <Grid item xs={12} display='flex' marginTop={1}>
+        <Grid display='flex' marginTop={1} size={12}>
           <PillList data={filterPillData} />
         </Grid>
       )}

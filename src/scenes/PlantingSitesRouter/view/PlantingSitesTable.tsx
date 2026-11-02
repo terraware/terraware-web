@@ -134,10 +134,10 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
         <PillList data={filterPillData} onRemove={onRemovePillList} />
       </Grid>
 
-      <Grid item xs={12} marginTop={2}>
+      <Grid marginTop={2} size={12}>
         <div>
           <Grid container spacing={4}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Table
                 id='planting-sites-table'
                 columns={tableColumns}

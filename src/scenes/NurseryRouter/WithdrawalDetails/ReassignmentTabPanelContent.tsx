@@ -63,7 +63,7 @@ export default function ReassignmentTabPanelContent({
       </Typography>
       <Grid container>
         {overviewCardData.map((item) => (
-          <Grid item xs={isMobile ? 12 : 4} key={item.title}>
+          <Grid key={item.title} size={isMobile ? 12 : 4}>
             <OverviewItemCard isEditable={false} title={item.title} contents={item.data} />
           </Grid>
         ))}

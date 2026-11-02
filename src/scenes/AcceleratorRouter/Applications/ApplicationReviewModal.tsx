@@ -112,7 +112,7 @@ const ApplicationReviewModal = ({ open, onClose, application }: ApplicationRevie
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         {canUpdateStatus && (
           <>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Dropdown
                 fullWidth={true}
                 label={strings.APPLICATION_STATUS}
@@ -124,7 +124,7 @@ const ApplicationReviewModal = ({ open, onClose, application }: ApplicationRevie
             </Grid>
           </>
         )}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <TextField
             type='textarea'
             label={strings.INTERNAL_COMMENTS}

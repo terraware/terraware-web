@@ -108,7 +108,14 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
   }, [projectId, navigate]);
 
   return (
-    <Grid item md={md || 12} xs={12} paddingX={theme.spacing(1)} position={'relative'}>
+    <Grid
+      paddingX={theme.spacing(1)}
+      position={'relative'}
+      size={{
+        md: md || 12,
+        xs: 12,
+      }}
+    >
       <Box
         sx={{
           position: 'absolute',

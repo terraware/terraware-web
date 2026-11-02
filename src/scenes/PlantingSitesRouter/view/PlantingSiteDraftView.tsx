@@ -108,7 +108,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
         onEdit={goToEditDraftPlantingSite}
         plantingSite={plantingSite}
       />
-      <Grid item xs={12}>
+      <Grid size={12}>
         <PageSnackbar />
       </Grid>
       <Box display='flex' flexDirection='column' gap={theme.spacing(2.5)} marginTop={theme.spacing(3)}>

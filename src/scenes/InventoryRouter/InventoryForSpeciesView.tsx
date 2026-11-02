@@ -74,14 +74,14 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
           >
             {getSpeciesLabel()}
           </Typography>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <PageSnackbar />
           </Grid>
         </Grid>
       </PageHeaderWrapper>
       {speciesId && (
         <Grid container ref={contentRef}>
-          <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
+          <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
             <InventorySummaryForSpecies speciesId={Number(speciesId)} />
 
             <Card flushMobile style={{ marginTop: theme.spacing(3) }}>

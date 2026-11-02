@@ -200,13 +200,13 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <RadioGroup
               name='radio-buttons-project-selection'
               onChange={(_event, value) => onChange('projectType', value)}
               value={newApplication.projectType}
             >
-              <Grid item xs={12} textAlign='left' display='flex' flexDirection='row'>
+              <Grid textAlign='left' display='flex' flexDirection='row' size={12}>
                 <FormControlLabel
                   checked={newApplication.projectType === 'Existing'}
                   control={<Radio />}
@@ -223,7 +223,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
               </Grid>
             </RadioGroup>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             {newApplication.projectType === 'New' && (
               <TextField
                 required

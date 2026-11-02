@@ -84,12 +84,12 @@ const PageHeaderProjectFilter = ({
       }}
     >
       {isDesktop && (
-        <Grid item>
+        <Grid>
           <Separator height='40px' />
         </Grid>
       )}
       {projects?.length > 0 && (
-        <Grid item>
+        <Grid>
           {projects?.length > 1 ? (
             <Box display='flex'>
               <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>

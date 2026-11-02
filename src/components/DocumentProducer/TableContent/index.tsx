@@ -58,10 +58,10 @@ const TableContent = <T extends TableRowType>({ searchProps, tableProps }: Table
           <Search {...searchProps} tableId={tableId} />
         </Box>
       )}
-      <Grid item xs={12}>
+      <Grid size={12}>
         <div>
           <Grid container spacing={4}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Table
                 id={tableId}
                 columns={() => tableColumns}

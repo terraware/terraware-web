@@ -20,14 +20,15 @@ const ModuleEventSessionCard = ({
 
   return (
     <Grid
-      item
-      xs={12}
-      md={3}
       marginBottom={`${theme.spacing(3)}`}
       sx={{
         borderLeft: leftBorder ? `1px solid ${theme.palette.TwClrBaseGray100}` : 0,
         minWidth: '300px',
         textWrap: 'nowrap',
+      }}
+      size={{
+        xs: 12,
+        md: 3,
       }}
     >
       <Box paddingX={theme.spacing(2)}>

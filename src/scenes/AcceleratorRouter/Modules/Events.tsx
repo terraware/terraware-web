@@ -84,7 +84,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
       </Box>
       <Grid container spacing={4}>
         {module && module.eventDescriptions['Live Session'] !== undefined && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.LIVE_SESSIONS}
@@ -120,7 +120,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Grid>
         )}
         {module && module.eventDescriptions['One-on-One Session'] !== undefined && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.ONE_ON_ONE_SESSIONS}
@@ -156,7 +156,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Grid>
         )}
         {module && module.eventDescriptions['Recorded Session'] !== undefined && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.RECORDED_SESSIONS}
@@ -192,7 +192,7 @@ export default function ModuleEvents({ events, module }: ModuleEventsProps): JSX
           </Grid>
         )}
         {module && module.eventDescriptions.Workshop !== undefined && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Box display='flex' justifyContent='space-between' alignItems='center' paddingBottom={1}>
               <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {strings.WORKSHOPS}

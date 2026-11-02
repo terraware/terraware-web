@@ -98,21 +98,8 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
         return description;
       }
 
-      if (target.kind === 'photo') {
-        if (findTrailingFilename(target.fullText, accession?.photoFilenames) === undefined) {
-          return description;
-        }
-
-        return (
-          <Link
-            component='button'
-            onClick={() => setOpenedTarget(target)}
-            sx={{ color: theme.palette.TwClrTxtBrand, textAlign: 'left' }}
-            underline='hover'
-          >
-            {description}
-          </Link>
-        );
+      if (target.kind === 'photo' && findTrailingFilename(target.fullText, accession?.photoFilenames) === undefined) {
+        return description;
       }
 
       if (target.kind === 'batch') {
@@ -128,7 +115,12 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
       }
 
       return (
-        <Link component='button' onClick={() => setOpenedTarget(target)} sx={{ textAlign: 'left' }} underline='hover'>
+        <Link
+          component='button'
+          onClick={() => setOpenedTarget(target)}
+          sx={{ color: theme.palette.TwClrTxtBrand, textAlign: 'left' }}
+          underline='hover'
+        >
           {description}
         </Link>
       );

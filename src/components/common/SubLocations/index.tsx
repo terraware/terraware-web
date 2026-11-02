@@ -154,15 +154,7 @@ export default function SubLocations({
         selectedSubLocation={selectedSubLocation}
         subLocations={subLocations}
       />
-      <Grid
-        item
-        xs={12}
-        display='flex'
-        alignItems='center'
-        justifyContent='space-between'
-        marginTop={4}
-        marginBottom={2}
-      >
+      <Grid display='flex' alignItems='center' justifyContent='space-between' marginTop={4} marginBottom={2} size={12}>
         <Typography fontSize='16px' fontWeight={600}>
           {strings.SUB_LOCATIONS}
         </Typography>
@@ -177,7 +169,7 @@ export default function SubLocations({
           />
         )}
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {(subLocations.length > 0 || editMode) && (
           <Table
             id='sub-locations-table'

@@ -261,7 +261,7 @@ export default function SeedBankView(): JSX.Element {
         }}
       >
         <Grid container spacing={3}>
-          <Grid item xs={gridSize}>
+          <Grid size={gridSize}>
             <TextField
               id='name'
               label={strings.NAME_REQUIRED}
@@ -271,7 +271,7 @@ export default function SeedBankView(): JSX.Element {
               errorText={record.name ? '' : nameError}
             />
           </Grid>
-          <Grid item xs={gridSize}>
+          <Grid size={gridSize}>
             <TextField
               id='description'
               label={strings.DESCRIPTION_REQUIRED}
@@ -281,14 +281,14 @@ export default function SeedBankView(): JSX.Element {
               errorText={record.description ? '' : descriptionError}
             />
           </Grid>
-          <Grid item xs={gridSize}>
+          <Grid size={gridSize}>
             <LocationTimeZoneSelector
               location={record}
               onChangeTimeZone={onChangeTimeZone}
               tooltip={strings.TOOLTIP_TIME_ZONE_SEEDBANK}
             />
           </Grid>
-          <Grid item xs={gridSize}>
+          <Grid size={gridSize}>
             <DatePicker
               id={'buildStartedDate'}
               label={strings.FACILITY_BUILD_START_DATE}
@@ -308,7 +308,7 @@ export default function SeedBankView(): JSX.Element {
               maxDate={record.buildCompletedDate}
             />
           </Grid>
-          <Grid item xs={gridSize}>
+          <Grid size={gridSize}>
             <DatePicker
               id={'buildCompletedDate'}
               label={strings.FACILITY_BUILD_COMPLETION_DATE}
@@ -329,7 +329,7 @@ export default function SeedBankView(): JSX.Element {
               maxDate={record.operationStartedDate}
             />
           </Grid>
-          <Grid item xs={gridSize}>
+          <Grid size={gridSize}>
             <DatePicker
               id={'operationStartedDate'}
               label={strings.FACILITY_OPERATION_START_DATE}

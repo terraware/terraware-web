@@ -100,7 +100,7 @@ export default function DetailsInputForm({
 
   return (
     <Grid container display='flex' spacing={3} flexGrow={0}>
-      <Grid item xs={gridSize()}>
+      <Grid size={gridSize()}>
         <TextField
           id='name'
           label={strings.NAME_REQUIRED}
@@ -111,7 +111,7 @@ export default function DetailsInputForm({
           autoFocus={true}
         />
       </Grid>
-      <Grid item xs={gridSize()}>
+      <Grid size={gridSize()}>
         <TextField
           id='description'
           label={strings.DESCRIPTION}
@@ -120,14 +120,14 @@ export default function DetailsInputForm({
           value={record.description}
         />
       </Grid>
-      <Grid item xs={gridSize()}>
+      <Grid size={gridSize()}>
         <LocationTimeZoneSelector
           location={record}
           onChangeTimeZone={onChangeTimeZone}
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
-      <Grid item xs={gridSize()}>
+      <Grid size={gridSize()}>
         <ProjectsDropdown availableProjects={availableProjects} record={record} setRecord={setRecord} allowUnselect />
       </Grid>
     </Grid>

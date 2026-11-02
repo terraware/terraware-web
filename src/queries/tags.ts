@@ -4,6 +4,7 @@
  * the 'LIST' tag (plus any parent/summary tags) instead, and let navigation unmount the detail views.
  */
 export enum QueryTagTypes {
+  AcceleratorOrganizations = 'AcceleratorOrganizations',
   AcceleratorProjectSpecies = 'AcceleratorProjectSpecies',
   AcceleratorProjectsBySpecies = 'AcceleratorProjectsBySpecies',
   AcceleratorSpeciesByProject = 'AcceleratorSpeciesByProject',
@@ -19,8 +20,11 @@ export enum QueryTagTypes {
   Deliverables = 'Deliverables',
   Deliveries = 'Deliveries',
   Disclaimer = 'Disclaimer',
+  DocumentHistory = 'DocumentHistory',
+  Documents = 'Documents',
   EmailNotificationSettings = 'EmailNotificationSettings',
   FunderActivities = 'FunderActivities',
+  FunderProjects = 'FunderProjects',
   InventoryPlanning = 'InventoryPlanning',
   CommonIndicators = 'CommonIndicators',
   ProjectIndicators = 'ProjectIndicators',

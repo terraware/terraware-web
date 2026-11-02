@@ -82,7 +82,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
         <Button label={strings.SAVE} onClick={handleSave} key='button-2' id='saveButton' />,
       ]}
     >
-      <Grid item xs={12} textAlign='left'>
+      <Grid textAlign='left' size={12}>
         <ProjectsDropdown
           availableProjects={availableProjects}
           record={entity}

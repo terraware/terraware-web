@@ -4,11 +4,10 @@ import { Button } from '@terraware/web-components';
 
 import DocumentMetadataEdit from 'src/components/DocumentProducer/DocumentMetadataEdit';
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
-import { selectDocumentRequest } from 'src/redux/features/documentProducer/documents/documentsSelector';
-import { requestUpdateDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateDocumentMutation } from 'src/queries/generated/documentProducerDocuments';
 import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
+import { toWorkflowState } from 'src/utils/mutationStatus';
 
 type UpdateMetadataProps = {
   doc: Document;
@@ -16,14 +15,11 @@ type UpdateMetadataProps = {
 };
 
 const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => {
-  const dispatch = useAppDispatch();
-
   const [documentName, setDocumentName] = useState<string>(doc.name);
   const [documentOwner, setDocumentOwner] = useState<string>(doc.ownedBy.toString());
-  const [requestId, setRequestId] = useState<string>('');
   const [formValid, setFormValid] = useState<boolean>();
 
-  const selector = useAppSelector(selectDocumentRequest(requestId));
+  const [updateDocument, updateDocumentResult] = useUpdateDocumentMutation();
 
   const isFormValid = () => documentName && documentOwner;
 
@@ -35,20 +31,17 @@ const UpdateMetadata = ({ doc, onFinish }: UpdateMetadataProps): JSX.Element => 
 
     setFormValid(true);
 
-    const request = dispatch(
-      requestUpdateDocument({
-        id: doc.id,
-        payload: { name: documentName, ownedBy: parseInt(documentOwner, 10), status: doc.status },
-      })
-    );
-    setRequestId(request.requestId);
+    void updateDocument({
+      id: doc.id,
+      updateDocumentRequestPayload: { name: documentName, ownedBy: parseInt(documentOwner, 10), status: doc.status },
+    });
   };
 
   const cancel = () => onFinish(false);
 
   return (
     <PageDialog
-      workflowState={requestId ? selector : undefined}
+      workflowState={toWorkflowState(updateDocumentResult)}
       onSuccess={() => onFinish(true)}
       onClose={cancel}
       open={true}

@@ -197,9 +197,9 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
           ]}
           scrolled={false}
         >
-          <Grid container item xs={12} spacing={2} textAlign='left'>
+          <Grid container spacing={2} textAlign='left' size={12}>
             {monitoringPlot && (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Textfield
                   id='monitoringPlot'
                   value={monitoringPlot.plotNumber}
@@ -209,7 +209,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
                 />
               </Grid>
             )}
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Textfield
                 id='reason'
                 value={justification}
@@ -223,7 +223,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
                 required
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Dropdown
                 id='duration'
                 label={strings.REASSIGNMENT_DURATION}

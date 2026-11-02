@@ -410,7 +410,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
         )}
         <Grid container sx={gridStyle}>
           {data.map((datum, index) => (
-            <Grid key={index} item xs={gridSize} marginTop={2}>
+            <Grid key={index} marginTop={2} size={gridSize}>
               <Textfield
                 id={`plot-observation-${index}`}
                 label={datum.label}
@@ -421,7 +421,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
               />
             </Grid>
           ))}
-          <Grid item xs={gridSize} marginTop={2}>
+          <Grid marginTop={2} size={gridSize}>
             <Box>
               <Typography
                 fontSize={'14px'}

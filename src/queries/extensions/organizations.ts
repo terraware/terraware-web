@@ -19,7 +19,10 @@ api.enhanceEndpoints({
       invalidatesTags: [{ type: QueryTagTypes.Organizations, id: 'LIST' }],
     },
     updateOrganization: {
-      invalidatesTags: (_result, _error, arg) => [{ type: QueryTagTypes.Organizations, id: arg.organizationId }],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.Organizations, id: arg.organizationId },
+        { type: QueryTagTypes.AcceleratorOrganizations, id: 'LIST' },
+      ],
     },
     deleteOrganization: {
       invalidatesTags: [{ type: QueryTagTypes.Organizations, id: 'LIST' }],

@@ -107,7 +107,7 @@ function ViabilityDialogForm(props: ViabilityDialogFormProps): JSX.Element {
         ]}
       >
         <Grid container spacing={2} textAlign='left'>
-          <Grid item xs={10} textAlign='left'>
+          <Grid textAlign='left' size={10}>
             <Box sx={{ display: 'flex', alignItems: 'center' }}>
               <Textfield
                 label={strings.VIABILITY_RATE}
@@ -122,7 +122,7 @@ function ViabilityDialogForm(props: ViabilityDialogFormProps): JSX.Element {
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <AddLink
               id='addViabilityTestButton'
               onClick={(event: any) => {

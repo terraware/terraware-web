@@ -73,7 +73,7 @@ const RejectedBox = ({ acceleratorProjectSpecies, onSubmit }: RejectedBoxProps) 
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               label={''}
               type='textarea'

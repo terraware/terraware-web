@@ -90,7 +90,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
       onSave={onSave}
       isConsoleView={isConsoleView}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!isEditing && !highlights ? (
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
             {strings.NO_HIGHLIGHTS_ADDED}

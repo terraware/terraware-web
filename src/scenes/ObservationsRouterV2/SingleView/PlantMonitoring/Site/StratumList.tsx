@@ -21,10 +21,11 @@ import { useGetOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { TABLES } from 'src/types/Tables';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const STORAGE_KEY = 'observation-site-stratum-table';
+const TABLE = TABLES.observationStrata;
 
 type StratumRow = {
   observationId: number;
@@ -58,7 +59,7 @@ export default function StratumList(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(STORAGE_KEY, { persistFilters: true });
+  } = useTableState(TABLE, { persistFilters: true });
 
   const { data: observationResultsResponse, isLoading } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -186,7 +187,7 @@ export default function StratumList(): JSX.Element {
       enableGlobalFilter={true}
       enableColumnFilters={true}
       enableColumnOrdering={true}
-      storageKey={STORAGE_KEY}
+      storageKey={TABLE.storageKey}
       enablePagination={false}
       enableTopToolbar={true}
       enableBottomToolbar={false}

@@ -115,7 +115,7 @@ export default function InventorySummaryForNursery({ nurseryId }: InventorySumma
   return (
     <Grid container spacing={3}>
       {cards.map((card) => (
-        <Grid key={card.label} item xs={card.gridColumns}>
+        <Grid key={card.label} size={card.gridColumns}>
           <OverviewItemCard
             isEditable={false}
             title={card.label}

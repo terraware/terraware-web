@@ -78,7 +78,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
       onSave={onSave}
       isConsoleView={isConsoleView}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!isEditing && !financialSummaries ? (
           <EmptyFieldPlaceholder text={strings.NO_FINANCIAL_SUMMARIES_ADDED} />
         ) : (

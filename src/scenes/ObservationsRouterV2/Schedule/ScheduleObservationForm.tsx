@@ -201,7 +201,7 @@ export default function ScheduleObservationForm({
 
         <Card style={{ maxWidth: '568px', margin: 'auto' }}>
           <Grid container spacing={3}>
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Dropdown
                 id='site'
                 label={strings.PLANTING_SITE}
@@ -215,7 +215,7 @@ export default function ScheduleObservationForm({
             </Grid>
 
             {selectedPlantingSiteId && (
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <ObservationSubstratumSelector
                   errorText={validate ? substratumError : ''}
                   onChangeSelectedSubstrata={setRequestedSubstratumIds}
@@ -224,11 +224,11 @@ export default function ScheduleObservationForm({
               </Grid>
             )}
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <Divider />
             </Grid>
 
-            <Grid item xs={isMobile ? 12 : 6}>
+            <Grid size={isMobile ? 12 : 6}>
               <DatePicker
                 id='startDate'
                 label={strings.OBSERVATION_START_DATE}
@@ -240,7 +240,7 @@ export default function ScheduleObservationForm({
               />
             </Grid>
 
-            <Grid item xs={isMobile ? 12 : 6}>
+            <Grid size={isMobile ? 12 : 6}>
               <DatePicker
                 id='endDate'
                 label={strings.OBSERVATION_END_DATE}

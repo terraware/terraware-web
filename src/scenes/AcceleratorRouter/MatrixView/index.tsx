@@ -45,6 +45,7 @@ import {
 } from 'src/redux/features/matrixView/matrixViewThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { SearchNodePayload } from 'src/types/Search';
+import { TABLES } from 'src/types/Tables';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 import {
   NewNonSectionValuePayloadUnion,
@@ -60,12 +61,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 import ColumnsModal, { baseColumns } from './ColumnsModal';
 
 const STORAGE_KEYS = {
-  SELECTED_COLUMNS: 'matrixView_selectedColumns',
-  COLUMN_ORDER: 'matrixView_columnOrder',
-  COLUMN_VISIBILITY: 'matrixView_columnVisibility',
-  COLUMN_FILTERS: 'matrixView_columnFilters',
-  SORTING: 'matrixView_sorting',
-  COLUMN_PINNING: 'matrixView_columnPinning',
+  SELECTED_COLUMNS: `${TABLES.matrixView.storageKey}_selectedColumns`,
+  COLUMN_ORDER: `${TABLES.matrixView.storageKey}_columnOrder`,
+  COLUMN_VISIBILITY: `${TABLES.matrixView.storageKey}_columnVisibility`,
+  COLUMN_FILTERS: `${TABLES.matrixView.storageKey}_columnFilters`,
+  SORTING: `${TABLES.matrixView.storageKey}_sorting`,
+  COLUMN_PINNING: `${TABLES.matrixView.storageKey}_columnPinning`,
 };
 
 type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
@@ -893,7 +894,7 @@ const MatrixView = () => {
     renderTopToolbarCustomActions: () => {
       return (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid item style={{ width: '250px' }}>
+          <Grid style={{ width: '242px' }}>
             <Dropdown
               id={'current-view'}
               label={strings.CURRENT_VIEW}
@@ -908,7 +909,7 @@ const MatrixView = () => {
           </Grid>
 
           {(!columnFiltersAreEmpty || !!globalFilter) && (
-            <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+            <Grid style={{ display: 'flex', alignItems: 'center' }}>
               <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
                 {strings.FILTERS_APPLIED.toUpperCase()}
               </Typography>

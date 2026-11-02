@@ -123,7 +123,7 @@ export default function EditorLayout({
           )}
         </Box>
       </PageHeaderWrapper>
-      <Grid item xs={12} ref={contentRef}>
+      <Grid size={12} ref={contentRef}>
         <PageSnackbar />
       </Grid>
       {!isEditorAvailable && (

@@ -273,7 +273,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       }
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12} sx={{ position: 'relative' }}>
+        <Grid sx={{ position: 'relative' }} size={12}>
           <>
             <OptionsMenu
               onOptionItemClick={onOptionItemClick}

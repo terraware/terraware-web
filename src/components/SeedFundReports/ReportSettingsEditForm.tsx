@@ -86,7 +86,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
       busy={isBusy}
     >
       <Grid container justifyContent={'center'}>
-        <Grid item>
+        <Grid>
           <Card style={{ width: isMobile ? '100%' : '700px' }}>
             <ReportSettingsEditFormFields
               reportsSettings={localReportsSettings}

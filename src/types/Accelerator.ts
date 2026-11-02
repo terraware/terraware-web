@@ -1,3 +1,3 @@
-import { components } from 'src/api/types/generated-schema';
+import { AcceleratorOrganizationPayload } from 'src/queries/generated/acceleratorOrganizations';
 
-export type AcceleratorOrg = components['schemas']['AcceleratorOrganizationPayload'];
+export type AcceleratorOrg = AcceleratorOrganizationPayload;

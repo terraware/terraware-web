@@ -436,7 +436,7 @@ const VariableDetailsInput = ({
       )}
 
       <Grid container>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Textfield
             id='type'
             label={strings.TYPE}
@@ -446,7 +446,7 @@ const VariableDetailsInput = ({
             sx={formElementStyles}
           />
         </Grid>
-        <Grid item xs={6}>
+        <Grid size={6}>
           <Textfield
             id='instances'
             label={strings.INSTANCES}
@@ -457,7 +457,7 @@ const VariableDetailsInput = ({
           />
         </Grid>
         {sectionsUsed && (
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography
               sx={{
                 color: theme.palette.TwClrTxtSecondary,
@@ -478,7 +478,7 @@ const VariableDetailsInput = ({
             </Box>
           </Grid>
         )}
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Textfield
             display={display}
             id='citation'

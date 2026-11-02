@@ -59,7 +59,7 @@ const ContactUsAttachments = ({ maxFiles, onChange }: AttachmentsProps): JSX.Ele
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!attachmentLimitReached && (
           <FileChooser
             acceptFileType={'image/*, video/*'}

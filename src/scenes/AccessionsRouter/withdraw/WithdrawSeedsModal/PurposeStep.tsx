@@ -139,7 +139,13 @@ const PurposeStep = ({
   );
 
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
-  const toTUser = useCallback((firstName: string) => ({ firstName }) as OrganizationUser, []);
+  const toTUser = useCallback(
+    (firstName: string) =>
+      ({
+        firstName,
+      }) as OrganizationUser,
+    []
+  );
 
   const labelWithTooltip = (text: string, tooltip: string) => (
     <Box display='flex' alignItems='center' gap={0.5}>
@@ -154,7 +160,7 @@ const PurposeStep = ({
 
   return (
     <Grid container textAlign='left' spacing={2}>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Typography color={theme.palette.TwClrTxtSecondary} fontSize={14}>
           {`${strings.PURPOSE} *`}
         </Typography>
@@ -182,7 +188,12 @@ const PurposeStep = ({
 
       {isNursery && (
         <>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <Dropdown
               id='destinationFacilityId'
               label={strings.DESTINATION_REQUIRED}
@@ -197,7 +208,12 @@ const PurposeStep = ({
             />
           </Grid>
           {inventoryBatchesForSpecies.length > 0 && (
-            <Grid item xs={12} sm={6}>
+            <Grid
+              size={{
+                xs: 12,
+                sm: 6,
+              }}
+            >
               <Select
                 id='inventoryBatch'
                 selectedValue={inventoryBatchInput}
@@ -217,7 +233,12 @@ const PurposeStep = ({
 
       {isViability && !isBulk && (
         <>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <Dropdown
               label={strings.TEST_TYPE}
               placeholder={strings.SELECT}
@@ -227,7 +248,12 @@ const PurposeStep = ({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <Dropdown
               label={strings.SUBSTRATE}
               placeholder={strings.SELECT}
@@ -237,7 +263,12 @@ const PurposeStep = ({
               fullWidth
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <Dropdown
               label={strings.TREATMENT}
               placeholder={strings.SELECT}
@@ -250,9 +281,14 @@ const PurposeStep = ({
         </>
       )}
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <DatePicker
               id='date'
               label={strings.WITHDRAW_DATE}
@@ -263,7 +299,12 @@ const PurposeStep = ({
               defaultTimeZone={timeZone}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid
+            size={{
+              xs: 12,
+              sm: 6,
+            }}
+          >
             <SelectT<OrganizationUser>
               label={strings.WITHDRAWN_BY}
               placeholder={strings.SELECT}
@@ -282,7 +323,12 @@ const PurposeStep = ({
       </Grid>
 
       {isNursery && (
-        <Grid item xs={12} sm={6}>
+        <Grid
+          size={{
+            xs: 12,
+            sm: 6,
+          }}
+        >
           <DatePicker
             id='readyByDate'
             label={strings.ESTIMATED_READY_DATE}
@@ -295,7 +341,7 @@ const PurposeStep = ({
         </Grid>
       )}
 
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Textfield
           id='notes'
           value={draft.notes}

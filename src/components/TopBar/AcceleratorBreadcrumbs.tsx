@@ -62,7 +62,7 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
     return (
       <div>
         <Grid container>
-          <Grid item>
+          <Grid>
             <Link
               id={'acceleratorConsoleButton'}
               fontSize={16}
@@ -78,7 +78,7 @@ export default function AcceleratorBreadcrumbs(): JSX.Element | null {
               {strings.ACCELERATOR_CONSOLE}
             </Link>
           </Grid>
-          <Grid item>
+          <Grid>
             <Separator />
           </Grid>
         </Grid>

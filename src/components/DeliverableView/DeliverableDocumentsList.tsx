@@ -46,7 +46,7 @@ const DeliverableDocumentsList = (props: DocumentsListProps): JSX.Element => {
 
   return (
     <Box display='flex' flexDirection='column'>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Table
           id={'documents-list' + isAcceleratorRoute ? '-admin' : ''}
           columns={() => props.columns}

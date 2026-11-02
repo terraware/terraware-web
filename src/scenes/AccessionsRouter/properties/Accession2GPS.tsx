@@ -64,7 +64,7 @@ export default function Accession2GPS(props: Accession2GPSProps): JSX.Element {
 
   if (!isOpen) {
     return (
-      <Grid item xs={12} marginTop={theme.spacing(2)}>
+      <Grid marginTop={theme.spacing(2)} size={12}>
         <Box display='flex' justifyContent='flex-start'>
           <AddLink id='addGPS' onClick={() => setIsOpen(true)} large={true} text={strings.ADD_GPS_COORDINATES} />
         </Box>

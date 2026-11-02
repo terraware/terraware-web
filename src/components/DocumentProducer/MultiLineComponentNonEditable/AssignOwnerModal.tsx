@@ -58,7 +58,7 @@ export default function AssignOwnerModal(props: AssignOwnerModalProps): JSX.Elem
       ]}
     >
       <Grid container textAlign={'left'}>
-        <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
+        <Grid sx={{ marginTop: theme.spacing(2) }} size={12}>
           <Dropdown
             id='document-owner'
             placeholder={strings.SELECT}

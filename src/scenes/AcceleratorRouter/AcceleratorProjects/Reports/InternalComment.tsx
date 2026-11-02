@@ -108,7 +108,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               label={strings.INTERNAL_COMMENTS}
               type='textarea'
@@ -118,7 +118,7 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
               preserveNewlines
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Dropdown
               fullWidth={true}
               label={strings.STATUS}

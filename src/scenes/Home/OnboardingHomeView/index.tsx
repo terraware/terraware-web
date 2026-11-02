@@ -132,7 +132,7 @@ const OnboardingHomeView = () => {
             />
             <Container maxWidth={false} sx={{ padding: 0 }}>
               <Grid container spacing={3} sx={{ padding: 0 }}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
               </Grid>

@@ -126,11 +126,11 @@ const DeliverablesList = ({ projectId, maxItemsPerPage }: DeliverablesListProps)
       activeLocale && !projectId ? (
         <>
           <Grid container sx={{ marginTop: theme.spacing(0.5), alignItems: 'center' }}>
-            <Grid item>
+            <Grid>
               <Separator height={'40px'} />
             </Grid>
             {moduleProjects?.length > 0 && (
-              <Grid item>
+              <Grid>
                 {moduleProjects?.length > 1 ? (
                   <Box display='flex'>
                     <Typography sx={{ lineHeight: '40px', marginRight: theme.spacing(1.5) }} component={'span'}>

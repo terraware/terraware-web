@@ -10,6 +10,8 @@ import {
   MRT_VisibilityState,
 } from 'material-react-table';
 
+import { TableDefinition } from 'src/types/Tables';
+
 type UseTableStateOptions = {
   defaultColumnOrder?: MRT_ColumnOrderState;
   defaultColumnVisibility?: MRT_VisibilityState;
@@ -43,7 +45,7 @@ const mergeColumnOrder = (
   return merged;
 };
 
-const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
+const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateOptions) => {
   const {
     defaultColumnOrder = [],
     defaultColumnVisibility = {},

@@ -49,7 +49,7 @@ export default function PlantingSiteView(): JSX.Element {
       )}
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <PlantingSiteDetailsHeader onDelete={openModal} plantingSite={plantingSite} />
-        <Grid item xs={12}>
+        <Grid size={12}>
           <PageSnackbar />
         </Grid>
         <Box marginTop={theme.spacing(3)}>

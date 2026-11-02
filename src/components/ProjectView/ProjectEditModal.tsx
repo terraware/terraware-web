@@ -156,7 +156,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id='name'
               label={strings.NAME}
@@ -167,7 +167,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
               required
             />
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <TextField
               id='description'
               label={strings.DESCRIPTION}

@@ -412,10 +412,10 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
         {strings.HISTORY}
       </Typography>
-      <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center' }}>
+      <Grid sx={{ display: 'flex', alignItems: 'center' }} size={12}>
         <Search {...searchProps} />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         {results && (
           <Table
             id='batch-history-table'

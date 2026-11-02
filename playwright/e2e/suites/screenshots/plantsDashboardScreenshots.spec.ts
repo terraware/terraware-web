@@ -202,7 +202,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await waitForMapIdle(page);
 
     // Toggle observation events layer on via the map legend
-    await page.getByRole('button', { name: 'Observation Events' }).getByRole('checkbox').check();
+    await page.getByRole('button', { name: 'Observation Events' }).getByRole('switch').check();
     await waitForMapIdle(page);
 
     await expect(page.locator('.map-container').first()).toHaveScreenshot(

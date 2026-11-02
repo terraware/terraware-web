@@ -24,35 +24,35 @@ const ParticipantHomeView = () => {
   return (
     <ParticipantPage>
       <Grid display={'flex'} flexDirection={'column'} width={'100%'}>
-        <Grid item>
+        <Grid>
           <Header />
         </Grid>
 
         {virtualWalkthroughEnabled && (
-          <Grid item marginTop={theme.spacing(2)}>
+          <Grid marginTop={theme.spacing(2)}>
             <VirtualWalkthroughMessages organizationId={selectedOrganization!.id} />
           </Grid>
         )}
 
         <DismissibleWrapper dontShowAgainPreferenceName={'dont-show-accelerator-welcome-banner'}>
           {(onClose) => (
-            <Grid item marginTop={theme.spacing(2)}>
+            <Grid marginTop={theme.spacing(2)}>
               <WelcomeBanner onClose={onClose} />
             </Grid>
           )}
         </DismissibleWrapper>
 
-        <Grid item marginTop={theme.spacing(2)}>
+        <Grid marginTop={theme.spacing(2)}>
           <ToDo />
         </Grid>
 
         {virtualWalkthroughEnabled && (
-          <Grid item marginTop={theme.spacing(2)}>
+          <Grid marginTop={theme.spacing(2)}>
             <VirtualWalkthroughCard />
           </Grid>
         )}
 
-        <Grid item marginTop={theme.spacing(2)}>
+        <Grid marginTop={theme.spacing(2)}>
           <CurrentModule />
         </Grid>
       </Grid>

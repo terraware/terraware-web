@@ -201,7 +201,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 backgroundColor: theme.palette.TwClrBg,
               }}
             >
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>
                   {strings.formatString(strings.SELECT_SEEDLINGS_BATCHES_FOR_PROJECT, project.name)}
                 </Typography>
@@ -210,7 +210,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 </Typography>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Box
                   sx={{
                     display: 'flex',
@@ -229,7 +229,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
                 </Box>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Table
                   columns={columns}
                   rows={entities}

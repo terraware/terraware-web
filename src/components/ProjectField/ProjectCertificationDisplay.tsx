@@ -23,7 +23,14 @@ const ProjectCertificationDisplay = ({ certifications }: { certifications?: Carb
   return (
     <>
       {certifications.map((certification) => (
-        <Grid item md={4} key={certification} paddingX={theme.spacing(2)} marginY={theme.spacing(1)}>
+        <Grid
+          key={certification}
+          paddingX={theme.spacing(2)}
+          marginY={theme.spacing(1)}
+          size={{
+            md: 4,
+          }}
+        >
           <Box marginBottom={theme.spacing(1)}>
             <Typography fontSize='16px' fontWeight={400} lineHeight='24px' component={'span'}>
               {strings.CERTIFICATION}

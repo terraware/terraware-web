@@ -105,7 +105,7 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <SelectT<SuggestedSpecies>
           id={id ?? 'speciesSelector'}
           label={hideLabel ? '' : strings.SPECIES_REQUIRED}

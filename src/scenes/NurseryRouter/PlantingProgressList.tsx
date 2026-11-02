@@ -24,6 +24,7 @@ import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
 import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
 import { PlantingProgressType } from 'src/types/PlantingSite';
+import { TABLES } from 'src/types/Tables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function PlantingProgressList(): JSX.Element {
@@ -113,8 +114,8 @@ export default function PlantingProgressList(): JSX.Element {
     return rows.some((d) => d.substratumName);
   }, [rows]);
 
-  const withStrataState = useTableState('plantings-progress-table-with-strata');
-  const withoutStrataState = useTableState('plantings-progress-table-without-strata');
+  const withStrataState = useTableState(TABLES.plantingProgressWithStrata);
+  const withoutStrataState = useTableState(TABLES.plantingProgressWithoutStrata);
   const activeState = hasStrata !== false ? withStrataState : withoutStrataState;
   const {
     density,
@@ -128,8 +129,8 @@ export default function PlantingProgressList(): JSX.Element {
   } = activeState;
 
   const tableStateStorageKey = hasStrata
-    ? 'plantings-progress-table-with-strata'
-    : 'plantings-progress-table-without-strata';
+    ? TABLES.plantingProgressWithStrata.storageKey
+    : TABLES.plantingProgressWithoutStrata.storageKey;
 
   const setPlantingCompleted = useCallback(
     async (complete: boolean) => {
@@ -340,7 +341,7 @@ export default function PlantingProgressList(): JSX.Element {
     <Box>
       <Box>{isLoading && <BusySpinner withSkrim={true} />}</Box>
       <EditableTable
-        key={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
+        key={tableStateStorageKey}
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={hasStrata ? columnsWithStrata : columnsWithoutStrata}
         data={rows}

@@ -42,7 +42,7 @@ const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Elemen
       <PlantingSiteStats />
       {rows.map((row, index) => (
         <Grid key={index} container spacing={3} sx={{ marginBottom: '16px', padding: 0 }}>
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             <Box
               sx={{
                 alignItems: 'center',
@@ -77,18 +77,14 @@ const OrganizationStatsCard = ({ rows }: OrganizationStatsCardProps): JSX.Elemen
           </Grid>
 
           {(isDesktop || row.statsCardItems[0]) && (
-            <Grid item xs={primaryGridSize}>
-              {row.statsCardItems[0] && <StatsCardItem {...row.statsCardItems[0]} />}
-            </Grid>
+            <Grid size={primaryGridSize}>{row.statsCardItems[0] && <StatsCardItem {...row.statsCardItems[0]} />}</Grid>
           )}
 
           {(isDesktop || row.statsCardItems[1]) && (
-            <Grid item xs={primaryGridSize}>
-              {row.statsCardItems[1] && <StatsCardItem {...row.statsCardItems[1]} />}
-            </Grid>
+            <Grid size={primaryGridSize}>{row.statsCardItems[1] && <StatsCardItem {...row.statsCardItems[1]} />}</Grid>
           )}
 
-          <Grid item xs={primaryGridSize}>
+          <Grid size={primaryGridSize}>
             {row.buttonProps && (
               <Box
                 sx={{

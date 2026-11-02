@@ -71,11 +71,7 @@ const ApplicationListView = () => {
           <NewApplicationModal open={isNewApplicationModalOpen} onClose={() => setIsNewApplicationModalOpen(false)} />
           <Grid container spacing={3} sx={{ padding: 0 }}>
             {allApplications?.map((application) => (
-              <Grid
-                item
-                xs={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}
-                key={application.id}
-              >
+              <Grid key={application.id} size={allApplications.length === 1 ? primaryGridSize() : secondaryGridSize()}>
                 <ApplicationCard
                   applicationId={application.id}
                   applicationName={application.projectName}

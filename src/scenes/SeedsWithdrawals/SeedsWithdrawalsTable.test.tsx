@@ -59,6 +59,7 @@ const renderTable = (results: SeedWithdrawalSearchResult[]) => {
       accession_species_scientificName: { values: ['Acacia koa'] },
       accession_facility_name: { values: ['Main Seed Bank'] },
       destination: { values: ['Kigali Nursery'] },
+      batch_facility_name: { values: ['Kigali Nursery'] },
     },
   });
 
@@ -155,6 +156,7 @@ describe('SeedsWithdrawalsTable', () => {
         accession_species_scientificName: { values: ['Acacia koa'] },
         accession_facility_name: { values: ['Main Seed Bank'] },
         destination: { values: ['Kigali Nursery'] },
+        batch_facility_name: { values: ['Kigali Nursery'] },
       },
     });
     server.use(
@@ -277,8 +279,8 @@ describe('SeedsWithdrawalsTable', () => {
     expect(await screen.findByRole('cell', { name: 'Ada Lovelace' })).toBeVisible();
 
     await userEvent.click(screen.getByRole('button', { name: /show.*hide columns/i }));
-    await userEvent.click(await screen.findByRole('checkbox', { name: new RegExp(strings.ESTIMATED_SEED_COUNT) }));
-    await userEvent.click(screen.getByRole('checkbox', { name: new RegExp(strings.ESTIMATED_WEIGHT) }));
+    await userEvent.click(await screen.findByRole('switch', { name: new RegExp(strings.ESTIMATED_SEED_COUNT) }));
+    await userEvent.click(screen.getByRole('switch', { name: new RegExp(strings.ESTIMATED_WEIGHT) }));
     await userEvent.keyboard('{Escape}');
 
     expect(await screen.findByRole('cell', { name: '480' })).toBeVisible();

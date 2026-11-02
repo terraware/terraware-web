@@ -25,6 +25,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationState, getStatus } from 'src/types/Observations';
+import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
@@ -51,7 +52,7 @@ type PlantMonitoringRow = {
   completedDate?: string;
 };
 
-const STORAGE_KEY = 'observations-assigned-table';
+const TABLE = TABLES.assignedObservations;
 
 const DEFAULT_COLUMN_ORDER = [
   'observationDate',
@@ -142,7 +143,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const showSelectObservation = typeof plantingSiteId === 'number';
   const showSiteName = plantingSiteId === ALL_PLANTING_SITES;
 
-  const tableState = useTableState(STORAGE_KEY, {
+  const tableState = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
   });
@@ -363,7 +364,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         enableGlobalFilter={true}
         enableColumnFilters={false}
         enableColumnOrdering={true}
-        storageKey={STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}

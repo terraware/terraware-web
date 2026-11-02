@@ -64,7 +64,7 @@ export default function SelectSeedBankModal(props: SelectSeedBankProps): JSX.Ele
           marginTop: Number(theme.spacing(2)) / 2,
         }}
       >
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Select
             id='seedBank'
             selectedValue={selectedFacility?.name}

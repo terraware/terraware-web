@@ -35,7 +35,7 @@ export default function CountryAndBotanicalCountrySelect({
 
   return (
     <>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Dropdown
           id='country'
           label={strings.COUNTRY}
@@ -48,7 +48,7 @@ export default function CountryAndBotanicalCountrySelect({
           required={required}
         />
       </Grid>
-      <Grid item xs={12}>
+      <Grid size={12}>
         <Dropdown
           id='botanicalCountry'
           label={strings.BOTANICAL_COUNTRY}

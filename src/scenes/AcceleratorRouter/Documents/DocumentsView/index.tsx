@@ -54,15 +54,15 @@ export default function DocumentsView(): JSX.Element | null {
       activeLocale ? (
         <>
           <Grid container sx={{ marginTop: theme.spacing(0.5) }}>
-            <Grid item>
+            <Grid>
               <Separator height={'40px'} />
             </Grid>
-            <Grid item>
+            <Grid>
               <Typography sx={{ lineHeight: '40px' }} component={'span'}>
                 {strings.DEAL_NAME}
               </Typography>
             </Grid>
-            <Grid item sx={{ marginLeft: theme.spacing(1.5) }}>
+            <Grid sx={{ marginLeft: theme.spacing(1.5) }}>
               <ProjectsDropdown
                 allowUnselect
                 availableProjects={availableProjects}

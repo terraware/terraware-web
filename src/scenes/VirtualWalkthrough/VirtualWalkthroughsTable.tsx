@@ -29,6 +29,9 @@ import {
   useSetOrganizationSplatNeedsAttentionMutation,
 } from 'src/queries/generated/organizationSplats';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
+import { TABLES } from 'src/types/Tables';
+
+const TABLE = TABLES.virtualWalkthroughs;
 
 type VirtualWalkthroughsTableProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
@@ -59,7 +62,7 @@ export default function VirtualWalkthroughsTable({
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState('virtual-walkthroughs-table');
+  } = useTableState(TABLE);
   const { strings } = useLocalization();
 
   const getStatusLabel = useCallback(
@@ -350,7 +353,7 @@ export default function VirtualWalkthroughsTable({
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
-        storageKey='virtual-walkthroughs-table'
+        storageKey={TABLE.storageKey}
         renderToolbarInternalActions={({ table }) => (
           <Box display='flex' gap={0.5}>
             <MRT_ToggleGlobalFilterButton table={table} />

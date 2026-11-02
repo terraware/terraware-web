@@ -178,8 +178,8 @@ export default function SpeciesProjectsTable({
         <AddToProjectModal onClose={onCloseAddToProject} onSubmit={onAddHandler} projects={selectableProjects} />
       )}
 
-      <Grid item xs={12}>
-        <Grid item xs={12}>
+      <Grid size={12}>
+        <Grid size={12}>
           <Box
             alignItems='center'
             display='flex'
@@ -205,7 +205,7 @@ export default function SpeciesProjectsTable({
             )}
           </Box>
         </Grid>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Table
             id='species-projects'
             columns={editMode ? columns : viewColumns}

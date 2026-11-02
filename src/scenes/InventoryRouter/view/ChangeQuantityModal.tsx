@@ -129,8 +129,8 @@ export default function ChangeQuantityModal({
 
   const onChangeMovedValue = useCallback(
     (value: unknown) => {
-      const valueNumber = value as number;
-      if (value && !isNaN(valueNumber) && valueNumber > 0) {
+      const valueNumber = Number(value);
+      if (!isNaN(valueNumber) && valueNumber > 0) {
         setMovedValue(valueNumber);
       } else {
         setMovedValue(undefined);
@@ -299,10 +299,10 @@ export default function ChangeQuantityModal({
         />,
       ]}
     >
-      <Grid>
+      <Grid container>
         {saving && <BusySpinner withSkrim />}
 
-        <Grid display='flex' item marginBottom='16px' textAlign='left' xs={11}>
+        <Grid display='flex' marginBottom='16px' textAlign='left' size={11}>
           <Dropdown
             errorText={undefined}
             fullWidth
@@ -315,7 +315,7 @@ export default function ChangeQuantityModal({
           />
         </Grid>
 
-        <Grid item xs={11} textAlign='left' display='flex'>
+        <Grid textAlign='left' display='flex' size={11}>
           <Textfield display id='previousValue' label={fromLabel} type='number' value={fromValueFormatted} />
 
           <Box maxWidth='120px' marginLeft={2}>

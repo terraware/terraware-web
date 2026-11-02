@@ -17,7 +17,12 @@ const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectPro
   const { isMobile, isTablet } = useDeviceInfo();
 
   return (
-    <Grid item md={isMobile || isTablet ? 12 : 6} sx={{ padding: theme.spacing(isMobile || isTablet ? 1 : 0, 1) }}>
+    <Grid
+      sx={{ padding: theme.spacing(isMobile || isTablet ? 1 : 0, 1) }}
+      size={{
+        md: isMobile || isTablet ? 12 : 6,
+      }}
+    >
       <Box
         sx={{
           overflow: 'hidden',

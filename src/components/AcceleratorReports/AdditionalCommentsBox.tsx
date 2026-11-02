@@ -81,7 +81,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
       onSave={onSave}
       isConsoleView={isConsoleView}
     >
-      <Grid item xs={12}>
+      <Grid size={12}>
         {!isEditing && !additionalComments ? (
           <EmptyFieldPlaceholder text={strings.NO_ADDITIONAL_COMMENTS_ADDED} />
         ) : (

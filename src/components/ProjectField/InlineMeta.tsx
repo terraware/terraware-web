@@ -38,7 +38,7 @@ const ProjectFieldInlineMeta = ({
   return (
     <FluidEntryWrapper>
       <Grid container alignContent={'center'} paddingX={theme.spacing(2)}>
-        <Grid item xs={12}>
+        <Grid size={12}>
           <Box>
             {dateLabel && (
               <Typography
