@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
@@ -18,7 +17,6 @@ import PlantingSitesListTab from './PlantingSitesListTab';
 
 const PlantingSitesList = () => {
   const { strings } = useLocalization();
-  const { isMobile } = useDeviceInfo();
   const query = useQuery();
   const { selectedOrganization } = useOrganization();
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
@@ -68,23 +66,18 @@ const PlantingSitesList = () => {
     viewIdentifier: 'planting-sites',
   });
 
-  const rightComponent = useMemo(() => {
-    if (isMobile) {
-      return (
-        <Button id='new-planting-site' icon='plus' onClick={() => setPlantingSiteTypeSelectOpen(true)} size='medium' />
-      );
-    } else {
-      return (
-        <Button
-          id='new-planting-site'
-          icon='plus'
-          label={strings.ADD_PLANTING_SITE}
-          onClick={() => setPlantingSiteTypeSelectOpen(true)}
-          size='medium'
-        />
-      );
-    }
-  }, [isMobile, strings]);
+  const rightComponent = useMemo(
+    () => (
+      <Button
+        id='new-planting-site'
+        icon='plus'
+        label={strings.ADD_PLANTING_SITE}
+        onClick={() => setPlantingSiteTypeSelectOpen(true)}
+        size='medium'
+      />
+    ),
+    [strings]
+  );
 
   const isLoading = useMemo(() => {
     return sitesCountLoading || (canViewDrafts && draftSitesCountLoading);

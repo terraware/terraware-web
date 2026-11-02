@@ -1,6 +1,6 @@
 import React, { type JSX, ReactNode, useCallback, useMemo, useState } from 'react';
 
-import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -10,9 +10,9 @@ import TfMain from 'src/components/common/TfMain';
 import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
+import useSiteEditorAvailability from 'src/scenes/PlantingSitesRouter/hooks/useSiteEditorAvailability';
 import strings from 'src/strings';
 import { EditorPlantingSite, SiteEditStep } from 'src/types/PlantingSite';
-import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { EditorStepperContext, PlantingSiteStep } from './EditorStepper';
 import Exclusions from './Exclusions';
@@ -57,9 +57,7 @@ export default function EditorLayout({
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
   const theme = useTheme();
-  const { isDesktop } = useDeviceInfo();
-  const isNarrowPortrait = useMediaQuery('(min-width: 768px) and (max-width: 1439px) and (orientation: portrait)');
-  const isEditorAvailable = isDesktop && !isNarrowPortrait;
+  const { isEditorAvailable, unavailableMessage } = useSiteEditorAvailability();
   const dispatch = useAppDispatch();
   const [stepperCollapsed, setStepperCollapsed] = useState<boolean>(false);
 
@@ -128,7 +126,7 @@ export default function EditorLayout({
       </Grid>
       {!isEditorAvailable && (
         <Message
-          body={isNarrowPortrait ? strings.SITE_EDITOR_USE_TABLET_LANDSCAPE : strings.SITE_EDITOR_USE_DESKTOP}
+          body={unavailableMessage}
           priority='info'
           type='page'
           pageButtons={[
