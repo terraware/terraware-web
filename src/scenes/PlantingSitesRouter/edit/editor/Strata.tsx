@@ -220,18 +220,18 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     }
 
     return [
+      { text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION },
       {
-        text: strings.SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) =>
-          strings.formatString(
-            prefix,
-            <MapIcon centerAligned={true} icon='slice' />,
-            <Typography component='span' fontSize='inherit' fontWeight={600}>
-              {strings.SITE_STRATUM_BOUNDARIES_SIZE}
-            </Typography>
-          ) as JSX.Element[],
+        startsSection: true,
+        text: strings.formatString(
+          strings.SITE_STRATUM_BOUNDARIES_DRAWING_INSTRUCTIONS,
+          <MapIcon centerAligned={true} icon='slice' />,
+          <Typography component='span' fontSize='inherit' fontWeight={600}>
+            {strings.SITE_STRATUM_BOUNDARIES_SIZE}
+          </Typography>
+        ) as JSX.Element[],
       },
+      { text: strings.SITE_STRATUM_BOUNDARIES_TUTORIAL, hasTutorial: true },
     ];
   }, [activeLocale]);
 
