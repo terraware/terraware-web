@@ -13,11 +13,19 @@ test.describe('Seedlings Dashboard', () => {
   });
 
   test('shows nursery totals and opens the correct inventory tabs', async ({ page }) => {
-    const response = await page.request.get('/api/v1/nursery/summary?organizationId=1');
+    const [response] = await Promise.all([
+      page.waitForResponse((response) => {
+        const url = new URL(response.url());
+        return (
+          response.request().method() === 'GET' &&
+          url.pathname === '/api/v1/nursery/summary' &&
+          url.searchParams.get('organizationId') === '1'
+        );
+      }),
+      openNavItem(page, 'Seedlings', 'Dashboard'),
+    ]);
     expect(response.ok()).toBe(true);
     const { summary } = (await response.json()) as { summary: OrganizationNurserySummaryPayload };
-
-    await openNavItem(page, 'Seedlings', 'Dashboard');
 
     await expect(page).toHaveURL((url) => url.pathname === '/seedlings-dashboard');
     await expect(page.getByRole('heading', { name: 'Seedlings Dashboard', level: 1 })).toBeVisible();
@@ -81,7 +89,7 @@ test.describe('Seedlings Dashboard', () => {
         },
       })
     );
-    await page.goto('/seedlings-dashboard');
+    await openNavItem(page, 'Seedlings', 'Dashboard');
 
     await expect(page.getByText('Add Inventory to See Data', { exact: true })).toBeVisible();
     await page.getByRole('button', { name: 'Add Inventory', exact: true }).click();
