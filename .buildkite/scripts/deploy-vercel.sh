@@ -101,6 +101,7 @@ github_api_request() {
         "$@" "$url"
 }
 
+bot_login=$(github_api_request GET "https://api.github.com/user" | jq -r '.login')
 existing_comment_id=""
 page=1
 while [[ -z "$existing_comment_id" ]]; do
@@ -109,8 +110,8 @@ while [[ -z "$existing_comment_id" ]]; do
     if [[ $(jq 'length' <<< "$comments") -eq 0 ]]; then
         break
     fi
-    existing_comment_id=$(jq -r --arg marker "$comment_marker" \
-        'first(.[] | select(.body | startswith($marker)) | .id) // empty' <<< "$comments")
+    existing_comment_id=$(jq -r --arg marker "$comment_marker" --arg login "$bot_login" \
+        'first(.[] | select(.user.login == $login and (.body | startswith($marker))) | .id) // empty' <<< "$comments")
     page=$((page + 1))
 done
 
