@@ -20,6 +20,7 @@ import {
   defaultPillValueRenderer,
 } from 'src/components/common/SearchFiltersWrapperV2';
 import IconFilters from 'src/components/common/SearchFiltersWrapperV2/IconFilters';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useClientSideFilter from 'src/hooks/useClientSideFiltering';
@@ -118,7 +119,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
       }}
     >
       <Grid paddingRight={theme.spacing(2)} size='auto'>
-        <img
+        <ThumbnailImage
           alt={coverPhoto?.caption}
           height='100'
           src={coverPhotoURL}

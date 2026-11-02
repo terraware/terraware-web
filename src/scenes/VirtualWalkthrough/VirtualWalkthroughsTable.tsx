@@ -15,6 +15,7 @@ import {
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
@@ -154,8 +155,7 @@ export default function VirtualWalkthroughsTable({
             '&:hover .icon360-overlay': { display: 'flex' },
           }}
         >
-          <Box
-            component='img'
+          <ThumbnailImage
             src={thumbnailSrc}
             alt={strings.THUMBNAIL}
             sx={{ borderRadius: '4px', display: 'block', height: 40, objectFit: 'cover', width: 64 }}

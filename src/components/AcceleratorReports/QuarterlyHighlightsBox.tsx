@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import { useThumbnailSrc } from 'src/components/common/ThumbnailImage';
 import Button from 'src/components/common/button/Button';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useLocalization } from 'src/providers';
@@ -47,6 +48,8 @@ const QuarterlyHighlightsBox = ({
     [projectHighlightPhotoValueId, projectId]
   );
 
+  const { src: coverPhotoSrc } = useThumbnailSrc(coverPhotoUrl);
+
   const onClick = useCallback(() => onViewHighlights(quarterLabel), [onViewHighlights, quarterLabel]);
 
   return (
@@ -66,8 +69,8 @@ const QuarterlyHighlightsBox = ({
       >
         <Box
           sx={{
-            background: coverPhotoUrl
-              ? `url(${coverPhotoUrl}) center / cover no-repeat`
+            background: coverPhotoSrc
+              ? `url(${coverPhotoSrc}) center / cover no-repeat`
               : 'url(/assets/logo-terraformation.svg) center / 33% no-repeat, linear-gradient(180deg, #2C8658 0%, #123624 100%)',
             borderRadius: theme.spacing(1),
             flexShrink: 0,

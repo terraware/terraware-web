@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { getImagePath } from 'src/utils/images';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -32,8 +33,7 @@ const ProjectProfileImage = ({ projectId, imageValueId, alt, label }: ProjectPro
           aspectRatio: '3/2',
         }}
       >
-        <Box
-          component={'img'}
+        <ThumbnailImage
           src={getImagePath(projectId, imageValueId)}
           alt={alt}
           sx={{

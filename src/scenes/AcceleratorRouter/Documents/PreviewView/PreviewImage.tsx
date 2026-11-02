@@ -2,6 +2,7 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import {
   ImageVariable,
   SectionVariableWithValues,
@@ -53,7 +54,7 @@ export const PreviewImage = ({
 
           return (
             <div className='image-container' key={`image-${index}`}>
-              <img width='75%' src={getImagePath(projectId, img.id)} alt='doc' />
+              <ThumbnailImage width='75%' src={getImagePath(projectId, img.id)} alt='doc' />
               {!suppressCaptions && (
                 <p className='caption'>
                   Figure {(relevantImageVariable as any).figure} {imgValue.caption}{' '}

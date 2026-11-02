@@ -6,6 +6,7 @@ import { Button, DropdownItem, Textfield } from '@terraware/web-components';
 import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWorkflowDetails';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import useUploadImageValues from 'src/hooks/variables/useUploadImageValues';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
@@ -264,7 +265,7 @@ const EditImagesModal = (props: EditImagesModalProps): JSX.Element => {
                   />
                 )}
 
-                <img
+                <ThumbnailImage
                   height='120px'
                   src={getImagePath(projectId, image.id, 120, 120)}
                   alt='doc'

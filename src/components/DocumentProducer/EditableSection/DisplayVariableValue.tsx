@@ -3,6 +3,7 @@ import React from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import TableDisplay from 'src/components/DocumentProducer/TableDisplay';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import strings from 'src/strings';
 import { TableVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue } from 'src/types/documentProducer/VariableValue';
@@ -69,7 +70,7 @@ export default function DisplayVariableValue({
                   width: '100%',
                 }}
               >
-                <img
+                <ThumbnailImage
                   src={getImagePath(projectId, v.id, 500, 500)}
                   alt={(v as VariableValueImageValue).caption ?? `${variable.name}-${index}`}
                 />

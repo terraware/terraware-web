@@ -3,6 +3,7 @@ import React, { type JSX, useState } from 'react';
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import strings from 'src/strings';
 import { ImageVariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue } from 'src/types/documentProducer/VariableValue';
@@ -71,7 +72,7 @@ const DeliverableEditImages = (props: DeliverableEditImagesProps): JSX.Element =
                   backgroundColor: theme.palette.TwClrBgDanger,
                 }}
               />
-              <img
+              <ThumbnailImage
                 height='120px'
                 src={getImagePath(projectId, image.id, 120, 120)}
                 alt='doc'
