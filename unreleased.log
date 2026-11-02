@@ -1,3 +1,7 @@
+ac383638 SW-9029 Use polygon extents in getBoundingBoxFromMultiPolygons and add unit tests (#6977)
+80e85e22 Find narrow antimeridian bounds from finite map points (#6976)
+af8cd1c3 SW-9029 Clamp getBoundsZoomLevel and add unit tests (#6975)
+2b52477d Validate wrapped and unwrapped map bounds (#6974)
 ae4e3a78 SW-9111 Improve drawer spacing between paragraphs (#6967)
 d412db92 Fetch matrix view projects through RTK Query (#6957)
 0ab68464 Bump follow-redirects from 1.16.1 to 1.16.2 (#6968)
