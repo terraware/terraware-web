@@ -21,7 +21,7 @@ import { Facility } from 'src/types/Facility';
 import { Organization } from 'src/types/Organization';
 import { isAdmin } from 'src/utils/organization';
 import useDebounce from 'src/utils/useDebounce';
-import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useDefaultTimeZone, withTimeZoneLongName } from 'src/utils/useTimeZoneUtils';
 
 import NurseriesCellRenderer from './TableCellRenderer';
 
@@ -69,7 +69,7 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
   const results = useMemo(
     () =>
       currentData
-        ? (currentData.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[])
+        ? (currentData.map((facility) => withTimeZoneLongName(facility, timeZones, defaultTimeZone)) as Facility[])
         : undefined,
     [currentData, timeZones, defaultTimeZone]
   );
