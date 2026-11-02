@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Button } from '@terraware/web-components';
 import _ from 'lodash';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -71,6 +71,8 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
       ),
     [editorSite, initialSite, isDirty, site]
   );
+
+  const busy = isSaving || isSummarizing || !!onValidate;
 
   const goToSiteView = useCallback(() => goToPlantingSiteView(site.id), [goToPlantingSiteView, site.id]);
 
@@ -203,20 +205,51 @@ export default function MapEditor({ site }: MapEditorProps): JSX.Element {
     setShowStartOver(false);
   }, [initialSite]);
 
+  const isLastStep = stepIndex === steps.length - 1;
+
+  const actions = (
+    <>
+      <Button
+        id='close-planting-site-edit'
+        label={strings.CLOSE}
+        onClick={onClose}
+        disabled={busy}
+        priority='secondary'
+        type='passive'
+        size='medium'
+      />
+      {stepIndex > 0 && (
+        <Button
+          id='back-planting-site-edit'
+          label={strings.BACK}
+          onClick={onBack}
+          disabled={busy}
+          priority='secondary'
+          type='passive'
+          size='medium'
+        />
+      )}
+      {!isLastStep && (
+        <Button id='next-planting-site-edit' label={strings.NEXT} onClick={onNext} disabled={busy} size='medium' />
+      )}
+      <Button
+        id='save-planting-site-edit'
+        label={strings.SAVE_CHANGES}
+        onClick={onNext}
+        disabled={busy || !isLastStep}
+        size='medium'
+      />
+    </>
+  );
+
   return (
     <EditorLayout
-      busy={isSaving || isSummarizing || !!onValidate}
-      closeButtonId='close-planting-site-edit'
+      actions={actions}
+      busy={busy}
       currentStep={currentStep}
-      finishButtonId='save-planting-site-edit'
-      finishLabel={strings.SAVE_CHANGES}
       isDirty={hasChanges}
-      onBack={onBack}
-      onClose={onClose}
       onDirtyChange={setIsDirty}
-      onFinish={onNext}
       onLeave={goToSiteView}
-      onNext={onNext}
       onStartOver={hasChanges ? onOpenStartOver : undefined}
       onValidate={onValidate}
       site={editorSite}

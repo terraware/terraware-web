@@ -43,8 +43,8 @@ type PendingRefetch = {
 };
 
 type PendingSave = {
+  exit: boolean;
   problems: PlantingSiteProblem[];
-  redirectToDraft: boolean;
   request: Data;
 };
 
@@ -54,14 +54,15 @@ export type Response = {
   onFinishUpdate: () => void;
   onSaveAnyway: () => void;
   problems?: PlantingSiteProblem[];
-  updateDraft: (draft: Data, redirectToDraft: boolean) => void;
+  saveStepPosition: (siteEditStep: SiteEditStep) => void;
+  updateDraft: (draft: Data, exit?: boolean) => void;
   updatedDraft?: Data;
 };
 
 /**
  * Hook to isolate workflow logic to update a draft planting site.
  * Returns update function, whether the request is in flight and the updated draft site.
- * Optionally redirects to draft after update.
+ * Saving with `exit` closes the flow and returns to the planting sites list.
  * If the draft has validation problems, the save waits for onSaveAnyway or onCancelSave.
  */
 export default function useDraftPlantingSiteUpdate(draftId: number): Response {
@@ -82,7 +83,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   }, [requestId]);
 
   const save = useCallback(
-    async (request: Data, redirectToDraft: boolean) => {
+    async (request: Data, exit: boolean) => {
       try {
         const requestIdBeforeSave = latestRequestId.current;
 
@@ -94,9 +95,10 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
           ),
         }).unwrap();
 
-        if (redirectToDraft) {
-          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-          navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${request.draft.id}`));
+        snackbar.toastSuccess(strings.PLANTING_SITE_SAVED_AS_DRAFT);
+
+        if (exit) {
+          navigate(APP_PATHS.PLANTING_SITES);
         } else {
           setPendingRefetch({ request, requestIdBeforeSave });
         }
@@ -113,7 +115,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
   );
 
   const updateDraft = useCallback(
-    (request: Data, redirectToDraft: boolean) => {
+    (request: Data, exit = false) => {
       const update = async () => {
         let problems: PlantingSiteProblem[];
         try {
@@ -124,9 +126,9 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         }
 
         if (problems.length) {
-          setPendingSave({ problems, redirectToDraft, request });
+          setPendingSave({ exit, problems, request });
         } else {
-          await save(request, redirectToDraft);
+          await save(request, exit);
         }
       };
 
@@ -135,10 +137,27 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
     [save, snackbar, validatePlantingSite]
   );
 
+  const saveStepPosition = useCallback(
+    (siteEditStep: SiteEditStep) => {
+      if (!currentData) {
+        return;
+      }
+
+      const persisted = toDraft(currentData.site);
+      void updateDraftPlantingSite({
+        id: persisted.id,
+        updateDraftPlantingSiteRequestPayload: fromDraft({ ...persisted, siteEditStep }, persisted),
+      })
+        .unwrap()
+        .catch(() => undefined);
+    },
+    [currentData, updateDraftPlantingSite]
+  );
+
   const onSaveAnyway = useCallback(() => {
     if (pendingSave) {
       setPendingSave(undefined);
-      void save(pendingSave.request, pendingSave.redirectToDraft);
+      void save(pendingSave.request, pendingSave.exit);
     }
   }, [pendingSave, save]);
 
@@ -162,6 +181,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
       onFinishUpdate,
       onSaveAnyway,
       problems: pendingSave?.problems,
+      saveStepPosition,
       updateDraft,
       updatedDraft,
     }),
@@ -173,6 +193,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
       onSaveAnyway,
       pendingRefetch,
       pendingSave,
+      saveStepPosition,
       updateDraft,
       updatedDraft,
     ]
