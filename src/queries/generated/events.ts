@@ -55,6 +55,15 @@ export type AccessionSubjectPayload = {
     accessionId: number;
     facilityId: number;
   };
+export type BiomassAdditionalSpeciesSubjectPayload = {
+  type: 'BiomassAdditionalSpecies';
+} & EventSubjectPayloadBase & {
+    monitoringPlotId: number;
+    observationId: number;
+    plantingSiteId: number;
+    scientificName?: string;
+    speciesId?: number;
+  };
 export type BiomassDetailsSubjectPayload = {
   type: 'BiomassDetails';
 } & EventSubjectPayloadBase & {
@@ -269,6 +278,7 @@ export type EventLogEntryPayload = {
   subject:
     | AccessionPhotoSubjectPayload
     | AccessionSubjectPayload
+    | BiomassAdditionalSpeciesSubjectPayload
     | BiomassDetailsSubjectPayload
     | BiomassQuadratSpeciesSubjectPayload
     | BiomassQuadratSubjectPayload
@@ -317,6 +327,7 @@ export type ListEventLogEntriesRequestPayload = {
   subjects?: (
     | 'Accession'
     | 'AccessionPhoto'
+    | 'BiomassAdditionalSpecies'
     | 'BiomassDetails'
     | 'BiomassQuadrat'
     | 'BiomassQuadratSpecies'

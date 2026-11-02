@@ -51,35 +51,6 @@ export type CreateDraftPlantingSiteResponsePayload = {
   id: number;
   status: SuccessOrError;
 };
-export type ErrorDetails = {
-  message: string;
-};
-export type PlantingSiteValidationProblemPayload = {
-  /** If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
-  conflictsWith?: string[];
-  problemType:
-    | 'DuplicateSubstratumName'
-    | 'DuplicateStratumName'
-    | 'ExclusionWithoutBoundary'
-    | 'SiteTooLarge'
-    | 'SubstratumBoundaryOverlaps'
-    | 'SubstratumInExclusionArea'
-    | 'SubstratumNotInStratum'
-    | 'StratumBoundaryOverlaps'
-    | 'StratumHasNoSubstrata'
-    | 'StratumNotInSite'
-    | 'StratumTooSmall'
-    | 'StrataWithoutSiteBoundary';
-  /** If the problem relates to a particular stratum, its name. */
-  stratum?: string;
-  /** If the problem relates to a particular substratum, its name. If this is present, stratum will also be present and will be the name of the stratum that contains this substratum. */
-  substratum?: string;
-};
-export type DraftPlantingSiteMapInvalidResponsePayload = {
-  error: ErrorDetails;
-  problems: PlantingSiteValidationProblemPayload[];
-  status: SuccessOrError;
-};
 export type CrsProperties = {
   /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system for GeoJSON. */
   name: string;
@@ -203,6 +174,9 @@ export type ParseDraftPlantingSiteBoundaryResponsePayload = {
   /** One content validation problem. Omitted on success; clients translate the code into a message in the user's language. */
   problems?: BoundaryFileProblemPayload[];
   status: SuccessOrError;
+};
+export type ErrorDetails = {
+  message: string;
 };
 export type SimpleErrorResponsePayload = {
   error: ErrorDetails;

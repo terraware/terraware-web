@@ -438,10 +438,7 @@ export type CreateAccessionResponsePayloadV2Read = {
   accession: AccessionPayloadV2Read;
   status: SuccessOrError;
 };
-export type CreateAccessionRequestPayloadV2 = {
-  /** Date and time the seeds were collected. */
-  collectedTime?: string;
-};
+export type CreateAccessionRequestPayloadV2 = {};
 export type CreateAccessionRequestPayloadV2Write = {
   bagNumbers?: string[];
   /** Will be derived from collectedTime if present. */
