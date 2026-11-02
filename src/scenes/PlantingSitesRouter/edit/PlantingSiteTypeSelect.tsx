@@ -21,6 +21,11 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
   const [siteType, setSiteType] = useState<SiteType>();
   const { createDraft, isCreating } = useDraftPlantingSiteCreate();
   const { isEditorAvailable, unavailableMessage } = useSiteEditorAvailability();
+  // Once the flow has started, keep going if the device rotates so entered details aren't lost.
+  const [hasStartedFlow, setHasStartedFlow] = useState(isEditorAvailable);
+  if (isEditorAvailable && !hasStartedFlow) {
+    setHasStartedFlow(true);
+  }
 
   const site = useMemo<DraftPlantingSite | undefined>(
     () =>
@@ -35,7 +40,7 @@ export default function PlantingSiteTypeSelect(props: PlantingSiteTypeSelectProp
     [selectedOrganization, siteType]
   );
 
-  if (!isEditorAvailable) {
+  if (!hasStartedFlow) {
     return (
       <DialogBox
         message={unavailableMessage}
