@@ -2527,6 +2527,8 @@ TOOLTIP_BATCH_NUMBER,"Los números de lote con el formato YY-L-N-XXX pueden desg
 TOOLTIP_COMMON_NAME,"El nombre por el que un organismo es conocido por el público general, en lugar de su nombre científico.",1f6fe5d2
 TOOLTIP_COUNTRY_MY_ACCOUNT,Su país afecta cómo mostramos los números y demás información.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.",5101036f
+TOOLTIP_DASHBOARD_TOTAL_BATCHES,"Este número incluye todos los lotes con plántulas restantes en cualquier etapa, incluida la Germinación. Los lotes vacíos no se cuentan.",aa399bbe
+TOOLTIP_DASHBOARD_TOTAL_SEEDLINGS,"Este número incluye plántulas en Crecimiento Activo, Endurecimiento y Listas. Las plántulas en Germinación se muestran por separado a continuación.",570c17ec
 TOOLTIP_ECOSYSTEM_TYPE,"Estos tipos son unidades relativamente grandes de tierra o agua que contienen un conjunto distintivo de comunidades naturales que comparten la mayoría de las especies, dinámicas y condiciones ambientales.",0242f37b
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,«Germinación/establecimiento» indica que las plántulas aún no han emergido de las semillas. La cantidad no cuenta para determinar la cantidad total.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Lo que determina que una planta esté en «Curación» puede variar y suele ser específico de cada especie. Ejemplo: tamaño de la planta o tiempo de aclimatación.,082384cb
@@ -2566,6 +2568,7 @@ TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos 
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
 TOTAL_AREA,Área total,2eefa842
+TOTAL_BATCHES,Total de lotes,1f5ca50c
 TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
 TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas,04705106
 TOTAL_GOAL,Meta total,b6468a48
@@ -2590,6 +2593,7 @@ TOTAL_QUANTITY,Cantidad total,cdf71c19
 TOTAL_QUANTITY_MOVED,Cantidad total de movidos,692dd6b4
 TOTAL_READY_TO_PLANT_QUANTITY,Cantidad total lista para plantar,e0ffa330
 TOTAL_SEED_COUNT,Recuento total de semillas,be979b1e
+TOTAL_SEEDLINGS,Total de plántulas,48079709
 TOTAL_SEEDLINGS_COUNT,Suma total de plantas de semillero,1aad5bd0
 TOTAL_SEEDLINGS_SENT,Total de plántulas enviadas,12a7f16d
 TOTAL_SEEDS,Total de semillas,b61cfde7

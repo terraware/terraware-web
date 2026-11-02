@@ -2527,6 +2527,8 @@ TOOLTIP_BATCH_NUMBER,"Les numéros de lots au format YY-L-N-XXX peuvent être d�
 TOOLTIP_COMMON_NAME,"Le nom sous lequel un organisme est connu du grand public, plutôt que son nom scientifique.",1f6fe5d2
 TOOLTIP_COUNTRY_MY_ACCOUNT,Votre pays influence la façon dont nous affichons les numéros et d'autres informations.,11f4b5a9
 TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS,"Ce numéro représente toutes les accessions dont le statut est « En attente d'enregistrement », « En attente de traitement », « En cours de traitement », « En cours de séchage » et « En cours de stockage ».",5101036f
+TOOLTIP_DASHBOARD_TOTAL_BATCHES,"Ce nombre inclut tous les lots ayant des plants restants à n'importe quelle étape, y compris la germination. Les lots vides ne sont pas comptabilisés.",aa399bbe
+TOOLTIP_DASHBOARD_TOTAL_SEEDLINGS,"Ce nombre inclut les plants en croissance active, en acclimatation et prêts. Les plants en germination sont affichés séparément ci-dessous.",570c17ec
 TOOLTIP_ECOSYSTEM_TYPE,"Ces types représentent des unités relativement vastes de terre ou d’eau contenant un ensemble distinct de communautés naturelles partageant la grande majorité des espèces, des dynamiques et des conditions environnementales.",0242f37b
 TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY,La « germination/établissement » indique que les semis n'ont pas encore émergé des graines. La quantité ne compte pas dans la quantité totale.,cb01c879
 TOOLTIP_HARDENING_OFF_QUANTITY,Les éléments qui déterminent qu'une plante est en phase d'endurcissement peuvent varier et sont souvent spécifiques à l'espèce. Exemple : taille de la plante ou durée d'acclimatation.,082384cb
@@ -2566,6 +2568,7 @@ TOOLTIP_VIABILITY_TEST_TREATMENT,"Les agents et techniques biologiques, physique
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total des accessions actives,8950dbea
 TOTAL_AREA,Superficie totale,2eefa842
+TOTAL_BATCHES,Nombre total de lots,1f5ca50c
 TOTAL_DENSITY_TOOLTIP,Densité totale de plantation (plants/ha) des valeurs saisies ci-dessus.,edb8e740
 TOTAL_DENSITY_VIEW_TOOLTIP,Total des densités de plantation de toutes les espèces répertoriées,04705106
 TOTAL_GOAL,Objectif total,b6468a48
@@ -2590,6 +2593,7 @@ TOTAL_QUANTITY,Quantité totale,cdf71c19
 TOTAL_QUANTITY_MOVED,Quantité totale déplacée,692dd6b4
 TOTAL_READY_TO_PLANT_QUANTITY,Quantité totale de plantes prêtes à être plantées,e0ffa330
 TOTAL_SEED_COUNT,Nombre total de semences,be979b1e
+TOTAL_SEEDLINGS,Nombre total de plants,48079709
 TOTAL_SEEDLINGS_COUNT,Nombre total de semis,1aad5bd0
 TOTAL_SEEDLINGS_SENT,Total des plantules envoyées,12a7f16d
 TOTAL_SEEDS,Nombre total de semences,b61cfde7
