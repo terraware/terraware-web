@@ -95,7 +95,36 @@ describe('MyAccountForm email notification settings', () => {
     expect(master).not.toBeChecked();
     for (const name of [strings.SEED_BANK, strings.NURSERY, strings.PLANTING_AND_OBSERVATIONS, strings.ACCELERATOR]) {
       expect(settingSwitch(name)).toBeDisabled();
+      expect(settingSwitch(name)).not.toBeChecked();
     }
+  });
+
+  it('opts into every available category when email notifications are enabled and saves those defaults', async () => {
+    mockEmailSettings(
+      ALL_CATEGORIES.map((setting) => ({ ...setting, optedIn: false })),
+      false
+    );
+    mockProfileSaveSideEffects();
+    mockPut(ME_URL);
+    const emailRequests = captureRequests('put', EMAIL_SETTINGS_URL);
+    const { user, returnedToView } = renderForm(true);
+
+    await user.click(await findMasterSwitch());
+
+    for (const name of [strings.SEED_BANK, strings.NURSERY, strings.PLANTING_AND_OBSERVATIONS, strings.ACCELERATOR]) {
+      expect(settingSwitch(name)).toBeEnabled();
+      expect(settingSwitch(name)).toBeChecked();
+    }
+
+    await user.click(settingSwitch(strings.NURSERY));
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+    await waitFor(() => expect(returnedToView()).toBe(true));
+    expect(emailRequests).toHaveLength(1);
+    expect(await emailRequests[0].json()).toEqual({
+      categories: ALL_CATEGORIES,
+      emailNotificationsEnabled: true,
+    });
   });
 
   it('sends the updated categories once when a category is toggled and saved', async () => {
