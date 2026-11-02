@@ -214,7 +214,7 @@ describe('SiteBoundary', () => {
     renderSiteBoundary();
 
     expect(screen.getByText(strings.BOUNDARY_METHOD_TITLE)).toBeInTheDocument();
-    expect(screen.getByText(strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, { exact: false })).toBeInTheDocument();
+    expect(screen.getByText(strings.SITE_BOUNDARY_DESCRIPTION, { exact: false })).toBeInTheDocument();
   });
 
   it('dismisses the chooser without opening the upload modal when the user chooses to draw', async () => {

@@ -89,12 +89,15 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     }
 
     return [
+      { text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION },
       {
-        text: strings.SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) =>
-          strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
+        startsSection: true,
+        text: strings.formatString(
+          strings.SITE_EXCLUSION_AREAS_DRAWING_INSTRUCTIONS,
+          <MapIcon centerAligned={true} icon='polygon' />
+        ) as JSX.Element[],
       },
+      { text: strings.SITE_EXCLUSION_AREAS_TUTORIAL, hasTutorial: true },
     ];
   }, [activeLocale]);
 

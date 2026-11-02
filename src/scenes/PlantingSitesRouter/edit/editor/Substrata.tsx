@@ -236,12 +236,15 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     }
 
     return [
+      { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION },
       {
-        text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) =>
-          strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+        startsSection: true,
+        text: strings.formatString(
+          strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_INSTRUCTIONS,
+          <MapIcon centerAligned={true} icon='slice' />
+        ) as JSX.Element[],
       },
+      { text: strings.SITE_SUBSTRATUM_BOUNDARIES_TUTORIAL, hasTutorial: true },
     ];
   }, [activeLocale]);
 
