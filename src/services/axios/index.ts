@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { redirectToLogin } from 'src/utils/login';
+
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(() => resolve(), ms));
 }
@@ -25,9 +27,7 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      const href = location.href.match('/error') ? location.origin : location.href;
-      const redirect = encodeURIComponent(href);
-      location.href = `/api/v1/login?redirect=${redirect}`;
+      redirectToLogin();
     }
     return Promise.reject(error);
   }

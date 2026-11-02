@@ -1,15 +1,20 @@
 import React from 'react';
 
 import { rs } from '@rstest/core';
-import { act, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, screen, waitFor } from '@testing-library/react';
 
-import ThumbnailImage from 'src/components/common/ThumbnailImage';
+import ThumbnailImage, { type ThumbnailImageProps } from 'src/components/common/ThumbnailImage';
 import { mockImage, renderWithProviders } from 'src/test-utils';
+
+// jsdom will not follow a navigation, so the redirect is observed rather than taken.
+const login = rs.hoisted(() => ({ redirectToLogin: rs.fn() }));
+rs.mock('src/utils/login', () => login);
 
 const PHOTO_URL = '/api/v1/nursery/batches/42/photos/99';
 const ALT_TEXT = 'Seedling batch';
 const PLACEHOLDER_IMAGE = '/assets/activity-media.svg';
 
+const UNAUTHORIZED = 401;
 const TOO_MANY_REQUESTS = 429;
 // The longest the component ever waits before one retry.
 const RETRY_WINDOW_MS = 10000;
@@ -34,8 +39,16 @@ const advanceThroughRetries = async (requests: Request[], expected: number) => {
   }
 };
 
+const renderLoadedThumbnail = async (props: Partial<ThumbnailImageProps> = {}) => {
+  mockImage(PHOTO_URL);
+  renderWithProviders(<ThumbnailImage alt={ALT_TEXT} src={PHOTO_URL} {...props} />);
+  await waitFor(() => expect(thumbnail()).toHaveAttribute('src', expect.stringMatching(/^blob:/)));
+};
+
 describe('ThumbnailImage', () => {
   beforeEach(() => {
+    login.redirectToLogin.mockClear();
+
     // Only the retry scheduling is under the test's control; everything else runs in real time so
     // Testing Library can keep polling while the clock is faked.
     rs.useFakeTimers({ shouldAdvanceTime: true, toFake: ['setTimeout', 'clearTimeout'] });
@@ -97,6 +110,60 @@ describe('ThumbnailImage', () => {
     await tick();
     expect(requests).toHaveLength(1);
     expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  it('sends an expired session to login rather than showing the photo as broken', async () => {
+    const onError = rs.fn();
+    const requests = mockImage(PHOTO_URL, UNAUTHORIZED);
+
+    renderWithProviders(<ThumbnailImage alt={ALT_TEXT} onError={onError} src={PHOTO_URL} />);
+
+    await waitFor(() => expect(login.redirectToLogin).toHaveBeenCalledTimes(1));
+
+    // The browser is on its way to login, so a placeholder would only make the page look broken on
+    // the way out.
+    expect(thumbnail()).not.toHaveAttribute('src');
+    expect(onError).not.toHaveBeenCalled();
+
+    await tick();
+    expect(requests).toHaveLength(1);
+  });
+
+  it('falls back to the placeholder when the fetched bytes turn out not to be a drawable image', async () => {
+    const onError = rs.fn();
+    await renderLoadedThumbnail({ onError });
+
+    // A 2xx body can still be undecodable, and only the element finds that out. jsdom decodes
+    // nothing, so the failure it would report is raised here instead.
+    fireEvent.error(thumbnail());
+
+    expect(thumbnail()).toHaveAttribute('src', PLACEHOLDER_IMAGE);
+    expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  it('ignores a failure of the placeholder itself, so a broken image cannot loop', async () => {
+    const onError = rs.fn();
+    await renderLoadedThumbnail({ onError });
+
+    fireEvent.error(thumbnail());
+    fireEvent.error(thumbnail());
+
+    expect(thumbnail()).toHaveAttribute('src', PLACEHOLDER_IMAGE);
+    expect(onError).toHaveBeenCalledTimes(1);
+  });
+
+  it('sizes the image in pixels when height and width come without a unit', async () => {
+    await renderLoadedThumbnail({ height: '100', width: 75 });
+
+    expect(getComputedStyle(thumbnail()).height).toBe('100px');
+    expect(getComputedStyle(thumbnail()).width).toBe('75px');
+  });
+
+  it('leaves a height and width that already carry a unit alone', async () => {
+    await renderLoadedThumbnail({ height: '120px', width: '75%' });
+
+    expect(getComputedStyle(thumbnail()).height).toBe('120px');
+    expect(getComputedStyle(thumbnail()).width).toBe('75%');
   });
 
   // No image handler is registered: the harness fails a test that makes an unmocked request, so

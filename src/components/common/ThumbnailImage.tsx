@@ -1,6 +1,8 @@
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, SxProps, Theme } from '@mui/material';
+
+import { redirectToLogin } from 'src/utils/login';
 
 /**
  * The server only generates a few thumbnails at a time and answers 429 once a request has waited
@@ -8,6 +10,7 @@ import { Box, SxProps, Theme } from '@mui/material';
  * means "not ready yet", not "broken", so requests are retried with a growing, randomized delay and
  * the placeholder stays up until the last attempt fails.
  */
+const UNAUTHORIZED = 401;
 const TOO_MANY_REQUESTS = 429;
 const MAX_ATTEMPTS = 4;
 const INITIAL_RETRY_DELAY_MS = 1000;
@@ -63,6 +66,13 @@ export const useThumbnailSrc = (src?: string, onError?: () => void): ImageState 
           return;
         }
 
+        // An expired session has to take the user to login the same way every other request does,
+        // rather than making the photo look broken. Stay on the placeholder while we navigate away.
+        if (response.status === UNAUTHORIZED) {
+          redirectToLogin();
+          return;
+        }
+
         if (!response.ok) {
           fail();
           return;
@@ -111,18 +121,42 @@ export type ThumbnailImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>
 };
 
 /**
+ * `height` and `width` are image attributes in pixels, but Box reads them as style props, where a
+ * bare number is not valid CSS and a fraction would silently become a percentage.
+ */
+const cssSize = (value?: string | number): string | number | undefined =>
+  typeof value === 'number' || (typeof value === 'string' && /^\d+(\.\d+)?$/.test(value)) ? `${value}px` : value;
+
+/**
  * Renders an image served by the API, retrying while the server is too busy to generate its
  * thumbnail. Images from anywhere else (local previews, bundled assets) are rendered as-is.
  */
-const ThumbnailImage = ({ onError, src, sx, ...imgProps }: ThumbnailImageProps): JSX.Element => {
+const ThumbnailImage = ({ height, onError, src, sx, width, ...imgProps }: ThumbnailImageProps): JSX.Element => {
   const { src: resolvedSrc, status } = useThumbnailSrc(src, onError);
+  const [undecodableSrc, setUndecodableSrc] = useState<string>();
+
+  // A 2xx response is no guarantee that the bytes are an image the browser can draw, and only the
+  // element finds that out, so a decode failure goes down the same path as a failed request.
+  const failed = status === 'error' || (resolvedSrc !== undefined && resolvedSrc === undecodableSrc);
+
+  const onImageError = useCallback(() => {
+    // The placeholder is the end of the line; sending it back through here would loop.
+    if (failed || resolvedSrc === undefined) {
+      return;
+    }
+
+    setUndecodableSrc(resolvedSrc);
+    onError?.();
+  }, [failed, onError, resolvedSrc]);
 
   return (
     <Box
       component='img'
       {...imgProps}
-      src={status === 'error' ? ERROR_IMAGE : resolvedSrc}
+      onError={onImageError}
+      src={failed ? ERROR_IMAGE : resolvedSrc}
       sx={[
+        { height: cssSize(height), width: cssSize(width) },
         status === 'loading' && {
           backgroundImage: `url(${LOADING_IMAGE})`,
           backgroundPosition: 'center',
