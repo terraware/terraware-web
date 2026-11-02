@@ -172,7 +172,7 @@ const findPreviousQuantitySnapshot = (
     );
 };
 
-export const findPreviousEvent = (
+const findPreviousEvent = (
   historyItem: BatchHistoryItem,
   allItems: BatchHistoryItem[] | null
 ): BatchHistoryItem | undefined => {
@@ -183,7 +183,7 @@ export const findPreviousEvent = (
   return findPreviousMatchingEvent(historyItem, allItems, (ev): ev is BatchHistoryItem => ev.type === historyItem.type);
 };
 
-export const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: BatchHistoryItem): string[] => {
+const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: BatchHistoryItem): string[] => {
   const changedFields: string[] = [];
 
   if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
