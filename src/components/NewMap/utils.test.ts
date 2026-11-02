@@ -306,15 +306,103 @@ describe('getBoundingBoxFromMultiPolygons', () => {
             [
               [
                 [179, -2],
+                [180, -2],
+                [180, 3],
+                [179, -2],
+              ],
+            ],
+            [
+              [
+                [-180, -2],
                 [-179, -2],
                 [-179, 3],
-                [179, -2],
+                [-180, -2],
               ],
             ],
           ],
         },
       ])
     ).toEqual({ minLat: -2, maxLat: 3, minLng: 179, maxLng: 181 });
+  });
+
+  test.each([
+    [-100, 100],
+    [-179, 179],
+  ])('preserves a single polygon plain longitude extent from %f to %f', (west, east) => {
+    expect(
+      getBoundingBoxFromMultiPolygons([
+        {
+          type: 'MultiPolygon',
+          coordinates: [
+            [
+              [
+                [west, -2],
+                [east, -2],
+                [east, 3],
+                [west, -2],
+              ],
+            ],
+          ],
+        },
+      ])
+    ).toEqual({ minLat: -2, maxLat: 3, minLng: west, maxLng: east });
+  });
+
+  test('merges overlapping and contained longitude intervals before finding gaps', () => {
+    expect(
+      getBoundingBoxFromMultiPolygons([
+        {
+          type: 'MultiPolygon',
+          coordinates: [
+            [
+              [
+                [-100, 0],
+                [20, 0],
+                [20, 10],
+                [-100, 0],
+              ],
+            ],
+            [
+              [
+                [-20, 0],
+                [100, 0],
+                [100, 10],
+                [-20, 0],
+              ],
+            ],
+            [
+              [
+                [-10, 0],
+                [10, 0],
+                [10, 5],
+                [-10, 0],
+              ],
+            ],
+          ],
+        },
+      ])
+    ).toEqual({ minLat: 0, maxLat: 10, minLng: -100, maxLng: 100 });
+  });
+
+  test('ignores non-finite polygon coordinates', () => {
+    expect(
+      getBoundingBoxFromMultiPolygons([
+        {
+          type: 'MultiPolygon',
+          coordinates: [
+            [
+              [
+                [0, 0],
+                [10, 5],
+                [Infinity, -80],
+                [-100, NaN],
+                [0, 0],
+              ],
+            ],
+          ],
+        },
+      ])
+    ).toEqual({ minLat: 0, maxLat: 5, minLng: 0, maxLng: 10 });
   });
 
   test.each<MultiPolygon[][]>([

@@ -59,49 +59,77 @@ const getBoundsZoomLevel = (bounds: MapBounds, mapWidth: number, mapHeight: numb
   return Math.max(0, Math.min(22, Math.floor(Math.min(latZoom, lngZoom))));
 };
 
-const getBoundingBoxFromMultiPolygons = (multipolygons: MultiPolygon[]): MapBounds => {
-  const points = multipolygons
-    .map((multipolygon) => multipolygon.coordinates)
-    .flat()
-    .flat()
-    .flat()
-    .map((coordinate) => ({ lng: coordinate[0], lat: coordinate[1] }));
+const getLongitudeBounds = (intervals: [number, number][]): { minLng: number; maxLng: number } => {
+  if (intervals.length === 0) {
+    return { minLng: Infinity, maxLng: -Infinity };
+  }
 
-  return getBoundingBoxFromPoints(points);
+  intervals.sort((a, b) => a[0] - b[0]);
+  const merged: [number, number][] = [];
+  for (const [west, east] of intervals) {
+    const previous = merged[merged.length - 1];
+    if (previous && west <= previous[1]) {
+      previous[1] = Math.max(previous[1], east);
+    } else {
+      merged.push([west, east]);
+    }
+  }
+
+  let minLng = merged[0][0];
+  let maxLng = merged[merged.length - 1][1];
+  let largestGap = minLng + 360 - maxLng;
+  for (let i = 1; i < merged.length; i++) {
+    const gap = merged[i][0] - merged[i - 1][1];
+    if (gap > largestGap) {
+      largestGap = gap;
+      minLng = merged[i][0];
+      maxLng = merged[i - 1][1] + 360;
+    }
+  }
+  return { minLng, maxLng };
+};
+
+const getBoundingBoxFromMultiPolygons = (multipolygons: MultiPolygon[]): MapBounds => {
+  let minLat = Infinity;
+  let maxLat = -Infinity;
+  const intervals: [number, number][] = [];
+  for (const multipolygon of multipolygons) {
+    for (const polygon of multipolygon.coordinates) {
+      let west = Infinity;
+      let east = -Infinity;
+      for (const ring of polygon) {
+        for (const [lng, lat] of ring) {
+          if (!Number.isFinite(lng) || !Number.isFinite(lat)) {
+            continue;
+          }
+          minLat = Math.min(minLat, lat);
+          maxLat = Math.max(maxLat, lat);
+          west = Math.min(west, lng);
+          east = Math.max(east, lng);
+        }
+      }
+      if (Number.isFinite(west)) {
+        intervals.push([west, east]);
+      }
+    }
+  }
+  return { minLat, maxLat, ...getLongitudeBounds(intervals) };
 };
 
 const getBoundingBoxFromPoints = (points: MapPoint[]): MapBounds => {
   let minLat = Infinity;
   let maxLat = -Infinity;
-  let minLng = Infinity;
-  let maxLng = -Infinity;
-
-  const longitudes: number[] = [];
+  const intervals: [number, number][] = [];
   for (const { lng, lat } of points) {
     if (!Number.isFinite(lng) || !Number.isFinite(lat)) {
       continue;
     }
     minLat = Math.min(minLat, lat);
     maxLat = Math.max(maxLat, lat);
-    longitudes.push(lng);
+    intervals.push([lng, lng]);
   }
 
-  if (longitudes.length > 0) {
-    longitudes.sort((a, b) => a - b);
-    minLng = longitudes[0];
-    maxLng = longitudes[longitudes.length - 1];
-    let largestGap = minLng + 360 - maxLng;
-    for (let i = 1; i < longitudes.length; i++) {
-      const gap = longitudes[i] - longitudes[i - 1];
-      if (gap > largestGap) {
-        largestGap = gap;
-        minLng = longitudes[i];
-        maxLng = longitudes[i - 1] + 360;
-      }
-    }
-  }
-
-  return { minLat, minLng, maxLat, maxLng };
+  return { minLat, maxLat, ...getLongitudeBounds(intervals) };
 };
 
 export { isBoundsValid, getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints, getBoundsZoomLevel };
