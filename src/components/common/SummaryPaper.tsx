@@ -6,7 +6,7 @@ import { IconName } from '@terraware/web-components';
 import PanelTitle from 'src/components/PanelTitle';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 interface Props {
   id: string;
@@ -29,6 +29,7 @@ export default function SummaryPaper({
   error,
   tooltipTitle,
 }: Props): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
 
   return (
