@@ -782,6 +782,7 @@ FAMILY,Famille,7709335f
 FAST_GROWTH,Croissance rapide,d52b67d0
 FAVORABLE_WEATHER,Météo favorable,47741ec2
 FEATURE_AVAILABLE_ON_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
+FEATURE_NOT_AVAILABLE_AT_SCREEN_SIZE,Cette fonctionnalité n'est pas disponible à cette taille d'écran. Veuillez utiliser une tablette ou un ordinateur de bureau pour accéder à cette fonctionnalité.,e273da07
 FEATURE_REQUEST,Demande de fonctionnalité,21c9d75f
 FEATURE_REQUEST_DESCRIPTION,Faites-nous part de vos idées pour de nouvelles fonctionnalités dans Terraware.,e57489fd
 FEATURE_REQUEST_INSTRUCTIONS,Fournissez des détails sur une nouvelle fonctionnalité ou des modifications à une fonctionnalité existante. (Quels sont les cas d'utilisation ou les problèmes que la nouvelle fonctionnalité ou les modifications vont résoudre ?),c44328fe
@@ -2187,8 +2188,7 @@ SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate e
 SITE_BOUNDARY_UPLOADED_INSTRUCTIONS,Vous pouvez modifier la limite du site. Utilisez l’outil de dessin {0} pour ajouter d’autres formes.,96b6e978
 SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est trop grande.,eb3c9a60
 SITE_DETAIL,Détail du site,c7f1672e
-SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
-SITE_EDITOR_USE_TABLET_LANDSCAPE,Cette fonctionnalité est uniquement disponible en mode paysage sur une tablette.,8710d7e6
+SITE_EDITOR_USE_TABLET_LANDSCAPE,Cette fonctionnalité est uniquement disponible en mode paysage sur une tablette. Continuez en mode paysage ou passez à un ordinateur de bureau.,38c2ca64
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Définissez les zones à l’intérieur de la limite du site qui ne sont pas plantables, telles que les routes, plans d’eau et bâtiments annexes. Elles seront exclues des calculs de surface plantable et des Observations.",8cccaceb
 SITE_EXCLUSION_AREAS_DRAWING_INSTRUCTIONS,Utilisez l’outil de dessin {0} pour tracer des formes à l’intérieur ou en chevauchement avec la limite du site. Passez cette étape s’il n’y a aucune zone à exclure.,6fc68388
 SITE_EXCLUSION_AREAS_TUTORIAL,[Regardez un tutoriel] sur la création de zones d’exclusion.,3f36cbc7
