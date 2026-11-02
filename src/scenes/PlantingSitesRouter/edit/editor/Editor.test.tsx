@@ -48,7 +48,7 @@ rstest.mock('src/utils/useDeviceInfo', () => ({
 /** Renders the current location so a test can assert on where the editor navigated. */
 const LocationProbe = () => {
   const location = useLocation();
-  return <div data-testid='location'>{location.pathname}</div>;
+  return <div data-testid='location'>{`${location.pathname}${location.search}`}</div>;
 };
 
 const square = (west: number, south: number, east: number, north: number): Position[][] => [
@@ -77,6 +77,7 @@ const VALIDATE_URL = '/api/v1/tracking/sites/validate';
 const CREATE_URL = '/api/v1/tracking/sites';
 const EDIT_ROUTE = '/planting-sites/draft/1/edit';
 const PLANTING_SITES = '/planting-sites';
+const PLANTING_SITES_TAB = '/planting-sites?tab=plantingSites';
 
 /** A site part way through the flow, with a boundary and the single stratum the editor defaults to. */
 const siteAtStep = (siteEditStep: SiteEditStep, siteType: DraftPlantingSite['siteType'] = 'Detailed') =>
@@ -258,7 +259,7 @@ describe('Editor', () => {
       await waitFor(() => expect(creates).toHaveLength(1));
       expect(await creates[0].json()).toMatchObject({ boundary: SITE_BOUNDARY, name: 'Draft Planting Site' });
       expect(await screen.findByText(strings.PLANTING_SITE_CREATED)).toBeInTheDocument();
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(PLANTING_SITES_TAB);
       expect(puts).toHaveLength(0);
     });
   });
@@ -351,7 +352,7 @@ describe('Editor', () => {
 
       await waitFor(() => expect(posts).toHaveLength(1));
       expect(await screen.findByText(strings.PLANTING_SITE_CREATED)).toBeInTheDocument();
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(PLANTING_SITES_TAB);
     });
 
     it('moves to the strata step instead when the user continues setup', async () => {

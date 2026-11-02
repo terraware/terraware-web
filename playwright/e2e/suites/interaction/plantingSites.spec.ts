@@ -291,10 +291,10 @@ test.describe('PlantingSiteTests', () => {
     await expectActiveStep(page, 'Exclusion Areas');
     await waitForMap(page);
     await drawPolygon(page, [
-      [0.62, 0.62],
-      [0.9, 0.62],
+      [0.55, 0.55],
+      [0.9, 0.55],
       [0.9, 0.9],
-      [0.62, 0.9],
+      [0.55, 0.9],
     ]);
     await expect(page.getByText('Unsaved changes')).toBeVisible();
     await editorButton(page, 'Next').click();
@@ -373,13 +373,15 @@ test.describe('PlantingSiteTests', () => {
     await featurePopupButton(page, 'Cancel').click();
 
     // A substratum inside the exclusion area is a problem. Saving lists it, and the user can go back to editing or
-    // save anyway. The exclusion was drawn a step earlier, where the header wraps to a different height and so
-    // leaves the map a different size, so stay well inside it rather than hugging its edges.
+    // save anyway. The map only fits the site boundary when it mounts, and the unsaved-changes badge wraps the
+    // header onto a second row, so everything drawn after the first edit on a step lands nearer the middle of the
+    // site than its coordinates say. Keep this square big and well inside the exclusion so it survives that shift
+    // and still covers the point the popup is reopened from once the badge is gone.
     await drawPolygon(page, [
-      [0.72, 0.72],
-      [0.8, 0.72],
-      [0.8, 0.8],
-      [0.72, 0.8],
+      [0.66, 0.66],
+      [0.88, 0.66],
+      [0.88, 0.88],
+      [0.66, 0.88],
     ]);
     await expect(substratumNameInput).toBeVisible();
     await substratumNameInput.fill(excludedSubstratumName);
@@ -413,7 +415,7 @@ test.describe('PlantingSiteTests', () => {
 
     // Deleting the substratum fixes the problem, so the next save goes through without asking.
     await waitForMap(page);
-    await openFeaturePopup(page, [0.76, 0.76], substratumNameInput);
+    await openFeaturePopup(page, [0.735, 0.735], substratumNameInput);
     await expect(substratumNameInput).toHaveValue(excludedSubstratumName);
     await deleteMapFeature(page);
     await expect(substratumNameInput).toBeHidden();
@@ -456,10 +458,11 @@ test.describe('PlantingSiteTests', () => {
 
     await expect(page.getByText('Planting Site was created.')).toBeVisible();
     await expect(page).toHaveURL(/\/planting-sites(\?|$)/);
-    await expect(page.getByRole('link', { name: siteName })).toBeVisible();
+
     await page.getByRole('tab', { name: 'Draft Planting Sites' }).click();
     await expect(page.getByRole('link', { name: siteName })).toBeHidden();
     await page.getByRole('tab', { name: 'Planting Sites', exact: true }).click();
+    await expect(page.getByRole('link', { name: siteName })).toBeVisible();
     await page.getByRole('link', { name: siteName }).click();
 
     await expect(page).toHaveURL(/\/planting-sites\/\d+(\?|$)/);

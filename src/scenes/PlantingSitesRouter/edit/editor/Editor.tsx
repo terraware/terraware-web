@@ -53,8 +53,8 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const onFinalizeSuccess = useCallback(() => {
     snackbar.toastSuccess(strings.PLANTING_SITE_CREATED);
-    goToPlantingSites();
-  }, [goToPlantingSites, snackbar]);
+    navigate(`${APP_PATHS.PLANTING_SITES}?tab=plantingSites`);
+  }, [navigate, snackbar]);
 
   const onFinalizeError = useCallback(
     (problems?: PlantingSiteProblem[]) => {
