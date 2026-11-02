@@ -6,8 +6,8 @@ import PanelTitle from 'src/components/PanelTitle';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import { OrganizationNurserySummaryPayload } from 'src/queries/generated/nurserySummaries';
-import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -18,6 +18,7 @@ type Props = {
 };
 
 export default function SeedlingsByStage({ summary, loading, error }: Props): JSX.Element {
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
