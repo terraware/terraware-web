@@ -5,7 +5,6 @@ import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/mater
 import ImportModal from 'src/components/common/ImportModal';
 import { useImportDeliverablesMutation } from 'src/queries/generated/deliverables';
 import { ImportModuleResponsePayload, useImportModulesMutation } from 'src/queries/generated/modules';
-import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 
 export type UploadModulesModalProps = {
@@ -45,7 +44,6 @@ export default function UploadModulesModal(props: UploadModulesModalProps): JSX.
       onClose={onClose}
       open={open}
       title={uploadingDeliverables ? strings.UPLOAD_DELIVERABLES : strings.UPLOAD}
-      resolveApi={SpeciesService.resolveSpeciesUpload}
       uploaderTitle={strings.UPLOAD_CSV_FILE}
       uploaderDescription={strings.UPLOAD_MODULES_DESCRIPTION}
       importCompleteLabel={

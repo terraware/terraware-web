@@ -32,7 +32,7 @@ export type ImportSpeciesModalProps = {
   facility?: Facility;
   setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   title: string;
-  resolveApi: (uploadId: number, overwriteExisting: boolean) => Promise<ResolveResponse>;
+  resolveApi?: (uploadId: number, overwriteExisting: boolean) => Promise<ResolveResponse>;
   uploaderTitle: string;
   uploaderDescription: string;
   uploadApi?: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
@@ -271,7 +271,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   };
 
   const resolveSpeciesUploadHandler = async (overwriteValues: boolean) => {
-    if (uploadId) {
+    if (uploadId && resolveApi) {
       const serverResponse = await resolveApi(uploadId, overwriteValues);
       if (serverResponse.requestSucceeded) {
         setFileStatus(undefined);
