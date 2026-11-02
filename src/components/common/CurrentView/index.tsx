@@ -1,12 +1,13 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
 
 import SaveViewModal from 'src/components/common/SaveViewModal';
 import { useFeatureEnabled } from 'src/features';
+import { useListSavedTableViewsQuery } from 'src/queries/generated/savedTableViews';
 import { TableDefinition } from 'src/types/Tables';
 
-import CurrentViewSelect, { DEFAULT_VIEW, ViewOption } from './CurrentViewSelect';
+import CurrentViewSelect, { DEFAULT_VIEW, ViewOption, sortViewsByLabel } from './CurrentViewSelect';
 import { getTableSettings } from './tableSettings';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
@@ -37,13 +38,24 @@ const CurrentView = <TData extends MRT_RowData>({
   const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [preset, setPreset] = useState(defaultPreset);
   const [showSaveViewModal, setShowSaveViewModal] = useState(false);
+  const { data: savedTableViewsData } = useListSavedTableViewsQuery(
+    { organizationId, tableName: tableDefinition.stableId },
+    { skip: !isSavedTableViewsEnabled }
+  );
+  const savedViewOptions = useMemo(
+    () => sortViewsByLabel(savedTableViewsData?.views.map((view) => ({ label: view.name, value: `${view.id}` }))) ?? [],
+    [savedTableViewsData]
+  );
 
   const handleChange = useCallback(
     (value: string) => {
+      if (savedViewOptions.some((view) => view.value === value)) {
+        return;
+      }
       setPreset(value);
       onPresetChange?.(value);
     },
-    [onPresetChange]
+    [onPresetChange, savedViewOptions]
   );
 
   const openSaveViewModal = useCallback(() => setShowSaveViewModal(true), []);
@@ -54,6 +66,7 @@ const CurrentView = <TData extends MRT_RowData>({
       <CurrentViewSelect
         defaultViewLabel={defaultViewLabel}
         id={id}
+        myViews={savedViewOptions}
         onChange={handleChange}
         onSave={openSaveViewModal}
         presetViews={presetViews}
