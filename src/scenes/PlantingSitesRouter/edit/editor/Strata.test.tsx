@@ -120,8 +120,6 @@ const stepperContext = {
   busy: false,
   collapsed: false,
   currentStep: 'stratum_boundaries' as const,
-  onBack: rstest.fn(),
-  onNext: rstest.fn(),
   onToggleCollapsed: rstest.fn(),
   steps: [{ type: 'stratum_boundaries' as const, label: 'Strata' }],
 };

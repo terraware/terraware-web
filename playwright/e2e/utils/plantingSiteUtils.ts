@@ -57,8 +57,23 @@ export const detailsDialogButton = (page: Page, button: 'Cancel' | 'Save' | 'Sav
 
 export const editDraftDetailsButton = (page: Page) => page.locator('#edit-draft-planting-site-details');
 
-export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Create Planting Site' | 'Save Changes') =>
-  page.getByRole('button', { name, exact: true });
+// Header CTAs are matched by id: the create and edit flows label several of them the same way, and names like
+// Cancel and Save also appear on the map's feature popups.
+const EDITOR_BUTTON_IDS = {
+  Back: '#back-planting-site-create, #back-planting-site-edit',
+  Cancel: '#cancel-planting-site-create',
+  Close: '#close-planting-site-edit',
+  'Create Site': '#create-planting-site',
+  Next: '#next-planting-site-create, #next-planting-site-edit',
+  'Save and exit': '#save-and-exit-planting-site-create',
+  'Save Changes': '#save-planting-site-edit',
+};
+
+export const editorButton = (page: Page, name: keyof typeof EDITOR_BUTTON_IDS) => page.locator(EDITOR_BUTTON_IDS[name]);
+
+/** The buttons on a stratum or substratum popup, which share their labels with the editor's header. */
+export const featurePopupButton = (page: Page, name: 'Cancel' | 'Save') =>
+  page.locator(name === 'Cancel' ? '#cancel' : '#save');
 
 const mapCanvas = (page: Page) => page.locator('.mapboxgl-canvas');
 

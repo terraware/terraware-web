@@ -1,6 +1,6 @@
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { SearchNodePayload, SearchRequestPayload } from 'src/types/Search';
-import { MergeOtherSpeciesPayload, SuggestedSpecies } from 'src/types/Species';
+import { SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
 import HttpService, { Response } from './HttpService';
@@ -25,9 +25,6 @@ const SPECIES_TEMPLATE_ENDPOINT = '/api/v1/species/uploads/template';
 const SPECIES_UPLOADS_ENDPOINT = '/api/v1/species/uploads';
 const SPECIES_UPLOAD_STATUS_ENDPOINT = '/api/v1/species/uploads/{uploadId}';
 const SPECIES_UPLOAD_RESOLVE_ENDPOINT = '/api/v1/species/uploads/{uploadId}/resolve';
-const MERGE_OTHER_SPECIES_ENDPOINT = '/api/v1/tracking/observations/{observationId}/mergeOtherSpecies';
-
-const httpMergeOtherSpecies = HttpService.root(MERGE_OTHER_SPECIES_ENDPOINT);
 
 /**
  * Download species template
@@ -124,26 +121,12 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   return await SearchService.search(params);
 };
 
-const mergeOtherSpecies = (
-  mergeOtherSpeciesPayload: MergeOtherSpeciesPayload,
-  observationId: number
-): Promise<Response> => {
-  const urlReplacements = {
-    '{observationId}': `${observationId}`,
-  };
-  return httpMergeOtherSpecies.post({
-    urlReplacements,
-    entity: mergeOtherSpeciesPayload,
-  });
-};
-
 /**
  * Exported functions
  */
 const SpeciesService = {
   downloadSpeciesTemplate,
   getSpeciesUploadStatus,
-  mergeOtherSpecies,
   resolveSpeciesUpload,
   suggestSpecies,
   uploadSpecies,

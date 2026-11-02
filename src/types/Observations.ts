@@ -32,7 +32,6 @@ type Boundary = {
 
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of stratum results -> substratum results -> ( species results | monitoring plot results )
-type ObservationResultsPayload = RtkObservationResultsPayload;
 
 export type AdHocObservationResults = Omit<RtkObservationResultsPayload, 'strata' | 'adHocPlot'> &
   Boundary & {
@@ -45,20 +44,6 @@ export type AdHocObservationResults = Omit<RtkObservationResultsPayload, 'strata
     totalLive: number | undefined;
     totalPlants: number | undefined;
   };
-
-export type ObservationResultsWithLastObv = Omit<
-  Omit<ObservationResultsPayload, 'species'> &
-    Boundary & {
-      completedDate?: string;
-      plantingSiteName: string;
-      strata: ObservationStratumResults[];
-      species: ObservationSpeciesResults[];
-      totalPlants: number;
-      hasObservedPermanentPlots: boolean;
-      hasObservedTemporaryPlots: boolean;
-    },
-  'strata'
-> & { strata: ObservationStratumResultsWithLastObv[] };
 
 // stratum level results -> contains a list of substratum level results
 type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;

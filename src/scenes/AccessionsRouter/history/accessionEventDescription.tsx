@@ -58,7 +58,7 @@ export const accessionPhotoUrl = (accessionId: number, filename: string): string
   );
 
 /** Reads one value out of a creation event's initial field values. */
-export const createdField = (action: EventLogEntryPayload['action'], fieldName: string): string | undefined =>
+const createdField = (action: EventLogEntryPayload['action'], fieldName: string): string | undefined =>
   action.type === 'Created' ? action.fields.find((field) => field.fieldName === fieldName)?.value?.[0] : undefined;
 
 /**
@@ -86,10 +86,8 @@ export const findViabilityTestWithdrawals = (events: EventLogEntryPayload[]): Vi
   return pairs;
 };
 
-export const isViabilityTestWithdrawal = (
-  event: EventLogEntryPayload,
-  pairs: ViabilityTestWithdrawals | undefined
-): boolean => event.subject.type === 'Withdrawal' && pairs?.has(event.subject.withdrawalId) === true;
+const isViabilityTestWithdrawal = (event: EventLogEntryPayload, pairs: ViabilityTestWithdrawals | undefined): boolean =>
+  event.subject.type === 'Withdrawal' && pairs?.has(event.subject.withdrawalId) === true;
 
 /**
  * True for the viability test row that the paired withdrawal row already accounts for, so that one

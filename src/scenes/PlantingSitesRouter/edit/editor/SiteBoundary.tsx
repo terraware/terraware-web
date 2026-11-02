@@ -34,6 +34,7 @@ import { boundingAreaHectares, createDefaultStrata, findErrors } from './utils';
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
+  onHasBoundaryChange?: (hasBoundary: boolean) => void;
   site: EditorPlantingSite;
 };
 
@@ -72,7 +73,12 @@ type Stack = {
 const editedBoundarySource = (previous?: BoundarySource): BoundarySource =>
   previous === 'uploaded' || previous === 'uploaded_edited' ? 'uploaded_edited' : 'drawn';
 
-export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({
+  onValidate,
+  onDirtyChange,
+  onHasBoundaryChange,
+  site,
+}: SiteBoundaryProps): JSX.Element {
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
     // drafts saved before the source was recorded could only have drawn boundaries
     boundarySource: site.boundary ? (site.boundarySource ?? 'drawn') : undefined,
@@ -132,6 +138,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   }, [boundary, boundingArea, boundingAreaTooLarge, siteBoundaryData?.errorAnnotations]);
 
   const boundarySource = boundary ? siteBoundaryData?.boundarySource : undefined;
+
+  useEffect(() => {
+    onHasBoundaryChange?.(!!boundary);
+  }, [boundary, onHasBoundaryChange]);
 
   useEffect(() => {
     if (onValidate) {

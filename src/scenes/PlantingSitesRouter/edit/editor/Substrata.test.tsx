@@ -92,8 +92,6 @@ const stepperContext = {
   busy: false,
   collapsed: false,
   currentStep: 'substratum_boundaries' as const,
-  onBack: rstest.fn(),
-  onNext: rstest.fn(),
   onToggleCollapsed: rstest.fn(),
   steps: [{ type: 'substratum_boundaries' as const, label: 'Substrata' }],
 };

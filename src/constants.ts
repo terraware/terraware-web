@@ -14,7 +14,6 @@ export const MONITORING_PLOT_SIZE = 30;
 export const TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
 export const TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
-export const ACCELERATOR_LINK = 'https://www.terraformation.com/accelerator';
 
 export const LOGIN_LINK = '/api/v1/login';
 
