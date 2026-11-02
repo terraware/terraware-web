@@ -2,8 +2,9 @@ import { MultiPolygon } from 'geojson';
 
 import { MapBounds, MapPoint } from './types';
 
+const MERCATOR_LAT_LIMIT = 85.0511287798;
+
 const latToY = (lat: number): number => {
-  const MERCATOR_LAT_LIMIT = 85.0511287798;
   const clampedLat = Math.max(-MERCATOR_LAT_LIMIT, Math.min(MERCATOR_LAT_LIMIT, lat));
   const rad = (clampedLat * Math.PI) / 180;
   return Math.log(Math.tan(Math.PI / 4 + rad / 2));
