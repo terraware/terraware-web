@@ -38,12 +38,10 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
 import { useListVariablesQuery } from 'src/queries/generated/documentProducerVariables';
-import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
 import {
   ProjectsWithVariablesSearchResult,
-  requestGetProjectsWithVariables,
-} from 'src/redux/features/matrixView/matrixViewThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  useLazySearchProjectsWithVariablesQuery,
+} from 'src/queries/search/projectsWithVariables';
 import { SearchNodePayload } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
@@ -72,10 +70,9 @@ const STORAGE_KEYS = {
 type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
 
 const MatrixView = () => {
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectProjectsWithVariables(requestId));
+  const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
+  const projects = useMemo(() => projectsData ?? [], [projectsData]);
   const { currentData: allVariablesData } = useListVariablesQuery({});
-  const [projects, setProjects] = useState<ProjectsWithVariablesSearchResult[]>([]);
   const [showColumnsModal, setShowColumnsModal] = useState(false);
   const allVariables = useMemo<VariableUnion[] | undefined>(
     () => allVariablesData?.variables.filter((v) => v.type !== 'Table' && v.type !== 'Image'),
@@ -85,7 +82,6 @@ const MatrixView = () => {
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
@@ -834,16 +830,6 @@ const MatrixView = () => {
     variableNameMap,
   ]);
 
-  useEffect(() => {
-    if (result?.status === 'success' && result?.data) {
-      setProjects(result.data);
-      setLoading(false);
-    }
-    if (result?.status === 'error') {
-      setLoading(false);
-    }
-  }, [result]);
-
   const onColumnsClickHandler = useCallback(() => {
     setShowColumnsModal(true);
   }, []);
@@ -1059,65 +1045,67 @@ const MatrixView = () => {
       };
     }
 
-    const request = dispatch(
-      requestGetProjectsWithVariables({
-        fields: [
-          'id',
-          'acceleratorDetails_dealName',
-          'phase',
-          'application_id',
-          'acceleratorDetails_confirmedReforestableLand(raw)',
-          'country_name',
-          'internalUsers.role',
-          'internalUsers.user_firstName',
-          'internalUsers.user_lastName',
-          'variables.stableId',
-          'variables.id',
-          'variables.variableName',
-          'variables.type',
-          'variables.isList',
-          'variables.isMultiSelect',
-          'variables.values.textValue',
-          'variables.values.numberValue(raw)',
-          'variables.values.linkUrl',
-          'variables.values.dateValue',
-          'variables.values.options.name',
-          'variables.values.options.position',
-        ],
-        sortOrder: {
-          field: 'acceleratorDetails_dealName',
-          direction: 'Ascending',
+    return searchProjectsWithVariables({
+      fields: [
+        'id',
+        'acceleratorDetails_dealName',
+        'phase',
+        'application_id',
+        'acceleratorDetails_confirmedReforestableLand(raw)',
+        'country_name',
+        'internalUsers.role',
+        'internalUsers.user_firstName',
+        'internalUsers.user_lastName',
+        'variables.stableId',
+        'variables.id',
+        'variables.variableName',
+        'variables.type',
+        'variables.isList',
+        'variables.isMultiSelect',
+        'variables.values.textValue',
+        'variables.values.numberValue(raw)',
+        'variables.values.linkUrl',
+        'variables.values.dateValue',
+        'variables.values.options.name',
+        'variables.values.options.position',
+      ],
+      sortOrder: {
+        field: 'acceleratorDetails_dealName',
+        direction: 'Ascending',
+      },
+      search,
+      filters: [
+        {
+          prefix: 'variables',
+          search: {
+            field: 'stableId',
+            operation: 'field',
+            type: 'Exact',
+            values: visibleColumnIds.length > 0 ? visibleColumnIds : [''],
+          },
         },
-        search,
-        filters: [
-          {
-            prefix: 'variables',
-            search: {
-              field: 'stableId',
-              operation: 'field',
-              type: 'Exact',
-              values: visibleColumnIds.length > 0 ? visibleColumnIds : [''],
-            },
+        {
+          prefix: 'internalUsers',
+          search: {
+            operation: 'field',
+            field: 'role',
+            values: ['Project Lead'],
           },
-          {
-            prefix: 'internalUsers',
-            search: {
-              operation: 'field',
-              field: 'role',
-              values: ['Project Lead'],
-            },
-          },
-        ],
-      })
-    );
-    setRequestId(request.requestId);
+        },
+      ],
+    });
+  }, [
+    searchProjectsWithVariables,
+    dataForMaterialReactTable,
     // disable exhaustive-deps because of the complex expression
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility, currentView]);
+    dataForMaterialReactTable?.getState()?.columnVisibility,
+    currentView,
+  ]);
 
   useEffect(() => {
     if (updateVariableValuesResult.isSuccess) {
-      reloadTable();
+      void reloadTable().then(() => setLoading(false));
     }
     if (updateVariableValuesResult.isError) {
       snackbar.toastError();
@@ -1126,8 +1114,8 @@ const MatrixView = () => {
   }, [reloadTable, snackbar, updateVariableValuesResult.isError, updateVariableValuesResult.isSuccess]);
 
   useEffect(() => {
-    reloadTable();
-  }, [dispatch, reloadTable]);
+    void reloadTable();
+  }, [reloadTable]);
 
   useEffect(() => {
     const loadSavedColumnState = () => {
@@ -1208,7 +1196,7 @@ const MatrixView = () => {
 
       // Save to localStorage
       localStorage.setItem('selectedColumns', JSON.stringify(columns));
-      reloadTable();
+      void reloadTable();
     },
     [dataForMaterialReactTable, reloadTable, uniqueVariableIds]
   );

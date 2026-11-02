@@ -26,7 +26,7 @@ import { Button, DialogBox } from '@terraware/web-components';
 import { MRT_TableInstance } from 'material-react-table';
 
 import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
-import { ProjectsWithVariablesSearchResult } from 'src/redux/features/matrixView/matrixViewThunks';
+import { ProjectsWithVariablesSearchResult } from 'src/queries/search/projectsWithVariables';
 import strings from 'src/strings';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 
