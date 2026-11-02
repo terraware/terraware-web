@@ -1,3 +1,4 @@
+9b606356 SW-9192 Show alerts about creating planting sites for mobile/tablet (#6982)
 87157d4a Remove code left unused by the matrix view migration (#6969)
 ac383638 SW-9029 Use polygon extents in getBoundingBoxFromMultiPolygons and add unit tests (#6977)
 80e85e22 Find narrow antimeridian bounds from finite map points (#6976)
