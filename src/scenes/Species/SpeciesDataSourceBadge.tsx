@@ -17,7 +17,7 @@ const DATA_SOURCE_LABELS: Record<string, string> = {
 };
 
 const ACRONYM_SOURCES = new Set(['GBIF', 'GRIIS', 'WCVP']);
-export const speciesDataSourceLabel = (datasetType?: string): string =>
+const speciesDataSourceLabel = (datasetType?: string): string =>
   datasetType ? (DATA_SOURCE_LABELS[datasetType] ?? datasetType) : '';
 export const speciesDataSourceAcronymLabel = (datasetType?: string): string => {
   if (!datasetType) {

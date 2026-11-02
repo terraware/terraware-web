@@ -67,7 +67,14 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   };
 
   return (
-    <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column' minHeight={minHeight}>
+    <Box
+      display='flex'
+      flexDirection='column'
+      gap={theme.spacing(1)}
+      marginBottom={theme.spacing(2)}
+      minHeight={minHeight}
+      paddingTop={theme.spacing(1)}
+    >
       {tutorialDescription && tutorialDocLinkKey && titleWithPrefix && (
         <VideoDialog
           description={tutorialDescription}

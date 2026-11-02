@@ -4,17 +4,13 @@ import { baseApi } from 'src/queries/baseApi';
 import { rtkReducers } from 'src/queries/reducers';
 
 import messageReducers from './features/message/messageSlice';
-import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
-import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 
 // assembly of app reducers
 const reducers = {
   ...messageReducers,
-  ...projectSpeciesReducers,
   ...snackbarReducers,
-  ...speciesAsyncThunkReducers,
   ...userAnalyticsReducers,
   ...rtkReducers,
 };

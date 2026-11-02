@@ -1,19 +1,7 @@
-import {
-  SearchApiArg,
-  SearchApiResponse,
-  SearchCountApiArg,
-  SearchCountApiResponse,
-  SearchDistinctValuesApiArg,
-  SearchDistinctValuesApiResponse,
-} from 'src/queries/generated/search';
-import {
-  SearchCriteria,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchValuesResponseElement,
-} from 'src/types/Search';
+import { SearchApiArg, SearchApiResponse } from 'src/queries/generated/search';
+import { SearchResponseElement } from 'src/types/Search';
 
-import HttpService, { Response } from './HttpService';
+import HttpService from './HttpService';
 
 /**
  * Service for user related functionality
@@ -21,8 +9,6 @@ import HttpService, { Response } from './HttpService';
 
 // endpoint
 const SEARCH_ENDPOINT = '/api/v1/search';
-const SEARCH_COUNT_ENDPOINT = '/api/v1/search/count';
-const SEARCH_VALUES_ENDPOINT = '/api/v1/search/values';
 
 /*
  * Types exported from service
@@ -42,43 +28,7 @@ type RawSearchRequestPayload = SearchApiArg;
 
 type SearchResponsePayload = SearchApiResponse;
 
-type RawSearchCountRequestPayload = SearchCountApiArg;
-
-type SearchCountResponsePayload = SearchCountApiResponse;
-
-type RawSearchValuesRequestPayload = SearchDistinctValuesApiArg;
-
-type SearchValuesResponsePayload = SearchDistinctValuesApiResponse;
-
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);
-const httpSearchCount = HttpService.root(SEARCH_COUNT_ENDPOINT);
-const httpSearchValues = HttpService.root(SEARCH_VALUES_ENDPOINT);
-
-/**
- * Converts a list of search criteria to an AndNodePayload that includes a filter for
- * organization ID.
- *
- * @param criteria Search criteria in the type of SearchCriteria, which is used by the application,
- * or an array of SearchNodePayload
- * @param organizationId ID of organization to search.
- * @return SearchNodePayload suitable for use in a search request. This will currently always be
- * an AndNodePayload.
- */
-function convertToSearchNodePayload(
-  criteria: SearchCriteria | SearchNodePayload[],
-  organizationId: number
-): SearchNodePayload {
-  const newCriteria = Object.values(criteria);
-  newCriteria.unshift({
-    field: 'facility_organization_id',
-    values: [organizationId.toString()],
-    operation: 'field',
-  } as SearchNodePayload);
-  return {
-    operation: 'and',
-    children: newCriteria,
-  };
-}
 
 async function search<T extends SearchResponseElement>(
   entity: RawSearchRequestPayload,
@@ -92,48 +42,11 @@ async function search<T extends SearchResponseElement>(
   }
 }
 
-async function searchCount(entity: RawSearchCountRequestPayload): Promise<number | null> {
-  try {
-    const response: SearchCountResponsePayload = (await httpSearchCount.post({ entity })).data;
-    return response.count ?? null;
-  } catch {
-    return null;
-  }
-}
-
-async function searchValues<T extends SearchValuesResponseElement>(
-  entity: RawSearchValuesRequestPayload
-): Promise<T | null> {
-  const serverResponse: Response = await httpSearchValues.post({ entity });
-  if (serverResponse.requestSucceeded) {
-    const response: SearchValuesResponsePayload | null = serverResponse.data?.results ?? null;
-    return response as T | null;
-  } else {
-    return null;
-  }
-}
-
-async function searchCsv(entity: RawSearchRequestPayload): Promise<any> {
-  const headers = {
-    accept: 'text/csv',
-  };
-  try {
-    const response = (await httpSearch.post({ entity, headers })).data;
-    return response;
-  } catch {
-    return null;
-  }
-}
-
 /**
  * Exported functions
  */
 const SearchService = {
-  convertToSearchNodePayload,
   search,
-  searchCount,
-  searchValues,
-  searchCsv,
 };
 
 export default SearchService;

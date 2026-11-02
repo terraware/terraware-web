@@ -17,7 +17,7 @@ import {
 } from 'src/queries/generated/draftPlantingSites';
 import defaultStrings from 'src/strings';
 
-export const BOUNDARY_FILE_EXTENSIONS = '.kml,.kmz,.geojson,.json,.zip';
+const BOUNDARY_FILE_EXTENSIONS = '.kml,.kmz,.geojson,.json,.zip';
 
 const BYTES_PER_KB = 1024;
 const BYTES_PER_MB = 1024 * 1024;
