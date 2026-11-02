@@ -3364,8 +3364,26 @@
 <a name='L3299'></a><a href='#L3299'>3299</a>
 <a name='L3300'></a><a href='#L3300'>3300</a>
 <a name='L3301'></a><a href='#L3301'>3301</a>
-<a name='L3302'></a><a href='#L3302'>3302</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3302'></a><a href='#L3302'>3302</a>
+<a name='L3303'></a><a href='#L3303'>3303</a>
+<a name='L3304'></a><a href='#L3304'>3304</a>
+<a name='L3305'></a><a href='#L3305'>3305</a>
+<a name='L3306'></a><a href='#L3306'>3306</a>
+<a name='L3307'></a><a href='#L3307'>3307</a>
+<a name='L3308'></a><a href='#L3308'>3308</a>
+<a name='L3309'></a><a href='#L3309'>3309</a>
+<a name='L3310'></a><a href='#L3310'>3310</a>
+<a name='L3311'></a><a href='#L3311'>3311</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">109x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -9134,12 +9152,14 @@ export const strings = {
   SITE_BOUNDARY_ABSENT_WARNING: 'Por favor, defina un límite para el sitio.',
   SITE_BOUNDARY_BOUNDING_BOX_LIMIT:
     'La caja delimitadora del sitio puede tener hasta 20,000 ha. Si su sitio es más grande, divídalo en varios sitios de plantación.',
+  SITE_BOUNDARY_DESCRIPTION:
+    'Defina un límite del Sitio de Plantación que contenga todas las áreas plantables del proyecto.',
   SITE_BOUNDARY_DESCRIPTION_0:
     'Trace a continuación los límites de su sitio de plantación. Todas las zonas de su proyecto que sean aptas para la siembra deben estar dentro de los límites del terreno.',
   SITE_BOUNDARY_DESCRIPTION_1:
     'Use la herramienta de dibujo {0} para trazar el límite del sitio de plantación. [Vea un tutorial] sobre cómo trazar los límites del sitio.',
-  SITE_BOUNDARY_DRAWING_DESCRIPTION:
-    'Defina un límite de Sitio de Plantación que contenga todas las áreas plantables del proyecto. Utilice la herramienta de dibujo {0} para trazar formas y complete cada forma haciendo doble clic o haciendo clic nuevamente en el punto de inicio. [Vea un tutorial] sobre cómo dibujar límites de sitios.',
+  SITE_BOUNDARY_DRAWING_INSTRUCTIONS:
+    'Utilice la herramienta de dibujo {0} para trazar formas y complete cada forma haciendo doble clic o haciendo clic nuevamente en el punto de inicio.',
   SITE_BOUNDARY_DRAWING_ON_MAP: 'Dibujando el límite en el mapa.',
   SITE_BOUNDARY_ERRORS: 'Hay errores en los límites del terreno.',
   SITE_BOUNDARY_FILE_SUMMARY: '{0} · {1} · {2} · {3} puntos · ~{4} ha · caja delimitadora ~{5} ha',
@@ -9150,35 +9170,42 @@ export const strings = {
     'Los {0} polígonos en este archivo se combinaron en un solo límite de sitio que los abarca a todos.',
   SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED:
     'Si necesita que cada uno sea su propio estrato, se requiere un Sitio Detallado.',
-  SITE_BOUNDARY_UPLOAD_DESCRIPTION:
-    'Defina un límite de Sitio de Plantación que contenga todas las áreas plantables del proyecto.',
+  SITE_BOUNDARY_TUTORIAL: '[Vea un tutorial] sobre cómo dibujar los límites del sitio.',
   SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE:
     'Los Sitios Simples incluyen un Estrato y un Subestrato que comprenden todo el sitio de plantación.',
-  SITE_BOUNDARY_UPLOAD_TUTORIAL: '[Vea un tutorial] sobre cómo dibujar límites de sitios.',
-  SITE_BOUNDARY_UPLOADED_DESCRIPTION:
-    'Defina un límite de Sitio de Plantación que contenga todas las áreas plantables del proyecto. Puede editar el límite del sitio. Utilice la herramienta de dibujo {0} para trazar formas adicionales. [Vea un tutorial] sobre cómo dibujar límites de sitios.',
+  SITE_BOUNDARY_UPLOADED_INSTRUCTIONS:
+    'Puede editar el límite del sitio. Utilice la herramienta de dibujo {0} para trazar formas adicionales.',
   SITE_BOUNDING_AREA_TOO_LARGE: 'El área delimitada de aproximadamente {0} hectáreas es demasiado grande.',
   SITE_DETAIL: 'Detalle del sitio',
   SITE_EDITOR_USE_DESKTOP: 'Esta función solo está disponible desde la aplicación de escritorio.',
   SITE_EDITOR_USE_TABLET_LANDSCAPE: 'Esta función solo está disponible en la vista horizontal en una tableta.',
-  SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION:
-    'Defina las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares. Estas áreas serán excluidas de los cálculos de superficie plantable y de las Observaciones. Utilice la herramienta de dibujo {0} para trazar formas dentro o superpuestas al límite del sitio. Omita este paso si no hay áreas que excluir. [Vea un tutorial] sobre cómo dibujar áreas de exclusión.',
+  SITE_EXCLUSION_AREAS_DESCRIPTION:
+    'Defina áreas dentro del límite del sitio que no sean plantables, como caminos, cuerpos de agua y edificaciones auxiliares. Estas áreas serán excluidas de los cálculos de área plantable y de las Observaciones.',
+  SITE_EXCLUSION_AREAS_DRAWING_INSTRUCTIONS:
+    'Utilice la herramienta de dibujo {0} para trazar formas dentro o superpuestas al límite del sitio. Omita este paso si no hay áreas que excluir.',
+  SITE_EXCLUSION_AREAS_TUTORIAL: '[Vea un tutorial] sobre cómo dibujar áreas de exclusión.',
   SITE_EXCLUSION_ERRORS: 'Hay errores en el límite de exclusión.',
   SITE_GOALS: 'Objetivos del Sitio',
   SITE_GOALS_DESCRIPTION: 'Gestione los objetivos del sitio para densidades de plantación y especies.',
   SITE_LOCATION: 'Ubicación del sitio',
   SITE_MAP: 'Mapa del sitio',
   SITE_PLANT_DENSITY: 'Densidad de plantas del sitio',
-  SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION:
-    'Defina los estratos: capas de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares, como la pendiente de una colina orientada al este. Cada sitio de plantación tiene un Estrato por defecto. Utilice la herramienta de corte {0} para dibujar polígonos de Estrato dentro del límite del sitio. {1} [Vea un tutorial] sobre cómo agregar límites de Estrato.',
+  SITE_STRATUM_BOUNDARIES_DESCRIPTION:
+    'Defina estratos: capas de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares, como la pendiente de una colina orientada al este. Cada sitio de plantación tiene un Estrato por defecto.',
+  SITE_STRATUM_BOUNDARIES_DRAWING_INSTRUCTIONS:
+    'Utilice la herramienta de corte {0} para trazar polígonos de Estrato dentro del límite del sitio. {1}',
   SITE_STRATUM_BOUNDARIES_SIZE: 'Los estratos deben tener un tamaño mínimo de 100 m × 100 m.',
   SITE_STRATUM_BOUNDARIES_TOO_SMALL: 'Una o más estratas tienen un límite menor a 100 m x 100 m.',
+  SITE_STRATUM_BOUNDARIES_TUTORIAL: '[Vea un tutorial] sobre cómo agregar límites de Estrato.',
   SITE_STRATUM_BOUNDARY_TOO_SMALL: 'Límite de estrata menor a 100 m x 100 m.',
   SITE_STRATUM_NAMES_MISSING: 'Falta el nombre de una o más estratas. Haga clic en una estrata para editar su nombre.',
-  SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION:
-    'Defina los sustratos: la unidad más pequeña donde se pueden plantar plántulas durante una sola temporada de plantación (por ejemplo, 50-200 hectáreas). Cada Estrato tiene un Sustrato por defecto. Seleccione un Estrato y luego utilice la herramienta de corte {0} para dibujar polígonos de Sustrato dentro de él. [Vea un tutorial] sobre cómo agregar límites de Sustrato.',
+  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION:
+    'Defina subestratos: el área más pequeña en la que se pueden plantar plántulas durante una sola temporada de plantación (por ejemplo, 50-200 hectáreas). Cada Estrato tiene un Subestrato por defecto.',
+  SITE_SUBSTRATUM_BOUNDARIES_DRAWING_INSTRUCTIONS:
+    'Seleccione un Estrato y luego utilice la herramienta de corte {0} para trazar polígonos de Subestrato dentro de él.',
   SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM: '{0} seleccionado para crear subestratos',
   SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL: 'Uno o más Subestratos tienen un límite menor a 25 m x 25 m.',
+  SITE_SUBSTRATUM_BOUNDARIES_TUTORIAL: '[Vea un tutorial] sobre cómo agregar límites de Subestrato.',
   SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL: 'Límite de Subestrato menor a 25 m x 25 m.',
   SITE_VISIT: 'Visita al sitio',
   SITE_WITH_NAME_EXISTS: 'Ya existe un sitio con este nombre.',
@@ -9973,7 +10000,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-02T18:35:28.587Z
+                at 2026-11-02T19:08:55.705Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
