@@ -1213,6 +1213,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,You must enter a subset weight in order to wit
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.,
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.,
 MITIGATION_PLAN,Mitigation Plan,
+MODIFIED,modified,
 MODULE,Module,
 MODULE_DETAILS,Module Details,
 MODULE_ID,Module ID,

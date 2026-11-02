@@ -1,14 +1,23 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { Box } from '@mui/material';
 import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
 
 import SaveViewModal from 'src/components/common/SaveViewModal';
+import Button from 'src/components/common/button/Button';
 import { useFeatureEnabled } from 'src/features';
+import { useLocalization } from 'src/providers';
 import { useListSavedTableViewsQuery } from 'src/queries/generated/savedTableViews';
 import { TableDefinition } from 'src/types/Tables';
 
 import CurrentViewSelect, { DEFAULT_VIEW, ViewOption, sortViewsByLabel } from './CurrentViewSelect';
-import { TableSettings, applyTableSettings, getDefaultTableSettings, getTableSettings } from './tableSettings';
+import {
+  TableSettings,
+  applyTableSettings,
+  getDefaultTableSettings,
+  getTableSettings,
+  isTableModified,
+} from './tableSettings';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
 export type { ViewOption } from './CurrentViewSelect';
@@ -37,6 +46,7 @@ const CurrentView = <TData extends MRT_RowData>({
   tableDefinition,
 }: CurrentViewProps<TData>) => {
   'use no memo';
+  const { strings } = useLocalization();
   const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [preset, setPreset] = useState(defaultPreset);
   const [savedViewId, setSavedViewId] = useState<string>();
@@ -84,21 +94,41 @@ const CurrentView = <TData extends MRT_RowData>({
 
   const handleSaved = useCallback((newViewId: number) => setSavedViewId(`${newViewId}`), []);
 
+  const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === savedViewId);
+  const isModified =
+    isSavedTableViewsEnabled &&
+    isTableModified(
+      table,
+      (selectedSavedView?.settings ?? {}) as Partial<TableSettings>,
+      getDefaultTableSettings(table, defaultSettings)
+    );
+
   const openSaveViewModal = useCallback(() => setShowSaveViewModal(true), []);
   const closeSaveViewModal = useCallback(() => setShowSaveViewModal(false), []);
 
   return (
-    <>
-      <CurrentViewSelect
-        defaultViewLabel={defaultViewLabel}
-        id={id}
-        myViews={savedViewOptions}
-        onChange={handleChange}
-        onSave={openSaveViewModal}
-        presetViews={presetViews}
-        selected={savedViewId ?? preset}
-        showSave={isSavedTableViewsEnabled}
-      />
+    <Box display='flex' alignItems='center' gap={1}>
+      <Box width='300px' flexShrink={0}>
+        <CurrentViewSelect
+          defaultViewLabel={defaultViewLabel}
+          id={id}
+          modified={isModified}
+          myViews={savedViewOptions}
+          onChange={handleChange}
+          onSave={openSaveViewModal}
+          presetViews={presetViews}
+          selected={savedViewId ?? preset}
+          showSave={isSavedTableViewsEnabled}
+        />
+      </Box>
+      {isModified && (
+        <Button
+          id={`${id ?? 'current-view'}-save-button`}
+          label={strings.SAVE_VIEW_BUTTON}
+          onClick={openSaveViewModal}
+          priority='ghost'
+        />
+      )}
       {showSaveViewModal && (
         <SaveViewModal
           baseView={preset}
@@ -110,7 +140,7 @@ const CurrentView = <TData extends MRT_RowData>({
           tableName={tableDefinition.stableId}
         />
       )}
-    </>
+    </Box>
   );
 };
 

@@ -29,6 +29,7 @@ export const sortViewsByLabel = (views?: ViewOption[]) =>
 export type CurrentViewSelectProps = {
   defaultViewLabel?: string | null;
   id?: string;
+  modified?: boolean;
   myViews?: ViewOption[];
   onChange: (value: string) => void;
   onSave?: () => void;
@@ -40,6 +41,7 @@ export type CurrentViewSelectProps = {
 const CurrentViewSelect = ({
   defaultViewLabel: defaultViewLabelProp,
   id = 'current-view',
+  modified,
   myViews,
   onChange,
   onSave,
@@ -63,10 +65,13 @@ const CurrentViewSelect = ({
     [onChange, onSave, showSave]
   );
 
+  const handleReselect = useCallback(() => onChange(selected), [onChange, selected]);
+  const getReselectHandler = (value: string) => (value === selected ? handleReselect : undefined);
+
   const renderLabel = (label: string, value: string) => (
     <Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
       {label}
-      {value === selected && (
+      {value === selected && !modified && (
         <Icon
           name='checkmark'
           size='small'
@@ -78,11 +83,25 @@ const CurrentViewSelect = ({
   );
 
   const renderValue = useCallback(
-    (value: string) =>
-      [...(presetViews ?? []), ...(myViews ?? [])].find((view) => view.value === value)?.label ??
-      defaultViewLabel ??
-      '',
-    [defaultViewLabel, myViews, presetViews]
+    (value: string) => {
+      const label =
+        [...(presetViews ?? []), ...(myViews ?? [])].find((view) => view.value === value)?.label ??
+        defaultViewLabel ??
+        '';
+      return modified ? (
+        <Box display='flex' minWidth={0}>
+          <Box component='span' overflow='hidden' textOverflow='ellipsis' whiteSpace='nowrap'>
+            {label}
+          </Box>
+          <Box component='i' flexShrink={0} marginLeft={theme.spacing(0.5)}>
+            ({strings.MODIFIED})
+          </Box>
+        </Box>
+      ) : (
+        label
+      );
+    },
+    [defaultViewLabel, modified, myViews, presetViews, strings, theme]
   );
 
   const renderSection = (header: string, views?: ViewOption[], showDivider = true) =>
@@ -93,7 +112,7 @@ const CurrentViewSelect = ({
             {header.toUpperCase()}
           </ListSubheader>,
           ...views.map(({ label, value }) => (
-            <MenuItem key={value} id={value} value={value}>
+            <MenuItem key={value} id={value} value={value} onClick={getReselectHandler(value)}>
               {renderLabel(label, value)}
             </MenuItem>
           )),
@@ -112,7 +131,7 @@ const CurrentViewSelect = ({
         value={selected}
       >
         {defaultViewLabel !== null && (
-          <MenuItem id={DEFAULT_VIEW} value={DEFAULT_VIEW}>
+          <MenuItem id={DEFAULT_VIEW} value={DEFAULT_VIEW} onClick={getReselectHandler(DEFAULT_VIEW)}>
             {renderLabel(defaultViewLabel, DEFAULT_VIEW)}
           </MenuItem>
         )}

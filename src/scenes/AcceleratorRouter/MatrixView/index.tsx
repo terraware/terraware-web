@@ -33,6 +33,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
@@ -82,6 +83,7 @@ const MatrixView = () => {
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
+  const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const {
     columnFilters,
@@ -1011,7 +1013,7 @@ const MatrixView = () => {
       },
       renderTopToolbarCustomActions: ({ table }) => (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid style={{ width: '242px' }}>
+          <Grid>
             <CurrentView
               defaultPreset={currentView}
               defaultSettings={defaultViewSettings}
@@ -1025,7 +1027,7 @@ const MatrixView = () => {
             />
           </Grid>
 
-          {(!columnFiltersAreEmpty || !!globalFilter) && (
+          {!isSavedTableViewsEnabled && (!columnFiltersAreEmpty || !!globalFilter) && (
             <Grid style={{ display: 'flex', alignItems: 'center' }}>
               <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
                 {strings.FILTERS_APPLIED.toUpperCase()}
@@ -1117,6 +1119,7 @@ const MatrixView = () => {
       currentView,
       defaultViewSettings,
       globalFilter,
+      isSavedTableViewsEnabled,
       onCurrentViewChange,
       setColumnFilters,
       setColumnOrder,

@@ -1213,6 +1213,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,Usted debe introducir un peso del subconjunto 
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto para poder retirarlo a un vivero. Para ello, edite la cantidad de esta accesión.",abddc79b
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión.",5ffd97b6
 MITIGATION_PLAN,Plan de mitigación,c13d7b11
+MODIFIED,modificado,eb0b21c2
 MODULE,Módulo,019952ca
 MODULE_DETAILS,Detalles del módulo,66959ca8
 MODULE_ID,ID del módulo,9c2e85f6
