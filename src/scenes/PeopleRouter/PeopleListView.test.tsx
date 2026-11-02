@@ -67,8 +67,8 @@ const TF_CONTACT = buildPersonSearchResult({
 
 /**
  * The view drives everything off one search endpoint, switching on the `prefix` in the body: the
- * people list (twice on mount — once for the table, once for the removable-user count) and the
- * internal project roles shown next to a Terraformation Contact.
+ * people list (the table and the removable-user count share one request on mount) and the internal
+ * project roles shown next to a Terraformation Contact.
  *
  * Returns the prefixes requested so far, so a test can wait for the mount searches to settle before
  * touching the table.
@@ -90,7 +90,7 @@ const mockSearches = (people: PersonSearchResult[], projectInternalUsers: Record
   return prefixes;
 };
 
-const MOUNT_SEARCHES = 3;
+const MOUNT_SEARCHES = 2;
 
 const waitForPeople = async (prefixes: string[]) => {
   await waitFor(() => expect(prefixes.length).toBeGreaterThanOrEqual(MOUNT_SEARCHES));
