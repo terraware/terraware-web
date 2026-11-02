@@ -6,11 +6,11 @@ import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers';
-import strings from 'src/strings';
+import { useLocalization, useOrganization } from 'src/providers';
 import { isAdmin, selectedOrgHasFacilityType } from 'src/utils/organization';
 
 export default function EmptyState(): JSX.Element {
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const navigate = useSyncNavigate();
   const theme = useTheme();
