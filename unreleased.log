@@ -1,3 +1,5 @@
+d412db92 Fetch matrix view projects through RTK Query (#6957)
+0ab68464 Bump follow-redirects from 1.16.1 to 1.16.2 (#6968)
 7c02e84e Search species deliverables through RTK Query (#6958)
 c043850a Remove openapi-typescript generated types (#6959)
 d2091310 Remove code left unused by the RTK Query migration (#6956)
