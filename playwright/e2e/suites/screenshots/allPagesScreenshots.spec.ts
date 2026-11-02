@@ -14,6 +14,7 @@ const pageMasks = (page: Page) => [page.locator('canvas'), page.locator('.mapbox
 const TERRAWARE_PAGES: { name: string; path: string }[] = [
   { name: 'home', path: '/home' },
   { name: 'seeds-dashboard', path: '/seeds-dashboard' },
+  { name: 'seedlings-dashboard', path: '/seedlings-dashboard' },
   { name: 'inventory', path: '/inventory' },
   { name: 'nursery-withdrawals', path: '/nursery/withdrawals' },
   { name: 'species', path: '/species' },

@@ -77,6 +77,14 @@ describe('SeedlingsDashboard', () => {
     renderWithProviders(<SeedlingsDashboard />);
     await screen.findByRole('link', { name: '12,960' });
 
+    const stageSection = within(screen.getByRole('region', { name: strings.SEEDLINGS_BY_STAGE }));
+    expect(stageSection.getAllByRole('region').map((region) => region.getAttribute('aria-label'))).toEqual([
+      strings.GERMINATING,
+      strings.ACTIVE_GROWTH,
+      strings.HARDENING_OFF,
+      strings.READY,
+    ]);
+
     for (const [label, quantity] of [
       [strings.GERMINATING, '1,200'],
       [strings.ACTIVE_GROWTH, '3,400'],

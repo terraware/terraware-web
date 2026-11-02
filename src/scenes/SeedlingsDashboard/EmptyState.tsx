@@ -35,7 +35,7 @@ export default function EmptyState(): JSX.Element {
         gap: theme.spacing(2.25),
       }}
     >
-      <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='large' />
+      <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='large' style={{ flexShrink: 0 }} />
       <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'start', gap: 1 }}>
         <Typography fontWeight={600}>{strings.SEEDLINGS_DASHBOARD_MESSAGE_TITLE}</Typography>
         <Typography>{strings.SEEDLINGS_DASHBOARD_MESSAGE}</Typography>
