@@ -77,12 +77,28 @@ const getBoundingBoxFromPoints = (points: MapPoint[]): MapBounds => {
   let minLng = Infinity;
   let maxLng = -Infinity;
 
-  if (points.length > 0) {
-    for (const { lng, lat } of points) {
-      minLat = Math.min(minLat, lat);
-      maxLat = Math.max(maxLat, lat);
-      minLng = Math.min(minLng, lng);
-      maxLng = Math.max(maxLng, lng);
+  const longitudes: number[] = [];
+  for (const { lng, lat } of points) {
+    if (!Number.isFinite(lng) || !Number.isFinite(lat)) {
+      continue;
+    }
+    minLat = Math.min(minLat, lat);
+    maxLat = Math.max(maxLat, lat);
+    longitudes.push(lng);
+  }
+
+  if (longitudes.length > 0) {
+    longitudes.sort((a, b) => a - b);
+    minLng = longitudes[0];
+    maxLng = longitudes[longitudes.length - 1];
+    let largestGap = minLng + 360 - maxLng;
+    for (let i = 1; i < longitudes.length; i++) {
+      const gap = longitudes[i] - longitudes[i - 1];
+      if (gap > largestGap) {
+        largestGap = gap;
+        minLng = longitudes[i];
+        maxLng = longitudes[i - 1] + 360;
+      }
     }
   }
 
