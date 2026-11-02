@@ -14,7 +14,9 @@ const useSiteEditorAvailability = (): SiteEditorAvailability => {
 
   return {
     isEditorAvailable: isDesktop && !isNarrowPortrait,
-    unavailableMessage: isNarrowPortrait ? strings.SITE_EDITOR_USE_TABLET_LANDSCAPE : strings.SITE_EDITOR_USE_DESKTOP,
+    unavailableMessage: isNarrowPortrait
+      ? strings.SITE_EDITOR_USE_TABLET_LANDSCAPE
+      : strings.FEATURE_NOT_AVAILABLE_AT_SCREEN_SIZE,
   };
 };
 

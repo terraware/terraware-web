@@ -783,6 +783,7 @@ FAMILY,Familia,7709335f
 FAST_GROWTH,Crecimiento rápido,d52b67d0
 FAVORABLE_WEATHER,Clima favorable,47741ec2
 FEATURE_AVAILABLE_ON_DESKTOP,Esta función solo está disponible desde la aplicación de escritorio.,1c4eb37d
+FEATURE_NOT_AVAILABLE_AT_SCREEN_SIZE,Esta función no está disponible en este tamaño de pantalla. Cambie a una tableta o a una computadora de escritorio para utilizar esta función.,e273da07
 FEATURE_REQUEST,Solicitud de funciones,21c9d75f
 FEATURE_REQUEST_DESCRIPTION,Díganos qué ideas tiene para nuevas funciones de Terraware.,e57489fd
 FEATURE_REQUEST_INSTRUCTIONS,Proporcione detalles sobre una nueva función o cambios a una función existente (¿Qué casos de uso o problemas se abordarán con la nueva función o los cambios?).,c44328fe
@@ -2188,7 +2189,6 @@ SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Los Sitios Simples incluyen un Estrato y u
 SITE_BOUNDARY_UPLOADED_INSTRUCTIONS,Puede editar el límite del sitio. Utilice la herramienta de dibujo {0} para trazar formas adicionales.,96b6e978
 SITE_BOUNDING_AREA_TOO_LARGE,El área delimitada de aproximadamente {0} hectáreas es demasiado grande.,eb3c9a60
 SITE_DETAIL,Detalle del sitio,c7f1672e
-SITE_EDITOR_USE_DESKTOP,Esta función no está disponible en este tamaño de pantalla. Cambie a una tableta o a una computadora de escritorio para agregar Sitios de Plantación.,4f66f474
 SITE_EDITOR_USE_TABLET_LANDSCAPE,Esta función solo está disponible en vista horizontal en una tableta. Continúe en vista horizontal o cambie a una computadora de escritorio.,38c2ca64
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Defina áreas dentro del límite del sitio que no sean plantables, como caminos, cuerpos de agua y edificaciones auxiliares. Estas áreas serán excluidas de los cálculos de área plantable y de las Observaciones.",8cccaceb
 SITE_EXCLUSION_AREAS_DRAWING_INSTRUCTIONS,Utilice la herramienta de dibujo {0} para trazar formas dentro o superpuestas al límite del sitio. Omita este paso si no hay áreas que excluir.,6fc68388
