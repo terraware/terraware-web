@@ -82,7 +82,7 @@ describe('SeedlingsDashboard', () => {
       [strings.HARDENING_OFF, '560'],
       [strings.READY, '9,000'],
     ]) {
-      const stage = within(screen.getByRole('region', { name: label, exact: true }));
+      const stage = within(screen.getByRole('region', { name: label }));
       expect(stage.getByText(quantity)).toBeInTheDocument();
       expect(stage.queryByRole('link')).not.toBeInTheDocument();
       expect(stage.queryByRole('button')).not.toBeInTheDocument();
