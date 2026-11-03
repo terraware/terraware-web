@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
@@ -23,6 +23,20 @@ import {
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
 export type { ViewOption } from './CurrentViewSelect';
+
+type StoredView = { preset?: string; savedViewId?: string };
+
+const loadStoredView = (storageKey: string): StoredView => {
+  try {
+    const stored = JSON.parse(localStorage.getItem(storageKey) || '{}');
+    return {
+      preset: typeof stored.preset === 'string' ? stored.preset : undefined,
+      savedViewId: typeof stored.savedViewId === 'string' ? stored.savedViewId : undefined,
+    };
+  } catch {
+    return {};
+  }
+};
 
 export type CurrentViewProps<TData extends MRT_RowData> = {
   defaultPreset?: string;
@@ -52,11 +66,17 @@ const CurrentView = <TData extends MRT_RowData>({
   const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const snackbar = useSnackbar();
   const [updateSavedTableView] = useUpdateSavedTableViewMutation();
-  const [preset, setPreset] = useState(defaultPreset);
-  const [savedViewId, setSavedViewId] = useState<string>();
+  const storageKey = `${tableDefinition.storageKey}-currentView`;
+  const [preset, setPreset] = useState(() => {
+    const storedPreset = loadStoredView(storageKey).preset;
+    return storedPreset === DEFAULT_VIEW || presetViews?.some((presetView) => presetView.value === storedPreset)
+      ? (storedPreset as string)
+      : defaultPreset;
+  });
+  const [savedViewId, setSavedViewId] = useState(() => loadStoredView(storageKey).savedViewId);
   const [showSaveViewModal, setShowSaveViewModal] = useState(false);
   const [viewToDelete, setViewToDelete] = useState<{ id: number; name: string }>();
-  const { data: savedTableViewsData } = useListSavedTableViewsQuery(
+  const { data: savedTableViewsData, isError: isSavedTableViewsError } = useListSavedTableViewsQuery(
     { organizationId, tableName: tableDefinition.stableId },
     { skip: !isSavedTableViewsEnabled }
   );
@@ -64,6 +84,18 @@ const CurrentView = <TData extends MRT_RowData>({
     () => sortViewsByLabel(savedTableViewsData?.views.map((view) => ({ label: view.name, value: `${view.id}` }))) ?? [],
     [savedTableViewsData]
   );
+  const isSavedViewAvailable = savedTableViewsData
+    ? savedTableViewsData.views.some((view) => `${view.id}` === savedViewId)
+    : !isSavedTableViewsError;
+  const activeSavedViewId = isSavedTableViewsEnabled && isSavedViewAvailable ? savedViewId : undefined;
+
+  const hasNotifiedRestoredPreset = useRef(false);
+  useEffect(() => {
+    if (!hasNotifiedRestoredPreset.current) {
+      hasNotifiedRestoredPreset.current = true;
+      onPresetChange?.(preset);
+    }
+  }, [onPresetChange, preset]);
 
   const changePreset = useCallback(
     (value: string) => {
@@ -72,6 +104,14 @@ const CurrentView = <TData extends MRT_RowData>({
     },
     [onPresetChange]
   );
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(storageKey, JSON.stringify({ preset, savedViewId }));
+    } catch {
+      // ignore
+    }
+  }, [preset, savedViewId, storageKey]);
 
   const handleChange = useCallback(
     (value: string) => {
@@ -117,16 +157,16 @@ const CurrentView = <TData extends MRT_RowData>({
   const closeDeleteViewModal = useCallback(() => setViewToDelete(undefined), []);
   const handleDeleted = useCallback(
     (deletedViewId: number) => {
-      if (`${deletedViewId}` === savedViewId) {
+      if (`${deletedViewId}` === activeSavedViewId) {
         handleChange(DEFAULT_VIEW);
       }
     },
-    [handleChange, savedViewId]
+    [activeSavedViewId, handleChange]
   );
 
   const handleSaved = useCallback((newViewId: number) => setSavedViewId(`${newViewId}`), []);
 
-  const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === savedViewId);
+  const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === activeSavedViewId);
   const isModified =
     isSavedTableViewsEnabled &&
     isTableModified(
@@ -151,7 +191,7 @@ const CurrentView = <TData extends MRT_RowData>({
           onRenameView={isSavedTableViewsEnabled ? handleRename : undefined}
           onSave={openSaveViewModal}
           presetViews={presetViews}
-          selected={savedViewId ?? preset}
+          selected={activeSavedViewId ?? preset}
           showSave={isSavedTableViewsEnabled}
         />
       </Box>
