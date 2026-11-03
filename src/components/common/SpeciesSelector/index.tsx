@@ -1,14 +1,13 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 import { SelectT } from '@terraware/web-components';
 
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
+import { useSearchSpeciesSuggestionsQuery } from 'src/queries/search/species';
 import strings from 'src/strings';
 import { SuggestedSpecies } from 'src/types/Species';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 
 interface SpeciesSelectorProps<T extends { speciesId?: number } | undefined> {
@@ -27,34 +26,19 @@ export default function SpeciesSelector<T extends { speciesId?: number } | undef
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { speciesId, record, setRecord, disabled, validate, tooltipTitle, hideLabel, id } = props;
-  const [speciesList, setSpeciesList] = useState<SuggestedSpecies[]>([]);
   const [selectedValue, setSelectedValue] = useState<SuggestedSpecies>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
-  const populateSpecies = useCallback(
-    async (searchTerm: string) => {
-      if (!selectedOrganization) {
-        return;
-      }
-      const requestId = Math.random().toString();
-      setRequestId(`speciesSelectorSearch${id}`, requestId);
-      const response: SuggestedSpecies[] | null = await SpeciesService.suggestSpecies(
-        selectedOrganization.id,
-        searchTerm
-      );
-      if (response && getRequestId(`speciesSelectorSearch${id}`) === requestId) {
-        setSpeciesList(response.sort((a, b) => a.scientificName.localeCompare(b.scientificName)));
-      }
-    },
-    [selectedOrganization, id]
+  const { data: suggestedSpecies } = useSearchSpeciesSuggestionsQuery(
+    { organizationId: selectedOrganization?.id ?? -1, query: debouncedSearchTerm },
+    // Species can change outside RTK Query (e.g. CSV imports), so fetch fresh suggestions on mount.
+    { skip: !selectedOrganization, refetchOnMountOrArgChange: true }
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void populateSpecies(debouncedSearchTerm);
-    }
-  }, [populateSpecies, debouncedSearchTerm, selectedOrganization]);
+  const speciesList = useMemo(
+    () => [...(suggestedSpecies ?? [])].sort((a, b) => a.scientificName.localeCompare(b.scientificName)),
+    [suggestedSpecies]
+  );
 
   useEffect(() => {
     if (speciesId && !selectedValue) {
