@@ -1,3 +1,6 @@
+5784f6e0 Release planting site boundary editing (#7001)
+1c09933e Hide the Edit Organization button from non-admins (#7000)
+4ff61c57 SW-9001 Console activity log E2E test (#6997)
 267d6151 Report Vercel preview URL in a GitHub check (#6990)
 a59927ad SW-9187 Filtering and unfiltering the console Projects view can cause Error (#6996)
 7eea7d64 SW-9111 Planting Site Create: Improvements to the drawer and map UI (#6995)
