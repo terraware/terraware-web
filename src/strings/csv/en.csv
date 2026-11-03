@@ -2524,6 +2524,7 @@ THIS_MODULE_CONTAINS,This module contains:,
 THIS_PERSON,this person,
 THIS_PROJECT_HAS_NO_ACTIVITIES,This project has no Activities,
 THIS_REPORT_HAS_BEEN_APPROVED,This report has been approved.,
+THIS_VIEW_SAVES,This view saves,Heading above the list of table settings a saved view will keep
 THREATENED,Threatened,
 THUMBNAIL,Thumbnail,
 TIDE,Tide,
@@ -2802,6 +2803,12 @@ VIEW_REPORTS,View Reports,
 VIEW_SESSION,View Session,Button label to view the video recording of an informational session
 VIEW_SITES_STRATA_SUBSTRATA,"View Sites, Strata, and Substrata on a map.",
 VIEW_SPECIES_LIST,View Species List,
+VIEW_SUMMARY_BASE_VIEW,Base View: {0},Save view summary entry: {0} is the preset view the saved view is based on
+VIEW_SUMMARY_COLUMNS,Columns: {0},Save view summary entry: {0} is the comma-separated list of visible columns in order
+VIEW_SUMMARY_FILTER,{0}: {1},Save view summary entry: {0} is a column name and {1} is the value it's filtered by
+VIEW_SUMMARY_NO_FILTERS,Filters: None,Save view summary entry shown when the view has no filters or search
+VIEW_SUMMARY_SEARCH,"Search: ""{0}""",Save view summary entry: {0} is the table's search text
+VIEW_SUMMARY_SORT,Sort: {0},"Save view summary entry: {0} is the sorted column names, each followed by ↑ or ↓"
 VIEWING,Viewing,
 VINE,Vine,A type of plant.
 VIRTUAL,Virtual,

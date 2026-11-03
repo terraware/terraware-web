@@ -62,12 +62,12 @@ export const applyTableSettings = <TData extends MRT_RowData>(
   table.setSorting(settings.sorting ?? defaults.sorting);
 };
 
-const isEmptyFilter = (filter: { value: unknown }) =>
-  filter.value === undefined ||
-  filter.value === '' ||
-  (Array.isArray(filter.value) && filter.value.every((value) => value === undefined || value === ''));
+export const isBlankFilterValue = (value: unknown) => value === undefined || value === null || value === '';
 
-const nonEmptyFilters = (filters: MRT_ColumnFiltersState) => filters.filter((filter) => !isEmptyFilter(filter));
+const isEmptyFilter = (filter: { value: unknown }) =>
+  isBlankFilterValue(filter.value) || (Array.isArray(filter.value) && filter.value.every(isBlankFilterValue));
+
+export const nonEmptyFilters = (filters: MRT_ColumnFiltersState) => filters.filter((filter) => !isEmptyFilter(filter));
 
 const toComparableFilterValue = (value: unknown) => {
   if (dayjs.isDayjs(value)) {
@@ -84,7 +84,7 @@ const comparableFilters = (filters: MRT_ColumnFiltersState) =>
       : toComparableFilterValue(filter.value),
   }));
 
-const isDataColumnId = (columnId: string) => !columnId.startsWith('mrt-');
+export const isDataColumnId = (columnId: string) => !columnId.startsWith('mrt-');
 
 const normalizePinning = (pinning: MRT_ColumnPinningState) => ({
   left: (pinning.left ?? []).filter(isDataColumnId),
