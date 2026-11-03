@@ -832,7 +832,7 @@ FROM_GIS_DATABASE,(de la base de datos GIS),7b29f44f
 FROM_NURSERY,De: Vivero,21226e82
 FROM_NURSERY_REQUIRED,De: Vivero *,4bcef7f8
 FROM_PLANTING_SITE,De: Sitio de plantación,ac7278e5
-FROM_SEED_BANK,Del banco de semillas,a3a6f4d4
+FROM_SEED_BANK,De: Banco de semillas,b05ed0f3
 FROM_SUBSTRATUM,De: Sustrato,d8e74cd4
 FULFILLED,Completado,9e0b0ecf
 FUNDER,Financiador,a66356e6

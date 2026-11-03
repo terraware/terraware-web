@@ -831,7 +831,7 @@ FROM_GIS_DATABASE,(à partir de la base de données SIG),7b29f44f
 FROM_NURSERY,De : Pépinière,21226e82
 FROM_NURSERY_REQUIRED,De : Pépinière *,4bcef7f8
 FROM_PLANTING_SITE,De : Site de plantation,ac7278e5
-FROM_SEED_BANK,Depuis la banque de semences,a3a6f4d4
+FROM_SEED_BANK,De : Banque de semences,b05ed0f3
 FROM_SUBSTRATUM,De : Substrat,d8e74cd4
 FULFILLED,Satisfait,9e0b0ecf
 FUNDER,Bailleurs de fonds,a66356e6
