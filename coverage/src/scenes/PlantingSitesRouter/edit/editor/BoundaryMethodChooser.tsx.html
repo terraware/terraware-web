@@ -201,7 +201,24 @@
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -282,9 +299,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,6 +367,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX } from 'react';
 &nbsp;
 import { Box, Typography, useTheme } from '@mui/material';
@@ -374,11 +408,13 @@ const MethodTile = ({ description, icon, id, label, onClick }: MethodTileProps):
         borderRadius: '8px',
         cursor: 'pointer',
         display: 'flex',
+        flex: '1 1 280px',
         fontFamily: 'inherit',
         gap: theme.spacing(2),
+        maxWidth: '320px',
+        minWidth: 0,
         padding: theme.spacing(2, 2.5),
         textAlign: 'left',
-        width: '320px',
         '&amp;:hover': {
           background: theme.palette.TwClrBgHover,
           borderColor: theme.palette.TwClrBrdrSuccess,
@@ -399,7 +435,7 @@ const MethodTile = ({ description, icon, id, label, onClick }: MethodTileProps):
       &gt;
         &lt;Icon name={icon} style={{ fill: theme.palette.TwClrIcnBrand, height: '20px', width: '20px' }} /&gt;
       &lt;/Box&gt;
-      &lt;Box display='flex' flexDirection='column' gap={theme.spacing(0.5)}&gt;
+      &lt;Box display='flex' flexDirection='column' gap={theme.spacing(0.5)} minWidth={0}&gt;
         &lt;Typography fontSize='14px' fontWeight={600} lineHeight='20px' color={theme.palette.TwClrTxt}&gt;
           {label}
         &lt;/Typography&gt;
@@ -416,8 +452,8 @@ export type BoundaryMethodChooserProps = {
 };
 &nbsp;
 /**
- * Overlay shown on top of the editor card while the site boundary is still undefined, letting the
- * user choose between uploading a spatial file and drawing the boundary by hand.
+ * Overlay shown on top of the map while the site boundary is still undefined, letting the user
+ * choose between uploading a spatial file and drawing the boundary by hand.
  */
 export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChooserProps): JSX.Element {
   const theme = useTheme();
@@ -431,10 +467,11 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
           'linear-gradient(180deg, ' +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)}, ` +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.24)})`,
-        borderRadius: theme.spacing(1),
         display: 'flex',
         inset: 0,
         justifyContent: 'center',
+        overflow: 'auto',
+        padding: theme.spacing(2),
         position: 'absolute',
         zIndex: MAP_VIEW_STYLE_CONTROL_Z_INDEX + 1,
       }}
@@ -448,13 +485,21 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
           display: 'flex',
           flexDirection: 'column',
           gap: theme.spacing(2.5),
+          margin: 'auto',
+          maxWidth: '100%',
           padding: theme.spacing(4, 4.5),
         }}
       &gt;
-        &lt;Typography fontSize='16px' fontWeight={600} lineHeight='24px' color={theme.palette.TwClrTxt}&gt;
+        &lt;Typography
+          fontSize='16px'
+          fontWeight={600}
+          lineHeight='24px'
+          color={theme.palette.TwClrTxt}
+          textAlign='center'
+        &gt;
           {strings.BOUNDARY_METHOD_TITLE}
         &lt;/Typography&gt;
-        &lt;Box display='flex' gap={theme.spacing(2)}&gt;
+        &lt;Box display='flex' flexWrap='wrap' gap={theme.spacing(2)} justifyContent='center' width='100%'&gt;
           &lt;MethodTile
             description={strings.BOUNDARY_METHOD_UPLOAD_DESCRIPTION}
             icon='uploadCloud'
@@ -470,7 +515,13 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
             onClick={() =&gt; onSelect('draw')}
           /&gt;
         &lt;/Box&gt;
-        &lt;Typography fontSize='12px' fontWeight={400} lineHeight='16px' color={theme.palette.TwClrTxtSecondary}&gt;
+        &lt;Typography
+          fontSize='12px'
+          fontWeight={400}
+          lineHeight='16px'
+          color={theme.palette.TwClrTxtSecondary}
+          textAlign='center'
+        &gt;
           {strings.BOUNDARY_METHOD_SWITCH_NOTE}
         &lt;/Typography&gt;
       &lt;/Box&gt;
@@ -484,7 +535,7 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-03T17:53:50.257Z
+                at 2026-11-03T19:31:06.044Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
