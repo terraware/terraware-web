@@ -2041,6 +2041,7 @@ SAVE_VIEW,Guardar vista,c4a3bd9f
 SAVE_VIEW_BUTTON,Guardar vista,0059102f
 SAVED,Guardado,3324fd4d
 SAVED_VIEW_CREATED,{0} se guardó en Mis vistas,e8a17db1
+SAVED_VIEW_UPDATED,{0} actualizado,aa7ecb38
 SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6

@@ -7,8 +7,9 @@ import SaveViewModal from 'src/components/common/SaveViewModal';
 import Button from 'src/components/common/button/Button';
 import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
-import { useListSavedTableViewsQuery } from 'src/queries/generated/savedTableViews';
+import { useListSavedTableViewsQuery, useUpdateSavedTableViewMutation } from 'src/queries/generated/savedTableViews';
 import { TableDefinition } from 'src/types/Tables';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import CurrentViewSelect, { DEFAULT_VIEW, ViewOption, sortViewsByLabel } from './CurrentViewSelect';
 import {
@@ -48,6 +49,8 @@ const CurrentView = <TData extends MRT_RowData>({
   'use no memo';
   const { strings } = useLocalization();
   const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
+  const snackbar = useSnackbar();
+  const [updateSavedTableView] = useUpdateSavedTableViewMutation();
   const [preset, setPreset] = useState(defaultPreset);
   const [savedViewId, setSavedViewId] = useState<string>();
   const [showSaveViewModal, setShowSaveViewModal] = useState(false);
@@ -92,6 +95,19 @@ const CurrentView = <TData extends MRT_RowData>({
     [changePreset, defaultSettings, isSavedTableViewsEnabled, presetViews, savedTableViewsData, table]
   );
 
+  const handleRename = useCallback(
+    async (value: string, name: string) => {
+      try {
+        await updateSavedTableView({ id: Number(value), updateSavedTableViewRequestPayload: { name } }).unwrap();
+        snackbar.toastSuccess(strings.formatString(strings.SAVED_VIEW_UPDATED, name));
+      } catch (error) {
+        snackbar.toastError();
+        throw error;
+      }
+    },
+    [snackbar, strings, updateSavedTableView]
+  );
+
   const handleSaved = useCallback((newViewId: number) => setSavedViewId(`${newViewId}`), []);
 
   const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === savedViewId);
@@ -115,6 +131,7 @@ const CurrentView = <TData extends MRT_RowData>({
           modified={isModified}
           myViews={savedViewOptions}
           onChange={handleChange}
+          onRenameView={isSavedTableViewsEnabled ? handleRename : undefined}
           onSave={openSaveViewModal}
           presetViews={presetViews}
           selected={savedViewId ?? preset}

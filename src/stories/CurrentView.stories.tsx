@@ -87,3 +87,12 @@ Modified.args = {
   selected: 'acceleratorProjects',
   showSave: true,
 };
+
+export const WithRename = CurrentViewTemplate.bind({});
+
+WithRename.args = {
+  myViews,
+  onRenameView: () => undefined,
+  presetViews,
+  selected: 'phase1Projects',
+};
