@@ -13,6 +13,7 @@ import useQuery from 'src/utils/useQuery';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PlantingSiteTypeSelect from '../edit/PlantingSiteTypeSelect';
+import { PLANTING_SITES_TABS } from '../plantingSitesListTabs';
 import PlantingSitesListTab from './PlantingSitesListTab';
 
 const PlantingSitesList = () => {
@@ -48,12 +49,12 @@ const PlantingSitesList = () => {
 
     return [
       {
-        id: 'plantingSites',
+        id: PLANTING_SITES_TABS.active,
         label: strings.PLANTING_SITES,
         children: <PlantingSitesListTab isDraft={false} />,
       },
       {
-        id: 'draftPlantingSites',
+        id: PLANTING_SITES_TABS.drafts,
         label: strings.DRAFT_PLANTING_SITES,
         children: <PlantingSitesListTab isDraft />,
       },
@@ -61,7 +62,7 @@ const PlantingSitesList = () => {
   }, [canViewDrafts, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
-    defaultTab: 'plantingSites',
+    defaultTab: PLANTING_SITES_TABS.active,
     tabs,
     viewIdentifier: 'planting-sites',
   });
