@@ -18,15 +18,16 @@ import {
   useUpdateOrganizationUserMutation,
 } from 'src/queries/generated/organizationUsers';
 import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
+import {
+  useLazySearchOrganizationUsersQuery,
+  useLazySearchProjectInternalUserRolesQuery,
+} from 'src/queries/search/organizationUsers';
 import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
-import { SearchService } from 'src/services';
 import { OrganizationRole } from 'src/types/Organization';
-import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
 import { isAdmin, isTfContact } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
-import { parseSearchTerm } from 'src/utils/search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -63,6 +64,8 @@ export default function PeopleListView(): JSX.Element {
   const [deleteOrganization] = useDeleteOrganizationMutation();
   const [updateOrganizationUser] = useUpdateOrganizationUserMutation();
   const [deleteOrganizationUser] = useDeleteOrganizationUserMutation();
+  const [searchOrganizationUsers] = useLazySearchOrganizationUsersQuery();
+  const [searchProjectInternalUserRoles] = useLazySearchProjectInternalUserRolesQuery();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale, strings } = useLocalization();
@@ -79,45 +82,18 @@ export default function PeopleListView(): JSX.Element {
   );
 
   const getProjectsWithInternalUsersData = useCallback(async () => {
-    // todo change to rtk query
     if (!selectedOrganization?.id) {
       return;
     }
 
-    const params: SearchRequestPayload = {
-      prefix: 'projectInternalUsers',
-      fields: ['project_name', 'user_id', 'role'],
-      search: {
-        operation: 'and',
-        children: [
-          {
-            operation: 'field',
-            field: 'project_organization_id',
-            type: 'Exact',
-            values: [selectedOrganization.id.toString()],
-          },
-          {
-            operation: 'field',
-            field: 'role',
-            type: 'Exact',
-            values: [
-              strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD,
-              strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD,
-            ],
-          },
-        ],
-      },
-      sortOrder: [{ field: 'role' }],
-      count: 0,
-    };
+    const searchResults = await searchProjectInternalUserRoles({
+      organizationId: selectedOrganization.id,
+      roles: [strings.PROJECT_INTERNAL_USER_ROLE_PROJECT_LEAD, strings.PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD],
+    })
+      .unwrap()
+      .catch(() => []);
 
-    const searchResults = await SearchService.search(params);
-
-    const flattened = (searchResults || []).map(
-      (result) => result as { role: string; user_id: string; project_name: string }
-    );
-
-    const internalUserRolesByUserId = flattened.reduce((acc, curr) => {
+    const internalUserRolesByUserId = searchResults.reduce((acc, curr) => {
       if (!acc[curr.user_id]) {
         acc[curr.user_id] = [];
       }
@@ -127,7 +103,7 @@ export default function PeopleListView(): JSX.Element {
       return acc;
     }, {} as ProjectInternalUserRoles);
     setProjectRestorationLeads(internalUserRolesByUserId);
-  }, [selectedOrganization, strings]);
+  }, [searchProjectInternalUserRoles, selectedOrganization, strings]);
 
   useEffect(() => {
     void getProjectsWithInternalUsersData();
@@ -150,74 +126,12 @@ export default function PeopleListView(): JSX.Element {
       if (!selectedOrganization) {
         return [];
       }
-      const { type, values } = parseSearchTerm(searchTerm);
-      const searchField: OrNodePayload | null = searchTerm
-        ? {
-            operation: 'or',
-            children: [
-              {
-                operation: 'field',
-                field: 'user_firstName',
-                type,
-                values,
-              },
-              {
-                operation: 'field',
-                field: 'user_lastName',
-                type,
-                values,
-              },
-              {
-                operation: 'field',
-                field: 'user_email',
-                type: 'Exact',
-                values,
-              },
-            ],
-          }
-        : null;
-
-      const params: SearchRequestPayload = {
-        prefix: 'organizationUsers',
-        fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
-        search: {
-          operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'organization_id',
-              type: 'Exact',
-              values: [selectedOrganization.id.toString()],
-            },
-            ...(searchField ? [searchField] : []),
-          ],
-        },
-        sortOrder: [
-          {
-            field: 'user_email',
-          },
-        ],
-        count: 0,
-      };
-
-      const searchResults = await SearchService.search(params);
-      const usersResults: OrganizationUser[] = [];
-      searchResults?.forEach((result) => {
-        if (skipTfContact && isTfContact(result.roleName as OrganizationRole)) {
-          return;
-        }
-        usersResults.push({
-          firstName: result.user_firstName as string,
-          lastName: result.user_lastName as string,
-          email: result.user_email as string,
-          id: result.user_id as number,
-          role: result.roleName as OrganizationRole,
-          addedTime: result.createdTime as string,
-        });
-      });
-      return usersResults;
+      const users = await searchOrganizationUsers({ organizationId: selectedOrganization.id, searchTerm })
+        .unwrap()
+        .catch((): OrganizationUser[] => []);
+      return skipTfContact ? users.filter((result) => !isTfContact(result.role)) : users;
     },
-    [selectedOrganization]
+    [searchOrganizationUsers, selectedOrganization]
   );
 
   const refreshSearch = useCallback(async () => {
