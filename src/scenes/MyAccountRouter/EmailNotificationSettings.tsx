@@ -50,30 +50,18 @@ type SettingRowProps = {
   disabled: boolean;
   example?: string;
   id: string;
+  labelledBy?: string;
   onChange: (checked: boolean) => void;
-  title: string;
+  title?: string;
 };
 
-const SettingRow = ({ checked, description, disabled, example, id, onChange, title }: SettingRowProps) => {
+const SettingRow = ({ checked, description, disabled, example, id, labelledBy, onChange, title }: SettingRowProps) => {
   const theme = useTheme();
-  const titleId = `${id}-title`;
+  const titleId = labelledBy ?? `${id}-title`;
 
   return (
-    <Box display='flex' alignItems='flex-start' gap={theme.spacing(2)} paddingY={theme.spacing(1.5)}>
-      <Box flex={1} minWidth={0}>
-        <Typography id={titleId} fontSize='16px' fontWeight={600}>
-          {title}
-        </Typography>
-        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-          {description}
-        </Typography>
-        {example && (
-          <Typography fontSize='12px' fontStyle='italic' color={theme.palette.TwClrTxtSecondary} marginTop={0.5}>
-            {example}
-          </Typography>
-        )}
-      </Box>
-      <Box marginTop={0.5}>
+    <Box display='flex' alignItems='flex-start' gap={theme.spacing(1.5)} paddingY={theme.spacing(1.5)}>
+      <Box marginTop={0.5} flexShrink={0}>
         <AntSwitch
           id={id}
           checked={checked}
@@ -81,6 +69,21 @@ const SettingRow = ({ checked, description, disabled, example, id, onChange, tit
           onChange={(_event, value) => onChange(value)}
           slotProps={{ input: { 'aria-labelledby': titleId } }}
         />
+      </Box>
+      <Box flex={1} minWidth={0}>
+        {title && (
+          <Typography id={titleId} fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
+            {title}
+          </Typography>
+        )}
+        <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+          {description}
+        </Typography>
+        {example && (
+          <Typography fontSize='14px' fontStyle='italic' color={theme.palette.TwClrTxtSecondary} marginTop={0.5}>
+            {example}
+          </Typography>
+        )}
       </Box>
     </Box>
   );
@@ -93,7 +96,6 @@ type EmailNotificationSettingsProps = {
 };
 
 const EmailNotificationSettings = ({ edit, onChange, value }: EmailNotificationSettingsProps): JSX.Element => {
-  const theme = useTheme();
   const { categories, emailNotificationsEnabled } = value;
 
   const sortedCategories = CATEGORY_ORDER.flatMap(
@@ -108,27 +110,31 @@ const EmailNotificationSettings = ({ edit, onChange, value }: EmailNotificationS
 
   return (
     <Box>
+      <Typography id='emailNotifications-title' fontSize='20px' fontWeight={600}>
+        {strings.EMAIL_NOTIFICATIONS}
+      </Typography>
       <SettingRow
         id='emailNotificationsEnabled'
-        title={strings.EMAIL_NOTIFICATIONS}
+        labelledBy='emailNotifications-title'
         description={strings.EMAIL_NOTIFICATIONS_DESCRIPTION}
         checked={emailNotificationsEnabled}
         disabled={!edit}
-        onChange={(checked) => onChange({ ...value, emailNotificationsEnabled: checked })}
+        onChange={(checked) =>
+          onChange({
+            ...value,
+            emailNotificationsEnabled: checked,
+            categories: checked ? categories.map((setting) => ({ ...setting, optedIn: true })) : categories,
+          })
+        }
       />
       {sortedCategories.length > 0 && (
-        <Box
-          borderLeft={`2px solid ${theme.palette.TwClrBrdrTertiary}`}
-          marginLeft={theme.spacing(1)}
-          paddingLeft={theme.spacing(3)}
-          sx={{ opacity: emailNotificationsEnabled ? 1 : 0.5 }}
-        >
+        <Box sx={{ opacity: emailNotificationsEnabled ? 1 : 0.5 }}>
           {sortedCategories.map(({ category, optedIn }) => (
             <SettingRow
               key={category}
               id={`emailNotificationCategory-${category}`}
               {...categoryCopy(category)}
-              checked={optedIn}
+              checked={emailNotificationsEnabled && optedIn}
               disabled={!edit || !emailNotificationsEnabled}
               onChange={(checked) => setCategoryOptedIn(category, checked)}
             />
