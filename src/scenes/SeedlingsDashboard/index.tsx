@@ -13,6 +13,8 @@ import { useGetOrganizationNurserySummaryQuery } from 'src/queries/generated/nur
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
+import SeedlingsByStage from './SeedlingsByStage';
+
 export default function SeedlingsDashboard(): JSX.Element {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -81,6 +83,9 @@ export default function SeedlingsDashboard(): JSX.Element {
               </Box>
             </Grid>
           ))}
+          <Grid size={12}>
+            <SeedlingsByStage summary={summary} loading={loading} error={isError} />
+          </Grid>
         </Grid>
       )}
     </TfMain>

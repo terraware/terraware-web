@@ -858,6 +858,7 @@ GENERAL,General,989aa26d
 GENERIC_ERROR,Se ha producido un error,e1abd8bd
 GENUS,Género,893239a9
 GEOMETRY_CHANGED_WARNING_MESSAGE,La geometría de este sitio cambió el {0}. Los datos que se muestran aquí representan la información de la última observación del {1} y pueden ya no ser representativos del sitio de plantación.,28fe6009
+GERMINATING,Germinando,9a93858b
 GERMINATION_ESTABLISHMENT,Germinación/Establecimiento,0da62fe0
 GERMINATION_ESTABLISHMENT_QUANTITY,Cantidad de germinación/establecimiento,630be8de
 GERMINATION_ESTABLISHMENT_QUANTITY_AFTER,Cantidad de germinación/establecimiento (después),869caad0
@@ -1828,6 +1829,7 @@ QUESTION,Pregunta,84cf257d
 RARE,Raro/a,c114e991
 RATIONALE,Fundamento,4e68d88e
 REACH_OUT_TO_ADMIN_TITLE,"Por favor, contacte con un administrador de su organización.",24a43465
+READY,Listo,35379dea
 READY_TO_PLANT,Listas para plantar,e9b178c5
 READY_TO_PLANT_QUANTITY,Cantidad lista para plantar,a6197e31
 READY_TO_PLANT_QUANTITY_AFTER,Cantidad lista para plantar (después),6879991b
@@ -2075,6 +2077,7 @@ SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
 SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
+SEE_ALL_INVENTORY,Ver todo el inventario,5b009c49
 SEE_DETAILS,Ver detalles,70772c6c
 SEE_IC_VOTES,Ver votos IC,a6e1094b
 SEE_LESS,Ver menos,519e0ef0
@@ -2101,6 +2104,7 @@ SEED_WEIGHT,Peso de semillas,ff04e812
 SEEDLING_BATCH,Lote de plántula,3e860688
 SEEDLING_BATCHES,Lotes de plántulas,040a561e
 SEEDLINGS,Plántulas,c87d3813
+SEEDLINGS_BY_STAGE,Plántulas por etapa,64e5e1c8
 SEEDLINGS_DASHBOARD,Panel de Plántulas,3324256a
 SEEDLINGS_PLURAL,plántulas,8c6852cb
 SEEDLINGS_SINGULAR,plántula,16e3be66

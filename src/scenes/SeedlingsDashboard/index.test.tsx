@@ -64,19 +64,41 @@ describe('SeedlingsDashboard', () => {
   it('shows loading instead of fabricated zeros before the response arrives', async () => {
     renderWithProviders(<SeedlingsDashboard />);
 
-    expect(screen.getAllByRole('progressbar')).toHaveLength(3);
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('progressbar')).toHaveLength(7);
+    expect(
+      within(screen.getByRole('region', { name: strings.TOTAL_SEEDLINGS })).queryByRole('link')
+    ).not.toBeInTheDocument();
     expect(screen.queryByText('0')).not.toBeInTheDocument();
     expect(await screen.findByRole('link', { name: '12,960' })).toBeInTheDocument();
   });
 
-  it('shows an error in every summary card without inventing totals', async () => {
+  it('shows all four stage counts without filtered inventory links', async () => {
+    renderWithProviders(<SeedlingsDashboard />);
+    await screen.findByRole('link', { name: '12,960' });
+
+    for (const [label, quantity] of [
+      [strings.GERMINATING, '1,200'],
+      [strings.ACTIVE_GROWTH, '3,400'],
+      [strings.HARDENING_OFF, '560'],
+      [strings.READY, '9,000'],
+    ]) {
+      const stage = within(screen.getByRole('region', { name: label }));
+      expect(stage.getByText(quantity)).toBeInTheDocument();
+      expect(stage.queryByRole('link')).not.toBeInTheDocument();
+      expect(stage.queryByRole('button')).not.toBeInTheDocument();
+    }
+    expect(screen.getByRole('link', { name: strings.SEE_ALL_INVENTORY })).toHaveAttribute('href', '/inventory');
+  });
+
+  it('shows an error in every summary and stage card without inventing totals', async () => {
     mockError('get', SUMMARY_URL);
 
     renderWithProviders(<SeedlingsDashboard />);
 
-    expect(await screen.findAllByText(strings.GENERIC_ERROR)).toHaveLength(3);
-    expect(screen.queryByRole('link')).not.toBeInTheDocument();
+    expect(await screen.findAllByText(strings.GENERIC_ERROR)).toHaveLength(7);
+    expect(
+      within(screen.getByRole('region', { name: strings.TOTAL_SEEDLINGS })).queryByRole('link')
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
     expect(screen.queryByText('0')).not.toBeInTheDocument();
   });
@@ -127,7 +149,7 @@ describe('SeedlingsDashboard', () => {
     await user.click(screen.getByRole('button', { name: 'Switch organization' }));
 
     expect(screen.queryByText('12,960')).not.toBeInTheDocument();
-    expect(screen.getAllByRole('progressbar')).toHaveLength(3);
+    expect(screen.getAllByRole('progressbar')).toHaveLength(7);
     resolveSecond();
     expect(await screen.findByRole('link', { name: '4,321' })).toBeInTheDocument();
     expect(requestedOrganizations).toEqual(['1', '2']);
@@ -169,9 +191,11 @@ describe('SeedlingsDashboard', () => {
         await rs.advanceTimersByTimeAsync(API_PULL_INTERVAL + 1000);
       });
 
-      await waitFor(() => expect(screen.getAllByText(strings.GENERIC_ERROR)).toHaveLength(3));
+      await waitFor(() => expect(screen.getAllByText(strings.GENERIC_ERROR)).toHaveLength(7));
       expect(screen.queryByText('12,960')).not.toBeInTheDocument();
-      expect(screen.queryByRole('link')).not.toBeInTheDocument();
+      expect(
+        within(screen.getByRole('region', { name: strings.TOTAL_SEEDLINGS })).queryByRole('link')
+      ).not.toBeInTheDocument();
     });
 
     it('does not refresh when recurrent requests are disabled', async () => {
