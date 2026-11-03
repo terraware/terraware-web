@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react
 
 import { Box, SxProps, Theme } from '@mui/material';
 
+import { cssSize } from 'src/utils/css';
 import { redirectToLogin } from 'src/utils/login';
 
 /**
@@ -120,13 +121,6 @@ export type ThumbnailImageProps = Omit<React.ImgHTMLAttributes<HTMLImageElement>
   src: string;
   sx?: SxProps<Theme>;
 };
-
-/**
- * `height` and `width` are image attributes in pixels, but Box reads them as style props, where a
- * bare number is not valid CSS and a fraction would silently become a percentage.
- */
-const cssSize = (value?: string | number): string | number | undefined =>
-  typeof value === 'number' || (typeof value === 'string' && /^\d+(\.\d+)?$/.test(value)) ? `${value}px` : value;
 
 /**
  * Renders an image served by the API, retrying while the server is too busy to generate its
