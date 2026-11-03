@@ -6,7 +6,6 @@ import { BusySpinner, Button } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
-import { useFeatureEnabled } from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useOrganization } from 'src/providers';
@@ -29,7 +28,6 @@ export default function PlantingSiteView(): JSX.Element {
   const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
   const { selectedOrganization } = useOrganization();
   const { goToPlantingSiteEdit } = useNavigateTo();
-  const isEditPlantingSiteEnabled = useFeatureEnabled('Edit Planting Site');
 
   const openModal = useCallback(() => setDeleteModalOpen(true), []);
   const closeModal = useCallback(() => setDeleteModalOpen(false), []);
@@ -60,7 +58,7 @@ export default function PlantingSiteView(): JSX.Element {
             flushMobile
             radius={theme.spacing(1)}
             rightComponent={
-              isEditPlantingSiteEnabled && isAdmin(selectedOrganization) && plantingSite.strata?.length ? (
+              isAdmin(selectedOrganization) && plantingSite.strata?.length ? (
                 <Button
                   icon='iconEdit'
                   id='edit-site-boundary'
@@ -89,7 +87,7 @@ export default function PlantingSiteView(): JSX.Element {
             )}
           </Card>
         )}
-        {isEditPlantingSiteEnabled && <PlantingSiteHistoryCard plantingSiteId={plantingSite.id} />}
+        <PlantingSiteHistoryCard plantingSiteId={plantingSite.id} />
       </Box>
     </>
   );

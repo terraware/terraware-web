@@ -5,7 +5,6 @@ import { BusySpinner, Button, Message } from '@terraware/web-components';
 
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrganization } from 'src/providers';
 import { PlantingSitePayload, useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -19,8 +18,7 @@ export default function PlantingSiteMapEdit(): JSX.Element {
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
   const { selectedOrganization } = useOrganization();
-  const isEditPlantingSiteEnabled = useFeatureEnabled('Edit Planting Site');
-  const canEdit = isEditPlantingSiteEnabled && isAdmin(selectedOrganization);
+  const canEdit = isAdmin(selectedOrganization);
   const { goToPlantingSiteView } = useNavigateTo();
   // simplified boundaries would be saved back over the site's real ones
   const { currentData, isError, isFetching } = useGetPlantingSiteQuery(
