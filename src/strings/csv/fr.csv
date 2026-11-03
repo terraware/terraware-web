@@ -2105,6 +2105,8 @@ SEEDLING_BATCHES,Lots de semis,040a561e
 SEEDLINGS,Semis,c87d3813
 SEEDLINGS_BY_STAGE,Semis par étape,64e5e1c8
 SEEDLINGS_DASHBOARD,Tableau de bord des plants,3324256a
+SEEDLINGS_DASHBOARD_MESSAGE,Votre tableau de bord des plants se remplira automatiquement de données à mesure que vous ajoutez de l’inventaire.,b84296e3
+SEEDLINGS_DASHBOARD_MESSAGE_TITLE,Ajoutez de l’inventaire pour voir les données,fad88503
 SEEDLINGS_PLURAL,semis,8c6852cb
 SEEDLINGS_SINGULAR,semis,16e3be66
 SEEDLINGS_WITHDRAWALS,Retraits de plants,057e5418

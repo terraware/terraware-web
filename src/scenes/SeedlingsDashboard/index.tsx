@@ -13,6 +13,7 @@ import { useGetOrganizationNurserySummaryQuery } from 'src/queries/generated/nur
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
+import EmptyState from './EmptyState';
 import SeedlingsByStage from './SeedlingsByStage';
 
 export default function SeedlingsDashboard(): JSX.Element {
@@ -58,6 +59,11 @@ export default function SeedlingsDashboard(): JSX.Element {
       <PageHeader page={strings.SEEDLINGS_DASHBOARD} parentPage={strings.SEEDLINGS} snackbarPageKey='seedlings' />
       {selectedOrganization && (
         <Grid container spacing={3}>
+          {!isError && summary?.batchesWithInventory === 0 && (
+            <Grid size={12}>
+              <EmptyState />
+            </Grid>
+          )}
           {cards.map((card) => (
             <Grid key={card.id} size={isMobile ? 12 : 4}>
               <Box component='section' aria-label={card.title}>

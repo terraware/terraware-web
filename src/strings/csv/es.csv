@@ -2106,6 +2106,8 @@ SEEDLING_BATCHES,Lotes de plántulas,040a561e
 SEEDLINGS,Plántulas,c87d3813
 SEEDLINGS_BY_STAGE,Plántulas por etapa,64e5e1c8
 SEEDLINGS_DASHBOARD,Panel de Plántulas,3324256a
+SEEDLINGS_DASHBOARD_MESSAGE,Su panel de plántulas se completará automáticamente con datos a medida que agregue inventario.,b84296e3
+SEEDLINGS_DASHBOARD_MESSAGE_TITLE,Agregue inventario para ver los datos,fad88503
 SEEDLINGS_PLURAL,plántulas,8c6852cb
 SEEDLINGS_SINGULAR,plántula,16e3be66
 SEEDLINGS_WITHDRAWALS,Retiros de plántulas,057e5418
