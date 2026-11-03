@@ -70,7 +70,7 @@ const SettingRow = ({ checked, description, disabled, example, id, labelledBy, o
           slotProps={{ input: { 'aria-labelledby': titleId } }}
           sx={{
             '& .MuiSwitch-switchBase.Mui-checked.Mui-disabled + .MuiSwitch-track': {
-              backgroundColor: theme.palette.action.disabled,
+              opacity: 0.4,
             },
           }}
         />
