@@ -5,6 +5,16 @@
 
 set -euo pipefail
 
+report_failure() {
+    local status=$?
+    if [[ $status -ne 0 ]]; then
+        buildkite-agent step update "notify.github_check.output.title" "Preview failed" || true
+        buildkite-agent step update "notify.github_check.output.summary" \
+            "The preview deployment failed. See [build #${BUILDKITE_BUILD_NUMBER}](${BUILDKITE_BUILD_URL})." || true
+    fi
+}
+trap report_failure EXIT
+
 .buildkite/scripts/install-deps.sh --tools
 
 # Read the labels from GitHub rather than build.pull_request.labels, which Buildkite snapshots when
