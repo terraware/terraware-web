@@ -5,12 +5,22 @@
 
 set -euo pipefail
 
+update_check() {
+    local status="$1" summary="$2" rows="${3:-}"
+    buildkite-agent step update "notify.github_check.output.summary" "$summary"
+    buildkite-agent step update "notify.github_check.output.text" <<TEXT
+| | |
+| --- | --- |
+| **Status** | ${status} |
+${rows}| **Commit** | [\`${BUILDKITE_COMMIT:0:12}\`](https://github.com/terraware/terraware-web/commit/${BUILDKITE_COMMIT}) |
+| **Build** | [#${BUILDKITE_BUILD_NUMBER}](${BUILDKITE_BUILD_URL}) |
+TEXT
+}
+
 report_failure() {
     local status=$?
     if [[ $status -ne 0 ]]; then
-        buildkite-agent step update "notify.github_check.output.title" "Preview failed" || true
-        buildkite-agent step update "notify.github_check.output.summary" \
-            "The preview deployment failed. See [build #${BUILDKITE_BUILD_NUMBER}](${BUILDKITE_BUILD_URL})." || true
+        update_check "Failed" "The preview deployment failed." || true
     fi
 }
 trap report_failure EXIT
@@ -24,8 +34,7 @@ PREVIEW_LABEL='Vercel preview'
 
 if [[ "${BUILDKITE_PULL_REQUEST:-false}" == "false" ]]; then
     echo "Not a pull request build; skipping preview."
-    buildkite-agent step update "notify.github_check.output.title" "No preview"
-    buildkite-agent step update "notify.github_check.output.summary" "Not a pull request build."
+    update_check "No preview" "Not a pull request build."
     exit 0
 fi
 
@@ -41,8 +50,7 @@ has_label=$(jq -r --arg want "$PREVIEW_LABEL" 'any(.labels[]; .name == $want)' <
 if [[ "$has_label" != "true" ]]; then
     echo "No \"${PREVIEW_LABEL}\" label; skipping preview."
     echo "Add the label and re-run this build to deploy one."
-    buildkite-agent step update "notify.github_check.output.title" "No preview"
-    buildkite-agent step update "notify.github_check.output.summary" \
+    update_check "No preview" \
         "Add the \"${PREVIEW_LABEL}\" label and re-run this build to deploy a preview."
     exit 0
 fi
@@ -90,13 +98,6 @@ buildkite-agent annotate \
     "Vercel preview: [https://${branch_url}](https://${branch_url})"
 
 echo "--- :github: Update Vercel preview check"
-buildkite-agent step update "notify.github_check.output.title" "Preview deployed"
-buildkite-agent step update "notify.github_check.output.summary" "Preview: https://${branch_url}"
-buildkite-agent step update "notify.github_check.output.text" <<TEXT
-| | |
-| --- | --- |
-| **Preview URL** | https://${branch_url} |
-| **Commit** | [\`${BUILDKITE_COMMIT:0:12}\`](https://github.com/terraware/terraware-web/commit/${BUILDKITE_COMMIT}) |
+update_check "Deployed" "Preview: https://${branch_url}" "| **Preview URL** | https://${branch_url} |
 | **Last deployed** | $(date -u +'%Y-%m-%d %H:%M:%S UTC') |
-| **Build** | [#${BUILDKITE_BUILD_NUMBER}](${BUILDKITE_BUILD_URL}) |
-TEXT
+"

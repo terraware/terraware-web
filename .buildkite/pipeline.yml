@@ -81,8 +81,12 @@ steps:
       - github_check:
           name: 'Vercel preview'
           output:
-            title: 'Preview not deployed'
+            title: 'Vercel preview'
             summary: 'See the Buildkite log for details.'
+            text: |
+              | | |
+              | --- | --- |
+              | **Status** | Not deployed |
 
   - label: ':playwright: Run end-to-end tests'
     key: 'e2e-tests'
