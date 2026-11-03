@@ -536,6 +536,9 @@ DELETE_SPECIES_TARGET_CONFIRM,"Está a punto de eliminar la especie {0} como obj
 DELETE_THIS_DRAFT,¿Eliminar este borrador?,9ecf4292
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,ceace778
+DELETE_VIEW,Eliminar vista,10ce4e6e
+DELETE_VIEW_CONFIRMATION,"""{0}"" se eliminará de sus vistas guardadas. Esto no cambiará ningún dato del proyecto.",5813e558
+DELETE_VIEW_TITLE,¿Eliminar vista?,3c9df51d
 DELETED_SPECIES,<deleted species>,c397460c
 DELIVERABLE_APPROVED,Entregable aprobado,c2a1516b
 DELIVERABLE_CATEGORY,Categoría: {0},bbe96e63
@@ -2041,6 +2044,7 @@ SAVE_VIEW,Guardar vista,c4a3bd9f
 SAVE_VIEW_BUTTON,Guardar vista,0059102f
 SAVED,Guardado,3324fd4d
 SAVED_VIEW_CREATED,{0} se guardó en Mis vistas,e8a17db1
+SAVED_VIEW_DELETED,{0} eliminado,77fb1505
 SAVED_VIEW_UPDATED,{0} actualizado,aa7ecb38
 SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849

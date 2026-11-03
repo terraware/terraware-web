@@ -19,5 +19,8 @@ api.enhanceEndpoints({
     updateSavedTableView: {
       invalidatesTags: (_result, _error, { id }) => [{ type: QueryTagTypes.SavedTableViews, id }],
     },
+    deleteSavedTableView: {
+      invalidatesTags: (_result, _error, id) => [{ type: QueryTagTypes.SavedTableViews, id }],
+    },
   },
 });

@@ -3,6 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
 
+import DeleteViewModal from 'src/components/common/DeleteViewModal';
 import SaveViewModal from 'src/components/common/SaveViewModal';
 import Button from 'src/components/common/button/Button';
 import { useFeatureEnabled } from 'src/features';
@@ -54,6 +55,7 @@ const CurrentView = <TData extends MRT_RowData>({
   const [preset, setPreset] = useState(defaultPreset);
   const [savedViewId, setSavedViewId] = useState<string>();
   const [showSaveViewModal, setShowSaveViewModal] = useState(false);
+  const [viewToDelete, setViewToDelete] = useState<{ id: number; name: string }>();
   const { data: savedTableViewsData } = useListSavedTableViewsQuery(
     { organizationId, tableName: tableDefinition.stableId },
     { skip: !isSavedTableViewsEnabled }
@@ -108,6 +110,20 @@ const CurrentView = <TData extends MRT_RowData>({
     [snackbar, strings, updateSavedTableView]
   );
 
+  const handleDeleteView = useCallback(
+    (value: string) => setViewToDelete(savedTableViewsData?.views.find((view) => `${view.id}` === value)),
+    [savedTableViewsData]
+  );
+  const closeDeleteViewModal = useCallback(() => setViewToDelete(undefined), []);
+  const handleDeleted = useCallback(
+    (deletedViewId: number) => {
+      if (`${deletedViewId}` === savedViewId) {
+        handleChange(DEFAULT_VIEW);
+      }
+    },
+    [handleChange, savedViewId]
+  );
+
   const handleSaved = useCallback((newViewId: number) => setSavedViewId(`${newViewId}`), []);
 
   const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === savedViewId);
@@ -131,6 +147,7 @@ const CurrentView = <TData extends MRT_RowData>({
           modified={isModified}
           myViews={savedViewOptions}
           onChange={handleChange}
+          onDeleteView={isSavedTableViewsEnabled ? handleDeleteView : undefined}
           onRenameView={isSavedTableViewsEnabled ? handleRename : undefined}
           onSave={openSaveViewModal}
           presetViews={presetViews}
@@ -146,6 +163,7 @@ const CurrentView = <TData extends MRT_RowData>({
           priority='ghost'
         />
       )}
+      {viewToDelete && <DeleteViewModal onClose={closeDeleteViewModal} onDeleted={handleDeleted} view={viewToDelete} />}
       {showSaveViewModal && (
         <SaveViewModal
           baseView={preset}
