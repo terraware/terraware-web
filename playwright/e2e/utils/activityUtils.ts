@@ -14,6 +14,8 @@ const getJson = async <T>(request: APIRequestContext, url: string): Promise<T> =
   return (await response.json()) as T;
 };
 
+export const TEST_ACTIVITY_PREFIX = 'E2E ';
+
 export type ActivityStatus = 'Not Verified' | 'Verified' | 'Do Not Use';
 
 export type ActivityType =
@@ -54,7 +56,7 @@ export const seedActivity = async (
     type = 'Seed Collection',
   }: SeedActivityOptions
 ): Promise<SeededActivity> => {
-  const activityDescription = `${description} ${Date.now()}`;
+  const activityDescription = `${TEST_ACTIVITY_PREFIX}${description} ${Date.now()}`;
 
   const { activity } = await postJson<{ activity: { id: number } }>(request, '/api/v1/accelerator/activities/admin', {
     date,
@@ -76,6 +78,23 @@ export const deleteActivities = async (request: APIRequestContext, activityIds: 
       `Failed to delete activity ${id}: ${response.status()}`
     ).toBeTruthy();
   }
+};
+
+export const deleteTestActivities = async (
+  request: APIRequestContext,
+  projectId: number,
+  createdActivityIds: number[]
+): Promise<void> => {
+  const { activities } = await getJson<{ activities: { description?: string; id: number }[] }>(
+    request,
+    `/api/v1/accelerator/activities/admin?projectId=${projectId}`
+  );
+
+  const orphaned = activities
+    .filter(({ description, id }) => !createdActivityIds.includes(id) && description?.startsWith(TEST_ACTIVITY_PREFIX))
+    .map(({ id }) => id);
+
+  await deleteActivities(request, [...createdActivityIds, ...orphaned]);
 };
 
 export const getProjectDealName = async (request: APIRequestContext, projectId: number): Promise<string> => {

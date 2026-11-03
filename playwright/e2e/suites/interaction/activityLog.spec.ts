@@ -1,6 +1,11 @@
 import { Locator, Page, expect, test } from '@playwright/test';
 
-import { deleteActivities, getProjectDealName, seedActivity } from '../../utils/activityUtils';
+import {
+  TEST_ACTIVITY_PREFIX,
+  deleteTestActivities,
+  getProjectDealName,
+  seedActivity,
+} from '../../utils/activityUtils';
 import { navigateToAcceleratorActivityLog } from '../../utils/navigation';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 import { exactOptions } from '../../utils/utils';
@@ -34,6 +39,19 @@ const saveActivity = async (page: Page) => {
   await expect(page.locator('#saveActivity')).toBeHidden();
 };
 
+const saveNewActivity = async (page: Page): Promise<number> => {
+  const [response] = await Promise.all([
+    page.waitForResponse(
+      (res) => res.request().method() === 'POST' && res.url().includes('/api/v1/accelerator/activities/admin')
+    ),
+    page.locator('#saveActivity').click(),
+  ]);
+
+  const { activity } = (await response.json()) as { activity: { id: number } };
+  await expect(page.locator('#saveActivity')).toBeHidden();
+  return activity.id;
+};
+
 const openActivity = async (page: Page, activityId: number) => {
   await page.locator(`#activity-log-item-${activityId}`).click();
   await expect(page.locator('#crumb_0')).toBeVisible();
@@ -46,26 +64,27 @@ const backToList = async (page: Page) => {
 
 const badge = (page: Page, label: string): Locator => page.getByText(label, exactOptions);
 
-const activityIdOf = async (listItem: Locator): Promise<number> => {
-  const elementId = await listItem.getAttribute('id');
-  expect(elementId, 'Activity list item has no id').toBeTruthy();
-  return Number(elementId!.replace('activity-log-item-', ''));
+let createdActivityIds: number[] = [];
+let projectUnderTest = PHASE_0_PROJECT_ID;
+
+const useProject = async (page: Page, projectId: number): Promise<string> => {
+  projectUnderTest = projectId;
+  await deleteTestActivities(page.request, projectId, []);
+  return await getProjectDealName(page.request, projectId);
 };
 
 test.describe('ActivityLogTests', () => {
-  let createdActivityIds: number[] = [];
-
   test.beforeEach(async ({ context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
     createdActivityIds = [];
   });
 
   test.afterEach(async ({ page }) => {
-    await deleteActivities(page.request, createdActivityIds);
+    await deleteTestActivities(page.request, projectUnderTest, createdActivityIds);
   });
 
   test('creates, edits and deletes an activity', async ({ page }) => {
-    const dealName = await getProjectDealName(page.request, PHASE_0_PROJECT_ID);
+    const dealName = await useProject(page, PHASE_0_PROJECT_ID);
 
     await navigateToAcceleratorActivityLog(page);
     await selectDealName(page, dealName);
@@ -74,15 +93,14 @@ test.describe('ActivityLogTests', () => {
     await page.getByRole('button', { name: 'Add Activity' }).click();
     await expect(page.getByRole('heading', { name: `Add Activity for ${dealName}` })).toBeVisible();
 
-    const description = `E2E created activity ${Date.now()}`;
+    const description = `${TEST_ACTIVITY_PREFIX}created activity ${Date.now()}`;
     await selectDropdownOption(page.locator('#activity-type-field .select'), 'Site Visit');
     await fillDescription(page, description);
     await selectDropdownOption(selectWithLabel(page, 'Status'), 'Not Verified');
-    await saveActivity(page);
+    createdActivityIds.push(await saveNewActivity(page));
 
     const listItem = page.locator('[id^=activity-log-item-]').filter({ hasText: description });
     await expect(listItem).toBeVisible();
-    createdActivityIds.push(await activityIdOf(listItem));
     await expect(listItem.getByText('Site Visit', exactOptions)).toBeVisible();
     await expect(listItem.getByText('Not Verified', exactOptions)).toBeVisible();
 
@@ -116,10 +134,10 @@ test.describe('ActivityLogTests', () => {
   });
 
   test('verifies and publishes an activity, then flags later edits as unpublished changes', async ({ page }) => {
-    const dealName = await getProjectDealName(page.request, PHASE_1_PROJECT_ID);
+    const dealName = await useProject(page, PHASE_1_PROJECT_ID);
     const activity = await seedActivity(page.request, {
       date: '2026-05-10',
-      description: 'E2E publishable activity',
+      description: 'publishable activity',
       projectId: PHASE_1_PROJECT_ID,
       status: 'Not Verified',
       type: 'Seed Collection',
@@ -175,10 +193,10 @@ test.describe('ActivityLogTests', () => {
   });
 
   test('marks an activity as a highlight and shows it in the highlights preview', async ({ page }) => {
-    const dealName = await getProjectDealName(page.request, PHASE_2_PROJECT_ID);
+    const dealName = await useProject(page, PHASE_2_PROJECT_ID);
     const activity = await seedActivity(page.request, {
       date: '2026-08-12',
-      description: 'E2E highlighted activity',
+      description: 'highlighted activity',
       projectId: PHASE_2_PROJECT_ID,
       status: 'Verified',
       type: 'Planting',
