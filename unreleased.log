@@ -1,3 +1,6 @@
+3c2d5cd2 SW-9008 Test adding a batch from a nursery or species page (#6993)
+6f73166d SW-9008 Test editing a batch and show Other notes in every language (#6992)
+522f307b SW-9008 Test creating a batch from the add inventory page (#6991)
 cef0f42d Rename setTimeZone to withTimeZoneLongName (#6981)
 05bfb8e6 Import species through RTK Query and delete SpeciesService (#6980)
 9b891e90 Replace FacilityService with organization and facility utils (#6979)
