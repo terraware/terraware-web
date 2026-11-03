@@ -25,6 +25,14 @@ export const navigateToFundingEntities = async (page: Page) => {
   await page.getByRole('button', { name: 'Funding Entities' }).click();
 };
 
+export const navigateToAcceleratorActivityLog = async (page: Page) => {
+  await page.goto('/');
+  await waitFor(page, '#acceleratorConsoleButton');
+  await page.getByRole('link', { name: 'Accelerator Console' }).click();
+  await page.locator('#activity-log').click();
+  await waitFor(page, '#projectId');
+};
+
 export const navigateToPeople = async (page: Page) => {
   await waitFor(page, '#settings-button');
   await page.locator('#settings-button').click();
