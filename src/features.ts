@@ -3,8 +3,7 @@ import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
-export type FeatureName =
-  'Show Production View' | 'Virtual Monitoring Plots' | 'Edit Planting Site' | 'Seeds Withdrawal Log';
+export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Seeds Withdrawal Log';
 
 export type Feature = {
   name: FeatureName;
@@ -45,15 +44,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Edit Planting Site',
-    preferenceName: 'editPlantingSite',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Edit the boundaries of existing planting sites.'],
     disclosure: ['This is a WIP'],
   },
   {
