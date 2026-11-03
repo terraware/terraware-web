@@ -76,8 +76,8 @@ const DRAFT_URL = '/api/v1/tracking/draftSites/1';
 const VALIDATE_URL = '/api/v1/tracking/sites/validate';
 const CREATE_URL = '/api/v1/tracking/sites';
 const EDIT_ROUTE = '/planting-sites/draft/1/edit';
-const PLANTING_SITES = '/planting-sites';
 const PLANTING_SITES_TAB = '/planting-sites?tab=plantingSites';
+const DRAFT_PLANTING_SITES_TAB = '/planting-sites?tab=draftPlantingSites';
 
 /** A site part way through the flow, with a boundary and the single stratum the editor defaults to. */
 const siteAtStep = (siteEditStep: SiteEditStep, siteType: DraftPlantingSite['siteType'] = 'Detailed') =>
@@ -244,7 +244,7 @@ describe('Editor', () => {
       await waitFor(() => expect(puts).toHaveLength(1));
       expect(await puts[0].json()).toMatchObject({ boundary: SITE_BOUNDARY });
       expect(await screen.findByText(strings.PLANTING_SITE_SAVED_AS_DRAFT)).toBeInTheDocument();
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(DRAFT_PLANTING_SITES_TAB);
     });
   });
 
@@ -270,7 +270,7 @@ describe('Editor', () => {
 
       await clickButton(user, strings.CANCEL);
 
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(DRAFT_PLANTING_SITES_TAB);
       expect(screen.queryByText(strings.CANCEL_SITE_SETUP)).not.toBeInTheDocument();
     });
 
@@ -309,7 +309,7 @@ describe('Editor', () => {
       const dialog = await screen.findByRole('dialog', { name: strings.CANCEL_SITE_SETUP });
       await user.click(within(dialog).getByRole('button', { name: strings.DISCARD_CHANGES }));
 
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(DRAFT_PLANTING_SITES_TAB);
       expect(puts).toHaveLength(0);
     });
 
@@ -323,7 +323,7 @@ describe('Editor', () => {
 
       await user.click(within(dialog).getByRole('button', { name: strings.EXIT_SETUP }));
 
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(DRAFT_PLANTING_SITES_TAB);
     });
   });
 
@@ -438,7 +438,7 @@ describe('Editor', () => {
 
       await waitFor(() => expect(puts).toHaveLength(1));
       expect(await screen.findByText(strings.PLANTING_SITE_SAVED_AS_DRAFT)).toBeInTheDocument();
-      expect(currentPath()).toBe(PLANTING_SITES);
+      expect(currentPath()).toBe(DRAFT_PLANTING_SITES_TAB);
     });
   });
 

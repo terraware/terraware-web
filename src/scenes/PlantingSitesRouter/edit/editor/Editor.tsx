@@ -2,11 +2,11 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } fr
 
 import { BusySpinner, Button } from '@terraware/web-components';
 
-import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useDraftPlantingSiteFinalize from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteFinalize';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
 import usePlantingSiteProblemsToast from 'src/scenes/PlantingSitesRouter/hooks/usePlantingSiteProblemsToast';
+import { PLANTING_SITES_TABS, plantingSitesListPath } from 'src/scenes/PlantingSitesRouter/plantingSitesListTabs';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -49,11 +49,15 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const hasUnsavedEdits = stepIsDirty || hasCarriedEdits;
 
-  const goToPlantingSites = useCallback(() => navigate(APP_PATHS.PLANTING_SITES), [navigate]);
+  // leaving without creating the site leaves a draft behind, which only the drafts tab lists
+  const goToDraftPlantingSites = useCallback(
+    () => navigate(plantingSitesListPath(PLANTING_SITES_TABS.drafts)),
+    [navigate]
+  );
 
   const onFinalizeSuccess = useCallback(() => {
     snackbar.toastSuccess(strings.PLANTING_SITE_CREATED);
-    navigate(`${APP_PATHS.PLANTING_SITES}?tab=plantingSites`);
+    navigate(plantingSitesListPath(PLANTING_SITES_TABS.active));
   }, [navigate, snackbar]);
 
   const onFinalizeError = useCallback(
@@ -149,11 +153,11 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const onCancel = useCallback(() => {
     if (stepIndex === 0 && !hasBoundary && !hasUnsavedEdits) {
-      goToPlantingSites();
+      goToDraftPlantingSites();
     } else {
       setShowCancelConfirmation(true);
     }
-  }, [goToPlantingSites, hasBoundary, hasUnsavedEdits, stepIndex]);
+  }, [goToDraftPlantingSites, hasBoundary, hasUnsavedEdits, stepIndex]);
 
   const onKeepEditing = useCallback(() => setShowCancelConfirmation(false), []);
 
@@ -315,7 +319,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       isDirty={hasUnsavedEdits}
       onDirtyChange={setStepIsDirty}
       onHasBoundaryChange={setHasBoundary}
-      onLeave={goToPlantingSites}
+      onLeave={goToDraftPlantingSites}
       onStartOver={showStartOverButton ? onOpenStartOver : undefined}
       onValidate={onValidate}
       site={plantingSite}
@@ -345,7 +349,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               : strings.CANCEL_DRAFT_SITE_SETUP_NO_CHANGES_MESSAGE
           }
           nothingToDiscard={!hasUnsavedEdits}
-          onDiscard={goToPlantingSites}
+          onDiscard={goToDraftPlantingSites}
           onKeepEditing={onKeepEditing}
           siteName={siteName}
         />

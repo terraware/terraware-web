@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   useGetDraftPlantingSiteQuery,
@@ -8,6 +7,7 @@ import {
 } from 'src/queries/generated/draftPlantingSites';
 import { useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
+import { PLANTING_SITES_TABS, plantingSitesListPath } from 'src/scenes/PlantingSitesRouter/plantingSitesListTabs';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, PlantingSiteProblem, SiteEditStep } from 'src/types/PlantingSite';
 import {
@@ -98,7 +98,7 @@ export default function useDraftPlantingSiteUpdate(draftId: number): Response {
         snackbar.toastSuccess(strings.PLANTING_SITE_SAVED_AS_DRAFT);
 
         if (exit) {
-          navigate(APP_PATHS.PLANTING_SITES);
+          navigate(plantingSitesListPath(PLANTING_SITES_TABS.drafts));
         } else {
           setPendingRefetch({ request, requestIdBeforeSave });
         }
