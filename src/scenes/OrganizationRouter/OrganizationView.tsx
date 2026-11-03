@@ -15,11 +15,13 @@ import EditOrganizationModal from 'src/scenes/OrganizationRouter/EditOrganizatio
 import strings from 'src/strings';
 import { organizationTypeLabel } from 'src/types/Organization';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const canEdit = isAdmin(selectedOrganization);
   const theme = useTheme();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const { isMobile } = useDeviceInfo();
@@ -68,7 +70,7 @@ export default function OrganizationView(): JSX.Element {
       }}
     >
       <PageSnackbar />
-      {selectedOrganization && (
+      {canEdit && (
         <EditOrganizationModal
           organization={selectedOrganization}
           open={editModalOpen}
@@ -84,15 +86,17 @@ export default function OrganizationView(): JSX.Element {
           margin: 0,
         }}
       >
-        <Grid paddingBottom={theme.spacing(2)} sx={{ display: 'flex', justifyContent: 'flex-end' }} size={12}>
-          <Button
-            icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT_ORGANIZATION}
-            priority='primary'
-            size='medium'
-            onClick={() => setEditModalOpen(true)}
-          />
-        </Grid>
+        {canEdit && (
+          <Grid paddingBottom={theme.spacing(2)} sx={{ display: 'flex', justifyContent: 'flex-end' }} size={12}>
+            <Button
+              icon='iconEdit'
+              label={isMobile ? undefined : strings.EDIT_ORGANIZATION}
+              priority='primary'
+              size='medium'
+              onClick={() => setEditModalOpen(true)}
+            />
+          </Grid>
+        )}
         <Grid paddingBottom={theme.spacing(4)} size={gridSize()}>
           <TextField
             label={strings.ORGANIZATION_NAME}
