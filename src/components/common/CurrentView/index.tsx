@@ -77,7 +77,11 @@ const CurrentView = <TData extends MRT_RowData>({
   const [savedViewId, setSavedViewId] = useState(() => loadStoredView(storageKey).savedViewId);
   const [showSaveViewModal, setShowSaveViewModal] = useState(false);
   const [viewToDelete, setViewToDelete] = useState<{ id: number; name: string }>();
-  const { data: savedTableViewsData, isError: isSavedTableViewsError } = useListSavedTableViewsQuery(
+  const {
+    data: savedTableViewsData,
+    isError: isSavedTableViewsError,
+    refetch: refetchSavedTableViews,
+  } = useListSavedTableViewsQuery(
     { organizationId, tableName: tableDefinition.stableId },
     { skip: !isSavedTableViewsEnabled }
   );
@@ -196,7 +200,12 @@ const CurrentView = <TData extends MRT_RowData>({
       getDefaultTableSettings(table, defaultSettings)
     );
 
-  const openSaveViewModal = useCallback(() => setShowSaveViewModal(true), []);
+  const openSaveViewModal = useCallback(() => {
+    if (isSavedTableViewsError) {
+      void refetchSavedTableViews();
+    }
+    setShowSaveViewModal(true);
+  }, [isSavedTableViewsError, refetchSavedTableViews]);
   const closeSaveViewModal = useCallback(() => setShowSaveViewModal(false), []);
 
   return (
@@ -228,6 +237,7 @@ const CurrentView = <TData extends MRT_RowData>({
       {showSaveViewModal && (
         <SaveViewModal
           baseView={preset}
+          existingNames={savedTableViewsData && savedViewOptions.map((view) => view.label)}
           onClose={closeSaveViewModal}
           onSaved={handleSaved}
           open

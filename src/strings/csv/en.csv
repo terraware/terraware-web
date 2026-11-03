@@ -2794,6 +2794,8 @@ VIEW_HISTORY,View History,
 VIEW_IN_MAP,View in Map,
 VIEW_MAP,View Map,
 VIEW_NAME,View name,
+VIEW_NAME_EXISTS,A view with this name already exists.,Error shown when saving or renaming a table view with a name the user already has for that table
+VIEW_NAME_REQUIRED,Enter a name for this view.,Error shown when saving or renaming a table view without a name
 VIEW_ON_MAP,View on Map,
 VIEW_PLANTING_PROGRESS,View Planting Progress,
 VIEW_PRESCREEN_SUBMISSION,View Pre-screen Submission,

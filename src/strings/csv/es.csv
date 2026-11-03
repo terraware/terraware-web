@@ -2794,6 +2794,8 @@ VIEW_HISTORY,Ver historial,a1dbe2ca
 VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_MAP,Ver mapa,8ef1dcc4
 VIEW_NAME,Nombre de la vista,0ea3fd0d
+VIEW_NAME_EXISTS,Ya existe una vista con este nombre.,4d895bfa
+VIEW_NAME_REQUIRED,Ingrese un nombre para esta vista.,951bcbb2
 VIEW_ON_MAP,Ver en el mapa,fb873a55
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6

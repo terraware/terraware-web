@@ -3,6 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { Box, Portal, Typography, useTheme } from '@mui/material';
 import { PillList } from '@terraware/web-components';
 
+import { MAX_VIEW_NAME_LENGTH, getViewNameError } from 'src/components/common/CurrentView/viewName';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -12,6 +13,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type SaveViewModalProps = {
   baseView?: string;
+  existingNames?: string[];
   onClose: () => void;
   onSaved?: (id: number) => void;
   open: boolean;
@@ -23,6 +25,7 @@ export type SaveViewModalProps = {
 
 const SaveViewModal = ({
   baseView,
+  existingNames,
   onClose,
   onSaved,
   open,
@@ -36,23 +39,24 @@ const SaveViewModal = ({
   const snackbar = useSnackbar();
   const [createSavedTableView, { isLoading }] = useCreateSavedTableViewMutation();
   const [name, setName] = useState('');
-  const [errorText, setErrorText] = useState('');
+  const [isNameTouched, setIsNameTouched] = useState(false);
+  const nameError = getViewNameError(name, existingNames ?? []);
 
   const handleClose = useCallback(() => {
     setName('');
-    setErrorText('');
+    setIsNameTouched(false);
     onClose();
   }, [onClose]);
 
   const handleNameChange = useCallback((value: unknown) => {
     setName((value as string) ?? '');
-    setErrorText('');
+    setIsNameTouched(true);
   }, []);
 
   const saveView = useCallback(async () => {
     const trimmedName = name.trim();
-    if (!trimmedName) {
-      setErrorText(strings.REQUIRED_FIELD);
+    if (nameError) {
+      setIsNameTouched(true);
       return;
     }
 
@@ -75,6 +79,7 @@ const SaveViewModal = ({
     createSavedTableView,
     handleClose,
     name,
+    nameError,
     onSaved,
     organizationId,
     settings,
@@ -102,7 +107,7 @@ const SaveViewModal = ({
             type='passive'
           />,
           <Button
-            disabled={isLoading}
+            disabled={isLoading || !existingNames || !!nameError}
             id='saveView'
             key='save'
             label={strings.SAVE_VIEW_BUTTON}
@@ -113,7 +118,8 @@ const SaveViewModal = ({
         <Box textAlign='left'>
           <TextField
             autoFocus
-            errorText={errorText}
+            errorText={isNameTouched ? nameError : undefined}
+            maxLength={MAX_VIEW_NAME_LENGTH}
             id='save-view-name'
             label={strings.VIEW_NAME}
             onChange={handleNameChange}
