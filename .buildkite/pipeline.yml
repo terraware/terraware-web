@@ -77,6 +77,12 @@ steps:
       - *cache-node-modules
       - *restore-dist
     command: .buildkite/scripts/deploy-vercel.sh
+    notify:
+      - github_check:
+          name: 'Vercel preview'
+          output:
+            title: 'Vercel preview'
+            summary: 'See the Buildkite log for details.'
 
   - label: ':playwright: Run end-to-end tests'
     key: 'e2e-tests'
