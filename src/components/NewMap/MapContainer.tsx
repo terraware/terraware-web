@@ -11,11 +11,12 @@ type MapContainerProps = {
   hideBorder?: boolean;
   legend?: ReactNode;
   map: ReactNode;
+  overlay?: ReactNode;
   style?: CSSProperties;
 };
 
 const MapContainer = (props: MapContainerProps) => {
-  const { containerId, drawer, drawerOpen, hideBorder, legend, map, style } = props;
+  const { containerId, drawer, drawerOpen, hideBorder, legend, map, overlay, style } = props;
   const { isDesktop } = useDeviceInfo();
   const drawerOnly = useMemo(() => !isDesktop && drawerOpen, [drawerOpen, isDesktop]);
 
@@ -27,7 +28,10 @@ const MapContainer = (props: MapContainerProps) => {
       }`}
       style={{ ...style, ...(hideBorder ? { border: 'none' } : undefined) }}
     >
-      <div className={`map-holder${drawerOnly ? ' map-holder--hidden' : ''}`}>{map}</div>
+      <div className={`map-holder${drawerOnly ? ' map-holder--hidden' : ''}`}>
+        {map}
+        {overlay}
+      </div>
       {drawerOpen && drawer}
       {!drawerOnly && legend}
     </div>

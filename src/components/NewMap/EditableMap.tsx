@@ -320,9 +320,9 @@ const EditableMap = ({
         mapRef={mapRef}
         onMapLoad={onMapLoad}
         onTokenExpired={refreshToken}
+        overlay={overlay}
         token={token ?? ''}
       />
-      {overlay}
     </Box>
   );
 };
