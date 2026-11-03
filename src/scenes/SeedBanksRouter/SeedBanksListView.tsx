@@ -22,7 +22,7 @@ import { Organization } from 'src/types/Organization';
 import { isAdmin } from 'src/utils/organization';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useDefaultTimeZone, withTimeZoneLongName } from 'src/utils/useTimeZoneUtils';
 
 import SeedBanksCellRenderer from './TableCellRenderer';
 
@@ -70,7 +70,7 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   const results = useMemo(
     () =>
       currentData
-        ? (currentData.map((facility) => setTimeZone(facility, timeZones, defaultTimeZone)) as Facility[])
+        ? (currentData.map((facility) => withTimeZoneLongName(facility, timeZones, defaultTimeZone)) as Facility[])
         : [],
     [currentData, timeZones, defaultTimeZone]
   );

@@ -16,9 +16,9 @@ export const getTimeZone = (timeZones: TimeZoneDescription[], id?: string): Time
 };
 
 /**
- * Populate a search response element with time zone value
+ * Return a copy of the element with its time zone ID replaced by that time zone's long name, falling back to the default
  */
-export const setTimeZone = (
+export const withTimeZoneLongName = (
   element: SearchResponseElement | Facility,
   timeZones: TimeZoneDescription[],
   defaultTimeZone: TimeZoneDescription
