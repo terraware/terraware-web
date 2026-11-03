@@ -421,7 +421,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
           />
         </Grid>
         <Grid padding={theme.spacing(2, 0, 0, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize}>
-          {record.substrate === strings.OTHER && (
+          {record.substrate === 'Other' && (
             <Textfield
               preserveNewlines={true}
               id='substrateNotes'
@@ -443,7 +443,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
           />
         </Grid>
         <Grid padding={theme.spacing(2, 0, 0, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize}>
-          {record.treatment === strings.OTHER && (
+          {record.treatment === 'Other' && (
             <Textfield
               id='treatmentNotes'
               value={record.treatmentNotes}
