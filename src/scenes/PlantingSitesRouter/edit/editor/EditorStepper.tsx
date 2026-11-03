@@ -49,17 +49,14 @@ const EditorStepper = ({
     steps.findIndex((step) => step.type === currentStep),
     0
   );
-  const activeStepContent = (
-    <>
-      {!collapsed && description}
-      {status && (
+  const activeStepContent = collapsed
+    ? status && (
         // zero width keeps the status from widening the collapsed drawer
         <Box minWidth='100%' width={0}>
           {status}
         </Box>
-      )}
-    </>
-  );
+      )
+    : description;
 
   return (
     <Box display='flex' flexDirection='column' height='100%'>

@@ -75,8 +75,8 @@ export type BoundaryMethodChooserProps = {
 };
 
 /**
- * Overlay shown on top of the editor card while the site boundary is still undefined, letting the
- * user choose between uploading a spatial file and drawing the boundary by hand.
+ * Overlay shown on top of the map while the site boundary is still undefined, letting the user
+ * choose between uploading a spatial file and drawing the boundary by hand.
  */
 export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChooserProps): JSX.Element {
   const theme = useTheme();
@@ -90,7 +90,6 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
           'linear-gradient(180deg, ' +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)}, ` +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.24)})`,
-        borderRadius: theme.spacing(1),
         display: 'flex',
         inset: 0,
         justifyContent: 'center',
