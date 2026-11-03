@@ -68,13 +68,8 @@ export const seedActivity = async (
   return { date, description: activityDescription, id: activity.id, projectId, type };
 };
 
-export const deleteProjectActivities = async (request: APIRequestContext, projectId: number): Promise<void> => {
-  const { activities } = await getJson<{ activities: { id: number }[] }>(
-    request,
-    `/api/v1/accelerator/activities/admin?projectId=${projectId}&depth=All`
-  );
-
-  for (const { id } of activities) {
+export const deleteActivities = async (request: APIRequestContext, activityIds: number[]): Promise<void> => {
+  for (const id of activityIds) {
     const response = await request.delete(`/api/v1/accelerator/activities/${id}`, { headers: JSON_HEADERS });
     expect(
       response.ok() || response.status() === 404,
