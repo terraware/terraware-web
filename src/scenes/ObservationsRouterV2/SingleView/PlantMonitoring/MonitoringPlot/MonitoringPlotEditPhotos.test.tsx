@@ -5,7 +5,7 @@ import { fireEvent, screen, waitFor } from '@testing-library/react';
 
 import MonitoringPlotEditPhotos from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/MonitoringPlotEditPhotos';
 import strings from 'src/strings';
-import { captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
+import { captureRequests, mockGet, mockImage, renderWithProviders } from 'src/test-utils';
 
 const OBSERVATION_ID = 1;
 const PLOT_ID = 2;
@@ -13,7 +13,7 @@ const FILE_ID = 555;
 
 const RESULTS_URL = '/api/v1/tracking/observations/:observationId/results';
 const UPLOAD_URL = '/api/v1/tracking/observations/:observationId/plots/:plotId/otherMedia';
-const DELETE_URL = '/api/v1/tracking/observations/:observationId/plots/:plotId/photos/:fileId';
+const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:plotId/photos/:fileId';
 
 // The component finds the plot under edit inside the observation results tree. An ad-hoc plot keeps
 // the fixture flat: no stratum/substratum nesting is needed to reach it.
@@ -109,7 +109,8 @@ describe('MonitoringPlotEditPhotos', () => {
         },
       ])
     );
-    const requests = captureRequests('delete', DELETE_URL);
+    mockImage(PHOTO_URL);
+    const requests = captureRequests('delete', PHOTO_URL);
 
     const { user } = renderEditPhotos();
 

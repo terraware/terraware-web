@@ -11,6 +11,7 @@ import {
   captureRequests,
   mockError,
   mockGet,
+  mockImage,
   renderWithProviders,
   selectDropdownOption,
 } from 'src/test-utils';
@@ -46,6 +47,7 @@ describe('BatchDetailsModal photos', () => {
   it('deletes an existing photo when its remove control is used and the details are saved', async () => {
     const PHOTO_ID = 99;
     mockGet(PHOTOS_URL, { photos: [{ id: PHOTO_ID }] });
+    mockImage(PHOTO_URL);
     const requests = captureRequests('delete', PHOTO_URL);
 
     const { user } = renderWithProviders(

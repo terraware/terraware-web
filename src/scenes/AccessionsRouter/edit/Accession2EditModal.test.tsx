@@ -8,6 +8,7 @@ import {
   buildSeedBank,
   captureRequests,
   mockGet,
+  mockImage,
   mockPost,
   mockPut,
   renderWithProviders,
@@ -79,6 +80,7 @@ describe('Accession2EditModal photos', () => {
 
   it('deletes an existing photo when it is removed and the accession is saved', async () => {
     mockDependencies(buildAccession({ photoFilenames: ['existing.jpg'] }));
+    mockImage(PHOTO_URL);
     const deletes = captureRequests('delete', PHOTO_URL);
     const { user } = renderModal();
 

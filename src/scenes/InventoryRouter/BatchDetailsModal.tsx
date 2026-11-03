@@ -7,6 +7,7 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import { useSaveBatch } from 'src/hooks/batches/useSaveBatch';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -495,7 +496,7 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
                       backgroundColor: theme.palette.TwClrBgDanger,
                     }}
                   />
-                  <img
+                  <ThumbnailImage
                     src={`${photo.url}?maxHeight=120&maxWidth=120`}
                     alt={`${index}`}
                     style={{

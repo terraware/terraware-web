@@ -3,6 +3,7 @@ import React, { type JSX, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { ViewPhotosDialog } from '@terraware/web-components';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -40,7 +41,7 @@ export default function PhotosList({ photoUrls, initialSlide, fillSpace }: Photo
             border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             sx={{ cursor: 'pointer' }}
           >
-            <img
+            <ThumbnailImage
               src={`${photoUrl}?maxHeight=120`}
               alt={`${index}`}
               onClick={() => {

@@ -1,5 +1,7 @@
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query';
 
+import { redirectToLogin } from 'src/utils/login';
+
 import { getQueryLocale } from './locale';
 
 function delay(ms: number): Promise<void> {
@@ -96,9 +98,7 @@ const baseQueryWithInterceptors: BaseQueryFn<string | FetchArgs, unknown, FetchB
 
   // --- handle 401 (redirect)
   if (result.error && result.error.status === 401) {
-    const href = location.href.match('/error') ? location.origin : location.href;
-    const redirect = encodeURIComponent(href);
-    location.href = `/api/v1/login?redirect=${redirect}`;
+    redirectToLogin();
   }
 
   return result;

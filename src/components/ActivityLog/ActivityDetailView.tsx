@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS, APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -258,7 +259,7 @@ const ActivityMediaItem = ({
       sx={{ '&:hover .info-panel': { opacity: 1 } }}
       width='100%'
     >
-      <img
+      <ThumbnailImage
         alt={mediaFile?.caption}
         onClick={onClickMediaItem(mediaFile.fileId)}
         onError={() => {

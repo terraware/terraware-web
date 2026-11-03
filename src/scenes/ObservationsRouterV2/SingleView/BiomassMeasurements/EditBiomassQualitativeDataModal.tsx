@@ -13,6 +13,7 @@ import {
 } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
@@ -557,7 +558,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               <Box display='flex'>
                 <Box paddingRight={'16px'} paddingTop={'16px'}>
                   {photoUrl && (
-                    <img
+                    <ThumbnailImage
                       src={`${photoUrl}?maxHeight=120`}
                       alt={'soilAssessmentImage'}
                       style={{
