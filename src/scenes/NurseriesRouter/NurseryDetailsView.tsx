@@ -7,10 +7,9 @@ import BackToLink from 'src/components/common/BackToLink';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
-import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
-import { isAdmin } from 'src/utils/organization';
+import { getNurseryById, isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -30,11 +29,7 @@ export default function NurseryDetailsView(): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization && nurseryId) {
-      const selectedNursery = FacilityService.getFacility({
-        organization: selectedOrganization,
-        facilityId: nurseryId,
-        type: 'Nursery',
-      });
+      const selectedNursery = getNurseryById(selectedOrganization, Number(nurseryId));
       if (selectedNursery) {
         setNursery(selectedNursery);
       } else if (!isFetchingOrganizations) {

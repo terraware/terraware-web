@@ -14,10 +14,14 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useCreateFacilityMutation, useUpdateFacilityMutation } from 'src/queries/generated/facilities';
 import NurserySubLocations from 'src/scenes/NurseriesRouter/NurserySubLocations';
-import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility, PartialSubLocation } from 'src/types/Facility';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import {
+  facilityBuildCompletedDateValid,
+  facilityBuildStartedDateValid,
+  facilityOperationStartedDateValid,
+} from 'src/utils/facility';
 import { getAllNurseries } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
@@ -144,17 +148,13 @@ export default function NurseryView(): JSX.Element {
     if (
       !record.name ||
       !record.description ||
-      !FacilityService.facilityBuildStartedDateValid(
+      !facilityBuildStartedDateValid(record.buildStartedDate, record.buildCompletedDate, record.operationStartedDate) ||
+      !facilityBuildCompletedDateValid(
         record.buildStartedDate,
         record.buildCompletedDate,
         record.operationStartedDate
       ) ||
-      !FacilityService.facilityBuildCompletedDateValid(
-        record.buildStartedDate,
-        record.buildCompletedDate,
-        record.operationStartedDate
-      ) ||
-      !FacilityService.facilityOperationStartedDateValid(
+      !facilityOperationStartedDateValid(
         record.buildStartedDate,
         record.buildCompletedDate,
         record.operationStartedDate
@@ -321,7 +321,7 @@ export default function NurseryView(): JSX.Element {
               defaultTimeZone={timeZoneId}
               errorText={
                 validateDates &&
-                !FacilityService.facilityBuildStartedDateValid(
+                !facilityBuildStartedDateValid(
                   record.buildStartedDate,
                   record.buildCompletedDate,
                   record.operationStartedDate
@@ -342,7 +342,7 @@ export default function NurseryView(): JSX.Element {
               defaultTimeZone={timeZoneId}
               errorText={
                 validateDates &&
-                !FacilityService.facilityBuildCompletedDateValid(
+                !facilityBuildCompletedDateValid(
                   record.buildStartedDate,
                   record.buildCompletedDate,
                   record.operationStartedDate
@@ -364,7 +364,7 @@ export default function NurseryView(): JSX.Element {
               defaultTimeZone={timeZoneId}
               errorText={
                 validateDates &&
-                !FacilityService.facilityOperationStartedDateValid(
+                !facilityOperationStartedDateValid(
                   record.buildStartedDate,
                   record.buildCompletedDate,
                   record.operationStartedDate

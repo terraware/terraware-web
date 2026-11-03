@@ -21,7 +21,6 @@ import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
 import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
-import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
@@ -110,11 +109,7 @@ export default function Accession2View(): JSX.Element {
   const seedBankTimeZone = useMemo(() => {
     const facility =
       accession?.facilityId && selectedOrganization
-        ? FacilityService.getFacility({
-            organization: selectedOrganization,
-            facilityId: accession.facilityId,
-            type: 'Seed Bank',
-          })
+        ? getSeedBank(selectedOrganization, accession.facilityId)
         : undefined;
     const tz = locationTimeZone.get(facility);
     return tz.id;
