@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">59.09% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/22</span>
+                <span class='fraction'>13/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>5/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -214,15 +214,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -314,7 +314,7 @@ interface Props {
   titleClassName?: string;
 }
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >PageHeader(</span>{
+export default function PageHeader({
   title,
   subtitle,
   children,
@@ -328,15 +328,15 @@ export default function <span class="fstat-no" title="function not covered" >Pag
   snackbarPageKey,
   titleClassName,
 }: Props): JSX.Element {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+  const theme = useTheme();
 &nbsp;
-  const getPageHeading = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (page &amp;&amp; parentPage) {</span>
-<span class="cstat-no" title="statement not covered" >      return &lt;Title page={page} parentPage={parentPage} /&gt;;</span>
+  const getPageHeading = () =&gt; {
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (page &amp;&amp; parentPage) {
+      return &lt;Title page={page} parentPage={parentPage} /&gt;;
     }
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Container
       maxWidth={false}
       sx={{
@@ -349,7 +349,7 @@ export default function <span class="fstat-no" title="function not covered" >Pag
     &gt;
       &lt;Grid container spacing={0} sx={{ maxWidth: '100%' }}&gt;
         &lt;Grid size={12}&gt;
-          {back &amp;&amp; backUrl &amp;&amp; backName &amp;&amp; (
+          {back &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >backUrl </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >backName </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >(</span>
             &lt;BackToLink
               id='back'
               to={backUrl}
@@ -362,10 +362,10 @@ export default function <span class="fstat-no" title="function not covered" >Pag
             /&gt;
           )}
         &lt;/Grid&gt;
-        {page &amp;&amp; parentPage &amp;&amp; title &amp;&amp; &lt;Grid size={12}&gt;{getPageHeading()}&lt;/Grid&gt;}
+        {page &amp;&amp; parentPage &amp;&amp; title &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >&lt;Grid size={12}&gt;{getPageHeading()}&lt;/Grid&gt;}</span>
         &lt;Grid sx={{ display: 'flex' }} size={12}&gt;
           &lt;Box sx={{ width: '100%' }}&gt;
-            &lt;Box padding={theme.spacing(0, 3, children?.some(<span class="fstat-no" title="function not covered" >(el) =&gt; <span class="cstat-no" title="statement not covered" >!!el)</span></span> ? 3 : 0, 3)}&gt;
+            &lt;Box padding={theme.spacing(0, 3, children?.some(<span class="fstat-no" title="function not covered" >(el) =&gt; <span class="cstat-no" title="statement not covered" >!!el)</span></span> ? <span class="branch-0 cbranch-no" title="branch not covered" >3 </span>: 0, 3)}&gt;
               &lt;Box display='flex' justifyContent='space-between' alignItems='center'&gt;
                 &lt;Typography
                   id='title'
@@ -379,10 +379,10 @@ export default function <span class="fstat-no" title="function not covered" >Pag
                 &gt;
                   {title || getPageHeading()}
                 &lt;/Typography&gt;
-                {!!leftComponent &amp;&amp; &lt;div style={{ marginRight: 'auto' }}&gt;{leftComponent}&lt;/div&gt;}
-                {!!rightComponent &amp;&amp; &lt;div&gt;{rightComponent}&lt;/div&gt;}
+                {!!leftComponent &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;div style={{ marginRight: 'auto' }}&gt;{leftComponent}&lt;/div&gt;}</span>
+                {!!rightComponent &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;div&gt;{rightComponent}&lt;/div&gt;}</span>
               &lt;/Box&gt;
-              {subtitle &amp;&amp; (
+              {subtitle &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
                 &lt;Typography
                   id='subtitle'
                   variant='h6'
@@ -412,7 +412,7 @@ export default function <span class="fstat-no" title="function not covered" >Pag
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-02T23:06:27.479Z
+                at 2026-11-03T01:32:45.913Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

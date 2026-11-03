@@ -3375,8 +3375,36 @@
 <a name='L3310'></a><a href='#L3310'>3310</a>
 <a name='L3311'></a><a href='#L3311'>3311</a>
 <a name='L3312'></a><a href='#L3312'>3312</a>
-<a name='L3313'></a><a href='#L3313'>3313</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">110x</span>
+<a name='L3313'></a><a href='#L3313'>3313</a>
+<a name='L3314'></a><a href='#L3314'>3314</a>
+<a name='L3315'></a><a href='#L3315'>3315</a>
+<a name='L3316'></a><a href='#L3316'>3316</a>
+<a name='L3317'></a><a href='#L3317'>3317</a>
+<a name='L3318'></a><a href='#L3318'>3318</a>
+<a name='L3319'></a><a href='#L3319'>3319</a>
+<a name='L3320'></a><a href='#L3320'>3320</a>
+<a name='L3321'></a><a href='#L3321'>3321</a>
+<a name='L3322'></a><a href='#L3322'>3322</a>
+<a name='L3323'></a><a href='#L3323'>3323</a>
+<a name='L3324'></a><a href='#L3324'>3324</a>
+<a name='L3325'></a><a href='#L3325'>3325</a>
+<a name='L3326'></a><a href='#L3326'>3326</a>
+<a name='L3327'></a><a href='#L3327'>3327</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7665,6 +7693,7 @@ export const strings = {
   GENUS: 'Género',
   GEOMETRY_CHANGED_WARNING_MESSAGE:
     'La geometría de este sitio cambió el {0}. Los datos que se muestran aquí representan la información de la última observación del {1} y pueden ya no ser representativos del sitio de plantación.',
+  GERMINATING: 'Germinando',
   GERMINATION_ESTABLISHMENT: 'Germinación/Establecimiento',
   GERMINATION_ESTABLISHMENT_QUANTITY: 'Cantidad de germinación/establecimiento',
   GERMINATION_ESTABLISHMENT_QUANTITY_AFTER: 'Cantidad de germinación/establecimiento (después)',
@@ -8758,6 +8787,7 @@ export const strings = {
   RARE: 'Raro/a',
   RATIONALE: 'Fundamento',
   REACH_OUT_TO_ADMIN_TITLE: 'Por favor, contacte con un administrador de su organización.',
+  READY: 'Listo',
   READY_TO_PLANT: 'Listas para plantar',
   READY_TO_PLANT_QUANTITY: 'Cantidad lista para plantar',
   READY_TO_PLANT_QUANTITY_AFTER: 'Cantidad lista para plantar (después)',
@@ -9049,6 +9079,7 @@ export const strings = {
   SECTION_OWNER_ASSIGNED: 'Sección asignada por el propietario',
   SECTIONS_USED: 'Secciones utilizadas',
   SEE_ALL_ACCESSIONS: 'Ver todas las accesiones',
+  SEE_ALL_INVENTORY: 'Ver todo el inventario',
   SEE_DETAILS: 'Ver detalles',
   SEE_IC_VOTES: 'Ver votos IC',
   SEE_LESS: 'Ver menos',
@@ -9075,6 +9106,11 @@ export const strings = {
   SEEDLING_BATCH: 'Lote de plántula',
   SEEDLING_BATCHES: 'Lotes de plántulas',
   SEEDLINGS: 'Plántulas',
+  SEEDLINGS_BY_STAGE: 'Plántulas por etapa',
+  SEEDLINGS_DASHBOARD: 'Panel de Plántulas',
+  SEEDLINGS_DASHBOARD_MESSAGE:
+    'Su panel de plántulas se completará automáticamente con datos a medida que agregue inventario.',
+  SEEDLINGS_DASHBOARD_MESSAGE_TITLE: 'Agregue inventario para ver los datos',
   SEEDLINGS_PLURAL: 'plántulas',
   SEEDLINGS_SINGULAR: 'plántula',
   SEEDLINGS_WITHDRAWALS: 'Retiros de plántulas',
@@ -9577,6 +9613,10 @@ export const strings = {
   TOOLTIP_COUNTRY_MY_ACCOUNT: 'Su país afecta cómo mostramos los números y demás información.',
   TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
     'Este número representa todas las accesiones con los estados Pendiente de registro, Pendiente de tratamiento, Tratamiento, Deshidratación y En almacenamiento.',
+  TOOLTIP_DASHBOARD_TOTAL_BATCHES:
+    'Este número incluye todos los lotes con plántulas restantes en cualquier etapa, incluida la Germinación. Los lotes vacíos no se cuentan.',
+  TOOLTIP_DASHBOARD_TOTAL_SEEDLINGS:
+    'Este número incluye plántulas en Crecimiento Activo, Endurecimiento y Listas. Las plántulas en Germinación se muestran por separado a continuación.',
   TOOLTIP_ECOSYSTEM_TYPE:
     'Estos tipos son unidades relativamente grandes de tierra o agua que contienen un conjunto distintivo de comunidades naturales que comparten la mayoría de las especies, dinámicas y condiciones ambientales.',
   TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY:
@@ -9646,6 +9686,7 @@ export const strings = {
   TOTAL: 'Total',
   TOTAL_ACTIVE_ACCESSIONS: 'Total de accesiones activas',
   TOTAL_AREA: 'Área total',
+  TOTAL_BATCHES: 'Total de lotes',
   TOTAL_DENSITY_TOOLTIP: 'Densidad total de plantas (plantas/ha) de los valores ingresados arriba.',
   TOTAL_DENSITY_VIEW_TOOLTIP: 'Total de las densidades de plantas de todas las especies listadas',
   TOTAL_GOAL: 'Meta total',
@@ -9673,6 +9714,7 @@ export const strings = {
   TOTAL_QUANTITY_MOVED: 'Cantidad total de movidos',
   TOTAL_READY_TO_PLANT_QUANTITY: 'Cantidad total lista para plantar',
   TOTAL_SEED_COUNT: 'Recuento total de semillas',
+  TOTAL_SEEDLINGS: 'Total de plántulas',
   TOTAL_SEEDLINGS_COUNT: 'Suma total de plantas de semillero',
   TOTAL_SEEDLINGS_SENT: 'Total de plántulas enviadas',
   TOTAL_SEEDS: 'Total de semillas',
@@ -10006,7 +10048,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-02T23:06:27.479Z
+                at 2026-11-03T01:32:45.913Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

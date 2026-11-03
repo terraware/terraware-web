@@ -3402,8 +3402,36 @@
 <a name='L3337'></a><a href='#L3337'>3337</a>
 <a name='L3338'></a><a href='#L3338'>3338</a>
 <a name='L3339'></a><a href='#L3339'>3339</a>
-<a name='L3340'></a><a href='#L3340'>3340</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">110x</span>
+<a name='L3340'></a><a href='#L3340'>3340</a>
+<a name='L3341'></a><a href='#L3341'>3341</a>
+<a name='L3342'></a><a href='#L3342'>3342</a>
+<a name='L3343'></a><a href='#L3343'>3343</a>
+<a name='L3344'></a><a href='#L3344'>3344</a>
+<a name='L3345'></a><a href='#L3345'>3345</a>
+<a name='L3346'></a><a href='#L3346'>3346</a>
+<a name='L3347'></a><a href='#L3347'>3347</a>
+<a name='L3348'></a><a href='#L3348'>3348</a>
+<a name='L3349'></a><a href='#L3349'>3349</a>
+<a name='L3350'></a><a href='#L3350'>3350</a>
+<a name='L3351'></a><a href='#L3351'>3351</a>
+<a name='L3352'></a><a href='#L3352'>3352</a>
+<a name='L3353'></a><a href='#L3353'>3353</a>
+<a name='L3354'></a><a href='#L3354'>3354</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7729,6 +7757,7 @@ export const strings = {
   GENUS: 'Genre',
   GEOMETRY_CHANGED_WARNING_MESSAGE:
     'La géométrie de ce site a changé le {0}. Les données affichées ici représentent les dernières observations du {1} et peuvent ne plus être représentatives du site de plantation.',
+  GERMINATING: 'Germination',
   GERMINATION_ESTABLISHMENT: 'Germination/établissement',
   GERMINATION_ESTABLISHMENT_QUANTITY: 'Quantité de germination/établissement',
   GERMINATION_ESTABLISHMENT_QUANTITY_AFTER: 'Quantité de germination/établissement (après)',
@@ -8833,6 +8862,7 @@ export const strings = {
   RARE: 'Rare',
   RATIONALE: 'Justification',
   REACH_OUT_TO_ADMIN_TITLE: 'Veuillez contacter un administrateur de votre organisation.',
+  READY: 'Prêt',
   READY_TO_PLANT: 'Prêt à planter',
   READY_TO_PLANT_QUANTITY: 'Quantité prête à planter',
   READY_TO_PLANT_QUANTITY_AFTER: 'Quantité prête à planter (après)',
@@ -9127,6 +9157,7 @@ export const strings = {
   SECTION_OWNER_ASSIGNED: 'Section Propriétaire assigné',
   SECTIONS_USED: 'Sections utilisées',
   SEE_ALL_ACCESSIONS: 'Voir toutes les accessions',
+  SEE_ALL_INVENTORY: 'Voir tout l’inventaire',
   SEE_DETAILS: 'Voir les détails',
   SEE_IC_VOTES: 'Voir les votes IC',
   SEE_LESS: 'Voir moins',
@@ -9154,6 +9185,11 @@ export const strings = {
   SEEDLING_BATCH: 'Lot de semis',
   SEEDLING_BATCHES: 'Lots de semis',
   SEEDLINGS: 'Semis',
+  SEEDLINGS_BY_STAGE: 'Semis par étape',
+  SEEDLINGS_DASHBOARD: 'Tableau de bord des plants',
+  SEEDLINGS_DASHBOARD_MESSAGE:
+    'Votre tableau de bord des plants se remplira automatiquement de données à mesure que vous ajoutez de l’inventaire.',
+  SEEDLINGS_DASHBOARD_MESSAGE_TITLE: 'Ajoutez de l’inventaire pour voir les données',
   SEEDLINGS_PLURAL: 'semis',
   SEEDLINGS_SINGULAR: 'semis',
   SEEDLINGS_WITHDRAWALS: 'Retraits de plants',
@@ -9657,6 +9693,10 @@ export const strings = {
   TOOLTIP_COUNTRY_MY_ACCOUNT: "Votre pays influence la façon dont nous affichons les numéros et d'autres informations.",
   TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
     "Ce numéro représente toutes les accessions dont le statut est « En attente d'enregistrement », « En attente de traitement », « En cours de traitement », « En cours de séchage » et « En cours de stockage ».",
+  TOOLTIP_DASHBOARD_TOTAL_BATCHES:
+    "Ce nombre inclut tous les lots ayant des plants restants à n'importe quelle étape, y compris la germination. Les lots vides ne sont pas comptabilisés.",
+  TOOLTIP_DASHBOARD_TOTAL_SEEDLINGS:
+    'Ce nombre inclut les plants en croissance active, en acclimatation et prêts. Les plants en germination sont affichés séparément ci-dessous.',
   TOOLTIP_ECOSYSTEM_TYPE:
     'Ces types représentent des unités relativement vastes de terre ou d’eau contenant un ensemble distinct de communautés naturelles partageant la grande majorité des espèces, des dynamiques et des conditions environnementales.',
   TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY:
@@ -9724,6 +9764,7 @@ export const strings = {
   TOTAL: 'Total',
   TOTAL_ACTIVE_ACCESSIONS: 'Total des accessions actives',
   TOTAL_AREA: 'Superficie totale',
+  TOTAL_BATCHES: 'Nombre total de lots',
   TOTAL_DENSITY_TOOLTIP: 'Densité totale de plantation (plants/ha) des valeurs saisies ci-dessus.',
   TOTAL_DENSITY_VIEW_TOOLTIP: 'Total des densités de plantation de toutes les espèces répertoriées',
   TOTAL_GOAL: 'Objectif total',
@@ -9751,6 +9792,7 @@ export const strings = {
   TOTAL_QUANTITY_MOVED: 'Quantité totale déplacée',
   TOTAL_READY_TO_PLANT_QUANTITY: 'Quantité totale de plantes prêtes à être plantées',
   TOTAL_SEED_COUNT: 'Nombre total de semences',
+  TOTAL_SEEDLINGS: 'Nombre total de plants',
   TOTAL_SEEDLINGS_COUNT: 'Nombre total de semis',
   TOTAL_SEEDLINGS_SENT: 'Total des plantules envoyées',
   TOTAL_SEEDS: 'Nombre total de semences',
@@ -10087,7 +10129,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-02T23:06:27.479Z
+                at 2026-11-03T01:32:45.913Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -3315,8 +3315,34 @@
 <a name='L3250'></a><a href='#L3250'>3250</a>
 <a name='L3251'></a><a href='#L3251'>3251</a>
 <a name='L3252'></a><a href='#L3252'>3252</a>
-<a name='L3253'></a><a href='#L3253'>3253</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">110x</span>
+<a name='L3253'></a><a href='#L3253'>3253</a>
+<a name='L3254'></a><a href='#L3254'>3254</a>
+<a name='L3255'></a><a href='#L3255'>3255</a>
+<a name='L3256'></a><a href='#L3256'>3256</a>
+<a name='L3257'></a><a href='#L3257'>3257</a>
+<a name='L3258'></a><a href='#L3258'>3258</a>
+<a name='L3259'></a><a href='#L3259'>3259</a>
+<a name='L3260'></a><a href='#L3260'>3260</a>
+<a name='L3261'></a><a href='#L3261'>3261</a>
+<a name='L3262'></a><a href='#L3262'>3262</a>
+<a name='L3263'></a><a href='#L3263'>3263</a>
+<a name='L3264'></a><a href='#L3264'>3264</a>
+<a name='L3265'></a><a href='#L3265'>3265</a>
+<a name='L3266'></a><a href='#L3266'>3266</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">112x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7528,6 +7554,7 @@ export const strings = {
   GENUS: 'Genus',
   GEOMETRY_CHANGED_WARNING_MESSAGE:
     'The geometry of this site changed on {0}. The data shown here represents the latest observation data from {1} and may no longer be representative of the planting site.',
+  GERMINATING: 'Germinating',
   GERMINATION_ESTABLISHMENT: 'Germination/Establishment',
   GERMINATION_ESTABLISHMENT_QUANTITY: 'Germination/Establishment Quantity',
   GERMINATION_ESTABLISHMENT_QUANTITY_AFTER: 'Germination/Establishment Quantity (After)',
@@ -8594,6 +8621,7 @@ export const strings = {
   RARE: 'Rare',
   RATIONALE: 'Rationale',
   REACH_OUT_TO_ADMIN_TITLE: 'Please reach out to an administrator from your organization.',
+  READY: 'Ready',
   READY_TO_PLANT: 'Ready to Plant',
   READY_TO_PLANT_QUANTITY: 'Ready to Plant Quantity',
   READY_TO_PLANT_QUANTITY_AFTER: 'Ready to Plant Quantity (After)',
@@ -8881,6 +8909,7 @@ export const strings = {
   SECTION_OWNER_ASSIGNED: 'Section Owner Assigned',
   SECTIONS_USED: 'Sections Used',
   SEE_ALL_ACCESSIONS: 'See All Accessions',
+  SEE_ALL_INVENTORY: 'See all inventory',
   SEE_DETAILS: 'See Details',
   SEE_IC_VOTES: 'See IC Votes',
   SEE_LESS: 'See Less',
@@ -8907,6 +8936,10 @@ export const strings = {
   SEEDLING_BATCH: 'Seedling Batch',
   SEEDLING_BATCHES: 'Seedling Batches',
   SEEDLINGS: 'Seedlings',
+  SEEDLINGS_BY_STAGE: 'Seedlings by Stage',
+  SEEDLINGS_DASHBOARD: 'Seedlings Dashboard',
+  SEEDLINGS_DASHBOARD_MESSAGE: 'Your seedlings dashboard will automatically populate with data as you add inventory.',
+  SEEDLINGS_DASHBOARD_MESSAGE_TITLE: 'Add Inventory to See Data',
   SEEDLINGS_PLURAL: 'seedlings',
   SEEDLINGS_SINGULAR: 'seedling',
   SEEDLINGS_WITHDRAWALS: 'Seedlings Withdrawals',
@@ -9403,6 +9436,10 @@ export const strings = {
   TOOLTIP_COUNTRY_MY_ACCOUNT: 'Your country affects how we display numbers and other information.',
   TOOLTIP_DASHBOARD_TOTAL_ACTIVE_ACCESSIONS:
     'This number represents all accessions with the statuses Awaiting Check In, Awaiting Processing, Processing, Drying, and In Storage.',
+  TOOLTIP_DASHBOARD_TOTAL_BATCHES:
+    'This number includes all batches with seedlings remaining in any stage, including Germinating. Empty batches are not counted.',
+  TOOLTIP_DASHBOARD_TOTAL_SEEDLINGS:
+    'This number includes seedlings in Active Growth, Hardening Off, and Ready. Germinating seedlings are shown separately below.',
   TOOLTIP_ECOSYSTEM_TYPE:
     'These types are relatively large units of land or water containing a distinct assemblage of natural communities sharing a large majority of species, dynamics, and environmental conditions.',
   TOOLTIP_GERMINATION_ESTABLISHMENT_QUANTITY:
@@ -9471,6 +9508,7 @@ export const strings = {
   TOTAL: 'Total',
   TOTAL_ACTIVE_ACCESSIONS: 'Total Active Accessions',
   TOTAL_AREA: 'Total Area',
+  TOTAL_BATCHES: 'Total Batches',
   TOTAL_DENSITY_TOOLTIP: 'Total plant density (plants/ha) of the input values above.',
   TOTAL_DENSITY_VIEW_TOOLTIP: "Total of all of the listed species' plant densities",
   TOTAL_GOAL: 'Total Goal',
@@ -9498,6 +9536,7 @@ export const strings = {
   TOTAL_QUANTITY_MOVED: 'Total Quantity Moved',
   TOTAL_READY_TO_PLANT_QUANTITY: 'Total Ready to Plant Quantity',
   TOTAL_SEED_COUNT: 'Total Seed Count',
+  TOTAL_SEEDLINGS: 'Total Seedlings',
   TOTAL_SEEDLINGS_COUNT: 'Total Seedlings Count',
   TOTAL_SEEDLINGS_SENT: 'Total Seedlings Sent',
   TOTAL_SEEDS: 'Total Seeds',
@@ -9826,7 +9865,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-02T23:06:27.479Z
+                at 2026-11-03T01:32:45.913Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
