@@ -20,6 +20,7 @@ import {
   MRT_Cell,
   MRT_Column,
   MRT_ColumnDef,
+  MRT_ColumnFiltersState,
   MRT_Row,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -54,6 +55,7 @@ import {
   VariableValueSelectValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
+import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
@@ -68,6 +70,8 @@ const STORAGE_KEYS = {
 };
 
 type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
+
+const isEmptyFilterValue = (value: unknown) => value === undefined || value === null || value === '';
 
 const MatrixView = () => {
   const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
@@ -88,9 +92,11 @@ const MatrixView = () => {
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const [globalFilter, setGlobalFilter] = useState('');
 
-  const [columnFilters, setColumnFilters] = useState(() => {
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_FILTERS) || '[]');
+      return normalizePersistedColumnFilters(
+        JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_FILTERS) || '[]') as MRT_ColumnFiltersState
+      );
     } catch {
       return [];
     }
@@ -838,10 +844,8 @@ const MatrixView = () => {
     () =>
       columnFilters.length === 0 ||
       columnFilters.every(
-        (filter: any) =>
-          filter.value === undefined ||
-          filter.value === '' ||
-          (Array.isArray(filter.value) && filter.value.every((val: any) => val === undefined || val === ''))
+        (filter) =>
+          isEmptyFilterValue(filter.value) || (Array.isArray(filter.value) && filter.value.every(isEmptyFilterValue))
       ),
     [columnFilters]
   );

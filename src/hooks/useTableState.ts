@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import dayjs from 'dayjs';
 import {
   MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
@@ -11,6 +10,7 @@ import {
 } from 'material-react-table';
 
 import { TableDefinition } from 'src/types/Tables';
+import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
 
 type UseTableStateOptions = {
   defaultColumnOrder?: MRT_ColumnOrderState;
@@ -111,35 +111,7 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
       if (!saved) {
         return [];
       }
-      const parsed = JSON.parse(saved) as MRT_ColumnFiltersState;
-      // Date-range filters store dayjs objects which serialize to ISO strings.
-      // Reconstruct dayjs objects so the date pickers restore correctly.
-      const isISODateTimeString = (v: unknown) =>
-        typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(v);
-      return parsed.map((f) => {
-        if (Array.isArray(f.value) && (f.value as unknown[]).some(isISODateTimeString)) {
-          return {
-            ...f,
-            value: (f.value as unknown[]).map((v) => (isISODateTimeString(v) ? dayjs(v as string) : v)),
-          };
-        }
-        // Coerce non-array values to arrays for multi-select columns so
-        // arrIncludesSome (which calls filterValue.some()) doesn't crash.
-        if (persistedMultiSelectIds.has(f.id) && !Array.isArray(f.value) && f.value !== null) {
-          return { ...f, value: [f.value] };
-        }
-        // Replace null entries in array filters with ''.
-        // JSON.stringify converts undefined to null, so persisted range filters
-        // like [undefined, 5] reload as [null, 5]. MRT's betweenInclusive only
-        // skips '' and undefined — passing null causes null.toString() to throw.
-        if (Array.isArray(f.value) && (f.value as unknown[]).some((v) => v === null)) {
-          return {
-            ...f,
-            value: (f.value as unknown[]).map((v) => (v === null ? '' : v)),
-          };
-        }
-        return f;
-      });
+      return normalizePersistedColumnFilters(JSON.parse(saved) as MRT_ColumnFiltersState, persistedMultiSelectIds);
     } catch {
       return [];
     }
