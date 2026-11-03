@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">26.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/26</span>
+                <span class='fraction'>7/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">8.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/12</span>
+                <span class='fraction'>1/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/9</span>
+                <span class='fraction'>0/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.52% </span>
+                <span class="strong">30.43% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/23</span>
+                <span class='fraction'>7/23</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -143,7 +143,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">65x</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -157,18 +157,18 @@
 <span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55x</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">65x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55x</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">65x</span>
@@ -199,7 +199,7 @@ axios.defaults.withCredentials = true;
 &nbsp;
 /* eslint no-restricted-globals: ["off", "location"]*/
 axios.interceptors.response.use(
-  (response) =&gt; response,
+<span class="fstat-no" title="function not covered" >  (response) =&gt; <span class="cstat-no" title="statement not covered" >response,</span></span>
 <span class="fstat-no" title="function not covered" >  (error) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (error.response &amp;&amp; error.response.status === 401) {</span>
       const href = <span class="cstat-no" title="statement not covered" >location.href.match('/error') ? location.origin : location.href;</span>
@@ -210,21 +210,21 @@ axios.interceptors.response.use(
   }
 );
 &nbsp;
-axios.interceptors.request.use((x) =&gt; {
+axios.interceptors.request.use(<span class="fstat-no" title="function not covered" >(x) =&gt; {</span>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  x.meta = x.meta || {};
+<span class="cstat-no" title="statement not covered" >  x.meta = x.meta || {};</span>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  x.meta.beginTimer = new Date().getTime();
-  return x;
+<span class="cstat-no" title="statement not covered" >  x.meta.beginTimer = new Date().getTime();</span>
+<span class="cstat-no" title="statement not covered" >  return x;</span>
 });
 &nbsp;
-axios.interceptors.response.use((x) =&gt; {
+axios.interceptors.response.use(<span class="fstat-no" title="function not covered" >(x) =&gt; {</span>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  x.responseTime = new Date().getTime() - x.config.meta.beginTimer;
-  return x;
+<span class="cstat-no" title="statement not covered" >  x.responseTime = new Date().getTime() - x.config.meta.beginTimer;</span>
+<span class="cstat-no" title="statement not covered" >  return x;</span>
 });
 &nbsp;
 const proxy = new Proxy(axios, handler);
@@ -238,7 +238,7 @@ export default proxy;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-03T01:32:45.913Z
+                at 2026-11-03T03:48:09.132Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
