@@ -2806,9 +2806,13 @@ VIEW_SPECIES_LIST,View Species List,
 VIEW_SUMMARY_BASE_VIEW,Base View: {0},Save view summary entry: {0} is the preset view the saved view is based on
 VIEW_SUMMARY_COLUMNS,Columns: {0},Save view summary entry: {0} is the comma-separated list of visible columns in order
 VIEW_SUMMARY_FILTER,{0}: {1},Save view summary entry: {0} is a column name and {1} is the value it's filtered by
+VIEW_SUMMARY_FILTER_COUNT_PLURAL,{0} filters,"Saved view summary in the view dropdown: {0} is the number of filters, counting search text as a filter"
+VIEW_SUMMARY_FILTER_COUNT_SINGULAR,1 filter,Saved view summary in the view dropdown when it has one filter
 VIEW_SUMMARY_NO_FILTERS,Filters: None,Save view summary entry shown when the view has no filters or search
+VIEW_SUMMARY_NONE,No filters,"Saved view summary in the view dropdown when the view has no filters, search or sort"
 VIEW_SUMMARY_SEARCH,"Search: ""{0}""",Save view summary entry: {0} is the table's search text
 VIEW_SUMMARY_SORT,Sort: {0},"Save view summary entry: {0} is the sorted column names, each followed by ↑ or ↓"
+VIEW_SUMMARY_SORTED_BY,Sorted by {0},Saved view summary in the view dropdown: {0} is the lowercase name of the sorted column
 VIEWING,Viewing,
 VINE,Vine,A type of plant.
 VIRTUAL,Virtual,

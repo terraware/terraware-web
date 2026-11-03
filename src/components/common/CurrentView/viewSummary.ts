@@ -97,3 +97,20 @@ export const getSaveViewSummary = <TData extends MRT_RowData>(
     strings.formatString(strings.VIEW_SUMMARY_COLUMNS, columns.join(', ')) as string,
   ];
 };
+
+export const getViewSummary = <TData extends MRT_RowData>(
+  table: MRT_TableInstance<TData>,
+  settings: TableSettings,
+  baseViewLabel?: string
+) => {
+  const filterCount = nonEmptyFilters(settings.columnFilters).length + (settings.globalFilter ? 1 : 0);
+  const sortedColumns = settings.sorting.map((sort) => getColumnHeader(table, sort.id).toLocaleLowerCase()).join(', ');
+
+  return [
+    ...(baseViewLabel ? [baseViewLabel] : []),
+    ...(filterCount === 1 ? [strings.VIEW_SUMMARY_FILTER_COUNT_SINGULAR] : []),
+    ...(filterCount > 1 ? [strings.formatString(strings.VIEW_SUMMARY_FILTER_COUNT_PLURAL, filterCount) as string] : []),
+    ...(sortedColumns ? [strings.formatString(strings.VIEW_SUMMARY_SORTED_BY, sortedColumns) as string] : []),
+    ...(filterCount || sortedColumns ? [] : [strings.VIEW_SUMMARY_NONE]),
+  ].join('. ');
+};

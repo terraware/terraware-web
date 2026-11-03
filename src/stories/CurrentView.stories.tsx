@@ -28,8 +28,8 @@ const presetViews = [
 ];
 
 const myViews = [
-  { label: 'Phase 1 Projects', value: 'phase1Projects' },
-  { label: 'High Priority', value: 'highPriority' },
+  { description: 'Applicants. 1 filter. Sorted by country', label: 'Phase 1 Projects', value: 'phase1Projects' },
+  { description: 'No filters', label: 'High Priority', value: 'highPriority' },
 ];
 
 export const DefaultOnly = CurrentViewTemplate.bind({});

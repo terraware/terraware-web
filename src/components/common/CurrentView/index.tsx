@@ -20,7 +20,7 @@ import {
   getTableSettings,
   isTableModified,
 } from './tableSettings';
-import { getSaveViewSummary } from './viewSummary';
+import { getSaveViewSummary, getViewSummary } from './viewSummary';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
 export type { ViewOption } from './CurrentViewSelect';
@@ -91,8 +91,19 @@ const CurrentView = <TData extends MRT_RowData>({
     [defaultViewLabel, presetViews, strings]
   );
   const savedViewOptions = useMemo(
-    () => sortViewsByLabel(savedTableViewsData?.views.map((view) => ({ label: view.name, value: `${view.id}` }))) ?? [],
-    [savedTableViewsData]
+    () =>
+      sortViewsByLabel(
+        savedTableViewsData?.views.map((view) => ({
+          description: getViewSummary(
+            table,
+            { ...getDefaultTableSettings(table, defaultSettings), ...(view.settings as Partial<TableSettings>) },
+            getBaseViewLabel(view.baseView)
+          ),
+          label: view.name,
+          value: `${view.id}`,
+        }))
+      ) ?? [],
+    [defaultSettings, getBaseViewLabel, savedTableViewsData, table]
   );
   const isSavedViewAvailable = savedTableViewsData
     ? savedTableViewsData.views.some((view) => `${view.id}` === savedViewId)
