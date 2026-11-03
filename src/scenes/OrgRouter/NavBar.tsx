@@ -54,6 +54,7 @@ export default function NavBar({
     useParticipantData();
 
   const isAccessionDashboardRoute = useMatch({ path: APP_PATHS.SEEDS_DASHBOARD + '/', end: false });
+  const isSeedlingsDashboardRoute = useMatch({ path: APP_PATHS.SEEDLINGS_DASHBOARD + '/', end: false });
   const isAccessionsRoute = useMatch({ path: APP_PATHS.ACCESSIONS + '/', end: false });
   const isSeedsWithdrawalsRoute = useMatch({ path: APP_PATHS.SEEDS_WITHDRAWALS + '/', end: false });
   const isApplicationRoute = useMatch({ path: APP_PATHS.APPLICATIONS + '/', end: false });
@@ -164,6 +165,18 @@ export default function NavBar({
   }, [projectsWithModules, currentAcceleratorProject, setCurrentAcceleratorProject]);
 
   const getSeedlingsMenuItems = () => {
+    const dashboardMenu = (
+      <NavItem
+        label={strings.DASHBOARD}
+        selected={!!isSeedlingsDashboardRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.SEEDLINGS_DASHBOARD);
+        }}
+        id='seedlings-dashboard'
+        key='seedlings-dashboard'
+      />
+    );
+
     const inventoryMenu = (
       <NavItem
         label={strings.INVENTORY}
@@ -200,7 +213,7 @@ export default function NavBar({
       />
     );
 
-    const items = [inventoryMenu];
+    const items = [dashboardMenu, inventoryMenu];
     if (hasPlantingSeasonWithTargets) {
       items.push(inventoryPlanningMenu);
     }
