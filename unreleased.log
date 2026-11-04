@@ -1,3 +1,4 @@
+76acb2d2 SW-9219 TF Experts should not be allowed to edit observations via activities (#7014)
 fea8af1c Render MatrixView with EditableTable (#7012)
 66621411 Manage MatrixView table state with useTableState (#7011)
 401623f0 Persist column pinning and global filter in useTableState (#7010)
