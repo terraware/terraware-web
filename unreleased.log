@@ -1,3 +1,7 @@
+fea8af1c Render MatrixView with EditableTable (#7012)
+66621411 Manage MatrixView table state with useTableState (#7011)
+401623f0 Persist column pinning and global filter in useTableState (#7010)
+dd34bb38 Cover MatrixView views, filters, persistence, and editing in e2e tests (#7009)
 3c6e88c4 SW-9000 Participant activity log E2E test (#7004)
 7365086a SW-9221 Add a monitoring type selector to the schedule observation form (#7018)
 dc96ba16 SW-9221 Match the server's has-plantings check when listing observable sites (#7016)
