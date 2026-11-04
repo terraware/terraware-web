@@ -10,6 +10,7 @@ import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import {
   RescheduleObservationRequestPayload,
@@ -20,8 +21,10 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import SmallSiteWarningDialog from 'src/scenes/ObservationsRouterV2/Schedule/SmallSiteWarningDialog';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import MonitoringTypeSelector from './MonitoringTypeSelector';
 import ObservationSubstratumSelector from './ObservationSubstratumSelector';
 import getObservationDateErrors from './getObservationDateErrors';
+import { MONITORING_TYPES, MonitoringType } from './monitoringTypes';
 import useObservablePlantingSites from './useObservablePlantingSites';
 
 const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
@@ -46,6 +49,7 @@ export default function ScheduleObservationForm({
   const { activeLocale, strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -97,6 +101,22 @@ export default function ScheduleObservationForm({
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [requestedSubstratumIds, setRequestedSubstratumIds] = useState<number[]>();
+  const [monitoringType, setMonitoringType] = useState<MonitoringType>('Monitoring');
+
+  const upcomingObservationStartDates = useMemo(
+    () => selectedSite?.upcomingObservationStartDates ?? {},
+    [selectedSite?.upcomingObservationStartDates]
+  );
+
+  useEffect(() => {
+    if (upcomingObservationStartDates[monitoringType] === undefined) {
+      return;
+    }
+    const schedulableType = MONITORING_TYPES.find((type) => upcomingObservationStartDates[type] === undefined);
+    if (schedulableType) {
+      setMonitoringType(schedulableType);
+    }
+  }, [monitoringType, upcomingObservationStartDates]);
 
   const [validate, setValidate] = useState<boolean>(false);
   const [startDateError, setStartDateError] = useState<string>();
@@ -162,11 +182,26 @@ export default function ScheduleObservationForm({
     }
 
     if (onSchedule && startDate && endDate && requestedSubstratumIds && selectedSite) {
-      onSchedule({ startDate, endDate, requestedSubstratumIds, plantingSiteId: selectedSite.id });
+      onSchedule({
+        startDate,
+        endDate,
+        requestedSubstratumIds,
+        plantingSiteId: selectedSite.id,
+        observationType: biomassSchedulingEnabled ? monitoringType : undefined,
+      });
     }
 
     setShowSmallSiteWarning(false);
-  }, [endDate, onReschedule, onSchedule, requestedSubstratumIds, selectedSite, startDate]);
+  }, [
+    biomassSchedulingEnabled,
+    endDate,
+    monitoringType,
+    onReschedule,
+    onSchedule,
+    requestedSubstratumIds,
+    selectedSite,
+    startDate,
+  ]);
 
   const onSubmit = useCallback(() => {
     setValidate(true);
@@ -213,6 +248,16 @@ export default function ScheduleObservationForm({
                 fullWidth
               />
             </Grid>
+
+            {biomassSchedulingEnabled && observationId === undefined && selectedPlantingSiteId && (
+              <Grid size={12} paddingTop={0}>
+                <MonitoringTypeSelector
+                  onChange={setMonitoringType}
+                  selectedMonitoringType={monitoringType}
+                  upcomingObservationStartDates={upcomingObservationStartDates}
+                />
+              </Grid>
+            )}
 
             {selectedPlantingSiteId && (
               <Grid size={12}>
