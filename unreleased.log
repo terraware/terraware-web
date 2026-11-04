@@ -1,3 +1,7 @@
+3c6e88c4 SW-9000 Participant activity log E2E test (#7004)
+7365086a SW-9221 Add a monitoring type selector to the schedule observation form (#7018)
+dc96ba16 SW-9221 Match the server's has-plantings check when listing observable sites (#7016)
+b9280a77 SW-9220 Create biomass schedule observations feature flag (#7015)
 185f36f8 SW-9217 Link the activity log empty state to the right create form (#7005)
 a6654bc0 SW-9213 Seeds Withdrawals: Add colon to "From Seed Bank" column title (#7003)
 6065ef5b SW-9191 On Save & Exit, show user Draft Planting Sites Tab (#7002)
