@@ -3,7 +3,11 @@ import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
-export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Seeds Withdrawal Log';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Seeds Withdrawal Log'
+  | 'Scheduled Biomass Monitoring Observations';
 
 export type Feature = {
   name: FeatureName;
@@ -53,6 +57,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Log of seed withdrawals.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Scheduled Biomass Monitoring Observations',
+    preferenceName: 'scheduledBiomassMonitoringObservations',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for scheduling biomass monitoring observations.'],
     disclosure: ['This is a WIP'],
   },
 ];
