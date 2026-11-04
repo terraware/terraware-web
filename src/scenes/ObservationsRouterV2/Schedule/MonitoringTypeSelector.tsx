@@ -9,12 +9,14 @@ import { MONITORING_TYPES, MonitoringType } from './monitoringTypes';
 import { UpcomingObservationStartDates } from './useObservablePlantingSites';
 
 interface MonitoringTypeSelectorProps {
+  hasPlantings: boolean;
   onChange: (monitoringType: MonitoringType) => void;
   selectedMonitoringType: MonitoringType;
   upcomingObservationStartDates: UpcomingObservationStartDates;
 }
 
 const MonitoringTypeSelector = ({
+  hasPlantings,
   onChange,
   selectedMonitoringType,
   upcomingObservationStartDates,
@@ -51,7 +53,16 @@ const MonitoringTypeSelector = ({
         {MONITORING_TYPES.map((monitoringType) => {
           const { badge, description, title } = optionsContent[monitoringType];
           const upcomingStartDate = upcomingObservationStartDates[monitoringType];
-          const disabled = upcomingStartDate !== undefined;
+          const unavailableMessage = !hasPlantings
+            ? strings.SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS
+            : upcomingStartDate !== undefined
+              ? (strings.formatString(
+                  strings.SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,
+                  badge,
+                  upcomingStartDate
+                ) as string)
+              : undefined;
+          const disabled = unavailableMessage !== undefined;
           const selected = !disabled && selectedMonitoringType === monitoringType;
 
           return (
@@ -106,7 +117,7 @@ const MonitoringTypeSelector = ({
                         {badge}
                       </Typography>
                     </Box>
-                    {upcomingStartDate !== undefined && (
+                    {unavailableMessage !== undefined && (
                       <Typography
                         fontSize='14px'
                         fontWeight={400}
@@ -114,11 +125,7 @@ const MonitoringTypeSelector = ({
                         color={theme.palette.TwClrTxtDanger}
                         paddingTop={theme.spacing(1)}
                       >
-                        {strings.formatString(
-                          strings.SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,
-                          badge,
-                          upcomingStartDate
-                        )}
+                        {unavailableMessage}
                       </Typography>
                     )}
                   </Box>

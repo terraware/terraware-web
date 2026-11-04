@@ -2046,6 +2046,7 @@ SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} is not included in this total because 
 SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Record how many plantings are alive and dead.,
 SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Track survival after planting,
 SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,A {0} observation is already scheduled to start {1}.,{0} is a monitoring type such as “Survival Monitoring” and {1} is a date
+SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS,Available once this planting site has plantings.,Shown on a monitoring type option that cannot be scheduled because the planting site has no plantings yet
 SCHEDULE_OBSERVATION_VEGETATION_DESCRIPTION,Measure plant growth and record other vegetation (e.g. for carbon calculations).,
 SCHEDULE_OBSERVATION_VEGETATION_TITLE,Track growth and survival,
 SCHEDULED_OBSERVATIONS,Scheduled Observations,

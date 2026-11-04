@@ -11,12 +11,14 @@ import { renderWithProviders } from 'src/test-utils';
 
 const renderSelector = (
   selectedMonitoringType: MonitoringType,
-  upcomingObservationStartDates: UpcomingObservationStartDates = {}
+  upcomingObservationStartDates: UpcomingObservationStartDates = {},
+  hasPlantings = true
 ) => {
   const onChange = rstest.fn();
 
   const { user } = renderWithProviders(
     <MonitoringTypeSelector
+      hasPlantings={hasPlantings}
       onChange={onChange}
       selectedMonitoringType={selectedMonitoringType}
       upcomingObservationStartDates={upcomingObservationStartDates}
@@ -48,6 +50,15 @@ describe('MonitoringTypeSelector', () => {
 
     expect(radioFor(strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE)).toBeEnabled();
     expect(screen.queryByText(alreadyScheduled(strings.VEGETATION_MONITORING, '2026-07-14'))).not.toBeInTheDocument();
+  });
+
+  it('disables every monitoring type when the planting site has no plantings', () => {
+    renderSelector('Monitoring', {}, false);
+
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).toBeDisabled();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).not.toBeChecked();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE)).toBeDisabled();
+    expect(screen.getAllByText(strings.SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS)).toHaveLength(2);
   });
 
   it('reports the monitoring type the user picks', async () => {

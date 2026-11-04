@@ -10,12 +10,13 @@ import {
 } from 'src/queries/generated/plantingSites';
 import { PlantingSite } from 'src/types/Tracking';
 
-import { MONITORING_TYPES, MonitoringType } from './monitoringTypes';
+import { MonitoringType } from './monitoringTypes';
 
 /** Start dates of the upcoming observations that block scheduling another one of the same type. */
 export type UpcomingObservationStartDates = Partial<Record<MonitoringType, string>>;
 
 export type ObservablePlantingSite = PlantingSite & {
+  hasPlantings: boolean;
   upcomingObservationStartDates: UpcomingObservationStartDates;
 };
 
@@ -61,19 +62,16 @@ const useObservablePlantingSites = (): ObservablePlantingSite[] => {
       return [];
     }
     return plantingSites.flatMap((site) => {
-      if (!site.strata?.length) {
-        return [];
-      }
       const sitePlants = allSitesReportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
-      if (!hasSubstratumPlantings(sitePlants)) {
-        return [];
-      }
+      const siteHasPlantings = hasSubstratumPlantings(sitePlants);
       const siteUpcomingObservations = upcomingObservations.filter(
         (observation) => observation.plantingSiteId === site.id
       );
 
       if (!biomassSchedulingEnabled) {
-        return siteUpcomingObservations.length > 0 ? [] : [{ ...site, upcomingObservationStartDates: {} }];
+        return !site.strata?.length || !siteHasPlantings || siteUpcomingObservations.length > 0
+          ? []
+          : [{ ...site, hasPlantings: true, upcomingObservationStartDates: {} }];
       }
 
       const upcomingObservationStartDates: UpcomingObservationStartDates = {};
@@ -84,8 +82,7 @@ const useObservablePlantingSites = (): ObservablePlantingSite[] => {
         }
       });
 
-      const allTypesBlocked = MONITORING_TYPES.every((type) => upcomingObservationStartDates[type] !== undefined);
-      return allTypesBlocked ? [] : [{ ...site, upcomingObservationStartDates }];
+      return [{ ...site, hasPlantings: siteHasPlantings, upcomingObservationStartDates }];
     });
   }, [plantingSites, allSitesReportedPlants, biomassSchedulingEnabled, upcomingObservations]);
 
