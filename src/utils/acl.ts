@@ -204,21 +204,16 @@ const isAllowedUpdateReportsTargets: PermissionCheckFn<UpdateReportsTargetsMetad
   return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
 };
 
-/**
- * Function related to updating observations, which the server restricts to super admins and members
- * of the observation's organization. Mirrors the server's `canUpdateObservation` check so that
- * console users without org membership aren't offered actions that will fail.
- */
 type UpdateObservationMetadata = {
+  organizationId: number | undefined;
   organizations: Organization[] | undefined;
-  project: ProjectPayload | undefined;
 };
 const isAllowedUpdateObservation: PermissionCheckFn<UpdateObservationMetadata> = (
   user: User,
   _: GlobalRolePermission,
   metadata?: UpdateObservationMetadata
 ): boolean => {
-  const organization = metadata?.organizations?.find((org) => org.id === metadata?.project?.organizationId);
+  const organization = metadata?.organizations?.find((org) => org.id === metadata?.organizationId);
   return isSuperAdmin(user) || isMember(organization);
 };
 

@@ -37,6 +37,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
+import useCanUpdateActivityObservation from './useCanUpdateActivityObservation';
 
 type ActivityMediaItemProps = {
   activity: TypedActivity;
@@ -358,8 +359,12 @@ const ActivityDetailView = ({
 
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
 
+  const { canUpdate: canUpdateObservation } = useCanUpdateActivityObservation(
+    activity.payload.observation?.observationId
+  );
+
   const { data: projectData } = useGetProjectQuery(projectId, {
-    skip: !isObsActivity,
+    skip: !isAcceleratorRoute || !isObsActivity,
   });
 
   const hasOrgAccess = useMemo(
@@ -370,15 +375,6 @@ const ActivityDetailView = ({
         isAcceleratorRoute,
       }),
     [isAcceleratorRoute, isAllowed, organizations, projectData?.project]
-  );
-
-  const canUpdateObservation = useMemo(
-    () =>
-      isAllowed('UPDATE_OBSERVATION', {
-        organizations,
-        project: projectData?.project,
-      }),
-    [isAllowed, organizations, projectData?.project]
   );
 
   // Funder activities include observation stats directly on the payload (no observationId or API call needed)

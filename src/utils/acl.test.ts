@@ -173,19 +173,22 @@ describe('isAllowed', () => {
     const superAdmin: User = { ...tfExpert, globalRoles: [GLOBAL_ROLE_SUPER_ADMIN] };
     const org = (id: number): Organization =>
       buildOrganization({ id, name: `Org ${id}`, role: undefined, facilities: undefined });
-    const project = (organizationId: number) => ({ id: 1, name: 'Project', organizationId }) as ProjectPayload;
 
     // Super admins can update any observation, even outside their orgs
-    expect(isAllowed(superAdmin, 'UPDATE_OBSERVATION', { organizations: [], project: project(1) })).toBeTruthy();
+    expect(isAllowed(superAdmin, 'UPDATE_OBSERVATION', { organizationId: 1, organizations: [] })).toBeTruthy();
 
-    // TF Experts can only update observations in orgs they belong to
+    // TF Experts can only update observations owned by an org they belong to
     expect(
-      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizations: [org(1), org(2)], project: project(2) })
+      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizationId: 2, organizations: [org(1), org(2)] })
     ).toBeTruthy();
     expect(
-      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizations: [org(1), org(2)], project: project(3) })
+      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizationId: 3, organizations: [org(1), org(2)] })
     ).toBeFalsy();
-    expect(isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizations: [org(1)], project: undefined })).toBeFalsy();
+
+    // An unresolved owning organization must not fall back to any org the user happens to be in
+    expect(
+      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizationId: undefined, organizations: [org(1)] })
+    ).toBeFalsy();
   });
 
   /**
