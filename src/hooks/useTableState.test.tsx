@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
-import { act, screen } from '@testing-library/react';
+import { act, renderHook, screen } from '@testing-library/react';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 
 import strings from 'src/strings';
@@ -116,5 +116,78 @@ describe('persisted table page', () => {
 
     expect(await screen.findByRole('cell', { name: 'Item 1' })).toBeVisible();
     expect(screen.queryByRole('cell', { name: 'Item 11' })).not.toBeInTheDocument();
+  });
+});
+
+describe('persisted column pinning and global filter', () => {
+  const pinningKey = `${storageKey}-columnPinning`;
+  const globalFilterKey = `${storageKey}-globalFilter`;
+  const defaultColumnPinning = { left: ['name'] };
+  const clearKeys = () => {
+    localStorage.removeItem(pinningKey);
+    localStorage.removeItem(globalFilterKey);
+  };
+  const renderTableState = (options: Parameters<typeof useTableState>[1]) =>
+    renderHook(() => useTableState({ storageKey, stableId: storageKey }, { defaultColumnPinning, ...options }));
+
+  beforeEach(clearKeys);
+  afterEach(clearKeys);
+
+  it('ignores and does not write saved values when persistence is off', () => {
+    localStorage.setItem(pinningKey, JSON.stringify({ left: ['group'] }));
+    localStorage.setItem(globalFilterKey, 'saved');
+    const { result } = renderTableState({});
+
+    expect(result.current.columnPinning).toEqual(defaultColumnPinning);
+    expect(result.current.globalFilter).toBe('');
+    expect(result.current.showGlobalFilter).toBe(false);
+
+    act(() => {
+      result.current.setColumnPinning({ right: ['name'] });
+      result.current.setGlobalFilter('new');
+    });
+
+    expect(localStorage.getItem(pinningKey)).toBe(JSON.stringify({ left: ['group'] }));
+    expect(localStorage.getItem(globalFilterKey)).toBe('saved');
+  });
+
+  it('restores saved column pinning', () => {
+    localStorage.setItem(pinningKey, JSON.stringify({ right: ['group'] }));
+    const { result } = renderTableState({ persistColumnPinning: true });
+
+    expect(result.current.columnPinning).toEqual({ right: ['group'] });
+  });
+
+  it('falls back to the default pinning when nothing is saved', () => {
+    const { result } = renderTableState({ persistColumnPinning: true });
+
+    expect(result.current.columnPinning).toEqual(defaultColumnPinning);
+  });
+
+  it('falls back to the default pinning when saved pinning is invalid JSON', () => {
+    localStorage.setItem(pinningKey, '{not json');
+    const { result } = renderTableState({ persistColumnPinning: true });
+
+    expect(result.current.columnPinning).toEqual(defaultColumnPinning);
+  });
+
+  it('saves column pinning changes', () => {
+    const { result } = renderTableState({ persistColumnPinning: true });
+
+    act(() => result.current.setColumnPinning({ left: ['group'], right: ['name'] }));
+
+    expect(JSON.parse(localStorage.getItem(pinningKey) ?? '')).toEqual({ left: ['group'], right: ['name'] });
+  });
+
+  it('restores and saves the global filter', () => {
+    localStorage.setItem(globalFilterKey, 'saved');
+    const { result } = renderTableState({ persistGlobalFilter: true });
+
+    expect(result.current.globalFilter).toBe('saved');
+    expect(result.current.showGlobalFilter).toBe(true);
+
+    act(() => result.current.setGlobalFilter('updated'));
+
+    expect(localStorage.getItem(globalFilterKey)).toBe('updated');
   });
 });

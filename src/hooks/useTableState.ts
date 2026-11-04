@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import {
   MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
+  MRT_ColumnPinningState,
   MRT_DensityState,
   MRT_PaginationState,
   MRT_SortingState,
@@ -14,10 +15,13 @@ import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
 
 type UseTableStateOptions = {
   defaultColumnOrder?: MRT_ColumnOrderState;
+  defaultColumnPinning?: MRT_ColumnPinningState;
   defaultColumnVisibility?: MRT_VisibilityState;
   defaultSorting?: MRT_SortingState;
   persistedMultiSelectColumnIds?: string[];
+  persistColumnPinning?: boolean;
   persistFilters?: boolean;
+  persistGlobalFilter?: boolean;
   persistSorting?: boolean;
   persistPageIndex?: {
     isLoading?: boolean;
@@ -48,10 +52,13 @@ const mergeColumnOrder = (
 const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateOptions) => {
   const {
     defaultColumnOrder = [],
+    defaultColumnPinning = {},
     defaultColumnVisibility = {},
     defaultSorting = [],
     persistedMultiSelectColumnIds = [],
+    persistColumnPinning = false,
     persistFilters = false,
+    persistGlobalFilter = false,
     persistSorting = false,
     persistPageIndex,
   } = options ?? {};
@@ -94,6 +101,29 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     }
   });
 
+  const [columnPinning, setColumnPinning] = useState<MRT_ColumnPinningState>(() => {
+    if (!persistColumnPinning) {
+      return defaultColumnPinning;
+    }
+    try {
+      const saved = localStorage.getItem(`${storageKey}-columnPinning`);
+      return saved ? (JSON.parse(saved) as MRT_ColumnPinningState) : defaultColumnPinning;
+    } catch {
+      return defaultColumnPinning;
+    }
+  });
+
+  const [globalFilter, setGlobalFilter] = useState<string>(() => {
+    if (!persistGlobalFilter) {
+      return '';
+    }
+    try {
+      return localStorage.getItem(`${storageKey}-globalFilter`) ?? '';
+    } catch {
+      return '';
+    }
+  });
+
   const [density, setDensity] = useState<MRT_DensityState>(() => {
     try {
       return (localStorage.getItem(`${storageKey}-density`) as MRT_DensityState) || 'comfortable';
@@ -133,7 +163,7 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     return false;
   });
 
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+  const [showGlobalFilter, setShowGlobalFilter] = useState(() => !!globalFilter);
 
   const [pagination, setPagination] = useState<MRT_PaginationState>(() => {
     try {
@@ -226,6 +256,28 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
   }, [columnFilters, persistFilters, storageKey]);
 
   useEffect(() => {
+    if (!persistColumnPinning) {
+      return;
+    }
+    try {
+      localStorage.setItem(`${storageKey}-columnPinning`, JSON.stringify(columnPinning));
+    } catch {
+      // ignore
+    }
+  }, [columnPinning, persistColumnPinning, storageKey]);
+
+  useEffect(() => {
+    if (!persistGlobalFilter) {
+      return;
+    }
+    try {
+      localStorage.setItem(`${storageKey}-globalFilter`, globalFilter ?? '');
+    } catch {
+      // ignore
+    }
+  }, [globalFilter, persistGlobalFilter, storageKey]);
+
+  useEffect(() => {
     if (!persistSorting) {
       return;
     }
@@ -252,15 +304,19 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     autoResetPageIndex: pageIndexStorageKey ? !isRestoringPageIndex : undefined,
     columnFilters,
     columnOrder,
+    columnPinning,
     columnVisibility,
     density,
+    globalFilter,
     isLoadingPage,
     onDensityChange,
     onPaginationChange,
     pagination,
     setColumnFilters,
     setColumnOrder,
+    setColumnPinning,
     setColumnVisibility,
+    setGlobalFilter,
     setShowColumnFilters,
     setShowGlobalFilter,
     setSorting,
