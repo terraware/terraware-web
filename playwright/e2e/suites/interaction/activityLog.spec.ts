@@ -1,10 +1,19 @@
-import { Locator, Page, expect, test } from '@playwright/test';
+import { Page, expect, test } from '@playwright/test';
 
 import {
   TEST_ACTIVITY_PREFIX,
+  backToList,
+  badge,
   deleteTestActivities,
+  fillDescription,
   getProjectDealName,
+  openActivity,
+  saveActivity,
+  saveNewActivity,
   seedActivity,
+  selectActivityLogProject,
+  selectDropdownOption,
+  selectWithLabel,
 } from '../../utils/activityUtils';
 import { navigateToAcceleratorActivityLog } from '../../utils/navigation';
 import { changeToSuperAdmin } from '../../utils/userUtils';
@@ -13,56 +22,6 @@ import { exactOptions } from '../../utils/utils';
 const PHASE_0_PROJECT_ID = 2;
 const PHASE_1_PROJECT_ID = 3;
 const PHASE_2_PROJECT_ID = 4;
-
-const selectWithLabel = (page: Page, label: string): Locator =>
-  page.locator('.select').filter({ has: page.locator('label', { hasText: label }) });
-
-const selectDropdownOption = async (select: Locator, option: string) => {
-  await select.locator('input').click();
-  await select.locator('.options-container').getByText(option, exactOptions).click();
-};
-
-const selectDealName = async (page: Page, dealName: string) => {
-  const projectSelect = page.locator('.select').filter({ has: page.locator('#projectId') });
-  await selectDropdownOption(projectSelect, dealName);
-  await expect(projectSelect.locator('input')).toHaveValue(dealName);
-};
-
-// The Textfield id lands on the label's htmlFor but not on the rendered textarea, so match the label instead.
-const fillDescription = async (page: Page, description: string) => {
-  const field = page.locator('.textfield').filter({ has: page.locator('label', { hasText: 'Description' }) });
-  await field.locator('textarea').fill(description);
-};
-
-const saveActivity = async (page: Page) => {
-  await page.locator('#saveActivity').click();
-  await expect(page.locator('#saveActivity')).toBeHidden();
-};
-
-const saveNewActivity = async (page: Page): Promise<number> => {
-  const [response] = await Promise.all([
-    page.waitForResponse(
-      (res) => res.request().method() === 'POST' && res.url().includes('/api/v1/accelerator/activities/admin')
-    ),
-    page.locator('#saveActivity').click(),
-  ]);
-
-  const { activity } = (await response.json()) as { activity: { id: number } };
-  await expect(page.locator('#saveActivity')).toBeHidden();
-  return activity.id;
-};
-
-const openActivity = async (page: Page, activityId: number) => {
-  await page.locator(`#activity-log-item-${activityId}`).click();
-  await expect(page.locator('#crumb_0')).toBeVisible();
-};
-
-const backToList = async (page: Page) => {
-  await page.locator('#crumb_0').click();
-  await expect(page.locator('#crumb_0')).toBeHidden();
-};
-
-const badge = (page: Page, label: string): Locator => page.getByText(label, exactOptions);
 
 let createdActivityIds: number[] = [];
 let projectUnderTest = PHASE_0_PROJECT_ID;
@@ -87,7 +46,7 @@ test.describe('ActivityLogTests', () => {
     const dealName = await useProject(page, PHASE_0_PROJECT_ID);
 
     await navigateToAcceleratorActivityLog(page);
-    await selectDealName(page, dealName);
+    await selectActivityLogProject(page, dealName);
     await expect(page.getByText('This project has no Activities')).toBeVisible();
 
     await page.getByRole('button', { name: 'Add Activity' }).click();
@@ -145,7 +104,7 @@ test.describe('ActivityLogTests', () => {
     createdActivityIds.push(activity.id);
 
     await navigateToAcceleratorActivityLog(page);
-    await selectDealName(page, dealName);
+    await selectActivityLogProject(page, dealName);
 
     const listItem = page.locator(`#activity-log-item-${activity.id}`);
     await expect(listItem.getByText('Not Verified', exactOptions)).toBeVisible();
@@ -204,7 +163,7 @@ test.describe('ActivityLogTests', () => {
     createdActivityIds.push(activity.id);
 
     await navigateToAcceleratorActivityLog(page);
-    await selectDealName(page, dealName);
+    await selectActivityLogProject(page, dealName);
     await expect(page.locator(`#activity-log-item-${activity.id}`)).toBeVisible();
 
     await page.locator('#previewHighlights').click();
