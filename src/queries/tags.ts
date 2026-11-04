@@ -68,6 +68,7 @@ export enum QueryTagTypes {
   Projects = 'Projects',
   PublishedAcceleratorReport = 'PublishedAcceleratorReport',
   PublishedAcceleratorReportMedia = 'PublishedAcceleratorReportMedia',
+  SavedTableViews = 'SavedTableViews',
   SeedbankSummary = 'SeedbankSummary',
   SeedFundReportMedia = 'SeedFundReportMedia',
   SeedFundReports = 'SeedFundReports',
