@@ -53,7 +53,6 @@ export type SeededActivity = {
   date: string;
   description: string;
   id: number;
-  isHighlight: boolean;
   projectId: number;
   type: ActivityType;
 };
@@ -81,19 +80,18 @@ export const seedActivity = async (
     type,
   });
 
-  return { date, description: activityDescription, id: activity.id, isHighlight, projectId, type };
+  return { date, description: activityDescription, id: activity.id, projectId, type };
 };
 
-export const verifyAndPublishActivity = async (request: APIRequestContext, activity: SeededActivity): Promise<void> => {
-  const { date, description, id, isHighlight, type } = activity;
-  await putJson(request, `/api/v1/accelerator/activities/admin/${id}`, {
-    date,
-    description,
-    isHighlight,
-    status: 'Verified',
-    type,
-  });
-  await postJson(request, `/api/v1/accelerator/activities/admin/${id}/publish`);
+export const verifyAndPublishActivity = async (request: APIRequestContext, activityId: number): Promise<void> => {
+  const url = `/api/v1/accelerator/activities/admin/${activityId}`;
+  const { activity } = await getJson<{
+    activity: { date: string; description?: string; isHighlight: boolean; type: ActivityType };
+  }>(request, url);
+  const { date, description, isHighlight, type } = activity;
+
+  await putJson(request, url, { date, description, isHighlight, status: 'Verified', type });
+  await postJson(request, `${url}/publish`);
 };
 
 export const deleteActivities = async (request: APIRequestContext, activityIds: number[]): Promise<void> => {
