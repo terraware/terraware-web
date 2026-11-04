@@ -3,7 +3,15 @@ import { useEffect, useMemo, useState } from 'react';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useOrganization } from 'src/providers';
 import { useLazyListObservationsQuery } from 'src/queries/generated/observations';
-import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
+import {
+  PlantingSiteReportedPlantsPayload,
+  useLazyListPlantingSiteReportedPlantsQuery,
+} from 'src/queries/generated/plantingSites';
+
+// The server only lets an observation be scheduled when the site has plantings assigned to a
+// substratum, so a site whose plants are all recorded at the site level doesn't qualify.
+const hasSubstratumPlantings = (sitePlants?: PlantingSiteReportedPlantsPayload) =>
+  sitePlants?.strata.some((stratum) => stratum.substrata.some((substratum) => substratum.totalPlants > 0)) === true;
 
 const useObservablePlantingSites = () => {
   const { selectedOrganization } = useOrganization();
@@ -45,7 +53,7 @@ const useObservablePlantingSites = () => {
         return false;
       }
       const sitePlants = allSitesReportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
-      if (!sitePlants?.totalPlants) {
+      if (!hasSubstratumPlantings(sitePlants)) {
         return false;
       }
       const siteUpcomingObservations = upcomingObservations.filter(
