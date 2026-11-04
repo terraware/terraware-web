@@ -9,9 +9,8 @@ export type ProjectsWithVariablesSearchResult = {
   phase?: string;
   application_id?: number;
   country_name: string;
-  acceleratorDetails: {
-    'confirmedReforestableLand(raw)': number;
-  };
+  acceleratorDetails_dealName?: string;
+  'acceleratorDetails_confirmedReforestableLand(raw)'?: number;
   internalUsers: {
     user_firstName: string;
     user_lastName: string;
