@@ -20,7 +20,6 @@ import {
   MRT_Cell,
   MRT_Column,
   MRT_ColumnDef,
-  MRT_ColumnFiltersState,
   MRT_Row,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -36,6 +35,7 @@ import Dropdown from 'src/components/common/Dropdown';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
 import { useListVariablesQuery } from 'src/queries/generated/documentProducerVariables';
@@ -55,19 +55,11 @@ import {
   VariableValueSelectValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
-import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
 
-const STORAGE_KEYS = {
-  SELECTED_COLUMNS: `${TABLES.matrixView.storageKey}_selectedColumns`,
-  COLUMN_ORDER: `${TABLES.matrixView.storageKey}_columnOrder`,
-  COLUMN_VISIBILITY: `${TABLES.matrixView.storageKey}_columnVisibility`,
-  COLUMN_FILTERS: `${TABLES.matrixView.storageKey}_columnFilters`,
-  SORTING: `${TABLES.matrixView.storageKey}_sorting`,
-  COLUMN_PINNING: `${TABLES.matrixView.storageKey}_columnPinning`,
-};
+const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
 type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
 
@@ -90,59 +82,26 @@ const MatrixView = () => {
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
-  const [globalFilter, setGlobalFilter] = useState('');
-
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
-    try {
-      return normalizePersistedColumnFilters(
-        JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_FILTERS) || '[]') as MRT_ColumnFiltersState
-      );
-    } catch {
-      return [];
-    }
+  const {
+    columnFilters,
+    columnOrder,
+    columnPinning,
+    columnVisibility: savedColumnVisibility,
+    globalFilter,
+    setColumnFilters,
+    setColumnOrder,
+    setColumnPinning,
+    setColumnVisibility,
+    setGlobalFilter,
+    setSorting,
+    sorting,
+  } = useTableState(TABLES.matrixView, {
+    defaultColumnPinning: DEFAULT_COLUMN_PINNING,
+    persistColumnPinning: true,
+    persistFilters: true,
+    persistGlobalFilter: true,
+    persistSorting: true,
   });
-
-  const [sorting, setSorting] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.SORTING) || '[]');
-    } catch {
-      return [];
-    }
-  });
-
-  const [columnPinning, setColumnPinning] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_PINNING) || '{"left": ["projectName"], "right": []}');
-    } catch {
-      return { left: ['projectName'], right: [] };
-    }
-  });
-
-  const [columnOrder, setColumnOrder] = useState(() => {
-    try {
-      const savedOrder = JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_ORDER) || '[]');
-      return Array.isArray(savedOrder) ? savedOrder : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // Save to localStorage when state changes
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.COLUMN_FILTERS, columnFilters);
-  }, [columnFilters]);
-
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.SORTING, sorting);
-  }, [sorting]);
-
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.COLUMN_PINNING, columnPinning);
-  }, [columnPinning]);
-
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.COLUMN_ORDER, columnOrder);
-  }, [columnOrder]);
 
   const uniqueVariableIds = useMemo(
     () =>
@@ -154,6 +113,21 @@ const MatrixView = () => {
         )
       ),
     [allVariables]
+  );
+
+  const columnVisibility = useMemo(
+    () => ({ ...Object.fromEntries(uniqueVariableIds.map((id) => [id, false])), ...savedColumnVisibility }),
+    [savedColumnVisibility, uniqueVariableIds]
+  );
+
+  const visibleVariableIds = useMemo(
+    () => uniqueVariableIds.filter((id) => columnVisibility[id]),
+    [columnVisibility, uniqueVariableIds]
+  );
+
+  const visibleColumnFilters = useMemo(
+    () => columnFilters.filter((filter) => columnVisibility[filter.id] !== false),
+    [columnFilters, columnVisibility]
   );
 
   const variableNameMap = useMemo(() => {
@@ -842,19 +816,15 @@ const MatrixView = () => {
 
   const columnFiltersAreEmpty = useMemo(
     () =>
-      columnFilters.length === 0 ||
-      columnFilters.every(
+      visibleColumnFilters.length === 0 ||
+      visibleColumnFilters.every(
         (filter) =>
           isEmptyFilterValue(filter.value) || (Array.isArray(filter.value) && filter.value.every(isEmptyFilterValue))
       ),
-    [columnFilters]
+    [visibleColumnFilters]
   );
 
   const onCurrentViewChange = useCallback((value: string) => setCurrentView(value as ViewOption), []);
-
-  const saveToLocalStorage = (key: string, value: any) => {
-    localStorage.setItem(key, JSON.stringify(value));
-  };
 
   const dataForMaterialReactTable = useMaterialReactTable({
     columns: columnsMRT,
@@ -909,10 +879,11 @@ const MatrixView = () => {
       );
     },
     state: {
-      columnFilters,
+      columnFilters: visibleColumnFilters,
       sorting,
       columnPinning,
       columnOrder,
+      columnVisibility,
       globalFilter,
       showGlobalFilter: true,
     },
@@ -921,6 +892,7 @@ const MatrixView = () => {
     onSortingChange: setSorting,
     onColumnPinningChange: setColumnPinning,
     onColumnOrderChange: setColumnOrder,
+    onColumnVisibilityChange: setColumnVisibility,
     muiTableBodyProps: {
       sx: {
         '& tr:nth-of-type(odd) > td': {
@@ -979,11 +951,6 @@ const MatrixView = () => {
   });
 
   const reloadTable = useCallback(() => {
-    const visibleColumnIds = dataForMaterialReactTable
-      .getVisibleFlatColumns()
-      .filter((col) => !isNaN(Number(col.id)))
-      .map((col) => col.id);
-
     let search: SearchNodePayload | undefined;
     if (currentView === 'noFilter') {
       search = {
@@ -1085,7 +1052,7 @@ const MatrixView = () => {
             field: 'stableId',
             operation: 'field',
             type: 'Exact',
-            values: visibleColumnIds.length > 0 ? visibleColumnIds : [''],
+            values: visibleVariableIds.length > 0 ? visibleVariableIds : [''],
           },
         },
         {
@@ -1098,14 +1065,7 @@ const MatrixView = () => {
         },
       ],
     });
-  }, [
-    searchProjectsWithVariables,
-    dataForMaterialReactTable,
-    // disable exhaustive-deps because of the complex expression
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    dataForMaterialReactTable?.getState()?.columnVisibility,
-    currentView,
-  ]);
+  }, [currentView, searchProjectsWithVariables, visibleVariableIds]);
 
   useEffect(() => {
     if (updateVariableValuesResult.isSuccess) {
@@ -1121,88 +1081,37 @@ const MatrixView = () => {
     void reloadTable();
   }, [reloadTable]);
 
-  useEffect(() => {
-    const loadSavedColumnState = () => {
-      const savedColumns = localStorage.getItem('selectedColumns');
-      if (savedColumns) {
-        const parsedColumns = JSON.parse(savedColumns);
-        if (Array.isArray(parsedColumns) && parsedColumns.length > 0) {
-          // Apply saved column visibility
-          const columnVisibility: Record<string, boolean> = {};
-
-          // Hide all columns first
-          uniqueVariableIds?.forEach((id) => {
-            columnVisibility[id] = false;
-          });
-
-          // Show only saved columns
-          parsedColumns.forEach((id) => {
-            columnVisibility[id] = true;
-          });
-
-          dataForMaterialReactTable.setColumnVisibility(columnVisibility);
-        }
-      } else {
-        if (uniqueVariableIds && dataForMaterialReactTable) {
-          const columnVisibility = uniqueVariableIds.reduce((acc: Record<string, boolean>, id) => {
-            acc[id] = false;
-            return acc;
-          }, {});
-
-          dataForMaterialReactTable.setColumnVisibility(columnVisibility);
-        }
-      }
-    };
-
-    // Load after table and data are ready
-    if (dataForMaterialReactTable && uniqueVariableIds) {
-      loadSavedColumnState();
-    }
-  }, [dataForMaterialReactTable, uniqueVariableIds]);
-
   const onCloseColumnsModalHandler = useCallback(() => {
     setShowColumnsModal(false);
   }, []);
 
   const onColumnsSelected = useCallback(
     (columns: string[]) => {
-      const columnVisibility: Record<string, boolean> = {};
+      const selectedVisibility: Record<string, boolean> = {};
 
       baseColumns().forEach((col) => {
         if (col.id !== 'projectName') {
-          columnVisibility[col.id] = false;
+          selectedVisibility[col.id] = false;
         }
       });
 
       uniqueVariableIds?.forEach((id) => {
-        columnVisibility[id] = false;
+        selectedVisibility[id] = false;
       });
 
       columns.forEach((id) => {
-        columnVisibility[id] = true;
+        selectedVisibility[id] = true;
       });
 
-      // Get all hidden column IDs
-      const hiddenColumnIds = Object.entries(columnVisibility)
+      const hiddenColumnIds = Object.entries(selectedVisibility)
         .filter(([, isVisible]) => !isVisible)
         .map(([columnId]) => columnId);
 
-      // Remove filters for all hidden columns in one operation
-      dataForMaterialReactTable.setColumnFilters((prev) =>
-        prev.filter((filter) => !hiddenColumnIds.includes(filter.id))
-      );
-
-      dataForMaterialReactTable.setColumnVisibility((prev) => ({
-        ...prev,
-        ...columnVisibility,
-      }));
+      setColumnFilters((prev) => prev.filter((filter) => !hiddenColumnIds.includes(filter.id)));
+      setColumnVisibility((prev) => ({ ...prev, ...selectedVisibility }));
       setColumnOrder(columns);
-
-      // Save to localStorage
-      localStorage.setItem('selectedColumns', JSON.stringify(columns));
-      void reloadTable();
     },
-    [dataForMaterialReactTable, reloadTable, uniqueVariableIds]
+    [setColumnFilters, setColumnOrder, setColumnVisibility, uniqueVariableIds]
   );
 
   return (

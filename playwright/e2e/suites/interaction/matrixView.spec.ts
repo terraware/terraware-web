@@ -221,9 +221,13 @@ test.describe('MatrixViewTests', () => {
     await expect(page).toHaveURL(/\/accelerator\/projects\/3$/);
   });
 
-  test('Search filters projects', async ({ page }) => {
+  test('Search filters projects and persists after reload', async ({ page }) => {
     await openMatrixView(page);
     await page.getByPlaceholder('Search').fill('Phase 1');
+    await expectDealNames(page, [PHASE_1_DEAL]);
+
+    await page.reload();
+    await expect(page.getByPlaceholder('Search')).toHaveValue('Phase 1');
     await expectDealNames(page, [PHASE_1_DEAL]);
 
     await page.getByPlaceholder('Search').clear();
@@ -238,6 +242,16 @@ test.describe('MatrixViewTests', () => {
 
     await page.reload();
     await expectDealNames(page, [PHASE_1_DEAL]);
+  });
+
+  test('Saved filters on hidden columns are ignored', async ({ page }) => {
+    await openMatrixView(page);
+    await page.evaluate(() =>
+      localStorage.setItem('matrixView_columnFilters', JSON.stringify([{ id: '1117', value: 'No match' }]))
+    );
+
+    await page.reload();
+    await expectDealNames(page, [PHASE_0_DEAL, PHASE_1_DEAL, PHASE_2_DEAL]);
   });
 
   test('Sorting persists after reload', async ({ page }) => {
