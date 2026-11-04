@@ -1,5 +1,5 @@
 import { baseApi as api } from '../baseApi';
-import { PrefixedSearch, SearchCountApiResponse } from '../generated/search';
+import { PrefixedSearch, SearchApiResponse, SearchCountApiResponse } from '../generated/search';
 import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
@@ -62,6 +62,27 @@ const injectedRtkApi = api.injectEndpoints({
       providesTags: () => [{ type: QueryTagTypes.Observation, id: 'LIST' }],
       transformResponse: (results: SearchCountApiResponse) => results.count,
     }),
+
+    searchObservationOrganization: build.query<number | undefined, number>({
+      query: (observationId) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'observations',
+          fields: ['plantingSite_organization_id'],
+          search: {
+            operation: 'field',
+            field: 'id',
+            values: [`${observationId}`],
+          },
+        },
+      }),
+      providesTags: (_result, _error, observationId) => [{ type: QueryTagTypes.Observation, id: observationId }],
+      transformResponse: (response: SearchApiResponse) => {
+        const organizationId = response.results[0]?.plantingSite_organization_id;
+        return organizationId === undefined ? undefined : Number(organizationId);
+      },
+    }),
   }),
 });
 
@@ -73,4 +94,4 @@ type CountObservationsApiArgs = {
   state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
 };
 
-export const { useLazyCountObservationsQuery } = injectedRtkApi;
+export const { useLazyCountObservationsQuery, useLazySearchObservationOrganizationQuery } = injectedRtkApi;

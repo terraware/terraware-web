@@ -5,20 +5,20 @@ import { screen, waitFor } from '@testing-library/react';
 import ActivityDetailView from 'src/components/ActivityLog/ActivityDetailView';
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import strings from 'src/strings';
-import { buildOrganization, buildUser, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
+import { buildOrganization, buildUser, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
 import { AdminActivityPayload } from 'src/types/Activity';
 
 const PROJECT_ID = 7;
 /** The organization the route's project belongs to, which is NOT what authorizes the edit. */
 const ROUTE_PROJECT_ORG_ID = 1;
-/** The organization that owns the observation, reached through its planting site. */
+/** The organization that owns the observation. */
 const OBSERVATION_ORG_ID = 42;
 const OBSERVATION_ID = 99;
 const PLANTING_SITE_ID = 55;
 
 const PROJECT_URL = '/api/v1/projects/:projectId';
 const OBSERVATION_RESULTS_URL = '/api/v1/tracking/observations/:observationId/results';
-const PLANTING_SITE_URL = '/api/v1/tracking/sites/:plantingSiteId';
+const SEARCH_URL = '/api/v1/search';
 
 const buildAdminActivity = (overrides: Partial<AdminActivityPayload> = {}): TypedActivity => ({
   type: 'admin',
@@ -57,6 +57,15 @@ const mockObservationResults = () => {
   });
 };
 
+/**
+ * Search visibility limits planting sites to organizations the user belongs to, so a non-member
+ * gets an empty result set rather than another organization's ID.
+ */
+const mockObservationOrgSearch = (organizationId?: number) =>
+  mockPost(SEARCH_URL, {
+    results: organizationId === undefined ? [] : [{ plantingSite_organization_id: `${organizationId}` }],
+  });
+
 /** The route's project always resolves to an org the user is in, so it can't be what grants access. */
 const mockRouteProject = () =>
   mockGet(PROJECT_URL, { project: { id: PROJECT_ID, name: 'Test Project', organizationId: ROUTE_PROJECT_ORG_ID } });
@@ -89,22 +98,17 @@ describe('ActivityDetailView', () => {
       // so the button has to stay disabled even though TF Experts may edit activities generally.
       mockRouteProject();
       mockObservationResults();
-      const siteRequests = captureRequests('get', PLANTING_SITE_URL, {
-        site: { id: PLANTING_SITE_ID, name: 'Site', organizationId: OBSERVATION_ORG_ID, adHocPlots: [] },
-      });
+      mockObservationOrgSearch(OBSERVATION_ORG_ID);
 
       renderDetailView(observationActivity, asTfExpertIn(ROUTE_PROJECT_ORG_ID));
 
-      await waitFor(() => expect(siteRequests).toHaveLength(1));
       await waitFor(() => expect(editButton()).toBeDisabled());
     });
 
     it('lets a TF Expert who is a member of the observation organization edit it', async () => {
       mockRouteProject();
       mockObservationResults();
-      mockGet(PLANTING_SITE_URL, {
-        site: { id: PLANTING_SITE_ID, name: 'Site', organizationId: OBSERVATION_ORG_ID, adHocPlots: [] },
-      });
+      mockObservationOrgSearch(OBSERVATION_ORG_ID);
 
       renderDetailView(observationActivity, asTfExpertIn(OBSERVATION_ORG_ID));
 
@@ -114,9 +118,7 @@ describe('ActivityDetailView', () => {
     it('lets a super admin edit an observation owned by an organization they are not in', async () => {
       mockRouteProject();
       mockObservationResults();
-      mockGet(PLANTING_SITE_URL, {
-        site: { id: PLANTING_SITE_ID, name: 'Site', organizationId: OBSERVATION_ORG_ID, adHocPlots: [] },
-      });
+      mockObservationOrgSearch(OBSERVATION_ORG_ID);
 
       renderDetailView(observationActivity, {
         currentUser: { user: buildUser({ globalRoles: ['Super-Admin'] }) },

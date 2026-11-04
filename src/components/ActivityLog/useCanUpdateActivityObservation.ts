@@ -1,8 +1,7 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { useOrganization, useUser } from 'src/providers/hooks';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useLazySearchObservationOrganizationQuery } from 'src/queries/search/observations';
 
 type CanUpdateActivityObservation = {
   canUpdate: boolean;
@@ -13,26 +12,21 @@ const useCanUpdateActivityObservation = (observationId?: number): CanUpdateActiv
   const { isAllowed } = useUser();
   const { organizations } = useOrganization();
 
-  const { data: observationResults, isError: isObservationError } = useGetObservationResultsQuery(
-    { observationId: observationId as number },
-    { skip: observationId === undefined }
-  );
+  const [searchObservationOrganization, { data: organizationId, isSuccess, isError }] =
+    useLazySearchObservationOrganizationQuery();
 
-  const plantingSiteId = observationResults?.observation.plantingSiteId;
-
-  const { data: plantingSiteData, isError: isPlantingSiteError } = useGetPlantingSiteQuery(
-    { id: plantingSiteId as number, includeZones: false, simplified: true },
-    { skip: plantingSiteId === undefined }
-  );
-
-  const organizationId = plantingSiteData?.site.organizationId;
+  useEffect(() => {
+    if (observationId !== undefined) {
+      void searchObservationOrganization(observationId, true);
+    }
+  }, [observationId, searchObservationOrganization]);
 
   return useMemo(
     () => ({
       canUpdate: isAllowed('UPDATE_OBSERVATION', { organizationId, organizations }),
-      isResolved: organizationId !== undefined || isObservationError || isPlantingSiteError,
+      isResolved: isSuccess || isError,
     }),
-    [isAllowed, isObservationError, isPlantingSiteError, organizationId, organizations]
+    [isAllowed, isError, isSuccess, organizationId, organizations]
   );
 };
 
