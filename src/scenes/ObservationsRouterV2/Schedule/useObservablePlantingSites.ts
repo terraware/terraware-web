@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useOrganization } from 'src/providers';
 import { useLazyListObservationsQuery } from 'src/queries/generated/observations';
@@ -7,16 +8,27 @@ import {
   PlantingSiteReportedPlantsPayload,
   useLazyListPlantingSiteReportedPlantsQuery,
 } from 'src/queries/generated/plantingSites';
+import { PlantingSite } from 'src/types/Tracking';
+
+import { MONITORING_TYPES, MonitoringType } from './monitoringTypes';
+
+/** Start dates of the upcoming observations that block scheduling another one of the same type. */
+export type UpcomingObservationStartDates = Partial<Record<MonitoringType, string>>;
+
+export type ObservablePlantingSite = PlantingSite & {
+  upcomingObservationStartDates: UpcomingObservationStartDates;
+};
 
 // The server only lets an observation be scheduled when the site has plantings assigned to a
 // substratum, so a site whose plants are all recorded at the site level doesn't qualify.
 const hasSubstratumPlantings = (sitePlants?: PlantingSiteReportedPlantsPayload) =>
   sitePlants?.strata.some((stratum) => stratum.substrata.some((substratum) => substratum.totalPlants > 0)) === true;
 
-const useObservablePlantingSites = () => {
+const useObservablePlantingSites = (): ObservablePlantingSite[] => {
   const { selectedOrganization } = useOrganization();
   const [listObservations, listObservationsResponse] = useLazyListObservationsQuery();
   const [listSitesReportedPlants, listSitesReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const allObservations = useMemo(
@@ -44,29 +56,40 @@ const useObservablePlantingSites = () => {
     });
   }, [allObservations, now]);
 
-  const plantingSitesWithStrataAndNoUpcomingObservations = useMemo(() => {
+  const observablePlantingSites = useMemo((): ObservablePlantingSite[] => {
     if (!plantingSites || !allSitesReportedPlants || !upcomingObservations) {
       return [];
     }
-    return plantingSites.filter((site) => {
+    return plantingSites.flatMap((site) => {
       if (!site.strata?.length) {
-        return false;
+        return [];
       }
       const sitePlants = allSitesReportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
       if (!hasSubstratumPlantings(sitePlants)) {
-        return false;
+        return [];
       }
       const siteUpcomingObservations = upcomingObservations.filter(
         (observation) => observation.plantingSiteId === site.id
       );
-      if (siteUpcomingObservations.length > 0) {
-        return false;
-      }
-      return true;
-    });
-  }, [plantingSites, allSitesReportedPlants, upcomingObservations]);
 
-  return plantingSitesWithStrataAndNoUpcomingObservations;
+      if (!biomassSchedulingEnabled) {
+        return siteUpcomingObservations.length > 0 ? [] : [{ ...site, upcomingObservationStartDates: {} }];
+      }
+
+      const upcomingObservationStartDates: UpcomingObservationStartDates = {};
+      siteUpcomingObservations.forEach((observation) => {
+        const blockingStartDate = upcomingObservationStartDates[observation.type];
+        if (!blockingStartDate || observation.startDate < blockingStartDate) {
+          upcomingObservationStartDates[observation.type] = observation.startDate;
+        }
+      });
+
+      const allTypesBlocked = MONITORING_TYPES.every((type) => upcomingObservationStartDates[type] !== undefined);
+      return allTypesBlocked ? [] : [{ ...site, upcomingObservationStartDates }];
+    });
+  }, [plantingSites, allSitesReportedPlants, biomassSchedulingEnabled, upcomingObservations]);
+
+  return observablePlantingSites;
 };
 
 export default useObservablePlantingSites;
