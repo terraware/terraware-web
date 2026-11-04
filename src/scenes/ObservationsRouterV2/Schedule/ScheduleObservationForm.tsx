@@ -249,7 +249,7 @@ export default function ScheduleObservationForm({
               />
             </Grid>
 
-            {biomassSchedulingEnabled && selectedPlantingSiteId && (
+            {biomassSchedulingEnabled && observationId === undefined && selectedPlantingSiteId && (
               <Grid size={12} paddingTop={0}>
                 <MonitoringTypeSelector
                   onChange={setMonitoringType}
