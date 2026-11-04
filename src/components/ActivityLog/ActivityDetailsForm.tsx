@@ -29,6 +29,7 @@ import {
   useUpdateActivityMutation,
 } from 'src/queries/generated/activities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 import {
   ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
@@ -102,7 +103,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const userTimeZone = useUserTimeZone();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
-  const { selectedOrganization } = useOrganization();
+  const { organizations, selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { acceleratorProjects } = useAcceleratorProjects();
   const { selectedProject } = useProjects({ projectId });
@@ -151,6 +152,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { data: observationResultsData } = useGetObservationResultsQuery(
     { observationId: activity?.payload.observation?.observationId as number },
     { skip: !activity?.payload.observation?.observationId }
+  );
+
+  const { data: projectData } = useGetProjectQuery(projectId, { skip: !isObsActivity });
+
+  const canUpdateObservation = useMemo(
+    () => isAllowed('UPDATE_OBSERVATION', { organizations, project: projectData?.project }),
+    [isAllowed, organizations, projectData?.project]
   );
 
   const obsSpecies = useMemo(
@@ -503,6 +511,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [adminGetError, getError, snackbar, strings.GENERIC_ERROR]);
+
+  useEffect(() => {
+    if (isEditing && isObsActivity && projectData?.project && !canUpdateObservation) {
+      snackbar.toastError(strings.EDIT_OBSERVATION_ACTIVITY_NOT_ALLOWED);
+      navToActivityLog();
+    }
+  }, [canUpdateObservation, isEditing, isObsActivity, navToActivityLog, projectData?.project, snackbar, strings]);
 
   // reset record with fetched activity data when editing
   useEffect(() => {

@@ -359,7 +359,7 @@ const ActivityDetailView = ({
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
 
   const { data: projectData } = useGetProjectQuery(projectId, {
-    skip: !isAcceleratorRoute || !isObsActivity,
+    skip: !isObsActivity,
   });
 
   const hasOrgAccess = useMemo(
@@ -370,6 +370,15 @@ const ActivityDetailView = ({
         isAcceleratorRoute,
       }),
     [isAcceleratorRoute, isAllowed, organizations, projectData?.project]
+  );
+
+  const canUpdateObservation = useMemo(
+    () =>
+      isAllowed('UPDATE_OBSERVATION', {
+        organizations,
+        project: projectData?.project,
+      }),
+    [isAllowed, organizations, projectData?.project]
   );
 
   // Funder activities include observation stats directly on the payload (no observationId or API call needed)
@@ -542,6 +551,9 @@ const ActivityDetailView = ({
   }, [query]);
 
   const isActivityEditable = useMemo(() => {
+    if (isObsActivity && !canUpdateObservation) {
+      return false;
+    }
     if (activity.type === 'admin') {
       return true;
     } else if (activity.type === 'base') {
@@ -549,7 +561,7 @@ const ActivityDetailView = ({
     } else {
       return false;
     }
-  }, [activity]);
+  }, [activity, canUpdateObservation, isObsActivity]);
 
   const openPublishActivityModal = useCallback(() => {
     setPublishActivityModalOpened(true);

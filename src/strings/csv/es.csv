@@ -640,6 +640,7 @@ EDIT_LOCATION,Editar ubicación,f120fad8
 EDIT_MODULES,Editar módulos,43c229be
 EDIT_NOTES,Editar notas,f02400ad
 EDIT_NURSERY,Editar vivero,8813669e
+EDIT_OBSERVATION_ACTIVITY_NOT_ALLOWED,Debe ser miembro de esta organización para editar una actividad vinculada a una observación.,cc65b664
 EDIT_OBSERVATION_DATA,Editar datos de observación,49681fee
 EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922

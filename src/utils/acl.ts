@@ -55,7 +55,7 @@ type PermissionDeliverable =
 type PermissionDocuments = 'CREATE_DOCUMENTS';
 type PermissionFunder = 'READ_FUNDING_ENTITIES' | 'MANAGE_FUNDING_ENTITIES' | 'INVITE_FUNDER';
 type PermissionGlobalRole = 'READ_GLOBAL_ROLES' | 'ASSIGN_GLOBAL_ROLE_TO_USER' | 'ASSIGN_SOME_GLOBAL_ROLES';
-type PermissionObservations = 'UPDATE_PLANT_COUNTS';
+type PermissionObservations = 'UPDATE_OBSERVATION' | 'UPDATE_PLANT_COUNTS';
 type PermissionOrganization = 'CREATE_PLANTING_SITE';
 type PermissionAcceleratorProject =
   | 'READ_ACCELERATOR_PROJECT'
@@ -202,6 +202,24 @@ const isAllowedUpdateReportsTargets: PermissionCheckFn<UpdateReportsTargetsMetad
   metadata?: UpdateReportsTargetsMetadata
 ): boolean => {
   return isTFExpertOrHigher(user) || isAdmin(metadata?.organization);
+};
+
+/**
+ * Function related to updating observations, which the server restricts to super admins and members
+ * of the observation's organization. Mirrors the server's `canUpdateObservation` check so that
+ * console users without org membership aren't offered actions that will fail.
+ */
+type UpdateObservationMetadata = {
+  organizations: Organization[] | undefined;
+  project: ProjectPayload | undefined;
+};
+const isAllowedUpdateObservation: PermissionCheckFn<UpdateObservationMetadata> = (
+  user: User,
+  _: GlobalRolePermission,
+  metadata?: UpdateObservationMetadata
+): boolean => {
+  const organization = metadata?.organizations?.find((org) => org.id === metadata?.project?.organizationId);
+  return isSuperAdmin(user) || isMember(organization);
 };
 
 type UpdatePlantCounts = { organization: Organization };
@@ -370,6 +388,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_DELIVERABLE: TFExpertPlus,
   UPDATE_MATRIX_VIEW: TFExpertPlus,
   UPDATE_ACCELERATOR_PROJECT_SCORING_VOTING: TFExpertPlus,
+  UPDATE_OBSERVATION: isAllowedUpdateObservation,
   UPDATE_PLANT_COUNTS: isAllowedUpdatePlantCounts,
   UPDATE_REPORTS_SETTINGS: AcceleratorAdminPlus,
   UPDATE_REPORTS_TARGETS: isAllowedUpdateReportsTargets,

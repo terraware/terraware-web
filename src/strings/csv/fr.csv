@@ -639,6 +639,7 @@ EDIT_LOCATION,Modifier l'emplacement,f120fad8
 EDIT_MODULES,Modifier les modules,43c229be
 EDIT_NOTES,Modifier les notes,f02400ad
 EDIT_NURSERY,Modifier la pépinière,8813669e
+EDIT_OBSERVATION_ACTIVITY_NOT_ALLOWED,Vous devez être membre de cette organisation pour modifier une activité liée à une observation.,cc65b664
 EDIT_OBSERVATION_DATA,Modifier les données d'observation,49681fee
 EDIT_ORGANIZATION,Modifier l'organisation,56332548
 EDIT_PERMANENT_PLOTS,Modifier les parcelles permanentes,b78a9922
