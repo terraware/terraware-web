@@ -37,6 +37,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
+import useCanUpdateActivityObservation from './useCanUpdateActivityObservation';
 
 type ActivityMediaItemProps = {
   activity: TypedActivity;
@@ -358,6 +359,10 @@ const ActivityDetailView = ({
 
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
 
+  const { canUpdate: canUpdateObservation } = useCanUpdateActivityObservation(
+    activity.payload.observation?.observationId
+  );
+
   const { data: projectData } = useGetProjectQuery(projectId, {
     skip: !isAcceleratorRoute || !isObsActivity,
   });
@@ -542,6 +547,9 @@ const ActivityDetailView = ({
   }, [query]);
 
   const isActivityEditable = useMemo(() => {
+    if (isObsActivity && !canUpdateObservation) {
+      return false;
+    }
     if (activity.type === 'admin') {
       return true;
     } else if (activity.type === 'base') {
@@ -549,7 +557,7 @@ const ActivityDetailView = ({
     } else {
       return false;
     }
-  }, [activity]);
+  }, [activity, canUpdateObservation, isObsActivity]);
 
   const openPublishActivityModal = useCallback(() => {
     setPublishActivityModalOpened(true);

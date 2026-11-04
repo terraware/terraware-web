@@ -163,6 +163,34 @@ describe('isAllowed', () => {
     ).toBeFalsy();
   });
 
+  it('has the correct permissions for UPDATE_OBSERVATION', () => {
+    const tfExpert: User = {
+      id: 1,
+      email: 'mock@email.com',
+      globalRoles: [GLOBAL_ROLE_TF_EXPERT],
+      userType: 'Individual',
+    };
+    const superAdmin: User = { ...tfExpert, globalRoles: [GLOBAL_ROLE_SUPER_ADMIN] };
+    const org = (id: number): Organization =>
+      buildOrganization({ id, name: `Org ${id}`, role: undefined, facilities: undefined });
+
+    // Super admins can update any observation, even outside their orgs
+    expect(isAllowed(superAdmin, 'UPDATE_OBSERVATION', { organizationId: 1, organizations: [] })).toBeTruthy();
+
+    // TF Experts can only update observations owned by an org they belong to
+    expect(
+      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizationId: 2, organizations: [org(1), org(2)] })
+    ).toBeTruthy();
+    expect(
+      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizationId: 3, organizations: [org(1), org(2)] })
+    ).toBeFalsy();
+
+    // An unresolved owning organization must not fall back to any org the user happens to be in
+    expect(
+      isAllowed(tfExpert, 'UPDATE_OBSERVATION', { organizationId: undefined, organizations: [org(1)] })
+    ).toBeFalsy();
+  });
+
   /**
    * Accession rules combine an organization role with the accession's own state.
    */
