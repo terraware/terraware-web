@@ -16,6 +16,7 @@ import { Icon } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 
 export const DEFAULT_VIEW = 'default';
+const SAVE_VIEW = 'saveView';
 
 export type ViewOption = {
   label: string;
@@ -30,8 +31,10 @@ export type CurrentViewSelectProps = {
   id?: string;
   myViews?: ViewOption[];
   onChange: (value: string) => void;
+  onSave?: () => void;
   presetViews?: ViewOption[];
   selected: string;
+  showSave?: boolean;
 };
 
 const CurrentViewSelect = ({
@@ -39,15 +42,26 @@ const CurrentViewSelect = ({
   id = 'current-view',
   myViews,
   onChange,
+  onSave,
   presetViews,
   selected,
+  showSave,
 }: CurrentViewSelectProps) => {
   const { strings } = useLocalization();
   const defaultViewLabel = defaultViewLabelProp === undefined ? strings.DEFAULT : defaultViewLabelProp;
   const theme = useTheme();
   const labelId = `${id}-outlined-label`;
 
-  const handleChange = useCallback((event: SelectChangeEvent) => onChange(event.target.value), [onChange]);
+  const handleChange = useCallback(
+    (event: SelectChangeEvent) => {
+      if (showSave && event.target.value === SAVE_VIEW) {
+        onSave?.();
+      } else {
+        onChange(event.target.value);
+      }
+    },
+    [onChange, onSave, showSave]
+  );
 
   const renderLabel = (label: string, value: string) => (
     <Box display='flex' alignItems='center' justifyContent='space-between' width='100%'>
@@ -104,6 +118,25 @@ const CurrentViewSelect = ({
         )}
         {renderSection(strings.PRESET_VIEWS, sortViewsByLabel(presetViews), defaultViewLabel !== null)}
         {renderSection(strings.MY_VIEWS, myViews, defaultViewLabel !== null || !!presetViews?.length)}
+        {showSave && <Divider />}
+        {showSave && (
+          <MenuItem
+            id={`${id}-save`}
+            value={SAVE_VIEW}
+            sx={{
+              color: theme.palette.TwClrTxtSuccess,
+              '&:hover, &.Mui-focusVisible': { backgroundColor: theme.palette.TwClrBgSuccessTertiary },
+            }}
+          >
+            <Icon
+              name='plus'
+              size='small'
+              fillColor={theme.palette.TwClrIcnSuccess}
+              style={{ marginRight: theme.spacing(1), stroke: theme.palette.TwClrIcnSuccess, strokeWidth: 1 }}
+            />
+            {strings.SAVE_TABLE_NEW_VIEW}
+          </MenuItem>
+        )}
       </Select>
     </FormControl>
   );

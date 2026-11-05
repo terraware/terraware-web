@@ -7,7 +7,8 @@ export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Seeds Withdrawal Log'
-  | 'Scheduled Biomass Monitoring Observations';
+  | 'Scheduled Biomass Monitoring Observations'
+  | 'Saved Table Views';
 
 export type Feature = {
   name: FeatureName;
@@ -66,6 +67,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for scheduling biomass monitoring observations.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Saved Table Views',
+    preferenceName: 'savedTableViews',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Save table filters, sorting, and column settings as named views.'],
     disclosure: ['This is a WIP'],
   },
 ];
