@@ -25,7 +25,7 @@ export default function InventoryListByNursery() {
   const snackbar = useSnackbar();
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { findSpeciesById } = useOrganizationSpecies();
+  const { findSpeciesById, species } = useOrganizationSpecies();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
@@ -144,6 +144,7 @@ export default function InventoryListByNursery() {
           setFilters={setFilters}
           columns={columns}
           origin='Nursery'
+          nurserySpecies={species}
           emptyTableMessage={
             !debouncedSearchTerm && !filters.facilityIds?.length && !filters.speciesIds?.length
               ? strings.NO_BATCHES_WITH_INVENTORY

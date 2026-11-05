@@ -5,6 +5,7 @@ import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } fro
 import _, { isArray } from 'lodash';
 import {
   MRT_Cell,
+  MRT_ColumnFiltersState,
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -24,11 +25,12 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
 import { useLazyListBatchIdsForNurseriesQuery, useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
-import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
+import { convertFilterGroupToMap, getNurseryDeleteSpeciesIds } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
 import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
+import { Species } from 'src/types/Species';
 import { TABLES, TableDefinition } from 'src/types/Tables';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
@@ -45,6 +47,7 @@ import QuantitiesMenu from './view/QuantitiesMenu';
 
 interface InventoryTableProps {
   disableDelete?: boolean;
+  nurserySpecies?: Species[];
   allowSelectionProjectAssign?: boolean;
   columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
@@ -65,6 +68,7 @@ const TABLES_BY_ORIGIN: Record<InventoryTableProps['origin'], TableDefinition> =
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
   const {
     disableDelete = false,
+    nurserySpecies,
     results,
     setTemporalSearchValue,
     temporalSearchValue,
@@ -92,6 +96,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [pillListPortalEl, setPillListPortalEl] = useState<HTMLElement | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openProjectAssignModal, setOpenProjectAssignModal] = useState<boolean>(false);
@@ -102,6 +107,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
   const selectionScope = JSON.stringify({
     filters,
+    columnFilters,
     temporalSearchValue,
     organizationId: selectedOrganization?.id,
     rowIds: results.map((row) => row.id ?? row.facility_id),
@@ -330,10 +336,19 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         if (!selectedOrganization) {
           return;
         }
+        const speciesIds = getNurseryDeleteSpeciesIds(
+          columnFilters.find((filter) => filter.id === 'facilityInventories')?.value,
+          nurserySpecies ?? [],
+          filters.speciesIds
+        );
+        if (speciesIds?.length === 0) {
+          setOpenDeleteModal(false);
+          return;
+        }
         batchIds = await listBatchIdsForNurseries({
           organizationId: selectedOrganization.id,
           facilityIds: selectedRows.map((row) => Number(row.facility_id)),
-          speciesIds: filters.speciesIds,
+          speciesIds,
         }).unwrap();
       } else {
         batchIds = selectedRows.map((row) => Number(row.id));
@@ -353,11 +368,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     }
   }, [
     deleteBatch,
+    columnFilters,
     disableDelete,
     filters.facilityIds,
     filters.speciesIds,
     listBatchIdsForNurseries,
     listBatchIdsForSpecies,
+    nurserySpecies,
     origin,
     selectedOrganization,
     selectedRows,
@@ -735,6 +752,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   state: {
                     isLoading: isLoadingPage,
                     rowSelection,
+                    columnFilters,
                     sorting,
                     columnOrder,
                     columnVisibility,
@@ -744,6 +762,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     showGlobalFilter,
                   },
                   onRowSelectionChange: setRowSelection,
+                  onColumnFiltersChange: setColumnFilters,
                   onSortingChange: setSorting,
                   onPaginationChange,
                   onColumnOrderChange: setColumnOrder,
