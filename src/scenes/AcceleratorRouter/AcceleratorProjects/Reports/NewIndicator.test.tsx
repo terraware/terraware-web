@@ -88,10 +88,12 @@ it.each(['common', 'project', 'error'])('blocks duplicate indicator saves (%s)',
             : strings.COMMON_INDICATOR_SAVED,
     })
   );
-  expect(screen.getByLabelText('Location')).toHaveTextContent(
-    kind === 'error'
-      ? '/accelerator/projects/7/new-indicator'
-      : '/accelerator/projects/7?tab=reports&reportsSegment=indicators'
+  await waitFor(() =>
+    expect(screen.getByLabelText('Location')).toHaveTextContent(
+      kind === 'error'
+        ? '/accelerator/projects/7/new-indicator'
+        : '/accelerator/projects/7?tab=reports&reportsSegment=indicators'
+    )
   );
   expect(requests).toHaveLength(1);
 });
