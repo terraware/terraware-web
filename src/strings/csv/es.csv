@@ -2046,6 +2046,7 @@ SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} no está incluido en este total porque
 SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Registrar cuántas plantas están vivas y cuántas muertas.,f2dc59dc
 SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Registrar supervivencia después de la plantación,04429f52
 SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,Ya hay una observación de {0} programada para comenzar el {1}.,4ade661b
+SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS,Disponible una vez que este sitio de plantación tenga plantas en campo.,95fffe13
 SCHEDULE_OBSERVATION_VEGETATION_DESCRIPTION,"Medir el crecimiento de las plantas y registrar otra vegetación (por ejemplo, para cálculos de carbono).",048ac335
 SCHEDULE_OBSERVATION_VEGETATION_TITLE,Registrar crecimiento y supervivencia,45d3cdc9
 SCHEDULED_OBSERVATIONS,Observaciones programadas,ae524d56

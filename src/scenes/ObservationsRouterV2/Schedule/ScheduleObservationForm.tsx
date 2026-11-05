@@ -107,6 +107,12 @@ export default function ScheduleObservationForm({
     () => selectedSite?.upcomingObservationStartDates ?? {},
     [selectedSite?.upcomingObservationStartDates]
   );
+  const hasPlantings = selectedSite?.hasPlantings === true;
+
+  const showMonitoringTypeSelector =
+    biomassSchedulingEnabled && observationId === undefined && !!selectedPlantingSiteId;
+  const selectedMonitoringTypeUnavailable =
+    showMonitoringTypeSelector && (!hasPlantings || upcomingObservationStartDates[monitoringType] !== undefined);
 
   useEffect(() => {
     if (upcomingObservationStartDates[monitoringType] === undefined) {
@@ -226,6 +232,7 @@ export default function ScheduleObservationForm({
         saveID={'scheduleObservation'}
         onCancel={onCancel}
         onSave={onSubmit}
+        saveDisabled={selectedMonitoringTypeUnavailable}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
@@ -249,9 +256,10 @@ export default function ScheduleObservationForm({
               />
             </Grid>
 
-            {biomassSchedulingEnabled && observationId === undefined && selectedPlantingSiteId && (
+            {showMonitoringTypeSelector && (
               <Grid size={12} paddingTop={0}>
                 <MonitoringTypeSelector
+                  hasPlantings={hasPlantings}
                   onChange={setMonitoringType}
                   selectedMonitoringType={monitoringType}
                   upcomingObservationStartDates={upcomingObservationStartDates}
@@ -259,52 +267,56 @@ export default function ScheduleObservationForm({
               </Grid>
             )}
 
-            {selectedPlantingSiteId && (
-              <Grid size={12}>
-                <ObservationSubstratumSelector
-                  errorText={validate ? substratumError : ''}
-                  onChangeSelectedSubstrata={setRequestedSubstratumIds}
-                  plantingSiteId={selectedPlantingSiteId}
-                />
-              </Grid>
+            {!selectedMonitoringTypeUnavailable && (
+              <>
+                {selectedPlantingSiteId && (
+                  <Grid size={12}>
+                    <ObservationSubstratumSelector
+                      errorText={validate ? substratumError : ''}
+                      onChangeSelectedSubstrata={setRequestedSubstratumIds}
+                      plantingSiteId={selectedPlantingSiteId}
+                    />
+                  </Grid>
+                )}
+
+                <Grid size={12}>
+                  <Divider />
+                </Grid>
+
+                <Grid size={isMobile ? 12 : 6}>
+                  <DatePicker
+                    id='startDate'
+                    label={strings.OBSERVATION_START_DATE}
+                    value={startDate ?? ''}
+                    onDateChange={setStartDateCallback}
+                    aria-label='date-picker'
+                    errorText={validate ? startDateError : ''}
+                    minDate={todayISO}
+                  />
+                </Grid>
+
+                <Grid size={isMobile ? 12 : 6}>
+                  <DatePicker
+                    id='endDate'
+                    label={strings.OBSERVATION_END_DATE}
+                    value={endDate ?? ''}
+                    onDateChange={setEndDateCallback}
+                    aria-label='date-picker'
+                    errorText={validate ? endDateError : ''}
+                  />
+                </Grid>
+
+                <Typography
+                  fontSize='14px'
+                  fontWeight={400}
+                  lineHeight='20px'
+                  color={theme.palette.TwClrBrdrInfo}
+                  padding={theme.spacing(1, 3)}
+                >
+                  {strings.OBSERVATION_PERIOD_WARN}
+                </Typography>
+              </>
             )}
-
-            <Grid size={12}>
-              <Divider />
-            </Grid>
-
-            <Grid size={isMobile ? 12 : 6}>
-              <DatePicker
-                id='startDate'
-                label={strings.OBSERVATION_START_DATE}
-                value={startDate ?? ''}
-                onDateChange={setStartDateCallback}
-                aria-label='date-picker'
-                errorText={validate ? startDateError : ''}
-                minDate={todayISO}
-              />
-            </Grid>
-
-            <Grid size={isMobile ? 12 : 6}>
-              <DatePicker
-                id='endDate'
-                label={strings.OBSERVATION_END_DATE}
-                value={endDate ?? ''}
-                onDateChange={setEndDateCallback}
-                aria-label='date-picker'
-                errorText={validate ? endDateError : ''}
-              />
-            </Grid>
-
-            <Typography
-              fontSize='14px'
-              fontWeight={400}
-              lineHeight='20px'
-              color={theme.palette.TwClrBrdrInfo}
-              padding={theme.spacing(1, 3)}
-            >
-              {strings.OBSERVATION_PERIOD_WARN}
-            </Typography>
           </Grid>
         </Card>
       </PageForm>
