@@ -65,7 +65,7 @@ test.describe('Seedlings Dashboard', () => {
     await expect(page.getByRole('tab', { name: 'By Species', exact: true })).toHaveAttribute('aria-selected', 'true');
     await openNavItem(page, 'Seedlings', 'Dashboard');
 
-    await page.getByRole('link', { name: 'See all inventory', exact: true }).click();
+    await page.getByRole('link', { name: 'See All Inventory', exact: true }).click();
     await expect(page).toHaveURL(/\/inventory(?:\?|$)/);
   });
 
