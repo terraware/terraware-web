@@ -329,7 +329,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       }
       const validBatchIds = [...new Set(batchIds)].filter((id) => Number.isInteger(id) && id > 0);
       if (validBatchIds.length === 0) {
-        snackbar.toastError();
+        setOpenDeleteModal(false);
         return;
       }
       const deleteResults = await Promise.allSettled(validBatchIds.map((id) => deleteBatch(id).unwrap()));
