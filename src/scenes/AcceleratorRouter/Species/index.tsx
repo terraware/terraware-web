@@ -212,6 +212,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 padding: theme.spacing(3),
                 margin: 0,
               }}
+              size={12}
             >
               {currentAcceleratorProjectSpecies && (
                 <Box display='flex' flexDirection='column' width='100%'>
@@ -415,11 +416,13 @@ export default function SpeciesDetailView(): JSX.Element {
                 padding: theme.spacing(3),
                 margin: 0,
               }}
+              size={12}
             >
               <Grid
                 sx={{ borderTop: `1px solid ${theme.palette.TwClrBaseGray100}` }}
                 container
                 padding={theme.spacing(0, 0, 4, 0)}
+                size={12}
               >
                 <Grid
                   container
@@ -429,6 +432,7 @@ export default function SpeciesDetailView(): JSX.Element {
                     paddingTop: theme.spacing(3),
                     margin: 0,
                   }}
+                  size={12}
                 >
                   <Grid paddingBottom={theme.spacing(2)} minHeight={'64px'} size={12}>
                     <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'}>

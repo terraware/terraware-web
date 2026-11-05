@@ -70,7 +70,7 @@ export default function PersonDetailsView(): JSX.Element {
         {isAdmin(selectedOrganization) && (
           <PersonModal open={editPersonModalOpened} onClose={() => setEditPersonModalOpened(false)} person={person} />
         )}
-        <Grid container padding={theme.spacing(0, 0, 2, 0)}>
+        <Grid container padding={theme.spacing(0, 0, 2, 0)} size={12}>
           <Grid size={12}>
             <BackToLink
               id='back'
@@ -134,6 +134,7 @@ export default function PersonDetailsView(): JSX.Element {
             borderRadius: '32px',
             padding: theme.spacing(3),
           }}
+          size={12}
         >
           <Grid paddingBottom={theme.spacing(2)} size={gridSize()}>
             <TextField label={strings.EMAIL} id='email' type='text' value={person?.email} display={true} />

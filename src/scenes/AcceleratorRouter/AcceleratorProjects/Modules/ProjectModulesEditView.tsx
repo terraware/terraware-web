@@ -144,6 +144,7 @@ export default function ProjectModulesEditView(): JSX.Element {
           borderRadius={theme.spacing(3)}
           padding={theme.spacing(0, 0, 3, 0)}
           margin={0}
+          width='100%'
         >
           {projectIdString && (
             <ProjectModulesList
