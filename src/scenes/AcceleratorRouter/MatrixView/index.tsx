@@ -116,9 +116,17 @@ const MatrixView = () => {
     [allVariables]
   );
 
+  const defaultViewSettings = useMemo(
+    () => ({
+      columnPinning: DEFAULT_COLUMN_PINNING,
+      columnVisibility: Object.fromEntries(uniqueVariableIds.map((id) => [id, false])),
+    }),
+    [uniqueVariableIds]
+  );
+
   const columnVisibility = useMemo(
-    () => ({ ...Object.fromEntries(uniqueVariableIds.map((id) => [id, false])), ...savedColumnVisibility }),
-    [savedColumnVisibility, uniqueVariableIds]
+    () => ({ ...defaultViewSettings.columnVisibility, ...savedColumnVisibility }),
+    [defaultViewSettings, savedColumnVisibility]
   );
 
   const visibleVariableIds = useMemo(
@@ -1006,6 +1014,7 @@ const MatrixView = () => {
           <Grid style={{ width: '242px' }}>
             <CurrentView
               defaultPreset={currentView}
+              defaultSettings={defaultViewSettings}
               onPresetChange={onCurrentViewChange}
               presetViews={[
                 { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
@@ -1106,6 +1115,7 @@ const MatrixView = () => {
       columnPinning,
       columnVisibility,
       currentView,
+      defaultViewSettings,
       globalFilter,
       onCurrentViewChange,
       setColumnFilters,

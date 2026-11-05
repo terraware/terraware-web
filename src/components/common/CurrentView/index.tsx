@@ -8,13 +8,14 @@ import { useListSavedTableViewsQuery } from 'src/queries/generated/savedTableVie
 import { TableDefinition } from 'src/types/Tables';
 
 import CurrentViewSelect, { DEFAULT_VIEW, ViewOption, sortViewsByLabel } from './CurrentViewSelect';
-import { getTableSettings } from './tableSettings';
+import { TableSettings, applyTableSettings, getDefaultTableSettings, getTableSettings } from './tableSettings';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
 export type { ViewOption } from './CurrentViewSelect';
 
 export type CurrentViewProps<TData extends MRT_RowData> = {
   defaultPreset?: string;
+  defaultSettings?: Partial<TableSettings>;
   defaultViewLabel?: string | null;
   id?: string;
   onPresetChange?: (preset: string) => void;
@@ -26,6 +27,7 @@ export type CurrentViewProps<TData extends MRT_RowData> = {
 
 const CurrentView = <TData extends MRT_RowData>({
   defaultPreset = DEFAULT_VIEW,
+  defaultSettings,
   defaultViewLabel,
   id,
   onPresetChange,
@@ -37,6 +39,7 @@ const CurrentView = <TData extends MRT_RowData>({
   'use no memo';
   const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [preset, setPreset] = useState(defaultPreset);
+  const [savedViewId, setSavedViewId] = useState<string>();
   const [showSaveViewModal, setShowSaveViewModal] = useState(false);
   const { data: savedTableViewsData } = useListSavedTableViewsQuery(
     { organizationId, tableName: tableDefinition.stableId },
@@ -47,16 +50,39 @@ const CurrentView = <TData extends MRT_RowData>({
     [savedTableViewsData]
   );
 
-  const handleChange = useCallback(
+  const changePreset = useCallback(
     (value: string) => {
-      if (savedViewOptions.some((view) => view.value === value)) {
-        return;
-      }
       setPreset(value);
       onPresetChange?.(value);
     },
-    [onPresetChange, savedViewOptions]
+    [onPresetChange]
   );
+
+  const handleChange = useCallback(
+    (value: string) => {
+      const defaults = getDefaultTableSettings(table, defaultSettings);
+      const savedView = savedTableViewsData?.views.find((view) => `${view.id}` === value);
+      if (savedView) {
+        setSavedViewId(value);
+        if (
+          savedView.baseView === DEFAULT_VIEW ||
+          presetViews?.some((presetView) => presetView.value === savedView.baseView)
+        ) {
+          changePreset(savedView.baseView as string);
+        }
+        applyTableSettings(table, savedView.settings as Partial<TableSettings>, defaults);
+      } else {
+        setSavedViewId(undefined);
+        changePreset(value);
+        if (isSavedTableViewsEnabled) {
+          applyTableSettings(table, {}, defaults);
+        }
+      }
+    },
+    [changePreset, defaultSettings, isSavedTableViewsEnabled, presetViews, savedTableViewsData, table]
+  );
+
+  const handleSaved = useCallback((newViewId: number) => setSavedViewId(`${newViewId}`), []);
 
   const openSaveViewModal = useCallback(() => setShowSaveViewModal(true), []);
   const closeSaveViewModal = useCallback(() => setShowSaveViewModal(false), []);
@@ -70,13 +96,14 @@ const CurrentView = <TData extends MRT_RowData>({
         onChange={handleChange}
         onSave={openSaveViewModal}
         presetViews={presetViews}
-        selected={preset}
+        selected={savedViewId ?? preset}
         showSave={isSavedTableViewsEnabled}
       />
       {showSaveViewModal && (
         <SaveViewModal
           baseView={preset}
           onClose={closeSaveViewModal}
+          onSaved={handleSaved}
           open
           organizationId={organizationId}
           settings={getTableSettings(table)}
