@@ -27,6 +27,8 @@ export const TEST_ACTIVITY_PREFIX = 'E2E ';
 // Must not start with TEST_ACTIVITY_PREFIX, or the Console spec's orphan cleanup would delete these mid-test.
 export const PARTICIPANT_TEST_ACTIVITY_PREFIX = 'Participant E2E ';
 
+export const FUNDER_TEST_ACTIVITY_PREFIX = 'Funder E2E ';
+
 export type ActivityStatus = 'Not Verified' | 'Verified' | 'Do Not Use';
 
 export type ActivityType =

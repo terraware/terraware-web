@@ -41,6 +41,11 @@ export const navigateToActivityLog = async (page: Page, orgName: string) => {
   await waitFor(page, '#projectId');
 };
 
+export const navigateToFunderProjectTab = async (page: Page, tabName: string) => {
+  await page.goto('/');
+  await page.getByRole('tab', { name: tabName }).click();
+};
+
 export const navigateToPeople = async (page: Page) => {
   await waitFor(page, '#settings-button');
   await page.locator('#settings-button').click();

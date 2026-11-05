@@ -1,4 +1,4 @@
-import { expect } from '@playwright/test';
+import { APIRequestContext, expect } from '@playwright/test';
 import type { Page } from 'playwright-core';
 
 import { navigateToProjectProfile } from './navigation';
@@ -115,3 +115,20 @@ export async function publishProjectProfile(dealName: string, page: Page) {
   await page.getByRole('button', { name: 'Publish' }).click();
   await expect(page.getByText('Project Profile Published', exactOptions)).toBeVisible();
 }
+
+export const publishProjectProfileViaApi = async (request: APIRequestContext, projectId: number) => {
+  const projectUrl = `/api/v1/accelerator/projects/${projectId}`;
+  const projectResponse = await request.get(projectUrl, { headers: { Accept: 'application/json' } });
+  expect(projectResponse.ok(), `GET ${projectUrl} failed with ${projectResponse.status()}`).toBeTruthy();
+  const { details } = (await projectResponse.json()) as { details: Record<string, unknown> };
+
+  const publishUrl = `/api/v1/funder/projects/${projectId}`;
+  const publishResponse = await request.post(publishUrl, {
+    data: { details },
+    headers: { Accept: 'application/json' },
+  });
+  expect(
+    publishResponse.ok(),
+    `POST ${publishUrl} failed with ${publishResponse.status()}: ${await publishResponse.text()}`
+  ).toBeTruthy();
+};
