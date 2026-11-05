@@ -95,8 +95,8 @@ export default function ProjectModulesEditView(): JSX.Element {
           updateProjectModule(modulePayloadToUpdatePayload(projectId, module)).unwrap()
         );
 
-        const responses = await Promise.all([...deletePromises, ...updatePromises]);
-        if (responses.some((response) => response.status !== 'ok')) {
+        const responses = await Promise.allSettled([...deletePromises, ...updatePromises]);
+        if (responses.some((response) => response.status === 'rejected' || response.value.status !== 'ok')) {
           snackbar.toastError();
           return;
         }
@@ -108,7 +108,7 @@ export default function ProjectModulesEditView(): JSX.Element {
         setSaveIsLoadingFalse();
       }
     };
-    void save();
+    return save();
   }, [
     projectIdString,
     projectModules,
