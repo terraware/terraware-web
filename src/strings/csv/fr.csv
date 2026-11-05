@@ -1212,6 +1212,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,Vous devez saisir le poids d'un sous-ensemble 
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,Vous devez entrer le poids d'un sous-ensemble pour pouvoir le retirer dans une pépinière. Ceci peut être fait en éditant la quantité de cette accession.,abddc79b
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,Vous devez entrer un poids de sous-ensemble pour créer un test de viabilité. Vous pouvez le faire en éditant la quantité de cet accès.,5ffd97b6
 MITIGATION_PLAN,Plan d'atténuation,c13d7b11
+MODIFIED,modifié,eb0b21c2
 MODULE,Module,019952ca
 MODULE_DETAILS,Détails du module,66959ca8
 MODULE_ID,Identifiant du module,9c2e85f6

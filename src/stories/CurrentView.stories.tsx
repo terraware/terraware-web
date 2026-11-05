@@ -77,3 +77,13 @@ WithSaveButton.args = {
   selected: 'acceleratorProjects',
   showSave: true,
 };
+
+export const Modified = CurrentViewTemplate.bind({});
+
+Modified.args = {
+  modified: true,
+  myViews,
+  presetViews,
+  selected: 'acceleratorProjects',
+  showSave: true,
+};
