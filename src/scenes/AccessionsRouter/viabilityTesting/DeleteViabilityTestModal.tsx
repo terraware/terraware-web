@@ -1,4 +1,4 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { Typography } from '@mui/material';
@@ -23,38 +23,53 @@ export default function DeleteViabilityTestModal(props: DeleteViabilityTestModal
   const { accessionId } = useParams<{ accessionId: string }>();
   const { accession } = useAccession(Number(accessionId));
   const snackbar = useSnackbar();
-  const [deleteViabilityTest] = useDeleteViabilityTestMutation();
+  const [deleteViabilityTest, { isLoading }] = useDeleteViabilityTestMutation();
+  const deleting = useRef(false);
 
   if (!accession) {
     return null;
   }
 
   const deleteHandler = async () => {
+    if (deleting.current) {
+      return;
+    }
+    deleting.current = true;
     try {
       await deleteViabilityTest({ accessionId: accession.id, viabilityTestId: viabilityTest.id }).unwrap();
       onDone();
     } catch {
       snackbar.toastError();
+    } finally {
+      deleting.current = false;
+    }
+  };
+
+  const cancelHandler = () => {
+    if (!deleting.current) {
+      onCancel();
     }
   };
 
   return (
     <DialogBox
-      onClose={onCancel}
+      onClose={cancelHandler}
       open={open}
       title={strings.DELETE_VIABILITY_TEST}
       size='medium'
       middleButtons={[
         <Button
           id='cancelDeleteViabilityTest'
+          disabled={isLoading}
           label={strings.CANCEL}
           type='passive'
-          onClick={onCancel}
+          onClick={cancelHandler}
           priority='secondary'
           key='button-1'
         />,
         <Button
           id='deleteViabilityTest'
+          disabled={isLoading}
           onClick={() => void deleteHandler()}
           type='destructive'
           label={strings.DELETE}
