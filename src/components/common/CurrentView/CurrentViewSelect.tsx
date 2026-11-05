@@ -22,6 +22,7 @@ export const DEFAULT_VIEW = 'default';
 const SAVE_VIEW = 'saveView';
 
 export type ViewOption = {
+  description?: string;
   label: string;
   value: string;
 };
@@ -192,10 +193,23 @@ const CurrentViewSelect = ({
     [cancelEditing, confirmEditing]
   );
 
-  const renderLabel = (label: string, value: string, isMyView = false) => (
+  const renderLabel = (label: string, value: string, isMyView = false, description?: string) => (
     <Box display='flex' alignItems='center' width='100%'>
-      <Box flexGrow={1} overflow='hidden' textOverflow='ellipsis' whiteSpace='nowrap'>
-        {label}
+      <Box flexGrow={1} minWidth={0}>
+        <Box overflow='hidden' textOverflow='ellipsis' whiteSpace='nowrap'>
+          {label}
+        </Box>
+        {description && (
+          <Box
+            color={theme.palette.TwClrTxtSecondary}
+            fontSize='12px'
+            overflow='hidden'
+            textOverflow='ellipsis'
+            whiteSpace='nowrap'
+          >
+            {description}
+          </Box>
+        )}
       </Box>
       {value === selected && !modified && (
         <Icon
@@ -301,7 +315,7 @@ const CurrentViewSelect = ({
           <ListSubheader key={`${header}-header`} sx={{ fontSize: '12px', lineHeight: '30px' }}>
             {header.toUpperCase()}
           </ListSubheader>,
-          ...views.map(({ label, value }) =>
+          ...views.map(({ description, label, value }) =>
             isMyViews && value === editingValue ? (
               <MenuItem key={value} id={value} value={value} disableRipple sx={{ padding: 0 }}>
                 {renderEditingLabel(value)}
@@ -316,7 +330,7 @@ const CurrentViewSelect = ({
                 onClick={getReselectHandler(value)}
                 onKeyDown={isMyViews ? handleMyViewKeyDown : undefined}
               >
-                {renderLabel(label, value, isMyViews)}
+                {renderLabel(label, value, isMyViews, description)}
               </MenuItem>
             )
           ),
