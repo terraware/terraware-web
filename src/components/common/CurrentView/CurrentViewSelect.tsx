@@ -18,6 +18,8 @@ import { BusySpinner, Icon } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 
+import { MAX_VIEW_NAME_LENGTH, getViewNameError } from './viewName';
+
 export const DEFAULT_VIEW = 'default';
 const SAVE_VIEW = 'saveView';
 
@@ -109,12 +111,19 @@ const CurrentViewSelect = ({
     [deleteView]
   );
 
+  const renameError = editingValue
+    ? getViewNameError(
+        editingName,
+        (myViews ?? []).filter((view) => view.value !== editingValue).map((view) => view.label)
+      )
+    : undefined;
+
   const confirmEditing = useCallback(async () => {
-    if (isRenaming) {
+    if (isRenaming || !editingValue || renameError) {
       return;
     }
     const name = editingName.trim();
-    if (editingValue && name) {
+    if (name !== myViews?.find((view) => view.value === editingValue)?.label) {
       setIsRenaming(true);
       try {
         await onRenameView?.(editingValue, name);
@@ -125,7 +134,7 @@ const CurrentViewSelect = ({
       }
     }
     setEditingValue(undefined);
-  }, [editingName, editingValue, isRenaming, onRenameView]);
+  }, [editingName, editingValue, isRenaming, myViews, onRenameView, renameError]);
 
   const startEditingView = useCallback(
     (value?: string) => {
@@ -258,16 +267,18 @@ const CurrentViewSelect = ({
     >
       <TextField
         autoFocus
+        error={!!renameError}
         fullWidth
+        helperText={renameError}
         id={`${id}-edit-name-${value}`}
         onChange={handleEditingNameChange}
         size='small'
-        slotProps={{ htmlInput: { 'aria-label': strings.VIEW_NAME } }}
+        slotProps={{ htmlInput: { 'aria-label': strings.VIEW_NAME, maxLength: MAX_VIEW_NAME_LENGTH } }}
         value={editingName}
       />
       <IconButton
         aria-label={strings.SAVE}
-        disabled={isRenaming || !editingName.trim()}
+        disabled={isRenaming || !!renameError}
         id={`${id}-edit-confirm`}
         onClick={handleConfirmClick}
         size='small'
