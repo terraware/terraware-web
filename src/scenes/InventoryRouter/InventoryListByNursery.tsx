@@ -87,7 +87,7 @@ export default function InventoryListByNursery() {
     [debouncedSearchTerm, filters.facilityIds, filters.speciesIds, selectedOrganization]
   );
 
-  const [searchInventoryByNursery, { data: apiSearchResults, currentData, isError }] =
+  const [searchInventoryByNursery, { data: apiSearchResults, isFetching, isError }] =
     useLazySearchInventoryByNurseryQuery();
 
   useEffect(() => {
@@ -136,7 +136,8 @@ export default function InventoryListByNursery() {
         </Box>
       ) : hasBatches ? (
         <InventoryTable
-          results={currentData ? searchResults || [] : []}
+          results={searchResults || []}
+          disableDelete={isFetching || isError}
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}

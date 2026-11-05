@@ -44,6 +44,7 @@ import DeleteBatchesModal from './view/DeleteBatchesModal';
 import QuantitiesMenu from './view/QuantitiesMenu';
 
 interface InventoryTableProps {
+  disableDelete?: boolean;
   allowSelectionProjectAssign?: boolean;
   columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
@@ -63,6 +64,7 @@ const TABLES_BY_ORIGIN: Record<InventoryTableProps['origin'], TableDefinition> =
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
   const {
+    disableDelete = false,
     results,
     setTemporalSearchValue,
     temporalSearchValue,
@@ -304,6 +306,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   }, []);
 
   const deleteSelectedBatches = useCallback(async () => {
+    if (disableDelete) {
+      return;
+    }
     try {
       let batchIds: number[];
       if (origin === 'Species') {
@@ -342,6 +347,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     }
   }, [
     deleteBatch,
+    disableDelete,
     filters.facilityIds,
     filters.speciesIds,
     listBatchIdsForNurseries,
@@ -756,6 +762,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           type='destructive'
                           onClick={() => setOpenDeleteModal(true)}
                           label={strings.DELETE}
+                          disabled={disableDelete}
                           priority='secondary'
                         />
                         {allowSelectionProjectAssign && (

@@ -84,7 +84,7 @@ export default function InventoryListBySpecies() {
     [debouncedSearchTerm, filters.facilityIds, selectedOrganization]
   );
 
-  const [searchSpeciesInventory, { data: apiSearchResults, currentData, isError }] =
+  const [searchSpeciesInventory, { data: apiSearchResults, isFetching, isError }] =
     useLazySearchSpeciesInventoryQuery();
 
   useEffect(() => {
@@ -212,7 +212,8 @@ export default function InventoryListBySpecies() {
         </Box>
       ) : hasBatches ? (
         <InventoryTable
-          results={currentData ? searchResults || [] : []}
+          results={searchResults || []}
+          disableDelete={isFetching || isError}
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
