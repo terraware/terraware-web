@@ -82,9 +82,7 @@ export default function InventoryListBySpecies() {
     [debouncedSearchTerm, filters.facilityIds, selectedOrganization]
   );
 
-  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, rather than blanking out on every keystroke.
-  const [searchSpeciesInventory, { data: apiSearchResults }] = useLazySearchSpeciesInventoryQuery();
+  const [searchSpeciesInventory, { currentData: apiSearchResults }] = useLazySearchSpeciesInventoryQuery();
 
   useEffect(() => {
     if (selectedOrganization) {

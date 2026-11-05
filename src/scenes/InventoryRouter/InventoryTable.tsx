@@ -98,6 +98,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   });
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
 
+  useEffect(() => {
+    setRowSelection({});
+    setOpenDeleteModal(false);
+  }, [filters, results, temporalSearchValue, selectedOrganization?.id]);
+
   const tableDefinition = TABLES_BY_ORIGIN[origin];
 
   // Filter-related state
