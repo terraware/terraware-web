@@ -297,15 +297,33 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setOpenDeleteModal(false);
   }, []);
 
-  const deleteSelectedBatches = useCallback(() => {
-    const promises = selectedRows.map((r) => deleteBatch(r.id as number).unwrap());
-    void Promise.allSettled(promises).then((deleteResults) => {
+  const deleteSelectedBatches = useCallback(async () => {
+    try {
+      let batchIds: number[];
+      if (origin === 'Species') {
+        if (!selectedOrganization) {
+          return;
+        }
+        batchIds = await listBatchIdsForSpecies({
+          organizationId: selectedOrganization.id,
+          speciesIds: selectedRows.filter((row) => row.id).map((row) => Number(row.id)),
+          facilityIds: filters.facilityIds?.map(Number),
+        }).unwrap();
+      } else if (origin === 'Nursery') {
+        batchIds = selectedRows.flatMap((row) => row.batchIds ?? []).map(Number);
+      } else {
+        batchIds = selectedRows.map((row) => Number(row.id));
+      }
+      const validBatchIds = [...new Set(batchIds)].filter((id) => Number.isInteger(id) && id > 0);
+      const deleteResults = await Promise.allSettled(validBatchIds.map((id) => deleteBatch(id).unwrap()));
       if (deleteResults.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
       }
       setOpenDeleteModal(false);
-    });
-  }, [deleteBatch, selectedRows, snackbar]);
+    } catch {
+      snackbar.toastError();
+    }
+  }, [deleteBatch, filters.facilityIds, listBatchIdsForSpecies, origin, selectedOrganization, selectedRows, snackbar]);
 
   const isSelectionWithdrawable = () => {
     // we are woring with 'any' type rows in this table
@@ -613,7 +631,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   return (
     <Box position={'relative'}>
-      <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
+      <DeleteBatchesModal
+        open={openDeleteModal}
+        onClose={onCloseDeleteBatchesModal}
+        onSubmit={() => void deleteSelectedBatches()}
+      />
       {openProjectAssignModal && (
         <ProjectAssignModal<{ id: number; projectId?: number }>
           entity={{ id: -1, projectId: undefined }}

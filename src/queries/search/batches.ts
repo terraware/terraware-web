@@ -88,6 +88,7 @@ export type ListAllBatchesApiArg = {
 type ListBatchIdsForSpeciesApiArg = {
   organizationId: number;
   speciesIds: number[];
+  facilityIds?: number[];
 };
 
 type ListBatchesForSpeciesApiArg = {
@@ -268,8 +269,11 @@ const injectedRtkApi = api.injectEndpoints({
               type: 'Exact',
               values: args.speciesIds.map(String),
             },
+            ...(args.facilityIds?.length
+              ? [{ operation: 'field' as const, field: 'facility_id', values: args.facilityIds.map(String) }]
+              : []),
           ]),
-          count: 1000,
+          count: 0,
         },
       }),
       providesTags: [{ type: QueryTagTypes.NurseryBatches, id: 'LIST' }],

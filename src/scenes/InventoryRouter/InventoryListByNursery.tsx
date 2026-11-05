@@ -109,10 +109,7 @@ export default function InventoryListByNursery() {
           resultTyped.facilityInventories
             ?.filter((fi) => fi.species_id)
             ?.map((inv) => findSpeciesById(Number(inv.species_id))?.scientificName ?? inv.species_scientificName) || [];
-        const batchIds =
-          resultTyped.facilityInventories
-            ?.filter((fi) => fi.species_id)
-            ?.flatMap((inv) => inv.batches.map((batch) => batch.id)) || [];
+        const batchIds = resultTyped.facilityInventories?.flatMap((inv) => inv.batches.map((batch) => batch.id)) || [];
         return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
       })
       .filter((result) => showEmptyNurseries || !isNurseryEmpty(result));
