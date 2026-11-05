@@ -15,8 +15,10 @@ import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { SpeciesFacilitiesInventoryResult, SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function InventoryListBySpecies() {
+  const snackbar = useSnackbar();
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
@@ -82,7 +84,14 @@ export default function InventoryListBySpecies() {
     [debouncedSearchTerm, filters.facilityIds, selectedOrganization]
   );
 
-  const [searchSpeciesInventory, { currentData: apiSearchResults }] = useLazySearchSpeciesInventoryQuery();
+  const [searchSpeciesInventory, { data: apiSearchResults, currentData, isError }] =
+    useLazySearchSpeciesInventoryQuery();
+
+  useEffect(() => {
+    if (isError) {
+      snackbar.toastError();
+    }
+  }, [isError, snackbar]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -92,7 +101,7 @@ export default function InventoryListBySpecies() {
 
   const searchResults = useMemo(() => {
     if (!apiSearchResults) {
-      return undefined;
+      return isError ? [] : undefined;
     }
 
     const showEmptySpecies = (filters.showEmptySpecies || [])[0] === 'true';
@@ -184,7 +193,7 @@ export default function InventoryListBySpecies() {
           ? Number(result['totalQuantity(raw)']) > 0 && Number(result['germinatingQuantity(raw)']) > 0
           : !isSpeciesEmpty(result))
     );
-  }, [apiSearchResults, filters.facilityIds, filters.showEmptySpecies]);
+  }, [apiSearchResults, filters.facilityIds, filters.showEmptySpecies, isError]);
 
   // A search matching nothing shows an empty table rather than the onboarding page
   const hasBatches = useOrganizationHasBatches();
@@ -203,7 +212,7 @@ export default function InventoryListBySpecies() {
         </Box>
       ) : hasBatches ? (
         <InventoryTable
-          results={searchResults || []}
+          results={currentData ? searchResults || [] : []}
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}

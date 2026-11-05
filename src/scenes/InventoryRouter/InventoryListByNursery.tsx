@@ -19,8 +19,10 @@ import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 export default function InventoryListByNursery() {
+  const snackbar = useSnackbar();
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
@@ -85,9 +87,14 @@ export default function InventoryListByNursery() {
     [debouncedSearchTerm, filters.facilityIds, filters.speciesIds, selectedOrganization]
   );
 
-  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, rather than blanking out on every keystroke.
-  const [searchInventoryByNursery, { data: apiSearchResults }] = useLazySearchInventoryByNurseryQuery();
+  const [searchInventoryByNursery, { data: apiSearchResults, currentData, isError }] =
+    useLazySearchInventoryByNurseryQuery();
+
+  useEffect(() => {
+    if (isError) {
+      snackbar.toastError();
+    }
+  }, [isError, snackbar]);
 
   useEffect(() => {
     if (selectedOrganization && activeLocale) {
@@ -97,7 +104,7 @@ export default function InventoryListByNursery() {
 
   const searchResults = useMemo(() => {
     if (!apiSearchResults) {
-      return undefined;
+      return isError ? [] : undefined;
     }
 
     const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
@@ -113,7 +120,7 @@ export default function InventoryListByNursery() {
         return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
       })
       .filter((result) => showEmptyNurseries || !isNurseryEmpty(result));
-  }, [apiSearchResults, filters.showEmptyNurseries, findSpeciesById]);
+  }, [apiSearchResults, filters.showEmptyNurseries, findSpeciesById, isError]);
 
   return (
     <Card flushMobile>
@@ -129,7 +136,7 @@ export default function InventoryListByNursery() {
         </Box>
       ) : hasBatches ? (
         <InventoryTable
-          results={searchResults || []}
+          results={currentData ? searchResults || [] : []}
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
