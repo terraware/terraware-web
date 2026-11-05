@@ -2525,6 +2525,7 @@ THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_PERSON,esta persona,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
+THIS_VIEW_SAVES,Esta vista guarda,85bfa1dc
 THREATENED,Amenazada,57ca76f3
 THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
@@ -2803,6 +2804,12 @@ VIEW_REPORTS,Ver informes,7fc5e229
 VIEW_SESSION,Ver sesión,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Ver Sitios, Estratos y Subestratos en un mapa.",f4d62997
 VIEW_SPECIES_LIST,Ver lista de especies,ff94b19b
+VIEW_SUMMARY_BASE_VIEW,Vista base: {0},2401d6ab
+VIEW_SUMMARY_COLUMNS,Columnas: {0},a4325100
+VIEW_SUMMARY_FILTER,{0}: {1},aa9a8fac
+VIEW_SUMMARY_NO_FILTERS,Filtros: Ninguno,7bb0150a
+VIEW_SUMMARY_SEARCH,"Buscar: ""{0}""",993c6c89
+VIEW_SUMMARY_SORT,Ordenar: {0},e1c3a163
 VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VIRTUAL,Virtual,51d865ab

@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { Box, Portal, Typography, useTheme } from '@mui/material';
+import { PillList } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -16,6 +17,7 @@ export type SaveViewModalProps = {
   open: boolean;
   organizationId?: number;
   settings: Record<string, any>;
+  summary?: string[];
   tableName: string;
 };
 
@@ -26,6 +28,7 @@ const SaveViewModal = ({
   open,
   organizationId,
   settings,
+  summary,
   tableName,
 }: SaveViewModalProps) => {
   const { strings } = useLocalization();
@@ -117,6 +120,16 @@ const SaveViewModal = ({
             type='text'
             value={name}
           />
+          {summary && (
+            <Box marginTop={theme.spacing(2)}>
+              <Typography fontSize='14px' fontWeight={600}>
+                {strings.THIS_VIEW_SAVES}
+              </Typography>
+              <Box marginTop={theme.spacing(1)}>
+                <PillList data={summary.map((item, index) => ({ id: index, value: item }))} />
+              </Box>
+            </Box>
+          )}
           <Typography fontSize='14px' marginTop={theme.spacing(2)} color={theme.palette.TwClrTxtSecondary}>
             {strings.SAVED_VIEWS_PRIVATE}
           </Typography>

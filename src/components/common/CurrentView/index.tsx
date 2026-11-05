@@ -20,6 +20,7 @@ import {
   getTableSettings,
   isTableModified,
 } from './tableSettings';
+import { getSaveViewSummary } from './viewSummary';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
 export type { ViewOption } from './CurrentViewSelect';
@@ -79,6 +80,15 @@ const CurrentView = <TData extends MRT_RowData>({
   const { data: savedTableViewsData, isError: isSavedTableViewsError } = useListSavedTableViewsQuery(
     { organizationId, tableName: tableDefinition.stableId },
     { skip: !isSavedTableViewsEnabled }
+  );
+  const getBaseViewLabel = useCallback(
+    (baseView?: string) => {
+      if (baseView !== DEFAULT_VIEW) {
+        return presetViews?.find((presetView) => presetView.value === baseView)?.label;
+      }
+      return defaultViewLabel === null ? undefined : (defaultViewLabel ?? strings.DEFAULT);
+    },
+    [defaultViewLabel, presetViews, strings]
   );
   const savedViewOptions = useMemo(
     () => sortViewsByLabel(savedTableViewsData?.views.map((view) => ({ label: view.name, value: `${view.id}` }))) ?? [],
@@ -212,6 +222,7 @@ const CurrentView = <TData extends MRT_RowData>({
           open
           organizationId={organizationId}
           settings={getTableSettings(table)}
+          summary={getSaveViewSummary(table, getTableSettings(table), getBaseViewLabel(preset))}
           tableName={tableDefinition.stableId}
         />
       )}
