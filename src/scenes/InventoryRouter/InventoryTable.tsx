@@ -23,7 +23,7 @@ import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
-import { useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
+import { useLazyListBatchIdsForNurseriesQuery, useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
 import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -85,6 +85,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const numberFormatter = useNumberFormatter();
   const [deleteBatch] = useDeleteBatchMutation();
   const [listBatchIdsForSpecies] = useLazyListBatchIdsForSpeciesQuery();
+  const [listBatchIdsForNurseries] = useLazyListBatchIdsForNurseriesQuery();
 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
@@ -315,11 +316,22 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           facilityIds: filters.facilityIds?.map(Number),
         }).unwrap();
       } else if (origin === 'Nursery') {
-        batchIds = selectedRows.flatMap((row) => row.batchIds ?? []).map(Number);
+        if (!selectedOrganization) {
+          return;
+        }
+        batchIds = await listBatchIdsForNurseries({
+          organizationId: selectedOrganization.id,
+          facilityIds: selectedRows.map((row) => Number(row.facility_id)),
+          speciesIds: filters.speciesIds,
+        }).unwrap();
       } else {
         batchIds = selectedRows.map((row) => Number(row.id));
       }
       const validBatchIds = [...new Set(batchIds)].filter((id) => Number.isInteger(id) && id > 0);
+      if (validBatchIds.length === 0) {
+        snackbar.toastError();
+        return;
+      }
       const deleteResults = await Promise.allSettled(validBatchIds.map((id) => deleteBatch(id).unwrap()));
       if (deleteResults.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
@@ -328,7 +340,17 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     } catch {
       snackbar.toastError();
     }
-  }, [deleteBatch, filters.facilityIds, listBatchIdsForSpecies, origin, selectedOrganization, selectedRows, snackbar]);
+  }, [
+    deleteBatch,
+    filters.facilityIds,
+    filters.speciesIds,
+    listBatchIdsForNurseries,
+    listBatchIdsForSpecies,
+    origin,
+    selectedOrganization,
+    selectedRows,
+    snackbar,
+  ]);
 
   const isSelectionWithdrawable = () => {
     // we are woring with 'any' type rows in this table

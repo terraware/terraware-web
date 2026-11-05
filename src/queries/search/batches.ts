@@ -91,6 +91,12 @@ type ListBatchIdsForSpeciesApiArg = {
   facilityIds?: number[];
 };
 
+type ListBatchIdsForNurseriesApiArg = {
+  organizationId: number;
+  facilityIds: number[];
+  speciesIds?: number[];
+};
+
 type ListBatchesForSpeciesApiArg = {
   organizationId: number;
   speciesId: number;
@@ -255,6 +261,27 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: BatchSearchResponse) => response.results,
     }),
 
+    listBatchIdsForNurseries: build.query<number[], ListBatchIdsForNurseriesApiArg>({
+      query: (args) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'batches',
+          fields: ['id'],
+          search: organizationScoped(args.organizationId, [
+            { operation: 'field', field: 'facility_id', values: args.facilityIds.map(String) },
+            ...(args.speciesIds?.length
+              ? [{ operation: 'field' as const, field: 'species_id', values: args.speciesIds.map(String) }]
+              : []),
+          ]),
+          count: 0,
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.NurseryBatches, id: 'LIST' }],
+      transformResponse: (response: { results: { id: string }[] }) =>
+        response.results.map((result) => Number(result.id)),
+    }),
+
     listBatchIdsForSpecies: build.query<number[], ListBatchIdsForSpeciesApiArg>({
       query: (args) => ({
         url: '/api/v1/search',
@@ -363,6 +390,7 @@ export const {
   useLazyListBatchesByIdsQuery,
   useLazyListAllBatchesQuery,
   useLazyListBatchIdsForSpeciesQuery,
+  useLazyListBatchIdsForNurseriesQuery,
   useListBatchesForSpeciesQuery,
   useListBatchesForNurseryQuery,
 } = injectedRtkApi;
