@@ -100,11 +100,17 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     openChangeQuantityModal: false,
   });
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
+  const selectionScope = JSON.stringify({
+    filters,
+    temporalSearchValue,
+    organizationId: selectedOrganization?.id,
+    rowIds: results.map((row) => row.id ?? row.facility_id),
+  });
 
   useEffect(() => {
     setRowSelection({});
     setOpenDeleteModal(false);
-  }, [filters, results, temporalSearchValue, selectedOrganization?.id]);
+  }, [selectionScope]);
 
   const tableDefinition = TABLES_BY_ORIGIN[origin];
 
