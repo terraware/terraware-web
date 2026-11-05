@@ -1,3 +1,5 @@
+3e6c3a75 Restore right-aligned top bar in mobile/tablet (#7033)
+2568cd0d SW-9002 Funder activity log E2E test (#7032)
 7c86f658 SW-9221 Include planting sites with no plantings in dropdown (#7019)
 76acb2d2 SW-9219 TF Experts should not be allowed to edit observations via activities (#7014)
 fea8af1c Render MatrixView with EditableTable (#7012)
