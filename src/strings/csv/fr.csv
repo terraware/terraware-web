@@ -2040,6 +2040,7 @@ SAVE_VIEW,Enregistrer la vue,c4a3bd9f
 SAVE_VIEW_BUTTON,Enregistrer la vue,0059102f
 SAVED,Sauvegardé,3324fd4d
 SAVED_VIEW_CREATED,{0} a été enregistré dans Mes vues,e8a17db1
+SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38
 SAVED_VIEWS_PRIVATE,Vous seul pouvez voir les vues que vous enregistrez.,374179a6
 SAVING,Enregistrement en cours...,d4ce4849
 SCARIFY,Scarification,b34359c6
