@@ -12,7 +12,7 @@ export type PageFormProps = Omit<FormProps, 'saveButtonText' | 'cancelButtonText
 };
 
 export default function WrappedPageForm(props: PageFormProps): JSX.Element {
-  const { busy, cancelButtonText, saveButtonText, saveDisabled, ...formProps } = props;
+  const { busy, cancelButtonText, saveButtonText, saveDisabled, cancelDisabled, ...formProps } = props;
 
   return (
     <>
@@ -20,6 +20,7 @@ export default function WrappedPageForm(props: PageFormProps): JSX.Element {
       <PageForm
         {...formProps}
         saveDisabled={busy || saveDisabled}
+        cancelDisabled={busy || cancelDisabled}
         saveButtonText={saveButtonText || strings.SAVE}
         cancelButtonText={cancelButtonText || strings.CANCEL}
       />
