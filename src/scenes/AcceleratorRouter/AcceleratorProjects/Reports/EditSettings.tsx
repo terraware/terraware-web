@@ -84,14 +84,14 @@ export default function EditSettings(): JSX.Element {
 
   const saveReportConfig = useCallback(() => {
     if (projectReportConfig) {
-      void updateReportConfig({
+      return updateReportConfig({
         projectId,
         updateProjectAcceleratorReportConfigRequestPayload: {
           config: newConfig,
         },
       });
     } else {
-      void createReportConfig({
+      return createReportConfig({
         projectId,
         createAcceleratorReportConfigRequestPayload: {
           config: newConfig,
