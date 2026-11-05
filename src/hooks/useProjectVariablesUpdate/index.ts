@@ -32,6 +32,7 @@ type ProjectVariablesUpdate = {
   updateSuccess: boolean;
   uploadSuccess: boolean;
   update: (updateStatuses?: boolean) => boolean;
+  updateAsync: (updateStatuses?: boolean) => Promise<{ hasChanges: boolean; succeeded: boolean }>;
 };
 
 export const useProjectVariablesUpdate = (
@@ -126,7 +127,7 @@ export const useProjectVariablesUpdate = (
     [stagedVariableWithValues, stagedCellValues]
   );
 
-  const update = useCallback(
+  const startUpdate = useCallback(
     (updateStatuses?: boolean) => {
       let operations: Operation[] = [];
 
@@ -134,7 +135,7 @@ export const useProjectVariablesUpdate = (
         // This means the project ID, most likely being populated by a provider looking at
         // the router path, isn't initialized before the update is called
         snackbar.toastError(strings.GENERIC_ERROR);
-        return false;
+        return { hasChanges: false, completion: Promise.resolve(false) };
       }
 
       pendingVariableValues.forEach((pendingValues, variableId) => {
@@ -217,21 +218,29 @@ export const useProjectVariablesUpdate = (
           });
         });
       });
+      const requests: Promise<boolean>[] = [];
       if (imageValuesToUpload.length > 0) {
-        void uploadImageValues(imageValuesToUpload);
+        requests.push(uploadImageValues(imageValuesToUpload));
       }
 
       if (operations.length > 0) {
-        void updateProjectVariableValues({
-          projectId,
-          updateVariableValuesRequestPayload: { operations, updateStatuses: updateStatuses ?? true },
-        });
+        requests.push(
+          updateProjectVariableValues({
+            projectId,
+            updateVariableValuesRequestPayload: { operations, updateStatuses: updateStatuses ?? true },
+          }).then((result) => !('error' in result))
+        );
       } else {
         // if there are no pending changes, set flag to true to fake success & exit
         setNoOp(true);
       }
 
-      return operations.length > 0 || imageValuesToUpload.length > 0;
+      return {
+        hasChanges: operations.length > 0 || imageValuesToUpload.length > 0,
+        completion: Promise.allSettled(requests).then((results) =>
+          results.every((result) => result.status === 'fulfilled' && result.value)
+        ),
+      };
     },
     [
       pendingCellValues,
@@ -246,6 +255,15 @@ export const useProjectVariablesUpdate = (
       uploadImageValues,
       variablesWithValues,
     ]
+  );
+
+  const update = useCallback((updateStatuses?: boolean) => startUpdate(updateStatuses).hasChanges, [startUpdate]);
+  const updateAsync = useCallback(
+    async (updateStatuses?: boolean) => {
+      const { hasChanges, completion } = startUpdate(updateStatuses);
+      return { hasChanges, succeeded: await completion };
+    },
+    [startUpdate]
   );
 
   useEffect(() => {
@@ -299,6 +317,7 @@ export const useProjectVariablesUpdate = (
       updateSuccess,
       uploadSuccess,
       update,
+      updateAsync,
       missingFields,
     }),
     [
@@ -315,6 +334,7 @@ export const useProjectVariablesUpdate = (
       updateSuccess,
       uploadSuccess,
       update,
+      updateAsync,
       missingFields,
     ]
   );

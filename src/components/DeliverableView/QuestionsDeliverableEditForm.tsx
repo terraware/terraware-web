@@ -200,9 +200,7 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     setValues,
     setVariableHasError,
     stagedVariableWithValues,
-    update,
-    updateSuccess,
-    uploadSuccess,
+    updateAsync,
     missingFields,
   } = useProjectVariablesUpdate(deliverable.projectId, filteredVariablesWithValues);
 
@@ -217,30 +215,19 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     [stagedVariableWithValues, dependentVariablesWithValues]
   );
 
-  useEffect(() => {
-    if (updateSuccess && uploadSuccess) {
-      exit();
-    }
-  }, [exit, updateSuccess, uploadSuccess]);
-
-  const handleOnSave = useCallback(() => {
+  const handleOnSave = useCallback(async () => {
     // If Questionnaire Deliverable is part of the Application and all fields are completed, mark deliverable as “Completed”
-    if (isApplicationPortal) {
-      if (!missingFields) {
-        complete(deliverable);
-      } else {
-        incomplete(deliverable);
-      }
-    }
+    const submission = isApplicationPortal
+      ? missingFields
+        ? incomplete(deliverable)
+        : complete(deliverable)
+      : Promise.resolve();
+    const [result] = await Promise.allSettled([updateAsync(), submission]);
 
-    const hasChanges = update();
-
-    if (!hasChanges) {
-      // If the user clicks save but there are no changes, just navigate them back to the deliverable
+    if (result.status === 'fulfilled' && (!result.value.hasChanges || result.value.succeeded)) {
       exit();
-      return;
     }
-  }, [complete, deliverable, exit, incomplete, isApplicationPortal, missingFields, update]);
+  }, [complete, deliverable, exit, incomplete, isApplicationPortal, missingFields, updateAsync]);
 
   return (
     <WrappedPageForm
