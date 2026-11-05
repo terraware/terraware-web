@@ -116,7 +116,7 @@ export async function publishProjectProfile(dealName: string, page: Page) {
   await expect(page.getByText('Project Profile Published', exactOptions)).toBeVisible();
 }
 
-export async function publishProjectProfileViaApi(request: APIRequestContext, projectId: number) {
+export const publishProjectProfileViaApi = async (request: APIRequestContext, projectId: number) => {
   const projectUrl = `/api/v1/accelerator/projects/${projectId}`;
   const projectResponse = await request.get(projectUrl, { headers: { Accept: 'application/json' } });
   expect(projectResponse.ok(), `GET ${projectUrl} failed with ${projectResponse.status()}`).toBeTruthy();
@@ -131,4 +131,4 @@ export async function publishProjectProfileViaApi(request: APIRequestContext, pr
     publishResponse.ok(),
     `POST ${publishUrl} failed with ${publishResponse.status()}: ${await publishResponse.text()}`
   ).toBeTruthy();
-}
+};
