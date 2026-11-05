@@ -50,6 +50,26 @@ const addPageTests = (
       }
       await page.goto(path);
       await page.waitForLoadState('networkidle', { timeout: 30000 });
+      if (name === 'seeds-dashboard') {
+        const seedCount = page.locator('#seedCount-current');
+        await expect(seedCount).toBeVisible();
+        const titleLeft = await page.locator('#title').evaluate((element) => element.getBoundingClientRect().left);
+        const seedCountLeft = await seedCount.evaluate((element) => element.getBoundingClientRect().left);
+        expect(seedCountLeft).toBeCloseTo(titleLeft, 0);
+        const headerRight = await page
+          .locator('#title')
+          .locator('..')
+          .evaluate((element) => element.getBoundingClientRect().right);
+        const seedCardLeft = await page
+          .locator('.MuiPaper-root')
+          .filter({ has: seedCount })
+          .evaluate((element) => element.getBoundingClientRect().left);
+        const speciesCardRight = await page
+          .locator('.MuiPaper-root')
+          .filter({ has: page.locator('#species-current') })
+          .evaluate((element) => element.getBoundingClientRect().right);
+        expect(speciesCardRight - headerRight).toBeCloseTo(titleLeft - seedCardLeft, 0);
+      }
       await expect(page).toHaveScreenshot(`page-${name}${screenshotSuffix}.png`, {
         ...SCREENSHOT_OPTIONS,
         fullPage: !!viewport,
