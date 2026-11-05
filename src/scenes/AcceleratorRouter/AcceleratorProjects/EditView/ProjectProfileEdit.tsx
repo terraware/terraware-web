@@ -999,7 +999,7 @@ const ProjectProfileEdit = () => {
               validate={!!acceleratorProjectRecord?.phase && validateFields}
             />
 
-            <Grid container>
+            <Grid container size={12}>
               <SdgMultiSelect
                 id={'sdgList'}
                 md={6}
