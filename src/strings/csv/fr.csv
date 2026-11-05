@@ -535,6 +535,9 @@ DELETE_SPECIES_TARGET_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0
 DELETE_THIS_DRAFT,Supprimer ce brouillon ?,9ecf4292
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabilité {0}.,ceace778
+DELETE_VIEW,Supprimer la vue,10ce4e6e
+DELETE_VIEW_CONFIRMATION,« {0} » sera supprimé de vos vues enregistrées. Cela ne modifiera aucune donnée du projet.,5813e558
+DELETE_VIEW_TITLE,Supprimer la vue ?,3c9df51d
 DELETED_SPECIES,<deleted species>,c397460c
 DELIVERABLE_APPROVED,Livrable approuvé,c2a1516b
 DELIVERABLE_CATEGORY,Catégorie : {0},bbe96e63
@@ -2040,6 +2043,7 @@ SAVE_VIEW,Enregistrer la vue,c4a3bd9f
 SAVE_VIEW_BUTTON,Enregistrer la vue,0059102f
 SAVED,Sauvegardé,3324fd4d
 SAVED_VIEW_CREATED,{0} a été enregistré dans Mes vues,e8a17db1
+SAVED_VIEW_DELETED,{0} supprimée,77fb1505
 SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38
 SAVED_VIEWS_PRIVATE,Vous seul pouvez voir les vues que vous enregistrez.,374179a6
 SAVING,Enregistrement en cours...,d4ce4849

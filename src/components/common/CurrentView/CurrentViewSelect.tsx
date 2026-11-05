@@ -35,6 +35,7 @@ export type CurrentViewSelectProps = {
   modified?: boolean;
   myViews?: ViewOption[];
   onChange: (value: string) => void;
+  onDeleteView?: (value: string) => void;
   onRenameView?: (value: string, name: string) => Promise<void> | void;
   onSave?: () => void;
   presetViews?: ViewOption[];
@@ -48,6 +49,7 @@ const CurrentViewSelect = ({
   modified,
   myViews,
   onChange,
+  onDeleteView,
   onRenameView,
   onSave,
   presetViews,
@@ -58,6 +60,7 @@ const CurrentViewSelect = ({
   const defaultViewLabel = defaultViewLabelProp === undefined ? strings.DEFAULT : defaultViewLabelProp;
   const theme = useTheme();
   const labelId = `${id}-outlined-label`;
+  const [open, setOpen] = useState(false);
   const [editingValue, setEditingValue] = useState<string>();
   const [editingName, setEditingName] = useState('');
   const [isRenaming, setIsRenaming] = useState(false);
@@ -79,6 +82,31 @@ const CurrentViewSelect = ({
   const stopPropagation = useCallback((event: React.SyntheticEvent) => event.stopPropagation(), []);
 
   const cancelEditing = useCallback(() => setEditingValue(undefined), []);
+
+  const handleOpen = useCallback(() => setOpen(true), []);
+
+  const handleClose = useCallback(() => {
+    setOpen(false);
+    cancelEditing();
+  }, [cancelEditing]);
+
+  const deleteView = useCallback(
+    (value?: string) => {
+      if (value) {
+        handleClose();
+        onDeleteView?.(value);
+      }
+    },
+    [handleClose, onDeleteView]
+  );
+
+  const handleDeleteClick = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      event.stopPropagation();
+      deleteView(event.currentTarget.dataset.value);
+    },
+    [deleteView]
+  );
 
   const confirmEditing = useCallback(async () => {
     if (isRenaming) {
@@ -116,13 +144,20 @@ const CurrentViewSelect = ({
 
   const handleMyViewKeyDown = useCallback(
     (event: React.KeyboardEvent<HTMLElement>) => {
-      if (event.key === 'F2') {
+      const value = event.currentTarget.dataset.value;
+      if (event.key === 'F2' && onRenameView) {
         event.preventDefault();
-        startEditingView(event.currentTarget.dataset.value);
+        startEditingView(value);
+      } else if ((event.key === 'Delete' || event.key === 'Backspace') && onDeleteView) {
+        event.preventDefault();
+        deleteView(value);
       }
     },
-    [startEditingView]
+    [deleteView, onDeleteView, onRenameView, startEditingView]
   );
+
+  const myViewKeyShortcuts =
+    [...(onRenameView ? ['F2'] : []), ...(onDeleteView ? ['Delete', 'Backspace'] : [])].join(' ') || undefined;
 
   const handleCancelClick = useCallback(
     (event: React.MouseEvent) => {
@@ -157,7 +192,7 @@ const CurrentViewSelect = ({
     [cancelEditing, confirmEditing]
   );
 
-  const renderLabel = (label: string, value: string, editable = false) => (
+  const renderLabel = (label: string, value: string, isMyView = false) => (
     <Box display='flex' alignItems='center' width='100%'>
       <Box flexGrow={1} overflow='hidden' textOverflow='ellipsis' whiteSpace='nowrap'>
         {label}
@@ -170,7 +205,7 @@ const CurrentViewSelect = ({
           style={{ stroke: theme.palette.TwClrIcnSuccess, strokeWidth: 1 }}
         />
       )}
-      {editable && (
+      {isMyView && onRenameView && (
         <IconButton
           aria-label={strings.EDIT}
           data-value={value}
@@ -180,6 +215,18 @@ const CurrentViewSelect = ({
           sx={{ marginLeft: theme.spacing(1), padding: 0 }}
         >
           <Icon name='iconEdit' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+        </IconButton>
+      )}
+      {isMyView && onDeleteView && (
+        <IconButton
+          aria-label={strings.DELETE}
+          data-value={value}
+          id={`${id}-delete-${value}`}
+          onClick={handleDeleteClick}
+          size='small'
+          sx={{ marginLeft: theme.spacing(1), padding: 0 }}
+        >
+          <Icon name='iconTrashCan' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
         </IconButton>
       )}
     </Box>
@@ -247,7 +294,7 @@ const CurrentViewSelect = ({
     [defaultViewLabel, modified, myViews, presetViews, strings, theme]
   );
 
-  const renderSection = (header: string, views?: ViewOption[], showDivider = true, editable = false) =>
+  const renderSection = (header: string, views?: ViewOption[], showDivider = true, isMyViews = false) =>
     views?.length
       ? [
           ...(showDivider ? [<Divider key={`${header}-divider`} />] : []),
@@ -255,21 +302,21 @@ const CurrentViewSelect = ({
             {header.toUpperCase()}
           </ListSubheader>,
           ...views.map(({ label, value }) =>
-            editable && value === editingValue ? (
+            isMyViews && value === editingValue ? (
               <MenuItem key={value} id={value} value={value} disableRipple sx={{ padding: 0 }}>
                 {renderEditingLabel(value)}
               </MenuItem>
             ) : (
               <MenuItem
-                aria-keyshortcuts={editable ? 'F2' : undefined}
+                aria-keyshortcuts={isMyViews ? myViewKeyShortcuts : undefined}
                 data-value={value}
                 key={value}
                 id={value}
                 value={value}
                 onClick={getReselectHandler(value)}
-                onKeyDown={editable ? handleMyViewKeyDown : undefined}
+                onKeyDown={isMyViews ? handleMyViewKeyDown : undefined}
               >
-                {renderLabel(label, value, editable)}
+                {renderLabel(label, value, isMyViews)}
               </MenuItem>
             )
           ),
@@ -284,7 +331,9 @@ const CurrentViewSelect = ({
         id={id}
         label={strings.CURRENT_VIEW}
         onChange={handleChange}
-        onClose={cancelEditing}
+        onClose={handleClose}
+        onOpen={handleOpen}
+        open={open}
         renderValue={renderValue}
         value={selected}
       >
@@ -294,7 +343,7 @@ const CurrentViewSelect = ({
           </MenuItem>
         )}
         {renderSection(strings.PRESET_VIEWS, sortViewsByLabel(presetViews), defaultViewLabel !== null)}
-        {renderSection(strings.MY_VIEWS, myViews, defaultViewLabel !== null || !!presetViews?.length, !!onRenameView)}
+        {renderSection(strings.MY_VIEWS, myViews, defaultViewLabel !== null || !!presetViews?.length, true)}
         {showSave && <Divider />}
         {showSave && (
           <MenuItem

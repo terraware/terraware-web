@@ -92,6 +92,7 @@ export const WithRename = CurrentViewTemplate.bind({});
 
 WithRename.args = {
   myViews,
+  onDeleteView: () => undefined,
   onRenameView: () => undefined,
   presetViews,
   selected: 'phase1Projects',

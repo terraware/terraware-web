@@ -536,6 +536,9 @@ DELETE_SPECIES_TARGET_CONFIRM,"You are about to delete the species {0} as a targ
 DELETE_THIS_DRAFT,Delete this draft?,
 DELETE_VIABILITY_TEST,Delete Viability Test,
 DELETE_VIABILITY_TEST_MESSAGE,You’re about to delete viability test {0}.,
+DELETE_VIEW,Delete view,
+DELETE_VIEW_CONFIRMATION,"""{0}"" will be removed from your saved views. This doesn’t change any project data.",
+DELETE_VIEW_TITLE,Delete view?,
 DELETED_SPECIES,<deleted species>,
 DELIVERABLE_APPROVED,Deliverable Approved,
 DELIVERABLE_CATEGORY,Category: {0},"Shows the deliverable document's category name, example Category: Legal"
@@ -2041,6 +2044,7 @@ SAVE_VIEW,Save View,
 SAVE_VIEW_BUTTON,Save view,
 SAVED,Saved,
 SAVED_VIEW_CREATED,{0} saved to My views,Toast shown after saving a table view: {0} is the view name
+SAVED_VIEW_DELETED,{0} deleted,Toast shown after deleting a saved table view: {0} is the view name
 SAVED_VIEW_UPDATED,{0} updated,Toast shown after renaming a saved table view: {0} is the new view name
 SAVED_VIEWS_PRIVATE,Only you can see views you save.,
 SAVING,Saving...,
