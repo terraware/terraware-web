@@ -147,7 +147,6 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
           display: 'flex',
           height: '24px',
           justifyContent: 'center',
-          ...logoStyles,
         }}
         size={6}
       />
