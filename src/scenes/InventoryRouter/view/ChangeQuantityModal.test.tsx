@@ -2,6 +2,7 @@ import React from 'react';
 
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
+import { HttpResponse, http } from 'msw/http';
 
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import strings from 'src/strings';
@@ -11,6 +12,7 @@ import {
   mockError,
   renderWithProviders,
   selectDropdownOption,
+  server,
 } from 'src/test-utils';
 
 type SourcePhase = 'germinating' | 'active-growth' | 'hardening-off';
@@ -100,6 +102,35 @@ const chooseNextPhase = async (user: UserEvent, from: SourcePhase, to: NextPhase
 const save = (user: UserEvent) => user.click(screen.getByRole('button', { name: strings.SAVE }));
 
 describe('ChangeQuantityModal', () => {
+  it.each([200, 500])('sends only one change while saving and unlocks after HTTP %s', async (status) => {
+    let finish!: () => void;
+    const pending = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const requests: Request[] = [];
+    server.use(
+      http.post(CHANGE_STATUSES_URL, async ({ request }) => {
+        requests.push(request);
+        await pending;
+        return HttpResponse.json({ status: status === 200 ? 'ok' : 'error' }, { status });
+      })
+    );
+    const { user } = renderModal('germinating');
+    await enterMove(user, '5');
+    const saveButton = screen.getByRole('button', { name: strings.SAVE });
+    await user.dblClick(saveButton);
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(saveButton).toBeDisabled();
+    await user.keyboard('{Enter}');
+    expect(requests).toHaveLength(1);
+    finish();
+    await waitFor(() => expect(saveButton).toBeEnabled());
+    if (status === 500) {
+      await user.click(saveButton);
+      await waitFor(() => expect(requests).toHaveLength(2));
+    }
+  });
+
   describe('next phase options', () => {
     it.each<{ from: SourcePhase; options: NextPhase[] }>([
       { from: 'germinating', options: ['ActiveGrowth', 'HardeningOff', 'Ready'] },
