@@ -491,6 +491,7 @@ DEAD_PLANTS,Plantes mortes,faa0988b
 DEAD_PLANTS_OBSERVED,Plantes mortes observées,3ff4f3af
 DEAL_NAME,Nom de l'offre,be1bd4c5
 DECLINE,Refuser,67618a4e
+DEFAULT,Par défaut,1df379f4
 DEFAULT_LANGUAGE_SELECTED,Langue par défaut : {0},74d18404
 DEFINITION,Définition,b17769ee
 DELETE,Supprimer,43cbbd0c
@@ -1248,6 +1249,7 @@ MOVE,Déplacer,abe6be41
 MRV_CYCLE,Cycle MRV,ab7e636c
 MULTIPLE_FORMS,Formes multiples,abad8008
 MY_ACCOUNT,Mon compte,8e57f7ad
+MY_VIEWS,Mes vues,d3f6da64
 N_IMAGES,{0} image(s),098eae0e
 N_ROWS,{0} ligne(s),2bb73684
 NA,N/A,627f660e
@@ -1717,6 +1719,7 @@ PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED,Mise à jour de la liste prélim
 PREPARATION_MATERIALS,Matériaux de préparation,c6fd2575
 PRESCREEN,Présélection,9a38127f
 PRESCREEN_FAILED,Échec de la présélection,2a2dc3e9
+PRESET_VIEWS,Vues prédéfinies,61b20adc
 PREVIEW,Aperçu,a2aefa10
 PREVIEW_FUNDER_REPORT,Prévisualiser le rapport du bailleur,17fa74c8
 PREVIEW_HIGHLIGHTS,Aperçu des points forts,248bb9ae

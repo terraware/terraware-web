@@ -28,8 +28,8 @@ import {
 } from 'material-react-table';
 
 import Page from 'src/components/Page';
+import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
-import Dropdown from 'src/components/common/Dropdown';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -59,7 +59,7 @@ import ColumnsModal, { baseColumns } from './ColumnsModal';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
-type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
+type ViewOption = typeof DEFAULT_VIEW | 'acceleratorProjects' | 'applicants';
 
 type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
 type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
@@ -795,7 +795,7 @@ const MatrixView = () => {
 
   const reloadTable = useCallback(() => {
     let search: SearchNodePayload | undefined;
-    if (currentView === 'noFilter') {
+    if (currentView === DEFAULT_VIEW) {
       search = {
         operation: 'or',
         children: [
@@ -1004,16 +1004,13 @@ const MatrixView = () => {
       renderTopToolbarCustomActions: () => (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
           <Grid style={{ width: '242px' }}>
-            <Dropdown
-              id={'current-view'}
-              label={strings.CURRENT_VIEW}
-              onChange={onCurrentViewChange}
-              values={[
-                { label: '--', value: 'noFilter' },
+            <CurrentView
+              defaultPreset={currentView}
+              onPresetChange={onCurrentViewChange}
+              presetViews={[
                 { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
                 { label: strings.APPLICANTS, value: 'applicants' },
               ]}
-              selected={currentView}
             />
           </Grid>
 
