@@ -34,8 +34,18 @@ const Form = () => {
   );
 };
 
-it.each(['images', 'values', 'complete', 'incomplete', 'value-error', 'image-error', 'complete-error', 'empty'])(
-  'waits for every questionnaire request before unlocking or exiting (%s)',
+it.each([
+  'images',
+  'values',
+  'complete',
+  'incomplete',
+  'value-error',
+  'image-error',
+  'images-error',
+  'complete-error',
+  'empty',
+])(
+  'waits for every questionnaire request before unlocking or exiting and retries only failed work (%s)',
   async (mode) => {
     mockGet('/build-version.txt');
     const baseVariable = { internalOnly: false, isList: false, isRequired: false };
@@ -67,7 +77,9 @@ it.each(['images', 'values', 'complete', 'incomplete', 'value-error', 'image-err
     });
     const onResponse = ({ request, response }: { request: Request; response: Response }) => {
       if (
-        mode === 'value-error' || mode === 'image-error' ? response.status === 500 : request.url.endsWith('/complete')
+        ['value-error', 'image-error', 'images-error'].includes(mode)
+          ? response.status === 500
+          : request.url.endsWith('/complete')
       ) {
         receivedFastResponse();
       }
@@ -75,24 +87,26 @@ it.each(['images', 'values', 'complete', 'incomplete', 'value-error', 'image-err
     server.events.on('response:mocked', onResponse);
     const requests: Request[] = [];
     let images = 0;
+    let values = 0;
     server.use(
       http.post('/api/v1/document-producer/projects/7/images', async ({ request }) => {
         requests.push(request.clone());
         images++;
-        const fails = mode === 'image-error' && images === 1;
-        if (['images', 'value-error', 'image-error'].includes(mode) && images === 2) {
+        const fails = (mode === 'image-error' && images === 1) || (mode === 'images-error' && images <= 2);
+        if (['images', 'value-error', 'image-error', 'images-error'].includes(mode) && images === 2) {
           await pending;
         }
         return HttpResponse.json({ status: fails ? 'error' : 'ok' }, { status: fails ? 500 : 200 });
       }),
       http.post('/api/v1/document-producer/projects/7/values', async ({ request }) => {
         requests.push(request.clone());
+        values++;
         if (mode === 'values') {
           await pending;
         }
         return HttpResponse.json(
-          { status: mode === 'value-error' ? 'error' : 'ok' },
-          { status: mode === 'value-error' ? 500 : 200 }
+          { status: mode === 'value-error' && values === 1 ? 'error' : 'ok' },
+          { status: mode === 'value-error' && values === 1 ? 500 : 200 }
         );
       }),
       http.post('/api/v1/accelerator/deliverables/4/submissions/7/:status', async ({ request }) => {
@@ -148,10 +162,13 @@ it.each(['images', 'values', 'complete', 'incomplete', 'value-error', 'image-err
       save.click();
       expect(requests).toHaveLength(noChanges ? 1 : 4);
       release();
-      if (mode === 'value-error' || mode === 'image-error') {
+      if (['value-error', 'image-error', 'images-error'].includes(mode)) {
         await waitFor(() => expect(save).toBeEnabled());
         expect(cancel).toBeEnabled();
         expect(screen.queryByText('Returned to deliverable')).not.toBeInTheDocument();
+        expect(document.querySelector('#value input')).toHaveValue('Restoring forest');
+        expect(screen.getByRole('img', { name: 'first.jpg' })).toBeInTheDocument();
+        expect(screen.getByRole('img', { name: 'second.jpg' })).toBeInTheDocument();
       } else {
         await screen.findByText('Returned to deliverable');
       }
@@ -162,6 +179,26 @@ it.each(['images', 'values', 'complete', 'incomplete', 'value-error', 'image-err
             msg: strings.GENERIC_ERROR,
           })
         );
+      }
+      if (['value-error', 'image-error', 'images-error'].includes(mode)) {
+        const valueRequests = requests.filter((request) => request.url.endsWith('/values'));
+        expect(await valueRequests[0].clone().json()).toMatchObject({
+          operations: [{ operation: 'Append', variableId: 1 }],
+        });
+        await user.click(save);
+        await screen.findByText('Returned to deliverable');
+        expect(requests.filter((request) => request.url.endsWith('/values'))).toHaveLength(
+          mode === 'value-error' ? 2 : 1
+        );
+        const imageRequests = requests.filter((request) => request.url.endsWith('/images'));
+        expect(imageRequests).toHaveLength(mode === 'value-error' ? 2 : mode === 'image-error' ? 3 : 4);
+        const filenames = await Promise.all(
+          imageRequests.map(async (request) => ((await request.clone().formData()).get('file') as File).name)
+        );
+        expect(filenames.filter((name) => name === 'first.jpg')).toHaveLength(mode === 'value-error' ? 1 : 2);
+        expect(filenames.filter((name) => name === 'second.jpg')).toHaveLength(mode === 'images-error' ? 2 : 1);
+        expect(requests.filter((request) => request.url.endsWith('/complete'))).toHaveLength(2);
+        expect(requests.filter((request) => request.url.endsWith('/incomplete'))).toHaveLength(0);
       }
     } finally {
       release();

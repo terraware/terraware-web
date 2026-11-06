@@ -17,6 +17,9 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { makeVariableValueOperations } from './util';
 
+const removeSavedEntries = <T>(current: Map<number, T>, saved: Map<number, T>) =>
+  new Map([...current].filter(([id, value]) => !saved.has(id) || saved.get(id) !== value));
+
 type ProjectVariablesUpdate = {
   hasVariableError: boolean;
   missingFields: boolean;
@@ -48,17 +51,17 @@ export const useProjectVariablesUpdate = (
   const [pendingDeletedImages, setPendingDeletedImages] = useState<Map<number, VariableValueImageValue[]>>(new Map());
   const [pendingNewImages, setPendingNewImages] = useState<Map<number, PhotoWithAttributes[]>>(new Map());
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
+  const [displayVariableValues, setDisplayVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
+  const [displayCellValues, setDisplayCellValues] = useState<Map<number, VariableTableCell[][]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
   const [variableHasErrorMap, setVariableHasErrorMap] = useState<Map<Variable['id'], boolean>>(new Map());
 
   const [noOp, setNoOp] = useState(false);
 
-  const setValues = useCallback(
-    (variableId: number, values: VariableValueValue[]) => {
-      setPendingVariableValues(new Map(pendingVariableValues).set(variableId, values));
-    },
-    [pendingVariableValues]
-  );
+  const setValues = useCallback((variableId: number, values: VariableValueValue[]) => {
+    setPendingVariableValues((current) => new Map(current).set(variableId, values));
+    setDisplayVariableValues((current) => new Map(current).set(variableId, values));
+  }, []);
 
   const setRemovedValue = useCallback(
     (variableId: number, value: VariableValueValue) => {
@@ -67,12 +70,10 @@ export const useProjectVariablesUpdate = (
     [removedVariableValues]
   );
 
-  const setCellValues = useCallback(
-    (variableId: number, values: VariableTableCell[][]) => {
-      setPendingCellValues(new Map(pendingCellValues).set(variableId, values));
-    },
-    [pendingCellValues]
-  );
+  const setCellValues = useCallback((variableId: number, values: VariableTableCell[][]) => {
+    setPendingCellValues((current) => new Map(current).set(variableId, values));
+    setDisplayCellValues((current) => new Map(current).set(variableId, values));
+  }, []);
 
   const setImages = useCallback(
     (variableId: number, values: VariableValueImageValue[]) => {
@@ -97,14 +98,14 @@ export const useProjectVariablesUpdate = (
 
   const stagedVariableWithValues: VariableWithValues[] = useMemo(() => {
     return variablesWithValues.map((variableWithValues) => {
-      const pendingValues = pendingVariableValues.get(variableWithValues.id);
+      const pendingValues = displayVariableValues.get(variableWithValues.id);
       if (pendingValues !== undefined) {
         return { ...variableWithValues, values: pendingValues };
       } else {
         return variableWithValues;
       }
     });
-  }, [pendingVariableValues, variablesWithValues]);
+  }, [displayVariableValues, variablesWithValues]);
 
   const stagedCellValues = useMemo(() => {
     const map = new Map<number, VariableTableCell[][]>();
@@ -112,7 +113,7 @@ export const useProjectVariablesUpdate = (
       .filter((variable): variable is TableVariableWithValues => variable.type === 'Table')
       .forEach((variable) => {
         const initialValues = getInitialCellValues(variable);
-        const pendingValues = pendingCellValues.get(variable.id);
+        const pendingValues = displayCellValues.get(variable.id);
         if (pendingValues !== undefined) {
           map.set(variable.id, pendingValues);
         } else {
@@ -120,7 +121,7 @@ export const useProjectVariablesUpdate = (
         }
       });
     return map;
-  }, [variablesWithValues, pendingCellValues]);
+  }, [variablesWithValues, displayCellValues]);
 
   const missingFields = useMemo(
     () => missingRequiredFields(stagedVariableWithValues, stagedCellValues),
@@ -220,7 +221,21 @@ export const useProjectVariablesUpdate = (
       });
       const requests: Promise<boolean>[] = [];
       if (imageValuesToUpload.length > 0) {
-        requests.push(uploadImageValues(imageValuesToUpload));
+        requests.push(
+          uploadImageValues(imageValuesToUpload, (image) => {
+            const savedImage = pendingNewImages.get(image.variableId)?.find((photo) => photo.file === image.file);
+            setPendingNewImages((current) => {
+              const remaining = new Map(current);
+              const photos = remaining.get(image.variableId)?.filter((photo) => photo !== savedImage);
+              if (photos?.length) {
+                remaining.set(image.variableId, photos);
+              } else {
+                remaining.delete(image.variableId);
+              }
+              return remaining;
+            });
+          })
+        );
       }
 
       if (operations.length > 0) {
@@ -228,7 +243,17 @@ export const useProjectVariablesUpdate = (
           updateProjectVariableValues({
             projectId,
             updateVariableValuesRequestPayload: { operations, updateStatuses: updateStatuses ?? true },
-          }).then((result) => !('error' in result))
+          }).then((result) => {
+            if ('error' in result) {
+              return false;
+            }
+            setPendingVariableValues((current) => removeSavedEntries(current, pendingVariableValues));
+            setPendingCellValues((current) => removeSavedEntries(current, pendingCellValues));
+            setPendingImages((current) => removeSavedEntries(current, pendingImages));
+            setPendingDeletedImages((current) => removeSavedEntries(current, pendingDeletedImages));
+            setRemovedVariableValues((current) => removeSavedEntries(current, removedVariableValues));
+            return true;
+          })
         );
       } else {
         // if there are no pending changes, set flag to true to fake success & exit
@@ -305,7 +330,7 @@ export const useProjectVariablesUpdate = (
   return useMemo(
     () => ({
       hasVariableError,
-      pendingVariableValues,
+      pendingVariableValues: displayVariableValues,
       setCellValues,
       setDeletedImages,
       setImages,
@@ -322,7 +347,7 @@ export const useProjectVariablesUpdate = (
     }),
     [
       hasVariableError,
-      pendingVariableValues,
+      displayVariableValues,
       setCellValues,
       setDeletedImages,
       setImages,
