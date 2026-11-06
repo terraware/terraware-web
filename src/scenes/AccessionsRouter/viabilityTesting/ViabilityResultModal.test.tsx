@@ -1,24 +1,17 @@
 import React from 'react';
 
 import { rs } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 
 import strings from 'src/strings';
-import {
-  buildAccession,
-  buildViabilityTest,
-  captureRequests,
-  mockError,
-  mockGet,
-  renderWithProviders,
-} from 'src/test-utils';
+import { buildAccession, buildViabilityTest, captureRequests, mockError, renderWithProviders } from 'src/test-utils';
 import { ViabilityTest } from 'src/types/Accession';
 
 import ViabilityResultModal from './ViabilityResultModal';
 
 const URL = '/api/v2/seedbank/accessions/42';
 const renderModal = (overrides: Partial<ViabilityTest> = {}) => {
-  mockGet(URL, { accession: buildAccession() });
+  const loads = captureRequests('get', URL, { accession: buildAccession() });
   const onClose = rs.fn();
   return {
     ...renderWithProviders(
@@ -34,6 +27,12 @@ const renderModal = (overrides: Partial<ViabilityTest> = {}) => {
       { route: '/accessions/42', path: '/accessions/:accessionId' }
     ),
     onClose,
+    waitForAccession: async () => {
+      await waitFor(() => expect(loads).toHaveLength(1));
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
+    },
   };
 };
 
@@ -43,10 +42,9 @@ describe('ViabilityResultModal', () => {
     [{ testType: 'Cut', seedsTested: 20, seedsFilled: 12, seedsCompromised: 3 }, '75%', 75],
   ] as const)('applies the displayed result %s only on confirmation', async (test, label, percent) => {
     const requests = captureRequests('put', URL);
-    const { user, onClose } = renderModal(test);
+    const { user, onClose, waitForAccession } = renderModal(test);
     expect(await screen.findByText(label)).toBeVisible();
-    // Wait for the accession needed to apply the result, not just the test's static display.
-    await waitFor(() => expect(screen.getByRole('button', { name: strings.APPLY_RESULT })).toBeEnabled());
+    await waitForAccession();
     await user.click(screen.getByRole('button', { name: strings.APPLY_RESULT }));
     await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
     expect(requests).toHaveLength(1);
@@ -63,8 +61,9 @@ describe('ViabilityResultModal', () => {
 
   it('keeps the result open when applying fails', async () => {
     mockError('put', URL);
-    const { user, onClose, store } = renderModal();
+    const { user, onClose, store, waitForAccession } = renderModal();
     await screen.findByText('32%');
+    await waitForAccession();
     await user.click(screen.getByRole('button', { name: strings.APPLY_RESULT }));
     await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
     expect(onClose).not.toHaveBeenCalled();
