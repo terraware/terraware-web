@@ -1,3 +1,4 @@
+aad5d875 SW-9236 Use distinct filenames for templates (#7049)
 a7ab4a71 SW-9241 Add Explanation photo to Biomass Photos Tab (#7048)
 ca95361d SW-9240 Add monitoring type column and show biomass observations in observations table (#7047)
 f8f8763a SW-9221 Show plot counts for the monitoring type being scheduled (#7046)
