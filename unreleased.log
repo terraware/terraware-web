@@ -1,3 +1,7 @@
+39251c90 SW-8789 Delete the right batches from By Species and By Nursery inventory (#7035)
+65db62aa SW-8021 Prevent duplicate quantity changes while saving (#7036)
+8e96a459 SW-8019 Prevent duplicate viability test deletions (#7037)
+b04efd85 SW-7614 Upgrade web-components and disable Cancel while PageForm is busy (#7039)
 a8df6f4e SW-9242 Add strata and monitoring plots pages to biomass observations (#7051)
 a5bc9d86 SW-9242 Resolve the biomass plot from the route (#7050)
 aad5d875 SW-9236 Use distinct filenames for templates (#7049)

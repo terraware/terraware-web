@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/25</span>
+                <span class='fraction'>0/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/30</span>
+                <span class='fraction'>0/36</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/24</span>
+                <span class='fraction'>0/27</span>
             </div>
         
             
@@ -218,7 +218,13 @@
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
-<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -241,6 +247,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -306,7 +314,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -320,6 +327,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -329,9 +342,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,6 +349,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -394,11 +406,13 @@ import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >InventoryListByNursery(</span>) {
+  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
   const { activeLocale, strings } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
   const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const { findSpeciesById } = <span class="cstat-no" title="statement not covered" >useOrganizationSpecies();</span>
+  const { findSpeciesById, species } = <span class="cstat-no" title="statement not covered" >useOrganizationSpecies();</span>
 &nbsp;
   const [filters, setFilters] = <span class="cstat-no" title="statement not covered" >useForm&lt;InventoryFiltersUnion&gt;({});</span>
   const [temporalSearchValue, setTemporalSearchValue] = <span class="cstat-no" title="statement not covered" >useState('');</span>
@@ -460,9 +474,14 @@ export default function <span class="fstat-no" title="function not covered" >Inv
     [debouncedSearchTerm, filters.facilityIds, filters.speciesIds, selectedOrganization]
   );
 &nbsp;
-  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, rather than blanking out on every keystroke.
-  const [searchInventoryByNursery, { data: apiSearchResults }] = <span class="cstat-no" title="statement not covered" >useLazySearchInventoryByNurseryQuery();</span>
+  const [searchInventoryByNursery, { data: apiSearchResults, isFetching, isError }] =
+<span class="cstat-no" title="statement not covered" >    useLazySearchInventoryByNurseryQuery();</span>
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+<span class="cstat-no" title="statement not covered" >    if (isError) {</span>
+<span class="cstat-no" title="statement not covered" >      snackbar.toastError();</span>
+    }
+  }, [isError, snackbar]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  useEffect(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (selectedOrganization &amp;&amp; activeLocale) {</span>
@@ -472,7 +491,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
 &nbsp;
   const searchResults = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (!apiSearchResults) {</span>
-<span class="cstat-no" title="statement not covered" >      return undefined;</span>
+<span class="cstat-no" title="statement not covered" >      return isError ? [] : undefined;</span>
     }
 &nbsp;
     const showEmptyNurseries = <span class="cstat-no" title="statement not covered" >(filters.showEmptyNurseries || [])[0] === 'true';</span>
@@ -484,14 +503,11 @@ export default function <span class="fstat-no" title="function not covered" >Inv
           resultTyped.facilityInventories
             ?.filter((fi) =&gt; fi.species_id)
             ?.map((inv) =&gt; findSpeciesById(Number(inv.species_id))?.scientificName ?? inv.species_scientificName) || [];
-        const batchIds =
-          resultTyped.facilityInventories
-            ?.filter(<span class="fstat-no" title="function not covered" >(fi) =&gt; <span class="cstat-no" title="statement not covered" >fi.species_id)</span></span>
-            ?.flatMap(<span class="fstat-no" title="function not covered" >(inv) =&gt; <span class="cstat-no" title="statement not covered" >inv.batches.map(<span class="fstat-no" title="function not covered" >(batch) =&gt; <span class="cstat-no" title="statement not covered" >batch.id)</span></span>)</span></span> || [];
+        const batchIds = resultTyped.facilityInventories?.flatMap(<span class="fstat-no" title="function not covered" >(inv) =&gt; <span class="cstat-no" title="statement not covered" >inv.batches.map(<span class="fstat-no" title="function not covered" >(batch) =&gt; <span class="cstat-no" title="statement not covered" >batch.id)</span></span>)</span></span> || [];
 <span class="cstat-no" title="statement not covered" >        return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };</span>
       })
       .filter(<span class="fstat-no" title="function not covered" >(result) =&gt; <span class="cstat-no" title="statement not covered" >showEmptyNurseries || !isNurseryEmpty(result))</span></span>;
-  }, [apiSearchResults, filters.showEmptyNurseries, findSpeciesById]);
+  }, [apiSearchResults, filters.showEmptyNurseries, findSpeciesById, isError]);
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Card flushMobile&gt;
@@ -508,12 +524,14 @@ export default function <span class="fstat-no" title="function not covered" >Inv
       ) : hasBatches ? (
         &lt;InventoryTable
           results={searchResults || []}
+          disableDelete={isFetching || isError}
           temporalSearchValue={temporalSearchValue}
           setTemporalSearchValue={setTemporalSearchValue}
           filters={filters}
           setFilters={setFilters}
           columns={columns}
           origin='Nursery'
+          nurserySpecies={species}
           emptyTableMessage={
             !debouncedSearchTerm &amp;&amp; !filters.facilityIds?.length &amp;&amp; !filters.speciesIds?.length
               ? strings.NO_BATCHES_WITH_INVENTORY
@@ -535,7 +553,7 @@ export default function <span class="fstat-no" title="function not covered" >Inv
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-06T18:33:38.754Z
+                at 2026-11-06T18:54:33.497Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
