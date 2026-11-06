@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 
 import { Box, Portal, Typography, useTheme } from '@mui/material';
-import { PillList } from '@terraware/web-components';
+import { BusySpinner, PillList } from '@terraware/web-components';
 
 import { MAX_VIEW_NAME_LENGTH, getViewNameError } from 'src/components/common/CurrentView/viewName';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -42,11 +42,17 @@ const SaveViewModal = ({
   const [isNameTouched, setIsNameTouched] = useState(false);
   const nameError = getViewNameError(name, existingNames ?? []);
 
-  const handleClose = useCallback(() => {
+  const closeModal = useCallback(() => {
     setName('');
     setIsNameTouched(false);
     onClose();
   }, [onClose]);
+
+  const handleClose = useCallback(() => {
+    if (!isLoading) {
+      closeModal();
+    }
+  }, [closeModal, isLoading]);
 
   const handleNameChange = useCallback((value: unknown) => {
     setName((value as string) ?? '');
@@ -70,14 +76,14 @@ const SaveViewModal = ({
       }).unwrap();
       onSaved?.(response.id);
       snackbar.toastSuccess(strings.formatString(strings.SAVED_VIEW_CREATED, trimmedName));
-      handleClose();
+      closeModal();
     } catch {
       snackbar.toastError();
     }
   }, [
     baseView,
+    closeModal,
     createSavedTableView,
-    handleClose,
     name,
     nameError,
     onSaved,
@@ -141,6 +147,7 @@ const SaveViewModal = ({
           </Typography>
         </Box>
       </DialogBox>
+      {isLoading && <BusySpinner withSkrim />}
     </Portal>
   );
 };
