@@ -10,6 +10,7 @@ import {
   buildOrganization,
   buildUser,
   captureRequests,
+  mockError,
   mockGet,
   mockPost,
   renderWithProviders,
@@ -407,6 +408,92 @@ describe('WithdrawSeedsForm', () => {
       expect(message).toContain('ACC-002');
       // Nothing was withdrawn, so the parent is not refreshed.
       expect(onWithdrawn).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('quantity interactions', () => {
+    it('sends the entered weight for an ordinary withdrawal', async () => {
+      const requests = captureRequests('post', WITHDRAWAL_URL);
+      const { user } = renderForm([buildWithdrawInfo({ remainingQuantity: { quantity: 50, units: 'Grams' } })]);
+      await user.click(await screen.findByRole('radio', { name: strings.PLANTING }));
+      await user.click(screen.getByRole('button', { name: strings.NEXT }));
+      await user.click(screen.getByRole('radio', { name: strings.SEED_WEIGHT }));
+      await user.type(screen.getByRole('spinbutton'), '12.5');
+      await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+      await waitFor(() => expect(requests).toHaveLength(1));
+      expect(await requests[0].json()).toMatchObject({
+        withdrawnQuantity: { quantity: 12.5, units: 'Grams' },
+      });
+    });
+
+    it('clears entered amounts when switching between seed count and weight', async () => {
+      const requests = captureRequests('post', WITHDRAWAL_URL);
+      const { user } = renderForm([buildWithdrawInfo()]);
+      await user.click(await screen.findByRole('radio', { name: strings.PLANTING }));
+      await user.click(screen.getByRole('button', { name: strings.NEXT }));
+      await user.type(screen.getByRole('spinbutton'), '10');
+      await user.click(screen.getByRole('radio', { name: strings.SEED_WEIGHT }));
+      expect(screen.getByRole('spinbutton')).toHaveValue(null);
+      expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+      await user.type(screen.getByRole('spinbutton'), '5');
+      await user.click(screen.getByRole('radio', { name: strings.SEED_COUNT }));
+      expect(screen.getByRole('spinbutton')).toHaveValue(null);
+      expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+      expect(requests).toHaveLength(0);
+    });
+
+    it('fills each accession balance with withdraw all and clears them when unchecked', async () => {
+      const requests = captureRequests('post', WITHDRAWAL_URL);
+      const { user } = renderForm([
+        buildWithdrawInfo(),
+        buildWithdrawInfo({ id: 2, accessionNumber: 'ACC-002', remainingQuantity: { quantity: 40, units: 'Seeds' } }),
+      ]);
+      await user.click(await screen.findByRole('radio', { name: strings.PLANTING }));
+      await user.click(screen.getByRole('button', { name: strings.NEXT }));
+      const all = screen.getByRole('checkbox', { name: strings.WITHDRAW_ALL });
+      await user.click(all);
+      expect(screen.getAllByRole('spinbutton')[0]).toHaveValue(100);
+      expect(screen.getAllByRole('spinbutton')[1]).toHaveValue(40);
+      await user.click(all);
+      for (const input of screen.getAllByRole('spinbutton')) {
+        expect(input).toHaveValue(null);
+      }
+      expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+      expect(requests).toHaveLength(0);
+    });
+
+    it('explains missing subset data and prevents a nursery weight transfer', async () => {
+      const transfers = captureRequests('post', NURSERY_TRANSFER_URL);
+      const { user } = renderForm([buildWithdrawInfo()]);
+      await screen.findByText(strings.PURPOSE);
+      await chooseNursery(user);
+      await user.click(screen.getByRole('button', { name: strings.NEXT }));
+      await user.click(screen.getByRole('radio', { name: strings.SEED_WEIGHT }));
+      await user.type(screen.getByRole('spinbutton'), '10');
+      expect(screen.getAllByText(strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY).length).toBeGreaterThan(0);
+      expect(screen.getByRole('button', { name: strings.NEXT })).toBeDisabled();
+      expect(transfers).toHaveLength(0);
+    });
+
+    it('retains entered amounts and allows retry when every withdrawal fails', async () => {
+      mockError('post', WITHDRAWAL_URL);
+      const onClose = rs.fn();
+      const onWithdrawn = rs.fn();
+      const { user, store } = renderForm([buildWithdrawInfo()], { onClose, onWithdrawn });
+      await user.click(await screen.findByRole('radio', { name: strings.PLANTING }));
+      await user.click(screen.getByRole('button', { name: strings.NEXT }));
+      await user.type(screen.getByRole('spinbutton'), '15');
+      await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+      await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+      expect(screen.getByRole('spinbutton')).toHaveValue(15);
+      expect(onClose).not.toHaveBeenCalled();
+      expect(onWithdrawn).not.toHaveBeenCalled();
+      const requests = captureRequests('post', WITHDRAWAL_URL);
+      await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+      await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+      expect(onWithdrawn).toHaveBeenCalledTimes(1);
+      expect(requests).toHaveLength(1);
+      expect(await requests[0].json()).toMatchObject({ withdrawnQuantity: { quantity: 15, units: 'Seeds' } });
     });
   });
 
