@@ -22,10 +22,8 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { TABLES } from 'src/types/Tables';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getBiomassStratumTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-const TABLE = TABLES.observationStrata;
 
 type StratumRow = {
   observationId: number;
@@ -39,7 +37,12 @@ type StratumRow = {
   survivalRatePending?: boolean;
 };
 
-export default function StratumList(): JSX.Element {
+type StratumListProps = {
+  isBiomass?: boolean;
+};
+
+export default function StratumList({ isBiomass = false }: StratumListProps): JSX.Element {
+  const tableDefinition = isBiomass ? TABLES.biomassObservationStrata : TABLES.observationStrata;
   const theme = useTheme();
   const { strings } = useLocalization();
   const defaultTimeZone = useDefaultTimeZone().get().id;
@@ -59,7 +62,7 @@ export default function StratumList(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(TABLE, { persistFilters: true });
+  } = useTableState(tableDefinition, { persistFilters: true });
 
   const { data: observationResultsResponse, isLoading } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -76,14 +79,20 @@ export default function StratumList(): JSX.Element {
   const rows = useMemo((): StratumRow[] => {
     if (observationResultsResponse) {
       return observationResultsResponse.observation.strata.map((stratum): StratumRow => {
-        const totalLive = getObservationSpeciesLivePlantsCount(stratum.species);
+        const counts = isBiomass
+          ? getBiomassStratumTotals(stratum)
+          : {
+              totalLive: getObservationSpeciesLivePlantsCount(stratum.species),
+              totalPlants: stratum.totalPlants,
+              totalSpecies: stratum.totalSpecies,
+            };
         return {
           observationId: observationResultsResponse.observation.observationId,
           stratumName: stratum.name,
           completedDate: stratum.completedTime ? getDateDisplayValue(stratum.completedTime, timeZone) : undefined,
-          totalLive,
-          totalPlants: stratum.totalPlants,
-          totalSpecies: stratum.totalSpecies,
+          totalLive: counts.totalLive,
+          totalPlants: counts.totalPlants,
+          totalSpecies: counts.totalSpecies,
           plantingDensity: stratum.observedDensity,
           survivalRate: stratum.survivalRate,
           survivalRatePending: stratum.pending,
@@ -92,7 +101,7 @@ export default function StratumList(): JSX.Element {
     } else {
       return [];
     }
-  }, [observationResultsResponse, timeZone]);
+  }, [isBiomass, observationResultsResponse, timeZone]);
 
   const StratumNameCell = useCallback(({ cell }: { cell: MRT_Cell<StratumRow> }) => {
     const row = cell.row.original;
@@ -129,8 +138,27 @@ export default function StratumList(): JSX.Element {
     );
   }, []);
 
-  const columns = useMemo<EditableTableColumn<StratumRow>[]>(
-    () => [
+  const columns = useMemo<EditableTableColumn<StratumRow>[]>(() => {
+    const plantColumns: EditableTableColumn<StratumRow>[] = isBiomass
+      ? []
+      : [
+          {
+            id: 'plantingDensity',
+            header: strings.PLANT_DENSITY,
+            accessorKey: 'plantingDensity',
+            filterVariant: 'range',
+            Cell: NumberCell,
+          },
+          {
+            id: 'survivalRate',
+            header: strings.SURVIVAL_RATE,
+            accessorKey: 'survivalRate',
+            filterVariant: 'range',
+            Cell: SurvivalRateCell,
+          },
+        ];
+
+    return [
       {
         id: 'stratumName',
         header: strings.STRATUM,
@@ -159,23 +187,9 @@ export default function StratumList(): JSX.Element {
         filterVariant: 'range',
         Cell: NumberCell,
       },
-      {
-        id: 'plantingDensity',
-        header: strings.PLANT_DENSITY,
-        accessorKey: 'plantingDensity',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'survivalRate',
-        header: strings.SURVIVAL_RATE,
-        accessorKey: 'survivalRate',
-        filterVariant: 'range',
-        Cell: SurvivalRateCell,
-      },
-    ],
-    [strings, StratumNameCell, NumberCell, SurvivalRateCell]
-  );
+      ...plantColumns,
+    ];
+  }, [isBiomass, strings, StratumNameCell, NumberCell, SurvivalRateCell]);
 
   return (
     <EditableTable
@@ -187,7 +201,7 @@ export default function StratumList(): JSX.Element {
       enableGlobalFilter={true}
       enableColumnFilters={true}
       enableColumnOrdering={true}
-      storageKey={TABLE.storageKey}
+      storageKey={tableDefinition.storageKey}
       enablePagination={false}
       enableTopToolbar={true}
       enableBottomToolbar={false}

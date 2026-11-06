@@ -26,12 +26,10 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import { useReassignPlotModal } from 'src/scenes/ObservationsRouterV2/Reassign';
 import { ObservationState, getPlotStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getBiomassPlotTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-const TABLE = TABLES.observationMonitoringPlots;
 
 type MonitoringPlotRow = {
   observationId: number;
@@ -73,7 +71,12 @@ const MonitoringPlotActionsMenuContent = ({ row }: { row: MonitoringPlotRow }): 
   );
 };
 
-export default function MonitoringPlotList(): JSX.Element {
+type MonitoringPlotListProps = {
+  isBiomass?: boolean;
+};
+
+export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlotListProps): JSX.Element {
+  const tableDefinition = isBiomass ? TABLES.biomassObservationMonitoringPlots : TABLES.observationMonitoringPlots;
   const theme = useTheme();
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -96,7 +99,7 @@ export default function MonitoringPlotList(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(TABLE, { persistFilters: true });
+  } = useTableState(tableDefinition, { persistFilters: true });
 
   const { data: observationResultsResponse, isLoading } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -124,7 +127,13 @@ export default function MonitoringPlotList(): JSX.Element {
     if (observationResult && stratumResult) {
       return stratumResult.substrata.flatMap((substratum) =>
         substratum.monitoringPlots.map((plot): MonitoringPlotRow => {
-          const totalLive = getObservationSpeciesLivePlantsCount(plot.species);
+          const counts = isBiomass
+            ? getBiomassPlotTotals(plot)
+            : {
+                totalLive: getObservationSpeciesLivePlantsCount(plot.species),
+                totalPlants: plot.totalPlants,
+                totalSpecies: plot.totalSpecies,
+              };
           return {
             observationId,
             observationState: observationResult.state,
@@ -136,9 +145,9 @@ export default function MonitoringPlotList(): JSX.Element {
             status: getPlotStatus(plot.status, strings),
             isPermanent: plot.isPermanent,
             sizeMeters: plot.sizeMeters,
-            totalLive,
-            totalPlants: plot.totalPlants,
-            totalSpecies: plot.totalSpecies,
+            totalLive: counts.totalLive,
+            totalPlants: counts.totalPlants,
+            totalSpecies: counts.totalSpecies,
             plantingDensity: plot.plantingDensity,
             survivalRate: plot.survivalRate,
             survivalRatePending: plot.pending,
@@ -148,7 +157,7 @@ export default function MonitoringPlotList(): JSX.Element {
     } else {
       return [];
     }
-  }, [observationId, observationResult, stratumResult, strings]);
+  }, [isBiomass, observationId, observationResult, stratumResult, strings]);
 
   const hasSmallPlots = useMemo(() => rows.some((row) => row.sizeMeters === 25), [rows]);
 
@@ -213,6 +222,25 @@ export default function MonitoringPlotList(): JSX.Element {
   const uniqueStatuses = useMemo(() => Array.from(new Set(rows.map((r) => r.status).filter(Boolean))).sort(), [rows]);
 
   const columns = useMemo<EditableTableColumn<MonitoringPlotRow>[]>(() => {
+    const plantColumns: EditableTableColumn<MonitoringPlotRow>[] = isBiomass
+      ? []
+      : [
+          {
+            id: 'plantingDensity',
+            header: strings.PLANT_DENSITY,
+            accessorKey: 'plantingDensity',
+            filterVariant: 'range',
+            Cell: NumberCell,
+          },
+          {
+            id: 'survivalRate',
+            header: strings.SURVIVAL_RATE,
+            accessorKey: 'survivalRate',
+            filterVariant: 'range',
+            Cell: SurvivalRateCell,
+          },
+        ];
+
     const defaultColumns: EditableTableColumn<MonitoringPlotRow>[] = [
       {
         id: 'monitoringPlotNumber',
@@ -283,20 +311,7 @@ export default function MonitoringPlotList(): JSX.Element {
         filterVariant: 'range',
         Cell: NumberCell,
       },
-      {
-        id: 'plantingDensity',
-        header: strings.PLANT_DENSITY,
-        accessorKey: 'plantingDensity',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'survivalRate',
-        header: strings.SURVIVAL_RATE,
-        accessorKey: 'survivalRate',
-        filterVariant: 'range',
-        Cell: SurvivalRateCell,
-      },
+      ...plantColumns,
     ];
 
     if (replaceObservationPlotEnabled) {
@@ -314,6 +329,7 @@ export default function MonitoringPlotList(): JSX.Element {
 
     return defaultColumns;
   }, [
+    isBiomass,
     strings,
     uniqueStatuses,
     replaceObservationPlotEnabled,
@@ -337,7 +353,7 @@ export default function MonitoringPlotList(): JSX.Element {
         enableGlobalFilter={true}
         enableColumnFilters={true}
         enableColumnOrdering={true}
-        storageKey={TABLE.storageKey}
+        storageKey={tableDefinition.storageKey}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
