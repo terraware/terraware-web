@@ -81,7 +81,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     { key: 'withdrawnDate', displayLabel: strings.DATE },
     { key: 'purpose', displayLabel: strings.PURPOSE },
     { key: 'nurseryName', displayLabel: strings.FROM_NURSERY },
-    { key: 'destinationName', displayLabel: strings.PLANTING_SITE },
+    { key: 'destinationName', displayLabel: strings.DESTINATION },
     { key: 'projectNames', displayLabel: strings.PROJECTS },
     { key: 'stratumName', displayLabel: strings.TO_STRATUM },
     { key: 'substratumShortName', displayLabel: strings.TO_SUBSTRATUM },
