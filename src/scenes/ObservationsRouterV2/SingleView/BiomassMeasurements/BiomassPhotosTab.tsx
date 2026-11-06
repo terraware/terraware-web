@@ -48,7 +48,9 @@ const BiomassPhotosTab = () => {
   }, [adHocPlot, navigate, observationId]);
 
   const plotCornerPhotos = useMemo(() => {
-    return adHocPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
+    return adHocPlot?.photos?.filter(
+      (photo) => photo.position !== undefined && (photo.type === 'Plot' || photo.type === 'Explanation')
+    );
   }, [adHocPlot?.photos]);
 
   const otherPhotos = useMemo(() => {
