@@ -1,30 +1,25 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotosWithActions';
 
+import useBiomassPlot from './useBiomassPlot';
+
 const BiomassPhotosTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const adHocPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
+  const { monitoringPlot: adHocPlot, observationId, results } = useBiomassPlot();
   const isCompleted = useMemo(() => adHocPlot?.completedTime !== undefined, [adHocPlot?.completedTime]);
   const navigate = useSyncNavigate();
 

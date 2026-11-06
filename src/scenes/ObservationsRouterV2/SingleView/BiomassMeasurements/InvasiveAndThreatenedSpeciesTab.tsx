@@ -1,31 +1,23 @@
-import React, { useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useCallback, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 
 import EditNotesModal from './EditNotesModal';
 import QuadratComponent from './QuadratComponent';
 import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
+import useBiomassPlot from './useBiomassPlot';
 
 const InvasiveAndThreatenedSpeciesTab = () => {
   const theme = useTheme();
-  const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
 
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const additionalSpecies = useMemo(
-    () => results?.biomassMeasurements?.additionalSpecies,
-    [results?.biomassMeasurements?.additionalSpecies]
-  );
+  const { biomassMeasurement, monitoringPlot, observationId } = useBiomassPlot();
+  const additionalSpecies = biomassMeasurement?.additionalSpecies;
 
   const [editNotesModalOpen, setEditNotesModalOpen] = useState(false);
 

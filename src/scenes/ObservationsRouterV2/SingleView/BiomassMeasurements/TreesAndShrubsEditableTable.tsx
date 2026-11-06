@@ -1,11 +1,9 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
 import { Button, DialogBox, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
@@ -21,6 +19,8 @@ import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMea
 import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ExistingTreePayload } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
+
+import useBiomassPlot from './useBiomassPlot';
 
 type TreeRow = ExistingTreePayload & {
   speciesName?: string;
@@ -74,7 +74,6 @@ const getTreeLabel = (row: TreeRow): string =>
 export default function TreesAndShrubsEditableTable(): JSX.Element {
   const theme = useTheme();
   const { findSpeciesById } = useOrganizationSpecies();
-  const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
   const [pendingMeasurement, setPendingMeasurement] = useState<{
     keep: () => void;
@@ -94,10 +93,8 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [strings]
   );
 
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const forestType = results?.biomassMeasurements?.forestType;
+  const { biomassMeasurement, monitoringPlot, observationId } = useBiomassPlot();
+  const forestType = biomassMeasurement?.forestType;
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
@@ -123,12 +120,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
-      if (!results?.adHocPlot) {
+      if (!monitoringPlot) {
         return Promise.resolve(false);
       }
       const payload = {
         observationId,
-        plotId: results.adHocPlot.monitoringPlotId,
+        plotId: monitoringPlot.monitoringPlotId,
         updateObservationRequestPayload: updatePayload,
       };
       // A failed request must not strand everything queued behind it.
@@ -138,7 +135,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       pendingUpdates.current = queued;
       return queued;
     },
-    [observationId, results, update]
+    [monitoringPlot, observationId, update]
   );
 
   const commitRecordedTree = useCallback(
@@ -343,10 +340,10 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
   const trunksOfTree = useCallback(
     (row: TreeRow) =>
-      (results?.biomassMeasurements?.trees ?? []).filter(
+      (biomassMeasurement?.trees ?? []).filter(
         (tree) => tree.treeGrowthForm !== 'Shrub' && tree.treeNumber === row.treeNumber
       ),
-    [results]
+    [biomassMeasurement?.trees]
   );
 
   const confirmSpeciesChange = useCallback(async () => {
@@ -427,7 +424,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         candidate.speciesId === species.id ||
         candidate.speciesName === species.scientificName ||
         candidate.scientificName === species.scientificName;
-      const biomass = results?.biomassMeasurements;
+      const biomass = biomassMeasurement;
       const tree = biomass?.trees?.find(isSameSpecies);
       if (tree) {
         return (optimisticValues[tree.id]?.[fieldId] ?? tree[fieldId]) ? 'true' : 'false';
@@ -437,7 +434,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         biomass?.quadrats?.flatMap((quadrat) => quadrat.species).find(isSameSpecies);
       return recorded?.[fieldId] ? 'true' : 'false';
     },
-    [optimisticValues, results]
+    [biomassMeasurement, optimisticValues]
   );
 
   const FlagCellEditor = useCallback(
@@ -876,7 +873,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const treesWithData = useMemo(() => {
-    return results?.biomassMeasurements?.trees
+    return biomassMeasurement?.trees
       ?.filter((tree) => !removedTreeIds.includes(tree.id))
       .map((tree) => {
         const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };
@@ -887,7 +884,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             : merged.speciesName,
         };
       });
-  }, [findSpeciesById, results, optimisticValues, removedTreeIds]);
+  }, [biomassMeasurement?.trees, findSpeciesById, optimisticValues, removedTreeIds]);
 
   return (
     <>

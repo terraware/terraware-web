@@ -1,5 +1,5 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
-import { useParams, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Tabs, Tooltip } from '@terraware/web-components';
@@ -8,7 +8,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -19,13 +18,12 @@ import BiomassObservationDataTab from './BiomassObservationDataTab';
 import BiomassPhotosTab from './BiomassPhotosTab';
 import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatenedSpeciesTab';
 import WoodySpeciesTab from './WoodySpeciesTab';
+import useBiomassPlot from './useBiomassPlot';
 
 const BiomassMeasurementsDetails = (): JSX.Element => {
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { activeLocale, strings } = useLocalization();
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
   const [searchParams] = useSearchParams();
   const plantingSiteIdParam = searchParams.get('plantingSiteId');
 
@@ -42,10 +40,9 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
     return crumbsData;
   }, [plantingSiteIdParam, strings.OBSERVATIONS]);
 
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
 
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const { monitoringPlot, results } = useBiomassPlot();
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 
   useEffect(() => {
@@ -60,8 +57,8 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
         ? getDateDisplayValue(results.completedTime, plantingSite?.timeZone ?? defaultTimezone)
         : undefined;
       const observationDate = getShortDate(completedDate ?? results.startDate, activeLocale);
-      const swCoordinatesLat = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
-      const swCoordinatesLong = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+      const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+      const swCoordinatesLong = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
       const hasLocation = swCoordinatesLat !== undefined && swCoordinatesLong !== undefined;
       return (
         <Box display='flex' alignItems={'end'}>
@@ -78,7 +75,7 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
                     {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLong}
                   </Typography>
                   <Typography>
-                    {strings.ELEVATION}: {results.adHocPlot?.elevationMeters} {strings.METERS}
+                    {strings.ELEVATION}: {monitoringPlot?.elevationMeters} {strings.METERS}
                   </Typography>
                 </Box>
               }
@@ -98,7 +95,17 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
     } else {
       return undefined;
     }
-  }, [activeLocale, defaultTimezone, plantingSite?.name, plantingSite?.timeZone, results, strings, theme]);
+  }, [
+    activeLocale,
+    defaultTimezone,
+    monitoringPlot?.boundary?.coordinates,
+    monitoringPlot?.elevationMeters,
+    plantingSite?.name,
+    plantingSite?.timeZone,
+    results,
+    strings,
+    theme,
+  ]);
 
   const tabs = useMemo(() => {
     return [

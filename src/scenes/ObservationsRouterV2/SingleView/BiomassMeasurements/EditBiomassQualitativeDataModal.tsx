@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
 import {
@@ -15,7 +14,6 @@ import { DateTime } from 'luxon';
 
 import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   BiomassUpdateOperationPayload,
@@ -28,6 +26,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditQualitativeDataConfirmationModal from '../../EditQualitativeDataConfirmationModal';
+import useBiomassPlot from './useBiomassPlot';
 
 export type BiomassQualitativeFormData = {
   biomassMeasurement: BiomassMeasurement;
@@ -45,17 +44,14 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
   const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
 
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [update] = useUpdateCompletedObservationPlotMutation();
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const { monitoringPlot, observationId, results } = useBiomassPlot();
 
-  const soilFileId = results?.adHocPlot?.media?.find((m) => m.type === 'Soil')?.fileId;
+  const soilFileId = monitoringPlot?.media?.find((m) => m.type === 'Soil')?.fileId;
   const photoUrl =
-    results && results.adHocPlot && soilFileId
+    results && monitoringPlot && soilFileId
       ? API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', String(results.observationId))
-          .replace('{monitoringPlotId}', String(results.adHocPlot.monitoringPlotId))
+          .replace('{monitoringPlotId}', String(monitoringPlot.monitoringPlotId))
           .replace('{fileId}', String(soilFileId))
       : undefined;
 
@@ -319,11 +315,11 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         notes: record.notes,
       };
 
-      if (results?.adHocPlot?.monitoringPlotId) {
+      if (monitoringPlot?.monitoringPlotId) {
         try {
           await update({
             observationId,
-            plotId: results.adHocPlot.monitoringPlotId,
+            plotId: monitoringPlot.monitoringPlotId,
             updateObservationRequestPayload: {
               updates: [biomassPayload, plotPayload],
             },
@@ -337,7 +333,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         }
       }
     })();
-  }, [record, results, setOpen, update, observationId, snackbar]);
+  }, [monitoringPlot, observationId, record, setOpen, snackbar, update]);
 
   return (
     open && (
