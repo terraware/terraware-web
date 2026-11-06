@@ -22,6 +22,13 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Species, id: 'LIST' },
       ],
     },
+    updateProjectLocation: {
+      invalidatesTags: (_result, _error, payload) => [
+        { type: QueryTagTypes.Projects, id: payload.id },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+        { type: QueryTagTypes.Species, id: 'LIST' },
+      ],
+    },
     deleteProject: {
       invalidatesTags: [{ type: QueryTagTypes.Projects, id: 'LIST' }],
     },
