@@ -136,6 +136,7 @@ const config: ConfigFile = {
       filterEndpoints: (_, operation) =>
         operation.path === '/api/v1/organizations' ||
         operation.path === '/api/v1/organizations/{organizationId}' ||
+        operation.path === '/api/v1/organizations/{organizationId}/location' ||
         operation.path === '/api/v1/organizations/{organizationId}/roles',
     },
     './src/queries/generated/organizationUsers.ts': {
