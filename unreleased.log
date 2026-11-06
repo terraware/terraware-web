@@ -1,3 +1,4 @@
+bec18a18 Skip CI for code that already passed (#7044)
 bb577f87 SW-9230 Validate saved view names when saving and renaming (#7029)
 30c9b2f7 SW-9189 Show a summary under each saved view in the CurrentView dropdown (#7028)
 c85fa9ff SW-9190 Show a summary of what a view saves in the save view modal (#7027)
