@@ -1,5 +1,5 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Tabs, Tooltip } from '@terraware/web-components';
@@ -26,6 +26,18 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const [searchParams] = useSearchParams();
   const plantingSiteIdParam = searchParams.get('plantingSiteId');
+  const stratumName = useParams<{ stratumName?: string }>().stratumName;
+
+  const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
+
+  const { monitoringPlot, observationId, results } = useBiomassPlot();
+  const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+
+  useEffect(() => {
+    if (results?.plantingSiteId) {
+      void getPlantingSite({ id: results.plantingSiteId, includeZones: false }, true);
+    }
+  }, [getPlantingSite, results?.plantingSiteId]);
 
   const crumbs: Crumb[] = useMemo(() => {
     const crumbsData: Crumb[] = [
@@ -37,19 +49,28 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
       },
     ];
 
-    return crumbsData;
-  }, [plantingSiteIdParam, strings.OBSERVATIONS]);
-
-  const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
-
-  const { monitoringPlot, results } = useBiomassPlot();
-  const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
-
-  useEffect(() => {
-    if (results?.plantingSiteId) {
-      void getPlantingSite({ id: results.plantingSiteId, includeZones: false }, true);
+    if (stratumName !== undefined && results && plantingSite) {
+      const completedDate = results.completedTime
+        ? getDateDisplayValue(results.completedTime, plantingSite.timeZone)
+        : undefined;
+      const observationDate = getShortDate(completedDate ?? results.startDate, activeLocale);
+      crumbsData.push(
+        {
+          name: `${observationDate} (${plantingSite.name})`,
+          to: APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`),
+        },
+        {
+          name: stratumName,
+          to: APP_PATHS.OBSERVATION_STRATUM_DETAILS_V2.replace(':observationId', `${observationId}`).replace(
+            ':stratumName',
+            stratumName
+          ),
+        }
+      );
     }
-  }, [getPlantingSite, results?.plantingSiteId]);
+
+    return crumbsData;
+  }, [activeLocale, observationId, plantingSite, plantingSiteIdParam, results, stratumName, strings.OBSERVATIONS]);
 
   const title = useMemo(() => {
     if (results) {

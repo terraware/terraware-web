@@ -15,6 +15,14 @@ export const TABLES = {
   accessionsBySpecies: { storageKey: 'accessions-database-species-table-v4', stableId: 'accessions-by-species' },
   adHocObservations: { storageKey: 'observations-ad-hoc-table', stableId: 'ad-hoc-observations' },
   assignedObservations: { storageKey: 'observations-assigned-table', stableId: 'assigned-observations' },
+  biomassObservationMonitoringPlots: {
+    storageKey: 'biomass-observation-stratum-monitoring-plot-table',
+    stableId: 'biomass-observation-monitoring-plots',
+  },
+  biomassObservationStrata: {
+    storageKey: 'biomass-observation-site-stratum-table',
+    stableId: 'biomass-observation-strata',
+  },
   inventoryBatchesForNursery: {
     storageKey: 'inventorySeedlingsTable_nursery',
     stableId: 'inventory-batches-for-nursery',
