@@ -17,7 +17,12 @@ import EditStateModal from './EditStateModal';
 
 const URL = '/api/v2/seedbank/accessions/42';
 const renderModal = (state: AccessionState = 'In Storage') => {
-  mockGet(URL, { accession: buildAccession({ state }) });
+  mockGet(URL, {
+    accession: buildAccession({
+      state,
+      remainingQuantity: { quantity: state === 'Used Up' ? 0 : 100, units: 'Seeds' },
+    }),
+  });
   const result = { closed: false };
   return {
     ...renderWithProviders(<EditStateModal open onClose={() => (result.closed = true)} />, {
@@ -74,12 +79,29 @@ describe('EditStateModal', () => {
 
   it('requires a restored quantity when reopening a used-up accession', async () => {
     const requests = captureRequests('put', URL);
-    const { user } = renderModal('Used Up');
+    const { user, result } = renderModal('Used Up');
     await screen.findByRole('dialog', { name: strings.EDIT_STATUS });
     await selectDropdownOption(user, 'accession-status', stateName('In Storage'));
     expect(screen.getByRole('button', { name: strings.SAVE })).toBeDisabled();
     expect(screen.getByText(strings.SEED_COUNT + ' *')).toBeVisible();
     expect(requests).toHaveLength(0);
+    // Textfield labels target wrapper divs rather than their inputs.
+    const quantity = document.querySelector('#seedsQuantity input') as HTMLInputElement;
+    expect(quantity).toHaveValue(0);
+    await user.clear(quantity);
+    await user.type(quantity, '25');
+    await user.type(
+      screen.getByPlaceholderText(strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER),
+      'Restored after recount'
+    );
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await waitFor(() => expect(result.closed).toBe(true));
+    expect(requests).toHaveLength(1);
+    expect(await requests[0].json()).toMatchObject({
+      state: 'In Storage',
+      remainingQuantity: { quantity: 25, units: 'Seeds' },
+      remainingQuantityNotes: 'Restored after recount',
+    });
   });
 
   it.skip('keeps the changed status open when saving fails', async () => {
