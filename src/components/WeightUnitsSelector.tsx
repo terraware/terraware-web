@@ -30,6 +30,7 @@ export default function WeightUnitsSelector(props: WeightUnitsSelectorProps): JS
       fullWidth={true}
       selectStyles={selectStyles}
       disabled={disabled}
+      fixedMenu
     />
   );
 }

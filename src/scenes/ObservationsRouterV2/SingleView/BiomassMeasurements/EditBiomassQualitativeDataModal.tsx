@@ -587,6 +587,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 selectedValue={record.biomassMeasurement?.soilType}
                 options={soilTypeOptions}
                 onChange={onChangeHandler('biomassMeasurement.soilType')}
+                fixedMenu
                 sx={{ paddingTop: '16px' }}
               />
             </Box>
