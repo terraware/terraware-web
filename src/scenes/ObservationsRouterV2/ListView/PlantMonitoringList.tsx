@@ -25,7 +25,7 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import { ObservationState, getStatus } from 'src/types/Observations';
+import { ObservationState, ObservationType, getStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { hasPendingResults } from 'src/utils/observation';
@@ -41,6 +41,7 @@ type PlantMonitoringRow = {
   observationId: number;
   observationDate?: string;
   observationState?: ObservationState;
+  observationType: ObservationType;
   monitoringType: string;
   state: string;
   plantingSiteName?: string;
@@ -81,10 +82,15 @@ const toLocalDate = (dateStr?: string) => {
 const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
   const { strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
-  const { downloadObservationCsv, downloadObservationGpx, downloadObservationResults } = useObservationExports();
+  const {
+    downloadBiomassObservationDetails,
+    downloadObservationCsv,
+    downloadObservationGpx,
+    downloadObservationResults,
+  } = useObservationExports();
   const navigate = useSyncNavigate();
 
-  const { observationId, observationState, state } = row;
+  const { observationId, observationState, observationType, state } = row;
   const exportDisabled = state === 'Upcoming';
   const rescheduleDisabled = state === 'Completed' || state === 'Abandoned';
 
@@ -111,7 +117,9 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           disabled: exportDisabled,
           label: strings.EXPORT_RESULTS,
           onClick: () => {
-            void downloadObservationResults(observationId);
+            void (observationType === 'Biomass Measurements'
+              ? downloadBiomassObservationDetails(observationId)
+              : downloadObservationResults(observationId));
           },
         },
         {
@@ -184,6 +192,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationId: observationResult.observationId,
           observationDate: completedDate ?? observationResult.startDate,
           observationState: observationResult.state,
+          observationType: observationResult.type,
           monitoringType:
             observationResult.type === 'Biomass Measurements' ? strings.BIOMASS_MONITORING : strings.PLANT_MONITORING,
           state: getStatus(observationResult.state, strings),
@@ -211,7 +220,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
             <Link fontSize='16px' to={url}>
               {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
             </Link>
-            {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
+            {showSelectObservation && row.observationType !== 'Biomass Measurements' && (
+              <SelectObservationButton observationId={row.observationId} />
+            )}
           </Box>
           {showSiteName && (
             <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
