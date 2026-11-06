@@ -152,7 +152,7 @@ const MonitoringPlotEditPhotos = () => {
   }, [monitoringPlotId, navigate, observationId, stratumName]);
 
   const savePhotos = useCallback(() => {
-    void (async () => {
+    return (async () => {
       try {
         setLoading(true);
         const promises = mediaItems.map((mediaItem) => {
@@ -188,13 +188,17 @@ const MonitoringPlotEditPhotos = () => {
           return Promise.resolve();
         });
 
-        await Promise.all(promises);
-        setLoading(false);
+        const results = await Promise.allSettled(promises);
+        if (results.some((result) => result.status === 'rejected')) {
+          snackbar.toastError();
+          return;
+        }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         goToPhotosTab();
       } catch (error) {
-        setLoading(false);
         snackbar.toastError();
+      } finally {
+        setLoading(false);
       }
     })();
   }, [deleteQuery, mediaItems, monitoringPlotId, observationId, update, upload, goToPhotosTab, snackbar]);
@@ -204,11 +208,13 @@ const MonitoringPlotEditPhotos = () => {
   }, []);
 
   const onCloseModal = useCallback(() => {
-    setShowWarning(false);
-  }, []);
+    if (!loading) {
+      setShowWarning(false);
+    }
+  }, [loading]);
 
   const onConfirmSave = useCallback(() => {
-    savePhotos();
+    void savePhotos();
   }, [savePhotos]);
 
   return (
@@ -228,6 +234,7 @@ const MonitoringPlotEditPhotos = () => {
                 priority='secondary'
                 type='passive'
                 onClick={onCloseModal}
+                disabled={loading}
                 key='button-1'
               />,
               <Button
@@ -247,6 +254,8 @@ const MonitoringPlotEditPhotos = () => {
         cancelID='cancelUploadPhotos'
         onCancel={goToPhotosTab}
         onSave={showModal}
+        saveDisabled={loading}
+        cancelDisabled={loading}
         saveButtonText={strings.SAVE}
         saveID='savePhotos'
         cancelButtonText={strings.CANCEL}
