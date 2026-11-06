@@ -18,6 +18,7 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
@@ -40,6 +41,7 @@ type PlantMonitoringRow = {
   observationId: number;
   observationDate?: string;
   observationState?: ObservationState;
+  monitoringType: string;
   state: string;
   plantingSiteName?: string;
   strata?: string;
@@ -56,6 +58,7 @@ const TABLE = TABLES.assignedObservations;
 
 const DEFAULT_COLUMN_ORDER = [
   'observationDate',
+  'monitoringType',
   'completedDate',
   'totalLive',
   'totalPlants',
@@ -138,6 +141,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const { activeLocale, strings } = useLocalization();
 
   const showSelectObservation = typeof plantingSiteId === 'number';
@@ -154,7 +158,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     isLoading,
     observations: observationResults,
   } = useFilteredObservationResults({
-    observationType: 'Monitoring',
+    observationType: biomassSchedulingEnabled ? 'All' : 'Monitoring',
     plantingSiteId,
     plotType: 'assigned',
   });
@@ -180,6 +184,8 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationId: observationResult.observationId,
           observationDate: completedDate ?? observationResult.startDate,
           observationState: observationResult.state,
+          monitoringType:
+            observationResult.type === 'Biomass Measurements' ? strings.BIOMASS_MONITORING : strings.PLANT_MONITORING,
           state: getStatus(observationResult.state, strings),
           plantingSiteName: plantingSiteNames.get(observationResult.plantingSiteId),
           strata: observationResult.strata.map((stratumResult) => stratumResult.name).join('\r'),
@@ -255,6 +261,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   );
 
   const columns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
+    const monitoringTypeColumns: EditableTableColumn<PlantMonitoringRow>[] = biomassSchedulingEnabled
+      ? [{ id: 'monitoringType', header: strings.MONITORING_TYPE, accessorKey: 'monitoringType' }]
+      : [];
+
     const baseColumns: EditableTableColumn<PlantMonitoringRow>[] = [
       {
         id: 'observationDate',
@@ -263,6 +273,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         accessorFn: (row) => toLocalDate(row.observationDate),
         Cell: ObservationDateCell,
       },
+      ...monitoringTypeColumns,
       { id: 'state', header: strings.STATUS, accessorKey: 'state' },
       { id: 'plantingSiteName', header: strings.PLANTING_SITE, accessorKey: 'plantingSiteName' },
       { id: 'strata', header: strings.STRATA, accessorKey: 'strata', Cell: StrataCell },
@@ -293,6 +304,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       : baseColumns;
   }, [
     strings,
+    biomassSchedulingEnabled,
     showSelectObservation,
     scheduleObservationsEnabled,
     ObservationDateCell,
