@@ -114,13 +114,7 @@ const ObservationMap = ({
     plantingSiteId === undefined || isAdHoc || isBiomass
   );
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
-    useMonitoringPlotsMapLegend(
-      plantingSiteId === undefined,
-      isBiomass || isAdHoc,
-      isBiomass || isAdHoc,
-      !isAdHoc && !isSingleView,
-      true
-    );
+    useMonitoringPlotsMapLegend(plantingSiteId === undefined, isAdHoc, isAdHoc, !isAdHoc && !isSingleView, true);
 
   const {
     sitesLayerStyle,
