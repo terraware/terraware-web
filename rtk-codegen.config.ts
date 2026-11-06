@@ -227,6 +227,9 @@ const config: ConfigFile = {
     './src/queries/generated/projectVotes.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/accelerator/projects/{projectId}/votes',
     },
+    './src/queries/generated/savedTableViews.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/users/me/savedTableViews'),
+    },
     './src/queries/generated/search.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
     },

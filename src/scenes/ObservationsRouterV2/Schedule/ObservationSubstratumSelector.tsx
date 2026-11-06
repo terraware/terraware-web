@@ -12,16 +12,20 @@ import { useLocalization } from 'src/providers';
 import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
+import { MonitoringType } from './monitoringTypes';
+
 const PLOT_COUNT_COLUMN_WIDTH = '88px';
 
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
+  monitoringType: MonitoringType;
   onChangeSelectedSubstrata: (requestedSubstratumIds: number[]) => void;
   plantingSiteId: number;
 }
 
 const ObservationSubstratumSelector = ({
   errorText,
+  monitoringType,
   onChangeSelectedSubstrata,
   plantingSiteId,
 }: ObservationSubstratumSelectorProps) => {
@@ -31,6 +35,15 @@ const ObservationSubstratumSelector = ({
 
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
+
+  const plotCountsFor = useCallback(
+    (stratum: Stratum) =>
+      stratum.plotCounts.find((counts) => counts.observationType === monitoringType) ??
+      (monitoringType === 'Monitoring'
+        ? { numPermanentPlots: stratum.numPermanentPlots, numTemporaryPlots: stratum.numTemporaryPlots }
+        : { numPermanentPlots: 0, numTemporaryPlots: 0 }),
+    [monitoringType]
+  );
 
   const onChangeSubstratumCheckbox = useCallback(
     (substratumId: number) => (value: boolean) => {
@@ -109,13 +122,16 @@ const ObservationSubstratumSelector = ({
   const assignedPlots = useMemo(
     () =>
       fullySelectedStrata.reduce(
-        (totals, stratum) => ({
-          permanent: totals.permanent + stratum.numPermanentPlots,
-          temporary: totals.temporary + stratum.numTemporaryPlots,
-        }),
+        (totals, stratum) => {
+          const { numPermanentPlots, numTemporaryPlots } = plotCountsFor(stratum);
+          return {
+            permanent: totals.permanent + numPermanentPlots,
+            temporary: totals.temporary + numTemporaryPlots,
+          };
+        },
         { permanent: 0, temporary: 0 }
       ),
-    [fullySelectedStrata]
+    [fullySelectedStrata, plotCountsFor]
   );
 
   const totalAssignedPlotsText = useMemo(() => {
@@ -170,6 +186,8 @@ const ObservationSubstratumSelector = ({
           </Box>
         </Grid>
         {plantingSite.strata?.map((stratum, index) => {
+          const { numPermanentPlots, numTemporaryPlots } = plotCountsFor(stratum);
+
           return (
             <Grid key={index} size={12}>
               <Box display='flex' alignItems='center'>
@@ -200,10 +218,10 @@ const ObservationSubstratumSelector = ({
                   </Typography>
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                  {stratum.numPermanentPlots}
+                  {numPermanentPlots}
                 </Typography>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                  {stratum.numTemporaryPlots}
+                  {numTemporaryPlots}
                 </Typography>
               </Box>
               {stratum.latestObservationCompletedTime &&

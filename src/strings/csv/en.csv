@@ -492,6 +492,7 @@ DEAD_PLANTS,Dead Plants,
 DEAD_PLANTS_OBSERVED,Dead Plants Observed,
 DEAL_NAME,Deal Name,
 DECLINE,Decline,
+DEFAULT,Default,
 DEFAULT_LANGUAGE_SELECTED,Default language: {0},
 DEFINITION,Definition,
 DELETE,Delete,
@@ -535,6 +536,9 @@ DELETE_SPECIES_TARGET_CONFIRM,"You are about to delete the species {0} as a targ
 DELETE_THIS_DRAFT,Delete this draft?,
 DELETE_VIABILITY_TEST,Delete Viability Test,
 DELETE_VIABILITY_TEST_MESSAGE,You’re about to delete viability test {0}.,
+DELETE_VIEW,Delete view,
+DELETE_VIEW_CONFIRMATION,"""{0}"" will be removed from your saved views. This doesn’t change any project data.",
+DELETE_VIEW_TITLE,Delete view?,
 DELETED_SPECIES,<deleted species>,
 DELIVERABLE_APPROVED,Deliverable Approved,
 DELIVERABLE_CATEGORY,Category: {0},"Shows the deliverable document's category name, example Category: Legal"
@@ -1212,6 +1216,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,You must enter a subset weight in order to wit
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,You must enter in a subset weight in order to withdraw to a nursery. This can be done by editing the quantity of this accession.,
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,You must enter in a subset weight in order to create a viability test. This can be done by editing the quantity of this accession.,
 MITIGATION_PLAN,Mitigation Plan,
+MODIFIED,modified,
 MODULE,Module,
 MODULE_DETAILS,Module Details,
 MODULE_ID,Module ID,
@@ -1249,6 +1254,7 @@ MOVE,Move,
 MRV_CYCLE,MRV Cycle,
 MULTIPLE_FORMS,Multiple Forms,"Describes a plant that can grow in more than one form, e.g., both a shrub and a forb."
 MY_ACCOUNT,My Account,
+MY_VIEWS,My Views,
 N_IMAGES,{0} image(s),
 N_ROWS,{0} row(s),
 NA,N/A,Abbreviation for Not Applicable
@@ -1718,6 +1724,7 @@ PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED,Preliminary Species Usage List U
 PREPARATION_MATERIALS,Preparation Materials,
 PRESCREEN,Pre-screen,
 PRESCREEN_FAILED,Pre-screen Failed,
+PRESET_VIEWS,Preset Views,
 PREVIEW,Preview,
 PREVIEW_FUNDER_REPORT,Preview Funder Report,
 PREVIEW_HIGHLIGHTS,Preview Highlights,
@@ -2028,11 +2035,18 @@ SAVE_PHOTOS_AND_VIDEOS,Save Photos & Videos,
 SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,You are making changes to the photos and videos associated with this Observation plot. Are you sure you want to make these changes?,
 SAVE_PLANT_DENSITY,Save Plant Density,
 SAVE_PROJECT_BOUNDARIES,Save Project Boundaries,
+SAVE_TABLE_NEW_VIEW,Save current table as new view,
 SAVE_TOOLTIP,Save will only update the edited information and will not send a planting withdrawal request to the Nursery for this Planting Date.,
 SAVE_VERSION,Save Version,
 SAVE_VERSION_ELLIPSIS,Save Version...,
 SAVE_VERSION_MESSAGE,Saving a version is the equivalent of creating a screenshot of what the Document looks like in its current state. You can continue to edit the document but you may not edit the saved version.,
+SAVE_VIEW,Save View,
+SAVE_VIEW_BUTTON,Save view,
 SAVED,Saved,
+SAVED_VIEW_CREATED,{0} saved to My views,Toast shown after saving a table view: {0} is the view name
+SAVED_VIEW_DELETED,{0} deleted,Toast shown after deleting a saved table view: {0} is the view name
+SAVED_VIEW_UPDATED,{0} updated,Toast shown after renaming a saved table view: {0} is the new view name
+SAVED_VIEWS_PRIVATE,Only you can see views you save.,
 SAVING,Saving...,
 SCARIFY,Scarify,
 SCHEDULE_OBSERVATION,Schedule Observation,
@@ -2511,6 +2525,7 @@ THIS_MODULE_CONTAINS,This module contains:,
 THIS_PERSON,this person,
 THIS_PROJECT_HAS_NO_ACTIVITIES,This project has no Activities,
 THIS_REPORT_HAS_BEEN_APPROVED,This report has been approved.,
+THIS_VIEW_SAVES,This view saves,Heading above the list of table settings a saved view will keep
 THREATENED,Threatened,
 THUMBNAIL,Thumbnail,
 TIDE,Tide,
@@ -2779,6 +2794,9 @@ VIEW_FULL_DASHBOARD,View Full Dashboard,
 VIEW_HISTORY,View History,
 VIEW_IN_MAP,View in Map,
 VIEW_MAP,View Map,
+VIEW_NAME,View name,
+VIEW_NAME_EXISTS,A view with this name already exists.,Error shown when saving or renaming a table view with a name the user already has for that table
+VIEW_NAME_REQUIRED,Enter a name for this view.,Error shown when saving or renaming a table view without a name
 VIEW_ON_MAP,View on Map,
 VIEW_PLANTING_PROGRESS,View Planting Progress,
 VIEW_PRESCREEN_SUBMISSION,View Pre-screen Submission,
@@ -2788,6 +2806,16 @@ VIEW_REPORTS,View Reports,
 VIEW_SESSION,View Session,Button label to view the video recording of an informational session
 VIEW_SITES_STRATA_SUBSTRATA,"View Sites, Strata, and Substrata on a map.",
 VIEW_SPECIES_LIST,View Species List,
+VIEW_SUMMARY_BASE_VIEW,Base View: {0},Save view summary entry: {0} is the preset view the saved view is based on
+VIEW_SUMMARY_COLUMNS,Columns: {0},Save view summary entry: {0} is the comma-separated list of visible columns in order
+VIEW_SUMMARY_FILTER,{0}: {1},Save view summary entry: {0} is a column name and {1} is the value it's filtered by
+VIEW_SUMMARY_FILTER_COUNT_PLURAL,{0} filters,"Saved view summary in the view dropdown: {0} is the number of filters, counting search text as a filter"
+VIEW_SUMMARY_FILTER_COUNT_SINGULAR,1 filter,Saved view summary in the view dropdown when it has one filter
+VIEW_SUMMARY_NO_FILTERS,Filters: None,Save view summary entry shown when the view has no filters or search
+VIEW_SUMMARY_NONE,No filters,"Saved view summary in the view dropdown when the view has no filters, search or sort"
+VIEW_SUMMARY_SEARCH,"Search: ""{0}""",Save view summary entry: {0} is the table's search text
+VIEW_SUMMARY_SORT,Sort: {0},"Save view summary entry: {0} is the sorted column names, each followed by ↑ or ↓"
+VIEW_SUMMARY_SORTED_BY,Sorted by {0},Saved view summary in the view dropdown: {0} is the lowercase name of the sorted column
 VIEWING,Viewing,
 VINE,Vine,A type of plant.
 VIRTUAL,Virtual,

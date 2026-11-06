@@ -22,6 +22,9 @@ type Observation = ObservationPayload;
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
+// "Monitoring" | "Biomass Measurements"
+export type ObservationType = Observation['type'];
+
 // plot replacement
 // "Temporary" | "LongTerm"
 export type ReplaceObservationPlotDuration = ReplaceObservationPlotRequestPayload['duration'];

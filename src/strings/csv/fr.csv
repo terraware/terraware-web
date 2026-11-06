@@ -491,6 +491,7 @@ DEAD_PLANTS,Plantes mortes,faa0988b
 DEAD_PLANTS_OBSERVED,Plantes mortes observées,3ff4f3af
 DEAL_NAME,Nom de l'offre,be1bd4c5
 DECLINE,Refuser,67618a4e
+DEFAULT,Par défaut,1df379f4
 DEFAULT_LANGUAGE_SELECTED,Langue par défaut : {0},74d18404
 DEFINITION,Définition,b17769ee
 DELETE,Supprimer,43cbbd0c
@@ -534,6 +535,9 @@ DELETE_SPECIES_TARGET_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0
 DELETE_THIS_DRAFT,Supprimer ce brouillon ?,9ecf4292
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabilité {0}.,ceace778
+DELETE_VIEW,Supprimer la vue,10ce4e6e
+DELETE_VIEW_CONFIRMATION,« {0} » sera supprimé de vos vues enregistrées. Cela ne modifiera aucune donnée du projet.,5813e558
+DELETE_VIEW_TITLE,Supprimer la vue ?,3c9df51d
 DELETED_SPECIES,<deleted species>,c397460c
 DELIVERABLE_APPROVED,Livrable approuvé,c2a1516b
 DELIVERABLE_CATEGORY,Catégorie : {0},bbe96e63
@@ -1211,6 +1215,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,Vous devez saisir le poids d'un sous-ensemble 
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,Vous devez entrer le poids d'un sous-ensemble pour pouvoir le retirer dans une pépinière. Ceci peut être fait en éditant la quantité de cette accession.,abddc79b
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,Vous devez entrer un poids de sous-ensemble pour créer un test de viabilité. Vous pouvez le faire en éditant la quantité de cet accès.,5ffd97b6
 MITIGATION_PLAN,Plan d'atténuation,c13d7b11
+MODIFIED,modifié,eb0b21c2
 MODULE,Module,019952ca
 MODULE_DETAILS,Détails du module,66959ca8
 MODULE_ID,Identifiant du module,9c2e85f6
@@ -1248,6 +1253,7 @@ MOVE,Déplacer,abe6be41
 MRV_CYCLE,Cycle MRV,ab7e636c
 MULTIPLE_FORMS,Formes multiples,abad8008
 MY_ACCOUNT,Mon compte,8e57f7ad
+MY_VIEWS,Mes vues,d3f6da64
 N_IMAGES,{0} image(s),098eae0e
 N_ROWS,{0} ligne(s),2bb73684
 NA,N/A,627f660e
@@ -1717,6 +1723,7 @@ PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED,Mise à jour de la liste prélim
 PREPARATION_MATERIALS,Matériaux de préparation,c6fd2575
 PRESCREEN,Présélection,9a38127f
 PRESCREEN_FAILED,Échec de la présélection,2a2dc3e9
+PRESET_VIEWS,Vues prédéfinies,61b20adc
 PREVIEW,Aperçu,a2aefa10
 PREVIEW_FUNDER_REPORT,Prévisualiser le rapport du bailleur,17fa74c8
 PREVIEW_HIGHLIGHTS,Aperçu des points forts,248bb9ae
@@ -2027,11 +2034,18 @@ SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
 SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Vous êtes en train de modifier les photos et vidéos associées à cette parcelle d’Observation. Êtes-vous sûr de vouloir effectuer ces modifications ?,8cfdcf97
 SAVE_PLANT_DENSITY,Enregistrer la densité de plantation,73135113
 SAVE_PROJECT_BOUNDARIES,Sauvegarder les limites du projet,d206ddd9
+SAVE_TABLE_NEW_VIEW,Enregistrer le tableau actuel comme nouvelle vue,cbdc26c6
 SAVE_TOOLTIP,Enregistrer mettra uniquement à jour les informations modifiées et n’enverra pas de demande de retrait de plants à la pépinière pour cette date de plantation.,0a966017
 SAVE_VERSION,Enregistrer la version,5afacff0
 SAVE_VERSION_ELLIPSIS,Enregistrer la version...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Sauvegarder une version équivaut à créer une capture d'écran de l'état actuel du document. Vous pouvez continuer à modifier le document, mais vous ne pouvez pas modifier la version enregistrée.",90b2fd9b
+SAVE_VIEW,Enregistrer la vue,c4a3bd9f
+SAVE_VIEW_BUTTON,Enregistrer la vue,0059102f
 SAVED,Sauvegardé,3324fd4d
+SAVED_VIEW_CREATED,{0} a été enregistré dans Mes vues,e8a17db1
+SAVED_VIEW_DELETED,{0} supprimée,77fb1505
+SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38
+SAVED_VIEWS_PRIVATE,Vous seul pouvez voir les vues que vous enregistrez.,374179a6
 SAVING,Enregistrement en cours...,d4ce4849
 SCARIFY,Scarification,b34359c6
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
@@ -2511,6 +2525,7 @@ THIS_MODULE_CONTAINS,Ce module contient :,7982e848
 THIS_PERSON,cette personne,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Ce projet n’a aucune activité,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Ce rapport a été approuvé.,030064cb
+THIS_VIEW_SAVES,Cette vue enregistre,85bfa1dc
 THREATENED,Menacée,57ca76f3
 THUMBNAIL,Vignette,3196d372
 TIDE,Marée,9dd490e9
@@ -2779,6 +2794,9 @@ VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
 VIEW_HISTORY,Voir l'historique,a1dbe2ca
 VIEW_IN_MAP,Afficher sur la carte,510d8388
 VIEW_MAP,Voir la carte,8ef1dcc4
+VIEW_NAME,Nom de la vue,0ea3fd0d
+VIEW_NAME_EXISTS,Une vue portant ce nom existe déjà.,4d895bfa
+VIEW_NAME_REQUIRED,Veuillez saisir un nom pour cette vue.,951bcbb2
 VIEW_ON_MAP,Voir sur la carte,fb873a55
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
@@ -2788,6 +2806,16 @@ VIEW_REPORTS,Voir les rapports,7fc5e229
 VIEW_SESSION,Voir la session,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une carte.",f4d62997
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
+VIEW_SUMMARY_BASE_VIEW,Vue de base : {0},2401d6ab
+VIEW_SUMMARY_COLUMNS,Colonnes : {0},a4325100
+VIEW_SUMMARY_FILTER,{0} : {1},aa9a8fac
+VIEW_SUMMARY_FILTER_COUNT_PLURAL,{0} filtres,52216b41
+VIEW_SUMMARY_FILTER_COUNT_SINGULAR,1 filtre,72a7c561
+VIEW_SUMMARY_NO_FILTERS,Filtres : Aucun,7bb0150a
+VIEW_SUMMARY_NONE,Aucun filtre,063fda22
+VIEW_SUMMARY_SEARCH,Recherche : « {0} »,993c6c89
+VIEW_SUMMARY_SORT,Tri : {0},e1c3a163
+VIEW_SUMMARY_SORTED_BY,Trié par {0},8c4e5019
 VIEWING,Visualisation,fb67a07d
 VINE,Vigne,c39d21fb
 VIRTUAL,Virtuel,51d865ab

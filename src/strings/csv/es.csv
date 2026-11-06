@@ -492,6 +492,7 @@ DEAD_PLANTS,Plantas muertas,faa0988b
 DEAD_PLANTS_OBSERVED,Plantas muertas observadas,3ff4f3af
 DEAL_NAME,Nombre de la operación,be1bd4c5
 DECLINE,Rechazar,67618a4e
+DEFAULT,Predeterminado,1df379f4
 DEFAULT_LANGUAGE_SELECTED,Idioma predeterminado: {0},74d18404
 DEFINITION,Definición,b17769ee
 DELETE,Borrar,43cbbd0c
@@ -535,6 +536,9 @@ DELETE_SPECIES_TARGET_CONFIRM,"Está a punto de eliminar la especie {0} como obj
 DELETE_THIS_DRAFT,¿Eliminar este borrador?,9ecf4292
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,ceace778
+DELETE_VIEW,Eliminar vista,10ce4e6e
+DELETE_VIEW_CONFIRMATION,"""{0}"" se eliminará de sus vistas guardadas. Esto no cambiará ningún dato del proyecto.",5813e558
+DELETE_VIEW_TITLE,¿Eliminar vista?,3c9df51d
 DELETED_SPECIES,<deleted species>,c397460c
 DELIVERABLE_APPROVED,Entregable aprobado,c2a1516b
 DELIVERABLE_CATEGORY,Categoría: {0},bbe96e63
@@ -1212,6 +1216,7 @@ MISSING_SUBSET_WEIGHT_ERROR_COUNT,Usted debe introducir un peso del subconjunto 
 MISSING_SUBSET_WEIGHT_ERROR_NURSERY,"Debe introducir el peso de un subconjunto para poder retirarlo a un vivero. Para ello, edite la cantidad de esta accesión.",abddc79b
 MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST,"Para crear una prueba de viabilidad, debe introducir el peso de un subconjunto. Para ello, edite la cantidad de esta accesión.",5ffd97b6
 MITIGATION_PLAN,Plan de mitigación,c13d7b11
+MODIFIED,modificado,eb0b21c2
 MODULE,Módulo,019952ca
 MODULE_DETAILS,Detalles del módulo,66959ca8
 MODULE_ID,ID del módulo,9c2e85f6
@@ -1249,6 +1254,7 @@ MOVE,Mover,abe6be41
 MRV_CYCLE,Ciclo MRV,ab7e636c
 MULTIPLE_FORMS,Múltiples formas,abad8008
 MY_ACCOUNT,Mi cuenta,8e57f7ad
+MY_VIEWS,Mis vistas,d3f6da64
 N_IMAGES,{0} imagen(es),098eae0e
 N_ROWS,{0} fila(s),2bb73684
 NA,No aplica,627f660e
@@ -1718,6 +1724,7 @@ PRELIMINARY_SPECIES_USAGE_LIST_UPDATE_REQUESTED,Actualización preliminar de la 
 PREPARATION_MATERIALS,Materiales de preparación,c6fd2575
 PRESCREEN,Preselección,9a38127f
 PRESCREEN_FAILED,Prueba de selección fallida,2a2dc3e9
+PRESET_VIEWS,Vistas predefinidas,61b20adc
 PREVIEW,Vista previa,a2aefa10
 PREVIEW_FUNDER_REPORT,Previsualizar informe para financiadores,17fa74c8
 PREVIEW_HIGHLIGHTS,Vista previa de aspectos destacados,248bb9ae
@@ -2028,11 +2035,18 @@ SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc
 SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Está realizando cambios en las fotos y videos asociados a esta parcela de Observación. ¿Está seguro de que desea realizar estos cambios?,8cfdcf97
 SAVE_PLANT_DENSITY,Guardar densidad de plantas,73135113
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
+SAVE_TABLE_NEW_VIEW,Guardar la tabla actual como una nueva vista,cbdc26c6
 SAVE_TOOLTIP,Guardar solo actualizará la información editada y no enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,0a966017
 SAVE_VERSION,Guardar versión,5afacff0
 SAVE_VERSION_ELLIPSIS,Guardar versión...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Guardar una versión equivale a crear una captura de pantalla del aspecto actual del documento. Puede seguir editando el documento, pero no podrá editar la versión guardada.",90b2fd9b
+SAVE_VIEW,Guardar vista,c4a3bd9f
+SAVE_VIEW_BUTTON,Guardar vista,0059102f
 SAVED,Guardado,3324fd4d
+SAVED_VIEW_CREATED,{0} se guardó en Mis vistas,e8a17db1
+SAVED_VIEW_DELETED,{0} eliminado,77fb1505
+SAVED_VIEW_UPDATED,{0} actualizado,aa7ecb38
+SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
@@ -2511,6 +2525,7 @@ THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_PERSON,esta persona,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
+THIS_VIEW_SAVES,Esta vista guarda,85bfa1dc
 THREATENED,Amenazada,57ca76f3
 THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
@@ -2779,6 +2794,9 @@ VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca
 VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_MAP,Ver mapa,8ef1dcc4
+VIEW_NAME,Nombre de la vista,0ea3fd0d
+VIEW_NAME_EXISTS,Ya existe una vista con este nombre.,4d895bfa
+VIEW_NAME_REQUIRED,Ingrese un nombre para esta vista.,951bcbb2
 VIEW_ON_MAP,Ver en el mapa,fb873a55
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6
@@ -2788,6 +2806,16 @@ VIEW_REPORTS,Ver informes,7fc5e229
 VIEW_SESSION,Ver sesión,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Ver Sitios, Estratos y Subestratos en un mapa.",f4d62997
 VIEW_SPECIES_LIST,Ver lista de especies,ff94b19b
+VIEW_SUMMARY_BASE_VIEW,Vista base: {0},2401d6ab
+VIEW_SUMMARY_COLUMNS,Columnas: {0},a4325100
+VIEW_SUMMARY_FILTER,{0}: {1},aa9a8fac
+VIEW_SUMMARY_FILTER_COUNT_PLURAL,{0} filtros,52216b41
+VIEW_SUMMARY_FILTER_COUNT_SINGULAR,1 filtro,72a7c561
+VIEW_SUMMARY_NO_FILTERS,Filtros: Ninguno,7bb0150a
+VIEW_SUMMARY_NONE,Sin filtros,063fda22
+VIEW_SUMMARY_SEARCH,"Buscar: ""{0}""",993c6c89
+VIEW_SUMMARY_SORT,Ordenar: {0},e1c3a163
+VIEW_SUMMARY_SORTED_BY,Ordenado por {0},8c4e5019
 VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VIRTUAL,Virtual,51d865ab

@@ -284,6 +284,11 @@ export type PlantingZonePayload = {
   plantingSubzones: PlantingSubzonePayload[];
   targetPlantingDensity: number;
 };
+export type StratumPlotCountsResponsePayload = {
+  numPermanentPlots: number;
+  numTemporaryPlots: number;
+  observationType: 'Monitoring' | 'Biomass Measurements';
+};
 export type SubstratumResponsePayload = {
   /** Area of substratum in hectares. */
   areaHa: number;
@@ -312,8 +317,12 @@ export type StratumResponsePayload = {
   latestObservationCompletedTime?: string;
   latestObservationId?: number;
   name: string;
+  /** Use plotCounts instead. */
   numPermanentPlots: number;
+  /** Use plotCounts instead. */
   numTemporaryPlots: number;
+  /** Number of plots that will be assigned in observations of specific types. */
+  plotCounts: StratumPlotCountsResponsePayload[];
   substrata: SubstratumResponsePayload[];
   /** Number of plants per hectare that the stratum should have after planting is completed. */
   targetPlantDensity?: number;

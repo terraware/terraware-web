@@ -28,11 +28,12 @@ import {
 } from 'material-react-table';
 
 import Page from 'src/components/Page';
+import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
-import Dropdown from 'src/components/common/Dropdown';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
@@ -59,7 +60,7 @@ import ColumnsModal, { baseColumns } from './ColumnsModal';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
-type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
+type ViewOption = typeof DEFAULT_VIEW | 'acceleratorProjects' | 'applicants';
 
 type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
 type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
@@ -82,6 +83,7 @@ const MatrixView = () => {
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
+  const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const {
     columnFilters,
@@ -116,9 +118,17 @@ const MatrixView = () => {
     [allVariables]
   );
 
+  const defaultViewSettings = useMemo(
+    () => ({
+      columnPinning: DEFAULT_COLUMN_PINNING,
+      columnVisibility: Object.fromEntries(uniqueVariableIds.map((id) => [id, false])),
+    }),
+    [uniqueVariableIds]
+  );
+
   const columnVisibility = useMemo(
-    () => ({ ...Object.fromEntries(uniqueVariableIds.map((id) => [id, false])), ...savedColumnVisibility }),
-    [savedColumnVisibility, uniqueVariableIds]
+    () => ({ ...defaultViewSettings.columnVisibility, ...savedColumnVisibility }),
+    [defaultViewSettings, savedColumnVisibility]
   );
 
   const visibleVariableIds = useMemo(
@@ -795,7 +805,7 @@ const MatrixView = () => {
 
   const reloadTable = useCallback(() => {
     let search: SearchNodePayload | undefined;
-    if (currentView === 'noFilter') {
+    if (currentView === DEFAULT_VIEW) {
       search = {
         operation: 'or',
         children: [
@@ -1001,23 +1011,23 @@ const MatrixView = () => {
         void columnMenuItemsCopy.pop();
         return columnMenuItemsCopy;
       },
-      renderTopToolbarCustomActions: () => (
+      renderTopToolbarCustomActions: ({ table }) => (
         <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid style={{ width: '242px' }}>
-            <Dropdown
-              id={'current-view'}
-              label={strings.CURRENT_VIEW}
-              onChange={onCurrentViewChange}
-              values={[
-                { label: '--', value: 'noFilter' },
+          <Grid>
+            <CurrentView
+              defaultPreset={currentView}
+              defaultSettings={defaultViewSettings}
+              onPresetChange={onCurrentViewChange}
+              presetViews={[
                 { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
                 { label: strings.APPLICANTS, value: 'applicants' },
               ]}
-              selected={currentView}
+              table={table}
+              tableDefinition={TABLES.matrixView}
             />
           </Grid>
 
-          {(!columnFiltersAreEmpty || !!globalFilter) && (
+          {!isSavedTableViewsEnabled && (!columnFiltersAreEmpty || !!globalFilter) && (
             <Grid style={{ display: 'flex', alignItems: 'center' }}>
               <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
                 {strings.FILTERS_APPLIED.toUpperCase()}
@@ -1107,7 +1117,9 @@ const MatrixView = () => {
       columnPinning,
       columnVisibility,
       currentView,
+      defaultViewSettings,
       globalFilter,
+      isSavedTableViewsEnabled,
       onCurrentViewChange,
       setColumnFilters,
       setColumnOrder,

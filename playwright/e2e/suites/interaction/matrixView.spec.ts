@@ -87,7 +87,7 @@ test.describe('MatrixViewTests', () => {
     await page.getByRole('link', { name: 'Accelerator Console' }).click({ delay: 50 });
     await page.waitForTimeout(1000); //Wait for table to load
     await page.locator('#current-view').click();
-    await page.locator('#noFilter').click();
+    await page.locator('#default').click();
 
     await expect(page.getByLabel('Show/Hide filters')).toBeVisible();
     await expect(page.locator('#manageColumns')).toBeVisible();
@@ -209,7 +209,7 @@ test.describe('MatrixViewTests', () => {
     await selectView(page, 'applicants');
     await expect(page.getByText('No records to display')).toBeVisible();
 
-    await selectView(page, 'noFilter');
+    await selectView(page, 'default');
     await expectDealNames(page, [APPLICATION_DEAL, PHASE_0_DEAL, PHASE_1_DEAL, PHASE_2_DEAL]);
   });
 
@@ -278,7 +278,7 @@ test.describe('MatrixViewTests', () => {
   test('Edit text, number, and link values', async ({ page }) => {
     const plantingDensity = 'Planting Density: Native Forest (trees per ha)';
     await openMatrixView(page);
-    await selectView(page, 'noFilter');
+    await selectView(page, 'default');
     await addColumns(page, ['TEST Organization Name', plantingDensity, 'Slack Link']);
 
     await editTextCell(page, APPLICATION_DEAL, 'TEST Organization Name', 'E2E Organization');
@@ -286,7 +286,7 @@ test.describe('MatrixViewTests', () => {
     await editTextCell(page, PHASE_0_DEAL, 'Slack Link', 'https://example.com/slack-e2e');
 
     await page.reload();
-    await selectView(page, 'noFilter');
+    await selectView(page, 'default');
     await expect(await getCell(page, APPLICATION_DEAL, 'TEST Organization Name')).toHaveText('E2E Organization');
     await expect(await getCell(page, APPLICATION_DEAL, plantingDensity)).toHaveText('600');
     await expect(await getCell(page, PHASE_0_DEAL, 'Slack Link')).toHaveText('https://example.com/slack-e2e');
@@ -301,7 +301,7 @@ test.describe('MatrixViewTests', () => {
     const allMultiSelectOptions = ['agroforestry timber', 'sustainable timber', 'marketable product'];
     const multiSelectOptions = ['agroforestry timber', 'marketable product'];
     await openMatrixView(page);
-    await selectView(page, 'noFilter');
+    await selectView(page, 'default');
     await addColumns(page, [singleSelect, multiSelect]);
 
     const singleSelectCell = await getCell(page, APPLICATION_DEAL, singleSelect);
@@ -321,7 +321,7 @@ test.describe('MatrixViewTests', () => {
     await expect(multiSelectCell).toHaveText(multiSelectOptions.join(', '));
 
     await page.reload();
-    await selectView(page, 'noFilter');
+    await selectView(page, 'default');
     await expect(await getCell(page, APPLICATION_DEAL, singleSelect)).toHaveText('maybe');
     await expect(await getCell(page, APPLICATION_DEAL, multiSelect)).toHaveText(multiSelectOptions.join(', '));
 
