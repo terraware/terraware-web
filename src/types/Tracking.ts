@@ -48,7 +48,7 @@ export type MinimalSubstratum = Omit<Substratum, 'areaHa' | 'monitoringPlots'>;
 
 export type MinimalStratum = Omit<
   Stratum,
-  'areaHa' | 'substrata' | 'boundaryModifiedTime' | 'numPermanentPlots' | 'numTemporaryPlots'
+  'areaHa' | 'substrata' | 'boundaryModifiedTime' | 'numPermanentPlots' | 'numTemporaryPlots' | 'plotCounts'
 > & {
   substrata: MinimalSubstratum[];
 };
