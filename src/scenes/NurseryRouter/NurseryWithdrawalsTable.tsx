@@ -519,7 +519,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       },
       {
         id: 'destinationName',
-        header: strings.PLANTING_SITE,
+        header: strings.DESTINATION,
         accessorKey: 'destinationName',
         enableEditing: false,
         filterVariant: 'multi-select',
