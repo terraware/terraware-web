@@ -17,7 +17,7 @@ export const toEditorSite = (site: PlantingSitePayload): EditorPlantingSite => {
     projectId,
     siteType: 'Detailed',
     strata: strata?.map((stratum): MinimalStratum => ({
-      ..._.omit(stratum, ['areaHa', 'boundaryModifiedTime', 'numPermanentPlots', 'numTemporaryPlots']),
+      ..._.omit(stratum, ['areaHa', 'boundaryModifiedTime', 'numPermanentPlots', 'numTemporaryPlots', 'plotCounts']),
       substrata: stratum.substrata.map((substratum) => _.omit(substratum, ['areaHa', 'monitoringPlots'])),
     })),
     timeZone,
