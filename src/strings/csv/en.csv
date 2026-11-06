@@ -2497,6 +2497,9 @@ TARGET_QUANTITY_REMAINING,Target Quantity Remaining,
 TARGET_QUANTITY_REMAINING_TOOLTIP,"Target quantity of this species in this substratum minus the number of plants scheduled in Planting Dates, including this date.",
 TARGETS,Targets,
 TEMPLATE,Template,
+TEMPLATE_FILENAME_ACCESSIONS,accessions-template,Filename (without extension) for download of accession import CSV template
+TEMPLATE_FILENAME_SEEDLINGS,seedling-inventory-template,Filename (without extension) for download of nursery seedling inventory import CSV template
+TEMPLATE_FILENAME_SPECIES,species-template,Filename (without extension) for download of species import CSV template
 TEMPORARY,Temporary,
 TEMPORARY_PLOTS,Temporary Plots,
 TERRAFORMATION_CONTACT,Terraformation Contact,

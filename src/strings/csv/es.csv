@@ -2497,6 +2497,9 @@ TARGET_QUANTITY_REMAINING,Cantidad objetivo restante,35300271
 TARGET_QUANTITY_REMAINING_TOOLTIP,"Cantidad objetivo de esta especie en este sustrato menos el número de plantas programadas en Fechas de Plantación, incluyendo esta fecha.",6c01de12
 TARGETS,Objetivos,afd4bbf9
 TEMPLATE,Plantilla,28afe27c
+TEMPLATE_FILENAME_ACCESSIONS,plantillas-accesiones,b03c36f4
+TEMPLATE_FILENAME_SEEDLINGS,plantilla-inventario-plántulas,ccea8c9a
+TEMPLATE_FILENAME_SPECIES,plantilla-especies,23c9321c
 TEMPORARY,Temporal,4d5354bb
 TEMPORARY_PLOTS,Parcelas Temporales,7d9bceab
 TERRAFORMATION_CONTACT,Contacto de Terraformation,65846c70

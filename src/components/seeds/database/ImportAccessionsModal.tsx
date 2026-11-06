@@ -83,6 +83,7 @@ export default function ImportAccessionsModal(props: ImportAccessionsModalProps)
       uploaderDescription={strings.IMPORT_ACCESSIONS_DESC}
       uploadApi={uploadAccessions}
       templateApi={downloadAccessionsTemplate}
+      templateFilename={strings.TEMPLATE_FILENAME_ACCESSIONS}
       statusApi={getAccessionsUploadStatus}
       importCompleteLabel={strings.ACCESSIONS_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_ACCESSIONS}

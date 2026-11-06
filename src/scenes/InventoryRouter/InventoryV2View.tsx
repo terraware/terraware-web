@@ -201,7 +201,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
           title: strings.IMPORT_INVENTORY_ALT_TITLE,
           text: strings.IMPORT_INVENTORY_WITH_TEMPLATE,
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
-          onLinkClick: () => downloadCsvTemplateHandler(getInventoryTemplate),
+          onLinkClick: () => downloadCsvTemplateHandler(getInventoryTemplate, strings.TEMPLATE_FILENAME_SEEDLINGS),
           buttonText: strings.IMPORT_INVENTORY,
           onClick: () => importInventory(),
         },

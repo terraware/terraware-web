@@ -26,7 +26,7 @@ type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
   problems: ImportProblemElement[];
 };
 
-export type ImportSpeciesModalProps = {
+export type ImportModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   facility?: Facility;
@@ -37,6 +37,7 @@ export type ImportSpeciesModalProps = {
   uploaderDescription: string;
   uploadApi?: (file: File, orgOrFacilityId: string) => Promise<UploadFileResponse>;
   templateApi?: () => Promise<any>;
+  templateFilename?: string;
   statusApi?: (uploadId: number) => Promise<UploadResponse>;
   simpleUploadApi?: (file: File) => Promise<ImportResponsePayload | null>;
   importCompleteLabel: string;
@@ -47,17 +48,17 @@ export type ImportSpeciesModalProps = {
   isImportValid?: () => boolean;
 };
 
-export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>) => {
+export const downloadCsvTemplateHandler = async (templateApi: () => Promise<any>, templateFilename?: string) => {
   const apiResponse = await templateApi();
   const data = apiResponse?.template ?? apiResponse; // TODO, make all API return a { template: <string> } type
-  downloadCsv('template', data);
+  downloadCsv(templateFilename ?? 'template', data);
 };
 
 const warningContentStyles = {
   textAlign: 'left',
 };
 
-export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
+export default function ImportModal(props: ImportModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const {
     open,
@@ -70,6 +71,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
     uploaderDescription,
     uploadApi,
     templateApi,
+    templateFilename,
     statusApi,
     simpleUploadApi,
     importCompleteLabel,
@@ -421,7 +423,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
               <Link
                 fontSize='12px'
                 onClick={() => {
-                  void downloadCsvTemplateHandler(templateApi);
+                  void downloadCsvTemplateHandler(templateApi, templateFilename);
                 }}
               >
                 {strings.DOWNLOAD_CSV_TEMPLATE}

@@ -25,6 +25,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       uploaderDescription={strings.IMPORT_SPECIES_LIST_DESC}
       uploadApi={uploadSpecies}
       templateApi={getSpeciesTemplate}
+      templateFilename={strings.TEMPLATE_FILENAME_SPECIES}
       statusApi={getSpeciesUploadStatus}
       importCompleteLabel={strings.SPECIES_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_SPECIES}
