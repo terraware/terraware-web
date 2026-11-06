@@ -24,11 +24,22 @@ const renderModal = (viabilityTest?: ViabilityTest, accession: Partial<Accession
   mockGet(URL, { accession: buildAccession({ estimatedCount: 100, ...accession }) });
   mockGet('/api/v1/organizations/1/users', { users: [] });
   const onClose = rs.fn();
+  const Modal = () => {
+    const [open, setOpen] = React.useState(true);
+    return (
+      <NewViabilityTestModal
+        open={open}
+        onClose={() => {
+          setOpen(false);
+          onClose();
+        }}
+        user={buildUser()}
+        viabilityTest={viabilityTest}
+      />
+    );
+  };
   return {
-    ...renderWithProviders(
-      <NewViabilityTestModal open onClose={onClose} user={buildUser()} viabilityTest={viabilityTest} />,
-      { route: '/accessions/42', path: '/accessions/:accessionId' }
-    ),
+    ...renderWithProviders(<Modal />, { route: '/accessions/42', path: '/accessions/:accessionId' }),
     onClose,
   };
 };
@@ -46,6 +57,94 @@ const enterDate = async (user: UserEvent, label: string, value: string) => {
   await user.keyboard('{Control>}a{/Control}');
   await user.paste(value);
 };
+
+describe('NewViabilityTestModal cut tests and completion', () => {
+  const chooseCut = async (user: UserEvent) => {
+    await user.click(document.querySelector('#test-method input') as HTMLInputElement);
+    await user.click(await screen.findByText(strings.CUT_TEST));
+  };
+  const fillCut = async (user: UserEvent) => {
+    await chooseCut(user);
+    await enter(user, 'seedsFilled', '8');
+    await enter(user, 'seedsCompromised', '1');
+    await enter(user, 'seedsEmpty', '1');
+  };
+
+  it('creates a cut test and offers the computed result for explicit application', async () => {
+    const requests = captureRequests('post', TESTS_URL);
+    const updates = captureRequests('put', URL);
+    const { user, onClose } = renderModal();
+    await screen.findByRole('dialog', { name: strings.ADD_VIABILITY_TEST });
+    await fillCut(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(await screen.findByText('90%')).toBeVisible();
+    expect(screen.getByRole('button', { name: strings.APPLY_RESULT })).toBeVisible();
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(requests).toHaveLength(1);
+    expect(await requests[0].json()).toMatchObject({
+      testType: 'Cut',
+      seedsTested: 10,
+      seedsFilled: '8',
+      seedsCompromised: '1',
+      seedsEmpty: '1',
+    });
+    expect(updates).toHaveLength(0);
+  });
+
+  it('blocks a cut-test total above available inventory', async () => {
+    const requests = captureRequests('post', TESTS_URL);
+    const { user } = renderModal(undefined, { estimatedCount: 5 });
+    await screen.findByRole('dialog', { name: strings.ADD_VIABILITY_TEST });
+    await fillCut(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(screen.getByText(strings.TOTAL_SEEDS_TESTED_ERROR)).toBeVisible();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('does not offer result application when saving the cut test fails', async () => {
+    mockError('post', TESTS_URL);
+    const { user, onClose, store } = renderModal();
+    await screen.findByRole('dialog', { name: strings.ADD_VIABILITY_TEST });
+    await fillCut(user);
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(screen.queryByRole('button', { name: strings.APPLY_RESULT })).not.toBeInTheDocument();
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('offers to apply a lab result only after saving the completed test', async () => {
+    const requests = captureRequests('put', `${TESTS_URL}/1`);
+    const { user } = renderModal(
+      buildViabilityTest({
+        testResults: [{ recordingDate: '2024-02-02', seedsGerminated: 10 }],
+      })
+    );
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    await user.click(screen.getByRole('checkbox', { name: strings.MARK_AS_COMPLETE }));
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(await screen.findByText('40%')).toBeVisible();
+    expect(requests).toHaveLength(1);
+    expect(await requests[0].json()).toHaveProperty('endDate');
+  });
+
+  it.skip('allows an existing cut test to retain its already-withdrawn seed total', async () => {
+    const requests = captureRequests('put', `${TESTS_URL}/1`);
+    const { user, onClose } = renderModal(
+      buildViabilityTest({
+        testType: 'Cut',
+        seedsTested: 20,
+        seedsFilled: 18,
+        seedsCompromised: 1,
+        seedsEmpty: 1,
+      }),
+      { estimatedCount: 5 }
+    );
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(await requests[0].json()).toMatchObject({ seedsTested: 20 });
+  });
+});
 
 describe('NewViabilityTestModal observations', () => {
   it('adds an observation to an existing test without changing its original count or start date', async () => {
