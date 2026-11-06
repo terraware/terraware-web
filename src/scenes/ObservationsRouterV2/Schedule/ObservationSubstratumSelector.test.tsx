@@ -3,6 +3,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 
 import ObservationSubstratumSelector from 'src/scenes/ObservationsRouterV2/Schedule/ObservationSubstratumSelector';
+import { MonitoringType } from 'src/scenes/ObservationsRouterV2/Schedule/monitoringTypes';
 import strings from 'src/strings';
 import { buildPlantingSite, buildStratum, buildSubstratum, mockGet, renderWithProviders } from 'src/test-utils';
 
@@ -14,25 +15,33 @@ const site = buildPlantingSite({
     buildStratum({
       id: 1,
       name: 'Ewe Highlands',
-      numPermanentPlots: 7,
-      numTemporaryPlots: 5,
+      plotCounts: [
+        { numPermanentPlots: 7, numTemporaryPlots: 5, observationType: 'Monitoring' },
+        { numPermanentPlots: 3, numTemporaryPlots: 4, observationType: 'Biomass Measurements' },
+      ],
       substrata: [buildSubstratum({ id: 11, name: 'North' }), buildSubstratum({ id: 12, name: 'South' })],
     }),
     buildStratum({
       id: 2,
       name: 'Okuta Range',
-      numPermanentPlots: 6,
-      numTemporaryPlots: 8,
+      plotCounts: [
+        { numPermanentPlots: 6, numTemporaryPlots: 8, observationType: 'Monitoring' },
+        { numPermanentPlots: 9, numTemporaryPlots: 12, observationType: 'Biomass Measurements' },
+      ],
       substrata: [buildSubstratum({ id: 21, name: 'North' }), buildSubstratum({ id: 22, name: 'South' })],
     }),
   ],
 });
 
-const renderSelector = () => {
+const renderSelector = (monitoringType: MonitoringType = 'Monitoring') => {
   mockGet(SITE_URL, { site });
 
   return renderWithProviders(
-    <ObservationSubstratumSelector onChangeSelectedSubstrata={() => undefined} plantingSiteId={PLANTING_SITE_ID} />
+    <ObservationSubstratumSelector
+      monitoringType={monitoringType}
+      onChangeSelectedSubstrata={() => undefined}
+      plantingSiteId={PLANTING_SITE_ID}
+    />
   );
 };
 
@@ -99,5 +108,23 @@ describe('ObservationSubstratumSelector', () => {
 
     expect(await screen.findByLabelText('Ewe Highlands')).toBeInTheDocument();
     expect(screen.queryByText(plotsAssigned(0, 0, 0, false))).not.toBeInTheDocument();
+  });
+
+  it('shows the plot counts of the monitoring type being scheduled', async () => {
+    const { user } = renderSelector('Biomass Measurements');
+
+    expect(await screen.findByText('3')).toBeInTheDocument();
+    expect(screen.getByText('4')).toBeInTheDocument();
+    expect(screen.getByText('9')).toBeInTheDocument();
+    expect(screen.getByText('12')).toBeInTheDocument();
+    expect(screen.queryByText('7')).not.toBeInTheDocument();
+    expect(screen.queryByText('5')).not.toBeInTheDocument();
+    expect(screen.queryByText('6')).not.toBeInTheDocument();
+    expect(screen.queryByText('8')).not.toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(strings.SELECT_ALL));
+
+    expect(screen.getByText(plotsAssigned(28, 16, 12, false))).toBeInTheDocument();
+    expect(screen.queryByText(plotsAssigned(26, 13, 13, false))).not.toBeInTheDocument();
   });
 });

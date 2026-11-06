@@ -273,6 +273,7 @@ export default function ScheduleObservationForm({
                   <Grid size={12}>
                     <ObservationSubstratumSelector
                       errorText={validate ? substratumError : ''}
+                      monitoringType={monitoringType}
                       onChangeSelectedSubstrata={setRequestedSubstratumIds}
                       plantingSiteId={selectedPlantingSiteId}
                     />
