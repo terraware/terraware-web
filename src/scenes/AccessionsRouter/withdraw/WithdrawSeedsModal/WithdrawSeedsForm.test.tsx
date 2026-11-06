@@ -1,5 +1,6 @@
 import React from 'react';
 
+import * as mui from '@mui/material' with { rstest: 'importActual' };
 import { rs } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
@@ -18,6 +19,14 @@ import {
 
 import WithdrawSeedsForm from './WithdrawSeedsForm';
 import { AccessionWithdrawInfo } from './types';
+
+// The sibling warning and form dialogs otherwise recursively reclaim focus in jsdom.
+rs.mock('@mui/material', () => {
+  return {
+    ...mui,
+    Unstable_TrapFocus: ({ children }: { children: React.ReactElement }) => children,
+  };
+});
 
 const ORG_USERS_URL = '/api/v1/organizations/1/users';
 const NURSERY_TRANSFER_URL = '/api/v2/seedbank/accessions/:accessionId/transfers/nursery';
@@ -108,7 +117,7 @@ describe('WithdrawSeedsForm purpose and dates', () => {
     expect(screen.getByRole('button', { name: strings.NEXT })).toBeDisabled();
   });
 
-  it.skip('warns before withdrawing earlier than receipt without sending a withdrawal', async () => {
+  it('warns before withdrawing earlier than receipt without sending a withdrawal', async () => {
     const requests = captureRequests('post', WITHDRAWAL_URL);
     await preparePredatedWithdrawal();
     expect(screen.getByRole('dialog', { name: strings.CONFIRM_WITHDRAWAL })).toBeVisible();
@@ -116,7 +125,7 @@ describe('WithdrawSeedsForm purpose and dates', () => {
     expect(requests).toHaveLength(0);
   });
 
-  it.skip('cancels the date warning without withdrawing or closing the form', async () => {
+  it('cancels the date warning without withdrawing or closing the form', async () => {
     const requests = captureRequests('post', WITHDRAWAL_URL);
     const { user } = await preparePredatedWithdrawal();
     await user.click(
@@ -129,7 +138,7 @@ describe('WithdrawSeedsForm purpose and dates', () => {
     expect(requests).toHaveLength(0);
   });
 
-  it.skip('continues the warning with the entered withdrawal date', async () => {
+  it('continues the warning with the entered withdrawal date', async () => {
     const requests = captureRequests('post', WITHDRAWAL_URL);
     const { user } = await preparePredatedWithdrawal();
     await user.click(screen.getByRole('button', { name: strings.CONTINUE }));
