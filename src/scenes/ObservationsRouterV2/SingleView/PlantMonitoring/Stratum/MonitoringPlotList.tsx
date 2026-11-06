@@ -26,7 +26,7 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import { useReassignPlotModal } from 'src/scenes/ObservationsRouterV2/Reassign';
 import { ObservationState, getPlotStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getBiomassPlotTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -127,7 +127,13 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
     if (observationResult && stratumResult) {
       return stratumResult.substrata.flatMap((substratum) =>
         substratum.monitoringPlots.map((plot): MonitoringPlotRow => {
-          const totalLive = getObservationSpeciesLivePlantsCount(plot.species);
+          const counts = isBiomass
+            ? getBiomassPlotTotals(plot)
+            : {
+                totalLive: getObservationSpeciesLivePlantsCount(plot.species),
+                totalPlants: plot.totalPlants,
+                totalSpecies: plot.totalSpecies,
+              };
           return {
             observationId,
             observationState: observationResult.state,
@@ -139,9 +145,9 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
             status: getPlotStatus(plot.status, strings),
             isPermanent: plot.isPermanent,
             sizeMeters: plot.sizeMeters,
-            totalLive,
-            totalPlants: plot.totalPlants,
-            totalSpecies: plot.totalSpecies,
+            totalLive: counts.totalLive,
+            totalPlants: counts.totalPlants,
+            totalSpecies: counts.totalSpecies,
             plantingDensity: plot.plantingDensity,
             survivalRate: plot.survivalRate,
             survivalRatePending: plot.pending,
@@ -151,7 +157,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
     } else {
       return [];
     }
-  }, [observationId, observationResult, stratumResult, strings]);
+  }, [isBiomass, observationId, observationResult, stratumResult, strings]);
 
   const hasSmallPlots = useMemo(() => rows.some((row) => row.sizeMeters === 25), [rows]);
 

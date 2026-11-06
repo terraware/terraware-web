@@ -232,7 +232,7 @@ const BiomassObservationDataTab = () => {
           unrecognizedSpecies={unrecognizedSpecies}
         />
       )}
-      <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
+      <ObservationDataNumbers items={items} isCompleted={!!monitoringPlot?.completedTime} />
       <Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}>
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}>
           {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}

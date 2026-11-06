@@ -34,7 +34,6 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   }, [biomassMeasurements, setRecord]);
 
   const recordQuadrats = record?.quadrats;
-  const observationResultsAdHocPlot = monitoringPlot;
 
   const onSubmit = useCallback(() => {
     void (async () => {
@@ -62,7 +61,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
         description: recordQuadrats?.find((q) => q.position === 'SouthwestCorner')?.description,
       };
 
-      if (observationResultsAdHocPlot) {
+      if (monitoringPlot) {
         const payloads: QuadratUpdateOperationPayload[] = [
           northeastQuadratPayload,
           northwestQuadratPayload,
@@ -72,7 +71,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
 
         const result = await update({
           observationId,
-          plotId: observationResultsAdHocPlot.monitoringPlotId,
+          plotId: monitoringPlot.monitoringPlotId,
           updateObservationRequestPayload: {
             updates: payloads,
           },
@@ -85,7 +84,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
       }
       onClose();
     })();
-  }, [recordQuadrats, observationResultsAdHocPlot, onClose, update, observationId, snackbar]);
+  }, [recordQuadrats, monitoringPlot, onClose, update, observationId, snackbar]);
 
   const showModal = useCallback(() => {
     setShowWarning(true);

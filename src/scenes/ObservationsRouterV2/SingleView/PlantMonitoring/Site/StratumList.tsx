@@ -22,7 +22,7 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { TABLES } from 'src/types/Tables';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import { getBiomassStratumTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type StratumRow = {
@@ -79,14 +79,20 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
   const rows = useMemo((): StratumRow[] => {
     if (observationResultsResponse) {
       return observationResultsResponse.observation.strata.map((stratum): StratumRow => {
-        const totalLive = getObservationSpeciesLivePlantsCount(stratum.species);
+        const counts = isBiomass
+          ? getBiomassStratumTotals(stratum)
+          : {
+              totalLive: getObservationSpeciesLivePlantsCount(stratum.species),
+              totalPlants: stratum.totalPlants,
+              totalSpecies: stratum.totalSpecies,
+            };
         return {
           observationId: observationResultsResponse.observation.observationId,
           stratumName: stratum.name,
           completedDate: stratum.completedTime ? getDateDisplayValue(stratum.completedTime, timeZone) : undefined,
-          totalLive,
-          totalPlants: stratum.totalPlants,
-          totalSpecies: stratum.totalSpecies,
+          totalLive: counts.totalLive,
+          totalPlants: counts.totalPlants,
+          totalSpecies: counts.totalSpecies,
           plantingDensity: stratum.observedDensity,
           survivalRate: stratum.survivalRate,
           survivalRatePending: stratum.pending,
@@ -95,7 +101,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
     } else {
       return [];
     }
-  }, [observationResultsResponse, timeZone]);
+  }, [isBiomass, observationResultsResponse, timeZone]);
 
   const StratumNameCell = useCallback(({ cell }: { cell: MRT_Cell<StratumRow> }) => {
     const row = cell.row.original;

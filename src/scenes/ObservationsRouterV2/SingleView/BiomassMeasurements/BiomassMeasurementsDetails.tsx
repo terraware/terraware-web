@@ -84,7 +84,9 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
       return (
         <Box display='flex' alignItems={'end'}>
           <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-            {observationDate} ({plantingSite?.name ?? ''})
+            {stratumName === undefined
+              ? `${observationDate} (${plantingSite?.name ?? ''})`
+              : monitoringPlot?.monitoringPlotNumber}
           </Typography>
           {hasLocation && (
             <Tooltip
@@ -121,9 +123,11 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
     defaultTimezone,
     monitoringPlot?.boundary?.coordinates,
     monitoringPlot?.elevationMeters,
+    monitoringPlot?.monitoringPlotNumber,
     plantingSite?.name,
     plantingSite?.timeZone,
     results,
+    stratumName,
     strings,
     theme,
   ]);
