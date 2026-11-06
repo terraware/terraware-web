@@ -72,6 +72,9 @@ const ColumnFilterObserver = ({
   table: MRT_TableInstance<SearchResponseElement>;
   onChange: (filters: MRT_ColumnFiltersState) => void;
 }) => {
+  'use no memo';
+
+  // MRT keeps a stable table instance while its filter state changes.
   const columnFilters = table.getState().columnFilters;
   useEffect(() => {
     onChange(columnFilters);
