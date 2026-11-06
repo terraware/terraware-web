@@ -73,8 +73,8 @@ type AdHocRow = {
 };
 
 const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string): AdHocRow => {
-  const biomass = observation.biomassMeasurements;
   const adHocPlot = observation.adHocPlot;
+  const biomass = adHocPlot?.biomassMeasurements;
 
   return {
     completedDate: observation.completedTime,
@@ -150,7 +150,9 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const rows = useMemo(
     () =>
       observations
-        .filter((observation) => observation.type !== 'Biomass Measurements' || observation.biomassMeasurements)
+        .filter(
+          (observation) => observation.type !== 'Biomass Measurements' || observation.adHocPlot?.biomassMeasurements
+        )
         .map((observation) => toRow(observation, plantingSiteNames[observation.plantingSiteId])),
     [observations, plantingSiteNames]
   );

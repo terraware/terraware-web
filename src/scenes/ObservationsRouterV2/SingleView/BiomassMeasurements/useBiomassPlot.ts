@@ -23,10 +23,7 @@ const useBiomassPlot = () => {
       .find((plot) => plot.monitoringPlotId === monitoringPlotId);
   }, [monitoringPlotId, results]);
 
-  const biomassMeasurement = useMemo(
-    () => monitoringPlot?.biomassMeasurements ?? results?.biomassMeasurements,
-    [monitoringPlot?.biomassMeasurements, results?.biomassMeasurements]
-  );
+  const biomassMeasurement = useMemo(() => monitoringPlot?.biomassMeasurements, [monitoringPlot?.biomassMeasurements]);
 
   return { biomassMeasurement, monitoringPlot, observationId, results };
 };
