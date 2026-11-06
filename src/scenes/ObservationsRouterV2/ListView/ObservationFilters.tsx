@@ -75,7 +75,7 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
           onClick={() => setFiltersExpanded(!filtersExpanded)}
           priority='secondary'
           size='medium'
-          sx={isMobile ? { margin: 0, width: '100%' } : undefined}
+          sx={isMobile ? { '&.button': { margin: 0 }, width: '100%' } : undefined}
           type='passive'
         />
       </Badge>

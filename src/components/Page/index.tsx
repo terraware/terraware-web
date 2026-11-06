@@ -76,7 +76,14 @@ export default function Page({
   const [firstRowEl, setFirstRowEl] = useState<HTMLElement | null>(null);
   const firstRowRef = useCallback((node: HTMLElement | null) => setFirstRowEl(node), []);
   const theme = useTheme();
-  const { isDesktop } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
+  const headerPaddingX = isMobile ? 0 : theme.spacing(2);
+  const headerInset = isMobile ? 0 : theme.spacing(3);
+  const actionStyle: SxProps<Theme> = {
+    paddingLeft: isDesktop ? 0 : headerInset,
+    textAlign: isDesktop ? 'right' : 'left',
+    ...(isMobile && { '& > .button': { marginLeft: 0 } }),
+  };
 
   if (isLoading) {
     return (
@@ -104,7 +111,7 @@ export default function Page({
           justifyContent='space-between'
           alignItems='center'
           marginBottom={theme.spacing(2)}
-          paddingX={theme.spacing(2)}
+          paddingX={headerPaddingX}
           sx={titleContainerStyle}
         >
           {title && typeof title !== 'string' && (
@@ -132,7 +139,7 @@ export default function Page({
             >
               <Typography
                 sx={{
-                  paddingLeft: theme.spacing(3),
+                  paddingLeft: headerInset,
                   fontSize: '24px',
                   fontWeight: 600,
                   color: theme.palette.TwClrBaseGray800,
@@ -145,7 +152,7 @@ export default function Page({
           )}
           {leftComponent && (
             <Grid
-              style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}
+              style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : headerInset }}
               size={{
                 md: leftComponentGridSize ?? 4,
                 xs: 12,
@@ -156,7 +163,7 @@ export default function Page({
           )}
           {rightComponent && (
             <Grid
-              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              sx={actionStyle}
               size={{
                 md: rightComponentGridSize ?? 4,
                 xs: 12,
@@ -168,7 +175,7 @@ export default function Page({
 
           {primaryButton && (
             <Grid
-              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              sx={actionStyle}
               size={{
                 md: 4,
                 xs: 12,
@@ -185,17 +192,17 @@ export default function Page({
           )}
         </Grid>
         {subHeader && (
-          <Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}>
-            <Box sx={{ paddingLeft: theme.spacing(3) }}>{subHeader}</Box>
+          <Grid marginBottom={theme.spacing(2)} paddingX={headerPaddingX} sx={titleContainerStyle} size={12}>
+            <Box sx={{ paddingLeft: headerInset }}>{subHeader}</Box>
           </Grid>
         )}
         {description ? (
-          <Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}>
+          <Grid marginBottom={theme.spacing(2)} paddingX={headerPaddingX} sx={titleContainerStyle} size={12}>
             <Typography
               margin={0}
               fontSize='14px'
               fontWeight={400}
-              sx={{ paddingLeft: theme.spacing(3), ...descriptionStyle }}
+              sx={{ paddingLeft: headerInset, ...descriptionStyle }}
             >
               {description}
             </Typography>
