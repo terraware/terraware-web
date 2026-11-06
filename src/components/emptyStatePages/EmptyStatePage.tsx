@@ -55,11 +55,11 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   };
 
   const downloadCsvTemplateHandler = () => {
-    void downloadTemplateCsv(getSpeciesTemplate);
+    void downloadTemplateCsv(getSpeciesTemplate, strings.TEMPLATE_FILENAME_SPECIES);
   };
 
   const downloadInventoryCsvTemplateHandler = () => {
-    void downloadTemplateCsv(getInventoryTemplate);
+    void downloadTemplateCsv(getInventoryTemplate, strings.TEMPLATE_FILENAME_SEEDLINGS);
   };
 
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);

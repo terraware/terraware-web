@@ -52,6 +52,7 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       uploaderDescription={strings.IMPORT_INVENTORY_DESC}
       uploadApi={uploadInventory}
       templateApi={getInventoryTemplate}
+      templateFilename={strings.TEMPLATE_FILENAME_SEEDLINGS}
       statusApi={getInventoryUploadStatus}
       importCompleteLabel={strings.INVENTORY_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_INVENTORY}
