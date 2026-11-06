@@ -10,6 +10,7 @@ import {
   MRT_VisibilityState,
 } from 'material-react-table';
 
+import { TableSettings } from 'src/components/common/CurrentView/tableSettings';
 import { TableDefinition } from 'src/types/Tables';
 import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
 
@@ -288,6 +289,13 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     }
   }, [persistSorting, sorting, storageKey]);
 
+  const [defaultViewSettings] = useState<Partial<TableSettings>>(() => ({
+    ...(options?.defaultColumnOrder && { columnOrder: options.defaultColumnOrder }),
+    ...(options?.defaultColumnPinning && { columnPinning: options.defaultColumnPinning }),
+    ...(options?.defaultColumnVisibility && { columnVisibility: options.defaultColumnVisibility }),
+    ...(options?.defaultSorting && { sorting: options.defaultSorting }),
+  }));
+
   const onDensityChange = (updater: MRT_DensityState | ((prev: MRT_DensityState) => MRT_DensityState)) => {
     setDensity((prev) => {
       const next = typeof updater === 'function' ? updater(prev) : updater;
@@ -306,6 +314,7 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     columnOrder,
     columnPinning,
     columnVisibility,
+    defaultViewSettings,
     density,
     globalFilter,
     isLoadingPage,

@@ -16,6 +16,7 @@ import {
 } from 'material-react-table';
 
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
@@ -229,6 +230,7 @@ export default function AccessionsTable({
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -820,6 +822,14 @@ export default function AccessionsTable({
                 },
               }
             : {}),
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>

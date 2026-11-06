@@ -18,6 +18,7 @@ import {
 import PageSnackbar from 'src/components/PageSnackbar';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -275,6 +276,7 @@ export default function SpeciesListView(): JSX.Element {
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -932,6 +934,14 @@ export default function SpeciesListView(): JSX.Element {
             enableColumnDragging: true,
             positionGlobalFilter: 'right',
             getRowId: (row) => String(row.id),
+            renderTopToolbarCustomActions: ({ table }) => (
+              <CurrentView
+                defaultSettings={defaultViewSettings}
+                organizationId={organizationId}
+                table={table}
+                tableDefinition={TABLE}
+              />
+            ),
             renderToolbarInternalActions: ({ table }) => (
               <Box display='flex' gap={0.5}>
                 <Tooltip title={strings.EXPORT}>

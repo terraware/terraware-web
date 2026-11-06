@@ -17,6 +17,7 @@ import {
   MRT_VisibilityState,
 } from 'material-react-table';
 
+import CurrentView from 'src/components/common/CurrentView';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS, VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
@@ -121,6 +122,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     setColumnFilters,
@@ -523,6 +525,14 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         enableGrouping: false,
         enableColumnDragging: true,
         positionGlobalFilter: 'right',
+        renderTopToolbarCustomActions: ({ table }) => (
+          <CurrentView
+            defaultSettings={defaultViewSettings}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        ),
         renderToolbarInternalActions: ({ table }) => (
           <Box display='flex' gap={0.5}>
             <Tooltip title={strings.EXPORT}>

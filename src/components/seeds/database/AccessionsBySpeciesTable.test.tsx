@@ -3,7 +3,7 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 
 import strings from 'src/strings';
-import { buildOrganization, mockGet, renderWithProviders } from 'src/test-utils';
+import { buildOrganization, buildUser, mockGet, renderWithProviders } from 'src/test-utils';
 import { SearchResponseElementWithId } from 'src/types/Search';
 
 import AccessionsBySpeciesTable from './AccessionsBySpeciesTable';
@@ -29,6 +29,11 @@ const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner'
     organization: { selectedOrganization: buildOrganization({ id: ORG_ID, role }) },
   });
 };
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me', { user: buildUser() });
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+});
 
 describe('AccessionsBySpeciesTable bulk withdrawal', () => {
   it('shows no selection for a contributor', () => {
