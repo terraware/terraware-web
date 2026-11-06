@@ -906,6 +906,7 @@ export default function SpeciesListView(): JSX.Element {
           enableTopToolbar={true}
           enableBottomToolbar={true}
           tableOptions={{
+            enableGlobalFilterRankedResults: false,
             autoResetPageIndex,
             state: {
               isLoading: isLoadingPage,

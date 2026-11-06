@@ -369,6 +369,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
           </Box>
         )}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           defaultColumn: { enableEditing: false },
           renderTopToolbarCustomActions: ({ table }) => (
             <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />

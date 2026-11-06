@@ -1003,6 +1003,7 @@ const MatrixView = () => {
 
   const tableOptions = useMemo<Partial<MRT_TableOptions<ProjectsWithVariablesSearchResult>>>(
     () => ({
+      enableGlobalFilterRankedResults: false,
       initialState: { showColumnFilters: false },
       positionGlobalFilter: 'right',
       renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {

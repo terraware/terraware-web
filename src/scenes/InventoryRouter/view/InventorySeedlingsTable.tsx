@@ -499,6 +499,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             enableTopToolbar={true}
             enableBottomToolbar={true}
             tableOptions={{
+              enableGlobalFilterRankedResults: false,
               autoResetPageIndex,
               state: {
                 isLoading: isLoadingPage,

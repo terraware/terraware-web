@@ -330,6 +330,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         storageKey={TABLE.storageKey}
         sx={{ padding: 0 }}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           defaultColumn: { enableEditing: false },
           enableColumnActions: true,
           enableColumnDragging: true,

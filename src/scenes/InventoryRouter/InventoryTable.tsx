@@ -689,6 +689,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enableTopToolbar={true}
                 enableBottomToolbar={true}
                 tableOptions={{
+                  enableGlobalFilterRankedResults: false,
                   autoResetPageIndex,
                   state: {
                     isLoading: isLoadingPage,
