@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.01% </span>
+                <span class="strong">94.96% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>248/261</span>
+                <span class='fraction'>245/258</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.39% </span>
+                <span class="strong">96.36% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>107/111</span>
+                <span class='fraction'>106/110</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.75% </span>
+                <span class="strong">94.69% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>235/248</span>
+                <span class='fraction'>232/245</span>
             </div>
         
             
@@ -1058,10 +1058,7 @@
 <a name='L993'></a><a href='#L993'>993</a>
 <a name='L994'></a><a href='#L994'>994</a>
 <a name='L995'></a><a href='#L995'>995</a>
-<a name='L996'></a><a href='#L996'>996</a>
-<a name='L997'></a><a href='#L997'>997</a>
-<a name='L998'></a><a href='#L998'>998</a>
-<a name='L999'></a><a href='#L999'>999</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L996'></a><a href='#L996'>996</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1139,7 +1136,6 @@
 <span class="cline-any cline-yes">398x</span>
 <span class="cline-any cline-yes">398x</span>
 <span class="cline-any cline-yes">398x</span>
-<span class="cline-any cline-yes">398x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1158,8 +1154,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">398x</span>
-<span class="cline-any cline-yes">398x</span>
-<span class="cline-any cline-yes">90x</span>
 <span class="cline-any cline-yes">398x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">398x</span>
@@ -2060,13 +2054,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 &nbsp;
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
 import { Button, DialogBox, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 &nbsp;
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
@@ -2082,6 +2074,8 @@ import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMea
 import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ExistingTreePayload } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
+&nbsp;
+import useBiomassPlot from './useBiomassPlot';
 &nbsp;
 type TreeRow = ExistingTreePayload &amp; {
   speciesName?: string;
@@ -2135,7 +2129,6 @@ const getTreeLabel = (row: TreeRow): string =&gt;
 export default function TreesAndShrubsEditableTable(): JSX.Element {
   const theme = useTheme();
   const { findSpeciesById } = useOrganizationSpecies();
-  const params = useParams&lt;{ observationId: string }&gt;();
   const { strings } = useLocalization();
   const [pendingMeasurement, setPendingMeasurement] = useState&lt;{
     keep: () =&gt; void;
@@ -2155,10 +2148,8 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [strings]
   );
 &nbsp;
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const forestType = results?.biomassMeasurements?.forestType;
+  const { biomassMeasurement, monitoringPlot, observationId } = useBiomassPlot();
+  const forestType = biomassMeasurement?.forestType;
 &nbsp;
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState&lt;Record&lt;number, Partial&lt;TreeRow&gt;&gt;&gt;({});
@@ -2184,12 +2175,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 &nbsp;
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload): Promise&lt;boolean&gt; =&gt; {
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (!results?.adHocPlot) {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (!monitoringPlot) {
 <span class="cstat-no" title="statement not covered" >        return Promise.resolve(false);</span>
       }
       const payload = {
         observationId,
-        plotId: results.adHocPlot.monitoringPlotId,
+        plotId: monitoringPlot.monitoringPlotId,
         updateObservationRequestPayload: updatePayload,
       };
       // A failed request must not strand everything queued behind it.
@@ -2199,7 +2190,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       pendingUpdates.current = queued;
       return queued;
     },
-    [observationId, results, update]
+    [monitoringPlot, observationId, update]
   );
 &nbsp;
   const commitRecordedTree = useCallback(
@@ -2404,10 +2395,10 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   /** A change applies to the whole tree, so every trunk of it is restated and re-rendered. */
   const trunksOfTree = useCallback(
     (row: TreeRow) =&gt;
-      (results?.biomassMeasurements?.trees ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>.filter(
+      (biomassMeasurement?.trees ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>.filter(
         (tree) =&gt; tree.treeGrowthForm !== 'Shrub' &amp;&amp; tree.treeNumber === row.treeNumber
       ),
-    [results]
+    [biomassMeasurement?.trees]
   );
 &nbsp;
   const confirmSpeciesChange = useCallback(async () =&gt; {
@@ -2488,7 +2479,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         candidate.speciesId === species.id ||
         candidate.speciesName === species.scientificName ||
         candidate.scientificName === species.scientificName;
-      const biomass = results?.biomassMeasurements;
+      const biomass = biomassMeasurement;
       const tree = biomass?.trees?.find(isSameSpecies);
       if (tree) {
         return (optimisticValues[tree.id]?.[fieldId] ?? tree[fieldId]) ? 'true' : 'false';
@@ -2498,7 +2489,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         biomass?.quadrats?.flatMap(<span class="fstat-no" title="function not covered" >(quadrat) =&gt; <span class="cstat-no" title="statement not covered" >quadrat.species)</span></span>.find(isSameSpecies);
       return recorded?.[fieldId] ? <span class="branch-0 cbranch-no" title="branch not covered" >'true' </span>: 'false';
     },
-    [optimisticValues, results]
+    [biomassMeasurement, optimisticValues]
   );
 &nbsp;
   const FlagCellEditor = useCallback(
@@ -2937,7 +2928,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 &nbsp;
   const treesWithData = useMemo(() =&gt; {
-    return results?.biomassMeasurements?.trees
+    return biomassMeasurement?.trees
       ?.filter((tree) =&gt; !removedTreeIds.includes(tree.id))
       .map((tree) =&gt; {
         const merged = { ...tree, ...(optimisticValues[tree.id] ?? {}) };
@@ -2948,7 +2939,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             : merged.speciesName,
         };
       });
-  }, [findSpeciesById, results, optimisticValues, removedTreeIds]);
+  }, [biomassMeasurement?.trees, findSpeciesById, optimisticValues, removedTreeIds]);
 &nbsp;
   return (
     &lt;&gt;
@@ -3064,7 +3055,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-06T17:25:58.482Z
+                at 2026-11-06T18:33:38.754Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

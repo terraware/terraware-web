@@ -1,3 +1,5 @@
+a8df6f4e SW-9242 Add strata and monitoring plots pages to biomass observations (#7051)
+a5bc9d86 SW-9242 Resolve the biomass plot from the route (#7050)
 aad5d875 SW-9236 Use distinct filenames for templates (#7049)
 a7ab4a71 SW-9241 Add Explanation photo to Biomass Photos Tab (#7048)
 ca95361d SW-9240 Add monitoring type column and show biomass observations in observations table (#7047)

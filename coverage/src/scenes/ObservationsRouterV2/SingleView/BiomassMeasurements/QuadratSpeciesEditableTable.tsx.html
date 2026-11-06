@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.87% </span>
+                <span class="strong">95.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>186/194</span>
+                <span class='fraction'>183/191</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.18% </span>
+                <span class="strong">97.14% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>69/71</span>
+                <span class='fraction'>68/70</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">95.97% </span>
+                <span class="strong">95.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>167/174</span>
+                <span class='fraction'>164/171</span>
             </div>
         
             
@@ -733,12 +733,7 @@
 <a name='L668'></a><a href='#L668'>668</a>
 <a name='L669'></a><a href='#L669'>669</a>
 <a name='L670'></a><a href='#L670'>670</a>
-<a name='L671'></a><a href='#L671'>671</a>
-<a name='L672'></a><a href='#L672'>672</a>
-<a name='L673'></a><a href='#L673'>673</a>
-<a name='L674'></a><a href='#L674'>674</a>
-<a name='L675'></a><a href='#L675'>675</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L671'></a><a href='#L671'>671</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -818,9 +813,6 @@
 <span class="cline-any cline-yes">387x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">387x</span>
-<span class="cline-any cline-yes">387x</span>
-<span class="cline-any cline-yes">387x</span>
-<span class="cline-any cline-yes">108x</span>
 <span class="cline-any cline-yes">387x</span>
 <span class="cline-any cline-yes">387x</span>
 <span class="cline-any cline-yes">387x</span>
@@ -1412,13 +1404,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 &nbsp;
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 &nbsp;
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
@@ -1436,6 +1426,7 @@ import { Species } from 'src/types/Species';
 &nbsp;
 import BiomassEditConfirmationModal from './BiomassEditConfirmationModal';
 import { QuadratPosition } from './QuadratNotesComponent';
+import useBiomassPlot from './useBiomassPlot';
 &nbsp;
 type SpeciesRow = {
   abundanceCount?: number;
@@ -1491,10 +1482,7 @@ export default function QuadratSpeciesEditableTable({
   const { strings } = useLocalization();
   const theme = useTheme();
 &nbsp;
-  const params = useParams&lt;{ observationId: string }&gt;();
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const { monitoringPlot, observationId } = useBiomassPlot();
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [rowEdits, setRowEdits] = useState&lt;Record&lt;string, Partial&lt;SpeciesRow&gt;&gt;&gt;({});
   const [speciesFlags, setSpeciesFlags] = useState&lt;Record&lt;string, Partial&lt;SpeciesRow&gt;&gt;&gt;({});
@@ -1509,12 +1497,12 @@ export default function QuadratSpeciesEditableTable({
 &nbsp;
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload): Promise&lt;boolean&gt; =&gt; {
-      <span class="missing-if-branch" title="if path not taken" >I</span>if (!results?.adHocPlot) {
+      <span class="missing-if-branch" title="if path not taken" >I</span>if (!monitoringPlot) {
 <span class="cstat-no" title="statement not covered" >        return Promise.resolve(false);</span>
       }
       const payload = {
         observationId,
-        plotId: results.adHocPlot.monitoringPlotId,
+        plotId: monitoringPlot.monitoringPlotId,
         updateObservationRequestPayload: updatePayload,
       };
       const queued = pendingUpdates.current
@@ -1523,7 +1511,7 @@ export default function QuadratSpeciesEditableTable({
       pendingUpdates.current = queued;
       return queued;
     },
-    [observationId, results, update]
+    [monitoringPlot, observationId, update]
   );
 &nbsp;
   const saveAbundance = useCallback(
@@ -2092,7 +2080,7 @@ export default function QuadratSpeciesEditableTable({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-06T17:25:58.482Z
+                at 2026-11-06T18:33:38.754Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
