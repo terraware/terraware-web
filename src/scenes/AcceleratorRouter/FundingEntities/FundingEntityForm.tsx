@@ -16,7 +16,7 @@ type FundingEntityFormProps = {
   busy?: boolean;
   fundingEntity?: FundingEntity;
   onCancel: () => void;
-  onSave: (fundingEntity: FundingEntity) => void;
+  onSave: (fundingEntity: FundingEntity) => void | Promise<unknown>;
 };
 
 const FundingEntityForm = (props: FundingEntityFormProps) => {
@@ -28,7 +28,7 @@ const FundingEntityForm = (props: FundingEntityFormProps) => {
   const { publishedProjects } = usePublishedProjects();
 
   const onSaveHandler = () => {
-    onSave({
+    return onSave({
       ...(localRecord as FundingEntity),
       projects: (localRecord.projects || []).filter((p) => p.projectId !== -1),
     });
