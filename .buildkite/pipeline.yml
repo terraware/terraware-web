@@ -182,7 +182,9 @@ steps:
 
   - label: ':white_check_mark: Record passing tree'
     key: 'record-passed-tree'
-    depends_on: 'docker'
+    depends_on:
+      - 'docker'
+      - 'validate-types'
     soft_fail: true
     if: "build.branch != 'main' && build.tag == null"
     plugins:
