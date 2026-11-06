@@ -2188,7 +2188,6 @@ SHOW_INSTRUCTIONS,Mostrar instrucciones,81469448
 SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
-SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
 SHOW_TITLE_BAR,Mostrar barra de título,95b1ccfb
 SHOWING_OBSERVATION_ON_MAP,Mostrando {0} en el mapa,3f167717
 SHRUB,Arbusto,af50871c
@@ -2350,6 +2349,7 @@ SPECIES_TO_PLANT,Especies a plantar,ad7f9878
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,El valor de {1} de la especie {0} cambió de {2} a {3},e3330648
+SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Especies con todas las accesiones agotadas,4d29a258
 SPECIES_WITH_TARGETS_IN_SEASON_DESCRIPTION,Especies con objetivos en la temporada y estrato/subestrato seleccionados,466cff52
 SPLIT,Dividir,9184c603
 STAFF,Personal,6b242686

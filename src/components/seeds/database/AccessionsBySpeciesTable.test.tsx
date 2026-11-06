@@ -122,3 +122,33 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
     expect(after[1]).toBeDisabled();
   });
 });
+
+describe('AccessionsBySpeciesTable used-up species', () => {
+  const rows = () => [
+    buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa' }),
+    buildRow({ id: '2', species_id: 20, speciesName: 'Metrosideros polymorpha', state: 'Used Up' }),
+  ];
+
+  it('hides species whose accessions are all used up by default', () => {
+    renderTable(rows());
+
+    expect(screen.getByText('Acacia koa')).toBeInTheDocument();
+    expect(screen.queryByText('Metrosideros polymorpha')).not.toBeInTheDocument();
+  });
+
+  it('shows used-up species when the used-up preset view is chosen', async () => {
+    const { user } = renderTable(rows());
+    expect(screen.queryByText('Metrosideros polymorpha')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('combobox', { name: new RegExp(strings.CURRENT_VIEW) }));
+    await user.click(await screen.findByRole('option', { name: strings.SPECIES_WITH_ALL_ACCESSIONS_USED_UP }));
+
+    expect(await screen.findByText('Metrosideros polymorpha')).toBeInTheDocument();
+  });
+
+  it('has no toolbar filter button', () => {
+    const { container } = renderTable(rows());
+
+    expect(container.querySelector('#filterAccessionsBySpecies')).toBeNull();
+  });
+});
