@@ -220,7 +220,6 @@ const ObservationListViewContent = (): JSX.Element => {
             flexWrap: 'wrap',
             justifyContent: 'space-between',
             marginBottom: theme.spacing(2),
-            paddingLeft: theme.spacing(3),
             rowGap: theme.spacing(2),
           }}
         >
