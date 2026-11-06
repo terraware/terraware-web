@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-components';
@@ -36,6 +36,7 @@ export default function ChangeQuantityModal({
     type === 'germinating' ? 'ActiveGrowth' : type === 'active-growth' ? 'HardeningOff' : 'Ready'
   );
   const [saving, setSaving] = useState<boolean>(false);
+  const savingRef = useRef(false);
   const [movedValue, setMovedValue] = useState<number | undefined>();
   const [errorText, setErrorText] = useState<string>('');
   const [record, setRecord] = useForm({
@@ -66,6 +67,9 @@ export default function ChangeQuantityModal({
   }, [row, onClose, setRecord]);
 
   const onSubmit = useCallback(async () => {
+    if (savingRef.current) {
+      return;
+    }
     if (movedValue === undefined || movedValue === 0) {
       setErrorText(strings.REQUIRED_FIELD);
       return;
@@ -89,6 +93,7 @@ export default function ChangeQuantityModal({
       return;
     }
 
+    savingRef.current = true;
     setSaving(true);
 
     let previousPhase: ChangeBatchStatusRequestPayload['previousPhase'];
@@ -119,6 +124,7 @@ export default function ChangeQuantityModal({
     } catch {
       snackbar.toastError();
     } finally {
+      savingRef.current = false;
       setSaving(false);
     }
   }, [changeBatchStatuses, markSubmitted, movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
@@ -291,6 +297,7 @@ export default function ChangeQuantityModal({
         />,
         <Button
           id='saveChangeQuantity'
+          disabled={saving}
           label={strings.SAVE}
           onClick={onSave}
           type='productive'
