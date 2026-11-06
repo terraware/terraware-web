@@ -75,6 +75,7 @@ export default function MultipleSelection(props: Props): JSX.Element {
   return (
     <Box id={`filter-list-${props.field}`} sx={{ padding: theme.spacing(1.75) }}>
       <MultiSelect
+        fixedMenu
         fullWidth={true}
         onAdd={onAdd}
         onRemove={onRemove}
