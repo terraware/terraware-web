@@ -262,8 +262,12 @@ const MonitoringPlotDetails = (): JSX.Element => {
           />
         </Box>
       )}
-      <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
-      <SurvivalRateRecalculationMessage inProgress={!!monitoringPlot?.pending} />
+      {!results?.isAdHoc && (
+        <>
+          <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
+          <SurvivalRateRecalculationMessage inProgress={!!monitoringPlot?.pending} />
+        </>
+      )}
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
