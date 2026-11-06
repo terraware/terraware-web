@@ -1,14 +1,13 @@
-import React, { useMemo } from 'react';
-import { useParams } from 'react-router';
+import React from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotos';
 import { ObservationMonitoringPlotPosition, getQuadratLabel } from 'src/types/Observations';
 
 import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
+import useBiomassPlot from './useBiomassPlot';
 
 type QuadratComponentProps = {
   position: ObservationMonitoringPlotPosition;
@@ -16,14 +15,9 @@ type QuadratComponentProps = {
 
 const QuadratComponent = ({ position }: QuadratComponentProps) => {
   const theme = useTheme();
-  const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
 
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const biomassMeasurements = useMemo(() => results?.biomassMeasurements, [results?.biomassMeasurements]);
+  const { biomassMeasurement: biomassMeasurements, monitoringPlot, observationId } = useBiomassPlot();
 
   return (
     <Box>
