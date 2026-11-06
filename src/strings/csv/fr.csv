@@ -697,7 +697,7 @@ EMAIL_NOTIFICATIONS_DESCRIPTION,"Recevez des e-mails de Terraware concernant l�
 EMAIL_REQUIRED,E-mail *,6b68d782
 EMAIL_REQUIREMENT_TERRAFORMATION,L'adresse e-mail doit inclure @terraformation.com,8bf29d92
 EMPTY_BATCH,Lot vide,585f2912
-EMPTY_BATCHES_AFTER_WITHDRAW,"Un ou plusieurs lots sont maintenant vides et n'apparaîtront pas dans les tableaux de lots. Pour voir les lots vides, cliquez sur le filtre du tableau et cochez « Afficher les lots vides ».",7b7ab93c
+EMPTY_BATCHES_AFTER_WITHDRAW,"Un ou plusieurs lots sont maintenant vides et n’apparaîtront plus dans les tableaux des lots. Pour voir les lots vides, sélectionnez l’affichage « Inclure les lots vides ».",bd614ed0
 END,Fin,43bef655
 END_DATE,Date de fin,bfc71620
 END_DATE_ERROR,La date de fin doit être postérieure à la date de début,055a3a36
@@ -806,9 +806,6 @@ FILE_SIZE_KB,{0} Ko,7b93b3f8
 FILE_SIZE_MB,{0} Mo,2895b026
 FILE_TOO_LARGE,Le fichier {0} est trop volumineux. La taille maximale est de {1} Mo.,73c962ea
 FILTER,Filtre,51b390ee
-FILTER_SHOW_EMPTY_BATCHES,Afficher les lots vides,f5c7fca1
-FILTER_SHOW_EMPTY_NURSERIES,Afficher les pépinières sans inventaire,6d351b84
-FILTER_SHOW_EMPTY_SPECIES,Afficher les espèces sans inventaire,0de9ee0c
 FILTERED,filtré,4ab1a8a2
 FILTERS,Filtres,c3d13364
 FILTERS_APPLIED,Filtres appliqués,75d4dd7e
@@ -954,8 +951,11 @@ IMPORTING_SPECIES,En cours d'importation des espèces... cela peut prendre quelq
 IN_PROGRESS,En cours,d5349fa1
 IN_REVIEW,En cours de révision,1acac124
 IN_STORAGE,Stocké,e17c2135
+INCLUDE_EMPTY_BATCHES,Inclure les lots vides,92110786
 INCLUDE_EMPTY_FIELDS,Inclure des champs vides,a4ba1236
+INCLUDE_NURSERIES_WITH_NO_INVENTORY,Inclure les pépinières sans inventaire,53e6c9b5
 INCLUDE_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Inclure les espèces dont toutes les accessions ont été utilisées,b6e91e45
+INCLUDE_SPECIES_WITH_NO_INVENTORY,Inclure les espèces sans inventaire,702c74f9
 INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_CLASS,Classe d’indicateur,8c9d3791
