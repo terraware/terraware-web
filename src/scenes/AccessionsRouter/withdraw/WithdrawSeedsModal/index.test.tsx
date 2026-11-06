@@ -38,9 +38,11 @@ describe('WithdrawSeedsModal', () => {
     expect(requests[0].url).toContain('/accessions/42');
   });
 
-  it('does not offer withdrawal for an empty selection', () => {
+  it('does not offer withdrawal for an empty selection', async () => {
     const onClose = rs.fn();
     renderWithProviders(<WithdrawSeedsModal open onClose={onClose} accessionIds={[]} user={buildUser()} />);
+    expect(screen.getByRole('progressbar')).toBeVisible();
+    await waitFor(() => expect(screen.queryByRole('progressbar')).not.toBeInTheDocument());
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: strings.NEXT })).not.toBeInTheDocument();
     expect(onClose).not.toHaveBeenCalled();
