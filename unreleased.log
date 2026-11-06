@@ -1,3 +1,6 @@
+a7ab4a71 SW-9241 Add Explanation photo to Biomass Photos Tab (#7048)
+ca95361d SW-9240 Add monitoring type column and show biomass observations in observations table (#7047)
+f8f8763a SW-9221 Show plot counts for the monitoring type being scheduled (#7046)
 c7c278f6 SW-9235 Show filter modal dropdown options over the footer (#7038)
 bec18a18 Skip CI for code that already passed (#7044)
 bb577f87 SW-9230 Validate saved view names when saving and renaming (#7029)
