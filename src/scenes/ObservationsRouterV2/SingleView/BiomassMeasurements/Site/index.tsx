@@ -1,19 +1,26 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
-import { Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Icon, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
+import ListMapView from 'src/components/ListMapView';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
 import StratumList from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/Site/StratumList';
+import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { getShortDate } from 'src/utils/dateFormatter';
+import { getBiomassObservationTotals } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import LiveTreesPerSpecies from '../LiveTreesPerSpecies';
+import ObservationDataNumbers from '../ObservationDataNumbers';
 import useBiomassPlot from '../useBiomassPlot';
 
 const BiomassSiteDetails = (): JSX.Element => {
@@ -23,7 +30,12 @@ const BiomassSiteDetails = (): JSX.Element => {
   const [searchParams] = useSearchParams();
   const plantingSiteIdParam = searchParams.get('plantingSiteId');
 
-  const { results } = useBiomassPlot();
+  const [isMapVisible, setIsMapVisible] = useState(false);
+  const onView = useCallback((view: string) => setIsMapVisible(view === 'map'), []);
+
+  const { observationId, results } = useBiomassPlot();
+  const { downloadBiomassObservationDetails } = useObservationExports();
+  const totals = useMemo(() => getBiomassObservationTotals(results), [results]);
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 
@@ -60,10 +72,59 @@ const BiomassSiteDetails = (): JSX.Element => {
     );
   }, [activeLocale, defaultTimezone, plantingSite?.name, plantingSite?.timeZone, results, theme]);
 
+  const items = [
+    { label: strings.TOTAL_PLANTS, tooltip: strings.BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP, value: totals.totalPlants },
+    { label: strings.LIVE_PLANTS, tooltip: strings.BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP, value: totals.totalLive },
+    { label: strings.DEAD_PLANTS, tooltip: strings.BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP, value: totals.totalDead },
+    { label: strings.SPECIES, tooltip: strings.BIOMASS_PLOT_SPECIES_TOOLTIP, value: totals.totalSpecies },
+  ];
+
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
       <Card radius='24px' style={{ width: '100%' }}>
-        <StratumList isBiomass />
+        <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
+        <Box display='flex' alignItems='center' paddingBottom={2}>
+          <Typography
+            fontSize='20px'
+            lineHeight='28px'
+            fontWeight={600}
+            color={theme.palette.TwClrTxt}
+            paddingRight={1}
+          >
+            {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
+          </Typography>
+          <Tooltip title={strings.BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP}>
+            <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} />
+          </Tooltip>
+        </Box>
+        <Box height='300px'>
+          <LiveTreesPerSpecies treeSpecies={totals.treeSpecies} />
+        </Box>
+        <Box display='flex' justifyContent='flex-end' paddingY={2}>
+          <Button
+            id='exportBiomassObservation'
+            label={strings.EXPORT_DATA}
+            onClick={() => void downloadBiomassObservationDetails(observationId)}
+            icon='iconImport'
+            priority='ghost'
+            sx={{ fontWeight: '400 !important' }}
+          />
+        </Box>
+        <ListMapView
+          search={null}
+          initialView='list'
+          onView={onView}
+          style={{ width: '100%' }}
+          list={<StratumList isBiomass />}
+          map={
+            <ObservationMapWrapper
+              isMapVisible={isMapVisible}
+              observationId={observationId}
+              observationType='Biomass Measurements'
+              plantingSiteId={results?.plantingSiteId}
+            />
+          }
+        />
       </Card>
     </Page>
   );
