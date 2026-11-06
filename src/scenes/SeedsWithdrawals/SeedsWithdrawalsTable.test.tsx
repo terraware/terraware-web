@@ -5,7 +5,15 @@ import userEvent from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { buildOrganization, captureRequests, mockGet, mockPost, renderWithProviders, server } from 'src/test-utils';
+import {
+  buildOrganization,
+  buildUser,
+  captureRequests,
+  mockGet,
+  mockPost,
+  renderWithProviders,
+  server,
+} from 'src/test-utils';
 
 import SeedsWithdrawalsTable from './SeedsWithdrawalsTable';
 
@@ -67,6 +75,11 @@ const renderTable = (results: SeedWithdrawalSearchResult[]) => {
     organization: { selectedOrganization: buildOrganization({ id: ORG_ID }) },
   });
 };
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me', { user: buildUser() });
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+});
 
 describe('SeedsWithdrawalsTable', () => {
   afterEach(() => {

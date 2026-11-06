@@ -14,6 +14,7 @@ import {
 } from 'material-react-table';
 
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -553,6 +554,13 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                     </Tooltip>
                   </Box>
                 </Box>
+              ),
+              renderTopToolbarCustomActions: ({ table }) => (
+                <CurrentView
+                  organizationId={selectedOrganization?.id}
+                  table={table}
+                  tableDefinition={tableDefinition}
+                />
               ),
               renderToolbarInternalActions: ({ table }) => (
                 <Box display='flex' gap={0.5}>

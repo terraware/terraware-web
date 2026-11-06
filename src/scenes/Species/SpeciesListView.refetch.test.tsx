@@ -11,11 +11,17 @@ import {
   buildOrganization,
   buildSpecies,
   buildSpeciesList,
+  buildUser,
   mockGet,
   mockPost,
   renderWithProviders,
   server,
 } from 'src/test-utils';
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me', { user: buildUser() });
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+});
 
 describe('SpeciesListView refetch behaviour', () => {
   it('restores the saved page after the forced refresh of cached species finishes', async () => {

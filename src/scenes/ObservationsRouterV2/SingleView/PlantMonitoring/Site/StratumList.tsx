@@ -15,11 +15,12 @@ import {
 } from 'material-react-table';
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { TABLES } from 'src/types/Tables';
 import { getBiomassStratumTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -45,6 +46,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
   const tableDefinition = isBiomass ? TABLES.biomassObservationStrata : TABLES.observationStrata;
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone().get().id;
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
@@ -217,6 +219,9 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
       )}
       tableOptions={{
         defaultColumn: { enableEditing: false },
+        renderTopToolbarCustomActions: ({ table }) => (
+          <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
+        ),
         state: {
           columnFilters,
           columnOrder,

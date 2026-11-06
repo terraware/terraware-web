@@ -12,6 +12,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -117,6 +118,8 @@ export default function PlantingProgressList(): JSX.Element {
   const withStrataState = useTableState(TABLES.plantingProgressWithStrata);
   const withoutStrataState = useTableState(TABLES.plantingProgressWithoutStrata);
   const activeState = hasStrata !== false ? withStrataState : withoutStrataState;
+  const activeTableDefinition =
+    hasStrata !== false ? TABLES.plantingProgressWithStrata : TABLES.plantingProgressWithoutStrata;
   const {
     density,
     onDensityChange,
@@ -401,6 +404,14 @@ export default function PlantingProgressList(): JSX.Element {
                 />
               </Box>
             </Box>
+          ),
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              key={activeTableDefinition.stableId}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={activeTableDefinition}
+            />
           ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>

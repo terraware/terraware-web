@@ -4,7 +4,14 @@ import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import strings from 'src/strings';
-import { buildOrganization, buildSpecies, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
+import {
+  buildOrganization,
+  buildSpecies,
+  buildUser,
+  captureRequests,
+  mockGet,
+  renderWithProviders,
+} from 'src/test-utils';
 
 import { getNurseryDeleteSpeciesIds } from './FilterUtils';
 import InventoryTable from './InventoryTable';
@@ -50,6 +57,8 @@ describe('nursery deletion with the sticky Species column filter', () => {
     rstest.spyOn(HTMLCanvasElement.prototype, 'getContext').mockReturnValue(null);
     mockGet('/api/v1/species', { species });
     mockGet('/api/v1/projects', { projects: [] });
+    mockGet('/api/v1/users/me', { user: buildUser() });
+    mockGet('/api/v1/users/me/preferences', { preferences: {} });
   });
 
   afterEach(() => rstest.restoreAllMocks());

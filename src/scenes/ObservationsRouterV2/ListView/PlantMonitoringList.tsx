@@ -13,6 +13,7 @@ import {
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -405,6 +406,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={tableState.defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <MRT_ToggleGlobalFilterButton table={table} />

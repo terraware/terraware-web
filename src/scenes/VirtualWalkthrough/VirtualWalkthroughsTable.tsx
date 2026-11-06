@@ -13,6 +13,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import CurrentView from 'src/components/common/CurrentView';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import ThumbnailImage from 'src/components/common/ThumbnailImage';
@@ -364,6 +365,9 @@ export default function VirtualWalkthroughsTable({
           </Box>
         )}
         tableOptions={{
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
+          ),
           state: { columnFilters, showColumnFilters, showGlobalFilter },
           onColumnFiltersChange: setColumnFilters,
           onShowColumnFiltersChange: setShowColumnFilters,

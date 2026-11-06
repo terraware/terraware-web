@@ -17,6 +17,7 @@ import {
 } from 'material-react-table';
 
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
+import CurrentView from 'src/components/common/CurrentView';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -80,6 +81,12 @@ const ColumnFilterObserver = ({
     onChange(columnFilters);
   }, [columnFilters, onChange]);
   return null;
+};
+
+const DEFAULT_SORTING_BY_ORIGIN: Record<InventoryTableProps['origin'], MRT_SortingState> = {
+  Batches: [{ id: 'batchNumber', desc: false }],
+  Nursery: [{ id: 'facility_name', desc: false }],
+  Species: [{ id: 'scientificName', desc: false }],
 };
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
@@ -648,19 +655,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     QuantitiesMenuCell,
   ]);
 
-  // Handle sorting for EditableTable
-  const [sorting, setSorting] = useState<MRT_SortingState>([
-    {
-      id: origin === 'Species' ? 'scientificName' : origin === 'Nursery' ? 'facility_name' : 'batchNumber',
-      desc: false,
-    },
-  ]);
-
   const {
     autoResetPageIndex,
     isLoadingPage,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -669,9 +669,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setColumnVisibility,
     setShowColumnFilters,
     setShowGlobalFilter,
+    setSorting,
     showColumnFilters,
     showGlobalFilter,
+    sorting,
   } = useTableState(tableDefinition, {
+    defaultSorting: DEFAULT_SORTING_BY_ORIGIN[origin],
     persistPageIndex: {},
   });
 
@@ -827,13 +830,21 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       </Box>
                     </Box>
                   ),
-                  renderTopToolbarCustomActions: () => (
-                    <Box
-                      ref={setPillListPortalEl}
-                      display='flex'
-                      alignItems='center'
-                      sx={{ flex: 1, overflow: 'hidden' }}
-                    />
+                  renderTopToolbarCustomActions: ({ table }) => (
+                    <Box display='flex' alignItems='center' gap={2} sx={{ flex: 1, minWidth: 0 }}>
+                      <CurrentView
+                        defaultSettings={defaultViewSettings}
+                        organizationId={selectedOrganization?.id}
+                        table={table}
+                        tableDefinition={tableDefinition}
+                      />
+                      <Box
+                        ref={setPillListPortalEl}
+                        display='flex'
+                        alignItems='center'
+                        sx={{ flex: 1, overflow: 'hidden' }}
+                      />
+                    </Box>
                   ),
                   renderToolbarInternalActions: ({ table }) => (
                     <Box display='flex' gap={0.5}>
