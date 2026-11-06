@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.33% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/12</span>
+                <span class='fraction'>4/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>3/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">8.33% </span>
+                <span class="strong">33.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/12</span>
+                <span class='fraction'>4/12</span>
             </div>
         
             
@@ -119,7 +119,21 @@
 <a name='L54'></a><a href='#L54'>54</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">84x</span>
+<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -136,12 +150,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -156,16 +165,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,7 +183,7 @@ api.enhanceEndpoints({
       ],
     },
     createFundingEntity: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(result) =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
+      invalidatesTags: (result) =&gt; [
         ...(result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),
         { type: QueryTagTypes.FundingEntities, id: 'LIST' },
       ],
@@ -203,7 +203,7 @@ api.enhanceEndpoints({
       invalidatesTags: [{ type: QueryTagTypes.FundingEntities, id: 'LIST' }],
     },
     getFundingEntity: {
-      providesTags: <span class="fstat-no" title="function not covered" >(result) =&gt; <span class="cstat-no" title="statement not covered" >(result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),</span></span>
+      providesTags: (result) =&gt; (result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>,
     },
     updateFundingEntity: {
       invalidatesTags: <span class="fstat-no" title="function not covered" >(_result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
@@ -218,7 +218,7 @@ api.enhanceEndpoints({
       providesTags: <span class="fstat-no" title="function not covered" >(_result, _error, fundingEntityId) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.Funders, id: fundingEntityId }],</span></span>
     },
     inviteFunder: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_result, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[{ type: QueryTagTypes.Funders, id: payload.fundingEntityId }],</span></span>
+      invalidatesTags: (_result, _error, payload) =&gt; [{ type: QueryTagTypes.Funders, id: payload.fundingEntityId }],
     },
   },
 });
@@ -229,7 +229,7 @@ api.enhanceEndpoints({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-06T19:30:19.936Z
+                at 2026-11-06T20:22:41.998Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

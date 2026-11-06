@@ -1,3 +1,8 @@
+4e0d42f3 SW-9231 Reapply the restored saved view on load (#7053)
+ab12a12e SW-9231 Add saved table views to all persisted tables (#7045)
+34cd6f1b SW-7614 Keep multi-request saves busy until all requests settle (#7042)
+a54b3fe0 SW-7614 Keep page forms disabled until their save request finishes (#7040)
+d46e7844 SW-9214 Seedling Withdrawals: Change "Planting Site" column to "Destination" (#7059)
 6cc1d3c0 Make some more dropdowns fixedMenu (#7057)
 39251c90 SW-8789 Delete the right batches from By Species and By Nursery inventory (#7035)
 65db62aa SW-8021 Prevent duplicate quantity changes while saving (#7036)
