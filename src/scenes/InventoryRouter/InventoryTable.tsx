@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Grid, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
+import { Box, Grid, IconButton, Tooltip, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
 import _, { isArray } from 'lodash';
 import {
@@ -18,7 +18,6 @@ import {
 
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import CurrentView from 'src/components/common/CurrentView';
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
@@ -26,17 +25,15 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
 import { useLazyListBatchIdsForNurseriesQuery, useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
-import { convertFilterGroupToMap, getNurseryDeleteSpeciesIds } from 'src/scenes/InventoryRouter/FilterUtils';
+import { getNurseryDeleteSpeciesIds, getSpeciesDeleteFacilityIds } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
-import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
+import { SearchResponseElement } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { TABLES, TableDefinition } from 'src/types/Tables';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
-import { getAllNurseries } from 'src/utils/organization';
-import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -64,6 +61,17 @@ const TABLES_BY_ORIGIN: Record<InventoryTableProps['origin'], TableDefinition> =
   Batches: TABLES.inventoryByBatch,
   Nursery: TABLES.inventoryByNursery,
   Species: TABLES.inventoryBySpecies,
+};
+
+const EMPTY_PRESET = 'includeEmpty';
+
+const EMPTY_FILTER_KEY_BY_ORIGIN: Record<
+  InventoryTableProps['origin'],
+  'showEmptyBatches' | 'showEmptyNurseries' | 'showEmptySpecies'
+> = {
+  Batches: 'showEmptyBatches',
+  Nursery: 'showEmptyNurseries',
+  Species: 'showEmptySpecies',
 };
 
 const ColumnFilterObserver = ({
@@ -106,10 +114,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const nurseries = useMemo(
-    () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
-    [selectedOrganization]
-  );
   const snackbar = useSnackbar();
   const query = useQuery();
   const numberFormatter = useNumberFormatter();
@@ -143,43 +147,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   }, [selectionScope]);
 
   const tableDefinition = TABLES_BY_ORIGIN[origin];
-
-  // Filter-related state
-  const initialFilters: Record<string, SearchNodePayload> = useMemo(() => {
-    const baseFilters: Record<string, SearchNodePayload> = {};
-    if (origin === 'Batches') {
-      baseFilters.showEmptyBatches = {
-        field: 'showEmptyBatches',
-        values: ['false'],
-        type: 'Exact',
-        operation: 'field',
-      };
-    } else if (origin === 'Species') {
-      baseFilters.showEmptySpecies = {
-        field: 'showEmptySpecies',
-        values: ['false'],
-        type: 'Exact',
-        operation: 'field',
-      };
-    } else if (origin === 'Nursery') {
-      baseFilters.showEmptyNurseries = {
-        field: 'showEmptyNurseries',
-        values: ['false'],
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-    return baseFilters;
-  }, [origin]);
-
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const handleFilterClick = (event?: React.MouseEvent<HTMLButtonElement>) => {
-    if (event) {
-      setFilterAnchorEl(event.currentTarget);
-    }
-  };
-  const handleFilterClose = () => setFilterAnchorEl(null);
-  const [filterGroupFilters, setFilterGroupFilters] = useForm<Record<string, SearchNodePayload>>(initialFilters);
 
   const selectedRows = useMemo(
     () =>
@@ -219,102 +186,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     }
   }, [filters, sessionFilters, setFilters]);
 
-  // Sync filterGroupFilters when filters prop changes
-  useEffect(() => {
-    const updates: Record<string, SearchNodePayload> = { ...initialFilters };
-
-    if (filters.showEmptyBatches) {
-      updates.showEmptyBatches = {
-        field: 'showEmptyBatches',
-        values: filters.showEmptyBatches,
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    if (filters.showEmptySpecies) {
-      updates.showEmptySpecies = {
-        field: 'showEmptySpecies',
-        values: filters.showEmptySpecies,
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    if (filters.showEmptyNurseries) {
-      updates.showEmptyNurseries = {
-        field: 'showEmptyNurseries',
-        values: filters.showEmptyNurseries,
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    if (filters.facilityIds?.length) {
-      updates.facilityIds = {
-        field: 'facilityIds',
-        values: filters.facilityIds.map((id) => id.toString()),
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    setFilterGroupFilters(updates);
-  }, [
-    filters.showEmptyBatches,
-    filters.showEmptySpecies,
-    filters.showEmptyNurseries,
-    filters.facilityIds,
-    setFilterGroupFilters,
-    initialFilters,
-  ]);
-
-  const filterGroupColumns = useMemo<FilterField[]>(() => {
-    const columnsToReturn: FilterField[] = [];
-    if (origin === 'Batches') {
-      columnsToReturn.push({
-        name: 'showEmptyBatches',
-        label: strings.FILTER_SHOW_EMPTY_BATCHES,
-        showLabel: false,
-        type: 'boolean',
-      });
-    }
-    if (origin === 'Species') {
-      if (nurseries.length > 0) {
-        columnsToReturn.push({
-          name: 'facilityIds',
-          label: strings.NURSERY,
-          type: 'multiple_selection',
-        });
-      }
-      columnsToReturn.push({
-        name: 'showEmptySpecies',
-        label: strings.FILTER_SHOW_EMPTY_SPECIES,
-        showLabel: false,
-        type: 'boolean',
-      });
-    }
-    if (origin === 'Nursery') {
-      columnsToReturn.push({
-        name: 'showEmptyNurseries',
-        label: strings.FILTER_SHOW_EMPTY_NURSERIES,
-        showLabel: false,
-        type: 'boolean',
-      });
-    }
-    return columnsToReturn;
-  }, [origin, strings, nurseries]);
-
-  const filterGroupOptionsRenderer = useCallback(
-    (filterName: string) => {
-      if (filterName === 'facilityIds') {
-        return nurseries.map((n) => ({ label: n.name, value: n.id.toString(), disabled: false }));
-      }
-      return undefined;
-    },
-    [nurseries]
-  );
-
   const withdrawInventory = async () => {
     let batchIds: number[] = [];
     if (origin === 'Species') {
@@ -351,10 +222,19 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         if (!selectedOrganization) {
           return;
         }
+        const facilityIds = getSpeciesDeleteFacilityIds(
+          columnFilters.find((filter) => filter.id === 'facilityInventories')?.value,
+          selectedOrganization,
+          filters.facilityIds?.map(Number)
+        );
+        if (facilityIds?.length === 0) {
+          setOpenDeleteModal(false);
+          return;
+        }
         batchIds = await listBatchIdsForSpecies({
           organizationId: selectedOrganization.id,
           speciesIds: selectedRows.filter((row) => row.id).map((row) => Number(row.id)),
-          facilityIds: filters.facilityIds?.map(Number),
+          facilityIds,
         }).unwrap();
       } else if (origin === 'Nursery') {
         if (!selectedOrganization) {
@@ -458,6 +338,28 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     },
     [setFilters, setSessionFilters]
   );
+
+  const emptyFilterKey = EMPTY_FILTER_KEY_BY_ORIGIN[origin];
+  const [showEmpty, setShowEmpty] = useState<boolean>();
+  const presetViews = useMemo(() => {
+    const labels: Record<InventoryTableProps['origin'], string> = {
+      Batches: strings.EMPTY_BATCHES,
+      Nursery: strings.NURSERIES_WITH_NO_INVENTORY,
+      Species: strings.SPECIES_WITH_NO_INVENTORY,
+    };
+    return [{ label: labels[origin], value: EMPTY_PRESET }];
+  }, [origin, strings]);
+  const handlePresetChange = useCallback((preset: string) => setShowEmpty(preset === EMPTY_PRESET), []);
+
+  useEffect(() => {
+    if (!sessionFilters || showEmpty === undefined) {
+      return;
+    }
+    const value = [`${showEmpty}`];
+    if (!_.isEqual(sessionFilters[emptyFilterKey], value)) {
+      setSearchFilters({ ...sessionFilters, [emptyFilterKey]: value });
+    }
+  }, [emptyFilterKey, sessionFilters, setSearchFilters, showEmpty]);
 
   const projectAssignPayloadCreator = useCallback(() => {
     return { batchIds: selectedRows.map((row) => Number(row.id)) };
@@ -590,36 +492,28 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         col.key === 'facility_name' ||
         col.key === 'facility_name_noLink'
       ) {
-        // Use select dropdown for Project, Species, and Nursery columns
-        columnDef.filterVariant = 'select';
+        columnDef.filterVariant = 'multi-select';
 
-        // For columns with combined names (separated by \r), split them into individual names
-        if (col.key === 'facilityInventories' || col.key === 'species_scientificName_noLink') {
-          const allNames = results
-            .map((row: any) => row[col.key])
-            .filter((val) => val !== null && val !== '' && val !== undefined)
-            .flatMap((val: string) => val.split('\r'))
-            .filter((name) => name.trim() !== '');
-          const uniqueValues = Array.from(new Set(allNames)).sort();
-          columnDef.filterSelectOptions = uniqueValues;
-          // Custom filter function to check if the filter value exists in the combined string
-          columnDef.filterFn = (row: any, columnId, filterValue) => {
-            const cellValue = row.original[col.key] as string;
-            if (!cellValue || typeof cellValue !== 'string') {
-              return false;
-            }
-            const names = cellValue.split('\r').map((name) => name.trim());
-            return names.includes(filterValue as string);
-          };
-        } else {
-          // Get unique values for this column from results
-          const uniqueValues = Array.from(
-            new Set(
-              results.map((row: any) => row[col.key]).filter((val) => val !== null && val !== '' && val !== undefined)
-            )
-          ).sort();
-          columnDef.filterSelectOptions = uniqueValues;
-        }
+        // Columns with combined names (separated by \r) are filtered by their individual names
+        const isCombinedNames = col.key === 'facilityInventories' || col.key === 'species_scientificName_noLink';
+        const optionValues = results
+          .map((row: any) => row[col.key])
+          .filter((val) => val !== null && val !== '' && val !== undefined)
+          .flatMap((val) => (isCombinedNames ? (val as string).split('\r').map((name) => name.trim()) : [val]))
+          .filter((val) => typeof val !== 'string' || val.trim() !== '');
+        columnDef.filterSelectOptions = Array.from(new Set(optionValues)).sort();
+        columnDef.filterFn = (row: any, columnId, filterValue) => {
+          const selectedNames = (Array.isArray(filterValue) ? filterValue : [filterValue]) as string[];
+          if (selectedNames.length === 0) {
+            return true;
+          }
+          const cellValue = row.original[col.key];
+          if (cellValue === null || cellValue === undefined || cellValue === '') {
+            return false;
+          }
+          const names = isCombinedNames ? `${cellValue}`.split('\r').map((name) => name.trim()) : [`${cellValue}`];
+          return selectedNames.some((name) => names.includes(`${name}`));
+        };
       } else {
         columnDef.filterVariant = 'text';
       }
@@ -742,9 +636,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           origin={origin}
           searchValue={temporalSearchValue}
           setFilters={setSearchFilters}
-          showEmptyBatchesFilter={origin === 'Batches'}
-          showEmptySpeciesFilter={origin === 'Species'}
-          showEmptyNurseriesFilter={origin === 'Nursery'}
           showProjectsFilter={false}
           showSearch={false}
           pillListPortalEl={pillListPortalEl}
@@ -834,7 +725,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     <Box display='flex' alignItems='center' gap={2} sx={{ flex: 1, minWidth: 0 }}>
                       <CurrentView
                         defaultSettings={defaultViewSettings}
+                        onPresetChange={handlePresetChange}
                         organizationId={selectedOrganization?.id}
+                        presetViews={presetViews}
                         table={table}
                         tableDefinition={tableDefinition}
                       />
@@ -854,71 +747,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           <Icon name='iconExport' size='medium' />
                         </IconButton>
                       </Tooltip>
-                      {filterGroupColumns.length > 0 && (
-                        <>
-                          <Tooltip title={strings.FILTER}>
-                            <Button
-                              id='filterInventory'
-                              onClick={handleFilterClick}
-                              type='passive'
-                              priority='ghost'
-                              icon='filter'
-                            />
-                          </Tooltip>
-                          <Popover
-                            id='inventory-filter-popover'
-                            open={Boolean(filterAnchorEl)}
-                            anchorEl={filterAnchorEl}
-                            onClose={handleFilterClose}
-                            anchorOrigin={{
-                              vertical: 'bottom',
-                              horizontal: 'center',
-                            }}
-                            transformOrigin={{
-                              vertical: 'top',
-                              horizontal: 'center',
-                            }}
-                            sx={{
-                              '& .MuiPaper-root': {
-                                borderRadius: '8px',
-                                overflow: 'visible',
-                                width: '480px',
-                              },
-                            }}
-                          >
-                            <FilterGroup
-                              key={JSON.stringify(filterGroupFilters)}
-                              initialFilters={filterGroupFilters}
-                              fields={filterGroupColumns}
-                              optionsRenderer={filterGroupOptionsRenderer}
-                              noScroll
-                              onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
-                                handleFilterClose();
-                                setFilterGroupFilters(_filterGroupFilters);
-                                if (Object.keys(_filterGroupFilters).length === 0) {
-                                  setFilters({});
-                                  setSessionFilters({});
-                                } else {
-                                  const converted = convertFilterGroupToMap(_filterGroupFilters);
-                                  const newFilters: InventoryFiltersUnion = { ...filters, ...converted };
-                                  if (_filterGroupFilters.facilityIds) {
-                                    newFilters.facilityIds = (
-                                      getFieldNodeValues(_filterGroupFilters.facilityIds) as string[]
-                                    )
-                                      .filter(Boolean)
-                                      .map(Number);
-                                  } else {
-                                    delete newFilters.facilityIds;
-                                  }
-                                  setFilters(newFilters);
-                                  setSessionFilters(newFilters);
-                                }
-                              }}
-                              onCancel={handleFilterClose}
-                            />
-                          </Popover>
-                        </>
-                      )}
                       <MRT_ToggleGlobalFilterButton table={table} />
                       <MRT_ToggleFiltersButton table={table} />
                       <MRT_ShowHideColumnsButton table={table} />

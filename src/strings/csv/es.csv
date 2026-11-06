@@ -697,7 +697,8 @@ EMAIL_NOTIFICATIONS_DESCRIPTION,"Reciba correos electrónicos de Terraware sobre
 EMAIL_REQUIRED,Correo electrónico *,6b68d782
 EMAIL_REQUIREMENT_TERRAFORMATION,"La dirección de correo electrónico tiene que incluir ""@terraformation.com"".",8bf29d92
 EMPTY_BATCH,Lote vacío,585f2912
-EMPTY_BATCHES_AFTER_WITHDRAW,"Uno o más lotes ahora están vacíos y no aparecerán en las tablas de lotes. Para ver los lotes vacíos, haga clic en el filtro de tabla y marque ""Mostrar lotes vacíos"".",7b7ab93c
+EMPTY_BATCHES,Lotes vacíos,fb04d991
+EMPTY_BATCHES_AFTER_WITHDRAW,"Uno o más lotes ahora están vacíos y no aparecerán en las tablas de lotes. Para ver los lotes vacíos, seleccione la vista ""Lotes vacíos"".",51ce292f
 END,Fin,43bef655
 END_DATE,Fecha de finalización,bfc71620
 END_DATE_ERROR,La fecha de finalización debe ser posterior a la fecha de inicio,055a3a36
@@ -806,9 +807,6 @@ FILE_SIZE_KB,{0} KB,7b93b3f8
 FILE_SIZE_MB,{0} MB,2895b026
 FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.,73c962ea
 FILTER,Filtrar,51b390ee
-FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
-FILTER_SHOW_EMPTY_NURSERIES,Mostrar viveros sin inventario,6d351b84
-FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
 FILTERED,filtrado,4ab1a8a2
 FILTERS,Filtros,c3d13364
 FILTERS_APPLIED,Filtros aplicados,75d4dd7e
@@ -1415,6 +1413,7 @@ NUMBER_OF_SMALL_TREES,Número de árboles pequeños,8765895c
 NUMBER_OF_SPECIES,Número de especies,370301c7
 NUMBER_PLANTS_COLLECTED_FROM,Número estimado de plantas de las que se recolectó,40e92d52
 NURSERIES,Viveros,74230ea3
+NURSERIES_WITH_NO_INVENTORY,Viveros sin inventario,8796cad1
 NURSERY,Vivero,2a9dbfec
 NURSERY_ADDED,Vivero añadido,43ce28ea
 NURSERY_AND_PROPAGULE_OPERATIONS,Operaciones de vivero y propágulos,6ccaebb3
@@ -2350,6 +2349,7 @@ SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcula
 SPECIES_USAGE,Uso de la especie,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,El valor de {1} de la especie {0} cambió de {2} a {3},e3330648
 SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Especies con todas las accesiones agotadas,4d29a258
+SPECIES_WITH_NO_INVENTORY,Especies sin inventario,7c792956
 SPECIES_WITH_TARGETS_IN_SEASON_DESCRIPTION,Especies con objetivos en la temporada y estrato/subestrato seleccionados,466cff52
 SPLIT,Dividir,9184c603
 STAFF,Personal,6b242686

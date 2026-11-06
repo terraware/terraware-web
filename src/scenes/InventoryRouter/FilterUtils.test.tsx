@@ -5,6 +5,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 
 import strings from 'src/strings';
 import {
+  buildFacility,
   buildOrganization,
   buildSpecies,
   buildUser,
@@ -13,7 +14,7 @@ import {
   renderWithProviders,
 } from 'src/test-utils';
 
-import { getNurseryDeleteSpeciesIds } from './FilterUtils';
+import { getNurseryDeleteSpeciesIds, getSpeciesDeleteFacilityIds } from './FilterUtils';
 import InventoryTable from './InventoryTable';
 
 const species = [
@@ -50,6 +51,36 @@ describe('nursery deletion species scope', () => {
   });
 });
 
+describe('species deletion nursery scope', () => {
+  const organization = buildOrganization({
+    facilities: [
+      buildFacility({ id: 101, name: 'Nursery A' }),
+      buildFacility({ id: 102, name: 'Nursery B' }),
+      buildFacility({ id: 103, name: 'Nursery C' }),
+    ],
+  });
+
+  it('restricts deletion to the nurseries selected in the column filter', () => {
+    expect(getSpeciesDeleteFacilityIds(['Nursery A', 'Nursery B'], organization)).toEqual([101, 102]);
+  });
+
+  it('intersects the column filter with server-side nursery filters', () => {
+    expect(getSpeciesDeleteFacilityIds(['Nursery A', 'Nursery B'], organization, [102, 103])).toEqual([102]);
+  });
+
+  it.each([undefined, null, '', []])(
+    'preserves the server-side filter when the column filter is cleared (%s)',
+    (value) => {
+      expect(getSpeciesDeleteFacilityIds(value, organization, [103])).toEqual([103]);
+      expect(getSpeciesDeleteFacilityIds(value, organization)).toBeUndefined();
+    }
+  );
+
+  it('does not broaden deletion when a selected nursery cannot be resolved', () => {
+    expect(getSpeciesDeleteFacilityIds(['Unknown nursery'], organization)).toEqual([]);
+  });
+});
+
 describe('nursery deletion with the sticky Species column filter', () => {
   beforeEach(() => {
     localStorage.clear();
@@ -64,7 +95,7 @@ describe('nursery deletion with the sticky Species column filter', () => {
   afterEach(() => rstest.restoreAllMocks());
 
   it.each(['resolved', 'unresolved', 'empty', 'failed'] as const)(
-    'uses the visible single-select filter when the lookup is %s',
+    'uses the visible multi-select filter when the lookup is %s',
     async (scenario) => {
       const lookups = captureRequests(
         'post',
@@ -104,6 +135,7 @@ describe('nursery deletion with the sticky Species column filter', () => {
       await user.click(screen.getByRole('button', { name: 'Show/Hide filters' }));
       await user.click(screen.getByRole('combobox', { name: `Filter by ${strings.SPECIES}` }));
       await user.click(screen.getByRole('option', { name: 'Acacia koa' }));
+      await user.keyboard('{Escape}');
       await waitFor(() => expect(rowCheckbox()).not.toBeChecked());
 
       await user.click(rowCheckbox());
