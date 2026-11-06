@@ -30,6 +30,9 @@ yarn-error.log*
 # build version file
 public/build-version.txt
 
+# CI record of the last passing tree
+.passed-tree.json
+
 # generated strings files
 src/strings/strings-*.[jt]s
 
