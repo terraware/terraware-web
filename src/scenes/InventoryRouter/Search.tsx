@@ -1,47 +1,23 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Grid, Popover, useTheme } from '@mui/material';
-import { Button, PillListItem, Textfield, Tooltip } from '@terraware/web-components';
+import { Box, Grid, useTheme } from '@mui/material';
+import { PillListItem, Textfield } from '@terraware/web-components';
 import { PillList } from '@terraware/web-components';
 
-import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import { useSubLocationsForFacilities } from 'src/components/common/SubLocations/useSubLocationsForFacilities';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { convertFilterGroupToMap, getNurseryName } from 'src/scenes/InventoryRouter/FilterUtils';
+import { getNurseryName } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import InventoryFilters, { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import strings from 'src/strings';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
-import { FieldNodePayload, SearchNodePayload } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
-import useForm from 'src/utils/useForm';
-
-const initialFilters: Record<string, FieldNodePayload> = {
-  showEmptyBatches: {
-    field: 'showEmptyBatches',
-    values: ['false'],
-    type: 'Exact',
-    operation: 'field',
-  },
-  showEmptySpecies: {
-    field: 'showEmptySpecies',
-    values: ['false'],
-    type: 'Exact',
-    operation: 'field',
-  },
-  showEmptyNurseries: {
-    field: 'showEmptyNurseries',
-    values: ['false'],
-    type: 'Exact',
-    operation: 'field',
-  },
-};
 
 interface SearchProps {
   filters: InventoryFiltersUnion;
@@ -50,9 +26,6 @@ interface SearchProps {
   origin?: OriginPage;
   searchValue: string;
   setFilters: (f: InventoryFiltersUnion) => void;
-  showEmptyBatchesFilter?: boolean;
-  showEmptySpeciesFilter?: boolean;
-  showEmptyNurseriesFilter?: boolean;
   showProjectsFilter?: boolean;
   showSearch?: boolean;
   pillListPortalEl?: HTMLElement | null;
@@ -70,9 +43,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
     onSearch,
     searchValue,
     setFilters,
-    showEmptyBatchesFilter,
-    showEmptySpeciesFilter,
-    showEmptyNurseriesFilter,
     showProjectsFilter,
     showSearch,
     pillListPortalEl,
@@ -108,77 +78,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
   }, [getResultsSpeciesNames, origin, species]);
 
   const subLocations = useSubLocationsForFacilities(filters.facilityIds);
-
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const handleFilterClick = (event: React.MouseEvent<HTMLElement>) => setFilterAnchorEl(event.currentTarget);
-  const handleFilterClose = () => setFilterAnchorEl(null);
-  const [filterGroupFilters, setFilterGroupFilters] = useForm<Record<string, SearchNodePayload>>(initialFilters);
-
-  // Sync filterGroupFilters when filters prop changes from parent
-  useEffect(() => {
-    const updates: Record<string, SearchNodePayload> = { ...initialFilters };
-
-    if (filters.showEmptyBatches) {
-      updates.showEmptyBatches = {
-        field: 'showEmptyBatches',
-        values: filters.showEmptyBatches,
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    if (filters.showEmptySpecies) {
-      updates.showEmptySpecies = {
-        field: 'showEmptySpecies',
-        values: filters.showEmptySpecies,
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    if (filters.showEmptyNurseries) {
-      updates.showEmptyNurseries = {
-        field: 'showEmptyNurseries',
-        values: filters.showEmptyNurseries,
-        type: 'Exact',
-        operation: 'field',
-      };
-    }
-
-    setFilterGroupFilters(updates);
-  }, [filters.showEmptyBatches, filters.showEmptySpecies, filters.showEmptyNurseries, setFilterGroupFilters]);
-
-  const filterGroupColumns = useMemo<FilterField[]>(() => {
-    if (!activeLocale) {
-      return [];
-    }
-    const columns: FilterField[] = [];
-    if (showEmptyBatchesFilter) {
-      columns.push({
-        name: 'showEmptyBatches',
-        label: strings.FILTER_SHOW_EMPTY_BATCHES,
-        showLabel: false,
-        type: 'boolean',
-      });
-    }
-    if (showEmptySpeciesFilter) {
-      columns.push({
-        name: 'showEmptySpecies',
-        label: strings.FILTER_SHOW_EMPTY_SPECIES,
-        showLabel: false,
-        type: 'boolean',
-      });
-    }
-    if (showEmptyNurseriesFilter) {
-      columns.push({
-        name: 'showEmptyNurseries',
-        label: strings.FILTER_SHOW_EMPTY_NURSERIES,
-        showLabel: false,
-        type: 'boolean',
-      });
-    }
-    return columns;
-  }, [activeLocale, showEmptyBatchesFilter, showEmptySpeciesFilter, showEmptyNurseriesFilter]);
 
   const getSpeciesName = useCallback(
     (speciesId: number) => (availableSpecies || []).find((s) => s.id === speciesId)?.scientificName,
@@ -239,30 +138,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
       });
     }
 
-    if (showEmptyBatchesFilter && filters.showEmptyBatches && filters.showEmptyBatches[0] === 'true') {
-      data.push({
-        id: 'showEmptyBatches',
-        value: strings.FILTER_SHOW_EMPTY_BATCHES,
-        emptyValue: ['false'],
-      });
-    }
-
-    if (showEmptySpeciesFilter && filters.showEmptySpecies && filters.showEmptySpecies[0] === 'true') {
-      data.push({
-        id: 'showEmptySpecies',
-        value: strings.FILTER_SHOW_EMPTY_SPECIES,
-        emptyValue: ['false'],
-      });
-    }
-
-    if (showEmptyNurseriesFilter && filters.showEmptyNurseries && filters.showEmptyNurseries[0] === 'true') {
-      data.push({
-        id: 'showEmptyNurseries',
-        value: strings.FILTER_SHOW_EMPTY_NURSERIES,
-        emptyValue: ['false'],
-      });
-    }
-
     return data;
   }, [
     selectedOrganization,
@@ -270,17 +145,11 @@ export default function Search(props: SearchProps): JSX.Element | null {
     filters.speciesIds,
     filters.subLocationsIds,
     filters.projectIds,
-    filters.showEmptyBatches,
-    filters.showEmptySpecies,
-    filters.showEmptyNurseries,
     getSpeciesName,
     getSubLocationName,
     getProjectName,
     origin,
     showProjectsFilter,
-    showEmptyBatchesFilter,
-    showEmptySpeciesFilter,
-    showEmptyNurseriesFilter,
   ]);
 
   const onRemovePillList = useCallback(
@@ -288,26 +157,11 @@ export default function Search(props: SearchProps): JSX.Element | null {
       const filter = filterPillData?.find((filterPillDatum) => filterPillDatum.id === filterId);
       if (filterId === 'facilityIds') {
         setFilters({ ...filters, facilityIds: [], subLocationsIds: [] });
-      } else if (filterId === 'showEmptyBatches') {
-        setFilterGroupFilters({
-          showEmptyBatches: { ...initialFilters.showEmptyBatches, values: ['false'] },
-        });
-        setFilters({ ...filters, showEmptyBatches: ['false'] });
-      } else if (filterId === 'showEmptySpecies') {
-        setFilterGroupFilters({
-          showEmptySpecies: { ...initialFilters.showEmptySpecies, values: ['false'] },
-        });
-        setFilters({ ...filters, showEmptySpecies: ['false'] });
-      } else if (filterId === 'showEmptyNurseries') {
-        setFilterGroupFilters({
-          showEmptyNurseries: { ...initialFilters.showEmptyNurseries, values: ['false'] },
-        });
-        setFilters({ ...filters, showEmptyNurseries: ['false'] });
       } else {
         setFilters({ ...filters, [filterId]: filter?.emptyValue || null });
       }
     },
-    [filterPillData, filters, setFilters, setFilterGroupFilters]
+    [filterPillData, filters, setFilters]
   );
 
   if (origin === 'Nursery' && !availableSpecies && !projects) {
@@ -399,57 +253,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
             notPresentFilterShown
             notPresentFilterLabel={strings.NO_PROJECT}
           />
-        )}
-
-        {showSearch && (showEmptyBatchesFilter || showEmptySpeciesFilter || showEmptyNurseriesFilter) && (
-          <Box sx={{ marginTop: theme.spacing(0.5) }}>
-            <Tooltip title={strings.FILTER}>
-              <Button
-                id='filterSpecies'
-                onClick={(event) => event && handleFilterClick(event)}
-                type='passive'
-                priority='ghost'
-                icon='filter'
-              />
-            </Tooltip>
-            <Popover
-              id='simple-popover'
-              open={Boolean(filterAnchorEl)}
-              anchorEl={filterAnchorEl}
-              onClose={handleFilterClose}
-              anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'center',
-              }}
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'center',
-              }}
-              sx={{
-                '& .MuiPaper-root': {
-                  borderRadius: '8px',
-                  overflow: 'visible',
-                  width: '480px',
-                },
-              }}
-            >
-              <FilterGroup
-                key={JSON.stringify(filterGroupFilters)}
-                initialFilters={filterGroupFilters}
-                fields={filterGroupColumns}
-                onConfirm={(_filterGroupFilters: Record<string, SearchNodePayload>) => {
-                  handleFilterClose();
-                  setFilterGroupFilters(_filterGroupFilters);
-                  if (Object.keys(_filterGroupFilters).length === 0) {
-                    setFilters({});
-                  } else {
-                    setFilters({ ...filters, ...convertFilterGroupToMap(_filterGroupFilters) });
-                  }
-                }}
-                onCancel={handleFilterClose}
-              />
-            </Popover>
-          </Box>
         )}
 
         {showSearch && <TableSettingsButton />}

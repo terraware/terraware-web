@@ -1,6 +1,5 @@
-import { InventoryFiltersType } from 'src/scenes/InventoryRouter/InventoryFilter';
 import { Organization } from 'src/types/Organization';
-import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
+import { SearchResponseElement } from 'src/types/Search';
 import { Species } from 'src/types/Species';
 import { getAllNurseries } from 'src/utils/organization';
 
@@ -45,12 +44,3 @@ export const isSpeciesEmpty = (species: SearchResponseElement): boolean => {
 export const isNurseryEmpty = (nursery: SearchResponseElement): boolean => {
   return Number(nursery['totalQuantity(raw)']) === 0 && Number(nursery['germinatingQuantity(raw)']) === 0;
 };
-
-export const convertFilterGroupToMap = (filterGroupFilters: Record<string, SearchNodePayload>): InventoryFiltersType =>
-  Object.keys(filterGroupFilters).reduce(
-    (acc, curr) => ({
-      ...acc,
-      [curr]: getFieldNodeValues(filterGroupFilters[curr]),
-    }),
-    {} as InventoryFiltersType
-  );
