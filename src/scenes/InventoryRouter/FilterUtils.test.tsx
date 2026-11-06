@@ -5,6 +5,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 
 import strings from 'src/strings';
 import {
+  buildFacility,
   buildOrganization,
   buildSpecies,
   buildUser,
@@ -13,7 +14,7 @@ import {
   renderWithProviders,
 } from 'src/test-utils';
 
-import { getNurseryDeleteSpeciesIds } from './FilterUtils';
+import { getNurseryDeleteSpeciesIds, getSpeciesDeleteFacilityIds } from './FilterUtils';
 import InventoryTable from './InventoryTable';
 
 const species = [
@@ -47,6 +48,36 @@ describe('nursery deletion species scope', () => {
 
   it('resolves an active column filter even when the server-side filter is empty', () => {
     expect(getNurseryDeleteSpeciesIds('Acacia koa', species, [])).toEqual([11]);
+  });
+});
+
+describe('species deletion nursery scope', () => {
+  const organization = buildOrganization({
+    facilities: [
+      buildFacility({ id: 101, name: 'Nursery A' }),
+      buildFacility({ id: 102, name: 'Nursery B' }),
+      buildFacility({ id: 103, name: 'Nursery C' }),
+    ],
+  });
+
+  it('restricts deletion to the nurseries selected in the column filter', () => {
+    expect(getSpeciesDeleteFacilityIds(['Nursery A', 'Nursery B'], organization)).toEqual([101, 102]);
+  });
+
+  it('intersects the column filter with server-side nursery filters', () => {
+    expect(getSpeciesDeleteFacilityIds(['Nursery A', 'Nursery B'], organization, [102, 103])).toEqual([102]);
+  });
+
+  it.each([undefined, null, '', []])(
+    'preserves the server-side filter when the column filter is cleared (%s)',
+    (value) => {
+      expect(getSpeciesDeleteFacilityIds(value, organization, [103])).toEqual([103]);
+      expect(getSpeciesDeleteFacilityIds(value, organization)).toBeUndefined();
+    }
+  );
+
+  it('does not broaden deletion when a selected nursery cannot be resolved', () => {
+    expect(getSpeciesDeleteFacilityIds(['Unknown nursery'], organization)).toEqual([]);
   });
 });
 

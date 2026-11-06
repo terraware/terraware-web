@@ -11,19 +11,37 @@ export const getNurseryName = (facilityId: number, organization: Organization) =
   return '';
 };
 
+const getActiveFilterNames = (columnFilter: unknown) =>
+  (Array.isArray(columnFilter) ? columnFilter : [columnFilter]).filter(
+    (name) => name !== undefined && name !== null && name !== ''
+  );
+
 export const getNurseryDeleteSpeciesIds = (
   columnFilter: unknown,
   species: Species[],
   speciesIds?: number[]
 ): number[] | undefined => {
-  const names = Array.isArray(columnFilter) ? columnFilter : [columnFilter];
-  const activeNames = names.filter((name) => name !== undefined && name !== null && name !== '');
+  const activeNames = getActiveFilterNames(columnFilter);
   if (activeNames.length === 0) {
     return speciesIds?.length ? speciesIds : undefined;
   }
   return species
     .filter((s) => activeNames.includes(s.scientificName) && (!speciesIds?.length || speciesIds.includes(s.id)))
     .map((s) => s.id);
+};
+
+export const getSpeciesDeleteFacilityIds = (
+  columnFilter: unknown,
+  organization: Organization,
+  facilityIds?: number[]
+): number[] | undefined => {
+  const activeNames = getActiveFilterNames(columnFilter);
+  if (activeNames.length === 0) {
+    return facilityIds?.length ? facilityIds : undefined;
+  }
+  return getAllNurseries(organization)
+    .filter((n) => activeNames.includes(n.name) && (!facilityIds?.length || facilityIds.includes(n.id)))
+    .map((n) => n.id);
 };
 
 // This is necessary because the Batch type is not hydrated as expected when it comes back within a search response

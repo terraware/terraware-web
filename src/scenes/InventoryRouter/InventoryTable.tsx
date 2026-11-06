@@ -25,7 +25,7 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
 import { useLazyListBatchIdsForNurseriesQuery, useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
-import { getNurseryDeleteSpeciesIds } from 'src/scenes/InventoryRouter/FilterUtils';
+import { getNurseryDeleteSpeciesIds, getSpeciesDeleteFacilityIds } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
@@ -222,10 +222,19 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         if (!selectedOrganization) {
           return;
         }
+        const facilityIds = getSpeciesDeleteFacilityIds(
+          columnFilters.find((filter) => filter.id === 'facilityInventories')?.value,
+          selectedOrganization,
+          filters.facilityIds?.map(Number)
+        );
+        if (facilityIds?.length === 0) {
+          setOpenDeleteModal(false);
+          return;
+        }
         batchIds = await listBatchIdsForSpecies({
           organizationId: selectedOrganization.id,
           speciesIds: selectedRows.filter((row) => row.id).map((row) => Number(row.id)),
-          facilityIds: filters.facilityIds?.map(Number),
+          facilityIds,
         }).unwrap();
       } else if (origin === 'Nursery') {
         if (!selectedOrganization) {
