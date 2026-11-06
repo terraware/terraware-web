@@ -65,6 +65,20 @@ const TABLES_BY_ORIGIN: Record<InventoryTableProps['origin'], TableDefinition> =
   Species: TABLES.inventoryBySpecies,
 };
 
+const ColumnFilterObserver = ({
+  table,
+  onChange,
+}: {
+  table: MRT_TableInstance<SearchResponseElement>;
+  onChange: (filters: MRT_ColumnFiltersState) => void;
+}) => {
+  const columnFilters = table.getState().columnFilters;
+  useEffect(() => {
+    onChange(columnFilters);
+  }, [columnFilters, onChange]);
+  return null;
+};
+
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
   const {
     disableDelete = false,
@@ -752,7 +766,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   state: {
                     isLoading: isLoadingPage,
                     rowSelection,
-                    columnFilters,
                     sorting,
                     columnOrder,
                     columnVisibility,
@@ -762,7 +775,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     showGlobalFilter,
                   },
                   onRowSelectionChange: setRowSelection,
-                  onColumnFiltersChange: setColumnFilters,
                   onSortingChange: setSorting,
                   onPaginationChange,
                   onColumnOrderChange: setColumnOrder,
@@ -822,6 +834,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   ),
                   renderToolbarInternalActions: ({ table }) => (
                     <Box display='flex' gap={0.5}>
+                      <ColumnFilterObserver table={table} onChange={setColumnFilters} />
                       <Tooltip title={strings.EXPORT}>
                         <IconButton onClick={() => handleExport(table)}>
                           <Icon name='iconExport' size='medium' />
