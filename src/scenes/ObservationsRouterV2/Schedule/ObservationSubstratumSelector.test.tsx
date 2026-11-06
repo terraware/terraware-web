@@ -33,8 +33,8 @@ const site = buildPlantingSite({
   ],
 });
 
-const renderSelector = (monitoringType: MonitoringType = 'Monitoring') => {
-  mockGet(SITE_URL, { site });
+const renderSelector = (monitoringType: MonitoringType = 'Monitoring', sitePayload = site) => {
+  mockGet(SITE_URL, { site: sitePayload });
 
   return renderWithProviders(
     <ObservationSubstratumSelector
@@ -108,6 +108,32 @@ describe('ObservationSubstratumSelector', () => {
 
     expect(await screen.findByLabelText('Ewe Highlands')).toBeInTheDocument();
     expect(screen.queryByText(plotsAssigned(0, 0, 0, false))).not.toBeInTheDocument();
+  });
+
+  it('shows no plots for a monitoring type the strata have no counts for', async () => {
+    const { user } = renderSelector(
+      'Biomass Measurements',
+      buildPlantingSite({
+        strata: [
+          buildStratum({
+            id: 1,
+            name: 'Ewe Highlands',
+            numPermanentPlots: 7,
+            numTemporaryPlots: 5,
+            plotCounts: [{ numPermanentPlots: 7, numTemporaryPlots: 5, observationType: 'Monitoring' }],
+            substrata: [buildSubstratum({ id: 11, name: 'North' })],
+          }),
+        ],
+      })
+    );
+
+    expect(await screen.findByLabelText('Ewe Highlands')).toBeInTheDocument();
+    expect(screen.queryByText('7')).not.toBeInTheDocument();
+    expect(screen.queryByText('5')).not.toBeInTheDocument();
+
+    await user.click(screen.getByLabelText(strings.SELECT_ALL));
+
+    expect(screen.getByText(plotsAssigned(0, 0, 0, true))).toBeInTheDocument();
   });
 
   it('shows the plot counts of the monitoring type being scheduled', async () => {

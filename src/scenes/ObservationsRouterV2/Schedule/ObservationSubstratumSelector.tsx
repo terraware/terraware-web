@@ -38,10 +38,10 @@ const ObservationSubstratumSelector = ({
 
   const plotCountsFor = useCallback(
     (stratum: Stratum) =>
-      stratum.plotCounts.find((counts) => counts.observationType === monitoringType) ?? {
-        numPermanentPlots: stratum.numPermanentPlots,
-        numTemporaryPlots: stratum.numTemporaryPlots,
-      },
+      stratum.plotCounts.find((counts) => counts.observationType === monitoringType) ??
+      (monitoringType === 'Monitoring'
+        ? { numPermanentPlots: stratum.numPermanentPlots, numTemporaryPlots: stratum.numTemporaryPlots }
+        : { numPermanentPlots: 0, numTemporaryPlots: 0 }),
     [monitoringType]
   );
 
