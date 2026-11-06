@@ -20,12 +20,14 @@ type BiomassObservationStatsProperties = {
 };
 
 type BiomassObservationStatsDrawerProps = {
+  monitoringPlotId?: number;
   observationId: number;
   onViewOnMap?: () => void;
   plantingSiteId: number;
 };
 
 const BiomassObservationStatsDrawer = ({
+  monitoringPlotId,
   observationId,
   onViewOnMap,
   plantingSiteId,
@@ -45,22 +47,34 @@ const BiomassObservationStatsDrawer = ({
     [observationResultsLoading, plantingSiteLoading]
   );
 
+  const monitoringPlot = useMemo(() => {
+    if (monitoringPlotId === undefined) {
+      return results?.adHocPlot;
+    }
+    return results?.strata
+      .flatMap((stratum) => stratum.substrata)
+      .flatMap((substratum) => substratum.monitoringPlots)
+      .find((plot) => plot.monitoringPlotId === monitoringPlotId);
+  }, [monitoringPlotId, results]);
+
   const properties = useMemo((): BiomassObservationStatsProperties | undefined => {
-    if (results && results.adHocPlot && results.biomassMeasurements) {
-      const completedDate = results.completedTime
-        ? getDateDisplayValue(results.completedTime, plantingSite?.timeZone ?? defaultTimezone)
+    const measurements = monitoringPlot?.biomassMeasurements ?? results?.biomassMeasurements;
+    if (results && monitoringPlot && measurements) {
+      const completedTime = monitoringPlot.completedTime ?? results.completedTime;
+      const completedDate = completedTime
+        ? getDateDisplayValue(completedTime, plantingSite?.timeZone ?? defaultTimezone)
         : undefined;
       return {
-        monitoringPlotName: results.adHocPlot.monitoringPlotName,
-        numTrees: results.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub').length,
-        numShrubs: results.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm === 'Shrub').length,
-        numSpecies: results.biomassMeasurements.treeSpeciesCount,
+        monitoringPlotName: monitoringPlot.monitoringPlotName,
+        numTrees: measurements.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub').length,
+        numShrubs: measurements.trees.filter((tree) => tree.treeGrowthForm === 'Shrub').length,
+        numSpecies: measurements.treeSpeciesCount,
         observationDate: completedDate ? getShortDate(completedDate, activeLocale) : '',
       };
     } else {
       return undefined;
     }
-  }, [activeLocale, defaultTimezone, plantingSite?.timeZone, results]);
+  }, [activeLocale, defaultTimezone, monitoringPlot, plantingSite?.timeZone, results]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     if (properties) {
@@ -68,7 +82,7 @@ const BiomassObservationStatsDrawer = ({
         { key: strings.TREES_STEMS, value: `${properties.numTrees}` },
         { key: strings.SHRUBS, value: `${properties.numShrubs}` },
         { key: strings.SPECIES, value: `${properties.numSpecies}` },
-        { key: strings.DATE, value: `${properties.numSpecies}` },
+        { key: strings.DATE, value: properties.observationDate },
       ];
     } else {
       return [];
