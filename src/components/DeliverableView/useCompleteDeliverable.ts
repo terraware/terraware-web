@@ -9,7 +9,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   status?: Statuses;
-  complete: (deliverable: DeliverableWithOverdue) => void;
+  complete: (deliverable: DeliverableWithOverdue) => Promise<void>;
 };
 
 /**
@@ -21,8 +21,9 @@ export default function useCompleteDeliverable(): Response {
 
   const complete = useCallback(
     (deliverable: DeliverableWithOverdue) => {
-      void completeSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+      return completeSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
         .unwrap()
+        .then(() => undefined)
         .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
     [completeSubmission, snackbar]
