@@ -1,3 +1,5 @@
+441474f3 Allow agents to push PRs when explicitly asked (#7074)
+b3930c2b SW-9218 Use location endpoints in species check (#7058)
 bb9885f3 SW-9145 Use plot-level biomass measurements (#6864)
 16478220 SW-9239 Hide survival rate banners for ad hoc observations (#7056)
 4e0d42f3 SW-9231 Reapply the restored saved view on load (#7053)

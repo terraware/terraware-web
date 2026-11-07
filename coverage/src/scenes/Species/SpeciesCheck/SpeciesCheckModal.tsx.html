@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">39.72% </span>
+                <span class="strong">39.86% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>114/287</span>
+                <span class='fraction'>114/286</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.5% </span>
+                <span class="strong">27.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/166</span>
+                <span class='fraction'>44/160</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.09% </span>
+                <span class="strong">30.39% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>31/103</span>
+                <span class='fraction'>31/102</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42% </span>
+                <span class="strong">42.16% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>113/269</span>
+                <span class='fraction'>113/268</span>
             </div>
         
             
@@ -869,8 +869,7 @@
 <a name='L804'></a><a href='#L804'>804</a>
 <a name='L805'></a><a href='#L805'>805</a>
 <a name='L806'></a><a href='#L806'>806</a>
-<a name='L807'></a><a href='#L807'>807</a>
-<a name='L808'></a><a href='#L808'>808</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L807'></a><a href='#L807'>807</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1274,10 +1273,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1688,10 +1686,10 @@ import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
-import useUpdateOrganization from 'src/hooks/useUpdateOrganization';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useUpdateProjectMutation } from 'src/queries/generated/projects';
+import { useUpdateOrganizationLocationMutation } from 'src/queries/generated/organizations';
+import { useUpdateProjectLocationMutation } from 'src/queries/generated/projects';
 import {
   useAcceptPendingNativitiesMutation,
   useAcceptProblemSuggestionMutation,
@@ -1755,8 +1753,8 @@ const SpeciesCheckModal = ({
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('species_check', open);
 &nbsp;
-  const [updateProject] = useUpdateProjectMutation();
-  const updateOrganization = useUpdateOrganization();
+  const [updateProjectLocation] = useUpdateProjectLocationMutation();
+  const [updateOrganizationLocation] = useUpdateOrganizationLocationMutation();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
   const [overrideSpecies] = useOverrideProjectSpeciesDataMutation();
   const [acceptPending] = useAcceptPendingNativitiesMutation();
@@ -2075,20 +2073,19 @@ const SpeciesCheckModal = ({
 <span class="cstat-no" title="statement not covered" >            if (!selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >              return Promise.resolve();</span>
             }
-<span class="cstat-no" title="statement not covered" >            return updateOrganization({</span>
-              ...selectedOrganization,
+<span class="cstat-no" title="statement not covered" >            return updateOrganizationLocation({</span>
+              organizationId: selectedOrganization.id,
+              updateOrganizationLocationRequestPayload: {
+                countryCode: edit.countryCode,
+                botanicalCountryCode: edit.botanicalCountryCode,
+              },
+            }).unwrap();
+          }
+<span class="cstat-no" title="statement not covered" >          return updateProjectLocation({</span>
+            id: target.projectId as number,
+            updateProjectLocationRequestPayload: {
               countryCode: edit.countryCode,
               botanicalCountryCode: edit.botanicalCountryCode,
-            });
-          }
-          const project = projects.find(<span class="fstat-no" title="function not covered" >(p) =&gt; <span class="cstat-no" title="statement not covered" >p.id === target.projectId)</span></span>;
-<span class="cstat-no" title="statement not covered" >          return updateProject({</span>
-            id: target.projectId as number,
-            updateProjectRequestPayload: {
-              name: project?.name ?? target.name,
-              description: project?.description,
-              countryCode: edit.countryCode ?? null,
-              botanicalCountryCode: edit.botanicalCountryCode ?? null,
             },
           }).unwrap();
         })
@@ -2116,8 +2113,8 @@ const SpeciesCheckModal = ({
     targets,
     trackEvent,
     trackSaveFailed,
-    updateOrganization,
-    updateProject,
+    updateOrganizationLocation,
+    updateProjectLocation,
   ]);
 &nbsp;
   const onAcceptNames = useCallback(<span class="fstat-no" title="function not covered" >async () =&gt; {</span>
@@ -2491,7 +2488,7 @@ export default SpeciesCheckModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-06T21:56:32.395Z
+                at 2026-11-07T00:46:34.188Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
