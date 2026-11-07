@@ -86,4 +86,4 @@ If the repo is using jj, you can use jj commands to manage the stack of revision
 
 Unless specifically requested by a human, once a PR has been created and a human has started reviewing it, don't amend, squash, or otherwise rewrite its existing commits. Add new commits on top instead, so reviewers can see exactly what changed in response to their comments.
 
-Don't push or submit the pull requests yourself; that'll be done manually.
+Only push or submit PRs if the user specifically requests it or if you are running as an automated job specifically intended to create pull requests; otherwise the user will create the PRs manually.
