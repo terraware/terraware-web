@@ -648,9 +648,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
     const purposes =
       purposeFilterValue && Array.isArray(purposeFilterValue)
-        ? purposeFilterValue.flatMap((value) =>
-            typeof value === 'string' && Object.hasOwn(purposeLabelToValue, value) ? [purposeLabelToValue[value]] : []
-          )
+        ? purposeFilterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v))
         : undefined;
 
     const totalWithdrawn =

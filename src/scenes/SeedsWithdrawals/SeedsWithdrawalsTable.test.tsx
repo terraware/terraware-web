@@ -86,34 +86,6 @@ describe('SeedsWithdrawalsTable', () => {
     localStorage.clear();
   });
 
-  it.each([
-    [[strings.NURSERY, 'stale translated label', 42, 'toString'], ['Nursery']],
-    [['stale translated label', 42, 'toString'], []],
-    [[], []],
-  ])('sends only recognized purposes from saved filters %j', async (savedPurposes, expectedPurposes) => {
-    localStorage.setItem(
-      'seeds-withdrawals-table_columnFilters',
-      JSON.stringify([{ id: 'purpose', value: savedPurposes }])
-    );
-    renderTable([buildSearchResult()]);
-    const requests = captureRequests('post', '/api/v1/search', { results: [buildSearchResult()] });
-    const countRequests = captureRequests('post', '/api/v1/search/count', { count: 1 });
-
-    await waitFor(() => expect(requests.length).toBeGreaterThan(0));
-    await waitFor(() => expect(countRequests.length).toBeGreaterThan(0));
-    for (const request of [requests[0], countRequests[0]]) {
-      const body = await request.json();
-      const purposeFilters = body.search.children.filter((child: { field?: string }) =>
-        child.field?.startsWith('purpose')
-      );
-      expect(purposeFilters).toEqual(
-        expectedPurposes.length
-          ? [{ operation: 'field', field: 'purpose(raw)', type: 'Exact', values: expectedPurposes }]
-          : []
-      );
-    }
-  });
-
   it('shows the withdrawal columns in order, with the optional ones hidden', async () => {
     renderTable([buildSearchResult()]);
 

@@ -135,7 +135,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
       const searchStatuses = searchFilters.statuses || [];
       if (searchStatuses.length > 0) {
         searchCriteria.state = {
-          field: 'state(raw)',
+          field: 'state',
           operation: 'field',
           type: 'Exact',
           values: searchStatuses,
