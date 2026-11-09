@@ -206,6 +206,17 @@ describe('BatchHistory', () => {
     expect(screen.queryByText(WITHDRAWAL_DESCRIPTION)).not.toBeInTheDocument();
   });
 
+  it('opens the event details of a quantity change from its description', async () => {
+    const { user } = await renderHistory();
+
+    await user.click(screen.getByRole('button', { name: fieldsChanged(strings.READY_TO_PLANT_QUANTITY) }));
+
+    expect(await screen.findByText(strings.EVENT_DETAILS)).toBeVisible();
+    // The quantity this event moved, which the row itself never shows.
+    expect(screen.getByText(strings.READY_TO_PLANT_QUANTITY_BEFORE).parentElement).toHaveTextContent('0');
+    expect(screen.getByText(strings.READY_TO_PLANT_QUANTITY_AFTER).parentElement).toHaveTextContent('12');
+  });
+
   it('narrows the list by a quantity note, which only the row itself shows', async () => {
     const { user } = await renderHistory();
 

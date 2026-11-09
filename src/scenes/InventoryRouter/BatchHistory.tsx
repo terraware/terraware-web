@@ -27,6 +27,7 @@ import BatchHistoryEventDescription, { getEventSearchText } from './BatchHistory
 
 type BatchHistoryProps = {
   batchId: number;
+  nurseryName?: string;
   // The accessions the batch was created from (canonical `accessions` array, with the deprecated
   // singular field as a fallback — see getBatchAccessions). Used to attribute the batch's creation
   // event to the accession it came from.
@@ -36,6 +37,8 @@ type BatchHistoryProps = {
 export type BatchHistoryEvent = BatchHistoryItem & {
   editedByName: string;
   modifiedFields: string[];
+  previousEvent?: BatchHistoryItem;
+  nurseryName?: string;
   // Set on the batch's creation event when the batch was created from an accession, so it can be
   // rendered like the "AddedFromAccession" events for accessions added later.
   fromAccessionId?: number;
@@ -223,7 +226,7 @@ const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: BatchHist
   return changedFields;
 };
 
-export default function BatchHistory({ batchId, accessions }: BatchHistoryProps): JSX.Element {
+export default function BatchHistory({ batchId, nurseryName, accessions }: BatchHistoryProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
@@ -336,6 +339,8 @@ export default function BatchHistory({ batchId, accessions }: BatchHistoryProps)
           ...historyItem,
           editedByName: getUserDisplayName(users[historyItem.createdBy]),
           modifiedFields: getModifiedFields(historyItem, previousEvent),
+          previousEvent,
+          nurseryName,
           ...(historyItem === creationAttribution?.event
             ? {
                 fromAccessionId: creationAttribution.accession.accessionId,
@@ -345,7 +350,7 @@ export default function BatchHistory({ batchId, accessions }: BatchHistoryProps)
         };
       })
       .sort((a, b) => b.createdTime.localeCompare(a.createdTime) || (b.version ?? 0) - (a.version ?? 0));
-  }, [batchHistory, creationAttribution, users]);
+  }, [batchHistory, creationAttribution, nurseryName, users]);
 
   const filteredEvents = useMemo((): BatchHistoryEvent[] => {
     const types = getFieldNodeValues(filters.type);

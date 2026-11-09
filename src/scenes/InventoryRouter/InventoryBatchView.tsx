@@ -114,10 +114,16 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       {
         id: 'history',
         label: strings.HISTORY,
-        children: <BatchHistory batchId={batch.id} accessions={getBatchAccessions(batch)} />,
+        children: (
+          <BatchHistory
+            batchId={batch.id}
+            nurseryName={inventoryNursery?.name}
+            accessions={getBatchAccessions(batch)}
+          />
+        ),
       },
     ];
-  }, [batch]);
+  }, [batch, inventoryNursery]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'details',
