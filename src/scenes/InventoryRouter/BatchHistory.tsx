@@ -1,15 +1,14 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
-import { TableColumnType } from '@terraware/web-components';
-import { Option } from '@terraware/web-components/components/table/types';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import { EventLogRow } from 'src/components/common/EventLog';
 import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
-import Table from 'src/components/common/table';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useGetBatchHistoryQuery } from 'src/queries/generated/nurseryBatches';
 import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
 import strings from 'src/strings';
@@ -20,34 +19,23 @@ import {
   batchHistoryEventEnumToLocalized,
   getBatchHistoryTypesEnum,
 } from 'src/types/Batch';
-import { FieldOptionsMap, FieldValuesPayload } from 'src/types/Search';
+import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload, getFieldNodeValues } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
 import { getUserDisplayName } from 'src/utils/user';
 
-import BatchHistoryRenderer from './BatchHistoryRenderer';
-import EventDetailsModal from './EventDetailsModal';
-
-const columns = (): TableColumnType[] => [
-  { key: 'createdTime', name: strings.DATE, type: 'date' },
-  { key: 'type', name: strings.EVENT, type: 'string' },
-  { key: 'editedByName', name: strings.EDITED_BY, type: 'string' },
-];
+import BatchHistoryEventDescription, { getEventType } from './BatchHistoryEventDescription';
 
 type BatchHistoryProps = {
   batchId: number;
-  nurseryName?: string;
   // The accessions the batch was created from (canonical `accessions` array, with the deprecated
   // singular field as a fallback — see getBatchAccessions). Used to attribute the batch's creation
   // event to the accession it came from.
   accessions?: BatchAccessionLink[];
 };
 
-export type BatchHistoryItemForTable = BatchHistoryItem & {
+export type BatchHistoryEvent = BatchHistoryItem & {
   editedByName: string;
-  previousEvent?: BatchHistoryItem;
   modifiedFields: string[];
-  nurseryName?: string;
-  batchId?: number;
   // Set on the batch's creation event when the batch was created from an accession, so it can be
   // rendered like the "AddedFromAccession" events for accessions added later.
   fromAccessionId?: number;
@@ -235,10 +223,11 @@ const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: BatchHist
   return changedFields;
 };
 
-export default function BatchHistory({ batchId, nurseryName, accessions }: BatchHistoryProps): JSX.Element {
+export default function BatchHistory({ batchId, accessions }: BatchHistoryProps): JSX.Element {
+  const { activeLocale } = useLocalization();
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
-  const [filters, setFilters] = useState<Record<string, any>>({});
+  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
   const { selectedOrganization } = useOrganization();
   const { currentData: organizationUsersData } = useListOrganizationUsersQuery(selectedOrganization?.id ?? skipToken);
   const users = useMemo(() => {
@@ -248,7 +237,19 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
     }
     return usersById;
   }, [organizationUsersData]);
-  const { currentData: batchHistory } = useGetBatchHistoryQuery(batchId);
+  const { currentData: batchHistory, isFetching } = useGetBatchHistoryQuery(batchId);
+
+  const filterColumns = useMemo(
+    (): FilterField[] =>
+      activeLocale
+        ? [
+            { name: 'type', label: strings.EVENT, type: 'multiple_selection' },
+            { name: 'editedByName', label: strings.EDITED_BY, type: 'multiple_selection' },
+          ]
+        : [],
+    [activeLocale]
+  );
+
   const filterOptions = useMemo<FieldOptionsMap>(
     () => ({
       type: {
@@ -257,53 +258,39 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
       },
       editedByName: {
         partial: false,
-        values: users ? Object.values(users).map((user) => getUserDisplayName(user)) : [],
+        values: Object.values(users).map((user) => getUserDisplayName(user)),
       },
     }),
     [users]
   );
-  const [selectedEvent, setSelectedEvent] = useState<any>();
-  const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
-
-  const filterColumns = useMemo<FilterField[]>(() => {
-    return [
-      { name: 'type', label: strings.EVENT, type: 'multiple_selection' },
-      { name: 'editedByName', label: strings.EDITED_BY, type: 'multiple_selection' },
-    ];
-  }, []);
 
   const searchProps = useMemo<SearchProps>(
     () => ({
       search,
-      onSearch: (value: string) => setSearch(value),
+      onSearch: setSearch,
+      hideTableSettings: true,
       filtersProps: {
         filters,
-        setFilters: (value: Record<string, any>) => setFilters(value),
+        setFilters,
         filterColumns,
         filterOptions,
-        optionsRenderer: (filterName: string, fieldValues: FieldValuesPayload): Option[] | undefined => {
-          if (filterName !== 'type') {
-            return;
-          }
-
-          return fieldValues[filterName].values.map((value): Option => ({
-            label: batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '',
-            value,
-            disabled: false,
-          }));
-        },
-        pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
-          if (filterName !== 'type') {
-            return;
-          }
-
-          return values
-            .map((value) => batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '')
-            .join(', ');
-        },
+        optionsRenderer: (filterName: string, fieldValues: FieldValuesPayload) =>
+          filterName === 'type'
+            ? fieldValues[filterName].values.map((value) => ({
+                label: batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '',
+                value,
+                disabled: false,
+              }))
+            : undefined,
+        pillValuesRenderer: (filterName: string, values: unknown[]) =>
+          filterName === 'type'
+            ? values
+                .map((value) => batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '')
+                .join(', ')
+            : undefined,
       },
     }),
-    [filters, filterColumns, filterOptions, search]
+    [filterColumns, filterOptions, filters, search]
   );
 
   // A batch created from an accession records its initial quantities as a plain "QuantityEdited"
@@ -334,53 +321,21 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
     return earliest ? { event: earliest, accession: creationAccession } : undefined;
   }, [accessions, batchHistory]);
 
-  const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
-    if (!batchHistory || !users) {
-      return null;
+  const events = useMemo((): BatchHistoryEvent[] => {
+    if (!batchHistory) {
+      return [];
     }
 
-    let filtered = [...batchHistory.history];
-
-    if (filters.type?.values) {
-      filtered = filtered.filter((ev) => filters.type.values.indexOf(ev.type) > -1);
-    }
-
-    if (filters.editedByName?.values) {
-      filtered = filtered.filter(
-        (ev) => filters.editedByName.values.indexOf(getUserDisplayName(users[ev.createdBy])) > -1
-      );
-    }
-
-    if (search) {
-      const regex = new RegExp(search, 'i');
-      filtered = filtered.filter((ev) => getUserDisplayName(users[ev.createdBy]).match(regex));
-    }
-
-    return filtered;
-  }, [batchHistory, filters, search, users]);
-
-  const results = useMemo((): BatchHistoryItemForTable[] | null => {
-    if (!filteredHistory || !users) {
-      return null;
-    }
-
-    return filteredHistory
-      .filter((historyItem) => {
-        return historyItem.type === 'DetailsEdited'
-          ? findPreviousEvent(historyItem, batchHistory?.history ?? null)
-          : true;
-      })
-      .map((historyItem) => {
-        const userSelected = users[historyItem.createdBy];
-        const previousEv = findPreviousEvent(historyItem, batchHistory?.history ?? null);
-        const changedFields = getModifiedFields(historyItem, previousEv);
+    return batchHistory.history
+      .filter((historyItem) =>
+        historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, batchHistory.history) : true
+      )
+      .map((historyItem): BatchHistoryEvent => {
+        const previousEvent = findPreviousEvent(historyItem, batchHistory.history);
         return {
           ...historyItem,
-          editedByName: getUserDisplayName(userSelected),
-          previousEvent: previousEv,
-          modifiedFields: changedFields,
-          nurseryName,
-          batchId,
+          editedByName: getUserDisplayName(users[historyItem.createdBy]),
+          modifiedFields: getModifiedFields(historyItem, previousEvent),
           ...(historyItem === creationAttribution?.event
             ? {
                 fromAccessionId: creationAttribution.accession.accessionId,
@@ -388,48 +343,54 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
               }
             : {}),
         };
-      });
-  }, [batchHistory?.history, batchId, creationAttribution, filteredHistory, nurseryName, users]);
+      })
+      .sort((a, b) => b.createdTime.localeCompare(a.createdTime) || (b.version ?? 0) - (a.version ?? 0));
+  }, [batchHistory, creationAttribution, users]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onBatchSelected = (batch: any, fromColumn?: string) => {
-    setSelectedEvent(batch);
-    setOpenEventDetailsModal(true);
-  };
+  const filteredEvents = useMemo((): BatchHistoryEvent[] => {
+    const types = getFieldNodeValues(filters.type);
+    const editedByNames = getFieldNodeValues(filters.editedByName);
+    const searchTerm = search.trim().toLowerCase();
+
+    return events.filter((event) => {
+      if (types?.length && !types.includes(event.type)) {
+        return false;
+      }
+      if (editedByNames?.length && !editedByNames.includes(event.editedByName)) {
+        return false;
+      }
+      return !searchTerm || `${getEventType(event)} ${event.editedByName}`.toLowerCase().includes(searchTerm);
+    });
+  }, [events, filters, search]);
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-      {openEventDetailsModal && (
-        <EventDetailsModal
-          onClose={() => {
-            setSelectedEvent(undefined);
-            setOpenEventDetailsModal(false);
-          }}
-          selectedEvent={selectedEvent}
-          batchId={batchId}
-        />
-      )}
       <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1)}>
         {strings.HISTORY}
       </Typography>
       <Grid sx={{ display: 'flex', alignItems: 'center' }} size={12}>
         <Search {...searchProps} />
       </Grid>
-      <Grid size={12}>
-        {results && (
-          <Table
-            id='batch-history-table'
-            columns={columns}
-            rows={results}
-            orderBy={'createdTime'}
-            order={'desc'}
-            Renderer={BatchHistoryRenderer}
-            onSelect={onBatchSelected}
-            controlledOnSelect={true}
-            isPresorted={false}
-          />
+      <Box marginTop={theme.spacing(2)}>
+        {isFetching && !batchHistory && (
+          <Box display='flex' justifyContent='center' padding={theme.spacing(5)}>
+            <CircularProgress />
+          </Box>
         )}
-      </Grid>
+        {batchHistory && filteredEvents.length === 0 ? (
+          <Typography>{strings.BATCH_HISTORY_NO_EVENTS}</Typography>
+        ) : (
+          filteredEvents.map((event, index) => (
+            <EventLogRow
+              date={getDateDisplayValue(event.createdTime)}
+              description={<BatchHistoryEventDescription batchId={batchId} event={event} />}
+              disableTopPadding={index === 0}
+              key={`${event.createdTime}-${event.type}-${index}`}
+              userName={event.editedByName}
+            />
+          ))
+        )}
+      </Box>
     </Card>
   );
 }

@@ -18,6 +18,35 @@ type EventLogProps = {
   renderEventDescription?: (event: EventLogEntryPayload) => ReactNode;
 };
 
+export type EventLogRowProps = {
+  date: string;
+  description: ReactNode;
+  disableTopPadding?: boolean;
+  userName: string;
+};
+
+export const EventLogRow = ({ date, description, disableTopPadding, userName }: EventLogRowProps): JSX.Element => {
+  const { strings } = useLocalization();
+  const theme = useTheme();
+
+  return (
+    <Box
+      borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+      display='flex'
+      gap='24px'
+      padding={2}
+      paddingTop={disableTopPadding ? 0 : 2}
+    >
+      <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
+        <Typography color={theme.palette.TwClrTxtSecondary} sx={{ whiteSpace: { xs: 'normal', sm: 'nowrap' } }}>
+          {date} {strings.BY} {userName}
+        </Typography>
+      </Box>
+      <Box flex={1}>{description}</Box>
+    </Box>
+  );
+};
+
 const EventLog = ({
   defaultExpanded,
   emptyState,
@@ -101,29 +130,15 @@ const EventLog = ({
       )}
       {eventsVisible && !isLoading && (
         <Box>
-          {filteredEvents?.map((event, index) => {
-            const dateModified = DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');
-            return (
-              <Box
-                key={`${event.timestamp}-${event.subject.type}-${index}`}
-                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
-                display='flex'
-                gap='24px'
-                padding={2}
-                paddingTop={hideToggle && index === 0 ? 0 : 2}
-              >
-                <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
-                  <Typography
-                    color={theme.palette.TwClrTxtSecondary}
-                    sx={{ whiteSpace: { xs: 'normal', sm: 'nowrap' } }}
-                  >
-                    {dateModified} {strings.BY} {event.userName}
-                  </Typography>
-                </Box>
-                <Box flex={1}>{renderEventDescription?.(event) ?? defaultRenderEventDescription(event)}</Box>
-              </Box>
-            );
-          })}
+          {filteredEvents?.map((event, index) => (
+            <EventLogRow
+              date={DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd')}
+              description={renderEventDescription?.(event) ?? defaultRenderEventDescription(event)}
+              disableTopPadding={hideToggle && index === 0}
+              key={`${event.timestamp}-${event.subject.type}-${index}`}
+              userName={event.userName}
+            />
+          ))}
         </Box>
       )}
     </Box>

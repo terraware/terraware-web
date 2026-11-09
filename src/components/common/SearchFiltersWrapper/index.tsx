@@ -78,6 +78,7 @@ export type SearchFiltersProps = {
 export type SearchProps = SearchInputProps & {
   filtersProps?: SearchFiltersProps;
   featuredFilters?: FeaturedFilterConfig[];
+  hideTableSettings?: boolean;
   // If set, add an export button and call this function when it's clicked
   onExport?: () => void;
   // If set, add an export button that uses these props to define functionality
@@ -90,6 +91,7 @@ export default function SearchFiltersWrapper({
   onSearch,
   filtersProps,
   featuredFilters,
+  hideTableSettings,
   onExport,
   exportProps,
   width,
@@ -173,7 +175,7 @@ export default function SearchFiltersWrapper({
 
         {exportProps && <ExportTableComponent {...exportProps} />}
 
-        <TableSettingsButton />
+        {!hideTableSettings && <TableSettingsButton />}
       </Grid>
 
       {filterPillData.length > 0 && (
