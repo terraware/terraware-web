@@ -90,9 +90,9 @@ const CurrentView = <TData extends MRT_RowData>({
       if (baseView !== DEFAULT_VIEW) {
         return presetViews?.find((presetView) => presetView.value === baseView)?.label;
       }
-      return defaultViewLabel === null ? undefined : (defaultViewLabel ?? strings.DEFAULT);
+      return undefined;
     },
-    [defaultViewLabel, presetViews, strings]
+    [presetViews]
   );
   const savedViewOptions = useMemo(
     () =>
