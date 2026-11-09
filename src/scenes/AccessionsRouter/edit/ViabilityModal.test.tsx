@@ -78,6 +78,8 @@ describe('ViabilityModal', () => {
     expect(requests).toHaveLength(0);
   });
 
+  // Skipped: a stored numeric 0% is treated as missing and rejected as required instead of saved.
+  // Unskip when zero is accepted as a valid manual viability percentage.
   it.skip('accepts an existing zero percent rather than reporting it as required', async () => {
     const requests = captureRequests('put', URL);
     const { user, onClose } = renderModal(0);
