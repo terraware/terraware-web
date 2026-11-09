@@ -960,6 +960,7 @@ IN_PROGRESS,En curso,d5349fa1
 IN_REVIEW,En revisión,1acac124
 IN_STORAGE,En almacenamiento,e17c2135
 INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,a4ba1236
+INCLUDE_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Incluir especies con todas las accesiones agotadas,b6e91e45
 INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_CLASS,Clase de indicador,8c9d3791
@@ -2192,7 +2193,6 @@ SHOW_INSTRUCTIONS,Mostrar instrucciones,81469448
 SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
-SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
 SHOW_TITLE_BAR,Mostrar barra de título,95b1ccfb
 SHOWING_OBSERVATION_ON_MAP,Mostrando {0} en el mapa,3f167717
 SHRUB,Arbusto,af50871c

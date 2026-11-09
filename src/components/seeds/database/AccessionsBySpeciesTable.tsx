@@ -1,16 +1,15 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import {
   Box,
   CircularProgress,
   IconButton,
   Checkbox as MuiCheckbox,
-  Popover,
   Tooltip,
   Typography,
   useTheme,
 } from '@mui/material';
-import { Button, Checkbox, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
@@ -33,7 +32,6 @@ import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
-import strings from 'src/strings';
 import { isWithdrawableAccessionState } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -57,6 +55,7 @@ type SpeciesRow = {
 };
 
 const TABLE = TABLES.accessionsBySpecies;
+const ALL_USED_UP_PRESET = 'allUsedUp';
 
 const DEFAULT_COLUMN_ORDER = [
   'speciesName',
@@ -76,7 +75,7 @@ export default function AccessionsBySpeciesTable({
   searchResults,
   reloadData,
 }: AccessionsBySpeciesTableProps): JSX.Element {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { user, isAllowed } = useUser();
   const theme = useTheme();
@@ -125,25 +124,11 @@ export default function AccessionsBySpeciesTable({
   });
 
   const [showAllUsedUp, setShowAllUsedUp] = useState(false);
-  const [draftShowAllUsedUp, setDraftShowAllUsedUp] = useState(false);
-  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
-  const filterOpen = Boolean(filterAnchorEl);
-  useEffect(() => {
-    if (filterOpen) {
-      setDraftShowAllUsedUp(showAllUsedUp);
-    }
-  }, [filterOpen, showAllUsedUp]);
-  const handleFilterClick = useCallback((event?: React.MouseEvent<HTMLButtonElement>) => {
-    if (event) {
-      setFilterAnchorEl(event.currentTarget);
-    }
-  }, []);
-  const handleFilterClose = useCallback(() => setFilterAnchorEl(null), []);
-  const handleFilterReset = useCallback(() => setDraftShowAllUsedUp(false), []);
-  const handleFilterApply = useCallback(() => {
-    setShowAllUsedUp(draftShowAllUsedUp);
-    setFilterAnchorEl(null);
-  }, [draftShowAllUsedUp]);
+  const presetViews = useMemo(
+    () => [{ label: strings.INCLUDE_SPECIES_WITH_ALL_ACCESSIONS_USED_UP, value: ALL_USED_UP_PRESET }],
+    [strings]
+  );
+  const handlePresetChange = useCallback((preset: string) => setShowAllUsedUp(preset === ALL_USED_UP_PRESET), []);
 
   const allSpeciesRows = useMemo<SpeciesRow[]>(() => {
     if (!searchResults) {
@@ -267,7 +252,7 @@ export default function AccessionsBySpeciesTable({
         </Tooltip>
       );
     },
-    [selectedSpeciesRows]
+    [selectedSpeciesRows, strings]
   );
 
   const uniqueSpeciesNames = useMemo(
@@ -275,18 +260,21 @@ export default function AccessionsBySpeciesTable({
     [speciesRows]
   );
 
-  const SpeciesNameCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesRow> }) => {
-    const row = cell.row.original;
-    if (row.speciesId === undefined) {
-      return <span>{row.speciesName || strings.DELETED_SPECIES}</span>;
-    }
-    const params = new URLSearchParams({ tab: 'byAccession', speciesId: String(row.speciesId) });
-    return (
-      <Link fontSize='16px' to={`${APP_PATHS.ACCESSIONS}?${params.toString()}`}>
-        {row.speciesName}
-      </Link>
-    );
-  }, []);
+  const SpeciesNameCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SpeciesRow> }) => {
+      const row = cell.row.original;
+      if (row.speciesId === undefined) {
+        return <span>{row.speciesName || strings.DELETED_SPECIES}</span>;
+      }
+      const params = new URLSearchParams({ tab: 'byAccession', speciesId: String(row.speciesId) });
+      return (
+        <Link fontSize='16px' to={`${APP_PATHS.ACCESSIONS}?${params.toString()}`}>
+          {row.speciesName}
+        </Link>
+      );
+    },
+    [strings]
+  );
 
   const SpeciesNumericCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SpeciesRow> }) => {
@@ -356,7 +344,7 @@ export default function AccessionsBySpeciesTable({
         Cell: SpeciesNumericCell,
       },
     ];
-  }, [activeLocale, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
+  }, [activeLocale, strings, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
 
   const downloadReportHandler = useCallback((table: MRT_TableInstance<SpeciesRow>) => {
     const filteredRows = table.getSortedRowModel().rows;
@@ -510,7 +498,9 @@ export default function AccessionsBySpeciesTable({
           renderTopToolbarCustomActions: ({ table }) => (
             <CurrentView
               defaultSettings={defaultViewSettings}
+              onPresetChange={handlePresetChange}
               organizationId={selectedOrganization?.id}
+              presetViews={presetViews}
               table={table}
               tableDefinition={TABLE}
             />
@@ -522,69 +512,6 @@ export default function AccessionsBySpeciesTable({
                   <Icon name='iconExport' size='medium' />
                 </IconButton>
               </Tooltip>
-              <Tooltip title={strings.FILTER}>
-                <Button
-                  id='filterAccessionsBySpecies'
-                  onClick={handleFilterClick}
-                  type='passive'
-                  priority='ghost'
-                  icon='filter'
-                />
-              </Tooltip>
-              <Popover
-                id='accessions-by-species-filter-popover'
-                open={filterOpen}
-                anchorEl={filterAnchorEl}
-                onClose={handleFilterClose}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
-                sx={{
-                  '& .MuiPaper-root': {
-                    borderRadius: '8px',
-                    overflow: 'visible',
-                    width: '480px',
-                  },
-                }}
-              >
-                <Box display='flex' flexDirection='column'>
-                  <Box
-                    sx={{
-                      background: theme.palette.TwClrBgSecondary,
-                      borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                      borderRadius: theme.spacing(1, 1, 0, 0),
-                      padding: theme.spacing(2, 3),
-                    }}
-                  >
-                    <Typography fontSize='20px' fontWeight={600}>
-                      {strings.FILTERS}
-                    </Typography>
-                  </Box>
-                  <Box padding={theme.spacing(2, 3)}>
-                    <Checkbox
-                      id='showAllUsedUp'
-                      name='showAllUsedUp'
-                      label={strings.SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP}
-                      value={draftShowAllUsedUp}
-                      onChange={setDraftShowAllUsedUp}
-                    />
-                  </Box>
-                  <Box
-                    display='flex'
-                    justifyContent='flex-end'
-                    gap={1}
-                    sx={{
-                      background: theme.palette.TwClrBgSecondary,
-                      borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                      borderRadius: theme.spacing(0, 0, 1, 1),
-                      padding: theme.spacing(2, 3),
-                    }}
-                  >
-                    <Button onClick={handleFilterClose} type='passive' priority='secondary' label={strings.CANCEL} />
-                    <Button onClick={handleFilterReset} type='passive' priority='secondary' label={strings.RESET} />
-                    <Button onClick={handleFilterApply} type='productive' priority='primary' label={strings.APPLY} />
-                  </Box>
-                </Box>
-              </Popover>
               <MRT_ToggleGlobalFilterButton table={table} />
               <MRT_ToggleFiltersButton table={table} />
               <MRT_ShowHideColumnsButton table={table} />

@@ -959,6 +959,7 @@ IN_PROGRESS,En cours,d5349fa1
 IN_REVIEW,En cours de révision,1acac124
 IN_STORAGE,Stocké,e17c2135
 INCLUDE_EMPTY_FIELDS,Inclure des champs vides,a4ba1236
+INCLUDE_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Inclure les espèces dont toutes les accessions ont été utilisées,b6e91e45
 INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_CLASS,Classe d’indicateur,8c9d3791
@@ -2191,7 +2192,6 @@ SHOW_INSTRUCTIONS,Afficher les instructions,81469448
 SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
-SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Afficher les espèces dont toutes les accessions sont épuisées,656a843d
 SHOW_TITLE_BAR,Afficher la barre de titre,95b1ccfb
 SHOWING_OBSERVATION_ON_MAP,Affichage de {0} sur la carte,3f167717
 SHRUB,Arbuste,af50871c
