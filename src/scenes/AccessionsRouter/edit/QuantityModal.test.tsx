@@ -79,6 +79,8 @@ describe('QuantityModal', () => {
     expect(await requests[0].json()).toMatchObject({ remainingQuantity: { quantity: 50, units: 'Seeds' } });
   });
 
+  // Skipped: weight and subset quantities are sent as strings instead of API numbers.
+  // Unskip when the modal sends numeric quantities.
   it.skip('sends numeric weight and subset quantities when editing by weight', async () => {
     const requests = captureRequests('put', ACCESSION_URL);
     const { user, state } = renderModal(buildAccession({ remainingQuantity: { quantity: 100, units: 'Grams' } }));
