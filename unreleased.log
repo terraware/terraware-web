@@ -1,3 +1,4 @@
+f5a1d090 Update dependencies to latest compatible versions (#6887)
 59d038dc Block closing the save view modal while it saves (#7097)
 b115c5be Test choosing, saving and deleting saved table views (#7096)
 35ac1836 Test the CurrentView dropdown (#7095)
