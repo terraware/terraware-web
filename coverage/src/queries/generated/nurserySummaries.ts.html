@@ -180,10 +180,30 @@
 <a name='L115'></a><a href='#L115'>115</a>
 <a name='L116'></a><a href='#L116'>116</a>
 <a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a>
+<a name='L120'></a><a href='#L120'>120</a>
+<a name='L121'></a><a href='#L121'>121</a>
+<a name='L122'></a><a href='#L122'>122</a>
+<a name='L123'></a><a href='#L123'>123</a>
+<a name='L124'></a><a href='#L124'>124</a>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -289,14 +309,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi as api } from '../baseApi';
 &nbsp;
 const injectedRtkApi = api.injectEndpoints({
@@ -358,12 +398,32 @@ export type GetNurserySummaryResponsePayload = {
   status: SuccessOrError;
   summary: NurserySummaryPayload;
 };
+export type SpeciesStageTimePayload = {
+  /** Number of batches with seedlings that finished this stage. */
+  batchCount: number;
+  /** Seedling-weighted average days in this stage, counting only seedlings that finished the stage, rounded to the nearest day. 0 means less than one day. Null when fewer than 3 batches contribute. */
+  days?: number;
+  /** Upper quartile of per-batch average days for seedlings that finished the stage, rounded to the nearest day. 0 means less than one day. Null when fewer than 5 batches have at least 10 finished seedlings or days is null. */
+  typicalMaxDays?: number;
+  /** Lower quartile of per-batch average days for seedlings that finished the stage, rounded to the nearest day. 0 means less than one day. Null when fewer than 5 batches have at least 10 finished seedlings or days is null. */
+  typicalMinDays?: number;
+  /** Number of batches with at least 10 seedlings that finished this stage. */
+  typicalRangeBatchCount: number;
+};
+export type SpeciesTimeInStagePayload = {
+  activeGrowth: SpeciesStageTimePayload;
+  germinating: SpeciesStageTimePayload;
+  hardeningOff: SpeciesStageTimePayload;
+  ready: SpeciesStageTimePayload;
+};
 export type SpeciesSummaryNurseryPayload = {
   facilityId: number;
   name: string;
 };
 export type SpeciesSummaryPayload = {
   activeGrowthQuantity: number;
+  /** Time in each nursery stage, counting only seedlings that finished the stage. */
+  averageTimeInStage: SpeciesTimeInStagePayload;
   germinatingQuantity: number;
   germinationRate?: number;
   hardeningOffQuantity: number;
@@ -421,7 +481,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-09T12:56:54.289Z
+                at 2026-11-09T17:39:01.292Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

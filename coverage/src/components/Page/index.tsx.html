@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.06% </span>
+                <span class="strong">62.16% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>18/31</span>
+                <span class='fraction'>23/37</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/7</span>
+                <span class='fraction'>9/10</span>
             </div>
         
             
@@ -278,7 +278,14 @@
 <a name='L213'></a><a href='#L213'>213</a>
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
-<a name='L216'></a><a href='#L216'>216</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L216'></a><a href='#L216'>216</a>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,6 +364,13 @@
 <span class="cline-any cline-yes">66x</span>
 <span class="cline-any cline-yes">569x</span>
 <span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-yes">569x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">569x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -571,7 +585,14 @@ export default function Page({
   const [firstRowEl, setFirstRowEl] = useState&lt;HTMLElement | null&gt;(null);
   const firstRowRef = useCallback((node: HTMLElement | null) =&gt; setFirstRowEl(node), []);
   const theme = useTheme();
-  const { isDesktop } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
+  const headerPaddingX = isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: theme.spacing(2);
+  const headerInset = isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: theme.spacing(3);
+  const actionStyle: SxProps&lt;Theme&gt; = {
+    paddingLeft: isDesktop ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: headerInset,
+    textAlign: isDesktop ? <span class="branch-0 cbranch-no" title="branch not covered" >'right' </span>: 'left',
+    ...(isMobile &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >{ '&amp; &gt; .button': { marginLeft: 0 } })</span>,
+  };
 &nbsp;
   <span class="missing-if-branch" title="if path not taken" >I</span>if (isLoading) {
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -599,7 +620,7 @@ export default function Page({
           justifyContent='space-between'
           alignItems='center'
           marginBottom={theme.spacing(2)}
-          paddingX={theme.spacing(2)}
+          paddingX={headerPaddingX}
           sx={titleContainerStyle}
         &gt;
           {title &amp;&amp; typeof title !== 'string' &amp;&amp; (
@@ -627,7 +648,7 @@ export default function Page({
             &gt;
               &lt;Typography
                 sx={{
-                  paddingLeft: theme.spacing(3),
+                  paddingLeft: headerInset,
                   fontSize: '24px',
                   fontWeight: 600,
                   color: theme.palette.TwClrBaseGray800,
@@ -640,7 +661,7 @@ export default function Page({
           )}
           {leftComponent &amp;&amp; (
             &lt;Grid
-              style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : theme.spacing(3) }}
+              style={{ marginRight: 'auto', paddingLeft: isDesktop ? 0 : headerInset }}
               size={{
                 md: <span class="branch-1 cbranch-no" title="branch not covered" >leftComponentGridSize </span>?? <span class="branch-2 cbranch-no" title="branch not covered" >4,</span>
                 xs: 12,
@@ -651,7 +672,7 @@ export default function Page({
           )}
           {rightComponent &amp;&amp; (
             &lt;Grid
-              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              sx={actionStyle}
               size={{
                 md: rightComponentGridSize ?? 4,
                 xs: 12,
@@ -663,7 +684,7 @@ export default function Page({
 &nbsp;
           {primaryButton &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
             &lt;Grid
-              sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
+              sx={actionStyle}
               size={{
                 md: 4,
                 xs: 12,
@@ -680,17 +701,17 @@ export default function Page({
           )}
         &lt;/Grid&gt;
         {subHeader &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-          &lt;Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}&gt;
-            &lt;Box sx={{ paddingLeft: theme.spacing(3) }}&gt;{subHeader}&lt;/Box&gt;
+          &lt;Grid marginBottom={theme.spacing(2)} paddingX={headerPaddingX} sx={titleContainerStyle} size={12}&gt;
+            &lt;Box sx={{ paddingLeft: headerInset }}&gt;{subHeader}&lt;/Box&gt;
           &lt;/Grid&gt;
         )}
         {description ? (
-          &lt;Grid marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle} size={12}&gt;
+          &lt;Grid marginBottom={theme.spacing(2)} paddingX={headerPaddingX} sx={titleContainerStyle} size={12}&gt;
             &lt;Typography
               margin={0}
               fontSize='14px'
               fontWeight={400}
-              sx={{ paddingLeft: theme.spacing(3), ...descriptionStyle }}
+              sx={{ paddingLeft: headerInset, ...descriptionStyle }}
             &gt;
               {description}
             &lt;/Typography&gt;
@@ -715,7 +736,7 @@ export default function Page({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-09T12:56:54.289Z
+                at 2026-11-09T17:39:01.292Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

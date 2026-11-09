@@ -1,3 +1,8 @@
+796082d4 SW-8981 Include the estimated counts for substrata (#7089)
+76cc90fd SW-9228 Inventory Batches: Update History to the new UI (#7088)
+77cf754f Update generated API code from staging (#7087)
+00b89b79 Add REVIEW.md to guide Devin Review (#7064)
+d4aa64a0 SW-9192 Align page headers with content on mobile (#7060)
 6830577d SW-9245 Add tiles and chart to biomass pages (#7055)
 441474f3 Allow agents to push PRs when explicitly asked (#7074)
 b3930c2b SW-9218 Use location endpoints in species check (#7058)

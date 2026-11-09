@@ -292,8 +292,8 @@
 <a name='L227'></a><a href='#L227'>227</a>
 <a name='L228'></a><a href='#L228'>228</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,9 +324,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -336,6 +333,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -505,9 +503,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -516,7 +514,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi as api } from '../baseApi';
 &nbsp;
 const injectedRtkApi = api.injectEndpoints({
@@ -550,9 +550,6 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.updateOrganizationRequestPayload,
       }),
     }),
-    listOrganizationRoles: build.query&lt;ListOrganizationRolesApiResponse, ListOrganizationRolesApiArg&gt;({
-      query: (queryArg) =&gt; ({ url: `/api/v1/organizations/${queryArg}/roles` }),
-    }),
     updateOrganizationLocation: build.mutation&lt;UpdateOrganizationLocationApiResponse, UpdateOrganizationLocationApiArg&gt;(
       {
         query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
@@ -562,15 +559,13 @@ const injectedRtkApi = api.injectEndpoints({
         }),
       }
     ),
+    listOrganizationRoles: build.query&lt;ListOrganizationRolesApiResponse, ListOrganizationRolesApiArg&gt;({
+      query: (queryArg) =&gt; ({ url: `/api/v1/organizations/${queryArg}/roles` }),
+    }),
   }),
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
-export type UpdateOrganizationLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
-export type UpdateOrganizationLocationApiArg = {
-  organizationId: number;
-  updateOrganizationLocationRequestPayload: UpdateOrganizationLocationRequestPayload;
-};
 export type ListOrganizationsApiResponse = /** status 200 OK */ ListOrganizationsResponsePayload;
 export type ListOrganizationsApiArg = /** Return this level of information about the organization's contents. */
   | ('Organization' | 'Facility')
@@ -591,6 +586,11 @@ export type UpdateOrganizationApiResponse = /** status 200 OK */ SimpleSuccessRe
 export type UpdateOrganizationApiArg = {
   organizationId: number;
   updateOrganizationRequestPayload: UpdateOrganizationRequestPayload;
+};
+export type UpdateOrganizationLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type UpdateOrganizationLocationApiArg = {
+  organizationId: number;
+  updateOrganizationLocationRequestPayload: UpdateOrganizationLocationRequestPayload;
 };
 export type ListOrganizationRolesApiResponse = /** status 200 OK */ ListOrganizationRolesResponsePayload;
 export type ListOrganizationRolesApiArg = number;
@@ -717,6 +717,12 @@ export type UpdateOrganizationRequestPayload = {
   timeZone?: string;
   website?: string;
 };
+export type UpdateOrganizationLocationRequestPayload = {
+  /** TDWG Level 3 botanical country code. Null clears the botanical country. */
+  botanicalCountryCode?: string;
+  /** ISO 3166 alpha-2 country code. Null clears the country. */
+  countryCode?: string;
+};
 export type OrganizationRolePayload = {
   role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
   /** Total number of users in the organization with this role. */
@@ -725,12 +731,6 @@ export type OrganizationRolePayload = {
 export type ListOrganizationRolesResponsePayload = {
   roles: OrganizationRolePayload[];
   status: SuccessOrError;
-};
-export type UpdateOrganizationLocationRequestPayload = {
-  /** TDWG Level 3 botanical country code. Null clears the botanical country. */
-  botanicalCountryCode?: string;
-  /** ISO 3166 alpha-2 country code. Null clears the country. */
-  countryCode?: string;
 };
 export const {
   useListOrganizationsQuery,
@@ -751,7 +751,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-09T12:56:54.289Z
+                at 2026-11-09T17:39:01.292Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

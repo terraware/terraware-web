@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/18</span>
+                <span class='fraction'>13/18</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/15</span>
+                <span class='fraction'>10/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/18</span>
+                <span class='fraction'>13/18</span>
             </div>
         
             
@@ -499,10 +499,26 @@
 <a name='L434'></a><a href='#L434'>434</a>
 <a name='L435'></a><a href='#L435'>435</a>
 <a name='L436'></a><a href='#L436'>436</a>
-<a name='L437'></a><a href='#L437'>437</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -529,7 +545,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
@@ -913,7 +929,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -934,7 +966,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">91x</span>
+<span class="cline-any cline-yes">93x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi as api } from '../baseApi';
 &nbsp;
 const injectedRtkApi = api.injectEndpoints({
@@ -965,7 +997,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({ url: `/api/v1/nursery/batches/uploads/${queryArg}` }),</span></span>
     }),
     getBatchHistory: build.query&lt;GetBatchHistoryApiResponse, GetBatchHistoryApiArg&gt;({
-      query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({ url: `/api/v1/nursery/batches/${queryArg}/history` }),</span></span>
+      query: (queryArg) =&gt; ({ url: `/api/v1/nursery/batches/${queryArg}/history` }),
     }),
     listBatchPhotos: build.query&lt;ListBatchPhotosApiResponse, ListBatchPhotosApiArg&gt;({
       query: (queryArg) =&gt; ({ url: `/api/v1/nursery/batches/${queryArg}/photos` }),
@@ -1090,6 +1122,20 @@ export type BatchAccessionPayload = {
   accessionId?: number;
   accessionNumber?: string;
 };
+export type BatchStageTimePayload = {
+  /** True if a manual quantity edit changed this stage's quantity, so its time in stage can't be calculated. */
+  cleared: boolean;
+  /** Average number of days seedlings have spent in this stage, rounded to the nearest day. 0 means less than one day. Null if no seedlings have been in this stage or if a manual quantity edit made the time unknown. */
+  days?: number;
+  /** True if seedlings are currently in this stage, so the average will keep increasing. */
+  inProgress: boolean;
+};
+export type BatchTimeInStagePayload = {
+  activeGrowth: BatchStageTimePayload;
+  germinating: BatchStageTimePayload;
+  hardeningOff: BatchStageTimePayload;
+  ready: BatchStageTimePayload;
+};
 export type BatchPayload = {
   /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this. */
   accessionId?: number;
@@ -1120,6 +1166,8 @@ export type BatchPayload = {
   subLocationIds: number[];
   substrate?: 'MediaMix' | 'Soil' | 'Sand' | 'Moss' | 'PerliteVermiculite' | 'Other';
   substrateNotes?: string;
+  /** How long seedlings have spent in each stage. Absent if the batch's history predates time-in-stage tracking. */
+  timeInStage?: BatchTimeInStagePayload;
   totalWithdrawn: number;
   treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
   treatmentNotes?: string;
@@ -1378,7 +1426,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-09T12:56:54.289Z
+                at 2026-11-09T17:39:01.292Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
