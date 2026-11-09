@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.92% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/13</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,22 +94,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">54x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">205x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">205x</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">205x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">205x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-yes">378x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,18 +123,18 @@ export const useSubLocationsForFacilities = (facilityIds?: number[]) =&gt; {
   const dispatch = useAppDispatch();
 &nbsp;
   const facilityIdsKey = (facilityIds ?? []).join(',');
-  const ids = useMemo(() =&gt; (facilityIdsKey ? <span class="branch-0 cbranch-no" title="branch not covered" >facilityIdsKey.split(',').map(Number) </span>: []), [facilityIdsKey]);
+  const ids = useMemo(() =&gt; (facilityIdsKey ? facilityIdsKey.split(',').map(Number) : []), [facilityIdsKey]);
 &nbsp;
   useEffect(() =&gt; {
-    const subscriptions = ids.map(<span class="fstat-no" title="function not covered" >(facilityId) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      dispatch(api.endpoints.listSubLocations.initiate(facilityId, { forceRefetch: true }))</span>
+    const subscriptions = ids.map((facilityId) =&gt;
+      dispatch(api.endpoints.listSubLocations.initiate(facilityId, { forceRefetch: true }))
     );
-    return () =&gt; subscriptions.forEach(<span class="fstat-no" title="function not covered" >(subscription) =&gt; <span class="cstat-no" title="statement not covered" >subscription.unsubscribe())</span></span>;
+    return () =&gt; subscriptions.forEach((subscription) =&gt; subscription.unsubscribe());
   }, [dispatch, ids]);
 &nbsp;
   return useAppSelector(
     (state) =&gt;
-      ids.flatMap(<span class="fstat-no" title="function not covered" >(facilityId) =&gt; <span class="cstat-no" title="statement not covered" >api.endpoints.listSubLocations.select(facilityId)(state).data?.subLocations ?? [])</span></span>,
+      ids.flatMap((facilityId) =&gt; api.endpoints.listSubLocations.select(facilityId)(state).data?.subLocations ?? []),
     shallowEqual
   );
 };
@@ -145,7 +145,7 @@ export const useSubLocationsForFacilities = (facilityIds?: number[]) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-09T21:08:26.459Z
+                at 2026-11-09T21:59:31.922Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
