@@ -77,7 +77,7 @@ export default function SpeciesDetailsForm({
 
   const autofillTimesRef = useRef<Record<string, number>>({});
 
-  const searchTermTooShort = debouncedSearchTerm.length <= 1;
+  const searchTermTooShort = debouncedSearchTerm.trim().length < 3;
 
   const [listSpeciesNames, { currentData: namesData }] = useLazyListSpeciesNamesQuery();
   const [getSpeciesDetails, { currentData: speciesDetails, isError: detailsError }] = useLazyGetSpeciesDetailsQuery();
