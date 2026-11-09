@@ -218,6 +218,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
         </Box>
       )}
       tableOptions={{
+        enableGlobalFilterRankedResults: false,
         defaultColumn: { enableEditing: false },
         renderTopToolbarCustomActions: ({ table }) => (
           <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />

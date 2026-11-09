@@ -731,6 +731,7 @@ export default function AccessionsTable({
         enableColumnOrdering={true}
         storageKey={TABLE.storageKey}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           autoResetPageIndex,
           defaultColumn: {
             enableEditing: false,

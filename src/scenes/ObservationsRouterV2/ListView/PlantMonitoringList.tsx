@@ -394,6 +394,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         enableBottomToolbar={false}
         initialSorting={[{ id: 'observationDate', desc: true }]}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           ...commonTableOptions,
           state: {
             columnOrder: tableState.columnOrder,

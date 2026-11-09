@@ -365,6 +365,7 @@ export default function VirtualWalkthroughsTable({
           </Box>
         )}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           renderTopToolbarCustomActions: ({ table }) => (
             <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
           ),

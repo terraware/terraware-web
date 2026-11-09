@@ -360,6 +360,7 @@ export default function PlantingProgressList(): JSX.Element {
         enableBottomToolbar={true}
         initialSorting={[{ id: hasStrata ? 'substratumName' : 'siteName', desc: false }]}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           state: {
             rowSelection,
             columnVisibility: activeState.columnVisibility,

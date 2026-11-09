@@ -409,6 +409,7 @@ export default function AccessionsBySpeciesTable({
         enableColumnOrdering={true}
         storageKey={TABLE.storageKey}
         tableOptions={{
+          enableGlobalFilterRankedResults: false,
           defaultColumn: {
             enableEditing: false,
             filterVariant: 'text',
