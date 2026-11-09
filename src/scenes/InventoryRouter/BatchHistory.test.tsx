@@ -64,6 +64,7 @@ const READY_QUANTITY_EDITED: BatchHistoryItem = {
   activeGrowthQuantity: 0,
   hardeningOffQuantity: 0,
   notReadyQuantity: 0,
+  notes: 'lost seedlings',
   readyQuantity: 12,
 };
 
@@ -203,6 +204,14 @@ describe('BatchHistory', () => {
 
     expect(datePrefixes().map((element) => element.textContent)).toEqual([datePrefix('2026-03-01', JENNIFER)]);
     expect(screen.queryByText(WITHDRAWAL_DESCRIPTION)).not.toBeInTheDocument();
+  });
+
+  it('narrows the list by a quantity note, which only the row itself shows', async () => {
+    const { user } = await renderHistory();
+
+    await search(user, 'lost seedlings');
+
+    expect(datePrefixes().map((element) => element.textContent)).toEqual([datePrefix('2026-02-05', RAFAEL)]);
   });
 
   it('narrows the list to the events edited by the person searched for', async () => {

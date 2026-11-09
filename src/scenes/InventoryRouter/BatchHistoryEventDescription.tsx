@@ -47,6 +47,17 @@ export const getEventType = (event: BatchHistoryEvent): string => {
   return event.type;
 };
 
+export const getEventSearchText = (event: BatchHistoryEvent): string =>
+  [
+    getEventType(event),
+    event.type === 'OutgoingWithdrawal' && event.version === undefined
+      ? strings.BATCH_QUANTITY_NOT_UPDATED_EXPLANATION
+      : undefined,
+    event.type === 'QuantityEdited' ? event.notes : undefined,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
 export type BatchHistoryEventDescriptionProps = {
   batchId: number;
   event: BatchHistoryEvent;

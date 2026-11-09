@@ -23,7 +23,7 @@ import { FieldOptionsMap, FieldValuesPayload, SearchNodePayload, getFieldNodeVal
 import { OrganizationUser } from 'src/types/User';
 import { getUserDisplayName } from 'src/utils/user';
 
-import BatchHistoryEventDescription, { getEventType } from './BatchHistoryEventDescription';
+import BatchHistoryEventDescription, { getEventSearchText } from './BatchHistoryEventDescription';
 
 type BatchHistoryProps = {
   batchId: number;
@@ -359,7 +359,7 @@ export default function BatchHistory({ batchId, accessions }: BatchHistoryProps)
       if (editedByNames?.length && !editedByNames.includes(event.editedByName)) {
         return false;
       }
-      return !searchTerm || `${getEventType(event)} ${event.editedByName}`.toLowerCase().includes(searchTerm);
+      return !searchTerm || `${getEventSearchText(event)} ${event.editedByName}`.toLowerCase().includes(searchTerm);
     });
   }, [events, filters, search]);
 
