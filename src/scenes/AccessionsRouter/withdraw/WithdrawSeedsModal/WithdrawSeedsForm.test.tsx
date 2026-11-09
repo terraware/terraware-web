@@ -469,6 +469,8 @@ describe('WithdrawSeedsForm', () => {
       expect(photos[0].url).toContain('/batches/555/photos');
     });
 
+    // Skipped: rejected photo uploads are ignored, so the form closes with a success toast.
+    // Unskip when photo failures are reported instead of treating the transfer as fully successful.
     it.skip('reports a failed photo upload instead of closing with a success toast', async () => {
       const transfers = captureRequests('post', NURSERY_TRANSFER_URL, { batch: { id: 555 } });
       mockError('post', BATCH_PHOTO_URL);
