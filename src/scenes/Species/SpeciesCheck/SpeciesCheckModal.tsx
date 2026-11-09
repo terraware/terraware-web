@@ -274,7 +274,9 @@ const SpeciesCheckModal = ({
     const summaries = checkedTargetData.map((data) =>
       buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)
     );
-    const unassignedSpecies = species.filter((sp) => (sp.projects ?? []).length === 0);
+    const unassignedSpecies = species.filter(
+      (sp) => !(sp.projects ?? []).some((project) => project.projectId !== undefined)
+    );
     if (projects.length > 0 && unassignedSpecies.length > 0) {
       summaries.push({
         projectName: strings.NO_PROJECT,
