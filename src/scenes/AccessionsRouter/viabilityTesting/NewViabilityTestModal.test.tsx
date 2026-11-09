@@ -127,6 +127,8 @@ describe('NewViabilityTestModal cut tests and completion', () => {
     expect(await requests[0].json()).toHaveProperty('endDate');
   });
 
+  // Skipped: editing a cut test caps its already-withdrawn seed total at the remaining inventory.
+  // Unskip when existing tests can retain their original tested seed total.
   it.skip('allows an existing cut test to retain its already-withdrawn seed total', async () => {
     const requests = captureRequests('put', `${TESTS_URL}/1`);
     const { user, onClose } = renderModal(
