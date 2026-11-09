@@ -92,8 +92,37 @@ const WITHDRAWAL: BatchHistoryItem = {
   readyQuantityWithdrawn: 3,
 };
 
+const DETAILS_BASELINE: BatchHistoryItem = {
+  type: 'DetailsEdited',
+  version: 5,
+  createdBy: JENNIFER.id,
+  createdTime: '2026-05-01T08:00:00Z',
+  readyByDate: '2026-09-01',
+  treatment: 'Soak',
+  subLocations: [],
+};
+
+/** Changes a date and sets the treatment to the API's untranslated "Other". */
+const DETAILS_EDITED: BatchHistoryItem = {
+  type: 'DetailsEdited',
+  version: 6,
+  createdBy: JENNIFER.id,
+  createdTime: '2026-06-01T08:00:00Z',
+  readyByDate: '2026-10-15',
+  treatment: 'Other',
+  treatmentNotes: 'soaked twice',
+  subLocations: [],
+};
+
 /** Oldest first, the order the API returns. */
-const HISTORY = [INITIAL_QUANTITIES, READY_QUANTITY_EDITED, PHOTO_CREATED, WITHDRAWAL];
+const HISTORY = [
+  INITIAL_QUANTITIES,
+  READY_QUANTITY_EDITED,
+  PHOTO_CREATED,
+  WITHDRAWAL,
+  DETAILS_BASELINE,
+  DETAILS_EDITED,
+];
 
 const WITHDRAWAL_DESCRIPTION = strings.formatString(
   strings.BATCH_HISTORY_WITHDRAWAL_ON_DATE,
@@ -148,7 +177,9 @@ describe('BatchHistory', () => {
   it('lists the batch history newest first, naming who made each change', async () => {
     await renderHistory();
 
+    // DETAILS_BASELINE is left out: a details edit with nothing before it has no change to report.
     expect(datePrefixes().map((element) => element.textContent)).toEqual([
+      datePrefix('2026-06-01', JENNIFER),
       datePrefix('2026-04-20', RAFAEL),
       datePrefix('2026-03-01', JENNIFER),
       datePrefix('2026-02-05', RAFAEL),
@@ -156,10 +187,11 @@ describe('BatchHistory', () => {
     ]);
 
     const rows = datePrefixes().map(rowOf);
-    expect(rows[0]).toHaveTextContent(WITHDRAWAL_DESCRIPTION);
-    expect(rows[1]).toHaveTextContent(strings.PHOTO_ADDED);
-    expect(rows[2]).toHaveTextContent(fieldsChanged(strings.READY_TO_PLANT_QUANTITY));
-    expect(rows[3]).toHaveTextContent(
+    expect(rows[0]).toHaveTextContent(fieldsChanged(strings.TREATMENT, strings.ESTIMATED_READY_DATE));
+    expect(rows[1]).toHaveTextContent(WITHDRAWAL_DESCRIPTION);
+    expect(rows[2]).toHaveTextContent(strings.PHOTO_ADDED);
+    expect(rows[3]).toHaveTextContent(fieldsChanged(strings.READY_TO_PLANT_QUANTITY));
+    expect(rows[4]).toHaveTextContent(
       fieldsChanged(
         strings.GERMINATION_ESTABLISHMENT_QUANTITY,
         strings.ACTIVE_GROWTH_QUANTITY,
@@ -190,7 +222,7 @@ describe('BatchHistory', () => {
   it('attributes the quantities the batch was created with to the accession it came from', async () => {
     await renderHistory({ accessions: [{ accessionId: 5, accessionNumber: 'ACC-001' }] });
 
-    const creationRow = rowOf(datePrefixes()[3]);
+    const creationRow = rowOf(datePrefixes()[4]);
     expect(creationRow).toHaveTextContent(
       strings.formatString(strings.BATCH_QUANTITY_UPDATED_FROM_ACCESSION, 'ACC-001') as string
     );
@@ -204,6 +236,38 @@ describe('BatchHistory', () => {
 
     expect(datePrefixes().map((element) => element.textContent)).toEqual([datePrefix('2026-03-01', JENNIFER)]);
     expect(screen.queryByText(WITHDRAWAL_DESCRIPTION)).not.toBeInTheDocument();
+  });
+
+  it('opens the event details of a quantity change from its description', async () => {
+    const { user } = await renderHistory();
+
+    await user.click(screen.getByRole('button', { name: fieldsChanged(strings.READY_TO_PLANT_QUANTITY) }));
+
+    expect(await screen.findByText(strings.EVENT_DETAILS)).toBeVisible();
+    // The quantity this event moved, which the row itself never shows.
+    expect(screen.getByText(strings.READY_TO_PLANT_QUANTITY_BEFORE).parentElement).toHaveTextContent('0');
+    expect(screen.getByText(strings.READY_TO_PLANT_QUANTITY_AFTER).parentElement).toHaveTextContent('12');
+  });
+
+  it('shows the old and new value of a changed date', async () => {
+    const { user } = await renderHistory();
+
+    await user.click(
+      screen.getByRole('button', { name: fieldsChanged(strings.TREATMENT, strings.ESTIMATED_READY_DATE) })
+    );
+
+    expect(screen.getByText(strings.ESTIMATED_READY_DATE_BEFORE).parentElement).toHaveTextContent('2026-09-01');
+    expect(screen.getByText(strings.ESTIMATED_READY_DATE_AFTER).parentElement).toHaveTextContent('2026-10-15');
+  });
+
+  it('shows the treatment notes when the treatment, not the substrate, is "Other"', async () => {
+    const { user } = await renderHistory();
+
+    await user.click(
+      screen.getByRole('button', { name: fieldsChanged(strings.TREATMENT, strings.ESTIMATED_READY_DATE) })
+    );
+
+    expect(screen.getByDisplayValue('soaked twice')).toBeVisible();
   });
 
   it('narrows the list by a quantity note, which only the row itself shows', async () => {

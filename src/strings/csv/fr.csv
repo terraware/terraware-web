@@ -723,6 +723,8 @@ EST_READY_DATE,Date estimée de disponibilité,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. total de plantes (densité de plantation × surface),311a283f
 ESTIMATED_BUDGET,Budget prévisionnel,23c1c02a
 ESTIMATED_READY_DATE,Date estimée de disponibilité,d37bedd1
+ESTIMATED_READY_DATE_AFTER,Date estimée de disponibilité (après),cdad8d70
+ESTIMATED_READY_DATE_BEFORE,Date estimée de disponibilité (avant),b298033c
 ESTIMATED_SEED_COUNT,Nombre estimé de semences,c9e614f6
 ESTIMATED_WEIGHT,Poids estimé,34a8dfe1
 EVENT,Événement,cc849cd0
@@ -873,6 +875,8 @@ GERMINATION_ESTABLISHMENT_QUANTITY_REMAINING,Quantité de germination/établisse
 GERMINATION_ESTABLISHMENT_QUANTITY_REQUIRED,Quantité de germination/établissement *,1a0dbd1b
 GERMINATION_ESTABLISHMENT_RATE,Taux de germination/établissement,397a5783
 GERMINATION_ESTABLISHMENT_STARTED_DATE,Date de début de germination/établissement,9448a887
+GERMINATION_ESTABLISHMENT_STARTED_DATE_AFTER,Date de début de germination/établissement (après),9d9ad3d8
+GERMINATION_ESTABLISHMENT_STARTED_DATE_BEFORE,Date de début de germination/établissement (avant),df7d4b96
 GET_STARTED,Commencer,000b82a4
 GET_STARTED_SUBTITLE,"Pour commencer, ajoutez des personnes à votre organisation et ajoutez les espèces de graines et de plantes que votre organisation gère.",86327bd9
 GIS,SIG,f5139d36
@@ -2134,6 +2138,8 @@ SEEDLINGS_WITHDRAWN_FOR_PLANTING,Semis retirés pour la plantation,5207ff63
 SEEDS,Semences,f6362924
 SEEDS_DASHBOARD,Tableau de bord des semis,1d59654c
 SEEDS_SOWN_DATE,Date du semis,91bf20b1
+SEEDS_SOWN_DATE_AFTER,Date de semis des semences (après),9d99c1d1
+SEEDS_SOWN_DATE_BEFORE,Date de semis des semences (avant),71a95c11
 SEEDS_WITHDRAWALS,Retraits de semences,6bca02cf
 SELECT,Sélectionnez...,1a789f9d
 SELECT_A_CONTACT_TYPE_FOR_ALL_INTERNAL_LEADS,Sélectionnez un type de contact pour tous les responsables internes.,e4c5c550

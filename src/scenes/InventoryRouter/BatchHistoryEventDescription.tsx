@@ -10,6 +10,7 @@ import strings from 'src/strings';
 import { batchHistoryEventEnumToLocalized, purposeLabel } from 'src/types/Batch';
 
 import { BatchHistoryEvent } from './BatchHistory';
+import EventDetailsModal from './EventDetailsModal';
 
 const accessionAttributionOf = (event: BatchHistoryEvent): { id: number; accessionNumber: string } | undefined => {
   if (event.type === 'AddedFromAccession') {
@@ -61,6 +62,32 @@ export const getEventSearchText = (event: BatchHistoryEvent): string =>
 export type BatchHistoryEventDescriptionProps = {
   batchId: number;
   event: BatchHistoryEvent;
+};
+
+const hasEventDetails = (event: BatchHistoryEvent): boolean =>
+  event.type === 'DetailsEdited' ||
+  event.type === 'QuantityEdited' ||
+  event.type === 'StatusChanged' ||
+  event.type === 'IncomingWithdrawal';
+
+const EventDetailsDescription = ({ batchId, event }: BatchHistoryEventDescriptionProps): JSX.Element => {
+  const [viewingDetails, setViewingDetails] = useState(false);
+
+  return (
+    <>
+      <Link fontSize='16px' fontWeight={400} lineHeight='24px' onClick={() => setViewingDetails(true)}>
+        {getEventType(event)}
+      </Link>
+      {event.type === 'QuantityEdited' && event.notes && (
+        <Typography fontSize='14px' fontWeight={300}>
+          {event.notes}
+        </Typography>
+      )}
+      {viewingDetails && (
+        <EventDetailsModal batchId={batchId} onClose={() => setViewingDetails(false)} selectedEvent={event} />
+      )}
+    </>
+  );
 };
 
 const PhotoCreatedDescription = ({ batchId, event }: BatchHistoryEventDescriptionProps): JSX.Element => {
@@ -139,16 +166,11 @@ const BatchHistoryEventDescription = ({ batchId, event }: BatchHistoryEventDescr
     return <PhotoCreatedDescription batchId={batchId} event={event} />;
   }
 
-  return (
-    <>
-      {getEventType(event)}
-      {event.type === 'QuantityEdited' && event.notes && (
-        <Typography fontSize='14px' fontWeight={300}>
-          {event.notes}
-        </Typography>
-      )}
-    </>
-  );
+  if (hasEventDetails(event)) {
+    return <EventDetailsDescription batchId={batchId} event={event} />;
+  }
+
+  return <>{getEventType(event)}</>;
 };
 
 export default BatchHistoryEventDescription;
