@@ -104,6 +104,8 @@ describe('EditStateModal', () => {
     });
   });
 
+  // Skipped: a failed status update closes the modal instead of preserving the entered status.
+  // Unskip when failed saves keep the modal open.
   it.skip('keeps the changed status open when saving fails', async () => {
     mockError('put', URL);
     const { user, result, store } = renderModal();
