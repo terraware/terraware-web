@@ -9,12 +9,20 @@ const useUploadImageValues = () => {
   const [status, setStatus] = useState<Statuses>();
 
   const uploadImageValues = useCallback(
-    async (images: UploadImageValueRequestPayloadWithProjectId[]): Promise<boolean> => {
+    async (
+      images: UploadImageValueRequestPayloadWithProjectId[],
+      onSuccess?: (image: UploadImageValueRequestPayloadWithProjectId) => void
+    ): Promise<boolean> => {
       setStatus('pending');
       const results = await Promise.all(
-        images.map(({ projectId, variableId, file, caption, citation }) =>
-          uploadProjectImageValue({ projectId, body: { variableId, file, caption, citation } })
-        )
+        images.map(async (image) => {
+          const { projectId, variableId, file, caption, citation } = image;
+          const result = await uploadProjectImageValue({ projectId, body: { variableId, file, caption, citation } });
+          if (!('error' in result)) {
+            onSuccess?.(image);
+          }
+          return result;
+        })
       );
       const succeeded = results.every((result) => !('error' in result));
       setStatus(succeeded ? 'success' : 'error');
