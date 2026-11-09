@@ -72,6 +72,8 @@ describe('EndDryingReminderModal', () => {
     expect(await requests[0].json()).toMatchObject({ dryingEndDate: null });
   });
 
+  // Skipped: clearing the optional reminder reports an invalid date despite saving its removal.
+  // Unskip when clearing the reminder succeeds without a date error.
   it.skip('does not report an invalid date when clearing the optional reminder', async () => {
     const { user } = renderModal();
     await enterDate(user, '');
