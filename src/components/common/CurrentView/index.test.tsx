@@ -7,15 +7,7 @@ import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'materi
 
 import { api as savedTableViewsApi } from 'src/queries/generated/savedTableViews';
 import strings from 'src/strings';
-import {
-  buildUser,
-  captureRequests,
-  dialogTitled,
-  mockDelete,
-  mockError,
-  mockGet,
-  renderWithProviders,
-} from 'src/test-utils';
+import { buildUser, captureRequests, dialogTitled, mockDelete, mockGet, renderWithProviders } from 'src/test-utils';
 import { TABLES } from 'src/types/Tables';
 
 import CurrentView, { ViewOption } from './index';
@@ -409,10 +401,11 @@ describe('CurrentView with saved views turned off', () => {
 describe('CurrentView when the saved views fail to load', () => {
   it('falls back to the stored preset and retries the list when saving a view', async () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ preset: 'active', savedViewId: '42' }));
-    mockError('get', SAVED_VIEWS_PATH);
+    const failedRequests = captureRequests('get', SAVED_VIEWS_PATH, {}, 500);
 
     const { user } = renderWithProviders(<TableWithCurrentView presetViews={PRESET_VIEWS} />);
 
+    await waitFor(() => expect(failedRequests).toHaveLength(1));
     await waitFor(() => expect(currentViewSelect()).toHaveTextContent(PRESET_VIEWS[0].label));
     expect(nameHeader()).toHaveAttribute('aria-sort', 'none');
 
