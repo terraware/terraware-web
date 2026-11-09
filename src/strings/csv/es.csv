@@ -698,7 +698,7 @@ EMAIL_NOTIFICATIONS_DESCRIPTION,"Reciba correos electrónicos de Terraware sobre
 EMAIL_REQUIRED,Correo electrónico *,6b68d782
 EMAIL_REQUIREMENT_TERRAFORMATION,"La dirección de correo electrónico tiene que incluir ""@terraformation.com"".",8bf29d92
 EMPTY_BATCH,Lote vacío,585f2912
-EMPTY_BATCHES_AFTER_WITHDRAW,"Uno o más lotes ahora están vacíos y no aparecerán en las tablas de lotes. Para ver los lotes vacíos, haga clic en el filtro de tabla y marque ""Mostrar lotes vacíos"".",7b7ab93c
+EMPTY_BATCHES_AFTER_WITHDRAW,"Uno o más lotes ahora están vacíos y no aparecerán en las tablas de lotes. Para ver los lotes vacíos, seleccione la vista ""Incluir lotes vacíos"".",bd614ed0
 END,Fin,43bef655
 END_DATE,Fecha de finalización,bfc71620
 END_DATE_ERROR,La fecha de finalización debe ser posterior a la fecha de inicio,055a3a36
@@ -809,9 +809,6 @@ FILE_SIZE_KB,{0} KB,7b93b3f8
 FILE_SIZE_MB,{0} MB,2895b026
 FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.,73c962ea
 FILTER,Filtrar,51b390ee
-FILTER_SHOW_EMPTY_BATCHES,Mostrar lotes vacíos,f5c7fca1
-FILTER_SHOW_EMPTY_NURSERIES,Mostrar viveros sin inventario,6d351b84
-FILTER_SHOW_EMPTY_SPECIES,Mostrar especies sin inventario,0de9ee0c
 FILTERED,filtrado,4ab1a8a2
 FILTERS,Filtros,c3d13364
 FILTERS_APPLIED,Filtros aplicados,75d4dd7e
@@ -959,8 +956,11 @@ IMPORTING_SPECIES,Importando especies... esto puede tardar unos minutos,2de070fc
 IN_PROGRESS,En curso,d5349fa1
 IN_REVIEW,En revisión,1acac124
 IN_STORAGE,En almacenamiento,e17c2135
+INCLUDE_EMPTY_BATCHES,Incluir lotes vacíos,92110786
 INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,a4ba1236
+INCLUDE_NURSERIES_WITH_NO_INVENTORY,Incluir viveros sin inventario,53e6c9b5
 INCLUDE_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Incluir especies con todas las accesiones agotadas,b6e91e45
+INCLUDE_SPECIES_WITH_NO_INVENTORY,Incluir especies sin inventario,702c74f9
 INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_CLASS,Clase de indicador,8c9d3791

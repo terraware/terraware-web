@@ -190,7 +190,7 @@ export default function InventoryListBySpecies() {
       (result) =>
         showEmptySpecies ||
         (specificFacilities
-          ? Number(result['totalQuantity(raw)']) > 0 && Number(result['germinatingQuantity(raw)']) > 0
+          ? Number(result['totalQuantity(raw)']) > 0 || Number(result['germinatingQuantity(raw)']) > 0
           : !isSpeciesEmpty(result))
     );
   }, [apiSearchResults, filters.facilityIds, filters.showEmptySpecies, isError]);
