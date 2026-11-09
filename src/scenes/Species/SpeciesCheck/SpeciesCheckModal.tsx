@@ -247,18 +247,12 @@ const SpeciesCheckModal = ({
     [locationForTarget, targetData]
   );
 
-  const checkedSpecies = useMemo(() => {
-    const speciesById = new Map<number, Species>();
-    checkedTargetData.forEach((data) => data.targetSpecies.forEach((sp) => speciesById.set(sp.id, sp)));
-    return [...speciesById.values()];
-  }, [checkedTargetData]);
-
   const speciesWithProblems = useMemo(
     () =>
-      checkedSpecies
+      species
         .filter((sp) => (sp.problems?.length ?? 0) > 0)
         .sort((a, b) => (a.scientificName ?? '').localeCompare(b.scientificName ?? '')),
-    [checkedSpecies]
+    [species]
   );
 
   const buildSummary = useCallback(
