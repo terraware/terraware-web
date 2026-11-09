@@ -1,10 +1,14 @@
 import React from 'react';
 
-import { screen, waitFor, within } from '@testing-library/react';
+import { act, screen, waitFor, within } from '@testing-library/react';
+import { HttpResponse, http } from 'msw/http';
 
+import { api } from 'src/queries/generated/nurseryBatches';
 import BatchDetails from 'src/scenes/InventoryRouter/BatchDetails';
+import InventoryBatchView from 'src/scenes/InventoryRouter/InventoryBatchView';
 import strings from 'src/strings';
 import { buildBatch, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
+import { server } from 'src/test-utils/msw/server';
 
 const BATCH = buildBatch({ id: 7, germinatingQuantity: 5, activeGrowthQuantity: 10, hardeningOffQuantity: 3 });
 
@@ -29,6 +33,70 @@ const editButtonFor = (title: string): HTMLElement => {
 };
 
 describe('BatchDetails', () => {
+  it.each(['deleted', 'emptied', 'failed'] as const)(
+    'refreshes cached detail and history when deletion is %s',
+    async (outcome) => {
+      let deleted = false;
+      let detailRequests = 0;
+      let historyRequests = 0;
+      const emptyBatch = buildBatch({
+        ...BATCH,
+        germinatingQuantity: 0,
+        activeGrowthQuantity: 0,
+        hardeningOffQuantity: 0,
+        readyQuantity: 0,
+      });
+      mockGet(`/api/v1/nursery/batches/${BATCH.id}/photos`, { photos: [] });
+      mockGet('/api/v1/projects', { projects: [] });
+      mockGet('/api/v1/species', { species: [] });
+      mockGet(`/api/v1/facilities/${BATCH.facilityId}/subLocations`, { subLocations: [] });
+      server.use(
+        http.get(`/api/v1/nursery/batches/${BATCH.id}`, () => {
+          detailRequests++;
+          return deleted && outcome === 'deleted'
+            ? HttpResponse.json({ status: 'error', error: { message: 'Batch not found' } }, { status: 404 })
+            : HttpResponse.json({ batch: deleted ? emptyBatch : BATCH });
+        }),
+        http.get(`/api/v1/nursery/batches/${BATCH.id}/history`, () => {
+          historyRequests++;
+          return HttpResponse.json({ history: [], status: 'ok' });
+        }),
+        http.delete(`/api/v1/nursery/batches/${BATCH.id}`, () => {
+          deleted = outcome !== 'failed';
+          return HttpResponse.json({ status: deleted ? 'ok' : 'error' }, { status: deleted ? 200 : 500 });
+        })
+      );
+      const { store, unmount } = renderWithProviders(<InventoryBatchView origin='Batches' species={[]} />, {
+        route: `/inventory/batch/${BATCH.id}`,
+        path: '/inventory/batch/:batchId',
+      });
+      await screen.findByRole('button', { name: strings.WITHDRAW });
+      const history = store.dispatch(api.endpoints.getBatchHistory.initiate(BATCH.id));
+      await history;
+      await act(async () => {
+        await store.dispatch(api.endpoints.deleteBatch.initiate(BATCH.id));
+      });
+      await waitFor(() => {
+        expect(detailRequests).toBe(2);
+        expect(historyRequests).toBe(2);
+        expect(api.endpoints.getBatch.select(BATCH.id)(store.getState()).isLoading).toBe(false);
+      });
+      if (outcome === 'failed') {
+        expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeInTheDocument();
+      } else {
+        await waitFor(() => expect(screen.queryByRole('button', { name: strings.WITHDRAW })).not.toBeInTheDocument());
+        if (outcome === 'deleted') {
+          expect(screen.queryByRole('tab', { name: strings.DETAILS })).not.toBeInTheDocument();
+        } else {
+          expect(api.endpoints.getBatch.select(BATCH.id)(store.getState()).data?.batch).toMatchObject(emptyBatch);
+        }
+      }
+      history.unsubscribe();
+      unmount();
+      store.dispatch(api.util.resetApiState());
+    }
+  );
+
   it.each([
     {
       phase: 'germinating',

@@ -32,7 +32,7 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => batchMutationTags(payload.id),
     },
     deleteBatch: {
-      invalidatesTags: batchListTags,
+      invalidatesTags: (_results, _error, batchId) => batchMutationTags(batchId),
     },
     listBatchPhotos: {
       providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.NurseryBatchPhotos, id: batchId }],
