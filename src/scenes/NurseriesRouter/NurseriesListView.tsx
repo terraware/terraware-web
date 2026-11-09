@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, TableColumnType } from '@terraware/web-components';
@@ -15,14 +15,13 @@ import { APP_PATHS } from 'src/constants';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTimeZones } from 'src/providers';
-import { FacilityService } from 'src/services';
+import { useSearchFacilitiesQuery } from 'src/queries/search/facilities';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { Organization } from 'src/types/Organization';
 import { isAdmin } from 'src/utils/organization';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
-import { setTimeZone, useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+import { useDefaultTimeZone, withTimeZoneLongName } from 'src/utils/useTimeZoneUtils';
 
 import NurseriesCellRenderer from './TableCellRenderer';
 
@@ -44,7 +43,6 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
   const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [results, setResults] = useState<Facility[]>();
   const contentRef = useRef(null);
 
   const goToNewNursery = () => {
@@ -62,27 +60,19 @@ export default function NurseriesListView({ organization }: NurseriesListProps):
     setTemporalSearchValue(value as string);
   };
 
-  useEffect(() => {
-    const refreshSearch = async () => {
-      const requestId = Math.random().toString();
-      setRequestId('searchNurseries', requestId);
+  const { currentData } = useSearchFacilitiesQuery({
+    query: debouncedSearchTerm,
+    organizationId: organization.id,
+    type: 'Nursery',
+  });
 
-      const nurseriesResults = await FacilityService.getFacilities({
-        query: debouncedSearchTerm,
-        organizationId: organization.id,
-        type: 'Nursery',
-      });
-
-      const transformedResults = nurseriesResults.map((nursery) =>
-        setTimeZone(nursery, timeZones, defaultTimeZone)
-      ) as Facility[];
-
-      if (getRequestId('searchNurseries') === requestId) {
-        setResults(transformedResults);
-      }
-    };
-    void refreshSearch();
-  }, [debouncedSearchTerm, organization, timeZones, defaultTimeZone]);
+  const results = useMemo(
+    () =>
+      currentData
+        ? (currentData.map((facility) => withTimeZoneLongName(facility, timeZones, defaultTimeZone)) as Facility[])
+        : undefined,
+    [currentData, timeZones, defaultTimeZone]
+  );
 
   return (
     <TfMain>

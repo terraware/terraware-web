@@ -9,10 +9,9 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocations';
-import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import type { Facility } from 'src/types/Facility';
-import { isAdmin } from 'src/utils/organization';
+import { getSeedBank, isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -28,11 +27,7 @@ export default function SeedBankDetailsView(): JSX.Element {
 
   const seedBank = useMemo<Facility | undefined>(() => {
     if (selectedOrganization && seedBankId) {
-      return FacilityService.getFacility({
-        organization: selectedOrganization,
-        facilityId: seedBankId,
-        type: 'Seed Bank',
-      });
+      return getSeedBank(selectedOrganization, Number(seedBankId));
     }
     return undefined;
   }, [seedBankId, selectedOrganization]);

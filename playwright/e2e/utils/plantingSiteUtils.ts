@@ -7,8 +7,7 @@ export type MapPoint = [number, number];
 
 export const BOUNDARY_FIXTURE = 'playwright/data/simpleSiteBoundary.geojson';
 
-// Suppresses the tutorial videos and enables editing existing sites for this page only,
-// without writing the preferences back to the server.
+// Suppresses the tutorial videos for this page only, without writing the preferences back to the server.
 export const enableSiteEditorPreferences = async (page: Page) => {
   await page.route(
     (url) => url.pathname === '/api/v1/users/me/preferences' && !url.searchParams.has('organizationId'),
@@ -23,7 +22,6 @@ export const enableSiteEditorPreferences = async (page: Page) => {
         ...json.preferences,
         'dont-show-site-boundary-instructions': true,
         'dont-show-site-stratum-boundaries-instructions': true,
-        editPlantingSite: true,
       };
       await route.fulfill({ response, json });
     }
@@ -57,8 +55,23 @@ export const detailsDialogButton = (page: Page, button: 'Cancel' | 'Save' | 'Sav
 
 export const editDraftDetailsButton = (page: Page) => page.locator('#edit-draft-planting-site-details');
 
-export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Create Planting Site' | 'Save Changes') =>
-  page.getByRole('button', { name, exact: true });
+// Header CTAs are matched by id: the create and edit flows label several of them the same way, and names like
+// Cancel and Save also appear on the map's feature popups.
+const EDITOR_BUTTON_IDS = {
+  Back: '#back-planting-site-create, #back-planting-site-edit',
+  Cancel: '#cancel-planting-site-create',
+  Close: '#close-planting-site-edit',
+  'Create Site': '#create-planting-site',
+  Next: '#next-planting-site-create, #next-planting-site-edit',
+  'Save and exit': '#save-and-exit-planting-site-create',
+  'Save Changes': '#save-planting-site-edit',
+};
+
+export const editorButton = (page: Page, name: keyof typeof EDITOR_BUTTON_IDS) => page.locator(EDITOR_BUTTON_IDS[name]);
+
+/** The buttons on a stratum or substratum popup, which share their labels with the editor's header. */
+export const featurePopupButton = (page: Page, name: 'Cancel' | 'Save') =>
+  page.locator(name === 'Cancel' ? '#cancel' : '#save');
 
 const mapCanvas = (page: Page) => page.locator('.mapboxgl-canvas');
 

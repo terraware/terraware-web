@@ -1,21 +1,28 @@
 import { useEffect, useState } from 'react';
 
-import dayjs from 'dayjs';
 import {
   MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
+  MRT_ColumnPinningState,
   MRT_DensityState,
   MRT_PaginationState,
   MRT_SortingState,
   MRT_VisibilityState,
 } from 'material-react-table';
 
+import { TableSettings } from 'src/components/common/CurrentView/tableSettings';
+import { TableDefinition } from 'src/types/Tables';
+import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
+
 type UseTableStateOptions = {
   defaultColumnOrder?: MRT_ColumnOrderState;
+  defaultColumnPinning?: MRT_ColumnPinningState;
   defaultColumnVisibility?: MRT_VisibilityState;
   defaultSorting?: MRT_SortingState;
   persistedMultiSelectColumnIds?: string[];
+  persistColumnPinning?: boolean;
   persistFilters?: boolean;
+  persistGlobalFilter?: boolean;
   persistSorting?: boolean;
   persistPageIndex?: {
     isLoading?: boolean;
@@ -43,13 +50,16 @@ const mergeColumnOrder = (
   return merged;
 };
 
-const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
+const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateOptions) => {
   const {
     defaultColumnOrder = [],
+    defaultColumnPinning = {},
     defaultColumnVisibility = {},
     defaultSorting = [],
     persistedMultiSelectColumnIds = [],
+    persistColumnPinning = false,
     persistFilters = false,
+    persistGlobalFilter = false,
     persistSorting = false,
     persistPageIndex,
   } = options ?? {};
@@ -92,6 +102,29 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     }
   });
 
+  const [columnPinning, setColumnPinning] = useState<MRT_ColumnPinningState>(() => {
+    if (!persistColumnPinning) {
+      return defaultColumnPinning;
+    }
+    try {
+      const saved = localStorage.getItem(`${storageKey}-columnPinning`);
+      return saved ? (JSON.parse(saved) as MRT_ColumnPinningState) : defaultColumnPinning;
+    } catch {
+      return defaultColumnPinning;
+    }
+  });
+
+  const [globalFilter, setGlobalFilter] = useState<string>(() => {
+    if (!persistGlobalFilter) {
+      return '';
+    }
+    try {
+      return localStorage.getItem(`${storageKey}-globalFilter`) ?? '';
+    } catch {
+      return '';
+    }
+  });
+
   const [density, setDensity] = useState<MRT_DensityState>(() => {
     try {
       return (localStorage.getItem(`${storageKey}-density`) as MRT_DensityState) || 'comfortable';
@@ -109,35 +142,7 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
       if (!saved) {
         return [];
       }
-      const parsed = JSON.parse(saved) as MRT_ColumnFiltersState;
-      // Date-range filters store dayjs objects which serialize to ISO strings.
-      // Reconstruct dayjs objects so the date pickers restore correctly.
-      const isISODateTimeString = (v: unknown) =>
-        typeof v === 'string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(v);
-      return parsed.map((f) => {
-        if (Array.isArray(f.value) && (f.value as unknown[]).some(isISODateTimeString)) {
-          return {
-            ...f,
-            value: (f.value as unknown[]).map((v) => (isISODateTimeString(v) ? dayjs(v as string) : v)),
-          };
-        }
-        // Coerce non-array values to arrays for multi-select columns so
-        // arrIncludesSome (which calls filterValue.some()) doesn't crash.
-        if (persistedMultiSelectIds.has(f.id) && !Array.isArray(f.value) && f.value !== null) {
-          return { ...f, value: [f.value] };
-        }
-        // Replace null entries in array filters with ''.
-        // JSON.stringify converts undefined to null, so persisted range filters
-        // like [undefined, 5] reload as [null, 5]. MRT's betweenInclusive only
-        // skips '' and undefined — passing null causes null.toString() to throw.
-        if (Array.isArray(f.value) && (f.value as unknown[]).some((v) => v === null)) {
-          return {
-            ...f,
-            value: (f.value as unknown[]).map((v) => (v === null ? '' : v)),
-          };
-        }
-        return f;
-      });
+      return normalizePersistedColumnFilters(JSON.parse(saved) as MRT_ColumnFiltersState, persistedMultiSelectIds);
     } catch {
       return [];
     }
@@ -159,7 +164,7 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     return false;
   });
 
-  const [showGlobalFilter, setShowGlobalFilter] = useState(false);
+  const [showGlobalFilter, setShowGlobalFilter] = useState(() => !!globalFilter);
 
   const [pagination, setPagination] = useState<MRT_PaginationState>(() => {
     try {
@@ -252,6 +257,28 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   }, [columnFilters, persistFilters, storageKey]);
 
   useEffect(() => {
+    if (!persistColumnPinning) {
+      return;
+    }
+    try {
+      localStorage.setItem(`${storageKey}-columnPinning`, JSON.stringify(columnPinning));
+    } catch {
+      // ignore
+    }
+  }, [columnPinning, persistColumnPinning, storageKey]);
+
+  useEffect(() => {
+    if (!persistGlobalFilter) {
+      return;
+    }
+    try {
+      localStorage.setItem(`${storageKey}-globalFilter`, globalFilter ?? '');
+    } catch {
+      // ignore
+    }
+  }, [globalFilter, persistGlobalFilter, storageKey]);
+
+  useEffect(() => {
     if (!persistSorting) {
       return;
     }
@@ -261,6 +288,13 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
       // ignore
     }
   }, [persistSorting, sorting, storageKey]);
+
+  const [defaultViewSettings] = useState<Partial<TableSettings>>(() => ({
+    ...(options?.defaultColumnOrder && { columnOrder: options.defaultColumnOrder }),
+    ...(options?.defaultColumnPinning && { columnPinning: options.defaultColumnPinning }),
+    ...(options?.defaultColumnVisibility && { columnVisibility: options.defaultColumnVisibility }),
+    ...(options?.defaultSorting && { sorting: options.defaultSorting }),
+  }));
 
   const onDensityChange = (updater: MRT_DensityState | ((prev: MRT_DensityState) => MRT_DensityState)) => {
     setDensity((prev) => {
@@ -278,15 +312,20 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     autoResetPageIndex: pageIndexStorageKey ? !isRestoringPageIndex : undefined,
     columnFilters,
     columnOrder,
+    columnPinning,
     columnVisibility,
+    defaultViewSettings,
     density,
+    globalFilter,
     isLoadingPage,
     onDensityChange,
     onPaginationChange,
     pagination,
     setColumnFilters,
     setColumnOrder,
+    setColumnPinning,
     setColumnVisibility,
+    setGlobalFilter,
     setShowColumnFilters,
     setShowGlobalFilter,
     setSorting,

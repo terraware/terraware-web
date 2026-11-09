@@ -99,7 +99,13 @@ shape breaks the test — that is the point.
 mockGet('/api/v1/species', { species: buildSpeciesList() }); // wraps in { status: 'ok', ... }
 mockPost('/api/v1/species', { id: 7 });
 mockError('get', '/api/v1/species'); // 500 with an error envelope
+mockImage('/api/v1/nursery/batches/42/photos/:photoId'); // image bytes, and the requests served
 ```
+
+`ThumbnailImage` fetches the image itself rather than leaving it to the browser, so a component that
+renders a photo or thumbnail needs its endpoint mocked like any other. `mockImage` takes a list of
+statuses to answer differently across calls, which is how the server being too busy to generate a
+thumbnail — and the retry that follows — is set up.
 
 Handlers reset between tests. For anything the helpers don't cover — asserting on a request body,
 returning different responses across calls, a non-enveloped endpoint — reach for `server.use` with
@@ -168,6 +174,9 @@ Pulled in by `src/setupTests.js`, so tests never do this themselves:
   silently never returns data.
 - **Stylesheets** — `@terraware/web-components` imports SCSS, loaded as inert source since jsdom
   applies no styles.
+- **jsdom stubs** (`setupTests.js`) — an inert `IntersectionObserver`, and object URLs, which jsdom
+  does not implement at all. `URL.createObjectURL` hands back a distinct `blob:` URL each time, like
+  a real one, because components key previews and thumbnails off it.
 
 ## What to assert
 

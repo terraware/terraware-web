@@ -10,6 +10,7 @@ import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import {
   RescheduleObservationRequestPayload,
@@ -20,8 +21,10 @@ import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites
 import SmallSiteWarningDialog from 'src/scenes/ObservationsRouterV2/Schedule/SmallSiteWarningDialog';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import MonitoringTypeSelector from './MonitoringTypeSelector';
 import ObservationSubstratumSelector from './ObservationSubstratumSelector';
 import getObservationDateErrors from './getObservationDateErrors';
+import { MONITORING_TYPES, MonitoringType } from './monitoringTypes';
 import useObservablePlantingSites from './useObservablePlantingSites';
 
 const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
@@ -46,6 +49,7 @@ export default function ScheduleObservationForm({
   const { activeLocale, strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -97,6 +101,28 @@ export default function ScheduleObservationForm({
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [requestedSubstratumIds, setRequestedSubstratumIds] = useState<number[]>();
+  const [monitoringType, setMonitoringType] = useState<MonitoringType>('Monitoring');
+
+  const upcomingObservationStartDates = useMemo(
+    () => selectedSite?.upcomingObservationStartDates ?? {},
+    [selectedSite?.upcomingObservationStartDates]
+  );
+  const hasPlantings = selectedSite?.hasPlantings === true;
+
+  const showMonitoringTypeSelector =
+    biomassSchedulingEnabled && observationId === undefined && !!selectedPlantingSiteId;
+  const selectedMonitoringTypeUnavailable =
+    showMonitoringTypeSelector && (!hasPlantings || upcomingObservationStartDates[monitoringType] !== undefined);
+
+  useEffect(() => {
+    if (upcomingObservationStartDates[monitoringType] === undefined) {
+      return;
+    }
+    const schedulableType = MONITORING_TYPES.find((type) => upcomingObservationStartDates[type] === undefined);
+    if (schedulableType) {
+      setMonitoringType(schedulableType);
+    }
+  }, [monitoringType, upcomingObservationStartDates]);
 
   const [validate, setValidate] = useState<boolean>(false);
   const [startDateError, setStartDateError] = useState<string>();
@@ -162,11 +188,26 @@ export default function ScheduleObservationForm({
     }
 
     if (onSchedule && startDate && endDate && requestedSubstratumIds && selectedSite) {
-      onSchedule({ startDate, endDate, requestedSubstratumIds, plantingSiteId: selectedSite.id });
+      onSchedule({
+        startDate,
+        endDate,
+        requestedSubstratumIds,
+        plantingSiteId: selectedSite.id,
+        observationType: biomassSchedulingEnabled ? monitoringType : undefined,
+      });
     }
 
     setShowSmallSiteWarning(false);
-  }, [endDate, onReschedule, onSchedule, requestedSubstratumIds, selectedSite, startDate]);
+  }, [
+    biomassSchedulingEnabled,
+    endDate,
+    monitoringType,
+    onReschedule,
+    onSchedule,
+    requestedSubstratumIds,
+    selectedSite,
+    startDate,
+  ]);
 
   const onSubmit = useCallback(() => {
     setValidate(true);
@@ -191,6 +232,7 @@ export default function ScheduleObservationForm({
         saveID={'scheduleObservation'}
         onCancel={onCancel}
         onSave={onSubmit}
+        saveDisabled={selectedMonitoringTypeUnavailable}
       >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
@@ -214,52 +256,68 @@ export default function ScheduleObservationForm({
               />
             </Grid>
 
-            {selectedPlantingSiteId && (
-              <Grid size={12}>
-                <ObservationSubstratumSelector
-                  errorText={validate ? substratumError : ''}
-                  onChangeSelectedSubstrata={setRequestedSubstratumIds}
-                  plantingSiteId={selectedPlantingSiteId}
+            {showMonitoringTypeSelector && (
+              <Grid size={12} paddingTop={0}>
+                <MonitoringTypeSelector
+                  hasPlantings={hasPlantings}
+                  onChange={setMonitoringType}
+                  selectedMonitoringType={monitoringType}
+                  upcomingObservationStartDates={upcomingObservationStartDates}
                 />
               </Grid>
             )}
 
-            <Grid size={12}>
-              <Divider />
-            </Grid>
+            {!selectedMonitoringTypeUnavailable && (
+              <>
+                {selectedPlantingSiteId && (
+                  <Grid size={12}>
+                    <ObservationSubstratumSelector
+                      errorText={validate ? substratumError : ''}
+                      monitoringType={monitoringType}
+                      onChangeSelectedSubstrata={setRequestedSubstratumIds}
+                      plantingSiteId={selectedPlantingSiteId}
+                    />
+                  </Grid>
+                )}
 
-            <Grid size={isMobile ? 12 : 6}>
-              <DatePicker
-                id='startDate'
-                label={strings.OBSERVATION_START_DATE}
-                value={startDate ?? ''}
-                onDateChange={setStartDateCallback}
-                aria-label='date-picker'
-                errorText={validate ? startDateError : ''}
-                minDate={todayISO}
-              />
-            </Grid>
+                <Grid size={12}>
+                  <Divider />
+                </Grid>
 
-            <Grid size={isMobile ? 12 : 6}>
-              <DatePicker
-                id='endDate'
-                label={strings.OBSERVATION_END_DATE}
-                value={endDate ?? ''}
-                onDateChange={setEndDateCallback}
-                aria-label='date-picker'
-                errorText={validate ? endDateError : ''}
-              />
-            </Grid>
+                <Grid size={isMobile ? 12 : 6}>
+                  <DatePicker
+                    id='startDate'
+                    label={strings.OBSERVATION_START_DATE}
+                    value={startDate ?? ''}
+                    onDateChange={setStartDateCallback}
+                    aria-label='date-picker'
+                    errorText={validate ? startDateError : ''}
+                    minDate={todayISO}
+                  />
+                </Grid>
 
-            <Typography
-              fontSize='14px'
-              fontWeight={400}
-              lineHeight='20px'
-              color={theme.palette.TwClrBrdrInfo}
-              padding={theme.spacing(1, 3)}
-            >
-              {strings.OBSERVATION_PERIOD_WARN}
-            </Typography>
+                <Grid size={isMobile ? 12 : 6}>
+                  <DatePicker
+                    id='endDate'
+                    label={strings.OBSERVATION_END_DATE}
+                    value={endDate ?? ''}
+                    onDateChange={setEndDateCallback}
+                    aria-label='date-picker'
+                    errorText={validate ? endDateError : ''}
+                  />
+                </Grid>
+
+                <Typography
+                  fontSize='14px'
+                  fontWeight={400}
+                  lineHeight='20px'
+                  color={theme.palette.TwClrBrdrInfo}
+                  padding={theme.spacing(1, 3)}
+                >
+                  {strings.OBSERVATION_PERIOD_WARN}
+                </Typography>
+              </>
+            )}
           </Grid>
         </Card>
       </PageForm>

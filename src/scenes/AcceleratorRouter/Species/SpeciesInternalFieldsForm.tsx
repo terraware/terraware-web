@@ -47,6 +47,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
         sx={{ borderTop: `1px solid ${theme.palette.TwClrBaseGray100}` }}
         container
         padding={theme.spacing(0, 0, 4, 0)}
+        size={12}
       >
         <Grid
           container
@@ -56,6 +57,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
             paddingTop: theme.spacing(3),
             margin: 0,
           }}
+          size={12}
         >
           <GridItemWrapper props={{ minHeight: 0 }}>
             <Typography fontSize={'20px'} fontWeight={600} lineHeight={'28px'} margin={0}>
@@ -63,7 +65,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
             </Typography>
           </GridItemWrapper>
 
-          <Grid container>
+          <Grid container size={12}>
             <GridItemInput>
               <TextField
                 label={strings.HEIGHT_AT_MATURITY}
@@ -85,7 +87,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
             </GridItemInput>
           </Grid>
 
-          <Grid container>
+          <Grid container size={12}>
             <GridItemInput>
               <TextField
                 label={strings.DIAMETER_AT_BREAST_HEIGHT}
@@ -107,7 +109,7 @@ const SpeciesInternalFieldsForm = ({ onChange, speciesRecord }: SpeciesInternalF
             </GridItemInput>
           </Grid>
 
-          <Grid container>
+          <Grid container size={12}>
             <GridItemInput>
               <TextField
                 label={strings.AVERAGE_WOOD_DENSITY}

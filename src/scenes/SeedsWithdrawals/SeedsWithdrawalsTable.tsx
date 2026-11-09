@@ -17,6 +17,7 @@ import {
   MRT_VisibilityState,
 } from 'material-react-table';
 
+import CurrentView from 'src/components/common/CurrentView';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS, VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
@@ -36,11 +37,12 @@ import {
 } from 'src/scenes/SeedsWithdrawals/exportSeedWithdrawals';
 import { SeedWithdrawalPurpose } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
+import { TABLES } from 'src/types/Tables';
 import useDebounce from 'src/utils/useDebounce';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { SeedWithdrawalPurposes, seedWithdrawalPurposeLabel } from 'src/utils/withdrawalPurposes';
 
-const TABLE_STATE_STORAGE_KEY = 'seeds-withdrawals-table';
+const TABLE = TABLES.seedWithdrawals;
 
 const ITEMS_PER_PAGE = 100;
 const EXPORT_PAGE_SIZE = 1000;
@@ -120,6 +122,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     setColumnFilters,
@@ -129,7 +132,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+  } = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     persistedMultiSelectColumnIds: ['destination', PROJECT_COLUMN_ID, 'purpose', 'speciesName'],
@@ -486,7 +489,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       enableGlobalFilter={true}
       enableColumnFilters={true}
       enableColumnOrdering={true}
-      storageKey={TABLE_STATE_STORAGE_KEY}
+      storageKey={TABLE.storageKey}
       enablePagination={true}
       enableTopToolbar={true}
       enableBottomToolbar={true}
@@ -522,6 +525,14 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         enableGrouping: false,
         enableColumnDragging: true,
         positionGlobalFilter: 'right',
+        renderTopToolbarCustomActions: ({ table }) => (
+          <CurrentView
+            defaultSettings={defaultViewSettings}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        ),
         renderToolbarInternalActions: ({ table }) => (
           <Box display='flex' gap={0.5}>
             <Tooltip title={strings.EXPORT}>

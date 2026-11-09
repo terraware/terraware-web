@@ -52,6 +52,7 @@ type MapComponentProps = {
   onMapMove?: (view: ViewStateChangeEvent) => void;
   onMouseMove?: (event: MapMouseEvent) => void;
   onTokenExpired?: () => void;
+  overlay?: ReactNode;
   setDrawerOpen?: (open: boolean) => void;
   token: string;
 };
@@ -98,6 +99,7 @@ const MapComponent = (props: MapComponentProps) => {
     onMapMove,
     onMouseMove,
     onTokenExpired,
+    overlay,
     setDrawerOpen,
     token,
   } = props;
@@ -242,6 +244,7 @@ const MapComponent = (props: MapComponentProps) => {
       hideBorder={hideBorder}
       legend={legends && <MapLegend legendKey={legendKey} legends={legends} />}
       map={map}
+      overlay={overlay}
       style={containerStyle}
     />
   );

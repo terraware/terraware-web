@@ -230,20 +230,33 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     return [strataData, substrataBoundaries];
   }, [mode, selectedStratum, site.id, siteSubstratumKeys, strata, strataLayerStyle, substrata, substrataLayerStyle]);
 
+  const selectedStratumText = useMemo(
+    () =>
+      strings.formatString(
+        strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
+        strata?.features?.find((feature) => feature.id === selectedStratum)?.properties?.name ?? ''
+      ) as string,
+    [selectedStratum, strata]
+  );
+
   const description = useMemo<Description[]>(() => {
     if (!activeLocale) {
       return [];
     }
 
     return [
+      { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION },
       {
-        text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) =>
-          strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+        startsSection: true,
+        text: strings.formatString(
+          strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_INSTRUCTIONS,
+          <MapIcon centerAligned={true} icon='slice' />
+        ) as JSX.Element[],
       },
+      { isBold: true, startsSection: true, text: selectedStratumText },
+      { text: strings.SITE_SUBSTRATUM_BOUNDARIES_TUTORIAL, hasTutorial: true },
     ];
-  }, [activeLocale]);
+  }, [activeLocale, selectedStratumText]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -434,10 +447,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
     />,
     <Typography fontSize='14px' fontWeight={600} lineHeight='20px' color={theme.palette.TwClrTxt}>
-      {strings.formatString(
-        strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
-        strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
-      )}
+      {selectedStratumText}
     </Typography>
   );
 

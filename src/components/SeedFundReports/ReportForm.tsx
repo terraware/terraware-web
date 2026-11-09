@@ -248,10 +248,10 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           {strings.SEED_BANKS}
         </Typography>
       </Grid>
-      <Grid container>
+      <Grid container size={12}>
         {reportSeedBanks ? (
           reportSeedBanks.map((seedbank, index) => (
-            <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
+            <Grid key={index} container spacing={theme.spacing(3)} margin={0} size={12}>
               {index !== 0 && <Grid sx={sectionStyles} size={12} />}
               <Grid size={12}>
                 {LocationCheckbox(seedbank.name, seedbank.selected, `seedbank-${index}`, index, 'seedBanks')}
@@ -282,10 +282,10 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           {strings.NURSERIES}
         </Typography>
       </Grid>
-      <Grid container>
+      <Grid container size={12}>
         {reportNurseries ? (
           reportNurseries.map((nursery, index) => (
-            <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
+            <Grid key={index} container spacing={theme.spacing(3)} margin={0} size={12}>
               {index !== 0 && <Grid sx={sectionStyles} size={12} />}
               <Grid size={12}>
                 {LocationCheckbox(nursery.name, nursery.selected, `nursery-${index}`, index, 'nurseries')}
@@ -317,10 +317,10 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
           {strings.PLANTING_SITES}
         </Typography>
       </Grid>
-      <Grid container>
+      <Grid container size={12}>
         {reportPlantingSites ? (
           reportPlantingSites.map((plantingSite, index) => (
-            <Grid key={index} container spacing={theme.spacing(3)} margin={0}>
+            <Grid key={index} container spacing={theme.spacing(3)} margin={0} size={12}>
               {index !== 0 && <Grid sx={sectionStyles} size={12} />}
               <Grid size={12}>
                 {LocationCheckbox(

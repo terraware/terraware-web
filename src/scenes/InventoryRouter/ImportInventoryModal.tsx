@@ -2,7 +2,6 @@ import React, { type JSX, useMemo, useState } from 'react';
 
 import { useInventoryImport } from 'src/hooks/batches/useInventoryImport';
 import { useOrganization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import useForm from 'src/utils/useForm';
@@ -49,11 +48,11 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       onClose={onCloseHandler}
       open={open}
       title={strings.IMPORT_INVENTORY}
-      resolveApi={SpeciesService.resolveSpeciesUpload}
       uploaderTitle={strings.IMPORT_INVENTORY}
       uploaderDescription={strings.IMPORT_INVENTORY_DESC}
       uploadApi={uploadInventory}
       templateApi={getInventoryTemplate}
+      templateFilename={strings.TEMPLATE_FILENAME_SEEDLINGS}
       statusApi={getInventoryUploadStatus}
       importCompleteLabel={strings.INVENTORY_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_INVENTORY}

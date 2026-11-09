@@ -32,6 +32,7 @@ const makePlantingSitesById: () => Record<number, PlantingSitePayload> = () => (
         name: 'stratum',
         numPermanentPlots: 2,
         numTemporaryPlots: 1,
+        plotCounts: [{ numPermanentPlots: 2, numTemporaryPlots: 1, observationType: 'Monitoring' }],
         substrata: [
           {
             areaHa: 15,

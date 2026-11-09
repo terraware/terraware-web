@@ -7,10 +7,11 @@ import ActivityMediaForm, {
   ExistingActivityMediaItem,
 } from 'src/components/ActivityLog/ActivityMediaForm';
 import strings from 'src/strings';
-import { renderWithProviders } from 'src/test-utils';
+import { mockImage, renderWithProviders } from 'src/test-utils';
 import { ActivityMediaFile } from 'src/types/Activity';
 
 const ACTIVITY_ID = 42;
+const MEDIA_URL = `/api/v1/accelerator/activities/${ACTIVITY_ID}/media/:fileId`;
 
 const fileInput = (container: HTMLElement): HTMLInputElement =>
   container.querySelector('input[type="file"]') as HTMLInputElement;
@@ -92,6 +93,7 @@ describe('ActivityMediaForm', () => {
   });
 
   it('marks an existing media item as deleted when its delete control is clicked', async () => {
+    mockImage(MEDIA_URL);
     let latestItems: ActivityMediaItem[] = [];
     const { user } = renderWithProviders(
       <Harness initialItems={[buildExistingMediaItem()]} onItemsChange={(items) => (latestItems = items)} />

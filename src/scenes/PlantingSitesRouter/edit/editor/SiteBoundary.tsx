@@ -34,6 +34,7 @@ import { boundingAreaHectares, createDefaultStrata, findErrors } from './utils';
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
+  onHasBoundaryChange?: (hasBoundary: boolean) => void;
   site: EditorPlantingSite;
 };
 
@@ -72,7 +73,12 @@ type Stack = {
 const editedBoundarySource = (previous?: BoundarySource): BoundarySource =>
   previous === 'uploaded' || previous === 'uploaded_edited' ? 'uploaded_edited' : 'drawn';
 
-export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({
+  onValidate,
+  onDirtyChange,
+  onHasBoundaryChange,
+  site,
+}: SiteBoundaryProps): JSX.Element {
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
     // drafts saved before the source was recorded could only have drawn boundaries
     boundarySource: site.boundary ? (site.boundarySource ?? 'drawn') : undefined,
@@ -134,6 +140,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const boundarySource = boundary ? siteBoundaryData?.boundarySource : undefined;
 
   useEffect(() => {
+    onHasBoundaryChange?.(!!boundary);
+  }, [boundary, onHasBoundaryChange]);
+
+  useEffect(() => {
     if (onValidate) {
       if ((!boundary && !onValidate.allowIncomplete) || errorAnnotations?.length) {
         snackbar.toastError(
@@ -177,39 +187,30 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       return [];
     }
 
-    if (uploadedFile) {
-      return [
-        {
-          text: strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION,
-          hasTutorial: true,
-          handlePrefix: (prefix: string) =>
-            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
-        },
-        { text: strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT },
-      ];
-    }
+    const tutorial: Description = { text: strings.SITE_BOUNDARY_TUTORIAL, hasTutorial: true };
 
-    if (activeMethod === 'draw') {
+    if (uploadedFile || activeMethod === 'draw') {
+      const instructions = uploadedFile
+        ? strings.SITE_BOUNDARY_UPLOADED_INSTRUCTIONS
+        : strings.SITE_BOUNDARY_DRAWING_INSTRUCTIONS;
       return [
+        { text: strings.SITE_BOUNDARY_DESCRIPTION },
         {
-          text: strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
-          hasTutorial: true,
-          handlePrefix: (prefix: string) =>
-            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
+          startsSection: true,
+          text: strings.formatString(
+            `${instructions} ${strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT}`,
+            <MapIcon centerAligned={true} icon='polygon' />
+          ) as JSX.Element[],
         },
-        { text: strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT },
+        tutorial,
       ];
     }
 
     const sentences =
       site.siteType === 'Detailed'
-        ? [strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_TUTORIAL]
-        : [
-            strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION,
-            strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,
-            strings.SITE_BOUNDARY_UPLOAD_TUTORIAL,
-          ];
-    return [{ text: sentences.join(' '), hasTutorial: true }];
+        ? [strings.SITE_BOUNDARY_DESCRIPTION]
+        : [strings.SITE_BOUNDARY_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE];
+    return [{ text: sentences.join(' ') }, tutorial];
   }, [activeLocale, activeMethod, site.siteType, uploadedFile]);
 
   const tutorialDescription = useMemo(() => {

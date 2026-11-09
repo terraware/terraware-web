@@ -6,6 +6,7 @@ import Cookies from 'cookies-js';
 import MainPaper from 'src/components/MainPaper';
 import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
+import SummaryPaper from 'src/components/common/SummaryPaper';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
@@ -14,7 +15,6 @@ import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import AccessionByStatus from 'src/scenes/SeedsDashboard/AccessionByStatus';
-import SummaryPaper from 'src/scenes/SeedsDashboard/SummaryPaper';
 import strings from 'src/strings';
 import { AccessionState, stateName } from 'src/types/Accession';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -66,7 +66,7 @@ export default function SeedSummary(): JSX.Element {
   return (
     <TfMain>
       <PageHeader page={strings.SEEDS_DASHBOARD} parentPage={strings.SEEDS} snackbarPageKey={'seeds'} />
-      <Container maxWidth={false} sx={{ padding: 0 }}>
+      <Container maxWidth={false} disableGutters>
         {selectedOrganization && seedBankSummary ? (
           <Grid container spacing={3}>
             {isEmptyState === true && (

@@ -1,25 +1,19 @@
-import React, { useMemo } from 'react';
-import { useParams } from 'react-router';
+import React from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 
 import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
+import useBiomassPlot from './useBiomassPlot';
 
 const WoodySpeciesTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
+  const { monitoringPlot, observationId } = useBiomassPlot();
 
   return (
     <Card radius='24px'>

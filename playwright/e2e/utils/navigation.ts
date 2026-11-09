@@ -1,6 +1,6 @@
 import type { Page } from 'playwright-core';
 
-import { waitFor } from './utils';
+import { selectOrg, waitFor } from './utils';
 
 export const navigateToProjectProfile = async (projectDealName: string, page: Page) => {
   await page.goto('/');
@@ -23,6 +23,27 @@ export const navigateToFundingEntities = async (page: Page) => {
   await waitFor(page, '#acceleratorConsoleButton');
   await page.getByRole('link', { name: 'Accelerator Console' }).click();
   await page.getByRole('button', { name: 'Funding Entities' }).click();
+};
+
+export const navigateToAcceleratorActivityLog = async (page: Page) => {
+  await page.goto('/');
+  await waitFor(page, '#acceleratorConsoleButton');
+  await page.getByRole('link', { name: 'Accelerator Console' }).click();
+  await page.locator('#activity-log').click();
+  await waitFor(page, '#projectId');
+};
+
+export const navigateToActivityLog = async (page: Page, orgName: string) => {
+  await page.goto('/');
+  await waitFor(page, '#home');
+  await selectOrg(page, orgName);
+  await page.locator('#activity-log').click();
+  await waitFor(page, '#projectId');
+};
+
+export const navigateToFunderProjectTab = async (page: Page, tabName: string) => {
+  await page.goto('/');
+  await page.getByRole('tab', { name: tabName }).click();
 };
 
 export const navigateToPeople = async (page: Page) => {

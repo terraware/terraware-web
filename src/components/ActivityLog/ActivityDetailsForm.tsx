@@ -64,6 +64,7 @@ import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
 import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
+import useCanUpdateActivityObservation from './useCanUpdateActivityObservation';
 import useSyncActivityMedia from './useSyncActivityMedia';
 
 const MAX_FILE_SIZE_GB = 5;
@@ -151,6 +152,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { data: observationResultsData } = useGetObservationResultsQuery(
     { observationId: activity?.payload.observation?.observationId as number },
     { skip: !activity?.payload.observation?.observationId }
+  );
+
+  const { canUpdate: canUpdateObservation, isResolved: isObservationOrgResolved } = useCanUpdateActivityObservation(
+    activity?.payload.observation?.observationId
   );
 
   const obsSpecies = useMemo(
@@ -257,6 +262,11 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [query, location, navigate]);
 
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
+
+  const isObservationEditBlocked = useMemo(
+    () => isEditing && isObsActivity && !canUpdateObservation,
+    [canUpdateObservation, isEditing, isObsActivity]
+  );
 
   const selectedAcceleratorProject = useMemo(() => {
     return acceleratorProjects.find((p) => p.projectId === projectId);
@@ -402,6 +412,11 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [isObsActivity, mediaItems, record, scrollToElementById]);
 
   const saveActivity = useCallback(async () => {
+    if (isObservationEditBlocked) {
+      snackbar.toastError(strings.EDIT_OBSERVATION_ACTIVITY_NOT_ALLOWED);
+      return;
+    }
+
     if (!validateForm()) {
       setValidateFields(true);
       scrollToFirstError();
@@ -470,10 +485,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     isAcceleratorRoute,
     isEditing,
     isObsActivity,
+    isObservationEditBlocked,
     projectId,
     record,
     scrollToFirstError,
     snackbar,
+    strings.EDIT_OBSERVATION_ACTIVITY_NOT_ALLOWED,
     strings.GENERIC_ERROR,
     syncMediaFiles,
     updateActivity,
@@ -503,6 +520,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
     }
   }, [adminGetError, getError, snackbar, strings.GENERIC_ERROR]);
+
+  useEffect(() => {
+    if (isObservationEditBlocked && isObservationOrgResolved) {
+      snackbar.toastError(strings.EDIT_OBSERVATION_ACTIVITY_NOT_ALLOWED);
+      navToActivityLog();
+    }
+  }, [isObservationEditBlocked, isObservationOrgResolved, navToActivityLog, snackbar, strings]);
 
   // reset record with fetched activity data when editing
   useEffect(() => {
@@ -704,7 +728,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     </Box>
   );
 
-  if (!record) {
+  if (isObservationEditBlocked || !record) {
     return <></>;
   }
 

@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
@@ -14,11 +13,11 @@ import useQuery from 'src/utils/useQuery';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import PlantingSiteTypeSelect from '../edit/PlantingSiteTypeSelect';
+import { PLANTING_SITES_TABS } from '../plantingSitesListTabs';
 import PlantingSitesListTab from './PlantingSitesListTab';
 
 const PlantingSitesList = () => {
   const { strings } = useLocalization();
-  const { isMobile } = useDeviceInfo();
   const query = useQuery();
   const { selectedOrganization } = useOrganization();
   const [plantingSiteTypeSelectOpen, setPlantingSiteTypeSelectOpen] = useState(false);
@@ -50,12 +49,12 @@ const PlantingSitesList = () => {
 
     return [
       {
-        id: 'plantingSites',
+        id: PLANTING_SITES_TABS.active,
         label: strings.PLANTING_SITES,
         children: <PlantingSitesListTab isDraft={false} />,
       },
       {
-        id: 'draftPlantingSites',
+        id: PLANTING_SITES_TABS.drafts,
         label: strings.DRAFT_PLANTING_SITES,
         children: <PlantingSitesListTab isDraft />,
       },
@@ -63,28 +62,23 @@ const PlantingSitesList = () => {
   }, [canViewDrafts, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
-    defaultTab: 'plantingSites',
+    defaultTab: PLANTING_SITES_TABS.active,
     tabs,
     viewIdentifier: 'planting-sites',
   });
 
-  const rightComponent = useMemo(() => {
-    if (isMobile) {
-      return (
-        <Button id='new-planting-site' icon='plus' onClick={() => setPlantingSiteTypeSelectOpen(true)} size='medium' />
-      );
-    } else {
-      return (
-        <Button
-          id='new-planting-site'
-          icon='plus'
-          label={strings.ADD_PLANTING_SITE}
-          onClick={() => setPlantingSiteTypeSelectOpen(true)}
-          size='medium'
-        />
-      );
-    }
-  }, [isMobile, strings]);
+  const rightComponent = useMemo(
+    () => (
+      <Button
+        id='new-planting-site'
+        icon='plus'
+        label={strings.ADD_PLANTING_SITE}
+        onClick={() => setPlantingSiteTypeSelectOpen(true)}
+        size='medium'
+      />
+    ),
+    [strings]
+  );
 
   const isLoading = useMemo(() => {
     return sitesCountLoading || (canViewDrafts && draftSitesCountLoading);

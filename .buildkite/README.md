@@ -51,6 +51,8 @@ https://buildkite.com/docs/pipelines/configure/managing-log-output
 ## Vercel previews
 
 Previews are opt-in: add the "Vercel preview" label to the pull request, then re-run the build.
+The deploy step reports the branch preview URL, commit, and deployment time in a "Vercel preview"
+GitHub check on the pull request.
 
 ## Caching and artifacts
 
@@ -72,6 +74,17 @@ branch, we "promote" the caches to the pipeline level so they'll be available in
 
 Artifacts are per-job; we use them to pass data between steps. For example, the `dist` directory
 gets bundled up in a compressed tarfile so it can be downloaded by later steps.
+
+## Skipping CI for passing trees
+
+Passing non-main builds save their git tree hash to the branch-level cache. Each branch has one
+cache entry, overwritten by each passing build, so only that branch's most recent passing tree
+counts. The first step of a later build restores the record; if a push build's tree matches, such
+as after squashing a PR's commits without changing its contents, it annotates the build and
+replaces the rest of the pipeline with an empty one.
+
+Main and tag builds, rebuilds, and manually started builds run in full. Rebasing onto a newer
+main changes the tree hash, so CI runs normally.
 
 ## Build environment
 

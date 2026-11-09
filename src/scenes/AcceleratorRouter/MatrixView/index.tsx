@@ -14,37 +14,36 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { BusySpinner, Icon } from '@terraware/web-components';
+import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
   MRT_Cell,
   MRT_Column,
-  MRT_ColumnDef,
   MRT_Row,
   MRT_TableInstance,
+  MRT_TableOptions,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
-  MaterialReactTable,
-  useMaterialReactTable,
 } from 'material-react-table';
 
 import Page from 'src/components/Page';
+import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
-import Dropdown from 'src/components/common/Dropdown';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
+import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
 import { useListVariablesQuery } from 'src/queries/generated/documentProducerVariables';
-import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
 import {
   ProjectsWithVariablesSearchResult,
-  requestGetProjectsWithVariables,
-} from 'src/redux/features/matrixView/matrixViewThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  useLazySearchProjectsWithVariablesQuery,
+} from 'src/queries/search/projectsWithVariables';
 import { SearchNodePayload } from 'src/types/Search';
+import { TABLES } from 'src/types/Tables';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 import {
   NewNonSectionValuePayloadUnion,
@@ -59,22 +58,19 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
 
-const STORAGE_KEYS = {
-  SELECTED_COLUMNS: 'matrixView_selectedColumns',
-  COLUMN_ORDER: 'matrixView_columnOrder',
-  COLUMN_VISIBILITY: 'matrixView_columnVisibility',
-  COLUMN_FILTERS: 'matrixView_columnFilters',
-  SORTING: 'matrixView_sorting',
-  COLUMN_PINNING: 'matrixView_columnPinning',
-};
+const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
-type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
+type ViewOption = typeof DEFAULT_VIEW | 'acceleratorProjects' | 'applicants';
+
+type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
+type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
+
+const isEmptyFilterValue = (value: unknown) => value === undefined || value === null || value === '';
 
 const MatrixView = () => {
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectProjectsWithVariables(requestId));
+  const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
+  const projects = useMemo(() => projectsData ?? [], [projectsData]);
   const { currentData: allVariablesData } = useListVariablesQuery({});
-  const [projects, setProjects] = useState<ProjectsWithVariablesSearchResult[]>([]);
   const [showColumnsModal, setShowColumnsModal] = useState(false);
   const allVariables = useMemo<VariableUnion[] | undefined>(
     () => allVariablesData?.variables.filter((v) => v.type !== 'Table' && v.type !== 'Image'),
@@ -84,62 +80,31 @@ const MatrixView = () => {
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
+  const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
-  const [globalFilter, setGlobalFilter] = useState('');
-
-  const [columnFilters, setColumnFilters] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_FILTERS) || '[]');
-    } catch {
-      return [];
-    }
+  const {
+    columnFilters,
+    columnOrder,
+    columnPinning,
+    columnVisibility: savedColumnVisibility,
+    globalFilter,
+    setColumnFilters,
+    setColumnOrder,
+    setColumnPinning,
+    setColumnVisibility,
+    setGlobalFilter,
+    setSorting,
+    sorting,
+  } = useTableState(TABLES.matrixView, {
+    defaultColumnPinning: DEFAULT_COLUMN_PINNING,
+    persistColumnPinning: true,
+    persistFilters: true,
+    persistGlobalFilter: true,
+    persistSorting: true,
   });
-
-  const [sorting, setSorting] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.SORTING) || '[]');
-    } catch {
-      return [];
-    }
-  });
-
-  const [columnPinning, setColumnPinning] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_PINNING) || '{"left": ["projectName"], "right": []}');
-    } catch {
-      return { left: ['projectName'], right: [] };
-    }
-  });
-
-  const [columnOrder, setColumnOrder] = useState(() => {
-    try {
-      const savedOrder = JSON.parse(localStorage.getItem(STORAGE_KEYS.COLUMN_ORDER) || '[]');
-      return Array.isArray(savedOrder) ? savedOrder : [];
-    } catch {
-      return [];
-    }
-  });
-
-  // Save to localStorage when state changes
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.COLUMN_FILTERS, columnFilters);
-  }, [columnFilters]);
-
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.SORTING, sorting);
-  }, [sorting]);
-
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.COLUMN_PINNING, columnPinning);
-  }, [columnPinning]);
-
-  useEffect(() => {
-    saveToLocalStorage(STORAGE_KEYS.COLUMN_ORDER, columnOrder);
-  }, [columnOrder]);
 
   const uniqueVariableIds = useMemo(
     () =>
@@ -151,6 +116,29 @@ const MatrixView = () => {
         )
       ),
     [allVariables]
+  );
+
+  const defaultViewSettings = useMemo(
+    () => ({
+      columnPinning: DEFAULT_COLUMN_PINNING,
+      columnVisibility: Object.fromEntries(uniqueVariableIds.map((id) => [id, false])),
+    }),
+    [uniqueVariableIds]
+  );
+
+  const columnVisibility = useMemo(
+    () => ({ ...defaultViewSettings.columnVisibility, ...savedColumnVisibility }),
+    [defaultViewSettings, savedColumnVisibility]
+  );
+
+  const visibleVariableIds = useMemo(
+    () => uniqueVariableIds.filter((id) => columnVisibility[id]),
+    [columnVisibility, uniqueVariableIds]
+  );
+
+  const visibleColumnFilters = useMemo(
+    () => columnFilters.filter((filter) => columnVisibility[filter.id] !== false),
+    [columnFilters, columnVisibility]
   );
 
   const variableNameMap = useMemo(() => {
@@ -247,8 +235,8 @@ const MatrixView = () => {
     [updateProjectVariableValues]
   );
 
-  const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
-    const baseNonVariableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = [
+  const matrixColumns = useMemo<MatrixColumn[]>(() => {
+    const baseNonVariableColumns: MatrixColumn[] = [
       {
         accessorKey: 'acceleratorDetails_dealName',
         header: strings.DEAL_NAME,
@@ -271,31 +259,7 @@ const MatrixView = () => {
             </Link>
           );
         },
-        muiTableBodyCellProps: ({
-          cell,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          return {
-            sx: {
-              maxWidth: '150px',
-              '& a': {
-                display: '-webkit-box',
-                WebkitLineClamp: 3,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-                textOverflow: 'ellipsis',
-                lineHeight: '1.2em',
-                maxHeight: '5.4em',
-                whiteSpace: 'normal',
-              },
-            },
-            title: cell.getValue()?.toString() || '',
-          };
-        },
+        filterVariant: 'text',
       },
       {
         accessorKey: 'phase',
@@ -303,6 +267,7 @@ const MatrixView = () => {
         size: 200,
         id: 'phase',
         enableEditing: false,
+        filterVariant: 'text',
       },
       {
         accessorKey: 'acceleratorDetails_confirmedReforestableLand(raw)',
@@ -316,6 +281,7 @@ const MatrixView = () => {
           if (cell.getValue() !== undefined) {
             return <FormattedNumber value={cell.getValue<number>()} />;
           }
+          return null;
         },
       },
       {
@@ -328,11 +294,11 @@ const MatrixView = () => {
         filterSelectOptions: countries.map((country) => country.name || ''),
       },
       {
-        accessorKey: 'internalUsers.user_firstName',
         header: strings.PROJECT_LEAD,
         size: 200,
         id: 'projectLead',
         enableEditing: false,
+        filterVariant: 'text',
         accessorFn: (row) =>
           row.internalUsers && row.internalUsers.length > 0 && row.internalUsers[0].user_firstName
             ? `${row.internalUsers[0].user_firstName} ${row.internalUsers[0].user_lastName}`
@@ -340,14 +306,12 @@ const MatrixView = () => {
       },
     ];
 
-    const variableColumns: MRT_ColumnDef<ProjectsWithVariablesSearchResult>[] = uniqueVariableIds.map((variableId) => {
+    const variableColumns: MatrixColumn[] = uniqueVariableIds.map((variableId) => {
       const selectedVariable = allVariables?.find((va) => va.stableId === variableId);
       const correspondingVariable = projects?.flatMap((p) => p.variables || []).find((v) => v.stableId === variableId);
       const correspondingValue = correspondingVariable?.values?.[0];
-      let Edit: any;
-      let Cell: any;
-      let editVariant: 'text' | 'select' = 'text';
-      let editSelectOptions: { label: string; value: string }[] | undefined;
+      let Edit: CustomEditComponent;
+      let Cell: MatrixColumn['Cell'];
       let filterFunction: 'between' | 'fuzzy' | 'arrIncludesSome' = 'fuzzy';
       let filterVariant: 'text' | 'multi-select' | 'range' | 'date-range' = 'text';
 
@@ -388,10 +352,12 @@ const MatrixView = () => {
             />
           );
         };
+        // eslint-disable-next-line react/display-name
         Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
           if (cell.getValue() && cell.getValue() instanceof Date) {
-            return cell.getValue<Date>().toLocaleDateString();
+            return <>{cell.getValue<Date>().toLocaleDateString()}</>;
           }
+          return null;
         };
       }
 
@@ -607,8 +573,6 @@ const MatrixView = () => {
             );
           };
         } else {
-          editVariant = 'select';
-          editSelectOptions = getSelectOptions();
           // eslint-disable-next-line react/display-name
           Edit = ({
             cell,
@@ -766,10 +730,18 @@ const MatrixView = () => {
         id: variableId,
         header: variableNameMap.get(variableId) || variableId,
         size: 150,
-        editVariant,
-        editSelectOptions,
         enableEditing: isAllowedEditMatrixView,
-        Edit,
+        editConfig: Edit
+          ? { editVariant: 'custom', customEditComponent: Edit }
+          : {
+              onSave: (row, newValue) => {
+                const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
+                const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
+                if (variableToProcess) {
+                  onSaveHandler(row.id, newValue, variableToProcess);
+                }
+              },
+            },
         filterVariant,
         filterSelectOptions,
         filterFn: filterFunction,
@@ -800,24 +772,6 @@ const MatrixView = () => {
           return '';
         },
         Cell,
-        // Handle saving the edited value
-        muiEditTextFieldProps: ({
-          row,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => ({
-          onBlur: (event) => {
-            const newValue = event.target.value;
-            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-            const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-            if (variableToProcess) {
-              onSaveHandler(row.original.id, newValue, variableToProcess);
-            }
-          },
-        }),
       };
     });
 
@@ -833,168 +787,25 @@ const MatrixView = () => {
     variableNameMap,
   ]);
 
-  useEffect(() => {
-    if (result?.status === 'success' && result?.data) {
-      setProjects(result.data);
-      setLoading(false);
-    }
-    if (result?.status === 'error') {
-      setLoading(false);
-    }
-  }, [result]);
-
   const onColumnsClickHandler = useCallback(() => {
     setShowColumnsModal(true);
   }, []);
 
   const columnFiltersAreEmpty = useMemo(
     () =>
-      columnFilters.length === 0 ||
-      columnFilters.every(
-        (filter: any) =>
-          filter.value === undefined ||
-          filter.value === '' ||
-          (Array.isArray(filter.value) && filter.value.every((val: any) => val === undefined || val === ''))
+      visibleColumnFilters.length === 0 ||
+      visibleColumnFilters.every(
+        (filter) =>
+          isEmptyFilterValue(filter.value) || (Array.isArray(filter.value) && filter.value.every(isEmptyFilterValue))
       ),
-    [columnFilters]
+    [visibleColumnFilters]
   );
 
   const onCurrentViewChange = useCallback((value: string) => setCurrentView(value as ViewOption), []);
 
-  const saveToLocalStorage = (key: string, value: any) => {
-    localStorage.setItem(key, JSON.stringify(value));
-  };
-
-  const dataForMaterialReactTable = useMaterialReactTable({
-    columns: columnsMRT,
-    data: projects || [],
-    enableColumnOrdering: true,
-    enableColumnPinning: true,
-    enableEditing: true,
-    renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
-      // remove the last element (show all columns)
-      const columnMenuItemsCopy = [...internalColumnMenuItems];
-      void columnMenuItemsCopy.pop();
-      return columnMenuItemsCopy;
-    },
-    editDisplayMode: 'cell',
-    renderToolbarInternalActions: ({ table }) => (
-      <Box>
-        <MRT_ToggleFiltersButton table={table} />
-        <Tooltip title={strings.MANAGE_COLUMNS}>
-          <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
-            <Icon name='iconColumns' />
-          </IconButton>
-        </Tooltip>
-        <MRT_ToggleDensePaddingButton table={table} />
-        <MRT_ToggleFullScreenButton table={table} />
-      </Box>
-    ),
-    renderTopToolbarCustomActions: () => {
-      return (
-        <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid style={{ width: '242px' }}>
-            <Dropdown
-              id={'current-view'}
-              label={strings.CURRENT_VIEW}
-              onChange={onCurrentViewChange}
-              values={[
-                { label: '--', value: 'noFilter' },
-                { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
-                { label: strings.APPLICANTS, value: 'applicants' },
-              ]}
-              selected={currentView}
-            />
-          </Grid>
-
-          {(!columnFiltersAreEmpty || !!globalFilter) && (
-            <Grid style={{ display: 'flex', alignItems: 'center' }}>
-              <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
-                {strings.FILTERS_APPLIED.toUpperCase()}
-              </Typography>
-            </Grid>
-          )}
-        </Grid>
-      );
-    },
-    state: {
-      columnFilters,
-      sorting,
-      columnPinning,
-      columnOrder,
-      globalFilter,
-      showGlobalFilter: true,
-    },
-    onGlobalFilterChange: setGlobalFilter,
-    onColumnFiltersChange: setColumnFilters,
-    onSortingChange: setSorting,
-    onColumnPinningChange: setColumnPinning,
-    onColumnOrderChange: setColumnOrder,
-    muiTableBodyProps: {
-      sx: {
-        '& tr:nth-of-type(odd) > td': {
-          backgroundColor: theme.palette.TwClrBaseGray025,
-        },
-      },
-    },
-    muiTablePaperProps: {
-      elevation: 0,
-    },
-    muiTableBodyRowProps: {
-      sx: {
-        '& td': {
-          borderBottom: 'none',
-        },
-      },
-    },
-    muiTableBodyCellProps: {
-      sx: {
-        '&[data-pinned="true"]:before': {
-          backgroundColor: 'transparent !important',
-        },
-        '&[data-pinned="true"]': {
-          filter: 'brightness(0.97)',
-          boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
-          zIndex: 1,
-        },
-      },
-    },
-    muiTableProps: {
-      sx: {
-        tableLayout: 'fixed',
-      },
-    },
-    muiTableHeadCellProps: ({ column }) => ({
-      sx: {
-        height: '56px',
-        maxWidth: '200px',
-        padding: '8px',
-        '&.MuiTableCell-head': {
-          height: '56px !important',
-        },
-        '&.MuiTableCell-head .Mui-TableHeadCell-Content-Wrapper': {
-          display: '-webkit-box',
-          WebkitLineClamp: 3,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          lineHeight: '1.2em',
-          maxHeight: '3.4em',
-          whiteSpace: 'normal',
-        },
-      },
-      title: column.columnDef.header,
-    }),
-  });
-
   const reloadTable = useCallback(() => {
-    const visibleColumnIds = dataForMaterialReactTable
-      .getVisibleFlatColumns()
-      .filter((col) => !isNaN(Number(col.id)))
-      .map((col) => col.id);
-
     let search: SearchNodePayload | undefined;
-    if (currentView === 'noFilter') {
+    if (currentView === DEFAULT_VIEW) {
       search = {
         operation: 'or',
         children: [
@@ -1058,65 +869,60 @@ const MatrixView = () => {
       };
     }
 
-    const request = dispatch(
-      requestGetProjectsWithVariables({
-        fields: [
-          'id',
-          'acceleratorDetails_dealName',
-          'phase',
-          'application_id',
-          'acceleratorDetails_confirmedReforestableLand(raw)',
-          'country_name',
-          'internalUsers.role',
-          'internalUsers.user_firstName',
-          'internalUsers.user_lastName',
-          'variables.stableId',
-          'variables.id',
-          'variables.variableName',
-          'variables.type',
-          'variables.isList',
-          'variables.isMultiSelect',
-          'variables.values.textValue',
-          'variables.values.numberValue(raw)',
-          'variables.values.linkUrl',
-          'variables.values.dateValue',
-          'variables.values.options.name',
-          'variables.values.options.position',
-        ],
-        sortOrder: {
-          field: 'acceleratorDetails_dealName',
-          direction: 'Ascending',
+    return searchProjectsWithVariables({
+      fields: [
+        'id',
+        'acceleratorDetails_dealName',
+        'phase',
+        'application_id',
+        'acceleratorDetails_confirmedReforestableLand(raw)',
+        'country_name',
+        'internalUsers.role',
+        'internalUsers.user_firstName',
+        'internalUsers.user_lastName',
+        'variables.stableId',
+        'variables.id',
+        'variables.variableName',
+        'variables.type',
+        'variables.isList',
+        'variables.isMultiSelect',
+        'variables.values.textValue',
+        'variables.values.numberValue(raw)',
+        'variables.values.linkUrl',
+        'variables.values.dateValue',
+        'variables.values.options.name',
+        'variables.values.options.position',
+      ],
+      sortOrder: {
+        field: 'acceleratorDetails_dealName',
+        direction: 'Ascending',
+      },
+      search,
+      filters: [
+        {
+          prefix: 'variables',
+          search: {
+            field: 'stableId',
+            operation: 'field',
+            type: 'Exact',
+            values: visibleVariableIds.length > 0 ? visibleVariableIds : [''],
+          },
         },
-        search,
-        filters: [
-          {
-            prefix: 'variables',
-            search: {
-              field: 'stableId',
-              operation: 'field',
-              type: 'Exact',
-              values: visibleColumnIds.length > 0 ? visibleColumnIds : [''],
-            },
+        {
+          prefix: 'internalUsers',
+          search: {
+            operation: 'field',
+            field: 'role',
+            values: ['Project Lead'],
           },
-          {
-            prefix: 'internalUsers',
-            search: {
-              operation: 'field',
-              field: 'role',
-              values: ['Project Lead'],
-            },
-          },
-        ],
-      })
-    );
-    setRequestId(request.requestId);
-    // disable exhaustive-deps because of the complex expression
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility, currentView]);
+        },
+      ],
+    });
+  }, [currentView, searchProjectsWithVariables, visibleVariableIds]);
 
   useEffect(() => {
     if (updateVariableValuesResult.isSuccess) {
-      reloadTable();
+      void reloadTable().then(() => setLoading(false));
     }
     if (updateVariableValuesResult.isError) {
       snackbar.toastError();
@@ -1125,47 +931,8 @@ const MatrixView = () => {
   }, [reloadTable, snackbar, updateVariableValuesResult.isError, updateVariableValuesResult.isSuccess]);
 
   useEffect(() => {
-    reloadTable();
-  }, [dispatch, reloadTable]);
-
-  useEffect(() => {
-    const loadSavedColumnState = () => {
-      const savedColumns = localStorage.getItem('selectedColumns');
-      if (savedColumns) {
-        const parsedColumns = JSON.parse(savedColumns);
-        if (Array.isArray(parsedColumns) && parsedColumns.length > 0) {
-          // Apply saved column visibility
-          const columnVisibility: Record<string, boolean> = {};
-
-          // Hide all columns first
-          uniqueVariableIds?.forEach((id) => {
-            columnVisibility[id] = false;
-          });
-
-          // Show only saved columns
-          parsedColumns.forEach((id) => {
-            columnVisibility[id] = true;
-          });
-
-          dataForMaterialReactTable.setColumnVisibility(columnVisibility);
-        }
-      } else {
-        if (uniqueVariableIds && dataForMaterialReactTable) {
-          const columnVisibility = uniqueVariableIds.reduce((acc: Record<string, boolean>, id) => {
-            acc[id] = false;
-            return acc;
-          }, {});
-
-          dataForMaterialReactTable.setColumnVisibility(columnVisibility);
-        }
-      }
-    };
-
-    // Load after table and data are ready
-    if (dataForMaterialReactTable && uniqueVariableIds) {
-      loadSavedColumnState();
-    }
-  }, [dataForMaterialReactTable, uniqueVariableIds]);
+    void reloadTable();
+  }, [reloadTable]);
 
   const onCloseColumnsModalHandler = useCallback(() => {
     setShowColumnsModal(false);
@@ -1173,58 +940,217 @@ const MatrixView = () => {
 
   const onColumnsSelected = useCallback(
     (columns: string[]) => {
-      const columnVisibility: Record<string, boolean> = {};
+      const selectedVisibility: Record<string, boolean> = {};
 
       baseColumns().forEach((col) => {
         if (col.id !== 'projectName') {
-          columnVisibility[col.id] = false;
+          selectedVisibility[col.id] = false;
         }
       });
 
       uniqueVariableIds?.forEach((id) => {
-        columnVisibility[id] = false;
+        selectedVisibility[id] = false;
       });
 
       columns.forEach((id) => {
-        columnVisibility[id] = true;
+        selectedVisibility[id] = true;
       });
 
-      // Get all hidden column IDs
-      const hiddenColumnIds = Object.entries(columnVisibility)
+      const hiddenColumnIds = Object.entries(selectedVisibility)
         .filter(([, isVisible]) => !isVisible)
         .map(([columnId]) => columnId);
 
-      // Remove filters for all hidden columns in one operation
-      dataForMaterialReactTable.setColumnFilters((prev) =>
-        prev.filter((filter) => !hiddenColumnIds.includes(filter.id))
-      );
-
-      dataForMaterialReactTable.setColumnVisibility((prev) => ({
-        ...prev,
-        ...columnVisibility,
-      }));
+      setColumnFilters((prev) => prev.filter((filter) => !hiddenColumnIds.includes(filter.id)));
+      setColumnVisibility((prev) => ({ ...prev, ...selectedVisibility }));
       setColumnOrder(columns);
-
-      // Save to localStorage
-      localStorage.setItem('selectedColumns', JSON.stringify(columns));
-      reloadTable();
     },
-    [dataForMaterialReactTable, reloadTable, uniqueVariableIds]
+    [setColumnFilters, setColumnOrder, setColumnVisibility, uniqueVariableIds]
+  );
+
+  const renderToolbarInternalActions = useCallback(
+    ({ table }: { table: MRT_TableInstance<ProjectsWithVariablesSearchResult> }) => (
+      <Box>
+        <MRT_ToggleFiltersButton table={table} />
+        <Tooltip title={strings.MANAGE_COLUMNS}>
+          <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
+            <Icon name='iconColumns' />
+          </IconButton>
+        </Tooltip>
+        <MRT_ToggleDensePaddingButton table={table} />
+        <MRT_ToggleFullScreenButton table={table} />
+        {showColumnsModal &&
+          allVariables &&
+          createPortal(
+            <ColumnsModal
+              onClose={onCloseColumnsModalHandler}
+              onSave={onColumnsSelected}
+              allVariables={allVariables}
+              table={table}
+            />,
+            document.body
+          )}
+      </Box>
+    ),
+    [
+      allVariables,
+      onCloseColumnsModalHandler,
+      onColumnsClickHandler,
+      onColumnsSelected,
+      showColumnsModal,
+      strings.MANAGE_COLUMNS,
+    ]
+  );
+
+  const tableOptions = useMemo<Partial<MRT_TableOptions<ProjectsWithVariablesSearchResult>>>(
+    () => ({
+      initialState: { showColumnFilters: false },
+      positionGlobalFilter: 'right',
+      renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
+        // remove the last element (show all columns)
+        const columnMenuItemsCopy = [...internalColumnMenuItems];
+        void columnMenuItemsCopy.pop();
+        return columnMenuItemsCopy;
+      },
+      renderTopToolbarCustomActions: ({ table }) => (
+        <Grid container style={{ maxWidth: '50%' }} spacing={1}>
+          <Grid>
+            <CurrentView
+              defaultPreset={currentView}
+              defaultSettings={defaultViewSettings}
+              onPresetChange={onCurrentViewChange}
+              presetViews={[
+                { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
+                { label: strings.APPLICANTS, value: 'applicants' },
+              ]}
+              table={table}
+              tableDefinition={TABLES.matrixView}
+            />
+          </Grid>
+
+          {!isSavedTableViewsEnabled && (!columnFiltersAreEmpty || !!globalFilter) && (
+            <Grid style={{ display: 'flex', alignItems: 'center' }}>
+              <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
+                {strings.FILTERS_APPLIED.toUpperCase()}
+              </Typography>
+            </Grid>
+          )}
+        </Grid>
+      ),
+      state: {
+        columnFilters: visibleColumnFilters,
+        sorting,
+        columnPinning,
+        columnOrder,
+        columnVisibility,
+        globalFilter,
+        showGlobalFilter: true,
+      },
+      onGlobalFilterChange: setGlobalFilter,
+      onColumnFiltersChange: setColumnFilters,
+      onSortingChange: setSorting,
+      onColumnPinningChange: setColumnPinning,
+      onColumnOrderChange: setColumnOrder,
+      onColumnVisibilityChange: setColumnVisibility,
+      muiTableBodyRowProps: {
+        sx: {
+          '& td': {
+            borderBottom: 'none',
+          },
+        },
+      },
+      muiTableBodyCellProps: ({ cell, column }) => ({
+        sx: {
+          '&[data-pinned="true"]:before': {
+            backgroundColor: 'transparent !important',
+          },
+          '&[data-pinned="true"]': {
+            filter: 'brightness(0.97)',
+            boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
+            zIndex: 1,
+          },
+          ...(column.id === 'projectName' && {
+            maxWidth: '150px',
+            '& a': {
+              display: '-webkit-box',
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              lineHeight: '1.2em',
+              maxHeight: '5.4em',
+              whiteSpace: 'normal',
+            },
+          }),
+        },
+        title: column.id === 'projectName' ? cell.getValue()?.toString() || '' : undefined,
+      }),
+      muiTableProps: {
+        sx: {
+          tableLayout: 'fixed',
+        },
+      },
+      muiTableHeadCellProps: ({ column }) => ({
+        sx: {
+          height: '56px',
+          maxWidth: '200px',
+          padding: '8px',
+          '&.MuiTableCell-head': {
+            height: '56px !important',
+          },
+          '&.MuiTableCell-head .Mui-TableHeadCell-Content-Wrapper': {
+            display: '-webkit-box',
+            WebkitLineClamp: 3,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            lineHeight: '1.2em',
+            maxHeight: '3.4em',
+            whiteSpace: 'normal',
+          },
+        },
+        title: column.columnDef.header,
+      }),
+    }),
+    [
+      columnFiltersAreEmpty,
+      columnOrder,
+      columnPinning,
+      columnVisibility,
+      currentView,
+      defaultViewSettings,
+      globalFilter,
+      isSavedTableViewsEnabled,
+      onCurrentViewChange,
+      setColumnFilters,
+      setColumnOrder,
+      setColumnPinning,
+      setColumnVisibility,
+      setGlobalFilter,
+      setSorting,
+      sorting,
+      strings,
+      theme,
+      visibleColumnFilters,
+    ]
   );
 
   return (
     <Page title={strings.PROJECTS}>
       {loading === true && <BusySpinner />}
-      {showColumnsModal && allVariables && (
-        <ColumnsModal
-          onClose={onCloseColumnsModalHandler}
-          onSave={onColumnsSelected}
-          allVariables={allVariables}
-          table={dataForMaterialReactTable}
-        />
-      )}
       <Card sx={{ borderRadius: '24px', padding: theme.spacing(3), boxShadow: 'none' }}>
-        <MaterialReactTable table={dataForMaterialReactTable} />
+        <EditableTable
+          clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+          columns={matrixColumns}
+          data={projects}
+          enableColumnFilters
+          enableColumnOrdering
+          enableColumnPinning
+          enableEditing
+          enableGlobalFilter
+          renderToolbarInternalActions={renderToolbarInternalActions}
+          sx={{ padding: 0 }}
+          tableOptions={tableOptions}
+        />
       </Card>
     </Page>
   );

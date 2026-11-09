@@ -14,6 +14,7 @@ export type Description = {
   hasTutorial?: boolean;
   isWarning?: boolean;
   isBold?: boolean;
+  startsSection?: boolean;
   text: string | JSX.Element[];
 };
 
@@ -67,7 +68,14 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   };
 
   return (
-    <Box marginBottom={theme.spacing(2)} display='flex' flexDirection='column' minHeight={minHeight}>
+    <Box
+      display='flex'
+      flexDirection='column'
+      gap={theme.spacing(1)}
+      marginBottom={theme.spacing(2)}
+      minHeight={minHeight}
+      paddingTop={theme.spacing(1)}
+    >
       {tutorialDescription && tutorialDocLinkKey && titleWithPrefix && (
         <VideoDialog
           description={tutorialDescription}
@@ -91,6 +99,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           fontWeight={line.isBold ? 600 : 400}
           lineHeight={largeText ? '24px' : '20px'}
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
+          marginTop={line.startsSection ? theme.spacing(1.5) : 0}
           whiteSpace={'line-wrap'}
         >
           {line.hasTutorial ? (
@@ -101,7 +110,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
               onClick={() => setShowModal(true)}
               text={line.text as string}
               key={index}
-              style={{ position: 'relative', bottom: '2px' }}
+              style={line.handlePrefix ? { position: 'relative', bottom: '2px' } : undefined}
             />
           ) : (
             line.text

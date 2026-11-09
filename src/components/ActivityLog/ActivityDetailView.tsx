@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS, APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -36,6 +37,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
+import useCanUpdateActivityObservation from './useCanUpdateActivityObservation';
 
 type ActivityMediaItemProps = {
   activity: TypedActivity;
@@ -258,7 +260,7 @@ const ActivityMediaItem = ({
       sx={{ '&:hover .info-panel': { opacity: 1 } }}
       width='100%'
     >
-      <img
+      <ThumbnailImage
         alt={mediaFile?.caption}
         onClick={onClickMediaItem(mediaFile.fileId)}
         onError={() => {
@@ -356,6 +358,10 @@ const ActivityDetailView = ({
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
+
+  const { canUpdate: canUpdateObservation } = useCanUpdateActivityObservation(
+    activity.payload.observation?.observationId
+  );
 
   const { data: projectData } = useGetProjectQuery(projectId, {
     skip: !isAcceleratorRoute || !isObsActivity,
@@ -541,6 +547,9 @@ const ActivityDetailView = ({
   }, [query]);
 
   const isActivityEditable = useMemo(() => {
+    if (isObsActivity && !canUpdateObservation) {
+      return false;
+    }
     if (activity.type === 'admin') {
       return true;
     } else if (activity.type === 'base') {
@@ -548,7 +557,7 @@ const ActivityDetailView = ({
     } else {
       return false;
     }
-  }, [activity]);
+  }, [activity, canUpdateObservation, isObsActivity]);
 
   const openPublishActivityModal = useCallback(() => {
     setPublishActivityModalOpened(true);

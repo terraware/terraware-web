@@ -1,8 +1,7 @@
 import React, { type JSX } from 'react';
 
-import { SpeciesService } from 'src/services';
+import { useSpeciesImport } from 'src/hooks/species/useSpeciesImport';
 import strings from 'src/strings';
-import { downloadCsv } from 'src/utils/csv';
 
 import ImportModal from '../../components/common/ImportModal';
 
@@ -12,27 +11,22 @@ export type ImportSpeciesModalProps = {
   onError?: (snackbarMessage: string) => void;
 };
 
-export const downloadCsvTemplate = async () => {
-  const apiResponse = await SpeciesService.downloadSpeciesTemplate();
-  if (apiResponse?.template) {
-    downloadCsv('template', apiResponse.template);
-  }
-};
-
 export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.Element {
   const { open, onClose } = props;
+  const { getSpeciesTemplate, uploadSpecies, getSpeciesUploadStatus, resolveSpeciesUpload } = useSpeciesImport();
 
   return (
     <ImportModal
       onClose={onClose}
       open={open}
       title={strings.IMPORT_SPECIES}
-      resolveApi={SpeciesService.resolveSpeciesUpload}
+      resolveApi={resolveSpeciesUpload}
       uploaderTitle={strings.IMPORT_SPECIES_LIST}
       uploaderDescription={strings.IMPORT_SPECIES_LIST_DESC}
-      uploadApi={SpeciesService.uploadSpecies}
-      templateApi={SpeciesService.downloadSpeciesTemplate}
-      statusApi={SpeciesService.getSpeciesUploadStatus}
+      uploadApi={uploadSpecies}
+      templateApi={getSpeciesTemplate}
+      templateFilename={strings.TEMPLATE_FILENAME_SPECIES}
+      statusApi={getSpeciesUploadStatus}
       importCompleteLabel={strings.SPECIES_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_SPECIES}
       duplicatedLabel={strings.DUPLICATED_SPECIES}

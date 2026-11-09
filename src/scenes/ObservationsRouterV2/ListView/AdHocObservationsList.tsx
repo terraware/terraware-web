@@ -13,16 +13,18 @@ import {
 } from 'material-react-table';
 
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
+import { TABLES } from 'src/types/Tables';
 import { MultiPolygon } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -32,7 +34,7 @@ import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import SelectObservationButton from './SelectObservationButton';
 
-const STORAGE_KEY = 'observations-ad-hoc-table';
+const TABLE = TABLES.adHocObservations;
 
 const DEFAULT_COLUMN_ORDER = [
   'monitoringPlotNumber',
@@ -71,8 +73,8 @@ type AdHocRow = {
 };
 
 const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string): AdHocRow => {
-  const biomass = observation.biomassMeasurements;
   const adHocPlot = observation.adHocPlot;
+  const biomass = adHocPlot?.biomassMeasurements;
 
   return {
     completedDate: observation.completedTime,
@@ -103,7 +105,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { activeFilterCount, observationType } = useObservationFilters();
   const { downloadAdHocObservationsZip } = useObservationExports();
-  const tableState = useTableState(STORAGE_KEY, {
+  const tableState = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
   });
@@ -119,6 +121,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
+  const { selectedOrganization } = useOrganization();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
 
   const plantingSitesById = useMemo(
@@ -147,7 +150,9 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const rows = useMemo(
     () =>
       observations
-        .filter((observation) => observation.type !== 'Biomass Measurements' || observation.biomassMeasurements)
+        .filter(
+          (observation) => observation.type !== 'Biomass Measurements' || observation.adHocPlot?.biomassMeasurements
+        )
         .map((observation) => toRow(observation, plantingSiteNames[observation.plantingSiteId])),
     [observations, plantingSiteNames]
   );
@@ -322,7 +327,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         enableSorting
         enableTopToolbar
         initialSorting={[{ id: 'completedDate', desc: true }]}
-        storageKey={STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         sx={{ padding: 0 }}
         tableOptions={{
           defaultColumn: { enableEditing: false },
@@ -365,6 +370,14 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={tableState.defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               {plantingSitesLoaded && rows.length > 0 && (

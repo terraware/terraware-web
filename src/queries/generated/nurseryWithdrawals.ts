@@ -34,7 +34,8 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
-export type CreateBatchWithdrawalApiResponse = /** status 200 OK */ GetNurseryWithdrawalResponsePayload;
+export type CreateBatchWithdrawalApiResponse =
+  /** status 200 The requested operation succeeded. */ GetNurseryWithdrawalResponsePayload;
 export type CreateBatchWithdrawalApiArg = CreateNurseryWithdrawalRequestPayload;
 export type GetNurseryWithdrawalApiResponse = /** status 200 OK */ GetNurseryWithdrawalResponsePayload;
 export type GetNurseryWithdrawalApiArg = number;
@@ -151,6 +152,13 @@ export type GetNurseryWithdrawalResponsePayload = {
   status: SuccessOrError;
   withdrawal: NurseryWithdrawalPayload;
 };
+export type ErrorDetails = {
+  message: string;
+};
+export type SimpleErrorResponsePayload = {
+  error: ErrorDetails;
+  status: SuccessOrError;
+};
 export type CreateNurseryWithdrawalRequestPayload = {
   batchWithdrawals: BatchWithdrawalPayload[];
   /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Not allowed for purposes other than "Nursery Transfer". */
@@ -198,13 +206,6 @@ export type NurseryWithdrawalPhotoPayload = {
 };
 export type ListWithdrawalPhotosResponsePayload = {
   photos: NurseryWithdrawalPhotoPayload[];
-  status: SuccessOrError;
-};
-export type ErrorDetails = {
-  message: string;
-};
-export type SimpleErrorResponsePayload = {
-  error: ErrorDetails;
   status: SuccessOrError;
 };
 export type CreateNurseryWithdrawalPhotoResponsePayload = {

@@ -1,3 +1,7 @@
+import { SearchNodePayload } from 'src/types/Search';
+import { SuggestedSpecies } from 'src/types/Species';
+import { parseSearchTerm } from 'src/utils/search';
+
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
@@ -23,6 +27,33 @@ const getAcceleratorProjectNames = (result: SpeciesAcceleratorProjectsSearchResu
     .map((projectSpeciesEntry) => projectSpeciesEntry.project?.name)
     .filter((name): name is string => Boolean(name));
   return Array.from(new Set(names)).sort((a, b) => a.localeCompare(b));
+};
+
+type SearchSpeciesSuggestionsApiArg = {
+  organizationId: number;
+  query: string;
+};
+
+const buildSpeciesSuggestionsSearch = ({
+  organizationId,
+  query,
+}: SearchSpeciesSuggestionsApiArg): SearchNodePayload => {
+  const children: SearchNodePayload[] = [
+    { operation: 'field', field: 'organization_id', type: 'Exact', values: [organizationId.toString()] },
+  ];
+
+  if (query) {
+    const { type, values } = parseSearchTerm(query);
+    children.push({
+      operation: 'or',
+      children: [
+        { operation: 'field', field: 'scientificName', type, values },
+        { operation: 'field', field: 'commonName', type, values },
+      ],
+    });
+  }
+
+  return { operation: 'and', children };
 };
 
 const injectedRtkApi = api.injectEndpoints({
@@ -58,7 +89,22 @@ const injectedRtkApi = api.injectEndpoints({
           response.results.map((result) => [Number(result.id), getAcceleratorProjectNames(result)])
         ) as Record<number, string[]>,
     }),
+    searchSpeciesSuggestions: build.query<SuggestedSpecies[], SearchSpeciesSuggestionsApiArg>({
+      query: (arg) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'species',
+          fields: ['scientificName', 'commonName', 'id'],
+          sortOrder: [{ field: 'scientificName', direction: 'Ascending' }],
+          search: buildSpeciesSuggestionsSearch(arg),
+          count: 0,
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
+      transformResponse: (response: { results: SuggestedSpecies[] }) => response.results,
+    }),
   }),
 });
 
-export const { useListSpeciesAcceleratorProjectsQuery } = injectedRtkApi;
+export const { useListSpeciesAcceleratorProjectsQuery, useSearchSpeciesSuggestionsQuery } = injectedRtkApi;

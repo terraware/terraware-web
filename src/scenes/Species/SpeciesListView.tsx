@@ -18,6 +18,7 @@ import {
 import PageSnackbar from 'src/components/PageSnackbar';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
@@ -43,6 +44,7 @@ import {
   conservationCategories,
   getConservationCategoryString,
 } from 'src/types/Species';
+import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -54,7 +56,7 @@ import { NATIVITY_VALUES, Nativity, getNativityLabel } from './SpeciesCheck/type
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
-const TABLE_STATE_STORAGE_KEY = 'species-list-table';
+const TABLE = TABLES.species;
 const EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID: Record<number, string[]> = {};
 
 const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
@@ -274,6 +276,7 @@ export default function SpeciesListView(): JSX.Element {
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -287,7 +290,7 @@ export default function SpeciesListView(): JSX.Element {
     showColumnFilters,
     showGlobalFilter,
     sorting,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+  } = useTableState(TABLE, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
     persistPageIndex: {
       isLoading:
@@ -898,7 +901,7 @@ export default function SpeciesListView(): JSX.Element {
           enableColumnFilters={true}
           enableColumnOrdering={true}
           stickyFilters={true}
-          storageKey={TABLE_STATE_STORAGE_KEY}
+          storageKey={TABLE.storageKey}
           enablePagination={true}
           enableTopToolbar={true}
           enableBottomToolbar={true}
@@ -931,6 +934,14 @@ export default function SpeciesListView(): JSX.Element {
             enableColumnDragging: true,
             positionGlobalFilter: 'right',
             getRowId: (row) => String(row.id),
+            renderTopToolbarCustomActions: ({ table }) => (
+              <CurrentView
+                defaultSettings={defaultViewSettings}
+                organizationId={organizationId}
+                table={table}
+                tableDefinition={TABLE}
+              />
+            ),
             renderToolbarInternalActions: ({ table }) => (
               <Box display='flex' gap={0.5}>
                 <Tooltip title={strings.EXPORT}>

@@ -30,6 +30,11 @@ common:
     peakon/git-shallow-clone#v0.0.1:
       depth: 1
 
+  - &cache-passed-tree-args
+    backend: s3
+    path: '.passed-tree.json'
+    soft-fail: true
+
 agents:
   # Run all steps on the same kind of runner.
   queue: 'x86-8core'
@@ -38,9 +43,23 @@ env:
   BUILDKITE_ARTIFACT_UPLOAD_DESTINATION: 's3://$BUILDKITE_PLUGIN_S3_CACHE_BUCKET/artifacts/$BUILDKITE_PIPELINE_SLUG/$BUILDKITE_BUILD_ID'
 
 steps:
+  - label: ':white_check_mark: Skip if this code already passed'
+    key: 'check-passed-tree'
+    soft_fail: true
+    if: "build.branch != 'main' && build.tag == null"
+    plugins:
+      - *shallow-clone
+      - cache#v1.12.0:
+          <<: *cache-passed-tree-args
+          restore: branch
+    command: .buildkite/scripts/passed-tree.sh check
+
   - label: ':graphite: CI optimizer'
     key: 'graphite-ci-optimizer'
     soft_fail: true
+    depends_on:
+      - step: 'check-passed-tree'
+        allow_failure: true
     plugins:
       - *shallow-clone
       - *load-secrets
@@ -77,6 +96,16 @@ steps:
       - *cache-node-modules
       - *restore-dist
     command: .buildkite/scripts/deploy-vercel.sh
+    notify:
+      - github_check:
+          name: 'Vercel preview'
+          output:
+            title: 'Vercel preview'
+            summary: 'See the Buildkite log for details.'
+            text: |
+              | | |
+              | --- | --- |
+              | **Status** | Not deployed |
 
   - label: ':playwright: Run end-to-end tests'
     key: 'e2e-tests'
@@ -150,6 +179,21 @@ steps:
           force: true
       - *restore-dist
     command: .buildkite/scripts/docker-build-push.sh
+
+  - label: ':white_check_mark: Record passing tree'
+    key: 'record-passed-tree'
+    depends_on:
+      - 'docker'
+      - 'validate-types'
+    soft_fail: true
+    if: "build.branch != 'main' && build.tag == null"
+    plugins:
+      - *shallow-clone
+      - cache#v1.12.0:
+          <<: *cache-passed-tree-args
+          save: branch
+          force: true
+    command: .buildkite/scripts/passed-tree.sh record
 
   - label: ':buildkite: Promote branch-level caches to pipeline-level'
     key: 'promote-caches'

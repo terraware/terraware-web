@@ -13,8 +13,10 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import CurrentView from 'src/components/common/CurrentView';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
@@ -29,6 +31,9 @@ import {
   useSetOrganizationSplatNeedsAttentionMutation,
 } from 'src/queries/generated/organizationSplats';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
+import { TABLES } from 'src/types/Tables';
+
+const TABLE = TABLES.virtualWalkthroughs;
 
 type VirtualWalkthroughsTableProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
@@ -59,7 +64,7 @@ export default function VirtualWalkthroughsTable({
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState('virtual-walkthroughs-table');
+  } = useTableState(TABLE);
   const { strings } = useLocalization();
 
   const getStatusLabel = useCallback(
@@ -151,8 +156,7 @@ export default function VirtualWalkthroughsTable({
             '&:hover .icon360-overlay': { display: 'flex' },
           }}
         >
-          <Box
-            component='img'
+          <ThumbnailImage
             src={thumbnailSrc}
             alt={strings.THUMBNAIL}
             sx={{ borderRadius: '4px', display: 'block', height: 40, objectFit: 'cover', width: 64 }}
@@ -350,7 +354,7 @@ export default function VirtualWalkthroughsTable({
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
-        storageKey='virtual-walkthroughs-table'
+        storageKey={TABLE.storageKey}
         renderToolbarInternalActions={({ table }) => (
           <Box display='flex' gap={0.5}>
             <MRT_ToggleGlobalFilterButton table={table} />
@@ -361,6 +365,9 @@ export default function VirtualWalkthroughsTable({
           </Box>
         )}
         tableOptions={{
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
+          ),
           state: { columnFilters, showColumnFilters, showGlobalFilter },
           onColumnFiltersChange: setColumnFilters,
           onShowColumnFiltersChange: setShowColumnFilters,

@@ -46,15 +46,16 @@ const BiomassObservationStatsDrawer = ({
   );
 
   const properties = useMemo((): BiomassObservationStatsProperties | undefined => {
-    if (results && results.adHocPlot && results.biomassMeasurements) {
+    const adHocPlot = results?.adHocPlot;
+    if (adHocPlot && adHocPlot.biomassMeasurements) {
       const completedDate = results.completedTime
         ? getDateDisplayValue(results.completedTime, plantingSite?.timeZone ?? defaultTimezone)
         : undefined;
       return {
-        monitoringPlotName: results.adHocPlot.monitoringPlotName,
-        numTrees: results.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub').length,
-        numShrubs: results.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm === 'Shrub').length,
-        numSpecies: results.biomassMeasurements.treeSpeciesCount,
+        monitoringPlotName: adHocPlot.monitoringPlotName,
+        numTrees: adHocPlot.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm !== 'Shrub').length,
+        numShrubs: adHocPlot.biomassMeasurements.trees.filter((tree) => tree.treeGrowthForm === 'Shrub').length,
+        numSpecies: adHocPlot.biomassMeasurements.treeSpeciesCount,
         observationDate: completedDate ? getShortDate(completedDate, activeLocale) : '',
       };
     } else {

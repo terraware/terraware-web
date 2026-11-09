@@ -13,18 +13,21 @@ import {
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import { ObservationState, getStatus } from 'src/types/Observations';
+import { ObservationState, ObservationType, getStatus } from 'src/types/Observations';
+import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
@@ -39,6 +42,8 @@ type PlantMonitoringRow = {
   observationId: number;
   observationDate?: string;
   observationState?: ObservationState;
+  observationType: ObservationType;
+  monitoringType: string;
   state: string;
   plantingSiteName?: string;
   strata?: string;
@@ -51,10 +56,11 @@ type PlantMonitoringRow = {
   completedDate?: string;
 };
 
-const STORAGE_KEY = 'observations-assigned-table';
+const TABLE = TABLES.assignedObservations;
 
 const DEFAULT_COLUMN_ORDER = [
   'observationDate',
+  'monitoringType',
   'completedDate',
   'totalLive',
   'totalPlants',
@@ -77,10 +83,15 @@ const toLocalDate = (dateStr?: string) => {
 const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
   const { strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
-  const { downloadObservationCsv, downloadObservationGpx, downloadObservationResults } = useObservationExports();
+  const {
+    downloadBiomassObservationDetails,
+    downloadObservationCsv,
+    downloadObservationGpx,
+    downloadObservationResults,
+  } = useObservationExports();
   const navigate = useSyncNavigate();
 
-  const { observationId, observationState, state } = row;
+  const { observationId, observationState, observationType, state } = row;
   const exportDisabled = state === 'Upcoming';
   const rescheduleDisabled = state === 'Completed' || state === 'Abandoned';
 
@@ -107,7 +118,9 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           disabled: exportDisabled,
           label: strings.EXPORT_RESULTS,
           onClick: () => {
-            void downloadObservationResults(observationId);
+            void (observationType === 'Biomass Measurements'
+              ? downloadBiomassObservationDetails(observationId)
+              : downloadObservationResults(observationId));
           },
         },
         {
@@ -137,12 +150,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const { activeLocale, strings } = useLocalization();
 
   const showSelectObservation = typeof plantingSiteId === 'number';
   const showSiteName = plantingSiteId === ALL_PLANTING_SITES;
 
-  const tableState = useTableState(STORAGE_KEY, {
+  const tableState = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
   });
@@ -153,7 +167,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     isLoading,
     observations: observationResults,
   } = useFilteredObservationResults({
-    observationType: 'Monitoring',
+    observationType: biomassSchedulingEnabled ? 'All' : 'Monitoring',
     plantingSiteId,
     plotType: 'assigned',
   });
@@ -179,6 +193,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationId: observationResult.observationId,
           observationDate: completedDate ?? observationResult.startDate,
           observationState: observationResult.state,
+          observationType: observationResult.type,
+          monitoringType:
+            observationResult.type === 'Biomass Measurements' ? strings.BIOMASS_MONITORING : strings.PLANT_MONITORING,
           state: getStatus(observationResult.state, strings),
           plantingSiteName: plantingSiteNames.get(observationResult.plantingSiteId),
           strata: observationResult.strata.map((stratumResult) => stratumResult.name).join('\r'),
@@ -204,7 +221,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
             <Link fontSize='16px' to={url}>
               {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
             </Link>
-            {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
+            {showSelectObservation && row.observationType !== 'Biomass Measurements' && (
+              <SelectObservationButton observationId={row.observationId} />
+            )}
           </Box>
           {showSiteName && (
             <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
@@ -254,6 +273,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   );
 
   const columns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
+    const monitoringTypeColumns: EditableTableColumn<PlantMonitoringRow>[] = biomassSchedulingEnabled
+      ? [{ id: 'monitoringType', header: strings.MONITORING_TYPE, accessorKey: 'monitoringType' }]
+      : [];
+
     const baseColumns: EditableTableColumn<PlantMonitoringRow>[] = [
       {
         id: 'observationDate',
@@ -262,6 +285,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         accessorFn: (row) => toLocalDate(row.observationDate),
         Cell: ObservationDateCell,
       },
+      ...monitoringTypeColumns,
       { id: 'state', header: strings.STATUS, accessorKey: 'state' },
       { id: 'plantingSiteName', header: strings.PLANTING_SITE, accessorKey: 'plantingSiteName' },
       { id: 'strata', header: strings.STRATA, accessorKey: 'strata', Cell: StrataCell },
@@ -292,6 +316,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       : baseColumns;
   }, [
     strings,
+    biomassSchedulingEnabled,
     showSelectObservation,
     scheduleObservationsEnabled,
     ObservationDateCell,
@@ -363,7 +388,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         enableGlobalFilter={true}
         enableColumnFilters={false}
         enableColumnOrdering={true}
-        storageKey={STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
@@ -381,6 +406,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={tableState.defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <MRT_ToggleGlobalFilterButton table={table} />

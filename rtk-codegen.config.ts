@@ -11,6 +11,9 @@ const config: ConfigFile = {
   exportName: 'api',
   hooks: { queries: true, lazyQueries: true, mutations: true },
   outputFiles: {
+    './src/queries/generated/acceleratorOrganizations.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/organizations'),
+    },
     './src/queries/generated/acceleratorProjects.ts': {
       filterEndpoints: (_, operation) =>
         operation.path === '/api/v1/accelerator/projects' ||
@@ -58,6 +61,12 @@ const config: ConfigFile = {
         operation.path === '/api/v1/users/me' ||
         operation.path === '/api/v1/users/{userId}',
     },
+    './src/queries/generated/documentProducerDocuments.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/document-producer/documents'),
+    },
+    './src/queries/generated/documentProducerTemplates.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/document-producer/templates',
+    },
     './src/queries/generated/documentProducerValues.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/document-producer/projects/{projectId}/values') ||
@@ -83,6 +92,9 @@ const config: ConfigFile = {
     },
     './src/queries/generated/funderActivities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/activities'),
+    },
+    './src/queries/generated/funderProjects.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/projects'),
     },
     './src/queries/generated/fundingEntities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/entities'),
@@ -124,6 +136,7 @@ const config: ConfigFile = {
       filterEndpoints: (_, operation) =>
         operation.path === '/api/v1/organizations' ||
         operation.path === '/api/v1/organizations/{organizationId}' ||
+        operation.path === '/api/v1/organizations/{organizationId}/location' ||
         operation.path === '/api/v1/organizations/{organizationId}/roles',
     },
     './src/queries/generated/organizationUsers.ts': {
@@ -214,6 +227,9 @@ const config: ConfigFile = {
     },
     './src/queries/generated/projectVotes.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/accelerator/projects/{projectId}/votes',
+    },
+    './src/queries/generated/savedTableViews.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/users/me/savedTableViews'),
     },
     './src/queries/generated/search.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),

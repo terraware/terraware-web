@@ -3,6 +3,8 @@ import React, { useMemo } from 'react';
 import { Box, SxProps, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
+
 type PhotoPreviewProps = {
   imgUrl: string;
   imgAlt?: string;
@@ -71,8 +73,7 @@ const PhotoPreview = ({
           paddingTop: aspectRatio && `${aspectRatio * 100}%`,
         }}
       >
-        <Box
-          component={'img'}
+        <ThumbnailImage
           src={imgUrl}
           alt={imgAlt}
           sx={{

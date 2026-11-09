@@ -5,6 +5,7 @@ import MuxPlayer from '@mux/mux-player-react';
 import { Icon } from '@terraware/web-components';
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { useLocalization } from 'src/providers';
 import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import { ObservationMonitoringPlotMediaType, ObservationMonitoringPlotPosition } from 'src/types/Observations';
@@ -261,7 +262,7 @@ const MediaItem = ({
         sx={{ '&:hover .info-panel': { opacity: 1 } }}
         width='100%'
       >
-        <img
+        <ThumbnailImage
           alt={mediaFile?.caption}
           onClick={onClickExpand}
           onError={handleImageError}

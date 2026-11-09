@@ -259,7 +259,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
     await page.getByRole('link', { name: '60' }).click();
-    await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();
+    await expect(page.locator('thead').getByText('Destination')).toBeVisible();
     await expect(page.getByText('East')).toBeVisible();
     await expect(page.getByText('North')).toBeVisible();
     await expect(page.locator('#row1-purpose')).toContainText('Planting');
@@ -306,7 +306,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Seedlings Withdrawn for Planting')).toBeVisible();
     await expect(page.getByText('Kousa Dogwood')).toBeVisible();
     await page.getByRole('link', { name: 'See Withdrawal History' }).click();
-    await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();
+    await expect(page.locator('thead').getByText('Destination')).toBeVisible();
     await expect(page.getByText('East')).toBeVisible();
     await expect(page.getByText('North')).toBeVisible();
   });

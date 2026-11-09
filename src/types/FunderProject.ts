@@ -1,5 +1,3 @@
-import { components } from 'src/api/types/generated-schema';
+import { FunderProjectDetailsPayload } from 'src/queries/generated/funderProjects';
 
-export type PublishedProject = components['schemas']['PublishedProjectPayload'];
-
-export type FunderProjectDetails = components['schemas']['FunderProjectDetailsPayload'];
+export type FunderProjectDetails = FunderProjectDetailsPayload;

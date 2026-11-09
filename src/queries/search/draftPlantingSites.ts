@@ -123,4 +123,6 @@ type SearchDraftPlantingSiteSummariesApiArgs = {
   searchTerm?: string;
 };
 
+export const draftPlantingSitesSearchApi = injectedRtkApi;
+
 export const { useLazyCountDraftPlantingSitesQuery, useLazySearchDraftPlantingSitesQuery } = injectedRtkApi;

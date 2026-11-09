@@ -4,6 +4,7 @@ import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { useGetBatchQuery } from 'src/queries/generated/nurseryBatches';
@@ -378,7 +379,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
               marginTop={1}
               border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
             >
-              <img
+              <ThumbnailImage
                 src={`${photoUrl}?maxHeight=120`}
                 alt={'new'}
                 style={{

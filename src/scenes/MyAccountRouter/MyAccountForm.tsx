@@ -610,9 +610,6 @@ const MyAccountForm = ({
               )}
             </Grid>
             <Grid size={12}>
-              <Typography fontSize='20px' fontWeight={600}>
-                {strings.NOTIFICATIONS}
-              </Typography>
               {emailSettings && (
                 <EmailNotificationSettings edit={edit} onChange={setEmailSettings} value={emailSettings} />
               )}

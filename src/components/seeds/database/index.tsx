@@ -182,7 +182,11 @@ export default function Database(props: DatabaseProps): JSX.Element {
           title: strings.IMPORT_ACCESSIONS_ALT_TITLE,
           text: strings.IMPORT_ACCESSIONS_WITH_TEMPLATE,
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
-          onLinkClick: () => downloadCsvTemplateHandler(() => fetchAccessionsListUploadTemplate().unwrap()),
+          onLinkClick: () =>
+            downloadCsvTemplateHandler(
+              () => fetchAccessionsListUploadTemplate().unwrap(),
+              strings.TEMPLATE_FILENAME_ACCESSIONS
+            ),
           buttonText: strings.IMPORT_ACCESSIONS,
           onClick: () => setSelectSeedBankForImportModalOpen(true),
         },

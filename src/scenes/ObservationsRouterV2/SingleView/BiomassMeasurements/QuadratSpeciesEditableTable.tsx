@@ -1,11 +1,9 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
 import { Button, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {
@@ -23,6 +21,7 @@ import { Species } from 'src/types/Species';
 
 import BiomassEditConfirmationModal from './BiomassEditConfirmationModal';
 import { QuadratPosition } from './QuadratNotesComponent';
+import useBiomassPlot from './useBiomassPlot';
 
 type SpeciesRow = {
   abundanceCount?: number;
@@ -78,10 +77,7 @@ export default function QuadratSpeciesEditableTable({
   const { strings } = useLocalization();
   const theme = useTheme();
 
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const { monitoringPlot, observationId } = useBiomassPlot();
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [rowEdits, setRowEdits] = useState<Record<string, Partial<SpeciesRow>>>({});
   const [speciesFlags, setSpeciesFlags] = useState<Record<string, Partial<SpeciesRow>>>({});
@@ -96,12 +92,12 @@ export default function QuadratSpeciesEditableTable({
 
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload): Promise<boolean> => {
-      if (!results?.adHocPlot) {
+      if (!monitoringPlot) {
         return Promise.resolve(false);
       }
       const payload = {
         observationId,
-        plotId: results.adHocPlot.monitoringPlotId,
+        plotId: monitoringPlot.monitoringPlotId,
         updateObservationRequestPayload: updatePayload,
       };
       const queued = pendingUpdates.current
@@ -110,7 +106,7 @@ export default function QuadratSpeciesEditableTable({
       pendingUpdates.current = queued;
       return queued;
     },
-    [observationId, results, update]
+    [monitoringPlot, observationId, update]
   );
 
   const saveAbundance = useCallback(

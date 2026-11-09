@@ -1,10 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   QuadratUpdateOperationPayload,
@@ -15,6 +13,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import EditQualitativeDataConfirmationModal from '../../EditQualitativeDataConfirmationModal';
 import QuadratNotesComponent from './QuadratNotesComponent';
+import useBiomassPlot from './useBiomassPlot';
 
 type EditNotesModalProps = {
   onClose: () => void;
@@ -22,19 +21,11 @@ type EditNotesModalProps = {
 
 const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   const { strings } = useLocalization();
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetOneObservationResults({
-    observationId,
-  });
-  const observationResults = useMemo(
-    () => observationResultsResponse?.observation,
-    [observationResultsResponse?.observation]
-  );
+  const { biomassMeasurement, monitoringPlot, observationId } = useBiomassPlot();
   const [update] = useUpdateCompletedObservationPlotMutation();
   const snackbar = useSnackbar();
 
-  const biomassMeasurements = observationResults?.biomassMeasurements;
+  const biomassMeasurements = biomassMeasurement;
   const [record, setRecord] = useForm(biomassMeasurements);
   const [showWarning, setShowWarning] = useState(false);
 
@@ -43,7 +34,6 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   }, [biomassMeasurements, setRecord]);
 
   const recordQuadrats = record?.quadrats;
-  const observationResultsAdHocPlot = observationResults?.adHocPlot;
 
   const onSubmit = useCallback(() => {
     void (async () => {
@@ -71,7 +61,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
         description: recordQuadrats?.find((q) => q.position === 'SouthwestCorner')?.description,
       };
 
-      if (observationResultsAdHocPlot) {
+      if (monitoringPlot) {
         const payloads: QuadratUpdateOperationPayload[] = [
           northeastQuadratPayload,
           northwestQuadratPayload,
@@ -81,7 +71,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
 
         const result = await update({
           observationId,
-          plotId: observationResultsAdHocPlot.monitoringPlotId,
+          plotId: monitoringPlot.monitoringPlotId,
           updateObservationRequestPayload: {
             updates: payloads,
           },
@@ -94,7 +84,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
       }
       onClose();
     })();
-  }, [recordQuadrats, observationResultsAdHocPlot, onClose, update, observationId, snackbar]);
+  }, [recordQuadrats, monitoringPlot, onClose, update, observationId, snackbar]);
 
   const showModal = useCallback(() => {
     setShowWarning(true);

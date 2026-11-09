@@ -8,7 +8,6 @@ import {
   SearchApiArg,
   SearchResponsePayload,
   SearchSortOrderElement,
-  SearchValuesResponsePayload,
 } from 'src/queries/generated/search';
 
 export type { AndNodePayload, FieldNodePayload, NotNodePayload, OrNodePayload, PrefixedSearch };
@@ -19,11 +18,8 @@ export type SearchSortOrder = SearchSortOrderElement;
 export type SearchType = FieldNodePayload['type'];
 export type SearchResponseElement = SearchResponsePayload['results'][0];
 export type SearchResponseElementWithId = SearchResponseElement & { id: string };
-export type SearchValuesResponseElement = SearchValuesResponsePayload['results'];
-
 export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
-export type SearchRequestPayloadWithOptionalSearch = SearchApiArg;
 /** Search request payload that requires a search node and result count to be specified. */
 export type SearchRequestPayload = SearchApiArg & {
   count: number;

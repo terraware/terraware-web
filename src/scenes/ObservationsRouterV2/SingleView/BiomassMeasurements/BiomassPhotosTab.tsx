@@ -6,26 +6,24 @@ import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotosWithActions';
 
+import useBiomassPlot from './useBiomassPlot';
+
 const BiomassPhotosTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const adHocPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const isCompleted = useMemo(() => adHocPlot?.completedTime !== undefined, [adHocPlot?.completedTime]);
+  const stratumName = useParams<{ stratumName?: string }>().stratumName;
+
+  const { monitoringPlot, observationId, results } = useBiomassPlot();
+  const isCompleted = useMemo(() => monitoringPlot?.completedTime !== undefined, [monitoringPlot?.completedTime]);
   const navigate = useSyncNavigate();
 
   useEffect(() => {
@@ -37,23 +35,31 @@ const BiomassPhotosTab = () => {
   const plantingSite = useMemo(() => plantingSiteResponse.data?.site, [plantingSiteResponse.data?.site]);
 
   const goToEdit = useCallback(() => {
-    if (adHocPlot) {
-      navigate(
-        APP_PATHS.OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2.replace(':observationId', observationId.toString()).replace(
-          ':monitoringPlotId',
-          adHocPlot.monitoringPlotId.toString()
-        )
-      );
+    if (!monitoringPlot) {
+      return;
     }
-  }, [adHocPlot, navigate, observationId]);
+    const plotId = monitoringPlot.monitoringPlotId.toString();
+    navigate(
+      stratumName === undefined
+        ? APP_PATHS.OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2.replace(':observationId', observationId.toString()).replace(
+            ':monitoringPlotId',
+            plotId
+          )
+        : APP_PATHS.OBSERVATION_MONITORING_PLOT_EDIT_PHOTOS_V2.replace(':observationId', observationId.toString())
+            .replace(':stratumName', stratumName)
+            .replace(':monitoringPlotId', plotId)
+    );
+  }, [monitoringPlot, navigate, observationId, stratumName]);
 
   const plotCornerPhotos = useMemo(() => {
-    return adHocPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
-  }, [adHocPlot?.photos]);
+    return monitoringPlot?.photos?.filter(
+      (photo) => photo.position !== undefined && (photo.type === 'Plot' || photo.type === 'Explanation')
+    );
+  }, [monitoringPlot?.photos]);
 
   const otherPhotos = useMemo(() => {
-    return adHocPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot');
-  }, [adHocPlot?.photos]);
+    return monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot');
+  }, [monitoringPlot?.photos]);
 
   return (
     <Card radius='24px'>
@@ -65,15 +71,15 @@ const BiomassPhotosTab = () => {
           <Button id='edit' label={strings.EDIT} onClick={goToEdit} icon='iconEdit' priority='secondary' size='small' />
         )}
       </Box>
-      {adHocPlot && (
+      {monitoringPlot && (
         <>
           <Box marginBottom={4}>
             {(plotCornerPhotos?.length || 0) > 0 ? (
               <MonitoringPlotPhotosWithActions
                 observationId={observationId}
-                monitoringPlotId={adHocPlot.monitoringPlotId}
+                monitoringPlotId={monitoringPlot.monitoringPlotId}
                 photos={plotCornerPhotos}
-                monitoringPlotName={adHocPlot.monitoringPlotName}
+                monitoringPlotName={monitoringPlot.monitoringPlotName}
                 plantingSiteName={plantingSite?.name}
               />
             ) : (
@@ -88,8 +94,8 @@ const BiomassPhotosTab = () => {
             </Typography>
             <MonitoringPlotPhotosWithActions
               observationId={observationId}
-              monitoringPlotId={adHocPlot.monitoringPlotId}
-              photos={adHocPlot.photos?.filter((photo) => photo.type === 'Quadrat')}
+              monitoringPlotId={monitoringPlot.monitoringPlotId}
+              photos={monitoringPlot.photos?.filter((photo) => photo.type === 'Quadrat')}
               plantingSiteName={plantingSite?.name}
             />
           </Box>
@@ -99,8 +105,8 @@ const BiomassPhotosTab = () => {
             </Typography>
             <MonitoringPlotPhotosWithActions
               observationId={observationId}
-              monitoringPlotId={adHocPlot.monitoringPlotId}
-              photos={adHocPlot.photos?.filter((photo) => photo.type === 'Soil')}
+              monitoringPlotId={monitoringPlot.monitoringPlotId}
+              photos={monitoringPlot.photos?.filter((photo) => photo.type === 'Soil')}
               plantingSiteName={plantingSite?.name}
             />
           </Box>
@@ -111,7 +117,7 @@ const BiomassPhotosTab = () => {
             {(otherPhotos?.length || 0) > 0 ? (
               <MonitoringPlotPhotosWithActions
                 observationId={observationId}
-                monitoringPlotId={adHocPlot.monitoringPlotId}
+                monitoringPlotId={monitoringPlot.monitoringPlotId}
                 photos={otherPhotos}
                 plantingSiteName={plantingSite?.name}
               />
@@ -123,8 +129,8 @@ const BiomassPhotosTab = () => {
           </Box>
         </>
       )}
-      {adHocPlot?.monitoringPlotId && (
-        <EventLog observationId={Number(observationId)} plotId={adHocPlot.monitoringPlotId} isBiomass />
+      {monitoringPlot?.monitoringPlotId && (
+        <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} isBiomass />
       )}
     </Card>
   );

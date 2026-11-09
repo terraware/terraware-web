@@ -4,7 +4,11 @@ import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName =
-  'Show Production View' | 'Virtual Monitoring Plots' | 'Edit Planting Site' | 'Seeds Withdrawal Log';
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Seeds Withdrawal Log'
+  | 'Scheduled Biomass Monitoring Observations'
+  | 'Saved Table Views';
 
 export type Feature = {
   name: FeatureName;
@@ -48,21 +52,30 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is a WIP'],
   },
   {
-    name: 'Edit Planting Site',
-    preferenceName: 'editPlantingSite',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Edit the boundaries of existing planting sites.'],
-    disclosure: ['This is a WIP'],
-  },
-  {
     name: 'Seeds Withdrawal Log',
     preferenceName: 'seedsWithdrawalLog',
     active: true,
     enabled: false,
     allowInternalProduction: false,
     description: ['Log of seed withdrawals.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Scheduled Biomass Monitoring Observations',
+    preferenceName: 'scheduledBiomassMonitoringObservations',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for scheduling biomass monitoring observations.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Saved Table Views',
+    preferenceName: 'savedTableViews',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Save table filters, sorting, and column settings as named views.'],
     disclosure: ['This is a WIP'],
   },
 ];

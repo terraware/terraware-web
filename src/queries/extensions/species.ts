@@ -50,6 +50,10 @@ api.enhanceEndpoints({
     deleteSpecies: {
       invalidatesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
     },
+    getSpeciesListUploadTemplate: {
+      query: () => ({ url: '/api/v1/species/uploads/template', responseHandler: 'text' }),
+      keepUnusedDataFor: Infinity,
+    },
     resolveSpeciesListUpload: {
       invalidatesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
     },

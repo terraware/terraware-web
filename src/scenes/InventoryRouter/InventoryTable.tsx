@@ -5,6 +5,7 @@ import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } fro
 import _, { isArray } from 'lodash';
 import {
   MRT_Cell,
+  MRT_ColumnFiltersState,
   MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -16,6 +17,7 @@ import {
 } from 'material-react-table';
 
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
+import CurrentView from 'src/components/common/CurrentView';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -23,12 +25,14 @@ import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
-import { useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
-import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
+import { useLazyListBatchIdsForNurseriesQuery, useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
+import { convertFilterGroupToMap, getNurseryDeleteSpeciesIds } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
 import { SearchNodePayload, SearchResponseElement, getFieldNodeValues } from 'src/types/Search';
+import { Species } from 'src/types/Species';
+import { TABLES, TableDefinition } from 'src/types/Tables';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllNurseries } from 'src/utils/organization';
@@ -43,10 +47,12 @@ import DeleteBatchesModal from './view/DeleteBatchesModal';
 import QuantitiesMenu from './view/QuantitiesMenu';
 
 interface InventoryTableProps {
+  disableDelete?: boolean;
+  nurserySpecies?: Species[];
   allowSelectionProjectAssign?: boolean;
   columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
-  origin: OriginPage;
+  origin: Extract<OriginPage, 'Batches' | 'Nursery' | 'Species'>;
   results: SearchResponseElement[];
   setFilters: (f: InventoryFiltersUnion) => void;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -54,8 +60,39 @@ interface InventoryTableProps {
   emptyTableMessage?: string;
 }
 
+const TABLES_BY_ORIGIN: Record<InventoryTableProps['origin'], TableDefinition> = {
+  Batches: TABLES.inventoryByBatch,
+  Nursery: TABLES.inventoryByNursery,
+  Species: TABLES.inventoryBySpecies,
+};
+
+const ColumnFilterObserver = ({
+  table,
+  onChange,
+}: {
+  table: MRT_TableInstance<SearchResponseElement>;
+  onChange: (filters: MRT_ColumnFiltersState) => void;
+}) => {
+  'use no memo';
+
+  // MRT keeps a stable table instance while its filter state changes.
+  const columnFilters = table.getState().columnFilters;
+  useEffect(() => {
+    onChange(columnFilters);
+  }, [columnFilters, onChange]);
+  return null;
+};
+
+const DEFAULT_SORTING_BY_ORIGIN: Record<InventoryTableProps['origin'], MRT_SortingState> = {
+  Batches: [{ id: 'batchNumber', desc: false }],
+  Nursery: [{ id: 'facility_name', desc: false }],
+  Species: [{ id: 'scientificName', desc: false }],
+};
+
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
   const {
+    disableDelete = false,
+    nurserySpecies,
     results,
     setTemporalSearchValue,
     temporalSearchValue,
@@ -78,10 +115,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const numberFormatter = useNumberFormatter();
   const [deleteBatch] = useDeleteBatchMutation();
   const [listBatchIdsForSpecies] = useLazyListBatchIdsForSpeciesQuery();
+  const [listBatchIdsForNurseries] = useLazyListBatchIdsForNurseriesQuery();
 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>([]);
   const [pillListPortalEl, setPillListPortalEl] = useState<HTMLElement | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const [openProjectAssignModal, setOpenProjectAssignModal] = useState<boolean>(false);
@@ -90,8 +129,20 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     openChangeQuantityModal: false,
   });
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
+  const selectionScope = JSON.stringify({
+    filters,
+    columnFilters,
+    temporalSearchValue,
+    organizationId: selectedOrganization?.id,
+    rowIds: results.map((row) => row.id ?? row.facility_id),
+  });
 
-  const tableStateStorageKey = `inventoryTable_${origin.toLowerCase()}`;
+  useEffect(() => {
+    setRowSelection({});
+    setOpenDeleteModal(false);
+  }, [selectionScope]);
+
+  const tableDefinition = TABLES_BY_ORIGIN[origin];
 
   // Filter-related state
   const initialFilters: Record<string, SearchNodePayload> = useMemo(() => {
@@ -290,15 +341,69 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setOpenDeleteModal(false);
   }, []);
 
-  const deleteSelectedBatches = useCallback(() => {
-    const promises = selectedRows.map((r) => deleteBatch(r.id as number).unwrap());
-    void Promise.allSettled(promises).then((deleteResults) => {
+  const deleteSelectedBatches = useCallback(async () => {
+    if (disableDelete) {
+      return;
+    }
+    try {
+      let batchIds: number[];
+      if (origin === 'Species') {
+        if (!selectedOrganization) {
+          return;
+        }
+        batchIds = await listBatchIdsForSpecies({
+          organizationId: selectedOrganization.id,
+          speciesIds: selectedRows.filter((row) => row.id).map((row) => Number(row.id)),
+          facilityIds: filters.facilityIds?.map(Number),
+        }).unwrap();
+      } else if (origin === 'Nursery') {
+        if (!selectedOrganization) {
+          return;
+        }
+        const speciesIds = getNurseryDeleteSpeciesIds(
+          columnFilters.find((filter) => filter.id === 'facilityInventories')?.value,
+          nurserySpecies ?? [],
+          filters.speciesIds
+        );
+        if (speciesIds?.length === 0) {
+          setOpenDeleteModal(false);
+          return;
+        }
+        batchIds = await listBatchIdsForNurseries({
+          organizationId: selectedOrganization.id,
+          facilityIds: selectedRows.map((row) => Number(row.facility_id)),
+          speciesIds,
+        }).unwrap();
+      } else {
+        batchIds = selectedRows.map((row) => Number(row.id));
+      }
+      const validBatchIds = [...new Set(batchIds)].filter((id) => Number.isInteger(id) && id > 0);
+      if (validBatchIds.length === 0) {
+        setOpenDeleteModal(false);
+        return;
+      }
+      const deleteResults = await Promise.allSettled(validBatchIds.map((id) => deleteBatch(id).unwrap()));
       if (deleteResults.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
       }
       setOpenDeleteModal(false);
-    });
-  }, [deleteBatch, selectedRows, snackbar]);
+    } catch {
+      snackbar.toastError();
+    }
+  }, [
+    deleteBatch,
+    columnFilters,
+    disableDelete,
+    filters.facilityIds,
+    filters.speciesIds,
+    listBatchIdsForNurseries,
+    listBatchIdsForSpecies,
+    nurserySpecies,
+    origin,
+    selectedOrganization,
+    selectedRows,
+    snackbar,
+  ]);
 
   const isSelectionWithdrawable = () => {
     // we are woring with 'any' type rows in this table
@@ -550,19 +655,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     QuantitiesMenuCell,
   ]);
 
-  // Handle sorting for EditableTable
-  const [sorting, setSorting] = useState<MRT_SortingState>([
-    {
-      id: origin === 'Species' ? 'scientificName' : origin === 'Nursery' ? 'facility_name' : 'batchNumber',
-      desc: false,
-    },
-  ]);
-
   const {
     autoResetPageIndex,
     isLoadingPage,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -571,9 +669,12 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setColumnVisibility,
     setShowColumnFilters,
     setShowGlobalFilter,
+    setSorting,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(tableStateStorageKey, {
+    sorting,
+  } = useTableState(tableDefinition, {
+    defaultSorting: DEFAULT_SORTING_BY_ORIGIN[origin],
     persistPageIndex: {},
   });
 
@@ -606,7 +707,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
 
   return (
     <Box position={'relative'}>
-      <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
+      <DeleteBatchesModal
+        open={openDeleteModal}
+        onClose={onCloseDeleteBatchesModal}
+        onSubmit={() => void deleteSelectedBatches()}
+      />
       {openProjectAssignModal && (
         <ProjectAssignModal<{ id: number; projectId?: number }>
           entity={{ id: -1, projectId: undefined }}
@@ -658,7 +763,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enableGlobalFilter={true}
                 enableColumnFilters={true}
                 stickyFilters={true}
-                storageKey={tableStateStorageKey}
+                storageKey={tableDefinition.storageKey}
                 enablePagination={true}
                 enableTopToolbar={true}
                 enableBottomToolbar={true}
@@ -700,6 +805,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           type='destructive'
                           onClick={() => setOpenDeleteModal(true)}
                           label={strings.DELETE}
+                          disabled={disableDelete}
                           priority='secondary'
                         />
                         {allowSelectionProjectAssign && (
@@ -724,16 +830,25 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       </Box>
                     </Box>
                   ),
-                  renderTopToolbarCustomActions: () => (
-                    <Box
-                      ref={setPillListPortalEl}
-                      display='flex'
-                      alignItems='center'
-                      sx={{ flex: 1, overflow: 'hidden' }}
-                    />
+                  renderTopToolbarCustomActions: ({ table }) => (
+                    <Box display='flex' alignItems='center' gap={2} sx={{ flex: 1, minWidth: 0 }}>
+                      <CurrentView
+                        defaultSettings={defaultViewSettings}
+                        organizationId={selectedOrganization?.id}
+                        table={table}
+                        tableDefinition={tableDefinition}
+                      />
+                      <Box
+                        ref={setPillListPortalEl}
+                        display='flex'
+                        alignItems='center'
+                        sx={{ flex: 1, overflow: 'hidden' }}
+                      />
+                    </Box>
                   ),
                   renderToolbarInternalActions: ({ table }) => (
                     <Box display='flex' gap={0.5}>
+                      <ColumnFilterObserver table={table} onChange={setColumnFilters} />
                       <Tooltip title={strings.EXPORT}>
                         <IconButton onClick={() => handleExport(table)}>
                           <Icon name='iconExport' size='medium' />

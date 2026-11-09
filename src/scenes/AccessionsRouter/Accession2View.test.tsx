@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from 'react-router';
 
 import { screen, waitFor } from '@testing-library/react';
+import { HttpResponse, http } from 'msw/http';
 
 import { VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
 import strings from 'src/strings';
@@ -13,10 +14,12 @@ import {
   mockGet,
   mockPost,
   renderWithProviders,
+  server,
 } from 'src/test-utils';
 import { Accession } from 'src/types/Accession';
 
 import Accession2View from './Accession2View';
+import DeleteViabilityTestModal from './viabilityTesting/DeleteViabilityTestModal';
 
 const ACCESSION_ID = 42;
 const ACCESSION_URL = `/api/v2/seedbank/accessions/${ACCESSION_ID}`;
@@ -77,6 +80,53 @@ const renderAccessionView = ({
     }
   );
 };
+
+describe('DeleteViabilityTestModal', () => {
+  it.each([200, 500])('blocks duplicate deletes and cancellation until HTTP %s completes', async (status) => {
+    mockGet(ACCESSION_URL, { accession: buildAccession({ viabilityTests: [labTest] }) });
+    let finish!: () => void;
+    const pending = new Promise<void>((resolve) => {
+      finish = resolve;
+    });
+    const requests: Request[] = [];
+    server.use(
+      http.delete(`${ACCESSION_URL}/viabilityTests/${LAB_TEST_ID}`, async ({ request }) => {
+        requests.push(request);
+        await pending;
+        return HttpResponse.json({ status: status === 200 ? 'ok' : 'error' }, { status });
+      })
+    );
+    let done = false;
+    let cancelled = false;
+    const { user, store } = renderWithProviders(
+      <DeleteViabilityTestModal
+        open
+        viabilityTest={labTest}
+        onCancel={() => (cancelled = true)}
+        onDone={() => (done = true)}
+      />,
+      { route: `/accessions/${ACCESSION_ID}`, path: '/accessions/:accessionId' }
+    );
+    const deleteButton = await screen.findByRole('button', { name: strings.DELETE });
+    await user.dblClick(deleteButton);
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(deleteButton).toBeDisabled();
+    expect(screen.getByRole('button', { name: strings.CANCEL })).toBeDisabled();
+    await user.keyboard('{Enter}{Escape}');
+    expect(cancelled).toBe(false);
+    expect(done).toBe(false);
+    expect(requests).toHaveLength(1);
+    finish();
+    await waitFor(() => expect(deleteButton).toBeEnabled());
+    expect(screen.getByRole('button', { name: strings.CANCEL })).toBeEnabled();
+    expect(done).toBe(status === 200);
+    if (status === 500) {
+      expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' });
+      await user.click(deleteButton);
+      await waitFor(() => expect(requests).toHaveLength(2));
+    }
+  });
+});
 
 describe('Accession2View viability test deep link', () => {
   beforeEach(() => sessionStorage.clear());

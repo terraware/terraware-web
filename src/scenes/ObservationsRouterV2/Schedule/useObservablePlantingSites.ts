@@ -1,14 +1,35 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useOrganization } from 'src/providers';
 import { useLazyListObservationsQuery } from 'src/queries/generated/observations';
-import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
+import {
+  PlantingSiteReportedPlantsPayload,
+  useLazyListPlantingSiteReportedPlantsQuery,
+} from 'src/queries/generated/plantingSites';
+import { PlantingSite } from 'src/types/Tracking';
 
-const useObservablePlantingSites = () => {
+import { MonitoringType } from './monitoringTypes';
+
+/** Start dates of the upcoming observations that block scheduling another one of the same type. */
+export type UpcomingObservationStartDates = Partial<Record<MonitoringType, string>>;
+
+export type ObservablePlantingSite = PlantingSite & {
+  hasPlantings: boolean;
+  upcomingObservationStartDates: UpcomingObservationStartDates;
+};
+
+// The server only lets an observation be scheduled when the site has plantings assigned to a
+// substratum, so a site whose plants are all recorded at the site level doesn't qualify.
+const hasSubstratumPlantings = (sitePlants?: PlantingSiteReportedPlantsPayload) =>
+  sitePlants?.strata.some((stratum) => stratum.substrata.some((substratum) => substratum.totalPlants > 0)) === true;
+
+const useObservablePlantingSites = (): ObservablePlantingSite[] => {
   const { selectedOrganization } = useOrganization();
   const [listObservations, listObservationsResponse] = useLazyListObservationsQuery();
   const [listSitesReportedPlants, listSitesReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const allObservations = useMemo(
@@ -36,29 +57,36 @@ const useObservablePlantingSites = () => {
     });
   }, [allObservations, now]);
 
-  const plantingSitesWithStrataAndNoUpcomingObservations = useMemo(() => {
+  const observablePlantingSites = useMemo((): ObservablePlantingSite[] => {
     if (!plantingSites || !allSitesReportedPlants || !upcomingObservations) {
       return [];
     }
-    return plantingSites.filter((site) => {
-      if (!site.strata?.length) {
-        return false;
-      }
+    return plantingSites.flatMap((site) => {
       const sitePlants = allSitesReportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
-      if (!sitePlants?.totalPlants) {
-        return false;
-      }
+      const siteHasPlantings = hasSubstratumPlantings(sitePlants);
       const siteUpcomingObservations = upcomingObservations.filter(
         (observation) => observation.plantingSiteId === site.id
       );
-      if (siteUpcomingObservations.length > 0) {
-        return false;
-      }
-      return true;
-    });
-  }, [plantingSites, allSitesReportedPlants, upcomingObservations]);
 
-  return plantingSitesWithStrataAndNoUpcomingObservations;
+      if (!biomassSchedulingEnabled) {
+        return !site.strata?.length || !siteHasPlantings || siteUpcomingObservations.length > 0
+          ? []
+          : [{ ...site, hasPlantings: true, upcomingObservationStartDates: {} }];
+      }
+
+      const upcomingObservationStartDates: UpcomingObservationStartDates = {};
+      siteUpcomingObservations.forEach((observation) => {
+        const blockingStartDate = upcomingObservationStartDates[observation.type];
+        if (!blockingStartDate || observation.startDate < blockingStartDate) {
+          upcomingObservationStartDates[observation.type] = observation.startDate;
+        }
+      });
+
+      return [{ ...site, hasPlantings: siteHasPlantings, upcomingObservationStartDates }];
+    });
+  }, [plantingSites, allSitesReportedPlants, biomassSchedulingEnabled, upcomingObservations]);
+
+  return observablePlantingSites;
 };
 
 export default useObservablePlantingSites;

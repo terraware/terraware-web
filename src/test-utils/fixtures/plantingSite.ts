@@ -44,6 +44,10 @@ export const buildStratum = (overrides: Partial<StratumResponsePayload> = {}): S
   name: 'Stratum A',
   numPermanentPlots: 2,
   numTemporaryPlots: 1,
+  plotCounts: [
+    { numPermanentPlots: 2, numTemporaryPlots: 1, observationType: 'Monitoring' },
+    { numPermanentPlots: 4, numTemporaryPlots: 3, observationType: 'Biomass Measurements' },
+  ],
   substrata: [buildSubstratum()],
   targetPlantDensity: 1500,
   ...overrides,

@@ -157,11 +157,6 @@ export type AppendVariableValueOperation = Omit<AppendValueOperationPayload, 'va
   value: NewNonSectionValuePayloadUnion;
 };
 
-export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit<ReplaceValuesOperationPayload, 'values'> & {
-  projectId: number;
-  values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
-};
-
 export type {
   NewTextValuePayload,
   NewNumberValuePayload,

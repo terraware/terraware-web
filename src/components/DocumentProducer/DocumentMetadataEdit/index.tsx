@@ -7,10 +7,8 @@ import isString from 'lodash/isString';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
+import { useListDocumentTemplatesQuery } from 'src/queries/generated/documentProducerTemplates';
 import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
-import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
-import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -41,10 +39,10 @@ const DocumentMetadataEdit = ({
   isEdit,
   formValid,
 }: DocumentMetadataEditProps): JSX.Element => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { documentTemplates, error: getDocumentTemplatesError } = useAppSelector(selectDocumentTemplates);
+  const { currentData: documentTemplatesData, isError: isDocumentTemplatesError } = useListDocumentTemplatesQuery();
+  const documentTemplates = documentTemplatesData?.documentTemplates;
   const { availableProjects: availableProjectOptions } = useProjects();
   const availableProjects = useMemo(() => availableProjectOptions || [], [availableProjectOptions]);
 
@@ -66,14 +64,10 @@ const DocumentMetadataEdit = ({
   );
 
   useEffect(() => {
-    void dispatch(requestListDocumentTemplates());
-  }, [dispatch]);
-
-  useEffect(() => {
-    if (getDocumentTemplatesError) {
+    if (isDocumentTemplatesError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [snackbar, getDocumentTemplatesError]);
+  }, [snackbar, isDocumentTemplatesError]);
 
   // All fields are required in this form
   const getErrorText = (value: unknown): string => (formValid === false && !value ? strings.REQUIRED_FIELD : '');

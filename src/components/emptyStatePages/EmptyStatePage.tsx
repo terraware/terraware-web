@@ -9,6 +9,7 @@ import { IconName } from 'src/components/common/icon/icons';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import { useInventoryImport } from 'src/hooks/batches/useInventoryImport';
+import { useSpeciesImport } from 'src/hooks/species/useSpeciesImport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import ImportInventoryModal from 'src/scenes/InventoryRouter/ImportInventoryModal';
@@ -19,7 +20,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import ImportSpeciesModal, { downloadCsvTemplate } from '../../scenes/Species/ImportSpeciesModal';
+import ImportSpeciesModal from '../../scenes/Species/ImportSpeciesModal';
 import TfMain from '../common/TfMain';
 
 type PageContent = {
@@ -44,6 +45,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const { getInventoryTemplate } = useInventoryImport();
+  const { getSpeciesTemplate } = useSpeciesImport();
 
   const goToNewLocation = () => {
     const newLocation = {
@@ -53,11 +55,11 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   };
 
   const downloadCsvTemplateHandler = () => {
-    void downloadCsvTemplate();
+    void downloadTemplateCsv(getSpeciesTemplate, strings.TEMPLATE_FILENAME_SPECIES);
   };
 
   const downloadInventoryCsvTemplateHandler = () => {
-    void downloadTemplateCsv(getInventoryTemplate);
+    void downloadTemplateCsv(getInventoryTemplate, strings.TEMPLATE_FILENAME_SEEDLINGS);
   };
 
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);

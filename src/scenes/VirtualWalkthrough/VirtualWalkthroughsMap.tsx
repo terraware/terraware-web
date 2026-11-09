@@ -12,6 +12,7 @@ import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import Button from 'src/components/common/button/Button';
 import { API_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -327,8 +328,7 @@ export default function VirtualWalkthroughsMap({
       <Box display='flex' flexDirection='column' width='100%' gap={2}>
         {thumbnailSrc && (
           <Box sx={{ position: 'relative', width: '100%' }}>
-            <Box
-              component='img'
+            <ThumbnailImage
               src={thumbnailSrc}
               alt={strings.THUMBNAIL}
               sx={{ aspectRatio: '3 / 2', display: 'block', objectFit: 'cover', width: '100%', borderRadius: '8px' }}

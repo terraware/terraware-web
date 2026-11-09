@@ -3,6 +3,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button, ViewPhotosDialog } from '@terraware/web-components';
 
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import useSeedFundReportPhotos from 'src/hooks/useSeedFundReportPhotos';
 import strings from 'src/strings';
@@ -93,7 +94,7 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
                 }}
               />
             )}
-            <img
+            <ThumbnailImage
               src={`${photo.url}?maxHeight=120&maxWidth=120`}
               alt={`${index}`}
               onClick={() => {

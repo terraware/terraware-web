@@ -18,6 +18,7 @@ import {
   MRT_VisibilityState,
 } from 'material-react-table';
 
+import CurrentView from 'src/components/common/CurrentView';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
@@ -44,13 +45,14 @@ import {
   purposeLabel,
 } from 'src/types/Batch';
 import { Project } from 'src/types/Project';
+import { TABLES } from 'src/types/Tables';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useDebounce from 'src/utils/useDebounce';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
+const TABLE = TABLES.nurseryWithdrawals;
 
 const ITEMS_PER_PAGE = 100;
 const PLANTING_DATE_COLUMN_ID = 'plantingDate';
@@ -203,6 +205,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     setColumnFilters,
@@ -212,7 +215,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+  } = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     persistedMultiSelectColumnIds: [
@@ -518,7 +521,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       },
       {
         id: 'destinationName',
-        header: strings.PLANTING_SITE,
+        header: strings.DESTINATION,
         accessorKey: 'destinationName',
         enableEditing: false,
         filterVariant: 'multi-select',
@@ -844,7 +847,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableGlobalFilter={true}
         enableColumnFilters={true}
         enableColumnOrdering={true}
-        storageKey={TABLE_STATE_STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         enablePagination={true}
         enableTopToolbar={true}
         enableBottomToolbar={true}
@@ -880,6 +883,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           enableGrouping: false,
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>

@@ -376,6 +376,8 @@ type ObservationDatesSearchResult = {
   endDate: string;
 };
 
+export const plantingSitesSearchApi = injectedRtkApi;
+
 export const {
   useLazyCountPlantingSitesQuery,
   useLazySearchPlantingSitesQuery,

@@ -3,7 +3,7 @@ import React from 'react';
 import { act, screen } from '@testing-library/react';
 
 import strings from 'src/strings';
-import { buildOrganization, renderWithProviders } from 'src/test-utils';
+import { buildOrganization, buildUser, mockGet, renderWithProviders } from 'src/test-utils';
 import { SearchResponseElementWithId } from 'src/types/Search';
 
 import AccessionsTable from './AccessionsTable';
@@ -25,6 +25,11 @@ const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner'
   renderWithProviders(<AccessionsTable searchResults={searchResults} />, {
     organization: { selectedOrganization: buildOrganization({ id: ORG_ID, role }) },
   });
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me', { user: buildUser() });
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+});
 
 describe('AccessionsTable saved page', () => {
   const pageIndexKey = 'accessions-database-table-pageIndex';

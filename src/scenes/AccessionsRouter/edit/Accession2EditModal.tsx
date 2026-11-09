@@ -8,6 +8,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import { API_PATHS } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -292,7 +293,7 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
                       top: -10,
                     }}
                   />
-                  <img
+                  <ThumbnailImage
                     alt={`${index}`}
                     src={`${API_PATHS.ACCESSION_PHOTO.replace('{accessionId}', String(accession.id)).replace('{photoFilename}', photoFilename)}?maxHeight=120&maxWidth=120`}
                     style={{

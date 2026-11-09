@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
@@ -24,19 +22,14 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
+import useBiomassPlot from './useBiomassPlot';
 
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const params = useParams<{ observationId: string }>();
-  const observationId = Number(params.observationId);
-
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
-  const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
-  const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const biomassMeasurement = useMemo(() => results?.biomassMeasurements, [results?.biomassMeasurements]);
+  const { biomassMeasurement, monitoringPlot, observationId, results } = useBiomassPlot();
 
   useEffect(() => {
     if (results) {
@@ -239,7 +232,7 @@ const BiomassObservationDataTab = () => {
           unrecognizedSpecies={unrecognizedSpecies}
         />
       )}
-      <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
+      <ObservationDataNumbers items={items} isCompleted={!!monitoringPlot?.completedTime} />
       <Box display='flex' sx={{ paddingBottom: 2, paddingTop: 3, alignItems: 'center' }}>
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingRight={1}>
           {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}

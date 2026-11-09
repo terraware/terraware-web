@@ -16,6 +16,7 @@ import {
 } from 'material-react-table';
 
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
@@ -28,6 +29,7 @@ import strings from 'src/strings';
 import { ACCESSION_2_STATES, isWithdrawableAccessionState } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
+import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
@@ -37,7 +39,7 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const TABLE_STATE_STORAGE_KEY = 'accessions-database-table';
+const TABLE = TABLES.accessions;
 
 const DEFAULT_VISIBLE_COLUMNS = [
   'accessionNumber',
@@ -228,6 +230,7 @@ export default function AccessionsTable({
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -241,7 +244,7 @@ export default function AccessionsTable({
     showColumnFilters,
     showGlobalFilter,
     sorting,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+  } = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     defaultSorting: [{ id: 'accessionNumber', desc: false }],
@@ -726,7 +729,7 @@ export default function AccessionsTable({
         enableGlobalFilter={true}
         enableColumnFilters={true}
         enableColumnOrdering={true}
-        storageKey={TABLE_STATE_STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         tableOptions={{
           autoResetPageIndex,
           defaultColumn: {
@@ -819,6 +822,14 @@ export default function AccessionsTable({
                 },
               }
             : {}),
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>

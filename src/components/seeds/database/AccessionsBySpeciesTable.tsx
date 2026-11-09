@@ -24,6 +24,7 @@ import {
 } from 'material-react-table';
 
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
@@ -36,6 +37,7 @@ import strings from 'src/strings';
 import { isWithdrawableAccessionState } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
+import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -54,7 +56,7 @@ type SpeciesRow = {
   accessionIds: number[];
 };
 
-const TABLE_STATE_STORAGE_KEY = 'accessions-database-species-table-v4';
+const TABLE = TABLES.accessionsBySpecies;
 
 const DEFAULT_COLUMN_ORDER = [
   'speciesName',
@@ -101,6 +103,7 @@ export default function AccessionsBySpeciesTable({
     columnFilters,
     columnOrder,
     columnVisibility,
+    defaultViewSettings,
     density,
     onDensityChange,
     onPaginationChange,
@@ -114,7 +117,7 @@ export default function AccessionsBySpeciesTable({
     showColumnFilters,
     showGlobalFilter,
     sorting,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+  } = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: { dryingSeeds: false, inStorageSeeds: false },
     defaultSorting: [{ id: 'speciesName', desc: false }],
@@ -416,7 +419,7 @@ export default function AccessionsBySpeciesTable({
         enableGlobalFilter={true}
         enableColumnFilters={true}
         enableColumnOrdering={true}
-        storageKey={TABLE_STATE_STORAGE_KEY}
+        storageKey={TABLE.storageKey}
         tableOptions={{
           defaultColumn: {
             enableEditing: false,
@@ -504,6 +507,14 @@ export default function AccessionsBySpeciesTable({
                 },
               }
             : {}),
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>

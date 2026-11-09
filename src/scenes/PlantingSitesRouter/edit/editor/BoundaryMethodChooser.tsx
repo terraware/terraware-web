@@ -33,11 +33,13 @@ const MethodTile = ({ description, icon, id, label, onClick }: MethodTileProps):
         borderRadius: '8px',
         cursor: 'pointer',
         display: 'flex',
+        flex: '1 1 280px',
         fontFamily: 'inherit',
         gap: theme.spacing(2),
+        maxWidth: '320px',
+        minWidth: 0,
         padding: theme.spacing(2, 2.5),
         textAlign: 'left',
-        width: '320px',
         '&:hover': {
           background: theme.palette.TwClrBgHover,
           borderColor: theme.palette.TwClrBrdrSuccess,
@@ -58,7 +60,7 @@ const MethodTile = ({ description, icon, id, label, onClick }: MethodTileProps):
       >
         <Icon name={icon} style={{ fill: theme.palette.TwClrIcnBrand, height: '20px', width: '20px' }} />
       </Box>
-      <Box display='flex' flexDirection='column' gap={theme.spacing(0.5)}>
+      <Box display='flex' flexDirection='column' gap={theme.spacing(0.5)} minWidth={0}>
         <Typography fontSize='14px' fontWeight={600} lineHeight='20px' color={theme.palette.TwClrTxt}>
           {label}
         </Typography>
@@ -75,8 +77,8 @@ export type BoundaryMethodChooserProps = {
 };
 
 /**
- * Overlay shown on top of the editor card while the site boundary is still undefined, letting the
- * user choose between uploading a spatial file and drawing the boundary by hand.
+ * Overlay shown on top of the map while the site boundary is still undefined, letting the user
+ * choose between uploading a spatial file and drawing the boundary by hand.
  */
 export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChooserProps): JSX.Element {
   const theme = useTheme();
@@ -90,10 +92,11 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
           'linear-gradient(180deg, ' +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)}, ` +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.24)})`,
-        borderRadius: theme.spacing(1),
         display: 'flex',
         inset: 0,
         justifyContent: 'center',
+        overflow: 'auto',
+        padding: theme.spacing(2),
         position: 'absolute',
         zIndex: MAP_VIEW_STYLE_CONTROL_Z_INDEX + 1,
       }}
@@ -107,13 +110,21 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
           display: 'flex',
           flexDirection: 'column',
           gap: theme.spacing(2.5),
+          margin: 'auto',
+          maxWidth: '100%',
           padding: theme.spacing(4, 4.5),
         }}
       >
-        <Typography fontSize='16px' fontWeight={600} lineHeight='24px' color={theme.palette.TwClrTxt}>
+        <Typography
+          fontSize='16px'
+          fontWeight={600}
+          lineHeight='24px'
+          color={theme.palette.TwClrTxt}
+          textAlign='center'
+        >
           {strings.BOUNDARY_METHOD_TITLE}
         </Typography>
-        <Box display='flex' gap={theme.spacing(2)}>
+        <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)} justifyContent='center' width='100%'>
           <MethodTile
             description={strings.BOUNDARY_METHOD_UPLOAD_DESCRIPTION}
             icon='uploadCloud'
@@ -129,7 +140,13 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
             onClick={() => onSelect('draw')}
           />
         </Box>
-        <Typography fontSize='12px' fontWeight={400} lineHeight='16px' color={theme.palette.TwClrTxtSecondary}>
+        <Typography
+          fontSize='12px'
+          fontWeight={400}
+          lineHeight='16px'
+          color={theme.palette.TwClrTxtSecondary}
+          textAlign='center'
+        >
           {strings.BOUNDARY_METHOD_SWITCH_NOTE}
         </Typography>
       </Box>

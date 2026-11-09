@@ -17,13 +17,6 @@ const createSearchNodeForIds = (field: string, ids: number[]): SearchNodePayload
     : [];
 
 /**
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions#escaping
- */
-function escapeRegExp(input: string) {
-  return input.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-}
-
-/**
  * Parse the text search term and return the query and the type of search. If the query is
  * surrounded by double quotes, the type is PhraseMatch (and the search term will have the quotes
  * stripped). Otherwise the type is the value of the "type" parameter, which is Fuzzy by default.
@@ -49,14 +42,6 @@ const phraseMatch = (input: string, word: string): boolean => {
 };
 
 /**
- * Check if a string matches a regex pattern
- */
-const regexMatch = (input: string, stringToMatch: string): boolean => {
-  const regex = new RegExp(escapeRegExp(stringToMatch), 'i');
-  return !!input.match(regex);
-};
-
-/**
  * Return inner string if a string is double-quoted, otherwsie null
  */
 const removeDoubleQuotes = (str: string): string | null => {
@@ -69,4 +54,4 @@ const removeDoubleQuotes = (str: string): string | null => {
   }
 };
 
-export { createSearchNodeForIds, parseSearchTerm, phraseMatch, regexMatch, removeDoubleQuotes };
+export { createSearchNodeForIds, parseSearchTerm, phraseMatch, removeDoubleQuotes };
