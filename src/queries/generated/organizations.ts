@@ -31,9 +31,6 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.updateOrganizationRequestPayload,
       }),
     }),
-    listOrganizationRoles: build.query<ListOrganizationRolesApiResponse, ListOrganizationRolesApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/organizations/${queryArg}/roles` }),
-    }),
     updateOrganizationLocation: build.mutation<UpdateOrganizationLocationApiResponse, UpdateOrganizationLocationApiArg>(
       {
         query: (queryArg) => ({
@@ -43,15 +40,13 @@ const injectedRtkApi = api.injectEndpoints({
         }),
       }
     ),
+    listOrganizationRoles: build.query<ListOrganizationRolesApiResponse, ListOrganizationRolesApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/organizations/${queryArg}/roles` }),
+    }),
   }),
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
-export type UpdateOrganizationLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
-export type UpdateOrganizationLocationApiArg = {
-  organizationId: number;
-  updateOrganizationLocationRequestPayload: UpdateOrganizationLocationRequestPayload;
-};
 export type ListOrganizationsApiResponse = /** status 200 OK */ ListOrganizationsResponsePayload;
 export type ListOrganizationsApiArg = /** Return this level of information about the organization's contents. */
   | ('Organization' | 'Facility')
@@ -72,6 +67,11 @@ export type UpdateOrganizationApiResponse = /** status 200 OK */ SimpleSuccessRe
 export type UpdateOrganizationApiArg = {
   organizationId: number;
   updateOrganizationRequestPayload: UpdateOrganizationRequestPayload;
+};
+export type UpdateOrganizationLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type UpdateOrganizationLocationApiArg = {
+  organizationId: number;
+  updateOrganizationLocationRequestPayload: UpdateOrganizationLocationRequestPayload;
 };
 export type ListOrganizationRolesApiResponse = /** status 200 OK */ ListOrganizationRolesResponsePayload;
 export type ListOrganizationRolesApiArg = number;
@@ -198,6 +198,12 @@ export type UpdateOrganizationRequestPayload = {
   timeZone?: string;
   website?: string;
 };
+export type UpdateOrganizationLocationRequestPayload = {
+  /** TDWG Level 3 botanical country code. Null clears the botanical country. */
+  botanicalCountryCode?: string;
+  /** ISO 3166 alpha-2 country code. Null clears the country. */
+  countryCode?: string;
+};
 export type OrganizationRolePayload = {
   role: 'Contributor' | 'Manager' | 'Admin' | 'Owner' | 'Terraformation Contact';
   /** Total number of users in the organization with this role. */
@@ -206,12 +212,6 @@ export type OrganizationRolePayload = {
 export type ListOrganizationRolesResponsePayload = {
   roles: OrganizationRolePayload[];
   status: SuccessOrError;
-};
-export type UpdateOrganizationLocationRequestPayload = {
-  /** TDWG Level 3 botanical country code. Null clears the botanical country. */
-  botanicalCountryCode?: string;
-  /** ISO 3166 alpha-2 country code. Null clears the country. */
-  countryCode?: string;
 };
 export const {
   useListOrganizationsQuery,

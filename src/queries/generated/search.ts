@@ -85,6 +85,7 @@ export type SearchRequestPayload = {
     | 'applications'
     | 'autoCalculatedIndicators'
     | 'bags'
+    | 'batchStageDetails'
     | 'batchSubLocations'
     | 'batchWithdrawals'
     | 'batches'

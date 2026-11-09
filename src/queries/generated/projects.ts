@@ -44,11 +44,6 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
-export type UpdateProjectLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
-export type UpdateProjectLocationApiArg = {
-  id: number;
-  updateProjectLocationRequestPayload: UpdateProjectLocationRequestPayload;
-};
 export type ListProjectsApiResponse = /** status 200 OK */ ListProjectsResponsePayload;
 export type ListProjectsApiArg =
   /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
@@ -69,6 +64,11 @@ export type AssignProjectApiResponse = /** status 200 OK */ SimpleSuccessRespons
 export type AssignProjectApiArg = {
   id: number;
   assignProjectRequestPayload: AssignProjectRequestPayload;
+};
+export type UpdateProjectLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type UpdateProjectLocationApiArg = {
+  id: number;
+  updateProjectLocationRequestPayload: UpdateProjectLocationRequestPayload;
 };
 export type ProjectPayload = {
   botanicalCountryCode?: string;
@@ -137,6 +137,6 @@ export const {
   useGetProjectQuery,
   useLazyGetProjectQuery,
   useUpdateProjectMutation,
-  useUpdateProjectLocationMutation,
   useAssignProjectMutation,
+  useUpdateProjectLocationMutation,
 } = injectedRtkApi;

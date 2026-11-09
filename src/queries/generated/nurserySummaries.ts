@@ -59,12 +59,32 @@ export type GetNurserySummaryResponsePayload = {
   status: SuccessOrError;
   summary: NurserySummaryPayload;
 };
+export type SpeciesStageTimePayload = {
+  /** Number of batches with seedlings that finished this stage. */
+  batchCount: number;
+  /** Seedling-weighted average days in this stage, counting only seedlings that finished the stage, rounded to the nearest day. 0 means less than one day. Null when fewer than 3 batches contribute. */
+  days?: number;
+  /** Upper quartile of per-batch average days for seedlings that finished the stage, rounded to the nearest day. 0 means less than one day. Null when fewer than 5 batches have at least 10 finished seedlings or days is null. */
+  typicalMaxDays?: number;
+  /** Lower quartile of per-batch average days for seedlings that finished the stage, rounded to the nearest day. 0 means less than one day. Null when fewer than 5 batches have at least 10 finished seedlings or days is null. */
+  typicalMinDays?: number;
+  /** Number of batches with at least 10 seedlings that finished this stage. */
+  typicalRangeBatchCount: number;
+};
+export type SpeciesTimeInStagePayload = {
+  activeGrowth: SpeciesStageTimePayload;
+  germinating: SpeciesStageTimePayload;
+  hardeningOff: SpeciesStageTimePayload;
+  ready: SpeciesStageTimePayload;
+};
 export type SpeciesSummaryNurseryPayload = {
   facilityId: number;
   name: string;
 };
 export type SpeciesSummaryPayload = {
   activeGrowthQuantity: number;
+  /** Time in each nursery stage, counting only seedlings that finished the stage. */
+  averageTimeInStage: SpeciesTimeInStagePayload;
   germinatingQuantity: number;
   germinationRate?: number;
   hardeningOffQuantity: number;
