@@ -2052,11 +2052,8 @@ SCARIFY,Scarify,
 SCHEDULE_OBSERVATION,Schedule Observation,
 SCHEDULE_OBSERVATION_MESSAGE,Select the strata and substrata to include in observation:,
 SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL,I want to:,Label for the field where the user picks which kind of observation to schedule
-SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,Plot counts next to each stratum are the numbers of permanent and temporary plots to be assigned.,
-SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATA,{0} - {1} temporary and {2} permanent - will be assigned for the selected strata.,{0} is a plot count such as “26 plots”
-SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATUM,{0} - {1} temporary and {2} permanent - will be assigned for the selected stratum.,{0} is a plot count such as “14 plots”
-SCHEDULE_OBSERVATION_SELECT_ALL_SUBSTRATA,Select all substrata in {0} to calculate how many of its plots will be assigned.,{0} is a stratum name
-SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} is not included in this total because only some of its substrata are selected.,{0} is a stratum name
+SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,"Counts next to each stratum are the numbers of plots to be assigned. Counts next to each substratum (~) are estimates. Note: Plots are placed randomly, so the actual number of plots in each substratum may differ.",
+SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,{0} - {1} temporary and {2} permanent - will be assigned for the selected areas.,{0} is an approximate plot count such as “~17 plots”
 SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Record how many plantings are alive and dead.,
 SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Track survival after planting,
 SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,A {0} observation is already scheduled to start {1}.,{0} is a monitoring type such as “Survival Monitoring” and {1} is a date
