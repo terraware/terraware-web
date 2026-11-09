@@ -12,6 +12,7 @@ import { useLocalization } from 'src/providers';
 import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
+import getSubstratumPlotEstimates, { PlotCounts } from './getSubstratumPlotEstimates';
 import { MonitoringType } from './monitoringTypes';
 
 const PLOT_COUNT_COLUMN_WIDTH = '88px';
@@ -109,35 +110,37 @@ const ObservationSubstratumSelector = ({
     onChangeSelectedSubstrata(selectedSubstrata);
   }, [onChangeSelectedSubstrata, selectedSubstrata]);
 
-  const fullySelectedStrata = useMemo(
-    () => plantingSite?.strata?.filter(isStratumFullySelected) ?? [],
-    [isStratumFullySelected, plantingSite]
-  );
-
-  const partiallySelectedStrata = useMemo(
-    () => plantingSite?.strata?.filter(isStratumPartiallySelected) ?? [],
-    [isStratumPartiallySelected, plantingSite]
-  );
+  const substratumEstimates = useMemo(() => {
+    const estimates = new Map<number, PlotCounts>();
+    plantingSite?.strata?.forEach((stratum) => {
+      getSubstratumPlotEstimates(stratum, plotCountsFor(stratum)).forEach((counts, substratumId) =>
+        estimates.set(substratumId, counts)
+      );
+    });
+    return estimates;
+  }, [plantingSite, plotCountsFor]);
 
   const assignedPlots = useMemo(
     () =>
-      fullySelectedStrata.reduce(
-        (totals, stratum) => {
-          const { numPermanentPlots, numTemporaryPlots } = plotCountsFor(stratum);
+      selectedSubstrata.reduce(
+        (totals, substratumId) => {
+          const estimate = substratumEstimates.get(substratumId);
           return {
-            permanent: totals.permanent + numPermanentPlots,
-            temporary: totals.temporary + numTemporaryPlots,
+            permanent: totals.permanent + (estimate?.numPermanentPlots ?? 0),
+            temporary: totals.temporary + (estimate?.numTemporaryPlots ?? 0),
           };
         },
         { permanent: 0, temporary: 0 }
       ),
-    [fullySelectedStrata, plotCountsFor]
+    [selectedSubstrata, substratumEstimates]
   );
+
+  const approximate = useCallback((count: number) => `${strings.APPROX_SYMBOL}${count}`, [strings.APPROX_SYMBOL]);
 
   const totalAssignedPlotsText = useMemo(() => {
     const total = assignedPlots.permanent + assignedPlots.temporary;
-    return strings.formatString(total === 1 ? strings.X_PLOT : strings.X_PLOTS, total) as string;
-  }, [assignedPlots, strings]);
+    return strings.formatString(total === 1 ? strings.X_PLOT : strings.X_PLOTS, approximate(total)) as string;
+  }, [approximate, assignedPlots, strings]);
 
   return (
     plantingSite &&
@@ -172,7 +175,7 @@ const ObservationSubstratumSelector = ({
               width={PLOT_COUNT_COLUMN_WIDTH}
               flexShrink={0}
             >
-              {strings.PERMANENT}
+              {strings.PERMANENT_PLOTS}
             </Typography>
             <Typography
               fontSize='12px'
@@ -181,7 +184,7 @@ const ObservationSubstratumSelector = ({
               width={PLOT_COUNT_COLUMN_WIDTH}
               flexShrink={0}
             >
-              {strings.TEMPORARY}
+              {strings.TEMPORARY_PLOTS}
             </Typography>
           </Box>
         </Grid>
@@ -244,67 +247,61 @@ const ObservationSubstratumSelector = ({
                     </Link>
                   </Box>
                 )}
-              <Box sx={{ columnGap: theme.spacing(3), paddingLeft: `${theme.spacing(4)}` }}>
+              <Box sx={{ paddingLeft: `${theme.spacing(4)}` }}>
                 {stratum.substrata.map((substratum, _index) => {
+                  const estimate = substratumEstimates.get(substratum.id);
+
                   return (
-                    <Box sx={{ display: 'inline-block', width: '100%' }} key={_index}>
-                      <Checkbox
-                        id={`observation-substratum-${stratum.id}`}
-                        label={substratum.name}
-                        name='Limit Observation to Substratum'
-                        onChange={onChangeSubstratumCheckbox(substratum.id)}
-                        value={selectedSubstrata.includes(substratum.id)}
-                      />
-                      {substratum.latestObservationCompletedTime && (
-                        <Typography
-                          sx={{
-                            display: 'inline',
-                            fontWeight: 500,
-                            color: theme.palette.TwClrTxtSecondary,
-                            verticalAlign: 'bottom',
-                            paddingLeft: 1,
-                          }}
-                        >
-                          {substratum.latestObservationCompletedTime
-                            ? strings.formatString(
-                                strings.LAST_OBSERVATION,
-                                getDateDisplayValue(substratum.latestObservationCompletedTime)
-                              )
-                            : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
-                        </Typography>
-                      )}
+                    <Box display='flex' alignItems='center' key={_index}>
+                      <Box flex={1}>
+                        <Checkbox
+                          id={`observation-substratum-${stratum.id}`}
+                          label={substratum.name}
+                          name='Limit Observation to Substratum'
+                          onChange={onChangeSubstratumCheckbox(substratum.id)}
+                          value={selectedSubstrata.includes(substratum.id)}
+                        />
+                        {substratum.latestObservationCompletedTime && (
+                          <Typography
+                            sx={{
+                              display: 'inline',
+                              fontWeight: 500,
+                              color: theme.palette.TwClrTxtSecondary,
+                              verticalAlign: 'bottom',
+                              paddingLeft: 1,
+                            }}
+                          >
+                            {strings.formatString(
+                              strings.LAST_OBSERVATION,
+                              getDateDisplayValue(substratum.latestObservationCompletedTime)
+                            )}
+                          </Typography>
+                        )}
+                      </Box>
+                      <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
+                        {approximate(estimate?.numPermanentPlots ?? 0)}
+                      </Typography>
+                      <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
+                        {approximate(estimate?.numTemporaryPlots ?? 0)}
+                      </Typography>
                     </Box>
                   );
                 })}
               </Box>
-              {isStratumPartiallySelected(stratum) && (
-                <Typography color={theme.palette.TwClrBaseOrange700} paddingTop={1} fontSize='14px'>
-                  {strings.formatString(strings.SCHEDULE_OBSERVATION_SELECT_ALL_SUBSTRATA, stratum.name)}
-                </Typography>
-              )}
             </Grid>
           );
         })}
-        {(fullySelectedStrata.length > 0 || partiallySelectedStrata.length > 0) && (
+        {selectedSubstrata.length > 0 && (
           <Grid size={12}>
             <Divider sx={{ marginBottom: theme.spacing(3) }} />
-            {fullySelectedStrata.length > 0 && (
-              <Typography fontSize='14px'>
-                {strings.formatString(
-                  fullySelectedStrata.length === 1
-                    ? strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATUM
-                    : strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATA,
-                  <b>{totalAssignedPlotsText}</b>,
-                  <>{assignedPlots.temporary}</>,
-                  <>{assignedPlots.permanent}</>
-                )}
-              </Typography>
-            )}
-            {partiallySelectedStrata.map((stratum) => (
-              <Typography color={theme.palette.TwClrBaseOrange700} fontSize='14px' key={stratum.id}>
-                {strings.formatString(strings.SCHEDULE_OBSERVATION_STRATUM_EXCLUDED, stratum.name)}
-              </Typography>
-            ))}
+            <Typography fontSize='14px'>
+              {strings.formatString(
+                strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,
+                <b>{totalAssignedPlotsText}</b>,
+                <>{approximate(assignedPlots.temporary)}</>,
+                <>{approximate(assignedPlots.permanent)}</>
+              )}
+            </Typography>
           </Grid>
         )}
       </Grid>

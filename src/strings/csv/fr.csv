@@ -2052,11 +2052,8 @@ SCARIFY,Scarification,b34359c6
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
 SCHEDULE_OBSERVATION_MESSAGE,Sélectionnez les strates et sous-strates à inclure dans l'observation :,3dc66640
 SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL,Je souhaite :,ef334f52
-SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,Les dénombrements de placettes à côté de chaque strate indiquent le nombre de placettes permanentes et temporaires à attribuer.,08b6bb53
-SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATA,{0} – {1} temporaires et {2} permanentes – seront attribuées aux strates sélectionnées.,915dae4c
-SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATUM,{0} – {1} temporaires et {2} permanentes – seront attribuées à la strate sélectionnée.,46c02309
-SCHEDULE_OBSERVATION_SELECT_ALL_SUBSTRATA,Sélectionnez tous les sous-strates dans {0} pour calculer combien de ses placettes seront attribuées.,0a64788a
-SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} n'est pas inclus dans ce total car seulement certains de ses sous-strates sont sélectionnés.,93612c0b
+SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,"Les nombres à côté de chaque strate indiquent le nombre de placettes à attribuer. Les nombres à côté de chaque sous-strate (~) sont des estimations. Remarque : Les placettes sont placées aléatoirement, donc le nombre réel de placettes dans chaque sous-strate peut différer.",cf5e0959
+SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,{0} - {1} temporaires et {2} permanentes - seront attribuées aux zones sélectionnées.,49140e4c
 SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Enregistrer combien de plantations sont vivantes et mortes.,f2dc59dc
 SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Suivre la survie après plantation,04429f52
 SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,Une observation de type {0} est déjà programmée pour commencer le {1}.,4ade661b
