@@ -270,10 +270,21 @@ const SpeciesCheckModal = ({
     [botanicalNameByCode, countryNameByCode, locationForTarget]
   );
 
-  const nameSummaries = useMemo(
-    () => checkedTargetData.map((data) => buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)),
-    [buildSummary, checkedTargetData]
-  );
+  const nameSummaries = useMemo(() => {
+    const summaries = checkedTargetData.map((data) =>
+      buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)
+    );
+    const unassignedSpecies = species.filter((sp) => (sp.projects ?? []).length === 0);
+    if (projects.length > 0 && unassignedSpecies.length > 0) {
+      summaries.push({
+        projectName: strings.NO_PROJECT,
+        showLocation: false,
+        speciesChecked: unassignedSpecies.length,
+        updates: unassignedSpecies.filter(hasNameSuggestion).length,
+      });
+    }
+    return summaries;
+  }, [buildSummary, checkedTargetData, projects.length, species]);
 
   const nativeSections = useMemo<NativeCheckProjectSection[]>(
     () =>
