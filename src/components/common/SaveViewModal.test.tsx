@@ -1,10 +1,11 @@
 import React from 'react';
 
 import { rstest } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
+import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { captureRequests, mockError, renderWithProviders } from 'src/test-utils';
+import { captureRequests, dialogTitled, mockError, renderWithProviders, server } from 'src/test-utils';
 
 import SaveViewModal, { SaveViewModalProps } from './SaveViewModal';
 
@@ -29,6 +30,7 @@ const renderModal = (props: Partial<SaveViewModalProps> = {}) =>
 
 const nameField = () => screen.getByRole('textbox');
 const saveButton = () => screen.getByRole('button', { name: strings.SAVE_VIEW_BUTTON });
+const closeIconButton = () => within(dialogTitled(strings.SAVE_VIEW)).getByRole('button', { name: '' });
 
 describe('SaveViewModal', () => {
   it('cannot save until the existing view names have loaded', async () => {
@@ -135,6 +137,32 @@ describe('SaveViewModal', () => {
     expect(onClose).not.toHaveBeenCalled();
     expect(onSaved).not.toHaveBeenCalled();
     expect(nameField()).toHaveValue('Retired only');
+  });
+
+  it('shows a busy skrim and cannot be closed while the save is in flight', async () => {
+    let respond: () => void = () => undefined;
+    const responded = new Promise<void>((resolve) => (respond = resolve));
+    server.use(
+      http.post(SAVED_VIEWS_PATH, async () => {
+        await responded;
+        return HttpResponse.json({ id: 99, status: 'ok' });
+      })
+    );
+    const onClose = rstest.fn();
+    const onSaved = rstest.fn();
+    const { user } = renderModal({ onClose, onSaved });
+
+    await user.type(nameField(), 'Retired only');
+    await user.click(saveButton());
+
+    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+    await user.click(closeIconButton());
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+    expect(onClose).not.toHaveBeenCalled();
+
+    respond();
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(onSaved).toHaveBeenCalledWith(99);
   });
 
   it('closes without saving when cancelled', async () => {
