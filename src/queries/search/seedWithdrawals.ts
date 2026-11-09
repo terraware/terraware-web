@@ -80,7 +80,7 @@ const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fiel
   if (args.purposes?.length) {
     searchChildren.push({
       operation: 'field',
-      field: 'purpose',
+      field: 'purpose(raw)',
       type: 'Exact',
       values: args.purposes,
     });

@@ -383,7 +383,9 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
     const purposeFilterValue = filterValue('purpose');
     const purposes =
       purposeFilterValue && Array.isArray(purposeFilterValue)
-        ? purposeFilterValue.map((value) => (typeof value === 'string' ? (purposeLabelToValue[value] ?? value) : value))
+        ? purposeFilterValue.flatMap((value) =>
+            typeof value === 'string' && Object.hasOwn(purposeLabelToValue, value) ? [purposeLabelToValue[value]] : []
+          )
         : undefined;
 
     const sortOrder =

@@ -45,7 +45,8 @@ const injectedRtkApi = api.injectEndpoints({
           },
           {
             operation: 'field',
-            field: 'status',
+            field: 'status(raw)',
+            type: 'Exact',
             values: inventoryPlanningPlantingSeasonStatuses,
           },
         ];

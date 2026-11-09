@@ -85,7 +85,7 @@ const injectedRtkApi = api.injectEndpoints({
                 type: 'Exact',
                 values: [organizationId.toString()],
               },
-              { operation: 'field', field: 'role', type: 'Exact', values: roles },
+              { operation: 'field', field: 'role(raw)', type: 'Exact', values: roles },
             ],
           },
           sortOrder: [{ field: 'role' }],

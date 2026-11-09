@@ -377,13 +377,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [projects]);
 
   // Create reverse mapping from label to value for filtering
-  const purposeLabelToValue = useMemo(() => {
-    const map: Record<string, NurseryWithdrawalPurpose> = {};
-    Object.values(NurseryWithdrawalPurposes).forEach((purpose) => {
-      map[purposeLabel(purpose)] = purpose;
-    });
-    return map;
-  }, []);
+  const purposeLabelToValue = useMemo<Record<string, NurseryWithdrawalPurpose>>(
+    () => ({
+      [strings.PLANTING]: 'Out Plant',
+      [strings.NURSERY_TRANSFER]: 'Nursery Transfer',
+      [strings.DEAD]: 'Dead',
+      [strings.UNDO_WITHDRAWAL]: 'Undo',
+      [strings.OTHER]: 'Other',
+    }),
+    [strings]
+  );
 
   // Cell renderer components
   const WithdrawnDateCell = useCallback(
@@ -645,7 +648,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
     const purposes =
       purposeFilterValue && Array.isArray(purposeFilterValue)
-        ? purposeFilterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v))
+        ? purposeFilterValue.flatMap((value) =>
+            typeof value === 'string' && Object.hasOwn(purposeLabelToValue, value) ? [purposeLabelToValue[value]] : []
+          )
         : undefined;
 
     const totalWithdrawn =

@@ -845,7 +845,7 @@ const MatrixView = () => {
         children: [
           {
             operation: 'field',
-            field: 'application_status',
+            field: 'application_status(raw)',
             type: 'Exact',
             values: [
               'Submitted',
@@ -912,7 +912,7 @@ const MatrixView = () => {
           prefix: 'internalUsers',
           search: {
             operation: 'field',
-            field: 'role',
+            field: 'role(raw)',
             values: ['Project Lead'],
           },
         },
