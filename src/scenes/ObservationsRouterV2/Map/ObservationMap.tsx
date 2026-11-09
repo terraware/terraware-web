@@ -114,13 +114,7 @@ const ObservationMap = ({
     plantingSiteId === undefined || isAdHoc || isBiomass
   );
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
-    useMonitoringPlotsMapLegend(
-      plantingSiteId === undefined,
-      isBiomass || isAdHoc,
-      isBiomass || isAdHoc,
-      !isAdHoc && !isSingleView,
-      true
-    );
+    useMonitoringPlotsMapLegend(plantingSiteId === undefined, isAdHoc, isAdHoc, !isAdHoc && !isSingleView, true);
 
   const {
     sitesLayerStyle,
@@ -979,8 +973,15 @@ const ObservationMap = ({
     (isDead: boolean): MapMarker[] => {
       if (isBiomass || hasBiomassResults) {
         return adHocObservationResults.flatMap((observation) => {
-          const trees = observation.adHocPlot?.biomassMeasurements?.trees ?? [];
-          return trees
+          const treesById = new Map<number, ExistingTreePayload>();
+          const addTrees = (trees?: ExistingTreePayload[]) => trees?.forEach((tree) => treesById.set(tree.id, tree));
+          addTrees(observation.adHocPlot?.biomassMeasurements?.trees);
+          observation.strata
+            .flatMap((stratum) => stratum.substrata)
+            .flatMap((substratum) => substratum.monitoringPlots)
+            .forEach((plot) => addTrees(plot.biomassMeasurements?.trees));
+
+          return [...treesById.values()]
             .filter((tree) => tree.isDead === isDead)
             .map((tree): MapMarker | undefined => {
               if (tree.gpsCoordinates) {
@@ -1252,8 +1253,14 @@ const ObservationMap = ({
         );
 
       if (isBiomassObservation) {
+        const plotLayerIds = ['adHocPlots', 'permanentPlots', 'temporaryPlots'];
         return (
           <BiomassObservationStatsDrawer
+            monitoringPlotId={
+              adHocObservationId === undefined && plotLayerIds.includes(selectedFeature.layerFeatureId.layerId)
+                ? Number(selectedFeature.layerFeatureId.featureId)
+                : undefined
+            }
             observationId={observationId}
             onViewOnMap={viewSelectedPlotOnMap}
             plantingSiteId={selectedFeature.plantingSiteId}
