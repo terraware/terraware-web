@@ -55,8 +55,8 @@ test.describe('InventoryTests', () => {
     page.mouse.wheel(0, 1000);
     await page.getByRole('tab', { name: 'History' }).click();
     page.mouse.wheel(0, 1000);
-    await expect(page.getByRole('cell', { name: 'Germination/Establishment Quantity, Active' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
+    await expect(page.getByLabel('History')).toContainText('Germination/Establishment Quantity, Active');
+    await expect(page.getByLabel('History')).toContainText('By Super Admin');
     await page.getByRole('tab', { name: 'Details' }).click();
   });
 
@@ -94,8 +94,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Total Quantity 50')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Batch quantity updated from Accession 26-1-2-001' })).toBeVisible();
-    await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
+    await expect(page.getByLabel('History')).toContainText('Batch quantity updated from Accession 26-1-2-001');
+    await expect(page.getByLabel('History')).toContainText('By Super Admin');
     await page.getByRole('tab', { name: 'Details' }).click();
   });
 
@@ -134,8 +134,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByRole('main')).toContainText('Loss Rate 14');
     await expect(page.getByRole('main')).toContainText('Total Withdrawn 15');
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
-    await expect(page.getByRole('cell', { name: withdrawalEvent('Dead') })).toBeVisible();
+    await expect(page.getByLabel('History')).toContainText('By Super Admin');
+    await expect(page.getByLabel('History')).toContainText(withdrawalEvent('Dead'));
     await page.getByRole('link', { name: withdrawalEvent('Dead') }).click();
     await expect(page.getByText('Purpose Dead')).toBeVisible();
     await expect(page.getByText('Quantity 15')).toBeVisible();
@@ -190,8 +190,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Ready to Plant Quantity 50', exactOptions)).toBeVisible();
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: withdrawalEvent('Nursery Transfer') })).toBeVisible();
-    await expect(page.locator('#row1-editedByName')).toBeVisible();
+    await expect(page.getByLabel('History')).toContainText(withdrawalEvent('Nursery Transfer'));
+    await expect(page.getByLabel('History')).toContainText('By Super Admin');
     await page.getByRole('link', { name: 'Inventory / Batches of Banana' }).click();
     await page.locator('#row1-germinatingQuantity').click();
     await expect(page.getByRole('cell', { name: batchNumber })).toBeVisible();
@@ -217,8 +217,8 @@ test.describe('InventoryTests', () => {
     await page.getByRole('link', { name: newBatchNumber }).click();
     await page.getByRole('tab', { name: 'History' }).waitFor({ state: 'visible' });
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Nursery Transfer' })).toBeVisible();
-    await expect(page.getByRole('cell', { name: 'Super Admin' })).toBeVisible();
+    await expect(page.getByLabel('History')).toContainText('Nursery Transfer');
+    await expect(page.getByLabel('History')).toContainText('By Super Admin');
   });
 
   test('Withdraw for Outplanting', async ({ page }, testInfo) => {
@@ -254,7 +254,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
     await page.locator('#acknowledge-button').click();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: withdrawalEvent('Planting') }).nth(0)).toBeVisible();
+    await expect(page.getByLabel('History')).toContainText(withdrawalEvent('Planting'));
     await openNavItem(page, 'Plantings', 'Planting Progress');
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
