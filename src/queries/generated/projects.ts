@@ -33,10 +33,22 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.assignProjectRequestPayload,
       }),
     }),
+    updateProjectLocation: build.mutation<UpdateProjectLocationApiResponse, UpdateProjectLocationApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/projects/${queryArg.id}/location`,
+        method: 'PUT',
+        body: queryArg.updateProjectLocationRequestPayload,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
+export type UpdateProjectLocationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type UpdateProjectLocationApiArg = {
+  id: number;
+  updateProjectLocationRequestPayload: UpdateProjectLocationRequestPayload;
+};
 export type ListProjectsApiResponse = /** status 200 OK */ ListProjectsResponsePayload;
 export type ListProjectsApiArg =
   /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
@@ -111,6 +123,12 @@ export type AssignProjectRequestPayload = {
   batchIds?: number[];
   plantingSiteIds?: number[];
 };
+export type UpdateProjectLocationRequestPayload = {
+  /** TDWG Level 3 botanical country code. Null clears the botanical country. */
+  botanicalCountryCode?: string;
+  /** ISO 3166 alpha-2 country code. Null clears the country. */
+  countryCode?: string;
+};
 export const {
   useListProjectsQuery,
   useLazyListProjectsQuery,
@@ -119,5 +137,6 @@ export const {
   useGetProjectQuery,
   useLazyGetProjectQuery,
   useUpdateProjectMutation,
+  useUpdateProjectLocationMutation,
   useAssignProjectMutation,
 } = injectedRtkApi;

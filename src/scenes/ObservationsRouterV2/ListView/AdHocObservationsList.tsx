@@ -13,13 +13,14 @@ import {
 } from 'material-react-table';
 
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
@@ -72,8 +73,8 @@ type AdHocRow = {
 };
 
 const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string): AdHocRow => {
-  const biomass = observation.biomassMeasurements;
   const adHocPlot = observation.adHocPlot;
+  const biomass = adHocPlot?.biomassMeasurements;
 
   return {
     completedDate: observation.completedTime,
@@ -120,6 +121,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
+  const { selectedOrganization } = useOrganization();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
 
   const plantingSitesById = useMemo(
@@ -148,7 +150,9 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const rows = useMemo(
     () =>
       observations
-        .filter((observation) => observation.type !== 'Biomass Measurements' || observation.biomassMeasurements)
+        .filter(
+          (observation) => observation.type !== 'Biomass Measurements' || observation.adHocPlot?.biomassMeasurements
+        )
         .map((observation) => toRow(observation, plantingSiteNames[observation.plantingSiteId])),
     [observations, plantingSiteNames]
   );
@@ -366,6 +370,14 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView
+              defaultSettings={tableState.defaultViewSettings}
+              organizationId={selectedOrganization?.id}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          ),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               {plantingSitesLoaded && rows.length > 0 && (

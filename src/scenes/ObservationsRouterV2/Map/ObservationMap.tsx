@@ -975,7 +975,6 @@ const ObservationMap = ({
         return adHocObservationResults.flatMap((observation) => {
           const treesById = new Map<number, ExistingTreePayload>();
           const addTrees = (trees?: ExistingTreePayload[]) => trees?.forEach((tree) => treesById.set(tree.id, tree));
-          addTrees(observation.biomassMeasurements?.trees);
           addTrees(observation.adHocPlot?.biomassMeasurements?.trees);
           observation.strata
             .flatMap((stratum) => stratum.substrata)

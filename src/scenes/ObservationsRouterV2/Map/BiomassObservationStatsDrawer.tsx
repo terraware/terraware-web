@@ -58,7 +58,7 @@ const BiomassObservationStatsDrawer = ({
   }, [monitoringPlotId, results]);
 
   const properties = useMemo((): BiomassObservationStatsProperties | undefined => {
-    const measurements = monitoringPlot?.biomassMeasurements ?? results?.biomassMeasurements;
+    const measurements = monitoringPlot?.biomassMeasurements;
     if (results && monitoringPlot && measurements) {
       const completedTime = monitoringPlot.completedTime ?? results.completedTime;
       const completedDate = completedTime

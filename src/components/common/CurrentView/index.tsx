@@ -162,6 +162,22 @@ const CurrentView = <TData extends MRT_RowData>({
     [changePreset, defaultSettings, isSavedTableViewsEnabled, presetViews, savedTableViewsData, table]
   );
 
+  const hasAppliedStoredView = useRef(false);
+  useEffect(() => {
+    if (hasAppliedStoredView.current || !savedTableViewsData) {
+      return;
+    }
+    hasAppliedStoredView.current = true;
+    const storedView = savedTableViewsData.views.find((view) => `${view.id}` === activeSavedViewId);
+    if (storedView) {
+      applyTableSettings(
+        table,
+        storedView.settings as Partial<TableSettings>,
+        getDefaultTableSettings(table, defaultSettings)
+      );
+    }
+  }, [activeSavedViewId, defaultSettings, savedTableViewsData, table]);
+
   const handleRename = useCallback(
     async (value: string, name: string) => {
       try {
@@ -208,8 +224,12 @@ const CurrentView = <TData extends MRT_RowData>({
   }, [isSavedTableViewsError, refetchSavedTableViews]);
   const closeSaveViewModal = useCallback(() => setShowSaveViewModal(false), []);
 
+  if (!isSavedTableViewsEnabled && !presetViews?.length) {
+    return null;
+  }
+
   return (
-    <Box display='flex' alignItems='center' gap={1}>
+    <Box display='flex' alignItems='center' gap={1} paddingTop={0.5} marginBottom={-0.5}>
       <Box width='300px' flexShrink={0}>
         <CurrentViewSelect
           defaultViewLabel={defaultViewLabel}

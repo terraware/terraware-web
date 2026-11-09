@@ -88,9 +88,9 @@ export default function NewIndicator(): JSX.Element {
       return;
     }
     if (indicatorKind === 'common') {
-      void createCommonIndicator({ indicator: newIndicator });
+      return createCommonIndicator({ indicator: newIndicator });
     } else {
-      void createProjectIndicator({
+      return createProjectIndicator({
         projectId,
         createProjectIndicatorRequestPayload: { indicator: newIndicator },
       });

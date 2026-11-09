@@ -59,7 +59,7 @@ const FunderInviteView = () => {
       return;
     }
 
-    void inviteFunder({
+    return inviteFunder({
       fundingEntityId,
       inviteFundingEntityFunderRequestPayload: { email: record.email },
     });

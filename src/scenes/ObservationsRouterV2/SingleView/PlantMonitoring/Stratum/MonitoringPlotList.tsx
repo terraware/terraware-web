@@ -16,6 +16,7 @@ import {
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
+import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import { APP_PATHS } from 'src/constants';
@@ -369,6 +370,9 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
         )}
         tableOptions={{
           defaultColumn: { enableEditing: false },
+          renderTopToolbarCustomActions: ({ table }) => (
+            <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
+          ),
           state: {
             columnFilters,
             columnOrder,

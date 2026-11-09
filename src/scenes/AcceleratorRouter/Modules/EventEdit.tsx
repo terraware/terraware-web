@@ -205,12 +205,7 @@ export default function EventEditView(): JSX.Element {
 
   return (
     <TfMain>
-      <PageForm
-        cancelID='cancelLiveSession'
-        saveID='saveLiveSession'
-        onCancel={() => goToEvent()}
-        onSave={() => void save()}
-      >
+      <PageForm cancelID='cancelLiveSession' saveID='saveLiveSession' onCancel={() => goToEvent()} onSave={save}>
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {getTitleForType()}

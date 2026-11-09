@@ -9,10 +9,10 @@ import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
-import useUpdateOrganization from 'src/hooks/useUpdateOrganization';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useUpdateProjectMutation } from 'src/queries/generated/projects';
+import { useUpdateOrganizationLocationMutation } from 'src/queries/generated/organizations';
+import { useUpdateProjectLocationMutation } from 'src/queries/generated/projects';
 import {
   useAcceptPendingNativitiesMutation,
   useAcceptProblemSuggestionMutation,
@@ -76,8 +76,8 @@ const SpeciesCheckModal = ({
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('species_check', open);
 
-  const [updateProject] = useUpdateProjectMutation();
-  const updateOrganization = useUpdateOrganization();
+  const [updateProjectLocation] = useUpdateProjectLocationMutation();
+  const [updateOrganizationLocation] = useUpdateOrganizationLocationMutation();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
   const [overrideSpecies] = useOverrideProjectSpeciesDataMutation();
   const [acceptPending] = useAcceptPendingNativitiesMutation();
@@ -396,20 +396,19 @@ const SpeciesCheckModal = ({
             if (!selectedOrganization) {
               return Promise.resolve();
             }
-            return updateOrganization({
-              ...selectedOrganization,
+            return updateOrganizationLocation({
+              organizationId: selectedOrganization.id,
+              updateOrganizationLocationRequestPayload: {
+                countryCode: edit.countryCode,
+                botanicalCountryCode: edit.botanicalCountryCode,
+              },
+            }).unwrap();
+          }
+          return updateProjectLocation({
+            id: target.projectId as number,
+            updateProjectLocationRequestPayload: {
               countryCode: edit.countryCode,
               botanicalCountryCode: edit.botanicalCountryCode,
-            });
-          }
-          const project = projects.find((p) => p.id === target.projectId);
-          return updateProject({
-            id: target.projectId as number,
-            updateProjectRequestPayload: {
-              name: project?.name ?? target.name,
-              description: project?.description,
-              countryCode: edit.countryCode ?? null,
-              botanicalCountryCode: edit.botanicalCountryCode ?? null,
             },
           }).unwrap();
         })
@@ -437,8 +436,8 @@ const SpeciesCheckModal = ({
     targets,
     trackEvent,
     trackSaveFailed,
-    updateOrganization,
-    updateProject,
+    updateOrganizationLocation,
+    updateProjectLocation,
   ]);
 
   const onAcceptNames = useCallback(async () => {
