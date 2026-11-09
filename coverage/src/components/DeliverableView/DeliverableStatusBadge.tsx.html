@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">52.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>10/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">23.52% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>4/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">52.63% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/19</span>
+                <span class='fraction'>10/19</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -170,25 +170,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">183x</span>
+<span class="cline-any cline-yes">183x</span>
+<span class="cline-any cline-yes">183x</span>
+<span class="cline-any cline-yes">183x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">183x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -218,7 +211,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,7 +236,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">183x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -262,40 +262,40 @@ type DeliverableStatusBadgeProps = {
   status: DeliverableStatusTypeWithOverdue;
 };
 &nbsp;
-const DeliverableStatusBadge = <span class="fstat-no" title="function not covered" >(props: DeliverableStatusBadgeProps): JSX.Element =&gt; {</span>
-  const { status } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const { activeLocale } = <span class="cstat-no" title="statement not covered" >useLocalization();</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { isAcceleratorRoute } = <span class="cstat-no" title="statement not covered" >useAcceleratorConsole();</span>
+const DeliverableStatusBadge = (props: DeliverableStatusBadgeProps): JSX.Element =&gt; {
+  const { status } = props;
+  const { activeLocale } = useLocalization();
+  const theme = useTheme();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 &nbsp;
-  const badgeProps = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >(): BadgeProps | undefined =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    if (!activeLocale) {</span>
+  const badgeProps = useMemo((): BadgeProps | undefined =&gt; {
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (!activeLocale) {
 <span class="cstat-no" title="statement not covered" >      return undefined;</span>
     }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    switch (status) {</span>
-      case 'Approved':
+    switch (status) {
+<span class="branch-0 cbranch-no" title="branch not covered" >      case 'Approved':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
           labelColor: theme.palette.TwClrTxtSuccess,
           label: strings.APPROVED,
         };
-      case 'In Review':
+<span class="branch-1 cbranch-no" title="branch not covered" >      case 'In Review':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
           label: strings.IN_REVIEW,
         };
-      case 'Needs Translation':
+<span class="branch-2 cbranch-no" title="branch not covered" >      case 'Needs Translation':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
           label: isAcceleratorRoute ? strings.NEEDS_TRANSLATION : strings.IN_REVIEW,
         };
-      case 'Not Needed':
+<span class="branch-3 cbranch-no" title="branch not covered" >      case 'Not Needed':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
@@ -303,39 +303,39 @@ const DeliverableStatusBadge = <span class="fstat-no" title="function not covere
           label: strings.NOT_NEEDED,
         };
       case 'Not Submitted':
-<span class="cstat-no" title="statement not covered" >        return {</span>
+        return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: strings.NOT_SUBMITTED,
         };
-      case 'Rejected':
+<span class="branch-5 cbranch-no" title="branch not covered" >      case 'Rejected':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
           label: isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED,
         };
-      case 'Overdue':
+<span class="branch-6 cbranch-no" title="branch not covered" >      case 'Overdue':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
           label: strings.OVERDUE,
         };
-      case 'Completed':
+<span class="branch-7 cbranch-no" title="branch not covered" >      case 'Completed':</span>
 <span class="cstat-no" title="statement not covered" >        return {</span>
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
           label: strings.COMPLETED,
         };
-      default:
+<span class="branch-8 cbranch-no" title="branch not covered" >      default:</span>
 <span class="cstat-no" title="statement not covered" >        return undefined;</span>
     }
   }, [activeLocale, isAcceleratorRoute, status, theme]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;&gt;{badgeProps &amp;&amp; &lt;Badge {...badgeProps} /&gt;}&lt;/&gt;;</span>
+  return &lt;&gt;{badgeProps &amp;&amp; &lt;Badge {...badgeProps} /&gt;}&lt;/&gt;;
 };
 &nbsp;
 export default DeliverableStatusBadge;
@@ -346,7 +346,7 @@ export default DeliverableStatusBadge;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-09T18:20:24.868Z
+                at 2026-11-09T20:14:11.296Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
