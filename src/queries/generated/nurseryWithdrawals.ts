@@ -64,6 +64,20 @@ export type BatchAccessionPayload = {
   accessionId?: number;
   accessionNumber?: string;
 };
+export type BatchStageTimePayload = {
+  /** True if a manual quantity edit changed this stage's quantity, so its time in stage can't be calculated. */
+  cleared: boolean;
+  /** Average number of days seedlings have spent in this stage, rounded to the nearest day. 0 means less than one day. Null if no seedlings have been in this stage or if a manual quantity edit made the time unknown. */
+  days?: number;
+  /** True if seedlings are currently in this stage, so the average will keep increasing. */
+  inProgress: boolean;
+};
+export type BatchTimeInStagePayload = {
+  activeGrowth: BatchStageTimePayload;
+  germinating: BatchStageTimePayload;
+  hardeningOff: BatchStageTimePayload;
+  ready: BatchStageTimePayload;
+};
 export type BatchPayload = {
   /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this. */
   accessionId?: number;
@@ -94,6 +108,8 @@ export type BatchPayload = {
   subLocationIds: number[];
   substrate?: 'MediaMix' | 'Soil' | 'Sand' | 'Moss' | 'PerliteVermiculite' | 'Other';
   substrateNotes?: string;
+  /** How long seedlings have spent in each stage. Absent if the batch's history predates time-in-stage tracking. */
+  timeInStage?: BatchTimeInStagePayload;
   totalWithdrawn: number;
   treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
   treatmentNotes?: string;
@@ -161,7 +177,7 @@ export type SimpleErrorResponsePayload = {
 };
 export type CreateNurseryWithdrawalRequestPayload = {
   batchWithdrawals: BatchWithdrawalPayload[];
-  /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Not allowed for purposes other than "Nursery Transfer". */
+  /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Cannot be the same as facilityId. Not allowed for purposes other than "Nursery Transfer". */
   destinationFacilityId?: number;
   facilityId: number;
   notes?: string;
