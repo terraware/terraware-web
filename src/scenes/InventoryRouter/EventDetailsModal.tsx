@@ -14,6 +14,8 @@ import { getNurseryById } from 'src/utils/organization';
 import { BatchHistoryEvent } from './BatchHistory';
 import { getEventType } from './BatchHistoryEventDescription';
 
+const OTHER_VALUE = 'Other';
+
 export interface EventDetailsModalProps {
   onClose: () => void;
   selectedEvent: BatchHistoryEvent;
@@ -38,6 +40,39 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
     { skip: selectedEvent.type !== 'IncomingWithdrawal' }
   );
   const relatedBatch = relatedBatchData?.batch;
+
+  const changedDates = useMemo(() => {
+    if (selectedEvent.type !== 'DetailsEdited' || previousEvent?.type !== 'DetailsEdited') {
+      return [];
+    }
+
+    return [
+      {
+        after: selectedEvent.germinationStartedDate,
+        before: previousEvent.germinationStartedDate,
+        field: strings.GERMINATION_ESTABLISHMENT_STARTED_DATE,
+        id: 'germinationStartedDate',
+        labelAfter: strings.GERMINATION_ESTABLISHMENT_STARTED_DATE_AFTER,
+        labelBefore: strings.GERMINATION_ESTABLISHMENT_STARTED_DATE_BEFORE,
+      },
+      {
+        after: selectedEvent.readyByDate,
+        before: previousEvent.readyByDate,
+        field: strings.ESTIMATED_READY_DATE,
+        id: 'readyByDate',
+        labelAfter: strings.ESTIMATED_READY_DATE_AFTER,
+        labelBefore: strings.ESTIMATED_READY_DATE_BEFORE,
+      },
+      {
+        after: selectedEvent.seedsSownDate,
+        before: previousEvent.seedsSownDate,
+        field: strings.SEEDS_SOWN_DATE,
+        id: 'seedsSownDate',
+        labelAfter: strings.SEEDS_SOWN_DATE_AFTER,
+        labelBefore: strings.SEEDS_SOWN_DATE_BEFORE,
+      },
+    ].filter((date) => selectedEvent.modifiedFields.includes(date.field));
+  }, [previousEvent, selectedEvent]);
 
   const photoUrl = useMemo(
     () =>
@@ -221,7 +256,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   />
                 </Grid>
                 <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
-                  {previousEvent.substrate === strings.OTHER && (
+                  {previousEvent.substrate === OTHER_VALUE && (
                     <Textfield id='substrateNotesBefore' value={previousEvent.substrateNotes} type='text' label='' />
                   )}
                 </Grid>
@@ -239,7 +274,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   />
                 </Grid>
                 <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
-                  {selectedEvent.substrate === strings.OTHER && (
+                  {selectedEvent.substrate === OTHER_VALUE && (
                     <Textfield id='substrateNotesAfter' value={selectedEvent.substrateNotes} type='text' label='' />
                   )}
                 </Grid>
@@ -265,7 +300,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   />
                 </Grid>
                 <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
-                  {previousEvent.treatment === strings.OTHER && (
+                  {previousEvent.treatment === OTHER_VALUE && (
                     <Textfield id='treatmentNotesBefore' value={previousEvent.treatmentNotes} type='text' label='' />
                   )}
                 </Grid>
@@ -283,7 +318,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
                   />
                 </Grid>
                 <Grid padding={theme.spacing(3, 0, 1, 2)} sx={{ alignSelf: 'flex-end' }} size={gridSize()}>
-                  {selectedEvent.substrate === strings.OTHER && (
+                  {selectedEvent.treatment === OTHER_VALUE && (
                     <Textfield id='treatmentNotesAfter' value={selectedEvent.treatmentNotes} type='text' label='' />
                   )}
                 </Grid>
@@ -321,6 +356,22 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
             )}
           </>
         )}
+        {changedDates.length > 0 && (
+          <Grid sx={marginTop} size={12}>
+            <Divider />
+          </Grid>
+        )}
+        {changedDates.map((date) => (
+          <React.Fragment key={date.id}>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
+              <Textfield display id={`${date.id}Before`} label={date.labelBefore} type='text' value={date.before} />
+            </Grid>
+            <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
+              <Textfield display id={`${date.id}After`} label={date.labelAfter} type='text' value={date.after} />
+            </Grid>
+          </React.Fragment>
+        ))}
+
         {selectedEvent?.type === 'IncomingWithdrawal' && relatedBatch && (
           <>
             <Grid sx={marginTop} paddingRight={paddingSeparator} size={gridSize()}>
