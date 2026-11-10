@@ -56,6 +56,13 @@ export enum MIXPANEL_EVENTS {
   CONSOLE_DELIVERABLES_NAV_CLICKED = 'Console Deliverables Nav Clicked',
   CONSOLE_DELIVERABLES_FILTER_APPLIED = 'Console Deliverables Filter Applied',
 
+  // --- Tables ---
+  TABLE_VIEW_SELECTED = 'Table View Selected',
+  TABLE_VIEW_SAVE_STARTED = 'Table View Save Started',
+  TABLE_VIEW_SAVED = 'Table View Saved',
+  TABLE_VIEW_RENAMED = 'Table View Renamed',
+  TABLE_VIEW_DELETED = 'Table View Deleted',
+
   // --- Generic UI / Navigation ---
   TOP_BAR_HOME_CLICKED = 'Top Bar Home Clicked',
   SETTINGS_TAB_CLICKED = 'Settings Tab Clicked',
@@ -81,6 +88,15 @@ export enum MIXPANEL_EVENTS {
 }
 
 export type BoundaryFileFormat = 'geojson' | 'kml' | 'kmz' | 'shapefile';
+
+export type TableViewEventContext = {
+  table: string;
+  location: 'console' | 'forestry_view';
+  user_id?: number;
+  org_id?: number;
+};
+
+export type TableViewSaveSource = 'save_button' | 'menu';
 
 export type SpeciesIntelligenceBannerType = 'set_location' | 'species_added';
 
@@ -192,6 +208,29 @@ export type MixpanelEventPropertyMap = {
     modal_name: string;
     time_open_seconds: number;
   };
+  [MIXPANEL_EVENTS.TABLE_VIEW_SELECTED]: TableViewEventContext & {
+    view_type: 'default' | 'preset' | 'my_view';
+    preset_name?: string;
+    my_views_count: number;
+    user_role?: string;
+  };
+  [MIXPANEL_EVENTS.TABLE_VIEW_SAVE_STARTED]: TableViewEventContext & {
+    source: TableViewSaveSource;
+    user_role?: string;
+  };
+  [MIXPANEL_EVENTS.TABLE_VIEW_SAVED]: TableViewEventContext & {
+    source: TableViewSaveSource;
+    base_view: string;
+    filter_count: number;
+    filtered_columns: string[];
+    has_sort: boolean;
+    has_search: boolean;
+    columns_reordered: boolean;
+    my_views_count: number;
+    user_role?: string;
+  };
+  [MIXPANEL_EVENTS.TABLE_VIEW_RENAMED]: TableViewEventContext;
+  [MIXPANEL_EVENTS.TABLE_VIEW_DELETED]: TableViewEventContext;
   [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN]: {
     banner_type: SpeciesIntelligenceBannerType;
   };

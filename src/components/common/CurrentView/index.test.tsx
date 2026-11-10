@@ -4,13 +4,27 @@ import { rs } from '@rstest/core';
 import { act, screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { MRT_ColumnDef, MaterialReactTable, useMaterialReactTable } from 'material-react-table';
+import { HttpResponse, http } from 'msw/http';
 
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { api as savedTableViewsApi } from 'src/queries/generated/savedTableViews';
 import strings from 'src/strings';
-import { buildUser, captureRequests, dialogTitled, mockDelete, mockGet, renderWithProviders } from 'src/test-utils';
+import {
+  buildUser,
+  captureRequests,
+  dialogTitled,
+  mockDelete,
+  mockError,
+  mockGet,
+  renderWithProviders,
+  server,
+} from 'src/test-utils';
 import { TABLES } from 'src/types/Tables';
 
 import CurrentView, { ViewOption } from './index';
+
+const { trackEvent } = rs.hoisted(() => ({ trackEvent: rs.fn() }));
+rs.mock('src/hooks/useTrackEvent', () => ({ useTrackEvent: () => trackEvent }));
 
 type Row = { name: string; status: string };
 
@@ -99,6 +113,7 @@ const expectAllRows = () => {
 };
 
 beforeEach(() => {
+  trackEvent.mockClear();
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/users/me/preferences', { preferences: { savedTableViews: true } });
 });
@@ -437,5 +452,130 @@ describe('CurrentView when the saved views fail to load', () => {
 
     await waitFor(() => expect(retryRequests).toHaveLength(1));
     expect(dialogTitled(strings.SAVE_VIEW)).toBeInTheDocument();
+  });
+});
+
+describe('CurrentView analytics', () => {
+  const trackedEvents = (event: MIXPANEL_EVENTS) =>
+    trackEvent.mock.calls.filter(([name]) => name === event).map(([, properties]) => properties);
+
+  const tableContext = { table: TABLE_DEFINITION.stableId, location: 'forestry_view', org_id: ORG_ID };
+
+  const saveInDialog = async (user: UserEvent, name: string) => {
+    const dialog = await waitFor(() => dialogTitled(strings.SAVE_VIEW));
+    await user.type(within(dialog).getByRole('textbox'), name);
+    await user.click(within(dialog).getByRole('button', { name: strings.SAVE_VIEW_BUTTON }));
+  };
+
+  it('reports the type of each view the user selects', async () => {
+    mockGet(SAVED_VIEWS_PATH, { views: [savedView, activeView] });
+
+    const { user } = renderWithProviders(<TableWithCurrentView presetViews={PRESET_VIEWS} />);
+    await chooseView(user, savedView.name);
+    await chooseView(user, PRESET_VIEWS[0].label);
+    await chooseView(user, strings.DEFAULT);
+
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SELECTED)).toEqual([
+      expect.objectContaining({ ...tableContext, view_type: 'my_view', preset_name: undefined, my_views_count: 2 }),
+      expect.objectContaining({ ...tableContext, view_type: 'preset', preset_name: 'active', my_views_count: 2 }),
+      expect.objectContaining({ ...tableContext, view_type: 'default', preset_name: undefined, my_views_count: 2 }),
+    ]);
+  });
+
+  it('reports where the user started saving a view from', async () => {
+    mockGet(SAVED_VIEWS_PATH, { views: [savedView] });
+
+    const { user } = renderWithProviders(<TableWithCurrentView />);
+    await toggleNameSort(user);
+    await user.click(await screen.findByRole('button', { name: strings.SAVE_VIEW_BUTTON }));
+    await user.click(
+      within(await waitFor(() => dialogTitled(strings.SAVE_VIEW))).getByRole('button', { name: strings.CANCEL })
+    );
+    const listbox = await openViewMenu(user);
+    await user.click(within(listbox).getByText(strings.SAVE_TABLE_NEW_VIEW));
+
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SAVE_STARTED)).toEqual([
+      expect.objectContaining({ ...tableContext, source: 'save_button' }),
+      expect.objectContaining({ ...tableContext, source: 'menu' }),
+    ]);
+  });
+
+  it('describes the saved table settings when a save succeeds', async () => {
+    const searchedView = { ...activeView, settings: { ...activeView.settings, globalFilter: 'Alpha' } };
+    mockGet(SAVED_VIEWS_PATH, { views: [savedView, searchedView] });
+    const postRequests = captureRequests('post', SAVED_VIEWS_PATH, { id: 50 });
+
+    const { user } = renderWithProviders(<TableWithCurrentView presetViews={PRESET_VIEWS} />);
+    await chooseView(user, searchedView.name);
+    await toggleNameSort(user);
+    await waitFor(() => expect(nameHeader()).toHaveAttribute('aria-sort', 'ascending'));
+    await toggleNameSort(user);
+    await waitFor(() => expect(nameHeader()).toHaveAttribute('aria-sort', 'descending'));
+
+    await user.click(await screen.findByRole('button', { name: strings.SAVE_VIEW_BUTTON }));
+    await saveInDialog(user, 'Alpha descending');
+
+    await waitFor(() => expect(postRequests).toHaveLength(1));
+    await waitFor(() => expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SAVED)).toHaveLength(1));
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SAVED)[0]).toMatchObject({
+      ...tableContext,
+      source: 'save_button',
+      base_view: 'active',
+      filter_count: 1,
+      filtered_columns: ['status'],
+      has_sort: true,
+      has_search: true,
+      my_views_count: 3,
+    });
+  });
+
+  it('does not report a saved view when the save fails', async () => {
+    mockGet(SAVED_VIEWS_PATH, { views: [savedView] });
+    mockError('post', SAVED_VIEWS_PATH);
+
+    const { store, user } = renderWithProviders(<TableWithCurrentView />);
+    const listbox = await openViewMenu(user);
+    await user.click(within(listbox).getByText(strings.SAVE_TABLE_NEW_VIEW));
+    await saveInDialog(user, 'Doomed view');
+
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SAVE_STARTED)).toHaveLength(1);
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SAVED)).toHaveLength(0);
+  });
+
+  it('reports a successful rename', async () => {
+    mockGet(SAVED_VIEWS_PATH, { views: [savedView] });
+    server.use(http.patch(`${SAVED_VIEWS_PATH}/${savedView.id}`, () => HttpResponse.json({ status: 'ok' })));
+
+    const { user } = renderWithProviders(<TableWithCurrentView />);
+    await openViewMenu(user);
+    await user.click(within(viewOption(savedView.name)).getByRole('button', { name: strings.EDIT }));
+    const field = screen.getByRole('textbox', { name: strings.VIEW_NAME });
+    await user.clear(field);
+    await user.type(field, 'Renamed view{Enter}');
+
+    await waitFor(() =>
+      expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_RENAMED)).toEqual([expect.objectContaining(tableContext)])
+    );
+  });
+
+  it('reports deleting the current view without reporting a view selection', async () => {
+    mockGet(SAVED_VIEWS_PATH, { views: [savedView, activeView] });
+    mockDelete(`${SAVED_VIEWS_PATH}/${savedView.id}`);
+
+    const { user } = renderWithProviders(<TableWithCurrentView />);
+    await chooseView(user, savedView.name);
+    await waitFor(() => expect(nameHeader()).toHaveAttribute('aria-sort', 'descending'));
+    trackEvent.mockClear();
+
+    mockGet(SAVED_VIEWS_PATH, { views: [activeView] });
+    await openViewMenu(user);
+    await user.click(within(viewOption(savedView.name)).getByRole('button', { name: strings.DELETE }));
+    const dialog = await waitFor(() => dialogTitled(strings.DELETE_VIEW_TITLE));
+    await user.click(within(dialog).getByRole('button', { name: strings.DELETE_VIEW }));
+
+    await waitFor(() => expect(currentViewSelect()).toHaveTextContent(strings.DEFAULT));
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_DELETED)).toEqual([expect.objectContaining(tableContext)]);
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SELECTED)).toHaveLength(0);
   });
 });
