@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">39.86% </span>
+                <span class="strong">40% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>114/286</span>
+                <span class='fraction'>114/285</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.5% </span>
+                <span class="strong">29.51% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/160</span>
+                <span class='fraction'>49/166</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.39% </span>
+                <span class="strong">31.68% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>31/102</span>
+                <span class='fraction'>32/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.16% </span>
+                <span class="strong">42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>113/268</span>
+                <span class='fraction'>113/269</span>
             </div>
         
             
@@ -869,7 +869,14 @@
 <a name='L804'></a><a href='#L804'>804</a>
 <a name='L805'></a><a href='#L805'>805</a>
 <a name='L806'></a><a href='#L806'>806</a>
-<a name='L807'></a><a href='#L807'>807</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L807'></a><a href='#L807'>807</a>
+<a name='L808'></a><a href='#L808'>808</a>
+<a name='L809'></a><a href='#L809'>809</a>
+<a name='L810'></a><a href='#L810'>810</a>
+<a name='L811'></a><a href='#L811'>811</a>
+<a name='L812'></a><a href='#L812'>812</a>
+<a name='L813'></a><a href='#L813'>813</a>
+<a name='L814'></a><a href='#L814'>814</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1118,16 +1125,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">63x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1147,9 +1148,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">132x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1190,7 +1204,7 @@
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1924,18 +1938,12 @@ const SpeciesCheckModal = ({
     [locationForTarget, targetData]
   );
 &nbsp;
-  const checkedSpecies = useMemo(() =&gt; {
-    const speciesById = new Map&lt;number, Species&gt;();
-    checkedTargetData.forEach(<span class="fstat-no" title="function not covered" >(data) =&gt; <span class="cstat-no" title="statement not covered" >data.targetSpecies.forEach(<span class="fstat-no" title="function not covered" >(sp) =&gt; <span class="cstat-no" title="statement not covered" >speciesById.set(sp.id, sp))</span></span>)</span></span>;
-    return [...speciesById.values()];
-  }, [checkedTargetData]);
-&nbsp;
   const speciesWithProblems = useMemo(
     () =&gt;
-      checkedSpecies
-        .filter(<span class="fstat-no" title="function not covered" >(sp) =&gt; <span class="cstat-no" title="statement not covered" >(sp.problems?.length ?? 0) &gt; 0)</span></span>
+      species
+        .filter((sp) =&gt; (sp.problems?.length ?? 0) &gt; 0)
         .sort(<span class="fstat-no" title="function not covered" >(a, b) =&gt; <span class="cstat-no" title="statement not covered" >(a.scientificName ?? '').localeCompare(b.scientificName ?? ''))</span></span>,
-    [checkedSpecies]
+    [species]
   );
 &nbsp;
   const buildSummary = useCallback(
@@ -1953,10 +1961,23 @@ const SpeciesCheckModal = ({
     [botanicalNameByCode, countryNameByCode, locationForTarget]
   );
 &nbsp;
-  const nameSummaries = useMemo(
-    () =&gt; checkedTargetData.map(<span class="fstat-no" title="function not covered" >(data) =&gt; <span class="cstat-no" title="statement not covered" >buildSummary(data, data.withProblems.filter(hasNameSuggestion).length))</span></span>,
-    [buildSummary, checkedTargetData]
-  );
+  const nameSummaries = useMemo(() =&gt; {
+    const summaries = checkedTargetData.map(<span class="fstat-no" title="function not covered" >(data) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)</span>
+    );
+    const unassignedSpecies = species.filter(
+      (sp) =&gt; !(sp.projects ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>.some(<span class="fstat-no" title="function not covered" >(project) =&gt; <span class="cstat-no" title="statement not covered" >project.projectId !== undefined)</span></span>
+    );
+    <span class="missing-if-branch" title="if path not taken" >I</span>if (projects.length &gt; 0 &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >unassignedSpecies.length &gt; 0)</span> {
+<span class="cstat-no" title="statement not covered" >      summaries.push({</span>
+        projectName: strings.NO_PROJECT,
+        showLocation: false,
+        speciesChecked: unassignedSpecies.length,
+        updates: unassignedSpecies.filter(hasNameSuggestion).length,
+      });
+    }
+    return summaries;
+  }, [buildSummary, checkedTargetData, projects.length, species]);
 &nbsp;
   const nativeSections = useMemo&lt;NativeCheckProjectSection[]&gt;(
     () =&gt;
@@ -2488,7 +2509,7 @@ export default SpeciesCheckModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-10T18:17:33.261Z
+                at 2026-11-10T19:27:21.003Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
