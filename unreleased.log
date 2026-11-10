@@ -1,3 +1,6 @@
+fbab8991 Omit Default base view from saved view summaries (#7123)
+7dbb8378 SW-9256 Make saved view edit and delete hover states distinct (#7127)
+4bb141dc SW-9257 Keep row selection column when applying table views (#7126)
 72ea12ff SW-8789 Refresh batch details and history after deleting batches (#7101)
 1159fa5d SW-9011 Test accession quantity and status entry permissions (#7106)
 ed506686 SW-9011 Test drying reminder changes (#7105)
