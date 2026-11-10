@@ -257,6 +257,21 @@ describe('CurrentView modified state', () => {
 });
 
 describe('CurrentView saving a view', () => {
+  it('omits the Default base from saved view descriptions', async () => {
+    mockGet(SAVED_VIEWS_PATH, {
+      views: [savedView, activeView, { ...savedView, id: 44, name: 'Empty view', settings: {} }],
+    });
+    const { user } = renderWithProviders(<TableWithCurrentView presetViews={PRESET_VIEWS} />);
+
+    await openViewMenu(user);
+
+    expect(viewOption(savedView.name)).toHaveTextContent('1 filter. Sorted by name');
+    expect(viewOption(savedView.name)).not.toHaveTextContent(`${strings.DEFAULT}.`);
+    expect(viewOption('Empty view')).toHaveTextContent(strings.VIEW_SUMMARY_NONE);
+    expect(viewOption('Empty view')).not.toHaveTextContent(`${strings.DEFAULT}.`);
+    expect(viewOption(activeView.name)).toHaveTextContent('Active only. 1 filter. Sorted by name');
+  });
+
   const newView = {
     id: 50,
     name: 'My new view',
@@ -282,6 +297,10 @@ describe('CurrentView saving a view', () => {
 
     mockGet(SAVED_VIEWS_PATH, { views: [savedView, newView] });
     await user.click(await screen.findByRole('button', { name: strings.SAVE_VIEW_BUTTON }));
+    expect(
+      screen.queryByText(strings.formatString(strings.VIEW_SUMMARY_BASE_VIEW, strings.DEFAULT) as string)
+    ).not.toBeInTheDocument();
+    expect(screen.getByText(strings.formatString(strings.VIEW_SUMMARY_SORT, 'Name ↑') as string)).toBeInTheDocument();
     await saveInDialog(user, newView.name);
 
     await waitFor(() => expect(postRequests).toHaveLength(1));
@@ -306,6 +325,9 @@ describe('CurrentView saving a view', () => {
     mockGet(SAVED_VIEWS_PATH, { views: [savedView, savedNewView] });
     const listbox = await openViewMenu(user);
     await user.click(within(listbox).getByText(strings.SAVE_TABLE_NEW_VIEW));
+    expect(
+      screen.getByText(strings.formatString(strings.VIEW_SUMMARY_BASE_VIEW, 'Active only') as string)
+    ).toBeInTheDocument();
     await saveInDialog(user, newView.name);
 
     await waitFor(() => expect(postRequests).toHaveLength(1));
