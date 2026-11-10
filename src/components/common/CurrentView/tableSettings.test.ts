@@ -149,6 +149,27 @@ describe('applyTableSettings', () => {
     expect(settings.sorting).toEqual([{ id: 'name', desc: false }]);
   });
 
+  test('keeps the row selection column first when the order omits it', () => {
+    const result = renderTable({ enableRowSelection: true });
+
+    act(() =>
+      applyTableSettings(result.current, {}, { ...emptySettings, columnOrder: ['date', 'count', 'status', 'name'] })
+    );
+
+    expect(getTableSettings(result.current).columnOrder).toEqual(['mrt-row-select', 'date', 'count', 'status', 'name']);
+    expect(result.current.getVisibleLeafColumns()[0].id).toBe('mrt-row-select');
+  });
+
+  test('moves a misplaced row selection column back to the start', () => {
+    const result = renderTable({ enableRowSelection: true });
+
+    act(() =>
+      applyTableSettings(result.current, { columnOrder: ['name', 'status', 'mrt-row-select', 'count'] }, emptySettings)
+    );
+
+    expect(getTableSettings(result.current).columnOrder).toEqual(['mrt-row-select', 'name', 'status', 'count', 'date']);
+  });
+
   test('restores date filters that were serialized as ISO strings', () => {
     const result = renderTable();
     const iso = '2024-03-04T00:00:00.000Z';
