@@ -37,8 +37,8 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
-  const { currentData: batchData } = useGetBatchQuery(Number(batchId), { skip: !batchId });
-  const batch = batchData?.batch;
+  const { currentData: batchData, isError } = useGetBatchQuery(Number(batchId), { skip: !batchId });
+  const batch = isError ? undefined : batchData?.batch;
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
   const { selectedOrganization } = useOrganization();
