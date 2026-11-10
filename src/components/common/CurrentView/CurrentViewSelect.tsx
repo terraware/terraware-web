@@ -225,7 +225,7 @@ const CurrentViewSelect = ({
           name='checkmark'
           size='small'
           fillColor={theme.palette.TwClrIcnSuccess}
-          style={{ stroke: theme.palette.TwClrIcnSuccess, strokeWidth: 1 }}
+          style={{ stroke: theme.palette.TwClrIcnSuccess, strokeWidth: 1, margin: theme.spacing(1) }}
         />
       )}
       {isMyView && onRenameView && (
@@ -235,9 +235,14 @@ const CurrentViewSelect = ({
           id={`${id}-edit-${value}`}
           onClick={startEditing}
           size='small'
-          sx={{ marginLeft: theme.spacing(1), padding: 0 }}
+          sx={{
+            borderRadius: theme.spacing(0.5),
+            padding: theme.spacing(0.75),
+            '& path': { fill: theme.palette.TwClrIcn },
+            '&:hover, &.Mui-focusVisible': { backgroundColor: theme.palette.TwClrBgTertiary },
+          }}
         >
-          <Icon name='iconEdit' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+          <Icon name='iconEdit' size='small' fillColor={theme.palette.TwClrIcn} />
         </IconButton>
       )}
       {isMyView && onDeleteView && (
@@ -247,9 +252,13 @@ const CurrentViewSelect = ({
           id={`${id}-delete-${value}`}
           onClick={handleDeleteClick}
           size='small'
-          sx={{ marginLeft: theme.spacing(1), padding: 0 }}
+          sx={{
+            borderRadius: theme.spacing(0.5),
+            padding: theme.spacing(0.75),
+            '&:hover, &.Mui-focusVisible': { backgroundColor: theme.palette.TwClrBgDangerGhostActive },
+          }}
         >
-          <Icon name='iconTrashCan' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+          <Icon name='iconTrashCan' size='small' fillColor={theme.palette.TwClrIcn} />
         </IconButton>
       )}
     </Box>
