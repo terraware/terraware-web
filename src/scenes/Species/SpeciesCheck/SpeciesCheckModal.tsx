@@ -247,18 +247,12 @@ const SpeciesCheckModal = ({
     [locationForTarget, targetData]
   );
 
-  const checkedSpecies = useMemo(() => {
-    const speciesById = new Map<number, Species>();
-    checkedTargetData.forEach((data) => data.targetSpecies.forEach((sp) => speciesById.set(sp.id, sp)));
-    return [...speciesById.values()];
-  }, [checkedTargetData]);
-
   const speciesWithProblems = useMemo(
     () =>
-      checkedSpecies
+      species
         .filter((sp) => (sp.problems?.length ?? 0) > 0)
         .sort((a, b) => (a.scientificName ?? '').localeCompare(b.scientificName ?? '')),
-    [checkedSpecies]
+    [species]
   );
 
   const buildSummary = useCallback(
@@ -276,10 +270,23 @@ const SpeciesCheckModal = ({
     [botanicalNameByCode, countryNameByCode, locationForTarget]
   );
 
-  const nameSummaries = useMemo(
-    () => checkedTargetData.map((data) => buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)),
-    [buildSummary, checkedTargetData]
-  );
+  const nameSummaries = useMemo(() => {
+    const summaries = checkedTargetData.map((data) =>
+      buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)
+    );
+    const unassignedSpecies = species.filter(
+      (sp) => !(sp.projects ?? []).some((project) => project.projectId !== undefined)
+    );
+    if (projects.length > 0 && unassignedSpecies.length > 0) {
+      summaries.push({
+        projectName: strings.NO_PROJECT,
+        showLocation: false,
+        speciesChecked: unassignedSpecies.length,
+        updates: unassignedSpecies.filter(hasNameSuggestion).length,
+      });
+    }
+    return summaries;
+  }, [buildSummary, checkedTargetData, projects.length, species]);
 
   const nativeSections = useMemo<NativeCheckProjectSection[]>(
     () =>

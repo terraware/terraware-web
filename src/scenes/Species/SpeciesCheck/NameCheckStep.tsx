@@ -54,7 +54,7 @@ const NameCheckStep = ({
       >
         {summaries.map((summary, index) => (
           <Box
-            key={summary.projectName}
+            key={`${index}-${summary.projectName}`}
             sx={{
               padding: theme.spacing(2, 0),
               borderTop: index > 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
