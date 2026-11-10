@@ -1,3 +1,7 @@
+1159fa5d SW-9011 Test accession quantity and status entry permissions (#7106)
+ed506686 SW-9011 Test drying reminder changes (#7105)
+70b93b0b SW-9011 Test accession status transitions (#7104)
+cbd2bdfa SW-9011 Test accession quantity changes (#7102)
 f3eb354f SW-9014 Test viability permissions and selected test access (#7115)
 42fc4b56 SW-9014 Test viability result application and manual edits (#7113)
 9ade5485 SW-9014 Test cut viability tests and result prompts (#7112)

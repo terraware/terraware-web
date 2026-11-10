@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.53% </span>
+                <span class="strong">27.69% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/65</span>
+                <span class='fraction'>18/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">21.56% </span>
+                <span class="strong">23.52% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/51</span>
+                <span class='fraction'>12/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30.76% </span>
+                <span class="strong">46.15% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/13</span>
+                <span class='fraction'>6/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.31% </span>
+                <span class="strong">26.56% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/64</span>
+                <span class='fraction'>17/64</span>
             </div>
         
             
@@ -341,15 +341,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -358,10 +350,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -596,8 +596,8 @@ export function <span class="fstat-no" title="function not covered" >weightUnits
   ];
 }
 &nbsp;
-function <span class="fstat-no" title="function not covered" >weightUnitsV2(</span>unit?: string) {
-<span class="cstat-no" title="statement not covered" >  if (unit === 'imperial') {</span>
+function weightUnitsV2(unit?: string) {
+  <span class="missing-if-branch" title="if path not taken" >I</span>if (unit === 'imperial') {
 <span class="cstat-no" title="statement not covered" >    return [</span>
       { label: strings.OZ, value: 'Ounces' },
       { label: strings.LB, value: 'Pounds' },
@@ -606,7 +606,7 @@ function <span class="fstat-no" title="function not covered" >weightUnitsV2(</sp
       { label: strings.KG, value: 'Kilograms' },
     ];
   }
-<span class="cstat-no" title="statement not covered" >  return [</span>
+  return [
     { label: strings.G, value: 'Grams' },
     { label: strings.MG, value: 'Milligrams' },
     { label: strings.KG, value: 'Kilograms' },
@@ -615,9 +615,9 @@ function <span class="fstat-no" title="function not covered" >weightUnitsV2(</sp
   ];
 }
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >usePreferredWeightUnits(</span>) {
-  const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
-<span class="cstat-no" title="statement not covered" >  return weightUnitsV2(userPreferences.preferredWeightSystem as string);</span>
+export function usePreferredWeightUnits() {
+  const { userPreferences } = useUser();
+  return weightUnitsV2(userPreferences.preferredWeightSystem as string);
 }
 &nbsp;
 export function weightSystems() {
@@ -838,7 +838,7 @@ export const unitAbbv = (): Record&lt;string, string&gt; =&gt; ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-10T19:27:21.003Z
+                at 2026-11-10T19:55:17.412Z
             </div>
         <script src="../prettify.js"></script>
         <script>

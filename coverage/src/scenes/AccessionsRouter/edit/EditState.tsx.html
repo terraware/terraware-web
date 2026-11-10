@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -146,25 +146,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-yes">220x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -211,17 +211,17 @@ export interface EditStateProps {
   error?: string;
 }
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >EditState(</span>props: EditStateProps): JSX.Element {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { accession, record, onChange, error } = <span class="cstat-no" title="statement not covered" >props;</span>
+export default function EditState(props: EditStateProps): JSX.Element {
+  const theme = useTheme();
+  const { accession, record, onChange, error } = props;
 &nbsp;
-  const stateChanged = <span class="cstat-no" title="statement not covered" >accession.state !== record.state;</span>
-  const options = getTransitionToStates(accession.state).map(<span class="fstat-no" title="function not covered" >(state: AccessionState) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+  const stateChanged = accession.state !== record.state;
+  const options = getTransitionToStates(accession.state).map((state: AccessionState) =&gt; ({
     label: stateName(state),
     value: state,
   }));
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;&gt;
       &lt;Grid textAlign='left' size={12}&gt;
         &lt;Grid size={12}&gt;
@@ -230,7 +230,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             label={strings.STATUS}
             placeholder={strings.SELECT}
             options={options}
-            onChange={<span class="fstat-no" title="function not covered" >(value: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange('state', value)}</span></span>
+            onChange={(value: string) =&gt; onChange('state', value)}
             selectedValue={record?.state}
             fullWidth={true}
             errorText={error}
@@ -268,7 +268,7 @@ export default function <span class="fstat-no" title="function not covered" >Edi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-10T19:27:21.003Z
+                at 2026-11-10T19:55:17.412Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
