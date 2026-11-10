@@ -8,6 +8,7 @@ import {
   MRT_SortingState,
   MRT_TableInstance,
   MRT_VisibilityState,
+  getDefaultColumnOrderIds,
 } from 'material-react-table';
 
 import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
@@ -49,13 +50,24 @@ export const getDefaultTableSettings = <TData extends MRT_RowData>(
   };
 };
 
+export const isDataColumnId = (columnId: string) => !columnId.startsWith('mrt-');
+
+const withDisplayColumns = <TData extends MRT_RowData>(
+  table: MRT_TableInstance<TData>,
+  columnOrder: MRT_ColumnOrderState
+): MRT_ColumnOrderState =>
+  getDefaultColumnOrderIds({
+    ...table.options,
+    state: { ...table.getState(), columnOrder: columnOrder.filter(isDataColumnId) },
+  });
+
 export const applyTableSettings = <TData extends MRT_RowData>(
   table: MRT_TableInstance<TData>,
   settings: Partial<TableSettings>,
   defaults: TableSettings
 ) => {
   table.setColumnFilters(normalizePersistedColumnFilters(settings.columnFilters ?? defaults.columnFilters));
-  table.setColumnOrder(settings.columnOrder ?? defaults.columnOrder);
+  table.setColumnOrder(withDisplayColumns(table, settings.columnOrder ?? defaults.columnOrder));
   table.setColumnPinning(settings.columnPinning ?? defaults.columnPinning);
   table.setColumnVisibility(settings.columnVisibility ?? defaults.columnVisibility);
   table.setGlobalFilter(settings.globalFilter ?? defaults.globalFilter);
@@ -83,8 +95,6 @@ const comparableFilters = (filters: MRT_ColumnFiltersState) =>
       ? filter.value.map(toComparableFilterValue)
       : toComparableFilterValue(filter.value),
   }));
-
-export const isDataColumnId = (columnId: string) => !columnId.startsWith('mrt-');
 
 const normalizePinning = (pinning: MRT_ColumnPinningState) => ({
   left: (pinning.left ?? []).filter(isDataColumnId),
