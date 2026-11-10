@@ -5,7 +5,15 @@ import { screen, waitFor } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 
 import strings from 'src/strings';
-import { buildAccession, buildUser, captureRequests, mockError, mockGet, renderWithProviders } from 'src/test-utils';
+import {
+  buildAccession,
+  buildUser,
+  buildViabilityTest,
+  captureRequests,
+  mockError,
+  mockGet,
+  renderWithProviders,
+} from 'src/test-utils';
 import { Accession, ViabilityTest } from 'src/types/Accession';
 
 import NewViabilityTestModal from './NewViabilityTestModal';
@@ -38,6 +46,92 @@ const enterDate = async (user: UserEvent, label: string, value: string) => {
   await user.keyboard('{Control>}a{/Control}');
   await user.paste(value);
 };
+
+describe('NewViabilityTestModal observations', () => {
+  it('adds an observation to an existing test without changing its original count or start date', async () => {
+    const requests = captureRequests('put', `${TESTS_URL}/1`);
+    const { user, onClose } = renderModal(buildViabilityTest());
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    expect(input('seedsTested')).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: strings.START_DATE_REQUIRED })).toBeDisabled();
+    await user.click(screen.getByRole('button', { name: strings.ADD_OBSERVATION }));
+    await enterDate(user, strings.CHECK_DATE_REQUIRED, '2024-02-02');
+    await enter(user, 'seedsGerminated', '8');
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(requests).toHaveLength(1);
+    expect(await requests[0].json()).toMatchObject({
+      seedsTested: 25,
+      startDate: '2024-02-01',
+      testResults: [{ recordingDate: '2024-02-02', seedsGerminated: '8' }],
+    });
+  });
+
+  it('rejects an observation before the test starts', async () => {
+    const requests = captureRequests('put', `${TESTS_URL}/1`);
+    const { user } = renderModal(buildViabilityTest());
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    await user.click(screen.getByRole('button', { name: strings.ADD_OBSERVATION }));
+    await enterDate(user, strings.CHECK_DATE_REQUIRED, '2024-01-31');
+    await enter(user, 'seedsGerminated', '8');
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(screen.getByText(strings.RECORDING_DATE_ERROR)).toBeVisible();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('rejects a germination total above the seeds tested', async () => {
+    const requests = captureRequests('put', `${TESTS_URL}/1`);
+    const { user } = renderModal(buildViabilityTest());
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    await user.click(screen.getByRole('button', { name: strings.ADD_OBSERVATION }));
+    await enter(user, 'seedsGerminated', '26');
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(screen.getByText(strings.TOTAL_SEEDS_GERMINATED_ERROR)).toBeVisible();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('removes an observation before saving', async () => {
+    const requests = captureRequests('put', `${TESTS_URL}/1`);
+    const { user, onClose } = renderModal(
+      buildViabilityTest({
+        testResults: [{ recordingDate: '2024-02-02', seedsGerminated: 8 }],
+      })
+    );
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    await user.click(screen.getByRole('button', { name: 'delete' }));
+    expect(screen.queryByRole('textbox', { name: strings.CHECK_DATE_REQUIRED })).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await waitFor(() => expect(onClose).toHaveBeenCalledTimes(1));
+    expect(await requests[0].json()).toMatchObject({ testResults: [] });
+  });
+
+  it('retains observations when updating fails', async () => {
+    mockError('put', `${TESTS_URL}/1`);
+    const { user, onClose, store } = renderModal(
+      buildViabilityTest({
+        testResults: [{ recordingDate: '2024-02-02', seedsGerminated: 8 }],
+      })
+    );
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    await enter(user, 'seedsGerminated', '9');
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(input('seedsGerminated')).toHaveValue('9');
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it('protects completed observations from editing or removal', async () => {
+    renderModal(
+      buildViabilityTest({ endDate: '2024-02-03', testResults: [{ recordingDate: '2024-02-02', seedsGerminated: 8 }] })
+    );
+    await screen.findByRole('dialog', { name: strings.EDIT_VIABILITY_TEST });
+    expect(input('seedsGerminated')).toBeDisabled();
+    expect(screen.getByRole('textbox', { name: strings.CHECK_DATE_REQUIRED })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'delete' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: strings.ADD_OBSERVATION })).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: strings.MARK_AS_COMPLETE })).toBeDisabled();
+  });
+});
 
 describe('NewViabilityTestModal lab creation', () => {
   it('creates a lab test with the entered seed count, date, and notes', async () => {
