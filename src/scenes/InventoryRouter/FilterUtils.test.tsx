@@ -90,6 +90,7 @@ describe('nursery deletion with the sticky Species column filter', () => {
     mockGet('/api/v1/projects', { projects: [] });
     mockGet('/api/v1/users/me', { user: buildUser() });
     mockGet('/api/v1/users/me/preferences', { preferences: {} });
+    mockGet('/api/v1/users/me/savedTableViews', { views: [] });
   });
 
   afterEach(() => rstest.restoreAllMocks());

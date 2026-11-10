@@ -6,7 +6,6 @@ import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
 import DeleteViewModal from 'src/components/common/DeleteViewModal';
 import SaveViewModal from 'src/components/common/SaveViewModal';
 import Button from 'src/components/common/button/Button';
-import { useFeatureEnabled } from 'src/features';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS, TableViewEventContext, TableViewSaveSource } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -67,7 +66,6 @@ const CurrentView = <TData extends MRT_RowData>({
 }: CurrentViewProps<TData>) => {
   'use no memo';
   const { strings } = useLocalization();
-  const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
   const { user } = useUser();
@@ -87,10 +85,7 @@ const CurrentView = <TData extends MRT_RowData>({
     data: savedTableViewsData,
     isError: isSavedTableViewsError,
     refetch: refetchSavedTableViews,
-  } = useListSavedTableViewsQuery(
-    { organizationId, tableName: tableDefinition.stableId },
-    { skip: !isSavedTableViewsEnabled }
-  );
+  } = useListSavedTableViewsQuery({ organizationId, tableName: tableDefinition.stableId });
   const getBaseViewLabel = useCallback(
     (baseView?: string) => {
       if (baseView !== DEFAULT_VIEW) {
@@ -118,7 +113,7 @@ const CurrentView = <TData extends MRT_RowData>({
   const isSavedViewAvailable = savedTableViewsData
     ? savedTableViewsData.views.some((view) => `${view.id}` === savedViewId)
     : !isSavedTableViewsError;
-  const activeSavedViewId = isSavedTableViewsEnabled && isSavedViewAvailable ? savedViewId : undefined;
+  const activeSavedViewId = isSavedViewAvailable ? savedViewId : undefined;
 
   const isConsole = organizationId === undefined;
   const trackingContext = useMemo<TableViewEventContext>(
@@ -173,12 +168,10 @@ const CurrentView = <TData extends MRT_RowData>({
       } else {
         setSavedViewId(undefined);
         changePreset(value);
-        if (isSavedTableViewsEnabled) {
-          applyTableSettings(table, {}, defaults);
-        }
+        applyTableSettings(table, {}, defaults);
       }
     },
-    [changePreset, defaultSettings, isSavedTableViewsEnabled, presetViews, savedTableViewsData, table]
+    [changePreset, defaultSettings, presetViews, savedTableViewsData, table]
   );
 
   const handleSelect = useCallback(
@@ -260,13 +253,11 @@ const CurrentView = <TData extends MRT_RowData>({
   );
 
   const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === activeSavedViewId);
-  const isModified =
-    isSavedTableViewsEnabled &&
-    isTableModified(
-      table,
-      (selectedSavedView?.settings ?? {}) as Partial<TableSettings>,
-      getDefaultTableSettings(table, defaultSettings)
-    );
+  const isModified = isTableModified(
+    table,
+    (selectedSavedView?.settings ?? {}) as Partial<TableSettings>,
+    getDefaultTableSettings(table, defaultSettings)
+  );
 
   const openSaveViewModal = useCallback(
     (source: TableViewSaveSource) => {
@@ -282,10 +273,6 @@ const CurrentView = <TData extends MRT_RowData>({
   const openSaveViewModalFromButton = useCallback(() => openSaveViewModal('save_button'), [openSaveViewModal]);
   const closeSaveViewModal = useCallback(() => setSaveSource(undefined), []);
 
-  if (!isSavedTableViewsEnabled && !presetViews?.length) {
-    return null;
-  }
-
   return (
     <Box display='flex' alignItems='center' gap={1} paddingTop={0.5} marginBottom={-0.5}>
       <Box width='300px' flexShrink={0}>
@@ -295,12 +282,12 @@ const CurrentView = <TData extends MRT_RowData>({
           modified={isModified}
           myViews={savedViewOptions}
           onChange={handleSelect}
-          onDeleteView={isSavedTableViewsEnabled ? handleDeleteView : undefined}
-          onRenameView={isSavedTableViewsEnabled ? handleRename : undefined}
+          onDeleteView={handleDeleteView}
+          onRenameView={handleRename}
           onSave={openSaveViewModalFromMenu}
           presetViews={presetViews}
           selected={activeSavedViewId ?? preset}
-          showSave={isSavedTableViewsEnabled}
+          showSave
         />
       </Box>
       {isModified && (

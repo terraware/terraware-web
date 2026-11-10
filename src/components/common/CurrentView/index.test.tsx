@@ -10,7 +10,6 @@ import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { api as savedTableViewsApi } from 'src/queries/generated/savedTableViews';
 import strings from 'src/strings';
 import {
-  buildUser,
   captureRequests,
   dialogTitled,
   mockDelete,
@@ -114,8 +113,6 @@ const expectAllRows = () => {
 
 beforeEach(() => {
   trackEvent.mockClear();
-  mockGet('/api/v1/users/me', { user: buildUser() });
-  mockGet('/api/v1/users/me/preferences', { preferences: { savedTableViews: true } });
 });
 
 afterEach(() => {
@@ -397,41 +394,6 @@ describe('CurrentView deleting a view', () => {
     expect(nameHeader()).toHaveAttribute('aria-sort', 'descending');
     expect(screen.queryByText('Alpha')).not.toBeInTheDocument();
     expectUnmodified();
-  });
-});
-
-describe('CurrentView with saved views turned off', () => {
-  const disableSavedViews = () => captureRequests('get', '/api/v1/users/me/preferences', { preferences: {} });
-
-  it('renders nothing when there are no preset views', async () => {
-    const preferenceRequests = disableSavedViews();
-    const listRequests = captureRequests('get', SAVED_VIEWS_PATH, { views: [savedView] });
-
-    renderWithProviders(<TableWithCurrentView />);
-
-    await waitFor(() => expect(preferenceRequests).toHaveLength(1));
-    await screen.findByText('Alpha');
-    expect(screen.queryByRole('combobox', { name: new RegExp(strings.CURRENT_VIEW) })).not.toBeInTheDocument();
-    expect(listRequests).toHaveLength(0);
-  });
-
-  it('offers only the preset views, without saving or a saved-views request', async () => {
-    const preferenceRequests = disableSavedViews();
-    const listRequests = captureRequests('get', SAVED_VIEWS_PATH, { views: [savedView] });
-
-    const { user } = renderWithProviders(<TableWithCurrentView presetViews={PRESET_VIEWS} />);
-    await waitFor(() => expect(preferenceRequests).toHaveLength(1));
-
-    const listbox = await openViewMenu(user);
-    expect(within(listbox).getByText(PRESET_VIEWS[0].label)).toBeInTheDocument();
-    expect(within(listbox).queryByText(strings.SAVE_TABLE_NEW_VIEW)).not.toBeInTheDocument();
-    expect(within(listbox).queryByText(savedView.name)).not.toBeInTheDocument();
-    await user.keyboard('{Escape}');
-
-    await toggleNameSort(user);
-    await waitFor(() => expect(nameHeader()).toHaveAttribute('aria-sort', 'ascending'));
-    expectUnmodified();
-    expect(listRequests).toHaveLength(0);
   });
 });
 
