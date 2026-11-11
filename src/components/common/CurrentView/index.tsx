@@ -131,7 +131,7 @@ const CurrentView = <TData extends MRT_RowData>({
     [isConsole, organizationId, tableDefinition.stableId, user?.id]
   );
   const userRole = getTableViewUserRole(isConsole, user, selectedOrganization?.role);
-  const myViewsCount = savedTableViewsData?.views.length ?? 0;
+  const myViewsCount = savedTableViewsData?.views.length;
 
   const hasNotifiedRestoredPreset = useRef(false);
   useEffect(() => {
@@ -250,7 +250,7 @@ const CurrentView = <TData extends MRT_RowData>({
           ...getSavedViewAnalytics(table, getTableSettings(table), getDefaultTableSettings(table, defaultSettings)),
           source: saveSource,
           base_view: preset,
-          my_views_count: myViewsCount + 1,
+          my_views_count: (myViewsCount ?? 0) + 1,
           user_role: userRole,
         });
       }

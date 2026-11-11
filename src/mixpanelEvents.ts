@@ -211,7 +211,7 @@ export type MixpanelEventPropertyMap = {
   [MIXPANEL_EVENTS.TABLE_VIEW_SELECTED]: TableViewEventContext & {
     view_type: 'default' | 'preset' | 'my_view';
     preset_name?: string;
-    my_views_count: number;
+    my_views_count?: number;
     user_role?: string;
   };
   [MIXPANEL_EVENTS.TABLE_VIEW_SAVE_STARTED]: TableViewEventContext & {

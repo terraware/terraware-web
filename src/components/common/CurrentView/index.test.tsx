@@ -525,8 +525,38 @@ describe('CurrentView analytics', () => {
       filtered_columns: ['status'],
       has_sort: true,
       has_search: true,
+      columns_reordered: false,
       my_views_count: 3,
     });
+  });
+
+  it('reports reordered columns when saving a view with a custom column order', async () => {
+    const reorderedView = { ...savedView, id: 43, name: 'Reordered', settings: { columnOrder: ['status', 'name'] } };
+    mockGet(SAVED_VIEWS_PATH, { views: [reorderedView] });
+    captureRequests('post', SAVED_VIEWS_PATH, { id: 50 });
+
+    const { user } = renderWithProviders(<TableWithCurrentView />);
+    await chooseView(user, reorderedView.name);
+    await toggleNameSort(user);
+    await user.click(await screen.findByRole('button', { name: strings.SAVE_VIEW_BUTTON }));
+    await saveInDialog(user, 'Reordered and sorted');
+
+    await waitFor(() =>
+      expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SAVED)).toEqual([
+        expect.objectContaining({ columns_reordered: true }),
+      ])
+    );
+  });
+
+  it('reports an unknown view count when saved views fail to load', async () => {
+    mockError('get', SAVED_VIEWS_PATH);
+
+    const { user } = renderWithProviders(<TableWithCurrentView presetViews={PRESET_VIEWS} />);
+    await chooseView(user, PRESET_VIEWS[0].label);
+
+    expect(trackedEvents(MIXPANEL_EVENTS.TABLE_VIEW_SELECTED)).toEqual([
+      expect.objectContaining({ view_type: 'preset', my_views_count: undefined }),
+    ]);
   });
 
   it('does not report a saved view when the save fails', async () => {
