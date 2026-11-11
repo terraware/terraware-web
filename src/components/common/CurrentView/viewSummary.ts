@@ -1,20 +1,21 @@
 import dayjs from 'dayjs';
-import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
+import { MRT_RowData } from 'material-react-table';
 
 import strings from 'src/strings';
 
-import { TableSettings, isBlankFilterValue, isDataColumnId, nonEmptyFilters } from './tableSettings';
+import { TableSettings, isBlankFilterValue, nonEmptyFilters } from './tableSettings';
+import { TableSource, isDataColumnId, toViewTable } from './viewTable';
 
 const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
 const RANGE_VARIANTS = ['date-range', 'datetime-range', 'range', 'range-slider', 'time-range'];
 
-const getColumn = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, columnId: string) =>
-  table.getAllLeafColumns().find((column) => column.id === columnId);
+const getColumn = <TData extends MRT_RowData>(table: TableSource<TData>, columnId: string) =>
+  toViewTable(table)
+    .getColumns()
+    .find((column) => column.id === columnId);
 
-const getColumnHeader = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, columnId: string) => {
-  const header = getColumn(table, columnId)?.columnDef.header;
-  return typeof header === 'string' ? header : columnId;
-};
+const getColumnHeader = <TData extends MRT_RowData>(table: TableSource<TData>, columnId: string) =>
+  getColumn(table, columnId)?.header ?? columnId;
 
 const formatValue = (value: unknown) => {
   if (dayjs.isDayjs(value)) {
@@ -26,14 +27,10 @@ const formatValue = (value: unknown) => {
   return String(value);
 };
 
-const formatFilterValue = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
-  columnId: string,
-  value: unknown
-) => {
-  const columnDef = getColumn(table, columnId)?.columnDef;
+const formatFilterValue = <TData extends MRT_RowData>(table: TableSource<TData>, columnId: string, value: unknown) => {
+  const column = getColumn(table, columnId);
 
-  if (Array.isArray(value) && RANGE_VARIANTS.includes(columnDef?.filterVariant ?? '')) {
+  if (Array.isArray(value) && RANGE_VARIANTS.includes(column?.filterVariant ?? '')) {
     const [min, max] = value as unknown[];
     if (isBlankFilterValue(max)) {
       return `≥ ${formatValue(min)}`;
@@ -44,7 +41,7 @@ const formatFilterValue = <TData extends MRT_RowData>(
     return `${formatValue(min)} – ${formatValue(max)}`;
   }
 
-  const options = Array.isArray(columnDef?.filterSelectOptions) ? columnDef.filterSelectOptions : [];
+  const options = (column?.filterSelectOptions ?? []) as ({ label?: string; value: unknown } | string)[];
   const toLabel = (optionValue: unknown) => {
     const option = options.find((candidate) => typeof candidate === 'object' && candidate.value === optionValue);
     return typeof option === 'object' && option.label ? option.label : formatValue(optionValue);
@@ -58,11 +55,11 @@ const formatFilterValue = <TData extends MRT_RowData>(
     : toLabel(value);
 };
 
-const formatSort = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, sorting: TableSettings['sorting']) =>
+const formatSort = <TData extends MRT_RowData>(table: TableSource<TData>, sorting: TableSettings['sorting']) =>
   sorting.map((sort) => `${getColumnHeader(table, sort.id)} ${sort.desc ? '↓' : '↑'}`).join(', ');
 
 export const getSaveViewSummary = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   settings: TableSettings,
   baseViewLabel?: string
 ): string[] => {
@@ -80,13 +77,10 @@ export const getSaveViewSummary = <TData extends MRT_RowData>(
   const sort = settings.sorting.length
     ? [strings.formatString(strings.VIEW_SUMMARY_SORT, formatSort(table, settings.sorting)) as string]
     : [];
-  const columns = [
-    ...table.getLeftVisibleLeafColumns(),
-    ...table.getCenterVisibleLeafColumns(),
-    ...table.getRightVisibleLeafColumns(),
-  ]
+  const columns = toViewTable(table)
+    .getVisibleColumnsInDisplayOrder()
     .filter((column) => isDataColumnId(column.id))
-    .map((column) => getColumnHeader(table, column.id));
+    .map((column) => column.header);
 
   return [
     ...(baseViewLabel ? [strings.formatString(strings.VIEW_SUMMARY_BASE_VIEW, baseViewLabel) as string] : []),
@@ -99,7 +93,7 @@ export const getSaveViewSummary = <TData extends MRT_RowData>(
 };
 
 export const getViewSummary = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   settings: TableSettings,
   baseViewLabel?: string
 ) => {

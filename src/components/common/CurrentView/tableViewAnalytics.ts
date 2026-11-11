@@ -1,10 +1,11 @@
 import { isEqual } from 'lodash';
-import { MRT_ColumnOrderState, MRT_RowData, MRT_TableInstance } from 'material-react-table';
+import { MRT_ColumnOrderState, MRT_RowData } from 'material-react-table';
 
 import { OrganizationRole } from 'src/types/Organization';
 import { User } from 'src/types/User';
 
-import { TableSettings, isDataColumnId, nonEmptyFilters } from './tableSettings';
+import { TableSettings, nonEmptyFilters } from './tableSettings';
+import { TableSource, isDataColumnId, toViewTable } from './viewTable';
 
 const GLOBAL_ROLE_PRIORITY: User['globalRoles'] = ['Super-Admin', 'Accelerator Admin', 'TF Expert', 'Read Only'];
 
@@ -16,12 +17,12 @@ export const getTableViewUserRole = (
   isConsole ? GLOBAL_ROLE_PRIORITY.find((role) => user?.globalRoles.includes(role)) : organizationRole;
 
 const isColumnOrderChanged = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   columnOrder: MRT_ColumnOrderState,
   defaultColumnOrder: MRT_ColumnOrderState
 ) => {
-  const dataColumnIds = table
-    .getAllLeafColumns()
+  const dataColumnIds = toViewTable(table)
+    .getColumns()
     .map((column) => column.id)
     .filter(isDataColumnId);
   const normalize = (order: MRT_ColumnOrderState) => [
@@ -32,7 +33,7 @@ const isColumnOrderChanged = <TData extends MRT_RowData>(
 };
 
 export const getSavedViewAnalytics = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   settings: TableSettings,
   defaults: TableSettings
 ) => {

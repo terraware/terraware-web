@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
+import { MRT_RowData } from 'material-react-table';
 
 import DeleteViewModal from 'src/components/common/DeleteViewModal';
 import SaveViewModal from 'src/components/common/SaveViewModal';
@@ -23,6 +23,7 @@ import {
 } from './tableSettings';
 import { getSavedViewAnalytics, getTableViewUserRole } from './tableViewAnalytics';
 import { getSaveViewSummary, getViewSummary } from './viewSummary';
+import { CurrentViewTable, toTableSource } from './viewTable';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
 export type { ViewOption } from './CurrentViewSelect';
@@ -49,7 +50,7 @@ export type CurrentViewProps<TData extends MRT_RowData> = {
   onPresetChange?: (preset: string) => void;
   organizationId?: number;
   presetViews?: ViewOption[];
-  table: MRT_TableInstance<TData>;
+  table: CurrentViewTable<TData>;
   tableDefinition: TableDefinition;
 };
 
@@ -61,10 +62,11 @@ const CurrentView = <TData extends MRT_RowData>({
   onPresetChange,
   organizationId,
   presetViews,
-  table,
+  table: tableInstance,
   tableDefinition,
 }: CurrentViewProps<TData>) => {
   'use no memo';
+  const table = useMemo(() => toTableSource(tableInstance), [tableInstance]);
   const { strings } = useLocalization();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
