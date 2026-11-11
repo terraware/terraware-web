@@ -13,10 +13,13 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
+import MatchSpeciesModal from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
 import StratumList from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/Site/StratumList';
+import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/SingleView/UnrecognizedSpeciesPageMessage';
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
+import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { getBiomassObservationTotals } from 'src/utils/observation';
+import { getBiomassObservationTotals, getBiomassObservationUnrecognizedSpecies } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import LiveTreesPerSpecies from '../LiveTreesPerSpecies';
@@ -32,10 +35,17 @@ const BiomassSiteDetails = (): JSX.Element => {
 
   const [isMapVisible, setIsMapVisible] = useState(false);
   const onView = useCallback((view: string) => setIsMapVisible(view === 'map'), []);
+  const [pageMessageDismissed, setPageMessageDismissed] = useState(false);
+  const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
   const { observationId, results } = useBiomassPlot();
   const { downloadBiomassObservationDetails } = useObservationExports();
   const totals = useMemo(() => getBiomassObservationTotals(results), [results]);
+  const unrecognizedSpecies = useMemo(() => getBiomassObservationUnrecognizedSpecies(results), [results]);
+  const onSaveMergedSpecies = useOnSaveMergedSpeciesRtk({
+    observationId,
+    onComplete: () => setShowMatchSpeciesModal(false),
+  });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 
@@ -81,6 +91,20 @@ const BiomassSiteDetails = (): JSX.Element => {
 
   return (
     <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+      {unrecognizedSpecies.length > 0 && !pageMessageDismissed && (
+        <UnrecognizedSpeciesPageMessage
+          setShowMatchSpeciesModal={setShowMatchSpeciesModal}
+          setShowPageMessage={(show) => setPageMessageDismissed(!show)}
+          unrecognizedSpecies={unrecognizedSpecies}
+        />
+      )}
+      {showMatchSpeciesModal && (
+        <MatchSpeciesModal
+          onClose={() => setShowMatchSpeciesModal(false)}
+          onSave={onSaveMergedSpecies}
+          unrecognizedSpecies={unrecognizedSpecies}
+        />
+      )}
       <Card radius='24px' style={{ width: '100%' }}>
         <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
         <Box display='flex' alignItems='center' paddingBottom={2}>
@@ -101,6 +125,15 @@ const BiomassSiteDetails = (): JSX.Element => {
           <LiveTreesPerSpecies treeSpecies={totals.treeSpecies} />
         </Box>
         <Box display='flex' justifyContent='flex-end' paddingY={2}>
+          <Button
+            id='matchBiomassUnrecognizedSpecies'
+            label={strings.MATCH_UNRECOGNIZED_SPECIES}
+            onClick={() => setShowMatchSpeciesModal(true)}
+            disabled={unrecognizedSpecies.length === 0}
+            icon='iconSynced'
+            priority='ghost'
+            sx={{ fontWeight: '400 !important' }}
+          />
           <Button
             id='exportBiomassObservation'
             label={strings.EXPORT_DATA}
