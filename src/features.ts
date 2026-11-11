@@ -8,7 +8,8 @@ export type FeatureName =
   | 'Virtual Monitoring Plots'
   | 'Seeds Withdrawal Log'
   | 'Scheduled Biomass Monitoring Observations'
-  | 'Saved Table Views';
+  | 'Saved Table Views'
+  | 'Nursery Batch Time Per Stage';
 
 export type Feature = {
   name: FeatureName;
@@ -76,6 +77,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Save table filters, sorting, and column settings as named views.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Nursery Batch Time Per Stage',
+    preferenceName: 'nurseryBatchTimePerStage',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Track how long nursery batches spend in each stage.'],
     disclosure: ['This is a WIP'],
   },
 ];
