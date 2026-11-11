@@ -1049,27 +1049,25 @@ const ObservationMap = ({
               }
             });
 
-      const adHocPlots = adHocObservationResults
-        .map((adHocResults) => adHocResults.adHocPlot)
-        .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
-      const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
-        if (plot.plants) {
-          const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-          return filteredPlants.map((plant): MapMarker => ({
+      const adHocPlotPlants = adHocObservationResults.flatMap((adHocResults): MapMarker[] => {
+        const plot = adHocResults.adHocPlot;
+        if (!plot?.plants) {
+          return [];
+        }
+        return plot.plants
+          .filter((plant) => plant.status === status)
+          .map((plant): MapMarker => ({
             id: `plants/${plant.id}`,
             longitude: plant.gpsCoordinates.coordinates[0],
             latitude: plant.gpsCoordinates.coordinates[1],
-            onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+            onClick: selectPlant(plot.monitoringPlotId, adHocResults.observationId, plant),
             selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
             properties: {
               monitoringPlotId: plot.monitoringPlotId,
-              observationId: selectedResults.observationId,
+              observationId: adHocResults.observationId,
               plant,
             },
           }));
-        } else {
-          return [];
-        }
       });
 
       return [...adHocPlotPlants, ...monitoringPlotPlants];
