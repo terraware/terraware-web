@@ -7,7 +7,9 @@ import DeleteViewModal from 'src/components/common/DeleteViewModal';
 import SaveViewModal from 'src/components/common/SaveViewModal';
 import Button from 'src/components/common/button/Button';
 import { useFeatureEnabled } from 'src/features';
-import { useLocalization } from 'src/providers';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS, TableViewEventContext, TableViewSaveSource } from 'src/mixpanelEvents';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useListSavedTableViewsQuery, useUpdateSavedTableViewMutation } from 'src/queries/generated/savedTableViews';
 import { TableDefinition } from 'src/types/Tables';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -20,6 +22,7 @@ import {
   getTableSettings,
   isTableModified,
 } from './tableSettings';
+import { getSavedViewAnalytics, getTableViewUserRole } from './tableViewAnalytics';
 import { getSaveViewSummary, getViewSummary } from './viewSummary';
 
 export { DEFAULT_VIEW } from './CurrentViewSelect';
@@ -66,6 +69,9 @@ const CurrentView = <TData extends MRT_RowData>({
   const { strings } = useLocalization();
   const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
+  const { user } = useUser();
+  const { selectedOrganization } = useOrganization();
   const [updateSavedTableView] = useUpdateSavedTableViewMutation();
   const storageKey = `${tableDefinition.storageKey}-currentView`;
   const [preset, setPreset] = useState(() => {
@@ -75,7 +81,7 @@ const CurrentView = <TData extends MRT_RowData>({
       : defaultPreset;
   });
   const [savedViewId, setSavedViewId] = useState(() => loadStoredView(storageKey).savedViewId);
-  const [showSaveViewModal, setShowSaveViewModal] = useState(false);
+  const [saveSource, setSaveSource] = useState<TableViewSaveSource>();
   const [viewToDelete, setViewToDelete] = useState<{ id: number; name: string }>();
   const {
     data: savedTableViewsData,
@@ -113,6 +119,19 @@ const CurrentView = <TData extends MRT_RowData>({
     ? savedTableViewsData.views.some((view) => `${view.id}` === savedViewId)
     : !isSavedTableViewsError;
   const activeSavedViewId = isSavedTableViewsEnabled && isSavedViewAvailable ? savedViewId : undefined;
+
+  const isConsole = organizationId === undefined;
+  const trackingContext = useMemo<TableViewEventContext>(
+    () => ({
+      table: tableDefinition.stableId,
+      location: isConsole ? 'console' : 'forestry_view',
+      user_id: user?.id,
+      org_id: organizationId,
+    }),
+    [isConsole, organizationId, tableDefinition.stableId, user?.id]
+  );
+  const userRole = getTableViewUserRole(isConsole, user, selectedOrganization?.role);
+  const myViewsCount = savedTableViewsData?.views.length;
 
   const hasNotifiedRestoredPreset = useRef(false);
   useEffect(() => {
@@ -162,6 +181,22 @@ const CurrentView = <TData extends MRT_RowData>({
     [changePreset, defaultSettings, isSavedTableViewsEnabled, presetViews, savedTableViewsData, table]
   );
 
+  const handleSelect = useCallback(
+    (value: string) => {
+      const isSavedView = savedTableViewsData?.views.some((view) => `${view.id}` === value);
+      const isDefault = !isSavedView && value === DEFAULT_VIEW;
+      trackEvent(MIXPANEL_EVENTS.TABLE_VIEW_SELECTED, {
+        ...trackingContext,
+        view_type: isSavedView ? 'my_view' : isDefault ? 'default' : 'preset',
+        preset_name: isSavedView || isDefault ? undefined : value,
+        my_views_count: myViewsCount,
+        user_role: userRole,
+      });
+      handleChange(value);
+    },
+    [handleChange, myViewsCount, savedTableViewsData, trackEvent, trackingContext, userRole]
+  );
+
   const hasAppliedStoredView = useRef(false);
   useEffect(() => {
     if (hasAppliedStoredView.current || !savedTableViewsData) {
@@ -182,13 +217,14 @@ const CurrentView = <TData extends MRT_RowData>({
     async (value: string, name: string) => {
       try {
         await updateSavedTableView({ id: Number(value), updateSavedTableViewRequestPayload: { name } }).unwrap();
+        trackEvent(MIXPANEL_EVENTS.TABLE_VIEW_RENAMED, trackingContext);
         snackbar.toastSuccess(strings.formatString(strings.SAVED_VIEW_UPDATED, name));
       } catch (error) {
         snackbar.toastError();
         throw error;
       }
     },
-    [snackbar, strings, updateSavedTableView]
+    [snackbar, strings, trackEvent, trackingContext, updateSavedTableView]
   );
 
   const handleDeleteView = useCallback(
@@ -198,14 +234,30 @@ const CurrentView = <TData extends MRT_RowData>({
   const closeDeleteViewModal = useCallback(() => setViewToDelete(undefined), []);
   const handleDeleted = useCallback(
     (deletedViewId: number) => {
+      trackEvent(MIXPANEL_EVENTS.TABLE_VIEW_DELETED, trackingContext);
       if (`${deletedViewId}` === activeSavedViewId) {
         handleChange(DEFAULT_VIEW);
       }
     },
-    [activeSavedViewId, handleChange]
+    [activeSavedViewId, handleChange, trackEvent, trackingContext]
   );
 
-  const handleSaved = useCallback((newViewId: number) => setSavedViewId(`${newViewId}`), []);
+  const handleSaved = useCallback(
+    (newViewId: number) => {
+      if (saveSource) {
+        trackEvent(MIXPANEL_EVENTS.TABLE_VIEW_SAVED, {
+          ...trackingContext,
+          ...getSavedViewAnalytics(table, getTableSettings(table), getDefaultTableSettings(table, defaultSettings)),
+          source: saveSource,
+          base_view: preset,
+          my_views_count: (myViewsCount ?? 0) + 1,
+          user_role: userRole,
+        });
+      }
+      setSavedViewId(`${newViewId}`);
+    },
+    [defaultSettings, myViewsCount, preset, saveSource, table, trackEvent, trackingContext, userRole]
+  );
 
   const selectedSavedView = savedTableViewsData?.views.find((view) => `${view.id}` === activeSavedViewId);
   const isModified =
@@ -216,13 +268,19 @@ const CurrentView = <TData extends MRT_RowData>({
       getDefaultTableSettings(table, defaultSettings)
     );
 
-  const openSaveViewModal = useCallback(() => {
-    if (isSavedTableViewsError) {
-      void refetchSavedTableViews();
-    }
-    setShowSaveViewModal(true);
-  }, [isSavedTableViewsError, refetchSavedTableViews]);
-  const closeSaveViewModal = useCallback(() => setShowSaveViewModal(false), []);
+  const openSaveViewModal = useCallback(
+    (source: TableViewSaveSource) => {
+      if (isSavedTableViewsError) {
+        void refetchSavedTableViews();
+      }
+      trackEvent(MIXPANEL_EVENTS.TABLE_VIEW_SAVE_STARTED, { ...trackingContext, source, user_role: userRole });
+      setSaveSource(source);
+    },
+    [isSavedTableViewsError, refetchSavedTableViews, trackEvent, trackingContext, userRole]
+  );
+  const openSaveViewModalFromMenu = useCallback(() => openSaveViewModal('menu'), [openSaveViewModal]);
+  const openSaveViewModalFromButton = useCallback(() => openSaveViewModal('save_button'), [openSaveViewModal]);
+  const closeSaveViewModal = useCallback(() => setSaveSource(undefined), []);
 
   if (!isSavedTableViewsEnabled && !presetViews?.length) {
     return null;
@@ -236,10 +294,10 @@ const CurrentView = <TData extends MRT_RowData>({
           id={id}
           modified={isModified}
           myViews={savedViewOptions}
-          onChange={handleChange}
+          onChange={handleSelect}
           onDeleteView={isSavedTableViewsEnabled ? handleDeleteView : undefined}
           onRenameView={isSavedTableViewsEnabled ? handleRename : undefined}
-          onSave={openSaveViewModal}
+          onSave={openSaveViewModalFromMenu}
           presetViews={presetViews}
           selected={activeSavedViewId ?? preset}
           showSave={isSavedTableViewsEnabled}
@@ -249,12 +307,12 @@ const CurrentView = <TData extends MRT_RowData>({
         <Button
           id={`${id ?? 'current-view'}-save-button`}
           label={strings.SAVE_VIEW_BUTTON}
-          onClick={openSaveViewModal}
+          onClick={openSaveViewModalFromButton}
           priority='ghost'
         />
       )}
       {viewToDelete && <DeleteViewModal onClose={closeDeleteViewModal} onDeleted={handleDeleted} view={viewToDelete} />}
-      {showSaveViewModal && (
+      {saveSource && (
         <SaveViewModal
           baseView={preset}
           existingNames={savedTableViewsData && savedViewOptions.map((view) => view.label)}
