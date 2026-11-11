@@ -18,7 +18,7 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
-import { isMonitoringPlotObserved } from 'src/utils/observation';
+import { getBiomassPlotUnrecognizedSpecies, isMonitoringPlotObserved } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -43,27 +43,10 @@ const BiomassObservationDataTab = () => {
 
   const { downloadBiomassObservationDetails } = useObservationExports();
 
-  const unrecognizedSpecies = useMemo(() => {
-    if (biomassMeasurement) {
-      const quadratSpeciesNames = biomassMeasurement.quadrats.flatMap((quadrat) =>
-        quadrat.species.map((species) => species.speciesName)
-      );
-      const treeSpeciesNames = biomassMeasurement.trees.map((tree) => tree.speciesName);
-      const additionalSpeciesNames = biomassMeasurement.additionalSpecies.map((species) => species.scientificName);
-      const combinedNames = Array.from(
-        new Set(
-          additionalSpeciesNames
-            .concat(quadratSpeciesNames)
-            .concat(treeSpeciesNames)
-            .filter((s): s is string => s !== undefined)
-        )
-      ).toSorted();
-
-      return combinedNames;
-    } else {
-      return [];
-    }
-  }, [biomassMeasurement]);
+  const unrecognizedSpecies = useMemo(
+    () => getBiomassPlotUnrecognizedSpecies(biomassMeasurement),
+    [biomassMeasurement]
+  );
 
   const defaultTimeZone = useDefaultTimeZone();
   const { activeLocale } = useLocalization();

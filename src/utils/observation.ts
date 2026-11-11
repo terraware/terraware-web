@@ -71,6 +71,31 @@ export const getBiomassStratumTotals = (stratum: ObservationStratumResultsPayloa
 export const getBiomassObservationTotals = (results: ObservationResultsPayload | undefined): BiomassTotals =>
   results ? summarizeBiomass(biomassMeasurementsOf(results.strata)) : EMPTY_BIOMASS_TOTALS;
 
+const unmatchedName = (speciesId: number | undefined, name: string | undefined) =>
+  speciesId === undefined ? name : undefined;
+
+const unrecognizedSpeciesIn = (measurements: ExistingBiomassMeasurementPayload[]): string[] =>
+  Array.from(
+    new Set(
+      measurements
+        .flatMap((measurement) => [
+          ...measurement.additionalSpecies.map((species) => unmatchedName(species.speciesId, species.scientificName)),
+          ...measurement.quadrats.flatMap((quadrat) =>
+            quadrat.species.map((species) => unmatchedName(species.speciesId, species.speciesName))
+          ),
+          ...measurement.trees.map((tree) => unmatchedName(tree.speciesId, tree.speciesName)),
+        ])
+        .filter((name): name is string => name !== undefined)
+    )
+  ).toSorted();
+
+export const getBiomassPlotUnrecognizedSpecies = (
+  measurements: ExistingBiomassMeasurementPayload | undefined
+): string[] => (measurements ? unrecognizedSpeciesIn([measurements]) : []);
+
+export const getBiomassObservationUnrecognizedSpecies = (results: ObservationResultsPayload | undefined): string[] =>
+  results ? unrecognizedSpeciesIn(biomassMeasurementsOf(results.strata)) : [];
+
 export const isMonitoringPlotObserved = (plot: ObservationMonitoringPlotResultsPayload | undefined): boolean =>
   plot?.completedTime !== undefined && plot.status === 'Completed';
 
