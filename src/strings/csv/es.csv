@@ -2056,10 +2056,11 @@ SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
-SCHEDULE_OBSERVATION_MESSAGE,Seleccione los estratos y subestratos que desea incluir en la observación:,3dc66640
+SCHEDULE_OBSERVATION_MESSAGE,Seleccione los estratos y subestratos que desea incluir en la observación.,875ef72a
 SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL,Quiero:,ef334f52
-SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,"Las cantidades junto a cada estrato indican el número de parcelas que se asignarán. Las cantidades junto a cada subestrato (~) son estimaciones. Nota: Las parcelas se ubican aleatoriamente, por lo que el número real de parcelas en cada subestrato puede variar.",cf5e0959
 SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,{0} - {1} temporales y {2} permanentes - se asignarán a las áreas seleccionadas.,49140e4c
+SCHEDULE_OBSERVATION_STRATUM_COUNTS_MESSAGE,Los números junto a cada estrato indican la cantidad de parcelas que se asignarán.,25868f1e
+SCHEDULE_OBSERVATION_SUBSTRATUM_COUNTS_MESSAGE,"Los números junto a cada subestrato (~) son estimaciones. Las parcelas se ubican aleatoriamente, por lo que la cantidad real de parcelas en cada subestrato puede variar.",c3833315
 SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Registrar cuántas plantas están vivas y cuántas muertas.,f2dc59dc
 SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Registrar supervivencia después de la plantación,04429f52
 SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,Ya hay una observación de {0} programada para comenzar el {1}.,4ade661b
