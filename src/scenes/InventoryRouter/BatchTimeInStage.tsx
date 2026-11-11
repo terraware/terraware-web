@@ -36,13 +36,13 @@ const useStages = (): Stage[] => {
             },
             {
               key: 'activeGrowth',
-              label: strings.ACTIVE_GROWTH,
+              label: strings.ACTIVE_GROWTH_SENTENCE_CASE,
               backgroundColor: theme.palette.TwClrBaseGreen200 as string,
               color: theme.palette.TwClrTxt as string,
             },
             {
               key: 'hardeningOff',
-              label: strings.HARDENING_OFF,
+              label: strings.HARDENING_OFF_SENTENCE_CASE,
               backgroundColor: theme.palette.TwClrBaseGreen500 as string,
               color: theme.palette.TwClrTxtInverse as string,
             },
@@ -66,11 +66,10 @@ const daysLabel = (days: number): string =>
 type StageSegmentProps = {
   stage: Stage;
   stageTime?: BatchStageTimePayload;
-  isFirst: boolean;
-  isLast: boolean;
+  fillEvenly: boolean;
 };
 
-const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps): JSX.Element => {
+const StageSegment = ({ stage, stageTime, fillEvenly }: StageSegmentProps): JSX.Element => {
   const theme = useTheme();
   const days = stageDays(stageTime);
   const hasDays = days !== undefined;
@@ -82,7 +81,7 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
         flexDirection: 'column',
         // Segments with a value share the leftover width in proportion to their days; the rest stay
         // just wide enough for their text.
-        flexGrow: hasDays ? days : 0,
+        flexGrow: fillEvenly ? 1 : hasDays ? days : 0,
         flexShrink: 0,
         flexBasis: 'auto',
         minWidth: 0,
@@ -90,9 +89,9 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
     >
       <Typography
         sx={{
-          color: theme.palette.TwClrTxtSecondary,
+          color: theme.palette.TwClrTxt,
           fontSize: '14px',
-          fontWeight: 500,
+          fontWeight: 600,
           marginBottom: theme.spacing(1),
           whiteSpace: 'nowrap',
         }}
@@ -103,10 +102,7 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
         sx={{
           alignItems: 'center',
           backgroundColor: stage.backgroundColor,
-          borderBottomLeftRadius: isFirst ? '8px' : 0,
-          borderBottomRightRadius: isLast ? '8px' : 0,
-          borderTopLeftRadius: isFirst ? '8px' : 0,
-          borderTopRightRadius: isLast ? '8px' : 0,
+          borderRadius: '8px',
           color: stage.color,
           display: 'flex',
           fontSize: '16px',
@@ -161,6 +157,8 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
     return null;
   }
 
+  const totalDays = stages.reduce((total, stage) => total + (stageDays(timeInStage?.[stage.key]) ?? 0), 0);
+
   const anyInProgress = stages.some((stage) => {
     const stageTime = timeInStage?.[stage.key];
     return stageTime?.inProgress === true && stageDays(stageTime) !== undefined;
@@ -171,7 +169,6 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
       sx={{
         backgroundColor: theme.palette.TwClrBg,
         borderRadius: '24px',
-        marginBottom: theme.spacing(3),
         padding: theme.spacing(3),
         width: '100%',
       }}
@@ -184,16 +181,18 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
           marginBottom: theme.spacing(2),
         }}
       >
-        {strings.TIME_IN_STAGE_TITLE} <IconTooltip title={strings.TIME_IN_STAGE_TITLE_TOOLTIP} />
+        {strings.TIME_IN_STAGE_TITLE}{' '}
+        <IconTooltip
+          title={`${strings.TIME_IN_STAGE_TITLE_TOOLTIP}\n\n${strings.TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING}`}
+        />
       </Typography>
-      <Box sx={{ display: 'flex', overflowX: 'auto' }}>
-        {stages.map((stage, index) => (
+      <Box sx={{ display: 'flex', gap: theme.spacing(1), overflowX: 'auto' }}>
+        {stages.map((stage) => (
           <StageSegment
             key={stage.key}
             stage={stage}
             stageTime={timeInStage?.[stage.key]}
-            isFirst={index === 0}
-            isLast={index === stages.length - 1}
+            fillEvenly={totalDays === 0}
           />
         ))}
       </Box>

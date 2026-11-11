@@ -75,8 +75,12 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
 
   return (
     <>
-      {isTimePerStageEnabled && <BatchTimeInStage batch={batch} />}
       <Grid container spacing={3} marginBottom={theme.spacing(4)}>
+        {isTimePerStageEnabled && (
+          <Grid size={12}>
+            <BatchTimeInStage batch={batch} />
+          </Grid>
+        )}
         <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
           <OverviewItemCardSubLocations batch={batch} />
         </Grid>

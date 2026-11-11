@@ -8,6 +8,13 @@ import TerrawareThemeOptions from '@terraware/web-components/style-dictionary-di
 
 const theme = createTheme(baseTheme, {
   components: {
+    MuiTooltip: {
+      styleOverrides: {
+        tooltip: {
+          whiteSpace: 'pre-line',
+        },
+      },
+    },
     MuiTableCell: {
       styleOverrides: {
         body: {

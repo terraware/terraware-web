@@ -51,14 +51,16 @@ describe('BatchTimeInStage', () => {
     renderCard(buildTimeInStage({ activeGrowth: buildStageTime({ days: 1 }) }));
 
     expect(
-      within(segmentFor(strings.ACTIVE_GROWTH)).getByText(strings.formatString(strings.X_DAY, 1).toString())
+      within(segmentFor(strings.ACTIVE_GROWTH_SENTENCE_CASE)).getByText(
+        strings.formatString(strings.X_DAY, 1).toString()
+      )
     ).toBeInTheDocument();
   });
 
   it('shows less than a day rather than zero days', () => {
     renderCard(buildTimeInStage({ hardeningOff: buildStageTime({ days: 0 }) }));
 
-    const segment = segmentFor(strings.HARDENING_OFF);
+    const segment = segmentFor(strings.HARDENING_OFF_SENTENCE_CASE);
     expect(within(segment).getByText(strings.LESS_THAN_ONE_DAY)).toBeInTheDocument();
     expect(within(segment).queryByText(strings.formatString(strings.X_DAYS, 0).toString())).not.toBeInTheDocument();
   });
@@ -84,7 +86,7 @@ describe('BatchTimeInStage', () => {
       buildTimeInStage({ activeGrowth: buildStageTime({ cleared: true, days: null as unknown as undefined }) })
     );
 
-    const segment = segmentFor(strings.ACTIVE_GROWTH);
+    const segment = segmentFor(strings.ACTIVE_GROWTH_SENTENCE_CASE);
     expect(within(segment).getByText(strings.NOT_AVAILABLE)).toBeInTheDocument();
 
     await user.hover(within(segment).getByLabelText(strings.TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP));
@@ -113,9 +115,10 @@ describe('BatchTimeInStage', () => {
 
     expect(screen.getByText(strings.TIME_IN_STAGE_TITLE)).toBeInTheDocument();
 
-    await user.hover(screen.getByLabelText(strings.TIME_IN_STAGE_TITLE_TOOLTIP));
+    const tooltip = `${strings.TIME_IN_STAGE_TITLE_TOOLTIP} ${strings.TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING}`;
+    await user.hover(screen.getByLabelText(tooltip));
 
-    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.TIME_IN_STAGE_TITLE_TOOLTIP);
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(tooltip);
   });
 
   it.each([

@@ -51,6 +51,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Quantité de croissance active (avant),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de croissance active ne peut être inférieure à 0,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Quantité de croissance active ({0} restant),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Quantité de croissance active *,b8c156d3
+ACTIVE_GROWTH_SENTENCE_CASE,Croissance active,ea48e4db
 ACTIVITY,Activité,4e3914f0
 ACTIVITY_DELETED,Activité supprimée,e2df95fd
 ACTIVITY_LOG,Journal d'activité,112b2d64
@@ -904,6 +905,7 @@ HARDENING_OFF_QUANTITY_BEFORE,Quantité à acclimater (avant),8c9f5ae5
 HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité à acclimater ne peut pas être inférieure à 0,7a75d47c
 HARDENING_OFF_QUANTITY_REMAINING,Quantité à acclimater ({0} restante),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Quantité à acclimater *,8bda8f0f
+HARDENING_OFF_SENTENCE_CASE,Acclimatation,5b744226
 HECTARES,Hectares,316902d7
 HEIGHT_AT_MATURITY,Hauteur à maturité (cm),f8025719
 HEIGHT_M,Hauteur (m),fe61fc34
@@ -1111,6 +1113,7 @@ LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Vous quittez l’écran de mod
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de modification des Parcelles Temporaires. Toute modification non enregistrée des Parcelles Temporaires ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,a4409ad0
 LEFT_TO_PLANT,Restant à transplanter,30af8cf9
 LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
+LESS_THAN_ONE_DAY,Moins d'un jour,ee9dfb62
 LIANA,Liane,812e082e
 LICHEN,Lichen,4f8de0bf
 LIFETIME,Durée de vie,a7451a5d
@@ -1375,6 +1378,7 @@ NORTHWEST_CORNER_FIELD_LONGITUDE,Longitude du coin nord-ouest du champ,8221fbe1
 NORTHWEST_CORNER_LATITUDE,Latitude du coin nord-ouest,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitude du coin nord-ouest,355e9d22
 NOT_APPLICABLE_FOR_AD_HOC_PLOTS,Non applicable aux parcelles ad hoc,3e9df420
+NOT_AVAILABLE,Non disponible,82519abb
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Non calculé pour les parcelles temporaires.,ca983c30
 NOT_COMPLETE,Pas terminé,a8606bc8
 NOT_COVERED,Non couverte,c01864d7
@@ -2253,6 +2257,7 @@ SLACK_LINK,Lien Slack,45b022ae
 SLIDES_URL,URL des diapositives,2d6bb620
 SMALL_TREES_COUNT_HIGH,Nombre de petits arbres (haut),8bd57803
 SMALL_TREES_COUNT_LOW,Nombre de petits arbres (bas),34682b74
+SO_FAR,jusqu'à présent,3408380d
 SOAK,Imprégnation,1eb78e7b
 SOCIAL_IMPACT,Impact social,34c0ea7c
 SOCIAL_IMPACT_INSTRUCTIONS,"Dressez la liste des avantages directs du projet pour la communauté locale. Les avantages spécifiques peuvent inclure l'impact sur les moyens de subsistance, l'éducation et la formation de la communauté, l'accès à l'eau potable, le soutien aux jeunes, aux femmes et/ou aux groupes minoritaires, ainsi que d'autres avantages socio-économiques et communautaires du projet. Veuillez inclure les indicateurs spécifiques que vous utilisez pour mesurer l'impact sur la communauté et les résultats que vous avez suivis dans le temps. (Une demi-page maximum)",08a8aaaa
@@ -2537,16 +2542,12 @@ THIS_VIEW_SAVES,Cette vue enregistre,85bfa1dc
 THREATENED,Menacée,57ca76f3
 THUMBNAIL,Vignette,3196d372
 TIDE,Marée,9dd490e9
-X_DAYS,{0} jours,bec81ab4
-X_DAY,{0} jour,f85a4e0a
 TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE,"* En cours de modification. Certains semis n'ont pas encore quitté cette étape, donc ces moyennes comptent leurs jours jusqu'à aujourd'hui.",26120d59
-LESS_THAN_ONE_DAY,Moins d'un jour,ee9dfb62
 TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP,Aucun semis de ce lot n'est passé par cette étape.,d8c51362
-NOT_AVAILABLE,Non disponible,82519abb
 TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP,"Les quantités de ce lot pour cette étape ont été modifiées manuellement, donc le temps passé dans l'étape ne peut pas être calculé.",5a0a0610
-SO_FAR,jusqu'à présent,3408380d
 TIME_IN_STAGE_TITLE,Nombre moyen de jours par étape de croissance pour ce lot,97675e32
-TIME_IN_STAGE_TITLE_TOOLTIP,"Chaque valeur correspond à la moyenne pour les semis ayant quitté l'étape ou y étant encore. Les semis retirés d'une étape ne sont pas inclus dans cette étape, sauf les semis transplantés depuis l'étape Prêt.",860fa0a4
+TIME_IN_STAGE_TITLE_TOOLTIP,"Le nombre moyen de jours que les semis ont passé à chaque étape, basé sur les changements d’étape dans l’Historique.",105750bf
+TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING,Les semis encore dans une étape sont comptabilisés jusqu’à aujourd’hui. Les semis retirés sont comptabilisés jusqu’à leur date de retrait.,ab898fcd
 TIME_OF_TIDE_MEASUREMENT,Heure de la mesure de la marée,08085281
 TIME_ZONE,Fuseau horaire,abc27841
 TIME_ZONE_REQUIRED,Fuseau horaire *,f1ee0610
@@ -2913,6 +2914,8 @@ X_ACCESSIONS,{0} accessions,e8ccdbc4
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
 X_CUMULATIVE_TARGET,Objectif cumulatif {0},25c175af
+X_DAY,{0} jour,f85a4e0a
+X_DAYS,{0} jours,bec81ab4
 X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
