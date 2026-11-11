@@ -71,6 +71,26 @@ export const getBiomassStratumTotals = (stratum: ObservationStratumResultsPayloa
 export const getBiomassObservationTotals = (results: ObservationResultsPayload | undefined): BiomassTotals =>
   results ? summarizeBiomass(biomassMeasurementsOf(results.strata)) : EMPTY_BIOMASS_TOTALS;
 
+const unrecognizedSpeciesIn = (measurements: ExistingBiomassMeasurementPayload[]): string[] =>
+  Array.from(
+    new Set(
+      measurements
+        .flatMap((measurement) => [
+          ...measurement.additionalSpecies.map((species) => species.scientificName),
+          ...measurement.quadrats.flatMap((quadrat) => quadrat.species.map((species) => species.speciesName)),
+          ...measurement.trees.map((tree) => tree.speciesName),
+        ])
+        .filter((name): name is string => name !== undefined)
+    )
+  ).toSorted();
+
+export const getBiomassPlotUnrecognizedSpecies = (
+  measurements: ExistingBiomassMeasurementPayload | undefined
+): string[] => (measurements ? unrecognizedSpeciesIn([measurements]) : []);
+
+export const getBiomassObservationUnrecognizedSpecies = (results: ObservationResultsPayload | undefined): string[] =>
+  results ? unrecognizedSpeciesIn(biomassMeasurementsOf(results.strata)) : [];
+
 export const getObservationSpeciesLivePlantsCount = (
   species: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined
 ): number | undefined => {
