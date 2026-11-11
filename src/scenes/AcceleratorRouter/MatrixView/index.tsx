@@ -2,7 +2,18 @@ import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'rea
 import { createPortal } from 'react-dom';
 
 import { Box, Card, Grid, IconButton, Tooltip, useTheme } from '@mui/material';
-import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import {
+  BusySpinner,
+  EditableTable,
+  EditableTableColumn,
+  EditableTableColumnV2,
+  EditableTableInstanceV2,
+  EditableTableToggleDensePaddingButtonV2,
+  EditableTableToggleFiltersButtonV2,
+  EditableTableToggleFullScreenButtonV2,
+  EditableTableV2,
+  Icon,
+} from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
   MRT_Cell,
@@ -16,9 +27,11 @@ import {
 
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
+import { CurrentViewTable } from 'src/components/common/CurrentView/viewTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
@@ -100,6 +113,84 @@ const toColumnV1 = ({ render, renderEditor, onSave, ...column }: MatrixColumnSpe
     : { onSave },
 });
 
+const matchesAnySelection = (value: unknown, filterValue: unknown) =>
+  !Array.isArray(filterValue) ||
+  filterValue.length === 0 ||
+  String(value ?? '')
+    .split(',')
+    .map((item) => item.trim())
+    .some((item) => filterValue.includes(item));
+
+const toColumnV2 = ({
+  render,
+  renderEditor,
+  onSave,
+  filterFn,
+  ...column
+}: MatrixColumnSpec): EditableTableColumnV2<MatrixRow> => ({
+  ...column,
+  filterFn:
+    filterFn === 'arrIncludesSome'
+      ? (row, columnId, filterValue) => matchesAnySelection(column.accessorFn?.(row), filterValue)
+      : undefined,
+  Cell: render ? ({ getValue, row }) => render(getValue(), row.original) : undefined,
+  editConfig: {
+    editVariant: renderEditor ? 'custom' : 'text',
+    onSave: onSave ? (row, value) => onSave(row, value as string | number | string[]) : undefined,
+    customEditComponent: renderEditor
+      ? ({ getValue, save, cancel }) => (
+          <>{renderEditor({ value: getValue(), onSave: (value) => void save(value), onCancel: cancel })}</>
+        )
+      : undefined,
+  },
+});
+
+const definitionHeader = (columns: EditableTableColumnV2<MatrixRow>[], columnId: string) =>
+  columns.find((column) => column.id === columnId)?.header;
+
+const bodyCellSx = (columnId: string) => ({
+  '&[data-pinned="true"]:before': {
+    backgroundColor: 'transparent !important',
+  },
+  '&[data-pinned="true"]': {
+    filter: 'brightness(0.97)',
+    boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
+    zIndex: 1,
+  },
+  ...(columnId === 'projectName' && {
+    maxWidth: '150px',
+    '& a': {
+      display: '-webkit-box',
+      WebkitLineClamp: 3,
+      WebkitBoxOrient: 'vertical',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
+      lineHeight: '1.2em',
+      maxHeight: '5.4em',
+      whiteSpace: 'normal',
+    },
+  }),
+});
+
+const HEAD_CELL_SX = {
+  height: '56px',
+  maxWidth: '200px',
+  padding: '8px',
+  '&.MuiTableCell-head': {
+    height: '56px !important',
+  },
+  '&.MuiTableCell-head .Mui-TableHeadCell-Content-Wrapper': {
+    display: '-webkit-box',
+    WebkitLineClamp: 3,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    lineHeight: '1.2em',
+    maxHeight: '3.4em',
+    whiteSpace: 'normal',
+  },
+};
+
 const MatrixView = () => {
   const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
   const projects = useMemo(() => projectsData ?? [], [projectsData]);
@@ -116,6 +207,7 @@ const MatrixView = () => {
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
+  const isEditableTableV2Enabled = useFeatureEnabled('Editable Table V2');
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const {
     columnFilters,
@@ -435,6 +527,7 @@ const MatrixView = () => {
   ]);
 
   const matrixColumns = useMemo(() => matrixColumnSpecs.map(toColumnV1), [matrixColumnSpecs]);
+  const matrixColumnsV2 = useMemo(() => matrixColumnSpecs.map(toColumnV2), [matrixColumnSpecs]);
 
   const onColumnsClickHandler = useCallback(() => {
     setShowColumnsModal(true);
@@ -602,17 +695,14 @@ const MatrixView = () => {
     [setColumnFilters, setColumnOrder, setColumnVisibility, uniqueVariableIds]
   );
 
-  const renderToolbarInternalActions = useCallback(
-    ({ table }: { table: MRT_TableInstance<ProjectsWithVariablesSearchResult> }) => (
-      <Box>
-        <MRT_ToggleFiltersButton table={table} />
+  const renderManageColumns = useCallback(
+    (table: CurrentViewTable<MatrixRow>) => (
+      <>
         <Tooltip title={strings.MANAGE_COLUMNS}>
           <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
             <Icon name='iconColumns' />
           </IconButton>
         </Tooltip>
-        <MRT_ToggleDensePaddingButton table={table} />
-        <MRT_ToggleFullScreenButton table={table} />
         {showColumnsModal &&
           allVariables &&
           createPortal(
@@ -624,7 +714,7 @@ const MatrixView = () => {
             />,
             document.body
           )}
-      </Box>
+      </>
     ),
     [
       allVariables,
@@ -636,7 +726,52 @@ const MatrixView = () => {
     ]
   );
 
-  const tableOptions = useMemo<Partial<MRT_TableOptions<ProjectsWithVariablesSearchResult>>>(
+  const renderCurrentView = useCallback(
+    (table: CurrentViewTable<MatrixRow>) => (
+      <Grid container style={{ maxWidth: '50%' }} spacing={1}>
+        <Grid>
+          <CurrentView
+            defaultPreset={currentView}
+            defaultSettings={defaultViewSettings}
+            onPresetChange={onCurrentViewChange}
+            presetViews={[
+              { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
+              { label: strings.APPLICANTS, value: 'applicants' },
+            ]}
+            table={table}
+            tableDefinition={TABLES.matrixView}
+          />
+        </Grid>
+      </Grid>
+    ),
+    [currentView, defaultViewSettings, onCurrentViewChange, strings]
+  );
+
+  const renderToolbarInternalActions = useCallback(
+    ({ table }: { table: MRT_TableInstance<MatrixRow> }) => (
+      <Box>
+        <MRT_ToggleFiltersButton table={table} />
+        {renderManageColumns(table)}
+        <MRT_ToggleDensePaddingButton table={table} />
+        <MRT_ToggleFullScreenButton table={table} />
+      </Box>
+    ),
+    [renderManageColumns]
+  );
+
+  const renderToolbarInternalActionsV2 = useCallback(
+    ({ table }: { table: EditableTableInstanceV2<MatrixRow> }) => (
+      <Box>
+        <EditableTableToggleFiltersButtonV2 table={table} />
+        {renderManageColumns(table)}
+        <EditableTableToggleDensePaddingButtonV2 table={table} />
+        <EditableTableToggleFullScreenButtonV2 table={table} />
+      </Box>
+    ),
+    [renderManageColumns]
+  );
+
+  const tableOptions = useMemo<Partial<MRT_TableOptions<MatrixRow>>>(
     () => ({
       enableGlobalFilterRankedResults: false,
       initialState: { showColumnFilters: false },
@@ -647,23 +782,7 @@ const MatrixView = () => {
         void columnMenuItemsCopy.pop();
         return columnMenuItemsCopy;
       },
-      renderTopToolbarCustomActions: ({ table }) => (
-        <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid>
-            <CurrentView
-              defaultPreset={currentView}
-              defaultSettings={defaultViewSettings}
-              onPresetChange={onCurrentViewChange}
-              presetViews={[
-                { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
-                { label: strings.APPLICANTS, value: 'applicants' },
-              ]}
-              table={table}
-              tableDefinition={TABLES.matrixView}
-            />
-          </Grid>
-        </Grid>
-      ),
+      renderTopToolbarCustomActions: ({ table }) => renderCurrentView(table),
       state: {
         columnFilters: visibleColumnFilters,
         sorting,
@@ -687,29 +806,7 @@ const MatrixView = () => {
         },
       },
       muiTableBodyCellProps: ({ cell, column }) => ({
-        sx: {
-          '&[data-pinned="true"]:before': {
-            backgroundColor: 'transparent !important',
-          },
-          '&[data-pinned="true"]': {
-            filter: 'brightness(0.97)',
-            boxShadow: '-4px 0 4px -4px rgba(97, 97, 97, 0.5) inset',
-            zIndex: 1,
-          },
-          ...(column.id === 'projectName' && {
-            maxWidth: '150px',
-            '& a': {
-              display: '-webkit-box',
-              WebkitLineClamp: 3,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              lineHeight: '1.2em',
-              maxHeight: '5.4em',
-              whiteSpace: 'normal',
-            },
-          }),
-        },
+        sx: bodyCellSx(column.id),
         title: column.id === 'projectName' ? cell.getValue()?.toString() || '' : undefined,
       }),
       muiTableProps: {
@@ -718,24 +815,7 @@ const MatrixView = () => {
         },
       },
       muiTableHeadCellProps: ({ column }) => ({
-        sx: {
-          height: '56px',
-          maxWidth: '200px',
-          padding: '8px',
-          '&.MuiTableCell-head': {
-            height: '56px !important',
-          },
-          '&.MuiTableCell-head .Mui-TableHeadCell-Content-Wrapper': {
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            lineHeight: '1.2em',
-            maxHeight: '3.4em',
-            whiteSpace: 'normal',
-          },
-        },
+        sx: HEAD_CELL_SX,
         title: column.columnDef.header,
       }),
     }),
@@ -743,10 +823,8 @@ const MatrixView = () => {
       columnOrder,
       columnPinning,
       columnVisibility,
-      currentView,
-      defaultViewSettings,
       globalFilter,
-      onCurrentViewChange,
+      renderCurrentView,
       setColumnFilters,
       setColumnOrder,
       setColumnPinning,
@@ -754,7 +832,6 @@ const MatrixView = () => {
       setGlobalFilter,
       setSorting,
       sorting,
-      strings,
       visibleColumnFilters,
     ]
   );
@@ -763,19 +840,61 @@ const MatrixView = () => {
     <Page title={strings.PROJECTS}>
       {loading === true && <BusySpinner />}
       <Card sx={{ borderRadius: '24px', padding: theme.spacing(3), boxShadow: 'none' }}>
-        <EditableTable
-          clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-          columns={matrixColumns}
-          data={projects}
-          enableColumnFilters
-          enableColumnOrdering
-          enableColumnPinning
-          enableEditing
-          enableGlobalFilter
-          renderToolbarInternalActions={renderToolbarInternalActions}
-          sx={{ padding: 0 }}
-          tableOptions={tableOptions}
-        />
+        {isEditableTableV2Enabled ? (
+          <EditableTableV2
+            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+            columns={matrixColumnsV2}
+            data={projects}
+            enableColumnFilters
+            enableColumnOrdering
+            enableColumnPinning
+            enableEditing
+            enableGlobalFilter
+            enableShowAllColumnsMenuItem={false}
+            positionGlobalFilter='right'
+            renderTopToolbarCustomActions={({ table }) => renderCurrentView(table)}
+            renderToolbarInternalActions={renderToolbarInternalActionsV2}
+            muiTableBodyCellProps={({ cell, column }) => ({
+              sx: bodyCellSx(column.id),
+              title: column.id === 'projectName' ? String(cell.getValue() ?? '') : undefined,
+            })}
+            muiTableHeadCellProps={({ column }) => ({
+              sx: HEAD_CELL_SX,
+              title: definitionHeader(matrixColumnsV2, column.id),
+            })}
+            tableOptions={{
+              state: {
+                columnFilters: visibleColumnFilters,
+                sorting,
+                columnPinning,
+                columnOrder,
+                columnVisibility,
+                globalFilter,
+              },
+              onGlobalFilterChange: setGlobalFilter,
+              onColumnFiltersChange: setColumnFilters,
+              onSortingChange: setSorting,
+              onColumnPinningChange: setColumnPinning,
+              onColumnOrderChange: setColumnOrder,
+              onColumnVisibilityChange: setColumnVisibility,
+            }}
+            sx={{ padding: 0, '& table': { tableLayout: 'fixed' }, '& td': { borderBottom: 'none' } }}
+          />
+        ) : (
+          <EditableTable
+            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+            columns={matrixColumns}
+            data={projects}
+            enableColumnFilters
+            enableColumnOrdering
+            enableColumnPinning
+            enableEditing
+            enableGlobalFilter
+            renderToolbarInternalActions={renderToolbarInternalActions}
+            sx={{ padding: 0 }}
+            tableOptions={tableOptions}
+          />
+        )}
       </Card>
     </Page>
   );
