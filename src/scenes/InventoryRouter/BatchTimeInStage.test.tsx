@@ -43,7 +43,7 @@ describe('BatchTimeInStage', () => {
     renderCard(buildTimeInStage({ germinating: buildStageTime({ days: 14 }) }));
 
     expect(
-      within(segmentFor(strings.GERMINATING)).getByText(strings.formatString(strings.TIME_IN_STAGE_DAYS, 14).toString())
+      within(segmentFor(strings.GERMINATING)).getByText(strings.formatString(strings.X_DAYS, 14).toString())
     ).toBeInTheDocument();
   });
 
@@ -51,9 +51,7 @@ describe('BatchTimeInStage', () => {
     renderCard(buildTimeInStage({ activeGrowth: buildStageTime({ days: 1 }) }));
 
     expect(
-      within(segmentFor(strings.ACTIVE_GROWTH)).getByText(
-        strings.formatString(strings.TIME_IN_STAGE_DAYS_ONE, 1).toString()
-      )
+      within(segmentFor(strings.ACTIVE_GROWTH)).getByText(strings.formatString(strings.X_DAY, 1).toString())
     ).toBeInTheDocument();
   });
 
@@ -61,20 +59,16 @@ describe('BatchTimeInStage', () => {
     renderCard(buildTimeInStage({ hardeningOff: buildStageTime({ days: 0 }) }));
 
     const segment = segmentFor(strings.HARDENING_OFF);
-    expect(within(segment).getByText(strings.TIME_IN_STAGE_LESS_THAN_ONE_DAY)).toBeInTheDocument();
-    expect(
-      within(segment).queryByText(strings.formatString(strings.TIME_IN_STAGE_DAYS, 0).toString())
-    ).not.toBeInTheDocument();
+    expect(within(segment).getByText(strings.LESS_THAN_ONE_DAY)).toBeInTheDocument();
+    expect(within(segment).queryByText(strings.formatString(strings.X_DAYS, 0).toString())).not.toBeInTheDocument();
   });
 
   it('marks a stage seedlings are still in, and footnotes the card', () => {
     renderCard(buildTimeInStage({ ready: buildStageTime({ days: 9, inProgress: true }) }));
 
     const segment = segmentFor(strings.READY);
-    expect(
-      within(segment).getByText(strings.formatString(strings.TIME_IN_STAGE_DAYS, 9).toString())
-    ).toBeInTheDocument();
-    expect(within(segment).getByText(`${strings.TIME_IN_STAGE_SO_FAR}*`)).toBeInTheDocument();
+    expect(within(segment).getByText(strings.formatString(strings.X_DAYS, 9).toString())).toBeInTheDocument();
+    expect(within(segment).getByText(`${strings.SO_FAR}*`)).toBeInTheDocument();
     expect(screen.getByText(strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE)).toBeInTheDocument();
   });
 
@@ -82,7 +76,7 @@ describe('BatchTimeInStage', () => {
     renderCard(buildTimeInStage({ ready: buildStageTime({ days: 9 }) }));
 
     expect(screen.queryByText(strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE)).not.toBeInTheDocument();
-    expect(screen.queryByText(`${strings.TIME_IN_STAGE_SO_FAR}*`)).not.toBeInTheDocument();
+    expect(screen.queryByText(`${strings.SO_FAR}*`)).not.toBeInTheDocument();
   });
 
   it('explains that a hand-edited stage has no time to show', async () => {
@@ -91,7 +85,7 @@ describe('BatchTimeInStage', () => {
     );
 
     const segment = segmentFor(strings.ACTIVE_GROWTH);
-    expect(within(segment).getByText(strings.TIME_IN_STAGE_NOT_AVAILABLE)).toBeInTheDocument();
+    expect(within(segment).getByText(strings.NOT_AVAILABLE)).toBeInTheDocument();
 
     await user.hover(within(segment).getByLabelText(strings.TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP));
 

@@ -60,8 +60,8 @@ const useStages = (): Stage[] => {
 
 const daysLabel = (days: number): string =>
   days === 0
-    ? strings.TIME_IN_STAGE_LESS_THAN_ONE_DAY
-    : strings.formatString(days === 1 ? strings.TIME_IN_STAGE_DAYS_ONE : strings.TIME_IN_STAGE_DAYS, days).toString();
+    ? strings.LESS_THAN_ONE_DAY
+    : strings.formatString(days === 1 ? strings.X_DAY : strings.X_DAYS, days).toString();
 
 type StageSegmentProps = {
   stage: Stage;
@@ -121,12 +121,12 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
             <Box component='span' fontWeight={600}>
               {daysLabel(days)}
             </Box>
-            {stageTime?.inProgress && <Box component='span'>{`${strings.TIME_IN_STAGE_SO_FAR}*`}</Box>}
+            {stageTime?.inProgress && <Box component='span'>{`${strings.SO_FAR}*`}</Box>}
           </>
         ) : (
           <>
             <Box component='span' fontWeight={600}>
-              {stageTime?.cleared ? strings.TIME_IN_STAGE_NOT_AVAILABLE : '—'}
+              {stageTime?.cleared ? strings.NOT_AVAILABLE : '—'}
             </Box>
             <IconTooltip
               title={

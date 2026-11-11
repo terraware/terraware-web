@@ -2536,14 +2536,14 @@ THIS_VIEW_SAVES,Cette vue enregistre,85bfa1dc
 THREATENED,Menacée,57ca76f3
 THUMBNAIL,Vignette,3196d372
 TIDE,Marée,9dd490e9
-TIME_IN_STAGE_DAYS,{0} jours,bec81ab4
-TIME_IN_STAGE_DAYS_ONE,{0} jour,f85a4e0a
+X_DAYS,{0} jours,bec81ab4
+X_DAY,{0} jour,f85a4e0a
 TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE,"* En cours de modification. Certains semis n'ont pas encore quitté cette étape, donc ces moyennes comptent leurs jours jusqu'à aujourd'hui.",26120d59
-TIME_IN_STAGE_LESS_THAN_ONE_DAY,Moins d'un jour,ee9dfb62
+LESS_THAN_ONE_DAY,Moins d'un jour,ee9dfb62
 TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP,Aucun semis de ce lot n'est passé par cette étape.,d8c51362
-TIME_IN_STAGE_NOT_AVAILABLE,Non disponible,82519abb
+NOT_AVAILABLE,Non disponible,82519abb
 TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP,"Les quantités de ce lot pour cette étape ont été modifiées manuellement, donc le temps passé dans l'étape ne peut pas être calculé.",5a0a0610
-TIME_IN_STAGE_SO_FAR,jusqu'à présent,3408380d
+SO_FAR,jusqu'à présent,3408380d
 TIME_IN_STAGE_TITLE,Nombre moyen de jours par étape de croissance pour ce lot,97675e32
 TIME_IN_STAGE_TITLE_TOOLTIP,"Chaque valeur correspond à la moyenne pour les semis ayant quitté l'étape ou y étant encore. Les semis retirés d'une étape ne sont pas inclus dans cette étape, sauf les semis transplantés depuis l'étape Prêt.",860fa0a4
 TIME_OF_TIDE_MEASUREMENT,Heure de la mesure de la marée,08085281
