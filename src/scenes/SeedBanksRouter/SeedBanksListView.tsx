@@ -1,12 +1,10 @@
-import React, { type JSX, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Grid } from '@mui/material';
 
-import PageSnackbar from 'src/components/PageSnackbar';
+import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextField from 'src/components/common/Textfield/Textfield';
-import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
@@ -39,12 +37,10 @@ const columns = (): TableColumnType[] => [
 export default function SeedBanksListView({ organization }: SeedBanksListProps): JSX.Element {
   const timeZones = useTimeZones();
   const defaultTimeZone = useDefaultTimeZone().get();
-  const theme = useTheme();
   const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
   const { isMobile } = useDeviceInfo();
-  const contentRef = useRef(null);
 
   const goToNewSeedBank = () => {
     const newSeedBankLocation = {
@@ -76,48 +72,23 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
   );
 
   return (
-    <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <Grid container paddingBottom={theme.spacing(2)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
-          <Grid size={8}>
-            <h1
-              style={{
-                marginTop: 0,
-                marginBottom: 0,
-                fontSize: '24px',
-                fontWeight: 600,
-              }}
-            >
-              {strings.SEED_BANKS}
-            </h1>
-          </Grid>
-          <Grid
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-            }}
-            size={4}
-          >
-            {isAdmin(organization) &&
-              (isMobile ? (
-                <Button id='new-facility' icon='plus' onClick={goToNewSeedBank} size='medium' />
-              ) : (
-                <Button
-                  id='new-facility'
-                  icon='plus'
-                  label={strings.ADD_SEED_BANK}
-                  onClick={goToNewSeedBank}
-                  size='medium'
-                />
-              ))}
-          </Grid>
-        </Grid>
-        <PageSnackbar />
-      </PageHeaderWrapper>
+    <Page
+      title={strings.SEED_BANKS}
+      contentStyle={{ display: 'block' }}
+      rightComponent={
+        isAdmin(organization) && (
+          <Button
+            id='new-facility'
+            icon='plus'
+            label={isMobile ? undefined : strings.ADD_SEED_BANK}
+            onClick={goToNewSeedBank}
+            size='medium'
+          />
+        )
+      }
+    >
       <Card flushMobile>
-        <Grid container ref={contentRef}>
+        <Grid container>
           <Grid
             sx={{
               display: 'flex',
@@ -156,6 +127,6 @@ export default function SeedBanksListView({ organization }: SeedBanksListProps):
           </Grid>
         </Grid>
       </Card>
-    </TfMain>
+    </Page>
   );
 }
