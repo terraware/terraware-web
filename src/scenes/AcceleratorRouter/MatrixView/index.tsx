@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Card, Checkbox, Chip, Grid, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Box, Card, Grid, IconButton, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
   MRT_Cell,
-  MRT_Column,
   MRT_Row,
   MRT_TableInstance,
   MRT_TableOptions,
@@ -17,7 +16,6 @@ import {
 
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
-import DatePicker from 'src/components/common/DatePicker';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
@@ -44,13 +42,63 @@ import {
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
+import { DateEditor, MatrixEditorProps, MultiSelectEditor, SelectEditor, SelectOption, TextEditor } from './editors';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
 type ViewOption = typeof DEFAULT_VIEW | 'acceleratorProjects' | 'applicants';
 
-type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
-type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
+type MatrixRow = ProjectsWithVariablesSearchResult;
+
+type MatrixColumnSpec = {
+  id: string;
+  header: string;
+  size: number;
+  enableEditing: boolean;
+  enableHiding?: boolean;
+  accessorKey?: keyof MatrixRow;
+  accessorFn?: (row: MatrixRow) => unknown;
+  filterVariant: 'text' | 'select' | 'multi-select' | 'range' | 'date-range';
+  filterFn?: 'between' | 'fuzzy' | 'arrIncludesSome';
+  filterSelectOptions?: string[];
+  render?: (value: unknown, row: MatrixRow) => ReactNode;
+  renderEditor?: (props: MatrixEditorProps) => ReactNode;
+  onSave?: (row: MatrixRow, value: string | number | string[]) => void;
+};
+
+const toColumnV1 = ({ render, renderEditor, onSave, ...column }: MatrixColumnSpec): EditableTableColumn<MatrixRow> => ({
+  ...column,
+  Cell: render
+    ? ({ cell, row }: { cell: MRT_Cell<MatrixRow>; row: MRT_Row<MatrixRow> }) => (
+        <>{render(cell.getValue(), row.original)}</>
+      )
+    : undefined,
+  editConfig: renderEditor
+    ? {
+        editVariant: 'custom',
+        customEditComponent: ({
+          cell,
+          row,
+          table,
+        }: {
+          cell: MRT_Cell<MatrixRow>;
+          row: MRT_Row<MatrixRow>;
+          table: MRT_TableInstance<MatrixRow>;
+        }) => (
+          <>
+            {renderEditor({
+              value: cell.getValue(),
+              onSave: (value) => {
+                table.setEditingCell(null);
+                onSave?.(row.original, value);
+              },
+              onCancel: () => table.setEditingCell(null),
+            })}
+          </>
+        ),
+      }
+    : { onSave },
+});
 
 const MatrixView = () => {
   const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
@@ -190,6 +238,10 @@ const MatrixView = () => {
         newValue = { type: 'Link', url: updatedValue.toString() };
       }
       const valueIdToUpdate = firstValue?.id || -1;
+      const handleError = () => {
+        snackbar.toastError();
+        setLoading(false);
+      };
       if (newValue) {
         setLoading(true);
         if (valueIdToUpdate.toString() !== '-1') {
@@ -201,7 +253,9 @@ const MatrixView = () => {
               ],
               updateStatuses: false,
             },
-          });
+          })
+            .unwrap()
+            .catch(handleError);
         } else {
           const varId = variable.id;
           if (varId) {
@@ -211,16 +265,18 @@ const MatrixView = () => {
                 operations: [{ operation: 'Append', variableId: Number(varId), value: newValue }],
                 updateStatuses: false,
               },
-            });
+            })
+              .unwrap()
+              .catch(handleError);
           }
         }
       }
     },
-    [updateProjectVariableValues]
+    [snackbar, updateProjectVariableValues]
   );
 
-  const matrixColumns = useMemo<MatrixColumn[]>(() => {
-    const baseNonVariableColumns: MatrixColumn[] = [
+  const matrixColumnSpecs = useMemo<MatrixColumnSpec[]>(() => {
+    const baseNonVariableColumns: MatrixColumnSpec[] = [
       {
         accessorKey: 'acceleratorDetails_dealName',
         header: strings.DEAL_NAME,
@@ -228,21 +284,11 @@ const MatrixView = () => {
         id: 'projectName',
         enableEditing: false,
         enableHiding: false,
-        Cell: ({
-          cell,
-          row,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const projectName = cell.getValue<string>();
-          const projectId = row.original.id;
-          return (
-            <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())}>
-              {projectName}
-            </Link>
-          );
-        },
+        render: (value, row) => (
+          <Link fontSize='16px' to={APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', row.id.toString())}>
+            {value as string}
+          </Link>
+        ),
         filterVariant: 'text',
       },
       {
@@ -261,12 +307,7 @@ const MatrixView = () => {
         enableEditing: false,
         filterVariant: 'range',
         filterFn: 'between',
-        Cell: ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-          if (cell.getValue() !== undefined) {
-            return <FormattedNumber value={cell.getValue<number>()} />;
-          }
-          return null;
-        },
+        render: (value) => (value !== undefined ? <FormattedNumber value={value as number} /> : null),
       },
       {
         accessorKey: 'country_name',
@@ -290,445 +331,67 @@ const MatrixView = () => {
       },
     ];
 
-    const variableColumns: MatrixColumn[] = uniqueVariableIds.map((variableId) => {
+    const variableColumns: MatrixColumnSpec[] = uniqueVariableIds.map((variableId) => {
       const selectedVariable = allVariables?.find((va) => va.stableId === variableId);
       const correspondingVariable = projects?.flatMap((p) => p.variables || []).find((v) => v.stableId === variableId);
       const correspondingValue = correspondingVariable?.values?.[0];
-      let Edit: CustomEditComponent;
-      let Cell: MatrixColumn['Cell'];
-      let filterFunction: 'between' | 'fuzzy' | 'arrIncludesSome' = 'fuzzy';
-      let filterVariant: 'text' | 'multi-select' | 'range' | 'date-range' = 'text';
-
+      let renderEditor: MatrixColumnSpec['renderEditor'];
+      let render: MatrixColumnSpec['render'];
+      let filterFn: MatrixColumnSpec['filterFn'] = 'fuzzy';
+      let filterVariant: MatrixColumnSpec['filterVariant'] = 'text';
       let filterSelectOptions: string[] = [];
 
       if (correspondingValue?.dateValue) {
         filterVariant = 'date-range';
-        filterFunction = 'between';
-        // eslint-disable-next-line react/display-name
-        Edit = ({
-          cell,
-          row,
-          table,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const [value, setValue] = useState(cell.getValue<string>() || '');
-
-          return (
-            <DatePicker
-              value={value ? new Date(value) : null}
-              onDateChange={(date) => {
-                const dateString = date ? date.toLocaleString() : '';
-                setValue(dateString);
-                table.setEditingCell(null);
-                const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-                const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-                if (variableToProcess && date) {
-                  onSaveHandler(row.original.id, date.toISODate() ?? '', variableToProcess);
-                }
-              }}
-              aria-label={''}
-              id={''}
-              label={undefined}
-            />
-          );
-        };
-        // eslint-disable-next-line react/display-name
-        Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-          if (cell.getValue() && cell.getValue() instanceof Date) {
-            return <>{cell.getValue<Date>().toLocaleDateString()}</>;
-          }
-          return null;
-        };
+        filterFn = 'between';
+        renderEditor = (props) => <DateEditor {...props} />;
+        render = (value) => (value instanceof Date ? <>{value.toLocaleDateString()}</> : null);
       }
 
       if (selectedVariable && 'options' in selectedVariable) {
-        Cell = undefined;
+        render = undefined;
         filterVariant = 'multi-select';
-        const getSelectOptions = () => {
-          if (selectedVariable && 'options' in selectedVariable && selectedVariable.options) {
-            return selectedVariable.options.map((option) => ({
-              label: option.renderedText ?? option.name,
-              value: option.id.toString(),
-            }));
-          }
-          return [];
-        };
+        const options: SelectOption[] =
+          selectedVariable.options?.map((option) => ({
+            label: option.renderedText ?? option.name,
+            value: option.id.toString(),
+          })) ?? [];
 
-        filterSelectOptions = getSelectOptions().map((opt) => opt.label || '');
-        filterFunction = 'arrIncludesSome';
+        filterSelectOptions = options.map((opt) => opt.label || '');
+        filterFn = 'arrIncludesSome';
 
-        if (selectedVariable && 'isMultiple' in selectedVariable && selectedVariable.isMultiple) {
-          // eslint-disable-next-line react/display-name
-          Edit = ({
-            cell,
-            row,
-            table,
-          }: {
-            cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-            column: MRT_Column<ProjectsWithVariablesSearchResult>;
-            row: MRT_Row<ProjectsWithVariablesSearchResult>;
-            table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-          }) => {
-            const [selectedLabels] = React.useState<string[]>(
-              cell.getValue<string>()
-                ? cell
-                    .getValue<string>()
-                    .trim()
-                    ?.split(',')
-                    .map((item) => item.trim())
-                : []
-            );
-            const [selections, setSelections] = React.useState<string[]>([]);
-            const [isOpen, setIsOpen] = useState(false);
-            const [position, setPosition] = useState({ top: 0, left: 0 });
-            const triggerRef = useRef<HTMLDivElement>(null);
-            const portalRef = useRef<HTMLDivElement>(null);
-
-            const optionsMap = useMemo(
-              () =>
-                new Map<string, string>(
-                  getSelectOptions()
-                    .filter((opt) => opt.value && opt.label)
-                    .map((opt) => [opt.value, opt.label])
-                ),
-              []
-            );
-
-            useEffect(() => {
-              if (selectedLabels) {
-                setSelections(
-                  selectedLabels.map((sl) => getSelectOptions().find((opt) => opt.label === sl)?.value || '')
-                );
-              }
-            }, [optionsMap, selectedLabels]);
-
-            const handleSave = useCallback(() => {
-              const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-              const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-              if (variableToProcess) {
-                onSaveHandler(row.original.id, selections, variableToProcess);
-              }
-              table.setEditingCell(null);
-            }, [row.original.id, row.original.variables, selections, table]);
-
-            const onAdd = (value: string | null) => {
-              const updatedValues = [...selections];
-              const valueIndex = updatedValues.findIndex((v) => v === value);
-              if (value && valueIndex < 0) {
-                updatedValues.push(value);
-                setSelections(updatedValues);
-              }
-            };
-
-            const onRemove = (value: string | null) => {
-              const updatedValues = [...selections];
-              const valueIndex = updatedValues.findIndex((v) => v === value);
-              if (valueIndex >= 0) {
-                updatedValues.splice(valueIndex, 1);
-                setSelections(updatedValues);
-              }
-            };
-
-            const handleOpen = useCallback(() => {
-              if (triggerRef.current) {
-                const rect = triggerRef.current.getBoundingClientRect();
-                setPosition({
-                  top: rect.bottom + window.scrollY,
-                  left: rect.left + window.scrollX,
-                });
-                setIsOpen(true);
-              }
-            }, []);
-
-            const handleClose = useCallback(() => {
-              handleSave();
-              setIsOpen(false);
-            }, [handleSave]);
-
-            useEffect(() => {
-              const handleClickOutside = (event: MouseEvent) => {
-                if (
-                  isOpen &&
-                  portalRef.current &&
-                  triggerRef.current &&
-                  !portalRef.current.contains(event.target as Node) &&
-                  !triggerRef.current.contains(event.target as Node)
-                ) {
-                  handleClose();
-                }
-              };
-
-              if (isOpen) {
-                document.addEventListener('mousedown', handleClickOutside);
-              }
-
-              return () => {
-                document.removeEventListener('mousedown', handleClickOutside);
-              };
-            }, [handleClose, isOpen]);
-
-            return (
-              <>
-                <div
-                  ref={triggerRef}
-                  onClick={handleOpen}
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    padding: '8px',
-                    minHeight: '40px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '4px',
-                    alignItems: 'center',
-                    width: '100%',
-                  }}
-                >
-                  {selections.map((value) => (
-                    <Chip
-                      key={value}
-                      label={optionsMap.get(value) || value}
-                      size='small'
-                      onDelete={(e) => {
-                        e.stopPropagation();
-                        onRemove(value);
-                      }}
-                    />
-                  ))}
-                  {selections.length === 0 && <span style={{ color: '#999' }}>Select options...</span>}
-                </div>
-
-                {isOpen &&
-                  createPortal(
-                    <div
-                      ref={portalRef}
-                      style={{
-                        position: 'fixed',
-                        top: position.top,
-                        left: position.left,
-                        zIndex: 9999,
-                        backgroundColor: 'white',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                        maxHeight: '200px',
-                        overflowY: 'auto',
-                        minWidth: '200px',
-                      }}
-                    >
-                      {Array.from(optionsMap.entries()).map(([value, label]) => (
-                        <div
-                          key={value}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (selections.includes(value)) {
-                              onRemove(value);
-                            } else {
-                              onAdd(value);
-                            }
-                          }}
-                          style={{
-                            padding: '8px 12px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            borderBottom: '1px solid #f0f0f0',
-                          }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.backgroundColor = 'white';
-                          }}
-                        >
-                          <Checkbox checked={selections.includes(value)} size='small' style={{ marginRight: '8px' }} />
-                          {label}
-                        </div>
-                      ))}
-                    </div>,
-                    document.body
-                  )}
-              </>
-            );
-          };
+        if ('isMultiple' in selectedVariable && selectedVariable.isMultiple) {
+          renderEditor = (props) => <MultiSelectEditor {...props} options={options} />;
         } else {
-          // eslint-disable-next-line react/display-name
-          Edit = ({
-            cell,
-            row,
-            table,
-          }: {
-            cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-            column: MRT_Column<ProjectsWithVariablesSearchResult>;
-            row: MRT_Row<ProjectsWithVariablesSearchResult>;
-            table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-          }) => {
-            const currentDisplayValue = cell.getValue<string>() || '';
-            const options = getSelectOptions();
-
-            const currentOption = options.find((opt) => opt.label === currentDisplayValue);
-            const [selectedValue, setSelectedValue] = useState(currentOption?.value || '');
-
-            const handleSave = () => {
-              const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-              const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-              if (variableToProcess) {
-                onSaveHandler(row.original.id, selectedValue, variableToProcess);
-              }
-              table.setEditingCell(null);
-            };
-
-            return (
-              <TextField
-                select
-                value={selectedValue}
-                onChange={(e) => {
-                  setSelectedValue(e.target.value);
-                }}
-                onBlur={handleSave}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSave();
-                  } else if (e.key === 'Escape') {
-                    table.setEditingCell(null);
-                  }
-                }}
-                size='small'
-                fullWidth
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            );
-          };
+          renderEditor = (props) => <SelectEditor {...props} options={options} />;
         }
       }
       if (correspondingValue?.['numberValue(raw)'] !== undefined) {
-        // eslint-disable-next-line react/display-name
-        Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-          return <FormattedNumber value={cell.getValue<number>()} />;
-        };
+        render = (value) => <FormattedNumber value={value as number} />;
         filterVariant = 'range';
-        filterFunction = 'between';
-        // Number input
-        // eslint-disable-next-line react/display-name
-        Edit = ({
-          cell,
-          row,
-          table,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const [value, setValue] = useState<string>((cell.getValue<string>() || 0).toString());
-
-          const handleSave = () => {
-            table.setEditingCell(null);
-            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-            const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-            if (variableToProcess) {
-              onSaveHandler(row.original.id, value, variableToProcess);
-            }
-          };
-
-          return (
-            <TextField
-              type='number'
-              value={value}
-              onChange={(e) => {
-                const numValue = e.target.value;
-                setValue(numValue);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSave();
-                } else if (e.key === 'Escape') {
-                  table.setEditingCell(null);
-                }
-              }}
-              onBlur={handleSave}
-              size='small'
-              fullWidth
-            />
-          );
-        };
+        filterFn = 'between';
+        renderEditor = (props) => <TextEditor {...props} type='number' />;
       }
       if (correspondingValue?.linkUrl) {
-        Cell = undefined;
-        // URL input
-        // eslint-disable-next-line react/display-name
-        Edit = ({
-          cell,
-          row,
-          table,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const [value, setValue] = useState(cell.getValue<string>() || '');
-
-          const handleSave = () => {
-            table.setEditingCell(null);
-            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-            const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-            if (variableToProcess) {
-              onSaveHandler(row.original.id, value, variableToProcess);
-            }
-          };
-
-          return (
-            <TextField
-              type='url'
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              onBlur={handleSave}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSave();
-                } else if (e.key === 'Escape') {
-                  table.setEditingCell(null);
-                }
-              }}
-              size='small'
-              fullWidth
-              placeholder='https://...'
-            />
-          );
-        };
+        render = undefined;
+        renderEditor = (props) => <TextEditor {...props} type='url' />;
       }
       return {
         id: variableId,
         header: variableNameMap.get(variableId) || variableId,
         size: 150,
         enableEditing: isAllowedEditMatrixView,
-        editConfig: Edit
-          ? { editVariant: 'custom', customEditComponent: Edit }
-          : {
-              onSave: (row, newValue) => {
-                const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
-                const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-                if (variableToProcess) {
-                  onSaveHandler(row.id, newValue, variableToProcess);
-                }
-              },
-            },
+        renderEditor,
+        onSave: (row, newValue) => {
+          const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
+          const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
+          if (variableToProcess) {
+            onSaveHandler(row.id, newValue, variableToProcess);
+          }
+        },
         filterVariant,
         filterSelectOptions,
-        filterFn: filterFunction,
+        filterFn,
         accessorFn: (row) => {
           const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
           const variableValue = variable?.values?.[0];
@@ -755,7 +418,7 @@ const MatrixView = () => {
 
           return '';
         },
-        Cell,
+        render,
       };
     });
 
@@ -770,6 +433,8 @@ const MatrixView = () => {
     uniqueVariableIds,
     variableNameMap,
   ]);
+
+  const matrixColumns = useMemo(() => matrixColumnSpecs.map(toColumnV1), [matrixColumnSpecs]);
 
   const onColumnsClickHandler = useCallback(() => {
     setShowColumnsModal(true);
@@ -898,11 +563,7 @@ const MatrixView = () => {
     if (updateVariableValuesResult.isSuccess) {
       void reloadTable().then(() => setLoading(false));
     }
-    if (updateVariableValuesResult.isError) {
-      snackbar.toastError();
-      setLoading(false);
-    }
-  }, [reloadTable, snackbar, updateVariableValuesResult.isError, updateVariableValuesResult.isSuccess]);
+  }, [reloadTable, updateVariableValuesResult.isSuccess]);
 
   useEffect(() => {
     void reloadTable();
