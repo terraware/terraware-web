@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import {
   Close as CloseIcon,
@@ -23,8 +23,8 @@ import {
   useTheme,
 } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
-import { MRT_TableInstance } from 'material-react-table';
 
+import { CurrentViewTable, toTableSource, toViewTable } from 'src/components/common/CurrentView/viewTable';
 import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
 import { ProjectsWithVariablesSearchResult } from 'src/queries/search/projectsWithVariables';
 import strings from 'src/strings';
@@ -34,7 +34,7 @@ type ColumnsModalProps = {
   onClose: () => void;
   onSave: (columns: string[]) => void;
   allVariables: VariableUnion[];
-  table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+  table: CurrentViewTable<ProjectsWithVariablesSearchResult>;
 };
 
 export function baseColumns() {
@@ -48,11 +48,21 @@ export function baseColumns() {
 }
 
 export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
-  const { onClose, onSave, allVariables, table } = props;
+  const { onClose, onSave, allVariables } = props;
+  const table = useMemo(() => toViewTable(toTableSource(props.table)), [props.table]);
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedDeliverables, setSelectedDeliverables] = useState(new Set());
-  const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
+  const [selectedColumns, setSelectedColumns] = useState<string[]>(() => {
+    const columnOrder = table.getSettings().columnOrder;
+    const visibleColumnIds = table
+      .getColumns()
+      .filter((col) => col.isVisible)
+      .map((col) => col.id);
+    return columnOrder.length > 0
+      ? columnOrder.filter((columnId) => visibleColumnIds.includes(columnId))
+      : visibleColumnIds;
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const { deliverables } = useDeliverablesWithOverdue({});
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
@@ -66,20 +76,8 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     return allVariables.filter((variable) => variable.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [allVariables, searchTerm]);
 
-  useEffect(() => {
-    const columnOrder = table.getState().columnOrder;
-    const visibleColumnIds = table.getVisibleFlatColumns().map((col) => col.id);
-
-    if (columnOrder.length > 0) {
-      const orderedVisibleColumns = columnOrder.filter((columnId) => visibleColumnIds.includes(columnId));
-      setSelectedColumns(orderedVisibleColumns);
-    } else {
-      setSelectedColumns(visibleColumnIds);
-    }
-  }, [table]);
-
   // Get current pinning state from the table
-  const columnPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+  const columnPinning = table.getSettings().columnPinning;
   const pinnedColumns = useMemo(
     () => [...(columnPinning.left || []), ...(columnPinning.right || [])],
     [columnPinning.left, columnPinning.right]
@@ -200,13 +198,12 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   }, [allVariables, baseColumnsIds, selectedColumns]);
 
   const handleUnpinAll = useCallback(() => {
-    // Unpin all columns using Material React Table's functionality
-    table?.setColumnPinning({ left: [], right: [] });
+    table.setColumnPinning({ left: [], right: [] });
   }, [table]);
 
   const handlePinColumn = useCallback(
     (columnId: string, position: 'left' | 'right' = 'left') => {
-      const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+      const currentPinning = table.getSettings().columnPinning;
 
       const newPinning = {
         left:
@@ -219,56 +216,45 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
             : (currentPinning.right || []).filter((id) => id !== columnId),
       };
 
-      table?.setColumnPinning(newPinning);
+      table.setColumnPinning(newPinning);
     },
     [table]
   );
 
   const handleUnpinColumn = useCallback(
     (columnId: string) => {
-      const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+      const currentPinning = table.getSettings().columnPinning;
 
       const newPinning = {
         left: (currentPinning.left || []).filter((id) => id !== columnId.toString()),
         right: (currentPinning.right || []).filter((id) => id !== columnId.toString()),
       };
 
-      table?.setColumnPinning(newPinning);
+      table.setColumnPinning(newPinning);
     },
+    [table]
+  );
+
+  const findVisibleColumn = useCallback(
+    (columnName: string) =>
+      table.getColumns().find((col) => col.isVisible && (col.header === columnName || col.id === columnName)),
     [table]
   );
 
   const isColumnPinned = useCallback(
     (columnName: string) => {
-      // Find the column by name and check if it's pinned
-      const column = table
-        ?.getVisibleFlatColumns()
-        ?.find(
-          (col) =>
-            'accessorKey' in col.columnDef &&
-            (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
-        );
+      const column = findVisibleColumn(columnName);
 
       return column ? pinnedColumns.includes(column.id) : false;
     },
-    [pinnedColumns, table]
+    [findVisibleColumn, pinnedColumns]
   );
 
   const getColumnId = useCallback(
     (columnName: string) => {
-      // Get the column ID for pinning operations
-      const column = table
-        ?.getVisibleFlatColumns()
-        ?.find(
-          (col) =>
-            col.columnDef &&
-            'accessorKey' in col.columnDef &&
-            (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
-        );
-
-      return column?.id || columnName;
+      return findVisibleColumn(columnName)?.id || columnName;
     },
-    [table]
+    [findVisibleColumn]
   );
 
   const handleResetColumns = useCallback(() => {
