@@ -7,7 +7,7 @@ import { api } from 'src/queries/generated/nurseryBatches';
 import BatchDetails from 'src/scenes/InventoryRouter/BatchDetails';
 import InventoryBatchView from 'src/scenes/InventoryRouter/InventoryBatchView';
 import strings from 'src/strings';
-import { buildBatch, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
+import { buildBatch, buildUser, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
 import { server } from 'src/test-utils/msw/server';
 
 const BATCH = buildBatch({ id: 7, germinatingQuantity: 5, activeGrowthQuantity: 10, hardeningOffQuantity: 3 });
@@ -50,6 +50,8 @@ describe('BatchDetails', () => {
       mockGet('/api/v1/projects', { projects: [] });
       mockGet('/api/v1/species', { species: [] });
       mockGet(`/api/v1/facilities/${BATCH.facilityId}/subLocations`, { subLocations: [] });
+      mockGet('/api/v1/users/me', { user: buildUser() });
+      mockGet('/api/v1/users/me/preferences', { preferences: {} });
       server.use(
         http.get(`/api/v1/nursery/batches/${BATCH.id}`, () => {
           detailRequests++;
