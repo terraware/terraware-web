@@ -50,6 +50,9 @@ const nurseryAResult = {
   ],
 };
 
+// These tests drive several MUI menus and are slow when the CPU is busy, as in CI
+rstest.setConfig({ testTimeout: 15_000 });
+
 beforeEach(() => {
   localStorage.clear();
   sessionStorage.clear();
