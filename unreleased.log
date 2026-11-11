@@ -1,3 +1,5 @@
+3d48d30c Enable filters, timeline and map for biomass observations (#7135)
+35189c02 SW-8981 Plot counts info improvements (#7131)
 a68e3b06 Add end-to-end tests for saved table views (#7103)
 419f1555 SW-9013 Test nursery withdrawal retries and photo uploads (#7109)
 ab3989b2 SW-9013 Test withdrawal quantity interactions and retries (#7108)
