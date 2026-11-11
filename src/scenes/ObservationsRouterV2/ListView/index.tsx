@@ -16,7 +16,7 @@ import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { isAdmin } from 'src/utils/organization';
 
 import ObservationMapWrapper from '../Map';
-import ObservationFiltersProvider, { PlotType, useObservationFilters } from '../ObservationFiltersProvider';
+import ObservationFiltersProvider, { useObservationFilters } from '../ObservationFiltersProvider';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import SelectedObservationProvider from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
@@ -234,12 +234,10 @@ const ObservationListViewContent = (): JSX.Element => {
     [headerIcons, isMobile, strings.OBSERVATIONS, theme]
   );
 
-  const countedPlotType: PlotType = observationType === 'Biomass Measurements' ? 'adHoc' : plotType;
-
   const { emptyState } = useFilteredObservationResults({
     observationType,
     plantingSiteId: selectedPlantingSiteId,
-    plotType: countedPlotType,
+    plotType,
   });
 
   const observationMapCard = useMemo(
@@ -256,12 +254,12 @@ const ObservationListViewContent = (): JSX.Element => {
           emptyState={emptyState}
           observationType={observationType}
           plantingSiteId={plantingSiteIdFilter}
-          plotType={countedPlotType}
+          plotType={plotType}
           selectPlantingSiteId={selectPlantingSite}
         />
       </Card>
     ),
-    [countedPlotType, emptyState, observationType, plantingSiteIdFilter, selectPlantingSite, theme]
+    [emptyState, observationType, plantingSiteIdFilter, plotType, selectPlantingSite, theme]
   );
 
   const mobileAppCard = useMemo(

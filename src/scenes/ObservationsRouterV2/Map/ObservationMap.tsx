@@ -110,9 +110,6 @@ const ObservationMap = ({
   } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible, setVirtualPlotVisible } =
     usePlotPhotosMapLegend({ disabled: plantingSiteId === undefined });
-  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(
-    plantingSiteId === undefined || isAdHoc || isBiomass
-  );
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
     useMonitoringPlotsMapLegend(plantingSiteId === undefined, isAdHoc, isAdHoc, !isAdHoc && !isSingleView, true);
 
@@ -193,6 +190,23 @@ const ObservationMap = ({
     }
   }, [getObservationResponse, plantingSiteId, adHocObservationResults, selectedObservationId]);
 
+  // The filter says biomass only when it is set to that one type, so fall back to what is selected.
+  const isBiomassSelected = isBiomass || selectedResults?.type === 'Biomass Measurements';
+
+  // An ad-hoc observation's measurements arrive with the list; a scheduled one's arrive with the
+  // selected observation, which is refetched at plot depth.
+  const biomassResults = useMemo(() => {
+    const candidates = [...adHocObservationResults];
+    if (selectedResults && !candidates.some((result) => result.observationId === selectedResults.observationId)) {
+      candidates.push(selectedResults);
+    }
+    return candidates.filter((observation) => observation.type === 'Biomass Measurements');
+  }, [adHocObservationResults, selectedResults]);
+
+  const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(
+    plantingSiteId === undefined || isAdHoc || isBiomassSelected
+  );
+
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {
       return selectedResults.strata
@@ -270,6 +284,7 @@ const ObservationMap = ({
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
       selectPhotos([]);
       selectPlants([]);
+      selectTrees([]);
 
       const adHocObservationId =
         layerId === 'adHocPlots'
@@ -290,14 +305,24 @@ const ObservationMap = ({
       setLocalSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       setDrawerOpen(true);
     },
-    [selectAdHocPlot, selectPhotos, selectPlants, adHocObservationResults]
+    [selectAdHocPlot, selectPhotos, selectPlants, selectTrees, adHocObservationResults]
   );
 
   const selectClickableFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => {
       let observed: boolean = false;
       if (selectedResults && selectedResults.plantingSiteId === _plantingSiteId) {
-        if (layerId === 'sites') {
+        if (layerId === 'permanentPlots' || layerId === 'temporaryPlots') {
+          const plots = selectedResults.strata
+            .flatMap((stratum) => stratum.substrata)
+            .flatMap((substratum) => substratum.monitoringPlots);
+          if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
+            observed = true;
+          }
+        } else if (isBiomassSelected) {
+          // Biomass is measured per plot, so a site, stratum or substratum has nothing to show.
+          observed = false;
+        } else if (layerId === 'sites') {
           observed = true;
         } else if (layerId === 'strata') {
           if (selectedResults.strata.find((stratum) => stratum.name === featureId)) {
@@ -306,13 +331,6 @@ const ObservationMap = ({
         } else if (layerId === 'substrata') {
           const substrata = selectedResults.strata.flatMap((stratum) => stratum.substrata);
           if (substrata.find((substratum) => substratum.substratumId === Number(featureId))) {
-            observed = true;
-          }
-        } else if (layerId === 'permanentPlots' || layerId === 'temporaryPlots') {
-          const plots = selectedResults.strata
-            .flatMap((stratum) => stratum.substrata)
-            .flatMap((substratum) => substratum.monitoringPlots);
-          if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
             observed = true;
           }
         }
@@ -330,7 +348,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [selectFeature, adHocObservationResults, selectedResults]
+    [isBiomassSelected, selectFeature, adHocObservationResults, selectedResults]
   );
 
   const siteLayers = useMemo((): MapLayer[] => {
@@ -964,49 +982,39 @@ const ObservationMap = ({
     isVirtualPlotsEnabled,
   ]);
 
-  const hasBiomassResults = useMemo(
-    () => adHocObservationResults.some((observation) => observation.type === 'Biomass Measurements'),
-    [adHocObservationResults]
-  );
-
   const treesMarkers = useCallback(
-    (isDead: boolean): MapMarker[] => {
-      if (isBiomass || hasBiomassResults) {
-        return adHocObservationResults.flatMap((observation) => {
-          const treesById = new Map<number, ExistingTreePayload>();
-          const addTrees = (trees?: ExistingTreePayload[]) => trees?.forEach((tree) => treesById.set(tree.id, tree));
-          addTrees(observation.adHocPlot?.biomassMeasurements?.trees);
-          observation.strata
-            .flatMap((stratum) => stratum.substrata)
-            .flatMap((substratum) => substratum.monitoringPlots)
-            .forEach((plot) => addTrees(plot.biomassMeasurements?.trees));
+    (isDead: boolean): MapMarker[] =>
+      biomassResults.flatMap((observation) => {
+        const treesById = new Map<number, ExistingTreePayload>();
+        const addTrees = (trees?: ExistingTreePayload[]) => trees?.forEach((tree) => treesById.set(tree.id, tree));
+        addTrees(observation.adHocPlot?.biomassMeasurements?.trees);
+        observation.strata
+          .flatMap((stratum) => stratum.substrata)
+          .flatMap((substratum) => substratum.monitoringPlots)
+          .forEach((plot) => addTrees(plot.biomassMeasurements?.trees));
 
-          return [...treesById.values()]
-            .filter((tree) => tree.isDead === isDead)
-            .map((tree): MapMarker | undefined => {
-              if (tree.gpsCoordinates) {
-                return {
-                  id: `trees/${tree.id}`,
-                  longitude: tree.gpsCoordinates.coordinates[0],
-                  latitude: tree.gpsCoordinates.coordinates[1],
-                  onClick: selectTree(observation.observationId, tree),
-                  selected: selectedTrees.find((selected) => selected.tree.id === tree.id) !== undefined,
-                  properties: {
-                    observationId: observation.observationId,
-                    tree,
-                  },
-                };
-              } else {
-                return undefined;
-              }
-            })
-            .filter((marker): marker is MapMarker => marker !== undefined);
-        });
-      } else {
-        return [];
-      }
-    },
-    [hasBiomassResults, isBiomass, selectTree, adHocObservationResults, selectedTrees]
+        return [...treesById.values()]
+          .filter((tree) => tree.isDead === isDead)
+          .map((tree): MapMarker | undefined => {
+            if (tree.gpsCoordinates) {
+              return {
+                id: `trees/${tree.id}`,
+                longitude: tree.gpsCoordinates.coordinates[0],
+                latitude: tree.gpsCoordinates.coordinates[1],
+                onClick: selectTree(observation.observationId, tree),
+                selected: selectedTrees.find((selected) => selected.tree.id === tree.id) !== undefined,
+                properties: {
+                  observationId: observation.observationId,
+                  tree,
+                },
+              };
+            } else {
+              return undefined;
+            }
+          })
+          .filter((marker): marker is MapMarker => marker !== undefined);
+      }),
+    [biomassResults, selectTree, selectedTrees]
   );
 
   const plantsMarkers = useCallback(
@@ -1014,59 +1022,57 @@ const ObservationMap = ({
       if (selectedResults === undefined) {
         return [];
       }
-      if (!isBiomass) {
-        const monitoringPlotPlants = selectedResults.strata
-          .flatMap((stratum) => stratum.substrata)
-          .flatMap((substratum) => substratum.monitoringPlots)
-          .flatMap((plot): MapMarker[] => {
-            if (plot.plants) {
-              const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-              return filteredPlants.map((plant): MapMarker => ({
-                id: `plants/${plant.id}`,
-                longitude: plant.gpsCoordinates.coordinates[0],
-                latitude: plant.gpsCoordinates.coordinates[1],
-                onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
-                selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-                properties: {
-                  monitoringPlotId: plot.monitoringPlotId,
-                  observationId: selectedResults.observationId,
-                  plant,
-                },
-              }));
-            } else {
-              return [];
-            }
-          });
+      // A biomass observation records trees rather than plants, but the other observations sharing
+      // the map still have plants of their own to show.
+      const monitoringPlotPlants = isBiomassSelected
+        ? []
+        : selectedResults.strata
+            .flatMap((stratum) => stratum.substrata)
+            .flatMap((substratum) => substratum.monitoringPlots)
+            .flatMap((plot): MapMarker[] => {
+              if (plot.plants) {
+                const filteredPlants = plot.plants.filter((plant) => plant.status === status);
+                return filteredPlants.map((plant): MapMarker => ({
+                  id: `plants/${plant.id}`,
+                  longitude: plant.gpsCoordinates.coordinates[0],
+                  latitude: plant.gpsCoordinates.coordinates[1],
+                  onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+                  selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+                  properties: {
+                    monitoringPlotId: plot.monitoringPlotId,
+                    observationId: selectedResults.observationId,
+                    plant,
+                  },
+                }));
+              } else {
+                return [];
+              }
+            });
 
-        const adHocPlots = adHocObservationResults
-          .map((adHocResults) => adHocResults.adHocPlot)
-          .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
-        const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
-          if (plot.plants) {
-            const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-            return filteredPlants.map((plant): MapMarker => ({
-              id: `plants/${plant.id}`,
-              longitude: plant.gpsCoordinates.coordinates[0],
-              latitude: plant.gpsCoordinates.coordinates[1],
-              onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
-              selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-              properties: {
-                monitoringPlotId: plot.monitoringPlotId,
-                observationId: selectedResults.observationId,
-                plant,
-              },
-            }));
-          } else {
-            return [];
-          }
-        });
+      const adHocPlotPlants = adHocObservationResults.flatMap((adHocResults): MapMarker[] => {
+        const plot = adHocResults.adHocPlot;
+        if (!plot?.plants) {
+          return [];
+        }
+        return plot.plants
+          .filter((plant) => plant.status === status)
+          .map((plant): MapMarker => ({
+            id: `plants/${plant.id}`,
+            longitude: plant.gpsCoordinates.coordinates[0],
+            latitude: plant.gpsCoordinates.coordinates[1],
+            onClick: selectPlant(plot.monitoringPlotId, adHocResults.observationId, plant),
+            selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+            properties: {
+              monitoringPlotId: plot.monitoringPlotId,
+              observationId: adHocResults.observationId,
+              plant,
+            },
+          }));
+      });
 
-        return [...adHocPlotPlants, ...monitoringPlotPlants];
-      } else {
-        return [];
-      }
+      return [...adHocPlotPlants, ...monitoringPlotPlants];
     },
-    [isBiomass, selectPlant, adHocObservationResults, selectedPlants, selectedResults]
+    [isBiomassSelected, selectPlant, adHocObservationResults, selectedPlants, selectedResults]
   );
 
   const markers = useMemo((): MapMarkerGroup[] => {
@@ -1246,11 +1252,7 @@ const ObservationMap = ({
             )?.observationId
           : undefined;
       const observationId = adHocObservationId ?? selectedResults.observationId;
-      const isBiomassObservation =
-        isBiomass ||
-        adHocObservationResults.some(
-          (result) => result.observationId === observationId && result.type === 'Biomass Measurements'
-        );
+      const isBiomassObservation = isBiomass || biomassResults.some((result) => result.observationId === observationId);
 
       if (isBiomassObservation) {
         const plotLayerIds = ['adHocPlots', 'permanentPlots', 'temporaryPlots'];
@@ -1289,6 +1291,7 @@ const ObservationMap = ({
       return treeDrawerContent;
     }
   }, [
+    biomassResults,
     isBiomass,
     photoDrawerContent,
     plantDrawerContent,

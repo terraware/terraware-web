@@ -5,6 +5,7 @@ import { Dropdown, MultiSelect, Textfield } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
+import { useFeatureEnabled } from 'src/features';
 import { useListObservationResults } from 'src/hooks/observations';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -54,6 +55,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const {
     dateFilter,
     observationType,
@@ -155,7 +157,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
         padding: theme.spacing(2),
       }}
     >
-      {plotType === 'adHoc' && (
+      {(plotType === 'adHoc' || biomassSchedulingEnabled) && (
         <Dropdown
           id='observation-type-filter'
           label={strings.MONITORING_TYPE}
