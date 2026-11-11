@@ -33,6 +33,7 @@ import { hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
 
 import { useAbandonObservationModal } from '../Abandon';
+import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
@@ -151,6 +152,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { selectedOrganization } = useOrganization();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const { observationType } = useObservationFilters();
   const { activeLocale, strings } = useLocalization();
 
   const showSelectObservation = typeof plantingSiteId === 'number';
@@ -167,7 +169,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     isLoading,
     observations: observationResults,
   } = useFilteredObservationResults({
-    observationType: biomassSchedulingEnabled ? 'All' : 'Monitoring',
+    observationType,
     plantingSiteId,
     plotType: 'assigned',
   });
@@ -221,9 +223,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
             <Link fontSize='16px' to={url}>
               {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
             </Link>
-            {showSelectObservation && row.observationType !== 'Biomass Measurements' && (
-              <SelectObservationButton observationId={row.observationId} />
-            )}
+            {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
           </Box>
           {showSiteName && (
             <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
