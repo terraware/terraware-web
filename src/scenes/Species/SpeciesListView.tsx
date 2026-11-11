@@ -44,7 +44,10 @@ import {
   Species,
   SpeciesProjectElement,
   conservationCategories,
+  ecosystemTypes,
   getConservationCategoryString,
+  getSeedStorageBehaviorString,
+  growthForms,
 } from 'src/types/Species';
 import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
@@ -366,14 +369,18 @@ export default function SpeciesListView(): JSX.Element {
     return map;
   }, [species, availableProjects]);
 
-  const results = useMemo<SpeciesSearchResultRow[]>(
-    () =>
-      species.map((sp) => ({
-        ...sp,
-        acceleratorProjects: acceleratorProjectNamesBySpeciesId[sp.id],
-      })),
-    [species, acceleratorProjectNamesBySpeciesId]
-  );
+  const results = useMemo<SpeciesSearchResultRow[]>(() => {
+    const growthFormLabels = new Map(growthForms(activeLocale).map(({ value, label }) => [value, label]));
+    const ecosystemTypeLabels = new Map(ecosystemTypes().map(({ value, label }) => [value, label]));
+
+    return species.map((sp) => ({
+      ...sp,
+      growthForms: sp.growthForms?.map((value) => growthFormLabels.get(value) ?? value),
+      seedStorageBehavior: getSeedStorageBehaviorString(sp),
+      ecosystemTypes: sp.ecosystemTypes?.map((value) => ecosystemTypeLabels.get(value) ?? value),
+      acceleratorProjects: acceleratorProjectNamesBySpeciesId[sp.id],
+    }));
+  }, [species, acceleratorProjectNamesBySpeciesId, activeLocale]);
 
   // Unique filter option values derived from results (client-side)
   const uniqueConservationCategories = useMemo(() => {
