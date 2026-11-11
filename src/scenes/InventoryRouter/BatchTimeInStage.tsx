@@ -3,9 +3,15 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
 import { BatchStageTimePayload } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
+
+const stageDays = (stageTime?: BatchStageTimePayload): number | undefined => {
+  const days = stageTime?.days as number | null | undefined;
+  return days === null ? undefined : days;
+};
 
 type Stage = {
   key: 'germinating' | 'activeGrowth' | 'hardeningOff' | 'ready';
@@ -16,35 +22,39 @@ type Stage = {
 
 const useStages = (): Stage[] => {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
 
   return useMemo(
-    () => [
-      {
-        key: 'germinating',
-        label: strings.GERMINATING,
-        backgroundColor: theme.palette.TwClrBaseGreen050 as string,
-        color: theme.palette.TwClrTxt as string,
-      },
-      {
-        key: 'activeGrowth',
-        label: strings.ACTIVE_GROWTH,
-        backgroundColor: theme.palette.TwClrBaseGreen200 as string,
-        color: theme.palette.TwClrTxt as string,
-      },
-      {
-        key: 'hardeningOff',
-        label: strings.HARDENING_OFF,
-        backgroundColor: theme.palette.TwClrBaseGreen500 as string,
-        color: theme.palette.TwClrTxtInverse as string,
-      },
-      {
-        key: 'ready',
-        label: strings.READY,
-        backgroundColor: theme.palette.TwClrBaseGreen700 as string,
-        color: theme.palette.TwClrTxtInverse as string,
-      },
-    ],
-    [theme]
+    (): Stage[] =>
+      activeLocale
+        ? [
+            {
+              key: 'germinating',
+              label: strings.GERMINATING,
+              backgroundColor: theme.palette.TwClrBaseGreen050 as string,
+              color: theme.palette.TwClrTxt as string,
+            },
+            {
+              key: 'activeGrowth',
+              label: strings.ACTIVE_GROWTH,
+              backgroundColor: theme.palette.TwClrBaseGreen200 as string,
+              color: theme.palette.TwClrTxt as string,
+            },
+            {
+              key: 'hardeningOff',
+              label: strings.HARDENING_OFF,
+              backgroundColor: theme.palette.TwClrBaseGreen500 as string,
+              color: theme.palette.TwClrTxtInverse as string,
+            },
+            {
+              key: 'ready',
+              label: strings.READY,
+              backgroundColor: theme.palette.TwClrBaseGreen700 as string,
+              color: theme.palette.TwClrTxtInverse as string,
+            },
+          ]
+        : [],
+    [activeLocale, theme]
   );
 };
 
@@ -62,7 +72,7 @@ type StageSegmentProps = {
 
 const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps): JSX.Element => {
   const theme = useTheme();
-  const days = stageTime?.days;
+  const days = stageDays(stageTime);
   const hasDays = days !== undefined;
 
   return (
@@ -144,14 +154,17 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
   // Legacy batches whose history can't be used have no timeInStage at all; there is nothing to show.
   const hasAnyValue = stages.some((stage) => {
     const stageTime = timeInStage?.[stage.key];
-    return stageTime?.days !== undefined || stageTime?.cleared === true;
+    return stageDays(stageTime) !== undefined || stageTime?.cleared === true;
   });
 
   if (!hasAnyValue) {
     return null;
   }
 
-  const anyInProgress = stages.some((stage) => timeInStage?.[stage.key]?.inProgress);
+  const anyInProgress = stages.some((stage) => {
+    const stageTime = timeInStage?.[stage.key];
+    return stageTime?.inProgress === true && stageDays(stageTime) !== undefined;
+  });
 
   return (
     <Box

@@ -1,0 +1,145 @@
+import React from 'react';
+
+import { screen, within } from '@testing-library/react';
+
+import { BatchStageTimePayload, BatchTimeInStagePayload } from 'src/queries/generated/nurseryBatches';
+import BatchTimeInStage from 'src/scenes/InventoryRouter/BatchTimeInStage';
+import strings from 'src/strings';
+import { buildBatch, renderWithProviders } from 'src/test-utils';
+
+/**
+ * A stage with no duration, as the API actually sends it: an explicit `days: null`, which the
+ * generated type models only as optional.
+ */
+const buildStageTime = (overrides: Partial<BatchStageTimePayload> = {}): BatchStageTimePayload => ({
+  cleared: false,
+  days: null as unknown as undefined,
+  inProgress: false,
+  ...overrides,
+});
+
+const buildTimeInStage = (overrides: Partial<BatchTimeInStagePayload> = {}): BatchTimeInStagePayload => ({
+  germinating: buildStageTime(),
+  activeGrowth: buildStageTime(),
+  hardeningOff: buildStageTime(),
+  ready: buildStageTime(),
+  ...overrides,
+});
+
+const renderCard = (timeInStage?: BatchTimeInStagePayload) =>
+  renderWithProviders(<BatchTimeInStage batch={buildBatch({ timeInStage })} />);
+
+/** A stage's value sits next to its label, which is the only accessible handle the segment has. */
+const segmentFor = (stageLabel: string): HTMLElement => {
+  const segment = screen.getByText(stageLabel).parentElement;
+  if (!segment) {
+    throw new Error(`No segment for "${stageLabel}"`);
+  }
+  return segment;
+};
+
+describe('BatchTimeInStage', () => {
+  it('shows a completed stage as a number of days', () => {
+    renderCard(buildTimeInStage({ germinating: buildStageTime({ days: 14 }) }));
+
+    expect(
+      within(segmentFor(strings.GERMINATING)).getByText(strings.formatString(strings.TIME_IN_STAGE_DAYS, 14).toString())
+    ).toBeInTheDocument();
+  });
+
+  it('shows a single day in the singular', () => {
+    renderCard(buildTimeInStage({ activeGrowth: buildStageTime({ days: 1 }) }));
+
+    expect(
+      within(segmentFor(strings.ACTIVE_GROWTH)).getByText(
+        strings.formatString(strings.TIME_IN_STAGE_DAYS_ONE, 1).toString()
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('shows less than a day rather than zero days', () => {
+    renderCard(buildTimeInStage({ hardeningOff: buildStageTime({ days: 0 }) }));
+
+    const segment = segmentFor(strings.HARDENING_OFF);
+    expect(within(segment).getByText(strings.TIME_IN_STAGE_LESS_THAN_ONE_DAY)).toBeInTheDocument();
+    expect(
+      within(segment).queryByText(strings.formatString(strings.TIME_IN_STAGE_DAYS, 0).toString())
+    ).not.toBeInTheDocument();
+  });
+
+  it('marks a stage seedlings are still in, and footnotes the card', () => {
+    renderCard(buildTimeInStage({ ready: buildStageTime({ days: 9, inProgress: true }) }));
+
+    const segment = segmentFor(strings.READY);
+    expect(
+      within(segment).getByText(strings.formatString(strings.TIME_IN_STAGE_DAYS, 9).toString())
+    ).toBeInTheDocument();
+    expect(within(segment).getByText(`${strings.TIME_IN_STAGE_SO_FAR}*`)).toBeInTheDocument();
+    expect(screen.getByText(strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE)).toBeInTheDocument();
+  });
+
+  it('leaves out the footnote when no stage is still in progress', () => {
+    renderCard(buildTimeInStage({ ready: buildStageTime({ days: 9 }) }));
+
+    expect(screen.queryByText(strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE)).not.toBeInTheDocument();
+    expect(screen.queryByText(`${strings.TIME_IN_STAGE_SO_FAR}*`)).not.toBeInTheDocument();
+  });
+
+  it('explains that a hand-edited stage has no time to show', async () => {
+    const { user } = renderCard(
+      buildTimeInStage({ activeGrowth: buildStageTime({ cleared: true, days: null as unknown as undefined }) })
+    );
+
+    const segment = segmentFor(strings.ACTIVE_GROWTH);
+    expect(within(segment).getByText(strings.TIME_IN_STAGE_NOT_AVAILABLE)).toBeInTheDocument();
+
+    await user.hover(within(segment).getByLabelText(strings.TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP);
+  });
+
+  it.each([
+    ['null', null as unknown as undefined],
+    ['absent', undefined],
+  ])('explains that a stage no seedlings went through does not apply when days is %s', async (_label, days) => {
+    const { user } = renderCard(
+      buildTimeInStage({ germinating: buildStageTime({ days: 3 }), ready: buildStageTime({ days }) })
+    );
+
+    const segment = segmentFor(strings.READY);
+    expect(within(segment).getByText('—')).toBeInTheDocument();
+
+    await user.hover(within(segment).getByLabelText(strings.TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP);
+  });
+
+  it('explains what the averages cover', async () => {
+    const { user } = renderCard(buildTimeInStage({ germinating: buildStageTime({ days: 3 }) }));
+
+    expect(screen.getByText(strings.TIME_IN_STAGE_TITLE)).toBeInTheDocument();
+
+    await user.hover(screen.getByLabelText(strings.TIME_IN_STAGE_TITLE_TOOLTIP));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.TIME_IN_STAGE_TITLE_TOOLTIP);
+  });
+
+  it.each([
+    ['the batch has no time in stage at all', undefined],
+    ['every stage reports null days', buildTimeInStage()],
+    [
+      'every stage omits days',
+      buildTimeInStage({
+        germinating: buildStageTime({ days: undefined }),
+        activeGrowth: buildStageTime({ days: undefined }),
+        hardeningOff: buildStageTime({ days: undefined }),
+        ready: buildStageTime({ days: undefined }),
+      }),
+    ],
+  ])('shows no card when %s', (_label, timeInStage) => {
+    renderCard(timeInStage);
+
+    expect(screen.queryByText(strings.TIME_IN_STAGE_TITLE)).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.GERMINATING)).not.toBeInTheDocument();
+  });
+});
