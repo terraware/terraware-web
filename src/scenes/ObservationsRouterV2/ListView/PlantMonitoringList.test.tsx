@@ -7,10 +7,14 @@ import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import { buildPlantingSite, buildUser, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
 
-import ObservationFiltersProvider from '../ObservationFiltersProvider';
+import ObservationFiltersProvider, { ObservationTypeFilter } from '../ObservationFiltersProvider';
 import PlantMonitoringList from './PlantMonitoringList';
 
 const PREFERENCES_URL = '/api/v1/users/me/preferences';
+
+// Where the filter panel persists the Monitoring Type selection, and where the provider reads it
+// back on mount, so seeding it stands in for a user having picked a type.
+const OBSERVATION_TYPE_SESSION_KEY = 'observation-type';
 
 const buildObservationResults = (overrides: Partial<ObservationResultsPayload> = {}): ObservationResultsPayload => ({
   isAdHoc: false,
@@ -42,7 +46,11 @@ const BIOMASS_ROW = /March 2026/;
  * The returned requests are the ones that carry the feature flag, so a test can tell "the flag said
  * no" apart from "the flag hasn't arrived yet".
  */
-const renderList = (scheduledBiomassMonitoringObservations: boolean) => {
+const renderList = (scheduledBiomassMonitoringObservations: boolean, observationType?: ObservationTypeFilter) => {
+  if (observationType !== undefined) {
+    sessionStorage.setItem(OBSERVATION_TYPE_SESSION_KEY, observationType);
+  }
+
   const preferenceRequests = captureRequests('get', PREFERENCES_URL, {
     preferences: { scheduledBiomassMonitoringObservations },
   });
@@ -87,5 +95,23 @@ describe('PlantMonitoringList', () => {
 
     expect(screen.queryByRole('row', { name: BIOMASS_ROW })).not.toBeInTheDocument();
     expect(screen.queryByRole('columnheader', { name: new RegExp(strings.MONITORING_TYPE) })).not.toBeInTheDocument();
+  });
+
+  it('shows only biomass observations when the monitoring type filter is set to biomass', async () => {
+    renderList(true, 'Biomass Measurements');
+
+    expect(await screen.findByRole('row', { name: BIOMASS_ROW })).toBeVisible();
+    expect(screen.queryByRole('row', { name: PLANT_ROW })).not.toBeInTheDocument();
+  });
+
+  it('shows only plant monitoring observations when the monitoring type filter is set to monitoring', async () => {
+    renderList(true, 'Monitoring');
+
+    // The monitoring type column only appears once the flag has arrived, so waiting for it keeps
+    // the missing biomass row from being explained by the flag rather than by the filter.
+    expect(await screen.findByRole('columnheader', { name: new RegExp(strings.MONITORING_TYPE) })).toBeVisible();
+
+    expect(await screen.findByRole('row', { name: PLANT_ROW })).toBeVisible();
+    expect(screen.queryByRole('row', { name: BIOMASS_ROW })).not.toBeInTheDocument();
   });
 });
