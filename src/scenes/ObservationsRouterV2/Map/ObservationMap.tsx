@@ -48,6 +48,7 @@ import {
   RecordedPlant,
   RecordedPlantStatus,
 } from 'src/types/Observations';
+import { isMonitoringPlotObserved } from 'src/utils/observation';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import { useSelectedObservation } from '../SelectedObservationProvider';
@@ -62,9 +63,6 @@ type LayerFeature = {
 const PLOT_FIT_PADDING = 150;
 
 const PLOT_LAYER_IDS = ['adHocPlots', 'permanentPlots', 'temporaryPlots'];
-
-const isPlotIncomplete = (plot: ObservationMonitoringPlotResultsPayload): boolean =>
-  plot.completedTime === undefined || plot.status !== 'Completed';
 
 type ObservationMapProps = {
   adHocObservationResults: ObservationResultsPayload[];
@@ -428,7 +426,7 @@ const ObservationMap = ({
             .map((adHocResults) => adHocResults.adHocPlot)
             .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined)
             .map((plot) => ({
-              dashedBorder: isPlotIncomplete(plot),
+              dashedBorder: !isMonitoringPlotObserved(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -448,7 +446,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => !plot.isPermanent)
             .map((plot) => ({
-              dashedBorder: isPlotIncomplete(plot),
+              dashedBorder: !isMonitoringPlotObserved(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -471,7 +469,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => plot.isPermanent)
             .map((plot) => ({
-              dashedBorder: isPlotIncomplete(plot),
+              dashedBorder: !isMonitoringPlotObserved(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',

@@ -5,6 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useLocalization } from 'src/providers';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotos';
 import { ObservationMonitoringPlotPosition, getQuadratLabel } from 'src/types/Observations';
+import { isMonitoringPlotObserved } from 'src/utils/observation';
 
 import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
 import useBiomassPlot from './useBiomassPlot';
@@ -43,7 +44,7 @@ const QuadratComponent = ({ position }: QuadratComponentProps) => {
       </Box>
       {position && (
         <QuadratSpeciesEditableTable
-          editable={true}
+          editable={isMonitoringPlotObserved(monitoringPlot)}
           species={biomassMeasurements?.quadrats.find((quad) => quad.position === position)?.species}
           position={position}
         />

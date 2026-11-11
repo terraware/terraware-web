@@ -18,6 +18,7 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
+import { isMonitoringPlotObserved } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -30,6 +31,7 @@ const BiomassObservationDataTab = () => {
   const { isMobile } = useDeviceInfo();
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const { biomassMeasurement, monitoringPlot, observationId, results } = useBiomassPlot();
+  const isObserved = isMonitoringPlotObserved(monitoringPlot);
 
   useEffect(() => {
     if (results) {
@@ -284,7 +286,7 @@ const BiomassObservationDataTab = () => {
             )}
           </Typography>
         )}
-        {monitoringPlot && (
+        {isObserved && (
           <Button
             id='edit'
             label={strings.EDIT}

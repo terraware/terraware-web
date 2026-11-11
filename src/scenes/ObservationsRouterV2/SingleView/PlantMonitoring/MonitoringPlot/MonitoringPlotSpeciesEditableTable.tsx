@@ -15,6 +15,7 @@ import {
 import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
+import { isMonitoringPlotObserved } from 'src/utils/observation';
 
 import useObservationSpecies from '../useObservationSpecies';
 import ChangeSpeciesConfirmationModal from './ChangeSpeciesConfirmationModal';
@@ -62,6 +63,8 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
             .find((plot) => plot.monitoringPlotId === monitoringPlotId),
     [monitoringPlotId, results?.adHocPlot, results?.isAdHoc, results?.strata]
   );
+
+  const isObserved = isMonitoringPlotObserved(monitoringPlot);
 
   const allMonitoringPlotSpecies = useObservationSpecies(monitoringPlot?.species ?? [], monitoringPlot?.unknownSpecies);
 
@@ -522,7 +525,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
             'mrt-row-actions': { Cell: RemoveCell, enableHiding: false, header: '', size: 60 },
           },
           enableBottomToolbar: true,
-          renderBottomToolbarCustomActions: renderAddSpeciesActions,
+          ...(isObserved ? { renderBottomToolbarCustomActions: renderAddSpeciesActions } : {}),
           muiTableBodyRowProps: rowPropsWithDropdownOnTop,
         }}
       />

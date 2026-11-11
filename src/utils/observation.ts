@@ -71,6 +71,9 @@ export const getBiomassStratumTotals = (stratum: ObservationStratumResultsPayloa
 export const getBiomassObservationTotals = (results: ObservationResultsPayload | undefined): BiomassTotals =>
   results ? summarizeBiomass(biomassMeasurementsOf(results.strata)) : EMPTY_BIOMASS_TOTALS;
 
+export const isMonitoringPlotObserved = (plot: ObservationMonitoringPlotResultsPayload | undefined): boolean =>
+  plot?.completedTime !== undefined && plot.status === 'Completed';
+
 export const getObservationSpeciesLivePlantsCount = (
   species: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined
 ): number | undefined => {

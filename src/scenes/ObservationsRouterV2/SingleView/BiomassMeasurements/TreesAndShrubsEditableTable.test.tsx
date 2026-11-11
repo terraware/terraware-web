@@ -34,7 +34,9 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
             },
           ],
         },
+        completedTime: '2026-01-15T00:00:00Z',
         monitoringPlotId: 9,
+        status: 'Completed',
       },
     },
   });
@@ -188,7 +190,9 @@ const setupTrunks = ({
     observation: {
       id: 7,
       adHocPlot: {
+        completedTime: '2026-01-15T00:00:00Z',
         monitoringPlotId: 9,
+        status: 'Completed',
         biomassMeasurements: {
           forestType,
           trees: Array.from({ length: trunkCount }, (_, index) => index + 1).map((trunkNumber) => ({
