@@ -148,8 +148,14 @@ const ObservationSubstratumSelector = ({
       <Grid container spacing={3}>
         <Grid size={12}>
           <Typography fontSize='14px'>{strings.SCHEDULE_OBSERVATION_MESSAGE}</Typography>
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE}
+          <Typography
+            component='ul'
+            fontSize='14px'
+            color={theme.palette.TwClrTxtSecondary}
+            sx={{ margin: 0, paddingLeft: theme.spacing(3) }}
+          >
+            <li>{strings.SCHEDULE_OBSERVATION_STRATUM_COUNTS_MESSAGE}</li>
+            <li>{strings.SCHEDULE_OBSERVATION_SUBSTRATUM_COUNTS_MESSAGE}</li>
           </Typography>
           {errorText && (
             <Typography fontSize='14px' color={theme.palette.TwClrBaseOrange700}>

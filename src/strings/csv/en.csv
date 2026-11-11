@@ -2056,10 +2056,11 @@ SAVED_VIEWS_PRIVATE,Only you can see views you save.,
 SAVING,Saving...,
 SCARIFY,Scarify,
 SCHEDULE_OBSERVATION,Schedule Observation,
-SCHEDULE_OBSERVATION_MESSAGE,Select the strata and substrata to include in observation:,
+SCHEDULE_OBSERVATION_MESSAGE,Select the strata and substrata to include in observation.,
 SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL,I want to:,Label for the field where the user picks which kind of observation to schedule
-SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,"Counts next to each stratum are the numbers of plots to be assigned. Counts next to each substratum (~) are estimates. Note: Plots are placed randomly, so the actual number of plots in each substratum may differ.",
 SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,{0} - {1} temporary and {2} permanent - will be assigned for the selected areas.,{0} is an approximate plot count such as “~17 plots”
+SCHEDULE_OBSERVATION_STRATUM_COUNTS_MESSAGE,Counts next to each stratum are the numbers of plots to be assigned.,
+SCHEDULE_OBSERVATION_SUBSTRATUM_COUNTS_MESSAGE,"Counts next to each substratum (~) are estimates. Plots are placed randomly, so the actual number of plots in each substratum may differ.",
 SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Record how many plantings are alive and dead.,
 SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Track survival after planting,
 SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,A {0} observation is already scheduled to start {1}.,{0} is a monitoring type such as “Survival Monitoring” and {1} is a date
