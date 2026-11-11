@@ -1,11 +1,18 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { useTheme } from '@mui/material';
-import { Badge, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import {
+  Badge,
+  EditableTable,
+  EditableTableColumn,
+  EditableTableColumnV2,
+  EditableTableV2,
+} from '@terraware/web-components';
 import { MRT_Cell } from 'material-react-table';
 
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
+import { useFeatureEnabled } from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -46,6 +53,36 @@ type RowIndicator = {
   [key: string]: string | number | undefined;
 };
 
+type TargetsColumn = {
+  id: string;
+  header: string;
+  accessorKey: keyof RowIndicator;
+  size?: number;
+  enableEditing: boolean;
+  render?: (value: unknown, row: RowIndicator) => ReactNode;
+  onSave?: (row: RowIndicator, value: unknown) => Promise<void>;
+};
+
+const toColumnV1 = (column: TargetsColumn): EditableTableColumn<RowIndicator> => {
+  const { render, onSave, ...rest } = column;
+  return {
+    ...rest,
+    Cell: render
+      ? ({ cell }: { cell: MRT_Cell<RowIndicator> }) => <>{render(cell.getValue(), cell.row.original)}</>
+      : undefined,
+    editConfig: onSave ? { editVariant: 'text', onSave } : undefined,
+  };
+};
+
+const toColumnV2 = (column: TargetsColumn): EditableTableColumnV2<RowIndicator> => {
+  const { render, onSave, ...rest } = column;
+  return {
+    ...rest,
+    Cell: render ? ({ getValue, row }) => render(getValue(), row.original) : undefined,
+    editConfig: onSave ? { editVariant: 'text', onSave: (row, value) => onSave(row, value) } : undefined,
+  };
+};
+
 export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentAcceleratorProject } = useParticipantData();
@@ -55,6 +92,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentAcceleratorProject?.id;
   const snackbar = useSnackbar();
+  const isEditableTableV2Enabled = useFeatureEnabled('Editable Table V2');
 
   const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
   const [listProjectIndicators, listProjectIndicatorsResponse] = useLazyListProjectIndicatorsQuery();
@@ -397,9 +435,9 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
   const theme = useTheme();
 
-  const CategoryCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
-      const category = cell.getValue<string>();
+  const renderCategory = useCallback(
+    (value: unknown) => {
+      const category = value as string;
       const isGreen = category === 'Biodiversity' || category === 'Climate' || category === 'Project Objectives';
       return (
         <Badge
@@ -413,15 +451,12 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [theme]
   );
 
-  const ClassIdCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => (
-      <>{indicatorClassLabel(cell.getValue<IndicatorClass | undefined>(), strings)}</>
-    ),
+  const renderClassId = useCallback(
+    (value: unknown) => <>{indicatorClassLabel(value as IndicatorClass | undefined, strings)}</>,
     [strings]
   );
 
-  const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
-    const raw = cell.getValue<number | string | undefined>();
+  const renderNumeric = useCallback((raw: unknown, row: RowIndicator) => {
     if (raw === undefined || raw === null || raw === '') {
       return null;
     }
@@ -429,12 +464,11 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     if (isNaN(value)) {
       return null;
     }
-    const precision = cell.row.original.precision ?? 0;
-    return <>{formatPrecision(value, precision)}</>;
+    return <>{formatPrecision(value, row.precision ?? 0)}</>;
   }, []);
 
-  const tableColumns = useMemo(() => {
-    const baseColumns: EditableTableColumn<RowIndicator>[] = [
+  const tableColumns = useMemo((): TargetsColumn[] => {
+    const baseColumns: TargetsColumn[] = [
       {
         id: 'name',
         header: strings.INDICATOR_NAME,
@@ -447,51 +481,45 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         header: strings.BASELINE,
         accessorKey: 'baseline',
         enableEditing: isAllowedUpdateReportsTargets,
-        Cell: NumericCell,
-        editConfig: {
-          editVariant: 'text',
-          onSave: (row: RowIndicator, value: any) => onSaveBaseline(row, value),
-        },
+        render: renderNumeric,
+        onSave: onSaveBaseline,
       },
     ];
 
-    const yearColumns: EditableTableColumn<RowIndicator>[] = yearRange.map((year) => ({
+    const yearColumns: TargetsColumn[] = yearRange.map((year) => ({
       id: `year${year}`,
       header: year.toString(),
-      accessorKey: `year${year}` as keyof RowIndicator,
+      accessorKey: `year${year}`,
       enableEditing: isAllowedUpdateReportsTargets,
-      Cell: NumericCell,
-      editConfig: {
-        editVariant: 'text',
-        onSave: (row: RowIndicator, value: any) => onSaveYearTarget(row, value, year),
-      },
+      render: renderNumeric,
+      onSave: (row: RowIndicator, value: unknown) => onSaveYearTarget(row, value, year),
     }));
 
-    const lastColumns: EditableTableColumn<RowIndicator>[] = [
+    const lastColumns: TargetsColumn[] = [
       {
         id: 'category',
         header: strings.CATEGORY,
-        accessorKey: 'component' as keyof RowIndicator,
+        accessorKey: 'component',
         enableEditing: false,
-        Cell: CategoryCell,
+        render: renderCategory,
       },
       {
         id: 'indicatorLevel',
         header: strings.INDICATOR_LEVEL,
-        accessorKey: 'type' as keyof RowIndicator,
+        accessorKey: 'type',
         enableEditing: false,
       },
       {
         id: 'cumulativeOrLevel',
         header: strings.IS_CUMULATIVE,
-        accessorKey: 'classId' as keyof RowIndicator,
+        accessorKey: 'classId',
         enableEditing: false,
-        Cell: ClassIdCell,
+        render: renderClassId,
       },
       {
         id: 'notes',
         header: strings.NOTES,
-        accessorKey: 'notes' as keyof RowIndicator,
+        accessorKey: 'notes',
         enableEditing: false,
       },
       {
@@ -499,11 +527,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         header: strings.END_OF_PROJECT_TARGET,
         accessorKey: 'endOfProjectTarget',
         enableEditing: isAllowedUpdateReportsTargets,
-        Cell: NumericCell,
-        editConfig: {
-          editVariant: 'text',
-          onSave: (row: RowIndicator, value: any) => onSaveEndOfProjectTarget(row, value),
-        },
+        render: renderNumeric,
+        onSave: onSaveEndOfProjectTarget,
       },
     ];
 
@@ -515,10 +540,13 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     onSaveYearTarget,
     onSaveBaseline,
     onSaveEndOfProjectTarget,
-    CategoryCell,
-    ClassIdCell,
-    NumericCell,
+    renderCategory,
+    renderClassId,
+    renderNumeric,
   ]);
+
+  const tableColumnsV1 = useMemo(() => tableColumns.map(toColumnV1), [tableColumns]);
+  const tableColumnsV2 = useMemo(() => tableColumns.map(toColumnV2), [tableColumns]);
 
   const columnOrder = useMemo(() => {
     const yearIds = yearRange.map((year) => `year${year}`);
@@ -526,10 +554,59 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     return ['name', 'baseline', ...yearIds, ...metaColumns, 'endOfProjectTarget'];
   }, [yearRange]);
 
+  const sx = {
+    padding: 0,
+    width: '100%',
+    maxWidth: '100%',
+    '& .MuiPaper-root': {
+      width: '100%',
+      maxWidth: '100%',
+      borderRadius: '24px',
+      paddingTop: '12px',
+    },
+    '& .MuiTableContainer-root': {
+      maxWidth: '100%',
+      overflowX: 'auto',
+    },
+  };
+
+  if (isEditableTableV2Enabled) {
+    return (
+      <EditableTableV2
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={tableColumnsV2}
+        data={allIndicatorRows}
+        enableEditing={true}
+        enableSorting={true}
+        enableGlobalFilter={true}
+        enableColumnFilters={true}
+        enablePagination={false}
+        enableColumnPinning={true}
+        enableColumnActions={false}
+        enableHiding={false}
+        enableTopToolbar={false}
+        initialSorting={[{ id: 'name', desc: false }]}
+        tableOptions={{
+          state: {
+            columnOrder,
+          },
+          initialState: {
+            columnPinning: {
+              left: ['name'],
+              right: ['endOfProjectTarget'],
+            },
+          },
+        }}
+        containerProps={{ sx: { maxHeight: 'none', overflowX: 'auto' } }}
+        sx={sx}
+      />
+    );
+  }
+
   return (
     <EditableTable
       clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      columns={tableColumns}
+      columns={tableColumnsV1}
       data={allIndicatorRows}
       enableEditing={true}
       enableSorting={true}
@@ -557,21 +634,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
           sx: { maxHeight: 'none', overflowX: 'auto' },
         },
       }}
-      sx={{
-        padding: 0,
-        width: '100%',
-        maxWidth: '100%',
-        '& .MuiPaper-root': {
-          width: '100%',
-          maxWidth: '100%',
-          borderRadius: '24px',
-          paddingTop: '12px',
-        },
-        '& .MuiTableContainer-root': {
-          maxWidth: '100%',
-          overflowX: 'auto',
-        },
-      }}
+      sx={sx}
     />
   );
 }

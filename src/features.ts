@@ -8,7 +8,8 @@ export type FeatureName =
   | 'Virtual Monitoring Plots'
   | 'Seeds Withdrawal Log'
   | 'Scheduled Biomass Monitoring Observations'
-  | 'Nursery Batch Time Per Stage';
+  | 'Nursery Batch Time Per Stage'
+  | 'Editable Table V2';
 
 export type Feature = {
   name: FeatureName;
@@ -76,6 +77,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Track how long nursery batches spend in each stage.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Editable Table V2',
+    preferenceName: 'editableTableV2',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Use the new TanStack-based editable table component.'],
     disclosure: ['This is a WIP'],
   },
 ];
