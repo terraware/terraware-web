@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.6% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/23</span>
+                <span class='fraction'>23/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>6/12</span>
+                <span class='fraction'>9/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/10</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>17/20</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
@@ -174,24 +174,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -202,14 +202,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,11 +221,11 @@ import { Accession } from 'src/types/Accession';
 &nbsp;
 import { AccessionWithdrawInfo } from './types';
 &nbsp;
-const toWithdrawInfo = <span class="fstat-no" title="function not covered" >(accession: Accession): AccessionWithdrawInfo =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+const toWithdrawInfo = (accession: Accession): AccessionWithdrawInfo =&gt; ({
   id: accession.id,
   accessionNumber: accession.accessionNumber,
   speciesId: accession.speciesId,
-  scientificName: accession.speciesScientificName ?? '',
+  scientificName: accession.speciesScientificName ?? <span class="branch-1 cbranch-no" title="branch not covered" >'',</span>
   commonName: accession.speciesCommonName,
   facilityId: accession.facilityId,
   receivedDate: accession.receivedDate,
@@ -257,16 +257,16 @@ const useAccessionsByIds = (accessionIds: number[]): { accessions?: AccessionWit
   const idsKey = accessionIds.join(',');
 &nbsp;
   useEffect(() =&gt; {
-    const ids = idsKey ? idsKey.split(',').map(Number) : <span class="branch-1 cbranch-no" title="branch not covered" >[];</span>
+    const ids = idsKey ? idsKey.split(',').map(Number) : [];
     const subscriptions = ids.map((id) =&gt; dispatch(accessionsV2Api.endpoints.getAccession.initiate(id)));
 &nbsp;
     let cancelled = false;
     Promise.all(subscriptions.map((sub) =&gt; sub.unwrap()))
-      .then(<span class="fstat-no" title="function not covered" >(responses) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >        if (!cancelled) {</span>
-<span class="cstat-no" title="statement not covered" >          setResult({</span>
+      .then((responses) =&gt; {
+        <span class="missing-if-branch" title="else path not taken" >E</span>if (!cancelled) {
+          setResult({
             key: idsKey,
-            accessions: responses.map(<span class="fstat-no" title="function not covered" >(response) =&gt; <span class="cstat-no" title="statement not covered" >toWithdrawInfo(response.accession))</span></span>,
+            accessions: responses.map((response) =&gt; toWithdrawInfo(response.accession)),
             isError: false,
           });
         }
@@ -295,7 +295,7 @@ export default useAccessionsByIds;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-10T23:12:04.400Z
+                at 2026-11-11T13:43:19.653Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

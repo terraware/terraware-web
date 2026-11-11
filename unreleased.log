@@ -1,3 +1,7 @@
+419f1555 SW-9013 Test nursery withdrawal retries and photo uploads (#7109)
+ab3989b2 SW-9013 Test withdrawal quantity interactions and retries (#7108)
+2d775a30 SW-9013 Test withdrawal purpose and date safeguards (#7107)
+8d481645 Raise timeout for inventory by-species list tests (#7125)
 fbab8991 Omit Default base view from saved view summaries (#7123)
 7dbb8378 SW-9256 Make saved view edit and delete hover states distinct (#7127)
 4bb141dc SW-9257 Keep row selection column when applying table views (#7126)
