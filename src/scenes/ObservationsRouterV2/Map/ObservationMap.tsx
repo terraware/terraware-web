@@ -284,6 +284,7 @@ const ObservationMap = ({
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
       selectPhotos([]);
       selectPlants([]);
+      selectTrees([]);
 
       const adHocObservationId =
         layerId === 'adHocPlots'
@@ -304,14 +305,24 @@ const ObservationMap = ({
       setLocalSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       setDrawerOpen(true);
     },
-    [selectAdHocPlot, selectPhotos, selectPlants, adHocObservationResults]
+    [selectAdHocPlot, selectPhotos, selectPlants, selectTrees, adHocObservationResults]
   );
 
   const selectClickableFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => {
       let observed: boolean = false;
       if (selectedResults && selectedResults.plantingSiteId === _plantingSiteId) {
-        if (layerId === 'sites') {
+        if (layerId === 'permanentPlots' || layerId === 'temporaryPlots') {
+          const plots = selectedResults.strata
+            .flatMap((stratum) => stratum.substrata)
+            .flatMap((substratum) => substratum.monitoringPlots);
+          if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
+            observed = true;
+          }
+        } else if (isBiomassSelected) {
+          // Biomass is measured per plot, so a site, stratum or substratum has nothing to show.
+          observed = false;
+        } else if (layerId === 'sites') {
           observed = true;
         } else if (layerId === 'strata') {
           if (selectedResults.strata.find((stratum) => stratum.name === featureId)) {
@@ -320,13 +331,6 @@ const ObservationMap = ({
         } else if (layerId === 'substrata') {
           const substrata = selectedResults.strata.flatMap((stratum) => stratum.substrata);
           if (substrata.find((substratum) => substratum.substratumId === Number(featureId))) {
-            observed = true;
-          }
-        } else if (layerId === 'permanentPlots' || layerId === 'temporaryPlots') {
-          const plots = selectedResults.strata
-            .flatMap((stratum) => stratum.substrata)
-            .flatMap((substratum) => substratum.monitoringPlots);
-          if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
             observed = true;
           }
         }
@@ -344,7 +348,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [selectFeature, adHocObservationResults, selectedResults]
+    [isBiomassSelected, selectFeature, adHocObservationResults, selectedResults]
   );
 
   const siteLayers = useMemo((): MapLayer[] => {
@@ -1018,57 +1022,57 @@ const ObservationMap = ({
       if (selectedResults === undefined) {
         return [];
       }
-      if (!isBiomassSelected) {
-        const monitoringPlotPlants = selectedResults.strata
-          .flatMap((stratum) => stratum.substrata)
-          .flatMap((substratum) => substratum.monitoringPlots)
-          .flatMap((plot): MapMarker[] => {
-            if (plot.plants) {
-              const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-              return filteredPlants.map((plant): MapMarker => ({
-                id: `plants/${plant.id}`,
-                longitude: plant.gpsCoordinates.coordinates[0],
-                latitude: plant.gpsCoordinates.coordinates[1],
-                onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
-                selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-                properties: {
-                  monitoringPlotId: plot.monitoringPlotId,
-                  observationId: selectedResults.observationId,
-                  plant,
-                },
-              }));
-            } else {
-              return [];
-            }
-          });
+      // A biomass observation records trees rather than plants, but the other observations sharing
+      // the map still have plants of their own to show.
+      const monitoringPlotPlants = isBiomassSelected
+        ? []
+        : selectedResults.strata
+            .flatMap((stratum) => stratum.substrata)
+            .flatMap((substratum) => substratum.monitoringPlots)
+            .flatMap((plot): MapMarker[] => {
+              if (plot.plants) {
+                const filteredPlants = plot.plants.filter((plant) => plant.status === status);
+                return filteredPlants.map((plant): MapMarker => ({
+                  id: `plants/${plant.id}`,
+                  longitude: plant.gpsCoordinates.coordinates[0],
+                  latitude: plant.gpsCoordinates.coordinates[1],
+                  onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+                  selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+                  properties: {
+                    monitoringPlotId: plot.monitoringPlotId,
+                    observationId: selectedResults.observationId,
+                    plant,
+                  },
+                }));
+              } else {
+                return [];
+              }
+            });
 
-        const adHocPlots = adHocObservationResults
-          .map((adHocResults) => adHocResults.adHocPlot)
-          .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
-        const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
-          if (plot.plants) {
-            const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-            return filteredPlants.map((plant): MapMarker => ({
-              id: `plants/${plant.id}`,
-              longitude: plant.gpsCoordinates.coordinates[0],
-              latitude: plant.gpsCoordinates.coordinates[1],
-              onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
-              selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-              properties: {
-                monitoringPlotId: plot.monitoringPlotId,
-                observationId: selectedResults.observationId,
-                plant,
-              },
-            }));
-          } else {
-            return [];
-          }
-        });
+      const adHocPlots = adHocObservationResults
+        .map((adHocResults) => adHocResults.adHocPlot)
+        .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
+      const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
+        if (plot.plants) {
+          const filteredPlants = plot.plants.filter((plant) => plant.status === status);
+          return filteredPlants.map((plant): MapMarker => ({
+            id: `plants/${plant.id}`,
+            longitude: plant.gpsCoordinates.coordinates[0],
+            latitude: plant.gpsCoordinates.coordinates[1],
+            onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+            selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+            properties: {
+              monitoringPlotId: plot.monitoringPlotId,
+              observationId: selectedResults.observationId,
+              plant,
+            },
+          }));
+        } else {
+          return [];
+        }
+      });
 
-        return [...adHocPlotPlants, ...monitoringPlotPlants];
-      } else {
-        return [];
-      }
+      return [...adHocPlotPlants, ...monitoringPlotPlants];
     },
     [isBiomassSelected, selectPlant, adHocObservationResults, selectedPlants, selectedResults]
   );
