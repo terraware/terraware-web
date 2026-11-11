@@ -6,7 +6,9 @@ import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import { useUpdateBatchMutation } from 'src/queries/generated/nurseryBatches';
+import BatchTimeInStage from 'src/scenes/InventoryRouter/BatchTimeInStage';
 import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
 import strings from 'src/strings';
 import { Batch, getBatchAccessions } from 'src/types/Batch';
@@ -25,6 +27,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const [updateBatch] = useUpdateBatchMutation();
+  const isTimePerStageEnabled = useFeatureEnabled('Nursery Batch Time Per Stage');
 
   const accessionLinks = useMemo(() => getBatchAccessions(batch), [batch]);
 
@@ -71,47 +74,50 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   }px)`;
 
   return (
-    <Grid container spacing={3} marginBottom={theme.spacing(4)}>
-      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-        <OverviewItemCardSubLocations batch={batch} />
-      </Grid>
-      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-        <OverviewItemCard
-          isEditable={false}
-          title={strings.GERMINATION_ESTABLISHMENT_RATE}
-          contents={batch.germinationRate ? numberFormatter.format(batch.germinationRate) : '%'}
-        />
-      </Grid>
-      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-        <OverviewItemCard
-          isEditable={false}
-          title={strings.LOSS_RATE}
-          contents={batch.lossRate ? numberFormatter.format(batch.lossRate) : '%'}
-        />
-      </Grid>
-      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-        <OverviewItemCard
-          isEditable={false}
-          title={strings.TOTAL_WITHDRAWN}
-          contents={numberFormatter.format(batch.totalWithdrawn)}
-        />
-      </Grid>
-      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-        <OverviewItemCard isEditable={false} title={strings.ACCESSION_ID} contents={accessionLinkContents} />
-      </Grid>
-      <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-        <OverviewItemCard isEditable={false} title={strings.BATCH_CREATED} contents={batch.addedDate} />
-      </Grid>
-
-      {batch && (
+    <>
+      {isTimePerStageEnabled && <BatchTimeInStage batch={batch} />}
+      <Grid container spacing={3} marginBottom={theme.spacing(4)}>
         <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
-          <ProjectOverviewItemCard<Batch>
-            entity={batch}
-            projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
-            onUnAssign={() => void onProjectUnAssign()}
+          <OverviewItemCardSubLocations batch={batch} />
+        </Grid>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.GERMINATION_ESTABLISHMENT_RATE}
+            contents={batch.germinationRate ? numberFormatter.format(batch.germinationRate) : '%'}
           />
         </Grid>
-      )}
-    </Grid>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.LOSS_RATE}
+            contents={batch.lossRate ? numberFormatter.format(batch.lossRate) : '%'}
+          />
+        </Grid>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
+          <OverviewItemCard
+            isEditable={false}
+            title={strings.TOTAL_WITHDRAWN}
+            contents={numberFormatter.format(batch.totalWithdrawn)}
+          />
+        </Grid>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
+          <OverviewItemCard isEditable={false} title={strings.ACCESSION_ID} contents={accessionLinkContents} />
+        </Grid>
+        <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
+          <OverviewItemCard isEditable={false} title={strings.BATCH_CREATED} contents={batch.addedDate} />
+        </Grid>
+
+        {batch && (
+          <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
+            <ProjectOverviewItemCard<Batch>
+              entity={batch}
+              projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
+              onUnAssign={() => void onProjectUnAssign()}
+            />
+          </Grid>
+        )}
+      </Grid>
+    </>
   );
 }
