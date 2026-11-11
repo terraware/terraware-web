@@ -2536,6 +2536,16 @@ THIS_VIEW_SAVES,Esta vista guarda,85bfa1dc
 THREATENED,Amenazada,57ca76f3
 THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
+TIME_IN_STAGE_DAYS,{0} días,bec81ab4
+TIME_IN_STAGE_DAYS_ONE,{0} día,f85a4e0a
+TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE,"* Aún en cambio. Algunas plántulas no han salido de esta etapa, por lo que estos promedios cuentan sus días hasta hoy.",26120d59
+TIME_IN_STAGE_LESS_THAN_ONE_DAY,Menos de 1 día,ee9dfb62
+TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP,Ninguna plántula de este lote pasó por esta etapa.,d8c51362
+TIME_IN_STAGE_NOT_AVAILABLE,No disponible,82519abb
+TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP,"Las cantidades de este lote para esta etapa se editaron manualmente, por lo que no se puede calcular el tiempo en la etapa.",5a0a0610
+TIME_IN_STAGE_SO_FAR,hasta ahora,3408380d
+TIME_IN_STAGE_TITLE,Días promedio por etapa de crecimiento para este lote,97675e32
+TIME_IN_STAGE_TITLE_TOOLTIP,"Cada valor es el promedio entre las plántulas que avanzaron de la etapa o que aún están en ella. Las plántulas retiradas de una etapa no se incluyen en esa etapa, excepto las plantas en campo desde Listas.",860fa0a4
 TIME_OF_TIDE_MEASUREMENT,Hora de la medición de la marea,08085281
 TIME_ZONE,Zona horaria,abc27841
 TIME_ZONE_REQUIRED,Zona horaria *,f1ee0610
