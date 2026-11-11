@@ -1,14 +1,29 @@
 import React from 'react';
 
-import { rs } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
+import { beforeEach, rs } from '@rstest/core';
+import { screen, waitFor, within } from '@testing-library/react';
+import { UserEvent } from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { buildOrganization, buildUser, captureRequests, mockGet, renderWithProviders, server } from 'src/test-utils';
+import {
+  buildOrganization,
+  buildUser,
+  captureRequests,
+  mockGet,
+  mockPost,
+  renderWithProviders,
+  server,
+} from 'src/test-utils';
 
 import WithdrawSeedsForm from './WithdrawSeedsForm';
 import { AccessionWithdrawInfo } from './types';
+
+// MUI skips focus enforcement in an unfocused document, avoiding competing sibling dialog traps.
+beforeEach(() => {
+  const hasFocus = rs.spyOn(document, 'hasFocus').mockReturnValue(false);
+  return () => hasFocus.mockRestore();
+});
 
 const ORG_USERS_URL = '/api/v1/organizations/1/users';
 const NURSERY_TRANSFER_URL = '/api/v2/seedbank/accessions/:accessionId/transfers/nursery';
@@ -46,6 +61,92 @@ const renderForm = (
     { organization: { selectedOrganization: buildOrganization() } }
   );
 };
+
+const enterDate = async (user: UserEvent, value: string) => {
+  const input = screen.getByRole('textbox', { name: strings.WITHDRAW_DATE });
+  await user.click(input);
+  await user.keyboard('{Control>}a{/Control}');
+  await user.paste(value);
+};
+
+const chooseNursery = async (user: UserEvent) => {
+  await user.click(document.querySelector('#destinationFacilityId') as Element);
+  await user.click(await screen.findByText('Test Nursery'));
+};
+
+const preparePredatedWithdrawal = async () => {
+  const result = renderForm([buildWithdrawInfo({ receivedDate: '2024-02-01' })]);
+  await result.user.click(screen.getByRole('radio', { name: strings.PLANTING }));
+  await enterDate(result.user, '2024-01-15');
+  await result.user.click(screen.getByRole('button', { name: strings.NEXT }));
+  await result.user.click(screen.getByRole('checkbox', { name: strings.WITHDRAW_ALL }));
+  await result.user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+  return result;
+};
+
+describe('WithdrawSeedsForm purpose and dates', () => {
+  it('blocks continuation without a nursery destination', async () => {
+    const { user } = renderForm([buildWithdrawInfo()]);
+    expect(screen.getByRole('button', { name: strings.NEXT })).toBeDisabled();
+    await chooseNursery(user);
+    expect(screen.getByRole('button', { name: strings.NEXT })).toBeEnabled();
+  });
+
+  it('blocks an unmatched existing batch name until it is cleared', async () => {
+    mockPost('/api/v1/search', { results: [{ id: '555', batchNumber: 'B-555', species_id: '1' }] });
+    const { user } = renderForm([buildWithdrawInfo({ speciesId: 1 })]);
+    await chooseNursery(user);
+    await screen.findByText(strings.INVENTORY_BATCH);
+    // Select labels target the wrapper rather than the editable input.
+    const batch = document.querySelector('#inventoryBatch input') as HTMLInputElement;
+    await user.type(batch, 'B-missing');
+    expect(screen.getByText(strings.INVALID_VALUE)).toBeVisible();
+    expect(screen.getByRole('button', { name: strings.NEXT })).toBeDisabled();
+    await user.clear(batch);
+    expect(screen.getByRole('button', { name: strings.NEXT })).toBeEnabled();
+  });
+
+  it('rejects a future withdrawal date without allowing continuation', async () => {
+    const { user } = renderForm([buildWithdrawInfo()]);
+    await user.click(screen.getByRole('radio', { name: strings.PLANTING }));
+    await enterDate(user, '2099-01-15');
+    expect(screen.getByText(strings.NO_FUTURE_DATES)).toBeVisible();
+    expect(screen.getByRole('button', { name: strings.NEXT })).toBeDisabled();
+  });
+
+  it('warns before withdrawing earlier than receipt without sending a withdrawal', async () => {
+    const requests = captureRequests('post', WITHDRAWAL_URL);
+    await preparePredatedWithdrawal();
+    expect(screen.getByRole('dialog', { name: strings.CONFIRM_WITHDRAWAL })).toBeVisible();
+    expect(screen.getByText(strings.WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING)).toBeVisible();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('cancels the date warning without withdrawing or closing the form', async () => {
+    const requests = captureRequests('post', WITHDRAWAL_URL);
+    const { user } = await preparePredatedWithdrawal();
+    await user.click(
+      within(screen.getByRole('dialog', { name: strings.CONFIRM_WITHDRAWAL })).getByRole('button', {
+        name: strings.CANCEL,
+      })
+    );
+    expect(screen.queryByRole('dialog', { name: strings.CONFIRM_WITHDRAWAL })).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: strings.WITHDRAW_SEEDS })).toBeVisible();
+    expect(requests).toHaveLength(0);
+  });
+
+  it('continues the warning with the entered withdrawal date', async () => {
+    const requests = captureRequests('post', WITHDRAWAL_URL);
+    const { user } = await preparePredatedWithdrawal();
+    await user.click(screen.getByRole('button', { name: strings.CONTINUE }));
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toMatchObject({
+      date: '2024-01-15',
+      purpose: 'Out-planting',
+      withdrawnQuantity: { quantity: 100, units: 'Seeds' },
+    });
+  });
+});
 
 describe('WithdrawSeedsForm', () => {
   describe('steps', () => {
