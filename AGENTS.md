@@ -68,6 +68,10 @@ Check whether the current repo is using Jujutsu (jj) rather than plain git; if s
 ## Internationalization
 
 - Add new strings to `src/strings/csv/en.csv` at the bottom of the file
+- Before adding a string, check whether an existing one already has the same text
+- Name strings after their text, not the feature using them, so they can be reused (e.g. `{0} days` should be `X_DAYS`,
+  not `<feature-name>_DAYS`). Use feature-specific names only for text that is specific to that feature, such as
+  `SPECIES_DENSITY_WARNING_MESSAGE`.
 - After adding new strings:
   - Run `yarn alphabetize-strings`
   - Run `yarn translate`
