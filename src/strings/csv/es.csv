@@ -811,7 +811,6 @@ FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.
 FILTER,Filtrar,51b390ee
 FILTERED,filtrado,4ab1a8a2
 FILTERS,Filtros,c3d13364
-FILTERS_APPLIED,Filtros aplicados,75d4dd7e
 FINAL_QTY,Cantidad final,47530c05
 FINANCIAL_SUMMARIES,Resúmenes financieros,d26c4f56
 FINANCIAL_VIABILITY,Viabilidad económica,50706753

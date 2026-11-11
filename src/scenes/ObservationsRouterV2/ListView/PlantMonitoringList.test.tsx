@@ -55,6 +55,7 @@ const renderList = (scheduledBiomassMonitoringObservations: boolean, observation
     preferences: { scheduledBiomassMonitoringObservations },
   });
   mockGet('/api/v1/users/me', { user: buildUser() });
+  mockGet('/api/v1/users/me/savedTableViews', { views: [] });
   mockGet('/api/v1/tracking/sites', { sites: [buildPlantingSite()] });
   mockGet('/api/v1/tracking/observations/results', { observations: [PLANT_OBSERVATION, BIOMASS_OBSERVATION] });
   // Reached by the row action menu's export options.

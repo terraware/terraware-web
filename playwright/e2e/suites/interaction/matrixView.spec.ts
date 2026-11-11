@@ -286,7 +286,7 @@ test.describe('MatrixViewTests', () => {
     await editTextCell(page, PHASE_0_DEAL, 'Slack Link', 'https://example.com/slack-e2e');
 
     await page.reload();
-    await selectView(page, 'default');
+    await expect(page.getByRole('columnheader', { name: 'TEST Organization Name' })).toBeVisible();
     await expect(await getCell(page, APPLICATION_DEAL, 'TEST Organization Name')).toHaveText('E2E Organization');
     await expect(await getCell(page, APPLICATION_DEAL, plantingDensity)).toHaveText('600');
     await expect(await getCell(page, PHASE_0_DEAL, 'Slack Link')).toHaveText('https://example.com/slack-e2e');
@@ -321,7 +321,7 @@ test.describe('MatrixViewTests', () => {
     await expect(multiSelectCell).toHaveText(multiSelectOptions.join(', '));
 
     await page.reload();
-    await selectView(page, 'default');
+    await expect(page.getByRole('columnheader', { name: singleSelect })).toBeVisible();
     await expect(await getCell(page, APPLICATION_DEAL, singleSelect)).toHaveText('maybe');
     await expect(await getCell(page, APPLICATION_DEAL, multiSelect)).toHaveText(multiSelectOptions.join(', '));
 

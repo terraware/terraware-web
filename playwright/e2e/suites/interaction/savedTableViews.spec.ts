@@ -32,22 +32,6 @@ const deleteAllSavedViews = async (request: APIRequestContext) => {
   }
 };
 
-const enableSavedTableViews = async (page: Page) => {
-  await page.route(
-    (url) => url.pathname === '/api/v1/users/me/preferences' && !url.searchParams.has('organizationId'),
-    async (route) => {
-      if (route.request().method() !== 'GET') {
-        await route.fallback();
-        return;
-      }
-      const response = await route.fetch();
-      const json = await response.json();
-      json.preferences = { ...json.preferences, savedTableViews: true };
-      await route.fulfill({ response, json });
-    }
-  );
-};
-
 const createUsedUpSpecies = async (request: APIRequestContext) => {
   const scientificName = `Used Up Species ${Date.now()}`;
   const speciesResponse = await request.post('/api/v1/species', {
@@ -189,7 +173,6 @@ test.describe('SavedTableViewsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
     await deleteAllSavedViews(page.request);
-    await enableSavedTableViews(page);
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');

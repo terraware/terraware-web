@@ -1,19 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import {
-  Box,
-  Card,
-  Checkbox,
-  Chip,
-  Grid,
-  IconButton,
-  MenuItem,
-  TextField,
-  Tooltip,
-  Typography,
-  useTheme,
-} from '@mui/material';
+import { Box, Card, Checkbox, Chip, Grid, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -33,7 +21,6 @@ import DatePicker from 'src/components/common/DatePicker';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
@@ -65,8 +52,6 @@ type ViewOption = typeof DEFAULT_VIEW | 'acceleratorProjects' | 'applicants';
 type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
 type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
 
-const isEmptyFilterValue = (value: unknown) => value === undefined || value === null || value === '';
-
 const MatrixView = () => {
   const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
   const projects = useMemo(() => projectsData ?? [], [projectsData]);
@@ -83,7 +68,6 @@ const MatrixView = () => {
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
   const { strings, countries } = useLocalization();
-  const isSavedTableViewsEnabled = useFeatureEnabled('Saved Table Views');
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const {
     columnFilters,
@@ -791,16 +775,6 @@ const MatrixView = () => {
     setShowColumnsModal(true);
   }, []);
 
-  const columnFiltersAreEmpty = useMemo(
-    () =>
-      visibleColumnFilters.length === 0 ||
-      visibleColumnFilters.every(
-        (filter) =>
-          isEmptyFilterValue(filter.value) || (Array.isArray(filter.value) && filter.value.every(isEmptyFilterValue))
-      ),
-    [visibleColumnFilters]
-  );
-
   const onCurrentViewChange = useCallback((value: string) => setCurrentView(value as ViewOption), []);
 
   const reloadTable = useCallback(() => {
@@ -1027,14 +1001,6 @@ const MatrixView = () => {
               tableDefinition={TABLES.matrixView}
             />
           </Grid>
-
-          {!isSavedTableViewsEnabled && (!columnFiltersAreEmpty || !!globalFilter) && (
-            <Grid style={{ display: 'flex', alignItems: 'center' }}>
-              <Typography style={{ color: theme.palette.TwClrBgDanger, fontWeight: 'bold' }}>
-                {strings.FILTERS_APPLIED.toUpperCase()}
-              </Typography>
-            </Grid>
-          )}
         </Grid>
       ),
       state: {
@@ -1113,14 +1079,12 @@ const MatrixView = () => {
       }),
     }),
     [
-      columnFiltersAreEmpty,
       columnOrder,
       columnPinning,
       columnVisibility,
       currentView,
       defaultViewSettings,
       globalFilter,
-      isSavedTableViewsEnabled,
       onCurrentViewChange,
       setColumnFilters,
       setColumnOrder,
@@ -1130,7 +1094,6 @@ const MatrixView = () => {
       setSorting,
       sorting,
       strings,
-      theme,
       visibleColumnFilters,
     ]
   );

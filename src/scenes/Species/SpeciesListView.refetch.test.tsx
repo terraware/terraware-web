@@ -21,6 +21,7 @@ import {
 beforeEach(() => {
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
+  mockGet('/api/v1/users/me/savedTableViews', { views: [] });
 });
 
 describe('SpeciesListView refetch behaviour', () => {

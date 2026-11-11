@@ -62,6 +62,7 @@ beforeEach(() => {
   mockGet('/api/v1/facilities/:facilityId/subLocations', { subLocations: [] });
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
+  mockGet('/api/v1/users/me/savedTableViews', { views: [] });
   mockPost('/api/v1/search/count', { count: 1 });
   server.use(
     http.post('/api/v1/search', async ({ request }) => {
