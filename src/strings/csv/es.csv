@@ -1111,6 +1111,7 @@ LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Está saliendo de la pantalla 
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Está saliendo de la pantalla de edición de Parcelas Temporales. Cualquier cambio no guardado en las Parcelas Temporales no se guardará. ¿Está seguro de que desea salir?,a4409ad0
 LEFT_TO_PLANT,Por plantar,30af8cf9
 LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
+LESS_THAN_ONE_DAY,Menos de 1 día,ee9dfb62
 LIANA,Liana,812e082e
 LICHEN,Liquen,4f8de0bf
 LIFETIME,Duración total,a7451a5d
@@ -1375,6 +1376,7 @@ NORTHWEST_CORNER_FIELD_LONGITUDE,Longitud del campo en la esquina noroeste,8221f
 NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitud de la esquina noroeste,355e9d22
 NOT_APPLICABLE_FOR_AD_HOC_PLOTS,No aplica para parcelas ad hoc,3e9df420
+NOT_AVAILABLE,No disponible,82519abb
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c30
 NOT_COMPLETE,Sin completar,a8606bc8
 NOT_COVERED,No Cubierto,c01864d7
@@ -2055,17 +2057,17 @@ SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
+SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,Registrar el crecimiento de las plantas y las condiciones actuales.,3870c828
+SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,Medir la supervivencia de las plantas y las condiciones actuales del sitio,2747bb6a
 SCHEDULE_OBSERVATION_MESSAGE,Seleccione los estratos y subestratos que desea incluir en la observación.,875ef72a
 SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL,Quiero:,ef334f52
+SCHEDULE_OBSERVATION_PLANT_MONITORING_DESCRIPTION,Registrar cuántas plantas están vivas y cuántas muertas.,82ad6f61
+SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE,Verificar la supervivencia de las plantas,bf93a8a2
 SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,{0} - {1} temporales y {2} permanentes - se asignarán a las áreas seleccionadas.,49140e4c
 SCHEDULE_OBSERVATION_STRATUM_COUNTS_MESSAGE,Los números junto a cada estrato indican la cantidad de parcelas que se asignarán.,25868f1e
 SCHEDULE_OBSERVATION_SUBSTRATUM_COUNTS_MESSAGE,"Los números junto a cada subestrato (~) son estimaciones. Las parcelas se ubican aleatoriamente, por lo que la cantidad real de parcelas en cada subestrato puede variar.",c3833315
-SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Registrar cuántas plantas están vivas y cuántas muertas.,f2dc59dc
-SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Registrar supervivencia después de la plantación,04429f52
-SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,Ya hay una observación de {0} programada para comenzar el {1}.,4ade661b
+SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,Ya hay una observación de {0} programada para comenzar el {1}.,359e70ba
 SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS,Disponible una vez que este sitio de plantación tenga plantas en campo.,95fffe13
-SCHEDULE_OBSERVATION_VEGETATION_DESCRIPTION,"Medir el crecimiento de las plantas y registrar otra vegetación (por ejemplo, para cálculos de carbono).",048ac335
-SCHEDULE_OBSERVATION_VEGETATION_TITLE,Registrar crecimiento y supervivencia,45d3cdc9
 SCHEDULED_OBSERVATIONS,Observaciones programadas,ae524d56
 SCHEDULED_OBSERVATIONS_ACROSS_SITES,{0} en {1} sitios de plantación,4f269453
 SCHEDULED_OBSERVATIONS_AT_SITE,{0} en {1},b55477e7
@@ -2253,6 +2255,7 @@ SLACK_LINK,Enlace de Slack,45b022ae
 SLIDES_URL,URL de las diapositivas,2d6bb620
 SMALL_TREES_COUNT_HIGH,Cantidad de árboles pequeños (máximo),8bd57803
 SMALL_TREES_COUNT_LOW,Cantidad de árboles pequeños (mínimo),34682b74
+SO_FAR,hasta ahora,3408380d
 SOAK,Remojar,1eb78e7b
 SOCIAL_IMPACT,Impacto social,34c0ea7c
 SOCIAL_IMPACT_INSTRUCTIONS,"Indique los beneficios directos del proyecto para la comunidad local. Los beneficios específicos podrían incluir el impacto sobre el sustento; educación y entrenamiento para la comunidad; acceso a agua limpia; apoyo para los jóvenes, las mujeres y/o las minorías; así como otros beneficios socioeconómicos y comunitarios del proyecto. Incluya los indicadores específicos que utiliza para medir el impacto sobre la comunidad, así como los resultados que ha monitoreado a lo largo del tiempo (con una longitud de media página, como máximo).",08a8aaaa
@@ -2442,7 +2445,6 @@ SUMMARY,Resumen,430d4ee5
 SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
-SURVIVAL_MONITORING,Monitoreo de supervivencia,dd8f0297
 SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
 SURVIVAL_RATE_CALCULATION_IN_PROGRESS_TOOLTIP,Los cálculos de la tasa de supervivencia están en curso.,601b07f4
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Las tasas de supervivencia se calculan en función de las densidades iniciales de plantas. Si no se establecen densidades iniciales de plantas para un Sitio de Plantación, la tasa de supervivencia no estará disponible.",426f186d
@@ -2536,14 +2538,9 @@ THIS_VIEW_SAVES,Esta vista guarda,85bfa1dc
 THREATENED,Amenazada,57ca76f3
 THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
-X_DAYS,{0} días,bec81ab4
-X_DAY,{0} día,f85a4e0a
 TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE,"* Aún en cambio. Algunas plántulas no han salido de esta etapa, por lo que estos promedios cuentan sus días hasta hoy.",26120d59
-LESS_THAN_ONE_DAY,Menos de 1 día,ee9dfb62
 TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP,Ninguna plántula de este lote pasó por esta etapa.,d8c51362
-NOT_AVAILABLE,No disponible,82519abb
 TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP,"Las cantidades de este lote para esta etapa se editaron manualmente, por lo que no se puede calcular el tiempo en la etapa.",5a0a0610
-SO_FAR,hasta ahora,3408380d
 TIME_IN_STAGE_TITLE,Días promedio por etapa de crecimiento para este lote,97675e32
 TIME_IN_STAGE_TITLE_TOOLTIP,"Cada valor es el promedio entre las plántulas que avanzaron de la etapa o que aún están en ella. Las plántulas retiradas de una etapa no se incluyen en esa etapa, excepto las plantas en campo desde Listas.",860fa0a4
 TIME_OF_TIDE_MEASUREMENT,Hora de la medición de la marea,08085281
@@ -2774,7 +2771,6 @@ VARIABLE_HISTORY,Historial variable,62d3bc75
 VARIABLE_STATUS,Estado de variable,dd3169c3
 VARIABLES,Variables,9902c54b
 VARIABLES_FOR_PROJECT,Variables para {0},8ed080a2
-VEGETATION_MONITORING,Monitoreo de vegetación,0732e880
 VERIFIED,Verificado,17f92e17
 VERIFIED_BY,Verificado por {0},c5e1ef69
 VERRA,Verra,b73695a0
@@ -2912,6 +2908,8 @@ X_ACCESSIONS,{0} Accesiones,e8ccdbc4
 X_BATCH,{0} lote,9d74cde8
 X_BATCHES,{0} lotes,a7a1d48d
 X_CUMULATIVE_TARGET,Meta acumulada {0},25c175af
+X_DAY,{0} día,f85a4e0a
+X_DAYS,{0} días,bec81ab4
 X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52

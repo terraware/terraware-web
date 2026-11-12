@@ -2057,17 +2057,17 @@ SAVED_VIEWS_PRIVATE,Only you can see views you save.,
 SAVING,Saving...,
 SCARIFY,Scarify,
 SCHEDULE_OBSERVATION,Schedule Observation,
+SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,Record plant growth and current conditions.,
+SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,Measure plant survival and current site conditions,
 SCHEDULE_OBSERVATION_MESSAGE,Select the strata and substrata to include in observation.,
 SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL,I want to:,Label for the field where the user picks which kind of observation to schedule
+SCHEDULE_OBSERVATION_PLANT_MONITORING_DESCRIPTION,Record how many plants are alive and dead.,
+SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE,Check plant survival,
 SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,{0} - {1} temporary and {2} permanent - will be assigned for the selected areas.,{0} is an approximate plot count such as “~17 plots”
 SCHEDULE_OBSERVATION_STRATUM_COUNTS_MESSAGE,Counts next to each stratum are the numbers of plots to be assigned.,
 SCHEDULE_OBSERVATION_SUBSTRATUM_COUNTS_MESSAGE,"Counts next to each substratum (~) are estimates. Plots are placed randomly, so the actual number of plots in each substratum may differ.",
-SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,Record how many plantings are alive and dead.,
-SCHEDULE_OBSERVATION_SURVIVAL_TITLE,Track survival after planting,
-SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,A {0} observation is already scheduled to start {1}.,{0} is a monitoring type such as “Survival Monitoring” and {1} is a date
+SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,A {0} observation is already scheduled to start {1}.,{0} is a monitoring type such as “Plant Monitoring” and {1} is a date
 SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS,Available once this planting site has plantings.,Shown on a monitoring type option that cannot be scheduled because the planting site has no plantings yet
-SCHEDULE_OBSERVATION_VEGETATION_DESCRIPTION,Measure plant growth and record other vegetation (e.g. for carbon calculations).,
-SCHEDULE_OBSERVATION_VEGETATION_TITLE,Track growth and survival,
 SCHEDULED_OBSERVATIONS,Scheduled Observations,
 SCHEDULED_OBSERVATIONS_ACROSS_SITES,{0} across {1} planting sites,"Example: 4 across 3 planting sites, where 4 is the number of scheduled observations"
 SCHEDULED_OBSERVATIONS_AT_SITE,{0} at {1},"Example: 2 at Abrewatia Hills Restoration Zone, where 2 is the number of scheduled observations"
@@ -2445,7 +2445,6 @@ SUMMARY,Summary,
 SUMMARY_OF_PROGRESS_DESCRIPTION,Give a brief summary of this project.,
 SUMMARY_OF_PROGRESS_REQUIRED,Summary of Progress *,
 SUPPLEMENTAL_FILES,Supplemental Files,
-SURVIVAL_MONITORING,Survival Monitoring,
 SURVIVAL_RATE,Survival Rate,
 SURVIVAL_RATE_CALCULATION_IN_PROGRESS_TOOLTIP,Survival rate calculations are in progress.,
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Survival rates are calculated based on initial plant densities. If initial plant densities are not set for a Planting Site, the Survival Rate will not be available.",
@@ -2772,7 +2771,6 @@ VARIABLE_HISTORY,Variable History,
 VARIABLE_STATUS,Variable Status,
 VARIABLES,Variables,
 VARIABLES_FOR_PROJECT,Variables for {0},
-VEGETATION_MONITORING,Vegetation Monitoring,
 VERIFIED,Verified,
 VERIFIED_BY,Verified By {0},
 VERRA,Verra,
