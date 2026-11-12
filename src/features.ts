@@ -6,7 +6,6 @@ import { isTerraformationEmail } from 'src/utils/user';
 export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
-  | 'Seeds Withdrawal Log'
   | 'Scheduled Biomass Monitoring Observations'
   | 'Nursery Batch Time Per Stage';
 
@@ -49,15 +48,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Seeds Withdrawal Log',
-    preferenceName: 'seedsWithdrawalLog',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Log of seed withdrawals.'],
     disclosure: ['This is a WIP'],
   },
   {
