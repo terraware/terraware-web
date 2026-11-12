@@ -3448,8 +3448,12 @@
 <a name='L3383'></a><a href='#L3383'>3383</a>
 <a name='L3384'></a><a href='#L3384'>3384</a>
 <a name='L3385'></a><a href='#L3385'>3385</a>
-<a name='L3386'></a><a href='#L3386'>3386</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3386'></a><a href='#L3386'>3386</a>
+<a name='L3387'></a><a href='#L3387'>3387</a>
+<a name='L3388'></a><a href='#L3388'>3388</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">153x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6894,6 +6898,7 @@ export const strings = {
   ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO: 'La cantidad de crecimiento activo no puede ser menor que 0.',
   ACTIVE_GROWTH_QUANTITY_REMAINING: 'Cantidad de crecimiento activo ({0} restante)',
   ACTIVE_GROWTH_QUANTITY_REQUIRED: 'Cantidad de crecimiento activo *',
+  ACTIVE_GROWTH_SENTENCE_CASE: 'Crecimiento activo',
   ACTIVITY: 'Actividad',
   ACTIVITY_DELETED: 'Actividad eliminada',
   ACTIVITY_LOG: 'Registro de actividades',
@@ -7860,6 +7865,7 @@ export const strings = {
   HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO: 'La cantidad en aclimatación no puede ser menor que 0',
   HARDENING_OFF_QUANTITY_REMAINING: 'Cantidad en aclimatación ({0} restantes)',
   HARDENING_OFF_QUANTITY_REQUIRED: 'Cantidad en aclimatación *',
+  HARDENING_OFF_SENTENCE_CASE: 'Acondicionamiento',
   HECTARES: 'Hectáreas',
   HEIGHT_AT_MATURITY: 'Altura en la madurez (cm)',
   HEIGHT_M: 'Altura (m)',
@@ -8902,7 +8908,6 @@ export const strings = {
     'Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.',
   PURPOSE: 'Propósito',
   PURPOSE_REQUIRED: 'Propósito *',
-  PURPOSE_WITH_DESTINATION: '{0}: {1}',
   QUADRAT_PHOTO_CANNOT_DELETE_INFO: 'No se pueden eliminar las fotos del cuadrante.',
   QUADRAT_PHOTOS: 'Fotos de cuadrantes',
   QUADRAT_PHOTOS_CANNOT_BE_DELETED: 'No se pueden eliminar las fotos de cuadrantes',
@@ -9173,22 +9178,23 @@ export const strings = {
   SAVING: 'Guardando...',
   SCARIFY: 'Escarificar',
   SCHEDULE_OBSERVATION: 'Programar observación',
+  SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION:
+    'Registrar el crecimiento de las plantas y las condiciones actuales.',
+  SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE:
+    'Medir la supervivencia de las plantas y las condiciones actuales del sitio',
   SCHEDULE_OBSERVATION_MESSAGE: 'Seleccione los estratos y subestratos que desea incluir en la observación.',
   SCHEDULE_OBSERVATION_MONITORING_TYPE_LABEL: 'Quiero:',
+  SCHEDULE_OBSERVATION_PLANT_MONITORING_DESCRIPTION: 'Registrar cuántas plantas están vivas y cuántas muertas.',
+  SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE: 'Verificar la supervivencia de las plantas',
   SCHEDULE_OBSERVATION_PLOTS_ASSIGNED:
     '{0} - {1} temporales y {2} permanentes - se asignarán a las áreas seleccionadas.',
   SCHEDULE_OBSERVATION_STRATUM_COUNTS_MESSAGE:
     'Los números junto a cada estrato indican la cantidad de parcelas que se asignarán.',
   SCHEDULE_OBSERVATION_SUBSTRATUM_COUNTS_MESSAGE:
     'Los números junto a cada subestrato (~) son estimaciones. Las parcelas se ubican aleatoriamente, por lo que la cantidad real de parcelas en cada subestrato puede variar.',
-  SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION: 'Registrar cuántas plantas están vivas y cuántas muertas.',
-  SCHEDULE_OBSERVATION_SURVIVAL_TITLE: 'Registrar supervivencia después de la plantación',
   SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED: 'Ya hay una observación de {0} programada para comenzar el {1}.',
   SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS:
     'Disponible una vez que este sitio de plantación tenga plantas en campo.',
-  SCHEDULE_OBSERVATION_VEGETATION_DESCRIPTION:
-    'Medir el crecimiento de las plantas y registrar otra vegetación (por ejemplo, para cálculos de carbono).',
-  SCHEDULE_OBSERVATION_VEGETATION_TITLE: 'Registrar crecimiento y supervivencia',
   SCHEDULED_OBSERVATIONS: 'Observaciones programadas',
   SCHEDULED_OBSERVATIONS_ACROSS_SITES: '{0} en {1} sitios de plantación',
   SCHEDULED_OBSERVATIONS_AT_SITE: '{0} en {1}',
@@ -9623,7 +9629,6 @@ export const strings = {
   SUMMARY_OF_PROGRESS_DESCRIPTION: 'Haga un breve resumen de este proyecto.',
   SUMMARY_OF_PROGRESS_REQUIRED: 'Resumen de progresos *',
   SUPPLEMENTAL_FILES: 'Archivos suplementarios',
-  SURVIVAL_MONITORING: 'Monitoreo de supervivencia',
   SURVIVAL_RATE: 'Tasa de supervivencia',
   SURVIVAL_RATE_CALCULATION_IN_PROGRESS_TOOLTIP: 'Los cálculos de la tasa de supervivencia están en curso.',
   SURVIVAL_RATE_COLUMN_TOOLTIP:
@@ -9737,7 +9742,9 @@ export const strings = {
     'Las cantidades de este lote para esta etapa se editaron manualmente, por lo que no se puede calcular el tiempo en la etapa.',
   TIME_IN_STAGE_TITLE: 'Días promedio por etapa de crecimiento para este lote',
   TIME_IN_STAGE_TITLE_TOOLTIP:
-    'Cada valor es el promedio entre las plántulas que avanzaron de la etapa o que aún están en ella. Las plántulas retiradas de una etapa no se incluyen en esa etapa, excepto las plantas en campo desde Listas.',
+    'El número promedio de días que las plántulas pasaron en cada etapa, basado en los cambios de etapa en el Historial.',
+  TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING:
+    'Las plántulas que aún están en una etapa se cuentan hasta hoy. Las plántulas retiradas se cuentan hasta la fecha de su retiro.',
   TIME_OF_TIDE_MEASUREMENT: 'Hora de la medición de la marea',
   TIME_ZONE: 'Zona horaria',
   TIME_ZONE_REQUIRED: 'Zona horaria *',
@@ -10031,7 +10038,6 @@ export const strings = {
   VARIABLE_STATUS: 'Estado de variable',
   VARIABLES: 'Variables',
   VARIABLES_FOR_PROJECT: 'Variables para {0}',
-  VEGETATION_MONITORING: 'Monitoreo de vegetación',
   VERIFIED: 'Verificado',
   VERIFIED_BY: 'Verificado por {0}',
   VERRA: 'Verra',
@@ -10225,7 +10231,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-11T20:31:27.939Z
+                at 2026-11-12T16:55:38.317Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

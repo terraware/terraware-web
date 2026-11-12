@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>29/29</span>
+                <span class='fraction'>30/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.05% </span>
+                <span class="strong">96.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>33/34</span>
+                <span class='fraction'>29/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>29/29</span>
+                <span class='fraction'>30/30</span>
             </div>
         
             
@@ -279,7 +279,8 @@
 <a name='L214'></a><a href='#L214'>214</a>
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
-<a name='L217'></a><a href='#L217'>217</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L217'></a><a href='#L217'>217</a>
+<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -290,8 +291,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">68x</span>
-<span class="cline-any cline-yes">68x</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-yes">104x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -350,16 +351,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">36x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -442,12 +439,17 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-yes">36x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -497,7 +499,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useMemo } from 'react';
 &nbsp;
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 &nbsp;
 import { useLocalization } from 'src/providers';
@@ -533,13 +535,13 @@ const useStages = (): Stage[] =&gt; {
             },
             {
               key: 'activeGrowth',
-              label: strings.ACTIVE_GROWTH,
+              label: strings.ACTIVE_GROWTH_SENTENCE_CASE,
               backgroundColor: theme.palette.TwClrBaseGreen200 as string,
               color: theme.palette.TwClrTxt as string,
             },
             {
               key: 'hardeningOff',
-              label: strings.HARDENING_OFF,
+              label: strings.HARDENING_OFF_SENTENCE_CASE,
               backgroundColor: theme.palette.TwClrBaseGreen500 as string,
               color: theme.palette.TwClrTxtInverse as string,
             },
@@ -563,11 +565,10 @@ const daysLabel = (days: number): string =&gt;
 type StageSegmentProps = {
   stage: Stage;
   stageTime?: BatchStageTimePayload;
-  isFirst: boolean;
-  isLast: boolean;
+  fillEvenly: boolean;
 };
 &nbsp;
-const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps): JSX.Element =&gt; {
+const StageSegment = ({ stage, stageTime, fillEvenly }: StageSegmentProps): JSX.Element =&gt; {
   const theme = useTheme();
   const days = stageDays(stageTime);
   const hasDays = days !== undefined;
@@ -579,7 +580,7 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
         flexDirection: 'column',
         // Segments with a value share the leftover width in proportion to their days; the rest stay
         // just wide enough for their text.
-        flexGrow: hasDays ? days : 0,
+        flexGrow: fillEvenly ? 1 : hasDays ? days : 0,
         flexShrink: 0,
         flexBasis: 'auto',
         minWidth: 0,
@@ -587,9 +588,9 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
     &gt;
       &lt;Typography
         sx={{
-          color: theme.palette.TwClrTxtSecondary,
+          color: theme.palette.TwClrTxt,
           fontSize: '14px',
-          fontWeight: 500,
+          fontWeight: 600,
           marginBottom: theme.spacing(1),
           whiteSpace: 'nowrap',
         }}
@@ -600,10 +601,7 @@ const StageSegment = ({ stage, stageTime, isFirst, isLast }: StageSegmentProps):
         sx={{
           alignItems: 'center',
           backgroundColor: stage.backgroundColor,
-          borderBottomLeftRadius: isFirst ? '8px' : 0,
-          borderBottomRightRadius: isLast ? '8px' : 0,
-          borderTopLeftRadius: isFirst ? '8px' : 0,
-          borderTopRightRadius: isLast ? '8px' : 0,
+          borderRadius: '8px',
           color: stage.color,
           display: 'flex',
           fontSize: '16px',
@@ -658,55 +656,60 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
     return null;
   }
 &nbsp;
+  const totalDays = stages.reduce((total, stage) =&gt; total + (stageDays(timeInStage?.[stage.key]) ?? 0), 0);
+&nbsp;
   const anyInProgress = stages.some((stage) =&gt; {
     const stageTime = timeInStage?.[stage.key];
     return stageTime?.inProgress === true &amp;&amp; stageDays(stageTime) !== undefined;
   });
 &nbsp;
   return (
-    &lt;Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '24px',
-        marginBottom: theme.spacing(3),
-        padding: theme.spacing(3),
-        width: '100%',
-      }}
-    &gt;
-      &lt;Typography
+    &lt;Grid size={12}&gt;
+      &lt;Box
         sx={{
-          color: theme.palette.TwClrTxt,
-          fontSize: '20px',
-          fontWeight: 600,
-          marginBottom: theme.spacing(2),
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '24px',
+          padding: theme.spacing(3),
+          width: '100%',
         }}
       &gt;
-        {strings.TIME_IN_STAGE_TITLE} &lt;IconTooltip title={strings.TIME_IN_STAGE_TITLE_TOOLTIP} /&gt;
-      &lt;/Typography&gt;
-      &lt;Box sx={{ display: 'flex', overflowX: 'auto' }}&gt;
-        {stages.map((stage, index) =&gt; (
-          &lt;StageSegment
-            key={stage.key}
-            stage={stage}
-            stageTime={timeInStage?.[stage.key]}
-            isFirst={index === 0}
-            isLast={index === stages.length - 1}
-          /&gt;
-        ))}
-      &lt;/Box&gt;
-      {anyInProgress &amp;&amp; (
         &lt;Typography
           sx={{
-            color: theme.palette.TwClrTxtSecondary,
-            fontSize: '14px',
-            fontWeight: 400,
-            marginTop: theme.spacing(2),
+            color: theme.palette.TwClrTxt,
+            fontSize: '20px',
+            fontWeight: 600,
+            marginBottom: theme.spacing(2),
           }}
         &gt;
-          {strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE}
+          {strings.TIME_IN_STAGE_TITLE}{' '}
+          &lt;IconTooltip
+            title={`${strings.TIME_IN_STAGE_TITLE_TOOLTIP}\n\n${strings.TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING}`}
+          /&gt;
         &lt;/Typography&gt;
-      )}
-    &lt;/Box&gt;
+        &lt;Box sx={{ display: 'flex', gap: theme.spacing(1), overflowX: 'auto' }}&gt;
+          {stages.map((stage) =&gt; (
+            &lt;StageSegment
+              key={stage.key}
+              stage={stage}
+              stageTime={timeInStage?.[stage.key]}
+              fillEvenly={totalDays === 0}
+            /&gt;
+          ))}
+        &lt;/Box&gt;
+        {anyInProgress &amp;&amp; (
+          &lt;Typography
+            sx={{
+              color: theme.palette.TwClrTxtSecondary,
+              fontSize: '14px',
+              fontWeight: 400,
+              marginTop: theme.spacing(2),
+            }}
+          &gt;
+            {strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE}
+          &lt;/Typography&gt;
+        )}
+      &lt;/Box&gt;
+    &lt;/Grid&gt;
   );
 };
 &nbsp;
@@ -718,7 +721,7 @@ export default BatchTimeInStage;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-11T20:31:27.939Z
+                at 2026-11-12T16:55:38.317Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
