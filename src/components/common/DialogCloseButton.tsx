@@ -3,12 +3,15 @@ import React, { type JSX } from 'react';
 import { Close } from '@mui/icons-material';
 import { IconButton, SxProps, useTheme } from '@mui/material';
 
+import { useLocalization } from 'src/providers';
+
 export interface Props {
   onClick: () => void;
   sx?: SxProps;
 }
 
 export default function DialogCloseButton({ onClick, sx }: Props): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
 
   const _sx: SxProps = {
@@ -20,7 +23,7 @@ export default function DialogCloseButton({ onClick, sx }: Props): JSX.Element {
   };
 
   return (
-    <IconButton aria-label='close' onClick={onClick} sx={_sx}>
+    <IconButton aria-label={strings.CLOSE} onClick={onClick} sx={_sx}>
       <Close />
     </IconButton>
   );
