@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -165,50 +165,52 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
   });
 
   return (
-    <Box
-      sx={{
-        backgroundColor: theme.palette.TwClrBg,
-        borderRadius: '24px',
-        padding: theme.spacing(3),
-        width: '100%',
-      }}
-    >
-      <Typography
+    <Grid size={12}>
+      <Box
         sx={{
-          color: theme.palette.TwClrTxt,
-          fontSize: '20px',
-          fontWeight: 600,
-          marginBottom: theme.spacing(2),
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '24px',
+          padding: theme.spacing(3),
+          width: '100%',
         }}
       >
-        {strings.TIME_IN_STAGE_TITLE}{' '}
-        <IconTooltip
-          title={`${strings.TIME_IN_STAGE_TITLE_TOOLTIP}\n\n${strings.TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING}`}
-        />
-      </Typography>
-      <Box sx={{ display: 'flex', gap: theme.spacing(1), overflowX: 'auto' }}>
-        {stages.map((stage) => (
-          <StageSegment
-            key={stage.key}
-            stage={stage}
-            stageTime={timeInStage?.[stage.key]}
-            fillEvenly={totalDays === 0}
-          />
-        ))}
-      </Box>
-      {anyInProgress && (
         <Typography
           sx={{
-            color: theme.palette.TwClrTxtSecondary,
-            fontSize: '14px',
-            fontWeight: 400,
-            marginTop: theme.spacing(2),
+            color: theme.palette.TwClrTxt,
+            fontSize: '20px',
+            fontWeight: 600,
+            marginBottom: theme.spacing(2),
           }}
         >
-          {strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE}
+          {strings.TIME_IN_STAGE_TITLE}{' '}
+          <IconTooltip
+            title={`${strings.TIME_IN_STAGE_TITLE_TOOLTIP}\n\n${strings.TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING}`}
+          />
         </Typography>
-      )}
-    </Box>
+        <Box sx={{ display: 'flex', gap: theme.spacing(1), overflowX: 'auto' }}>
+          {stages.map((stage) => (
+            <StageSegment
+              key={stage.key}
+              stage={stage}
+              stageTime={timeInStage?.[stage.key]}
+              fillEvenly={totalDays === 0}
+            />
+          ))}
+        </Box>
+        {anyInProgress && (
+          <Typography
+            sx={{
+              color: theme.palette.TwClrTxtSecondary,
+              fontSize: '14px',
+              fontWeight: 400,
+              marginTop: theme.spacing(2),
+            }}
+          >
+            {strings.TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE}
+          </Typography>
+        )}
+      </Box>
+    </Grid>
   );
 };
 

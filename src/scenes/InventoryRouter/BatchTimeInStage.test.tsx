@@ -134,9 +134,10 @@ describe('BatchTimeInStage', () => {
       }),
     ],
   ])('shows no card when %s', (_label, timeInStage) => {
-    renderCard(timeInStage);
+    const { container } = renderCard(timeInStage);
 
     expect(screen.queryByText(strings.TIME_IN_STAGE_TITLE)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.GERMINATING)).not.toBeInTheDocument();
+    expect(container).toBeEmptyDOMElement();
   });
 });
