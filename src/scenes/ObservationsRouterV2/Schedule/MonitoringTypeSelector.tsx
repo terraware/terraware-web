@@ -27,14 +27,14 @@ const MonitoringTypeSelector = ({
   const optionsContent = useMemo(
     (): Record<MonitoringType, { badge: string; description: string; title: string }> => ({
       Monitoring: {
-        badge: strings.SURVIVAL_MONITORING,
-        description: strings.SCHEDULE_OBSERVATION_SURVIVAL_DESCRIPTION,
-        title: strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE,
+        badge: strings.PLANT_MONITORING,
+        description: strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_DESCRIPTION,
+        title: strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE,
       },
       'Biomass Measurements': {
-        badge: strings.VEGETATION_MONITORING,
-        description: strings.SCHEDULE_OBSERVATION_VEGETATION_DESCRIPTION,
-        title: strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE,
+        badge: strings.BIOMASS_MONITORING,
+        description: strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,
+        title: strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,
       },
     }),
     [strings]
