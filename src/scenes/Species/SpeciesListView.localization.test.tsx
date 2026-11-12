@@ -104,6 +104,25 @@ describe('SpeciesListView localization', () => {
     });
   });
 
+  it('keeps missing seed storage behavior after populated values when sorted ascending', async () => {
+    const { user } = renderWithProviders(<SpeciesListView />);
+    await screen.findByRole('link', { name: 'Acacia koa' });
+
+    await user.click(screen.getByText(strings.SEED_STORAGE_BEHAVIOR));
+    expect(screen.getByRole('columnheader', { name: new RegExp(strings.SEED_STORAGE_BEHAVIOR) })).toHaveAttribute(
+      'aria-sort',
+      'ascending'
+    );
+
+    await waitFor(() => {
+      expect(
+        screen
+          .getAllByRole('link', { name: /Acacia koa|Dryopteris filix-mas|Unknown species/ })
+          .map((link) => link.textContent)
+      ).toEqual(['Acacia koa', 'Dryopteris filix-mas', 'Unknown species']);
+    });
+  });
+
   it('exports translated species field values to CSV', async () => {
     const download = rstest.spyOn(URL, 'createObjectURL');
     const click = rstest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);

@@ -376,7 +376,7 @@ export default function SpeciesListView(): JSX.Element {
     return species.map((sp) => ({
       ...sp,
       growthForms: sp.growthForms?.map((value) => growthFormLabels.get(value) ?? value),
-      seedStorageBehavior: getSeedStorageBehaviorString(sp),
+      seedStorageBehavior: sp.seedStorageBehavior ? getSeedStorageBehaviorString(sp) : undefined,
       ecosystemTypes: sp.ecosystemTypes?.map((value) => ecosystemTypeLabels.get(value) ?? value),
       acceleratorProjects: acceleratorProjectNamesBySpeciesId[sp.id],
     }));
