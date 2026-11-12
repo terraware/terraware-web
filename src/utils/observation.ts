@@ -96,6 +96,9 @@ export const getBiomassPlotUnrecognizedSpecies = (
 export const getBiomassObservationUnrecognizedSpecies = (results: ObservationResultsPayload | undefined): string[] =>
   results ? unrecognizedSpeciesIn(biomassMeasurementsOf(results.strata)) : [];
 
+export const isMonitoringPlotObserved = (plot: ObservationMonitoringPlotResultsPayload | undefined): boolean =>
+  plot?.completedTime !== undefined && plot.status === 'Completed';
+
 export const getObservationSpeciesLivePlantsCount = (
   species: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined
 ): number | undefined => {

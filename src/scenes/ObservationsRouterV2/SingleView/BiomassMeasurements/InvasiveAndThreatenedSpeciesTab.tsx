@@ -6,6 +6,7 @@ import { Button, Icon } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
 import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
+import { isMonitoringPlotObserved } from 'src/utils/observation';
 
 import EditNotesModal from './EditNotesModal';
 import QuadratComponent from './QuadratComponent';
@@ -18,6 +19,7 @@ const InvasiveAndThreatenedSpeciesTab = () => {
 
   const { biomassMeasurement, monitoringPlot, observationId } = useBiomassPlot();
   const additionalSpecies = biomassMeasurement?.additionalSpecies;
+  const isObserved = isMonitoringPlotObserved(monitoringPlot);
 
   const [editNotesModalOpen, setEditNotesModalOpen] = useState(false);
 
@@ -39,14 +41,16 @@ const InvasiveAndThreatenedSpeciesTab = () => {
             {strings.INVASIVE_AND_THREATENED_SPECIES_INSTRUCTIONS}
           </Typography>
         </Box>
-        <Button
-          id='edit'
-          label={strings.EDIT_NOTES}
-          onClick={onEditNotes}
-          icon='iconEdit'
-          priority='secondary'
-          size='small'
-        />
+        {isObserved && (
+          <Button
+            id='edit'
+            label={strings.EDIT_NOTES}
+            onClick={onEditNotes}
+            icon='iconEdit'
+            priority='secondary'
+            size='small'
+          />
+        )}
       </Box>
       <QuadratComponent position='SouthwestCorner' />
       <QuadratComponent position='NorthwestCorner' />
@@ -56,7 +60,7 @@ const InvasiveAndThreatenedSpeciesTab = () => {
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}>
           {strings.ADDITIONAL_INVASIVE_THREATENED_SPECIES}
         </Typography>
-        <QuadratSpeciesEditableTable editable={true} species={additionalSpecies} />
+        <QuadratSpeciesEditableTable editable={isObserved} species={additionalSpecies} />
       </Box>
       {monitoringPlot?.monitoringPlotId && (
         <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} isBiomass />

@@ -29,7 +29,9 @@ const setup = ({ gateFirstUpdate = false } = {}) => {
   // The results endpoint is stateful so that the refetch an update triggers reflects the change,
   // the way it would against the real API.
   const plot = {
+    completedTime: '2026-01-15T00:00:00Z',
     monitoringPlotId: 9,
+    status: 'Completed',
     species: [
       { certainty: 'Known', speciesId: ACACIA.id, totalExisting: 0, totalLive: 4, totalDead: 1 },
       { certainty: 'Known', speciesId: DUOSPERMA.id, totalExisting: 2, totalLive: 6, totalDead: 0 },

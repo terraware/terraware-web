@@ -19,6 +19,7 @@ import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMea
 import SpeciesSearchSelect from 'src/scenes/ObservationsRouterV2/SingleView/SpeciesSearchSelect';
 import { ExistingTreePayload } from 'src/types/Observations';
 import { Species } from 'src/types/Species';
+import { isMonitoringPlotObserved } from 'src/utils/observation';
 
 import useBiomassPlot from './useBiomassPlot';
 
@@ -94,6 +95,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const { biomassMeasurement, monitoringPlot, observationId } = useBiomassPlot();
+  const isObserved = isMonitoringPlotObserved(monitoringPlot);
   const forestType = biomassMeasurement?.forestType;
 
   const [update] = useUpdateCompletedObservationPlotMutation();
@@ -977,7 +979,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           createDisplayMode: 'row',
           positionCreatingRow: 'bottom',
           enableBottomToolbar: true,
-          renderBottomToolbarCustomActions: renderAddActions,
+          ...(isObserved ? { renderBottomToolbarCustomActions: renderAddActions } : {}),
           muiTableBodyRowProps: rowPropsWithDropdownOnTop,
           enableRowActions: true,
           positionActionsColumn: 'last',
