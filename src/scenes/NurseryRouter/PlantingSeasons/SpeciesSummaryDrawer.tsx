@@ -4,8 +4,9 @@ import { Box, Drawer, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
+import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
-import strings from 'src/strings';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type SpeciesSummaryDrawerProps = {
   open: boolean;
@@ -25,6 +26,8 @@ type DisplayRow = {
 
 const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummaryDrawerProps): JSX.Element => {
   const theme = useTheme();
+  const { strings } = useLocalization();
+  const { format } = useNumberFormatter();
   const { findSpeciesById } = useOrganizationSpecies();
   const [getSummary, { data: summaryRows }] = useLazyGetPlantingSeasonSpeciesSummaryQuery();
 
@@ -138,16 +141,16 @@ const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummar
               )}
             </Box>
             <Typography fontSize='16px' textAlign='right'>
-              {row.target.toLocaleString()}
+              {format(row.target)}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
-              {row.allocated.toLocaleString()}
+              {format(row.allocated)}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
-              {row.withdrawn.toLocaleString()}
+              {format(row.withdrawn)}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
-              {row.leftToPlant.toLocaleString()}
+              {format(row.leftToPlant)}
             </Typography>
           </Box>
         ))}
@@ -165,16 +168,16 @@ const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummar
             {strings.TOTALS}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {totals.target.toLocaleString()}
+            {format(totals.target)}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {totals.allocated.toLocaleString()}
+            {format(totals.allocated)}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {totals.withdrawn.toLocaleString()}
+            {format(totals.withdrawn)}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {totals.leftToPlant.toLocaleString()}
+            {format(totals.leftToPlant)}
           </Typography>
         </Box>
       </Box>

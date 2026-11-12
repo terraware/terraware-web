@@ -190,11 +190,11 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
       if (rendererProps.column.key === 'collectedTime' && rendererProps.value) {
         const ms = new Date(rendererProps.value as string).getTime();
         const tz = rendererProps.row.facility_name ? facilityNameToTz[rendererProps.row.facility_name] : undefined;
-        return <span>{getDateTimeDisplayValue(ms, tz)}</span>;
+        return <span>{getDateTimeDisplayValue(ms, tz, activeLocale)}</span>;
       }
       return CellRenderer(rendererProps);
     },
-    [facilityNameToTz]
+    [facilityNameToTz, activeLocale]
   );
 
   const entitySpecificFilterConfigs: EntitySpecificFilterConfig[] = useMemo(

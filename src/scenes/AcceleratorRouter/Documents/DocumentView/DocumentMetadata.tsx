@@ -3,8 +3,8 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
+import { useLocalization } from 'src/providers';
 import { useGetUserQuery } from 'src/queries/generated/users';
-import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
 import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
@@ -17,6 +17,7 @@ type DocumentMetadataProps = {
 
 const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps): JSX.Element => {
   const { name, modifiedBy, modifiedTime, projectId } = document;
+  const { activeLocale, strings } = useLocalization();
 
   const theme = useTheme();
   const { acceleratorProjects } = useAcceleratorProjects();
@@ -25,7 +26,10 @@ const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps)
   const modifiedByUser = modifiedByData?.user;
 
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
-  const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);
+  const modifiedTimeDisplay = useMemo(
+    () => getDateTimeDisplayValue(new Date(modifiedTime).getTime(), undefined, activeLocale),
+    [modifiedTime, activeLocale]
+  );
 
   const project = acceleratorProjects?.find((proj) => proj.projectId === projectId);
 

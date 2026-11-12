@@ -6,6 +6,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import { useLocalization } from 'src/providers';
 import { BatchForWithdraw } from 'src/queries/search/batchesForWithdraw';
 import { PlantingDateRequestSubstratumSpecies } from 'src/queries/search/plantingDateRequests';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const batchGridTemplateColumns = '2fr 1fr 1fr 1fr';
 const withdrawColumnSx = { gridColumn: 4 };
@@ -32,6 +33,7 @@ const RequestSpeciesBox = ({
 }: RequestSpeciesBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { format } = useNumberFormatter();
 
   return (
     <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
@@ -62,7 +64,7 @@ const RequestSpeciesBox = ({
             {strings.REMAINING_TO_WITHDRAW}:
           </Typography>
           <Typography fontSize='16px' fontWeight={600}>
-            {Math.max(0, species.quantity - species.withdrawnQuantity).toLocaleString()}
+            {format(Math.max(0, species.quantity - species.withdrawnQuantity))}
           </Typography>
         </Box>
       </Box>
@@ -110,7 +112,7 @@ const RequestSpeciesBox = ({
                 {batch.batchNumber}
               </Typography>
               <Typography fontSize='16px' textAlign='right'>
-                {batch.readyQuantity.toLocaleString()}
+                {format(batch.readyQuantity)}
               </Typography>
               <Box sx={withdrawInputSx}>
                 <TextField

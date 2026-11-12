@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type SpeciesTargetsTableProps = {
   rows: SpeciesTargetForSubstratum[];
@@ -12,6 +13,7 @@ type SpeciesTargetsTableProps = {
 const SpeciesTargetsTable = ({ rows }: SpeciesTargetsTableProps): JSX.Element | null => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { format } = useNumberFormatter();
 
   if (rows.length === 0) {
     return null;
@@ -66,13 +68,13 @@ const SpeciesTargetsTable = ({ rows }: SpeciesTargetsTableProps): JSX.Element | 
               {row.commonName ? ` (${row.commonName})` : ''}
             </Typography>
             <Typography fontSize='14px' textAlign='right'>
-              {row.target.toLocaleString()}
+              {format(row.target)}
             </Typography>
             <Typography fontSize='14px' textAlign='right'>
-              {row.alreadyWithdrawn.toLocaleString()}
+              {format(row.alreadyWithdrawn)}
             </Typography>
             <Typography fontSize='14px' textAlign='right'>
-              {row.notYetWithdrawn.toLocaleString()}
+              {format(row.notYetWithdrawn)}
             </Typography>
           </Box>
         ))}

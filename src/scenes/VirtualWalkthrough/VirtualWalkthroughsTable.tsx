@@ -67,7 +67,8 @@ export default function VirtualWalkthroughsTable({
     showColumnFilters,
     showGlobalFilter,
   } = useTableState(TABLE);
-  const { strings } = useLocalization();
+  const { strings, activeLocale } = useLocalization();
+  const dateLocale = activeLocale === 'gx' ? 'fr' : activeLocale || 'en';
 
   const getStatusLabel = useCallback(
     (file: OrganizationVirtualWalkthrough): string => {
@@ -313,7 +314,7 @@ export default function VirtualWalkthroughsTable({
       {
         id: 'createdTime',
         header: strings.DATE_UPLOADED,
-        accessorFn: (row) => (row.createdTime ? new Date(row.createdTime).toLocaleDateString() : ''),
+        accessorFn: (row) => (row.createdTime ? new Date(row.createdTime).toLocaleDateString(dateLocale) : ''),
       },
       {
         id: 'videoLink',
@@ -340,7 +341,17 @@ export default function VirtualWalkthroughsTable({
         Cell: RemoveCell,
       },
     ];
-  }, [FlagCell, LocationCell, RemoveCell, StatusCell, ThumbnailCell, VideoLinkCell, getStatusLabel, strings]);
+  }, [
+    FlagCell,
+    LocationCell,
+    RemoveCell,
+    StatusCell,
+    ThumbnailCell,
+    VideoLinkCell,
+    getStatusLabel,
+    strings,
+    dateLocale,
+  ]);
 
   return (
     <>
