@@ -59,6 +59,7 @@ import ProblemTooltip from './ProblemTooltip';
 import SpeciesCheckModal, { SpeciesCheckEntry } from './SpeciesCheck/SpeciesCheckModal';
 import { NATIVITY_VALUES, Nativity, getNativityLabel } from './SpeciesCheck/types';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
+import normalizeSpeciesColumnFilters from './columnFilters';
 import { SpeciesSearchResultRow } from './types';
 
 const TABLE = TABLES.species;
@@ -297,6 +298,8 @@ export default function SpeciesListView(): JSX.Element {
     sorting,
   } = useTableState(TABLE, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
+    persistFilters: true,
+    normalizeColumnFilters: normalizeSpeciesColumnFilters,
     persistPageIndex: {
       isLoading:
         speciesLoading || projectsLoading || !orgBootstrapped || !participantDataKnown || acceleratorProjectsLoading,
@@ -722,7 +725,7 @@ export default function SpeciesListView(): JSX.Element {
         filterVariant: 'select',
         filterSelectOptions: uniqueConservationCategories,
         filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, value: string) =>
-          row.original.conservationCategory === (value.match(/\(([A-Z]{2})\)$/)?.[1] ?? value),
+          row.original.conservationCategory === value,
         sortUndefined: 'last',
       },
       {
@@ -939,7 +942,6 @@ export default function SpeciesListView(): JSX.Element {
           enableGlobalFilter={true}
           enableColumnFilters={true}
           enableColumnOrdering={true}
-          stickyFilters={true}
           storageKey={TABLE.storageKey}
           enablePagination={true}
           enableTopToolbar={true}

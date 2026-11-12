@@ -117,6 +117,8 @@ describe('SpeciesListView localization', () => {
     ['conservationCategory', 'EN'],
     ['conservationCategory', 'Endangered (EN)'],
     ['rare', 'Yes'],
+    ['rare', 'Oui'],
+    ['rare', 'Sí'],
   ])('restores an existing %s filter in a different language', async (id, value) => {
     localStorage.setItem('species-list-table_columnFilters', JSON.stringify([{ id, value }]));
     renderWithProviders(<SpeciesListView />, {
@@ -189,6 +191,8 @@ describe('SpeciesListView localization', () => {
           { id: 'growthForms', value: ['Tree'] },
           { id: 'seedStorageBehavior', value: 'Orthodox' },
           { id: 'ecosystemTypes', value: ['Mangroves'] },
+          { id: 'conservationCategory', value: 'En danger (EN)' },
+          { id: 'rare', value: 'Sí' },
         ],
       },
     };
