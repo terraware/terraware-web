@@ -287,7 +287,7 @@ export type PlantingZonePayload = {
 export type StratumPlotCountsResponsePayload = {
   numPermanentPlots: number;
   numTemporaryPlots: number;
-  observationType: 'Monitoring' | 'Biomass Measurements';
+  observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
 };
 export type SubstratumResponsePayload = {
   /** Area of substratum in hectares. */

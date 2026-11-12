@@ -90,7 +90,7 @@ export type FunderActivityObservationPayload = {
   livePlants?: number;
   /** If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots. */
   monitoringPlotNumber?: number;
-  observationType: 'Monitoring' | 'Biomass Measurements';
+  observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
   plantDensity?: number;
   survivalRate?: number;
 };

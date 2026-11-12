@@ -202,7 +202,7 @@ export type ActivityObservationPayload = {
   /** If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots. */
   monitoringPlotNumber?: number;
   observationId: number;
-  observationType: 'Monitoring' | 'Biomass Measurements';
+  observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
 };
 export type ActivityPayload = {
   date: string;
@@ -269,7 +269,7 @@ export type AdminActivityObservationPayload = {
   isAdHoc: boolean;
   monitoringPlotNumber?: number;
   observationId: number;
-  observationType: 'Monitoring' | 'Biomass Measurements';
+  observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
 };
 export type AdminActivityPayload = {
   createdBy: number;

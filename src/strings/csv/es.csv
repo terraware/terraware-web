@@ -249,6 +249,7 @@ BACK_TO_EDIT,Volver a editar,b3d8a9a6
 BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
 BASELINE,Línea base,332af00e
+BASELINE_SURVEY,Encuesta de referencia,bc76c649
 BATCH,Lote,9fdfdd9b
 BATCH_CREATED,Lote creado,1a382f74
 BATCH_HISTORY_NO_EVENTS,Aún no hay historial.,f8822669
@@ -1203,6 +1204,7 @@ MATCH_SPECIES,Verificar coincidencias,8dc1bd1d
 MATCH_SPECIES_MODAL_DESCRIPTION,"Seleccionar coincidencias para las especies no reconocidas. Una vez realizado, no podrá modificarla ni deshacerla.",788bcc85
 MATCH_UNRECOGNIZED_SPECIES,Verificar especies no reconocidas,e8523786
 MAX,Máximo,7b696111
+MEASURE_MY_SITE_BEFORE_PLANTING,Medir mi sitio antes de plantar,c4c0c233
 MEASUREMENT_TIME,Tiempo de medición,002a568f
 MEDIA_MIX,Mezcla de vivero,699d2d86
 MEETING_URL,URL de la reunión,933a0ae3
@@ -1877,6 +1879,7 @@ RECEIVED_DATE,Fecha de recepción,9814318f
 RECEIVING_DATE_REQUIRED,Fecha de recepción *,bd66283e
 RECENT,Recientes,1e4a4bb6
 RECOMMENDED,Recomendado,74c8bc37
+RECORD_PLOT_CONDITIONS_AND_PLANTS_ALREADY_THERE,Registrar las condiciones de la parcela y las plantas ya presentes,064f9597
 RECORDED_SESSION,Sesión grabada,797dfcf5
 RECORDED_SESSIONS,Sesiones grabadas,60a9c3c7
 RECORDING_DATE_ERROR,Debe ser posterior a la fecha de inicio,3ca9e68a
