@@ -7,7 +7,7 @@ export type ChartMessageProps = {
 };
 
 /** A note centered over a chart, for when the chart itself has nothing to plot. */
-export default function ChartMessage({ message }: ChartMessageProps): JSX.Element {
+const ChartMessage = ({ message }: ChartMessageProps): JSX.Element => {
   const theme = useTheme();
 
   return (
@@ -29,4 +29,6 @@ export default function ChartMessage({ message }: ChartMessageProps): JSX.Elemen
       {message}
     </Box>
   );
-}
+};
+
+export default ChartMessage;
