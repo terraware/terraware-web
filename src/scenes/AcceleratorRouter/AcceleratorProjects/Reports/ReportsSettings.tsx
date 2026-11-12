@@ -2,12 +2,13 @@ import React, { type JSX, type ReactNode, useCallback, useMemo, useState } from 
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Badge, Button, EditableTable, EditableTableColumn, Textfield } from '@terraware/web-components';
+import { Badge, Button, EditableTableColumn, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { MRT_Cell } from 'material-react-table';
 
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';

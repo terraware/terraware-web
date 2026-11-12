@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
@@ -14,6 +14,7 @@ import {
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';

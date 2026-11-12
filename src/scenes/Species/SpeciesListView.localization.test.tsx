@@ -3,6 +3,8 @@ import React from 'react';
 import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
+import { MRT_Localization_ES } from 'material-react-table/locales/es';
+import { MRT_Localization_FR } from 'material-react-table/locales/fr';
 
 import { LocalizationContext } from 'src/providers/contexts';
 import { useLocalization } from 'src/providers/hooks';
@@ -11,6 +13,13 @@ import { buildSpecies, buildUser, mockGet, renderWithProviders } from 'src/test-
 import { setTestLocale } from 'src/test-utils/setupStrings';
 
 import SpeciesListView from './SpeciesListView';
+
+const tableLocalization = () =>
+  strings.getLanguage() === 'es'
+    ? MRT_Localization_ES
+    : strings.getLanguage() === 'fr'
+      ? MRT_Localization_FR
+      : MRT_Localization_EN;
 
 const LocalizedSpeciesList = ({ locale }: { locale: string }) => {
   const localization = useLocalization();
@@ -98,7 +107,7 @@ describe('SpeciesListView localization', () => {
     });
     await screen.findByRole('link', { name: 'Acacia koa' });
 
-    await user.click(screen.getByRole('button', { name: MRT_Localization_EN.showHideFilters }));
+    await user.click(screen.getByRole('button', { name: tableLocalization().showHideFilters }));
     await user.click(screen.getByRole('combobox', { name: new RegExp(strings[columnKey]) }));
     await user.click(await screen.findByRole('option', { name: strings[valueKey] }));
     await user.keyboard('{Escape}');
@@ -158,7 +167,7 @@ describe('SpeciesListView localization', () => {
   ] as const)('keeps a selected %s filter when switching languages', async (columnKey, valueKey) => {
     const { user, rerender } = renderWithProviders(<LocalizedSpeciesList locale='en' />);
     await screen.findByRole('link', { name: 'Acacia koa' });
-    await user.click(screen.getByRole('button', { name: MRT_Localization_EN.showHideFilters }));
+    await user.click(screen.getByRole('button', { name: tableLocalization().showHideFilters }));
     await user.click(screen.getByRole('combobox', { name: new RegExp(strings[columnKey]) }));
     await user.click(await screen.findByRole('option', { name: strings[valueKey] }));
     await user.keyboard('{Escape}');
@@ -187,7 +196,7 @@ describe('SpeciesListView localization', () => {
       localization: { activeLocale: 'es', selectedLocale: 'es' },
     });
     await screen.findByRole('link', { name: 'Acacia koa' });
-    await user.click(screen.getByRole('button', { name: MRT_Localization_EN.showHideFilters }));
+    await user.click(screen.getByRole('button', { name: tableLocalization().showHideFilters }));
     await user.click(screen.getByRole('combobox', { name: new RegExp(strings[columnKey]) }));
     const option = await screen.findByRole('option', { name: strings[valueKey] });
     await user.click(option);
