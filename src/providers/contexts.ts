@@ -18,6 +18,7 @@ export const UserContext = createContext<ProvidedUserData>({
   },
   userPreferences: {},
   bootstrapped: false,
+  isLoadingUser: false,
   updateUserCookieConsent: () => Promise.resolve(),
   updateUserPreferences: () => Promise.resolve(true),
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

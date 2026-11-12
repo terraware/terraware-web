@@ -38,6 +38,8 @@ export default function LocalizationProvider({
   const supportedLocales = useSupportedLocales();
   const dispatch = useAppDispatch();
   const previousLocaleRef = useRef<string | null>(null);
+  const activeLocaleRef = useRef(activeLocale);
+  activeLocaleRef.current = activeLocale;
 
   // Keep the locale that RTK Query sends as Accept-Language in sync synchronously (before the query
   // hooks below run) so the initial fetch is already localized.
@@ -123,13 +125,18 @@ export default function LocalizationProvider({
         setStrings(localizedStrings);
       };
 
-      void fetchStrings();
+      fetchStrings().catch(() => {
+        // Stay on the language that's already loaded rather than waiting forever for this one.
+        if (!cancelled && activeLocaleRef.current) {
+          setSelectedLocale(activeLocaleRef.current);
+        }
+      });
 
       return () => {
         cancelled = true;
       };
     }
-  }, [selectedLocale, setActiveLocale, supportedLocales]);
+  }, [selectedLocale, setActiveLocale, setSelectedLocale, supportedLocales]);
 
   if (selectedLocale) {
     const context: ProvidedLocalizationData = {

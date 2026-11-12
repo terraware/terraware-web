@@ -77,6 +77,7 @@ const buildUserContext = (overrides: Partial<ProvidedUserData> = {}): ProvidedUs
     // directly only when a test needs a permission the ACL can't express through those.
     isAllowed: (permission, metadata) => (user ? isAllowedACL(user, permission, metadata) : false),
     reloadUser: () => undefined,
+    isLoadingUser: false,
     updateUserCookieConsent: () => Promise.resolve(),
     updateUserPreferences: () => Promise.resolve(true),
     ...overrides,

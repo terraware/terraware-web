@@ -11,6 +11,7 @@ export type PreferencesType = { [key: string]: unknown };
 export type ProvidedUserData = {
   bootstrapped: boolean;
   isAllowed: (permission: GlobalRolePermission, metadata?: unknown) => boolean;
+  isLoadingUser: boolean;
   reloadUser: () => void;
   updateUserCookieConsent: (consent: boolean) => Promise<void>;
   updateUserPreferences: (preferences: PreferencesType) => Promise<boolean>;
