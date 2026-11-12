@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import {
@@ -19,6 +19,7 @@ import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
@@ -360,13 +361,13 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
         enableBottomToolbar={false}
         initialSorting={[{ id: 'monitoringPlotNumber', desc: false }]}
         renderToolbarInternalActions={({ table }) => (
-          <Box display='flex' gap={0.5}>
+          <TableToolbarActions>
             <MRT_ToggleGlobalFilterButton table={table} />
             <MRT_ToggleFiltersButton table={table} />
             <MRT_ShowHideColumnsButton table={table} />
             <MRT_ToggleDensePaddingButton table={table} />
             <MRT_ToggleFullScreenButton table={table} />
-          </Box>
+          </TableToolbarActions>
         )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,

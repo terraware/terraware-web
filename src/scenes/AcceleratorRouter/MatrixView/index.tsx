@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Card, Checkbox, Chip, Grid, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
@@ -20,6 +20,7 @@ import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
@@ -943,7 +944,7 @@ const MatrixView = () => {
 
   const renderToolbarInternalActions = useCallback(
     ({ table }: { table: MRT_TableInstance<ProjectsWithVariablesSearchResult> }) => (
-      <Box>
+      <TableToolbarActions>
         <MRT_ToggleFiltersButton table={table} />
         <Tooltip title={strings.MANAGE_COLUMNS}>
           <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
@@ -963,7 +964,7 @@ const MatrixView = () => {
             />,
             document.body
           )}
-      </Box>
+      </TableToolbarActions>
     ),
     [
       allVariables,
@@ -987,21 +988,17 @@ const MatrixView = () => {
         return columnMenuItemsCopy;
       },
       renderTopToolbarCustomActions: ({ table }) => (
-        <Grid container style={{ maxWidth: '50%' }} spacing={1}>
-          <Grid>
-            <CurrentView
-              defaultPreset={currentView}
-              defaultSettings={defaultViewSettings}
-              onPresetChange={onCurrentViewChange}
-              presetViews={[
-                { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
-                { label: strings.APPLICANTS, value: 'applicants' },
-              ]}
-              table={table}
-              tableDefinition={TABLES.matrixView}
-            />
-          </Grid>
-        </Grid>
+        <CurrentView
+          defaultPreset={currentView}
+          defaultSettings={defaultViewSettings}
+          onPresetChange={onCurrentViewChange}
+          presetViews={[
+            { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
+            { label: strings.APPLICANTS, value: 'applicants' },
+          ]}
+          table={table}
+          tableDefinition={TABLES.matrixView}
+        />
       ),
       state: {
         columnFilters: visibleColumnFilters,

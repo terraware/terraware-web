@@ -18,6 +18,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -416,12 +417,12 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
             />
           ),
           renderToolbarInternalActions: ({ table }) => (
-            <Box display='flex' gap={0.5}>
+            <TableToolbarActions>
               <MRT_ToggleGlobalFilterButton table={table} />
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
-            </Box>
+            </TableToolbarActions>
           ),
         }}
         sx={{ padding: 0 }}

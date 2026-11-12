@@ -25,6 +25,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -944,7 +945,7 @@ export default function SpeciesListView(): JSX.Element {
               />
             ),
             renderToolbarInternalActions: ({ table }) => (
-              <Box display='flex' gap={0.5}>
+              <TableToolbarActions>
                 <Tooltip title={strings.EXPORT}>
                   <IconButton onClick={() => downloadReportHandler(table)}>
                     <Icon name='iconExport' size='medium' />
@@ -955,7 +956,7 @@ export default function SpeciesListView(): JSX.Element {
                 <MRT_ShowHideColumnsButton table={table} />
                 <MRT_ToggleDensePaddingButton table={table} />
                 <MRT_ToggleFullScreenButton table={table} />
-              </Box>
+              </TableToolbarActions>
             ),
             muiTableBodyCellProps: ({ row, column, table }) => {
               const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
