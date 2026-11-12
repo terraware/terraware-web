@@ -1,32 +1,26 @@
 import { MRT_ColumnFiltersState } from 'material-react-table';
 
-// Labels written by earlier versions of the table must remain readable after a language change.
-const legacyValues: Record<string, Record<string, string>> = {
-  rare: { Yes: 'Yes', No: 'No', Sí: 'Yes', Oui: 'Yes', Non: 'No' },
-  status: {
-    Nativo: 'Native',
-    Indigène: 'Native',
-    Introducido: 'Introduced',
-    Introduit: 'Introduced',
-    Invasiva: 'Invasive',
-    Desconocido: 'Unknown',
-    Inconnu: 'Unknown',
-    'Not set': 'Not Set',
-    'No establecido': 'Not Set',
-    'Non défini': 'Not Set',
-  },
+import { conservationCategories, ecosystemTypes, growthForms, storageBehaviors } from 'src/types/Species';
+
+import { NATIVITY_VALUES } from './SpeciesCheck/types';
+
+const validValues: Record<string, string[]> = {
+  rare: ['Yes', 'No'],
+  status: [...NATIVITY_VALUES, 'Not Set'],
+  conservationCategory: conservationCategories().map(({ value }) => value),
+  growthForms: growthForms(null).map(({ value }) => value),
+  ecosystemTypes: ecosystemTypes().map(({ value }) => value),
+  seedStorageBehavior: storageBehaviors().map(({ value }) => value),
 };
 
 const normalizeSpeciesColumnFilters = (filters: MRT_ColumnFiltersState): MRT_ColumnFiltersState =>
-  filters.map((filter) => {
-    if (typeof filter.value !== 'string') {
-      return filter;
+  filters.filter(({ id, value }) => {
+    const allowed = validValues[id];
+    if (!allowed) {
+      return true;
     }
-    const value =
-      filter.id === 'conservationCategory'
-        ? (filter.value.match(/\(([A-Z]{2})\)$/)?.[1] ?? filter.value)
-        : (legacyValues[filter.id]?.[filter.value] ?? filter.value);
-    return value === filter.value ? filter : { ...filter, value };
+    const values = Array.isArray(value) ? value : [value];
+    return values.every((entry) => typeof entry === 'string' && allowed.includes(entry));
   });
 
 export default normalizeSpeciesColumnFilters;
