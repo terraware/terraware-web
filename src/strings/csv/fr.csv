@@ -1822,7 +1822,6 @@ PUBLISHED_FUNDER_REPORT,Rapport de bailleur publié,28419d0b
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
 PURPOSE,But,ff06abab
 PURPOSE_REQUIRED,But *,3f585469
-PURPOSE_WITH_DESTINATION,{0} : {1},b9a86233
 QUADRAT_PHOTO_CANNOT_DELETE_INFO,Les photos de quadrat ne peuvent pas être supprimées.,264a9867
 QUADRAT_PHOTOS,Photos de quadrat,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,Les photos de quadrats ne peuvent pas être supprimées.,24cf5aff

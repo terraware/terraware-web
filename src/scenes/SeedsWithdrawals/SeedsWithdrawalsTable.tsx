@@ -217,15 +217,12 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         );
       }
 
-      if (row.purpose === 'Nursery' && row.destination) {
-        const withNursery = strings.formatString(strings.PURPOSE_WITH_DESTINATION, label, row.destination);
-        // A nursery withdrawal creates the batch its seeds were transferred into.
-        return row.batchId ? (
+      // A nursery withdrawal creates the batch its seeds were transferred into.
+      if (row.purpose === 'Nursery' && row.batchId) {
+        return (
           <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(row.batchId))} style={accessionLinkStyles}>
-            {withNursery}
+            {label}
           </Link>
-        ) : (
-          <span>{withNursery}</span>
         );
       }
 
