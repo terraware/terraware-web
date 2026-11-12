@@ -172,7 +172,7 @@ test.describe('InventoryTests', () => {
       .getByRole('button', { name: 'Withdraw', ...exactOptions })
       .click();
     await expect(page.getByText('1 batch for a total of 150')).toBeVisible();
-    await page.getByRole('button', { name: 'Withdrawals' }).click();
+    await openNavItem(page, 'Seedlings', 'Withdrawals');
     await page.getByRole('row', { name: 'Nursery Transfer' }).locator('[id$="-withdrawnDate"]').click();
     await expect(page.getByText('Purpose Nursery Transfer')).toBeVisible();
     await expect(page.getByText('Quantity 150')).toBeVisible();
