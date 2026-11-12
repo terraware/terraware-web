@@ -12,6 +12,12 @@ import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useLocalization, useOrganization } from 'src/providers';
 import { MonitoringPlotStatus, ObservationState } from 'src/types/Observations';
+import {
+  getBiomassObservationTotals,
+  getBiomassPlotTotals,
+  getBiomassStratumTotals,
+  getBiomassSubstratumTotals,
+} from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 
 import { useAbandonObservationModal } from '../Abandon';
@@ -42,6 +48,7 @@ type ObservationStatsDrawerProps = {
 };
 
 const ObservationStatsDrawer = ({
+  isBiomass,
   layerFeatureId,
   onViewOnMap,
   plantingSiteId,
@@ -81,10 +88,12 @@ const ObservationStatsDrawer = ({
       const observedPermanentPlots = plots.filter((plot) => plot.isPermanent && plot.completedTime).length;
       const observedTemporaryPlots = plots.filter((plot) => !plot.isPermanent && plot.completedTime).length;
 
+      const totals = isBiomass ? getBiomassObservationTotals(results) : undefined;
+
       return {
         name: plantingSite?.name,
-        observedPlants: results?.totalPlants,
-        observedSpecies: results?.totalSpecies,
+        observedPlants: totals ? totals.totalPlants : results?.totalPlants,
+        observedSpecies: totals ? totals.totalSpecies : results?.totalSpecies,
         observedDensity: results?.observedDensity,
         observationState: results?.state,
         survivalRate: results?.survivalRate,
@@ -105,10 +114,12 @@ const ObservationStatsDrawer = ({
       const totalTemporaryPlots = plots.filter((plot) => !plot.isPermanent).length;
       const observedPermanentPlots = plots.filter((plot) => plot.isPermanent && plot.completedTime).length;
       const observedTemporaryPlots = plots.filter((plot) => !plot.isPermanent && plot.completedTime).length;
+      const totals = isBiomass && stratumResults ? getBiomassStratumTotals(stratumResults) : undefined;
+
       return {
         name: stratumHistory?.name ?? stratum?.name,
-        observedPlants: stratumResults?.totalPlants,
-        observedSpecies: stratumResults?.totalSpecies,
+        observedPlants: totals ? totals.totalPlants : stratumResults?.totalPlants,
+        observedSpecies: totals ? totals.totalSpecies : stratumResults?.totalSpecies,
         observedDensity: stratumResults?.observedDensity,
         survivalRate: stratumResults?.survivalRate,
         survivalRatePending: stratumResults?.pending,
@@ -134,10 +145,12 @@ const ObservationStatsDrawer = ({
       const totalTemporaryPlots = plots.filter((plot) => !plot.isPermanent).length;
       const observedPermanentPlots = plots.filter((plot) => plot.isPermanent && plot.completedTime).length;
       const observedTemporaryPlots = plots.filter((plot) => !plot.isPermanent && plot.completedTime).length;
+      const totals = isBiomass && substratumResults ? getBiomassSubstratumTotals(substratumResults) : undefined;
+
       return {
         name: substratumHistory?.name ?? substratum?.name,
-        observedPlants: substratumResults?.totalPlants,
-        observedSpecies: substratumResults?.totalSpecies,
+        observedPlants: totals ? totals.totalPlants : substratumResults?.totalPlants,
+        observedSpecies: totals ? totals.totalSpecies : substratumResults?.totalSpecies,
         observedDensity: substratumResults?.plantingDensity,
         survivalRate: substratumResults?.survivalRate,
         survivalRatePending: substratumResults?.pending,
@@ -165,10 +178,12 @@ const ObservationStatsDrawer = ({
       );
       const plotType = plotResults?.isAdHoc ? 'adHoc' : plotResults?.isPermanent ? 'permanent' : 'temporary';
       const plotStatus = plotResults?.isAdHoc ? 'Completed' : plotResults?.status;
+      const totals = isBiomass && plotResults ? getBiomassPlotTotals(plotResults) : undefined;
+
       return {
         name: plot ? `${plot.plotNumber}` : undefined,
-        observedPlants: plotResults?.totalPlants,
-        observedSpecies: plotResults?.totalSpecies,
+        observedPlants: totals ? totals.totalPlants : plotResults?.totalPlants,
+        observedSpecies: totals ? totals.totalSpecies : plotResults?.totalSpecies,
         observedDensity: plotResults?.plantingDensity,
         plotType,
         plotStatus,
@@ -178,7 +193,7 @@ const ObservationStatsDrawer = ({
     } else {
       return undefined;
     }
-  }, [layerFeatureId, plantingSite, results, siteHistory?.strata]);
+  }, [isBiomass, layerFeatureId, plantingSite, results, siteHistory?.strata]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     const drawerRows: MapDrawerTableRow[] = [];
@@ -255,12 +270,14 @@ const ObservationStatsDrawer = ({
         value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
       });
 
-      drawerRows.push({
-        key: strings.PLANT_DENSITY,
-        value: properties.observedDensity ? `${properties.observedDensity}` : strings.NO_DATA_YET,
-      });
+      if (!isBiomass) {
+        drawerRows.push({
+          key: strings.PLANT_DENSITY,
+          value: properties.observedDensity ? `${properties.observedDensity}` : strings.NO_DATA_YET,
+        });
+      }
 
-      if (properties.plotType !== 'adHoc') {
+      if (!isBiomass && properties.plotType !== 'adHoc') {
         drawerRows.push({
           key: strings.SURVIVAL_RATE,
           value: properties.survivalRate ? (
@@ -275,7 +292,7 @@ const ObservationStatsDrawer = ({
     }
 
     return drawerRows;
-  }, [properties, strings]);
+  }, [isBiomass, properties, strings]);
 
   const stratumHasMonitoringPlots = useMemo(() => {
     if (layerFeatureId.layerId !== 'strata') {

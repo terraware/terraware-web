@@ -319,9 +319,6 @@ const ObservationMap = ({
           if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
             observed = true;
           }
-        } else if (isBiomassSelected) {
-          // Biomass is measured per plot, so a site, stratum or substratum has nothing to show.
-          observed = false;
         } else if (layerId === 'sites') {
           observed = true;
         } else if (layerId === 'strata') {
@@ -348,7 +345,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [isBiomassSelected, selectFeature, adHocObservationResults, selectedResults]
+    [selectFeature, adHocObservationResults, selectedResults]
   );
 
   const siteLayers = useMemo((): MapLayer[] => {
@@ -1252,33 +1249,29 @@ const ObservationMap = ({
             )?.observationId
           : undefined;
       const observationId = adHocObservationId ?? selectedResults.observationId;
-      const isBiomassObservation = isBiomass || biomassResults.some((result) => result.observationId === observationId);
+      const biomassObservation = biomassResults.find((result) => result.observationId === observationId);
+      const isBiomassObservation = isBiomass || biomassObservation !== undefined;
 
-      if (isBiomassObservation) {
-        const plotLayerIds = ['adHocPlots', 'permanentPlots', 'temporaryPlots'];
+      // A scheduled biomass observation has the regions and plots a plant monitoring one has, so it
+      // uses the same drawers; only an ad-hoc observation is a single plot of biomass measurements.
+      if (biomassObservation?.isAdHoc) {
         return (
           <BiomassObservationStatsDrawer
-            monitoringPlotId={
-              adHocObservationId === undefined && plotLayerIds.includes(selectedFeature.layerFeatureId.layerId)
-                ? Number(selectedFeature.layerFeatureId.featureId)
-                : undefined
-            }
             observationId={observationId}
             onViewOnMap={viewSelectedPlotOnMap}
             plantingSiteId={selectedFeature.plantingSiteId}
           />
         );
-      } else {
-        if (observationId) {
-          return (
-            <ObservationStatsDrawer
-              layerFeatureId={selectedFeature.layerFeatureId}
-              observationId={observationId}
-              onViewOnMap={viewSelectedPlotOnMap}
-              plantingSiteId={selectedFeature.plantingSiteId}
-            />
-          );
-        }
+      } else if (observationId) {
+        return (
+          <ObservationStatsDrawer
+            isBiomass={isBiomassObservation}
+            layerFeatureId={selectedFeature.layerFeatureId}
+            observationId={observationId}
+            onViewOnMap={viewSelectedPlotOnMap}
+            plantingSiteId={selectedFeature.plantingSiteId}
+          />
+        );
       }
     }
     if (selectedPhotos.length > 0) {
