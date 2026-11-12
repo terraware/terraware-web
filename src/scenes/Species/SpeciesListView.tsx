@@ -526,8 +526,7 @@ export default function SpeciesListView(): JSX.Element {
   }, []);
 
   const GrowthFormsCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
-    const value = cell.getValue() as string | undefined;
-    const list = value ? value.split(', ') : [];
+    const list = cell.row.original.growthForms ?? [];
     return (
       <TextTruncated
         fontSize={16}
@@ -540,8 +539,7 @@ export default function SpeciesListView(): JSX.Element {
   }, []);
 
   const EcosystemTypesCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
-    const value = cell.getValue() as string | undefined;
-    const list = value ? value.split(', ') : [];
+    const list = cell.row.original.ecosystemTypes ?? [];
     return (
       <TextTruncated
         fontSize={16}
@@ -669,16 +667,12 @@ export default function SpeciesListView(): JSX.Element {
               enableEditing: false,
               filterVariant: 'select' as const,
               filterSelectOptions: [
-                strings.NATIVE,
-                strings.INTRODUCED,
-                strings.INVASIVE,
-                strings.UNKNOWN,
-                strings.NOT_SET,
+                ...NATIVITY_VALUES.map((value) => ({ value, label: getNativityLabel(value) })),
+                { value: 'Not Set', label: strings.NOT_SET },
               ],
               filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string) => {
                 const nativities = statusBySpeciesId.get(row.original.id) ?? [];
-                const labels = nativities.length ? nativities.map(getNativityLabel) : [strings.NOT_SET];
-                return labels.includes(filterValue);
+                return nativities.length ? nativities.includes(filterValue as Nativity) : filterValue === 'Not Set';
               },
               sortUndefined: 'last' as const,
               Cell: StatusCell,
@@ -726,7 +720,9 @@ export default function SpeciesListView(): JSX.Element {
         accessorFn: (row: SpeciesSearchResultRow) => getConservationCategoryString(row.conservationCategory),
         enableEditing: false,
         filterVariant: 'select',
-        filterSelectOptions: uniqueConservationCategories.map((category) => category.label),
+        filterSelectOptions: uniqueConservationCategories,
+        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, value: string) =>
+          row.original.conservationCategory === (value.match(/\(([A-Z]{2})\)$/)?.[1] ?? value),
         sortUndefined: 'last',
       },
       {
@@ -735,7 +731,12 @@ export default function SpeciesListView(): JSX.Element {
         accessorFn: (row: SpeciesSearchResultRow) => (row.rare ? strings.YES : strings.NO),
         enableEditing: false,
         filterVariant: 'select',
-        filterSelectOptions: [strings.YES, strings.NO],
+        filterSelectOptions: [
+          { value: 'Yes', label: strings.YES },
+          { value: 'No', label: strings.NO },
+        ],
+        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, value: string) =>
+          Boolean(row.original.rare) === (value === 'Yes'),
         sortUndefined: 'last',
       },
       {
