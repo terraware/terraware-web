@@ -19,6 +19,7 @@ import {
 
 import CurrentView from 'src/components/common/CurrentView';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS, VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
@@ -40,6 +41,7 @@ import { SeedWithdrawalPurpose } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { TABLES } from 'src/types/Tables';
 import useDebounce from 'src/utils/useDebounce';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { SeedWithdrawalPurposes, seedWithdrawalPurposeLabel } from 'src/utils/withdrawalPurposes';
 
@@ -94,6 +96,7 @@ const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDa
 };
 
 export default function SeedsWithdrawalsTable(): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
@@ -521,7 +524,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         enableColumnActions: true,
         enableHiding: true,
         enableGrouping: false,
-        enableColumnDragging: true,
+        enableColumnDragging: !isMobile,
         positionGlobalFilter: 'right',
         renderTopToolbarCustomActions: ({ table }) => (
           <CurrentView
@@ -557,6 +560,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         },
         muiTopToolbarProps: {
           sx: {
+            ...mobileTopToolbarSx,
             position: 'relative',
             '& > .MuiBox-root': {
               position: 'relative',

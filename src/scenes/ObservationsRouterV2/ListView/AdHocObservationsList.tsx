@@ -17,6 +17,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
@@ -27,6 +28,7 @@ import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { MultiPolygon } from 'src/types/Tracking';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
@@ -101,6 +103,7 @@ export type AdHocObservationsListProps = {
 };
 
 const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): JSX.Element => {
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
@@ -334,7 +337,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           enableGlobalFilterRankedResults: false,
           defaultColumn: { enableEditing: false },
           enableColumnActions: true,
-          enableColumnDragging: true,
+          enableColumnDragging: !isMobile,
           enableColumnPinning: true,
           enableGrouping: false,
           enableHiding: true,
@@ -355,6 +358,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           }),
           muiTablePaperProps: { elevation: 0 },
           positionGlobalFilter: 'right' as const,
+          muiTopToolbarProps: { sx: mobileTopToolbarSx },
           renderEmptyRowsFallback: () =>
             emptyMessage ? (
               <Typography padding={theme.spacing(4)} textAlign='center'>

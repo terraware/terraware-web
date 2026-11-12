@@ -21,6 +21,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -36,6 +37,7 @@ import { TABLES, TableDefinition } from 'src/types/Tables';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
 import { getAllNurseries } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -100,6 +102,7 @@ const DEFAULT_SORTING_BY_ORIGIN: Record<InventoryTableProps['origin'], MRT_Sorti
 };
 
 export default function InventoryTable(props: InventoryTableProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const {
     disableDelete = false,
     nurserySpecies,
@@ -715,7 +718,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   enableColumnPinning: true,
                   enableColumnActions: true,
                   enableHiding: true,
-                  enableColumnDragging: true,
+                  enableColumnDragging: !isMobile,
                   enableColumnOrdering: true,
                   positionGlobalFilter: 'right',
                   positionToolbarAlertBanner: selectedRows.length > 0 ? 'top' : 'none',
@@ -754,7 +757,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     </Box>
                   ),
                   renderTopToolbarCustomActions: ({ table }) => (
-                    <Box display='flex' alignItems='center' gap={2} sx={{ flex: 1, minWidth: 0 }}>
+                    <Box
+                      display='flex'
+                      alignItems='center'
+                      flexWrap={isMobile ? 'wrap' : undefined}
+                      gap={2}
+                      rowGap={1}
+                      sx={{ flex: 1, minWidth: 0 }}
+                    >
                       <CurrentView
                         defaultSettings={defaultViewSettings}
                         onPresetChange={handlePresetChange}
@@ -767,7 +777,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                         ref={setPillListPortalEl}
                         display='flex'
                         alignItems='center'
-                        sx={{ flex: 1, overflow: 'hidden' }}
+                        sx={{
+                          flex: isMobile ? '1 0 100%' : 1,
+                          overflow: 'hidden',
+                          '&:has(> div:empty)': { display: isMobile ? 'none' : undefined },
+                        }}
                       />
                     </Box>
                   ),
@@ -810,6 +824,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   }),
                   muiTopToolbarProps: {
                     sx: {
+                      ...mobileTopToolbarSx,
                       position: 'relative',
                       '& > .MuiBox-root': {
                         position: 'relative',
