@@ -60,11 +60,18 @@ export default function LocalizationProvider({
     return [...timeZonesData.timeZones].sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale ?? 'en'));
   }, [selectedLocale, timeZonesData]);
 
+  // Follow the user's saved locale only when it changes. After a language switch, the user is
+  // refetched and can still carry the previous locale until the profile update lands; reapplying it
+  // would flip the app back to the old language.
+  const userLocale = user ? user.locale || 'en' : undefined;
+  const lastUserLocaleRef = useRef<string | undefined>(undefined);
+
   useEffect(() => {
-    if (user) {
-      setSelectedLocale(user.locale || 'en');
+    if (userLocale && userLocale !== lastUserLocaleRef.current) {
+      lastUserLocaleRef.current = userLocale;
+      setSelectedLocale(userLocale);
     }
-  }, [user, setSelectedLocale]);
+  }, [userLocale, setSelectedLocale]);
 
   useEffect(() => {
     if (selectedLocale) {
@@ -83,6 +90,10 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     if (selectedLocale) {
+      // A quick switch to another locale can finish loading before this one does; don't let this one
+      // overwrite it.
+      let cancelled = false;
+
       const fetchStrings = async () => {
         const language = selectedLocale.replace(/[-_].*/, ''); // 'en-US' => 'en'
         const localeDetails =
@@ -101,6 +112,9 @@ export default function LocalizationProvider({
         const localeMap: ILocalizedStringsMap = {
           [selectedLocale]: { ...getComponentStrings(), ...(await localeDetails.loadModule()).strings },
         };
+        if (cancelled) {
+          return;
+        }
         defaultStrings.setContent(localeMap);
         defaultStrings.setLanguage(selectedLocale);
         const localizedStrings = new LocalizedStrings(localeMap);
@@ -110,6 +124,10 @@ export default function LocalizationProvider({
       };
 
       void fetchStrings();
+
+      return () => {
+        cancelled = true;
+      };
     }
   }, [selectedLocale, setActiveLocale, supportedLocales]);
 

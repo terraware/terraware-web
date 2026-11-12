@@ -67,6 +67,7 @@ const OrganizationHarness = ({ organization, children }: { organization: Organiz
       redirectAndNotify: () => undefined,
       reloadOrganizations: () => Promise.resolve(),
       isFetchingOrganizations: false,
+      isLoadingOrganizations: false,
     }),
     [organization]
   );

@@ -26,6 +26,7 @@ export const UserContext = createContext<ProvidedUserData>({
 
 export const OrganizationContext = createContext<ProvidedOrganizationData>({
   isFetchingOrganizations: false,
+  isLoadingOrganizations: false,
   organizations: [],
   orgPreferences: {},
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
