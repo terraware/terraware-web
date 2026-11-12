@@ -7,11 +7,11 @@ import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useUser } from 'src/providers';
-import strings from 'src/strings';
+import { useLocalization, useUser } from 'src/providers';
 import useEnvironment from 'src/utils/useEnvironment';
 
 export default function UserMenu(): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const { user } = useUser();
   const { isProduction } = useEnvironment();
@@ -58,7 +58,7 @@ export default function UserMenu(): JSX.Element {
     ]);
 
     return items;
-  }, [user, isProduction]);
+  }, [user, isProduction, strings]);
 
   return (
     <PopoverMenu

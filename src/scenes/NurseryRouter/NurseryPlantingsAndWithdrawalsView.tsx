@@ -10,16 +10,16 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
-import strings from 'src/strings';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import NurseryWithdrawals from './NurseryWithdrawalsTabContent';
 import PlantingDateRequestsTabContent from './PlantingDateRequestsTabContent';
 
 export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const contentRef = useRef(null);
   const { selectedOrganization } = useOrganization();
@@ -57,7 +57,7 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
         children: <PlantingDateRequestsTabContent />,
       },
     ],
-    [requestsCount]
+    [requestsCount, strings]
   );
 
   const { activeTab, onChangeTab } = useStickyTabs({
