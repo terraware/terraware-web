@@ -12,7 +12,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -132,19 +131,17 @@ export default function NavBar({
     }
   }, [countNurseryWithdrawals, selectedOrganization]);
 
-  const isSeedsWithdrawalLogEnabled = useFeatureEnabled('Seeds Withdrawal Log');
-
   const [countSeedWithdrawals, countSeedWithdrawalsResponse] = useLazyCountSeedWithdrawalsQuery();
   const showSeedsWithdrawals = useMemo(
-    () => isSeedsWithdrawalLogEnabled && !!countSeedWithdrawalsResponse?.currentData,
-    [isSeedsWithdrawalLogEnabled, countSeedWithdrawalsResponse?.currentData]
+    () => !!countSeedWithdrawalsResponse?.currentData,
+    [countSeedWithdrawalsResponse?.currentData]
   );
 
   useEffect(() => {
-    if (selectedOrganization && isSeedsWithdrawalLogEnabled) {
+    if (selectedOrganization) {
       void countSeedWithdrawals({ organizationId: selectedOrganization.id }, true);
     }
-  }, [countSeedWithdrawals, isSeedsWithdrawalLogEnabled, selectedOrganization]);
+  }, [countSeedWithdrawals, selectedOrganization]);
 
   const [listPlantingSeasonsForNav, plantingSeasonsForNavResponse] = useLazyListPlantingSeasonsQuery();
   const hasPlantingSeasonWithTargets = useMemo(
