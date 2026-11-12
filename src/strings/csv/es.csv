@@ -51,6 +51,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Cantidad de crecimiento activo (antes),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad de crecimiento activo no puede ser menor que 0.,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Cantidad de crecimiento activo ({0} restante),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Cantidad de crecimiento activo *,b8c156d3
+ACTIVE_GROWTH_SENTENCE_CASE,Crecimiento activo,ea48e4db
 ACTIVITY,Actividad,4e3914f0
 ACTIVITY_DELETED,Actividad eliminada,e2df95fd
 ACTIVITY_LOG,Registro de actividades,112b2d64
@@ -904,6 +905,7 @@ HARDENING_OFF_QUANTITY_BEFORE,Cantidad en aclimatación (antes),8c9f5ae5
 HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad en aclimatación no puede ser menor que 0,7a75d47c
 HARDENING_OFF_QUANTITY_REMAINING,Cantidad en aclimatación ({0} restantes),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Cantidad en aclimatación *,8bda8f0f
+HARDENING_OFF_SENTENCE_CASE,Acondicionamiento,5b744226
 HECTARES,Hectáreas,316902d7
 HEIGHT_AT_MATURITY,Altura en la madurez (cm),f8025719
 HEIGHT_M,Altura (m),fe61fc34
@@ -2541,7 +2543,8 @@ TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE,"* Aún en cambio. Algunas plántulas no han 
 TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP,Ninguna plántula de este lote pasó por esta etapa.,d8c51362
 TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP,"Las cantidades de este lote para esta etapa se editaron manualmente, por lo que no se puede calcular el tiempo en la etapa.",5a0a0610
 TIME_IN_STAGE_TITLE,Días promedio por etapa de crecimiento para este lote,97675e32
-TIME_IN_STAGE_TITLE_TOOLTIP,"Cada valor es el promedio entre las plántulas que avanzaron de la etapa o que aún están en ella. Las plántulas retiradas de una etapa no se incluyen en esa etapa, excepto las plantas en campo desde Listas.",860fa0a4
+TIME_IN_STAGE_TITLE_TOOLTIP,"El número promedio de días que las plántulas pasaron en cada etapa, basado en los cambios de etapa en el Historial.",105750bf
+TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING,Las plántulas que aún están en una etapa se cuentan hasta hoy. Las plántulas retiradas se cuentan hasta la fecha de su retiro.,ab898fcd
 TIME_OF_TIDE_MEASUREMENT,Hora de la medición de la marea,08085281
 TIME_ZONE,Zona horaria,abc27841
 TIME_ZONE_REQUIRED,Zona horaria *,f1ee0610

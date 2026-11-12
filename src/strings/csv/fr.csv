@@ -51,6 +51,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Quantité de croissance active (avant),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de croissance active ne peut être inférieure à 0,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Quantité de croissance active ({0} restant),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Quantité de croissance active *,b8c156d3
+ACTIVE_GROWTH_SENTENCE_CASE,Croissance active,ea48e4db
 ACTIVITY,Activité,4e3914f0
 ACTIVITY_DELETED,Activité supprimée,e2df95fd
 ACTIVITY_LOG,Journal d'activité,112b2d64
@@ -903,6 +904,7 @@ HARDENING_OFF_QUANTITY_BEFORE,Quantité à acclimater (avant),8c9f5ae5
 HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité à acclimater ne peut pas être inférieure à 0,7a75d47c
 HARDENING_OFF_QUANTITY_REMAINING,Quantité à acclimater ({0} restante),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Quantité à acclimater *,8bda8f0f
+HARDENING_OFF_SENTENCE_CASE,Acclimatation,5b744226
 HECTARES,Hectares,316902d7
 HEIGHT_AT_MATURITY,Hauteur à maturité (cm),f8025719
 HEIGHT_M,Hauteur (m),fe61fc34
@@ -2541,7 +2543,8 @@ TIME_IN_STAGE_IN_PROGRESS_FOOTNOTE,"* En cours de modification. Certains semis n
 TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP,Aucun semis de ce lot n'est passé par cette étape.,d8c51362
 TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP,"Les quantités de ce lot pour cette étape ont été modifiées manuellement, donc le temps passé dans l'étape ne peut pas être calculé.",5a0a0610
 TIME_IN_STAGE_TITLE,Nombre moyen de jours par étape de croissance pour ce lot,97675e32
-TIME_IN_STAGE_TITLE_TOOLTIP,"Chaque valeur correspond à la moyenne pour les semis ayant quitté l'étape ou y étant encore. Les semis retirés d'une étape ne sont pas inclus dans cette étape, sauf les semis transplantés depuis l'étape Prêt.",860fa0a4
+TIME_IN_STAGE_TITLE_TOOLTIP,"Le nombre moyen de jours que les semis ont passé à chaque étape, basé sur les changements d’étape dans l’Historique.",105750bf
+TIME_IN_STAGE_TITLE_TOOLTIP_COUNTING,Les semis encore dans une étape sont comptabilisés jusqu’à aujourd’hui. Les semis retirés sont comptabilisés jusqu’à leur date de retrait.,ab898fcd
 TIME_OF_TIDE_MEASUREMENT,Heure de la mesure de la marée,08085281
 TIME_ZONE,Fuseau horaire,abc27841
 TIME_ZONE_REQUIRED,Fuseau horaire *,f1ee0610
