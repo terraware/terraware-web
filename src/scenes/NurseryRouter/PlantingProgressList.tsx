@@ -16,6 +16,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useProjects } from 'src/hooks/useProjects';
@@ -27,9 +28,11 @@ import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNu
 import strings from 'src/strings';
 import { PlantingProgressType } from 'src/types/PlantingSite';
 import { TABLES } from 'src/types/Tables';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function PlantingProgressList(): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const snackbar = useSnackbar();
   const [rowSelection, setRowSelection] = useState({});
@@ -383,7 +386,7 @@ export default function PlantingProgressList(): JSX.Element {
           enableColumnActions: true,
           enableHiding: true,
           enableGrouping: false,
-          enableColumnDragging: true,
+          enableColumnDragging: !isMobile,
           positionGlobalFilter: 'right',
           getRowId: (row, index) => String(index),
           renderToolbarAlertBannerContent: ({ selectedAlert }) => (
@@ -447,6 +450,7 @@ export default function PlantingProgressList(): JSX.Element {
           },
           muiTopToolbarProps: {
             sx: {
+              ...mobileTopToolbarSx,
               position: 'relative',
               '& > .MuiBox-root': {
                 position: 'relative',

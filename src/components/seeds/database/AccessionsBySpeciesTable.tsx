@@ -28,6 +28,7 @@ import Link from 'src/components/common/Link';
 import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
@@ -38,6 +39,7 @@ import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type SpeciesRow = {
@@ -80,6 +82,7 @@ export default function AccessionsBySpeciesTable({
   const { selectedOrganization } = useOrganization();
   const { user, isAllowed } = useUser();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const numberFormatter = useNumberFormatter();
   const { availableProjects: projects } = useProjects();
   // Contributors cannot edit accessions, so they must not reach the withdrawal flow (its mutation
@@ -438,7 +441,7 @@ export default function AccessionsBySpeciesTable({
           enableColumnPinning: true,
           enableColumnActions: true,
           enableHiding: true,
-          enableColumnDragging: true,
+          enableColumnDragging: !isMobile,
           positionGlobalFilter: 'right',
           getRowId: (row) => row.id,
           ...(canWithdraw
@@ -535,6 +538,7 @@ export default function AccessionsBySpeciesTable({
           muiTablePaperProps: { elevation: 0 },
           muiTopToolbarProps: {
             sx: {
+              ...mobileTopToolbarSx,
               position: 'relative',
               '& > .MuiBox-root': {
                 position: 'relative',

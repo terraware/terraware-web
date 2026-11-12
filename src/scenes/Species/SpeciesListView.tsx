@@ -26,6 +26,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -933,7 +934,7 @@ export default function SpeciesListView(): JSX.Element {
             enableColumnPinning: true,
             enableColumnActions: true,
             enableHiding: true,
-            enableColumnDragging: true,
+            enableColumnDragging: !isMobile,
             positionGlobalFilter: 'right',
             getRowId: (row) => String(row.id),
             renderTopToolbarCustomActions: ({ table }) => (
@@ -974,6 +975,7 @@ export default function SpeciesListView(): JSX.Element {
             },
             muiTopToolbarProps: {
               sx: {
+                ...mobileTopToolbarSx,
                 position: 'relative',
                 '& > .MuiBox-root': {
                   position: 'relative',

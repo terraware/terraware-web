@@ -18,6 +18,7 @@ import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate
 import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
@@ -25,6 +26,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { TABLES } from 'src/types/Tables';
 import { getBiomassStratumTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type StratumRow = {
@@ -44,6 +46,7 @@ type StratumListProps = {
 };
 
 export default function StratumList({ isBiomass = false }: StratumListProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const tableDefinition = isBiomass ? TABLES.biomassObservationStrata : TABLES.observationStrata;
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -243,7 +246,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
         enableColumnActions: true,
         enableHiding: true,
         enableGrouping: false,
-        enableColumnDragging: true,
+        enableColumnDragging: !isMobile,
         positionGlobalFilter: 'right',
         muiTableBodyRowProps: ({ row }: { row: MRT_Row<StratumRow> }) => ({
           id: `row${row.index + 1}`,
@@ -264,6 +267,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
         muiTablePaperProps: { elevation: 0 },
         muiTopToolbarProps: {
           sx: {
+            ...mobileTopToolbarSx,
             position: 'relative',
             '& > .MuiBox-root': { position: 'relative' },
             '& .Mui-ToolbarDropZone': { display: 'none' },

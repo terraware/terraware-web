@@ -18,6 +18,7 @@ import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import ThumbnailImage from 'src/components/common/ThumbnailImage';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { API_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
@@ -367,6 +368,7 @@ export default function VirtualWalkthroughsTable({
         )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
+          muiTopToolbarProps: { sx: mobileTopToolbarSx },
           renderTopToolbarCustomActions: ({ table }) => (
             <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
           ),

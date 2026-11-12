@@ -21,6 +21,7 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
@@ -35,6 +36,7 @@ import { makeCsv } from 'src/utils/csv';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -133,6 +135,7 @@ export default function AccessionsTable({
   const { selectedOrganization } = useOrganization();
   const { user, isAllowed } = useUser();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   // Contributors cannot edit accessions, so they must not reach the withdrawal flow (its mutation
   // would be rejected). Gate the selection/withdraw entry point on the same permission the
   // Accession Details withdraw button uses.
@@ -762,7 +765,7 @@ export default function AccessionsTable({
           enableColumnPinning: true,
           enableColumnActions: true,
           enableHiding: true,
-          enableColumnDragging: true,
+          enableColumnDragging: !isMobile,
           positionGlobalFilter: 'right',
           getRowId: (row) => String(row.id),
           ...(canWithdraw
@@ -862,6 +865,7 @@ export default function AccessionsTable({
           },
           muiTopToolbarProps: {
             sx: {
+              ...mobileTopToolbarSx,
               position: 'relative',
               '& > .MuiBox-root': {
                 position: 'relative',

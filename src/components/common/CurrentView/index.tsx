@@ -11,6 +11,7 @@ import { MIXPANEL_EVENTS, TableViewEventContext, TableViewSaveSource } from 'src
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useListSavedTableViewsQuery, useUpdateSavedTableViewMutation } from 'src/queries/generated/savedTableViews';
 import { TableDefinition } from 'src/types/Tables';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CurrentViewSelect, { DEFAULT_VIEW, ViewOption, sortViewsByLabel } from './CurrentViewSelect';
@@ -68,6 +69,7 @@ const CurrentView = <TData extends MRT_RowData>({
   const { strings } = useLocalization();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
+  const { isMobile } = useDeviceInfo();
   const { user } = useUser();
   const { selectedOrganization } = useOrganization();
   const [updateSavedTableView] = useUpdateSavedTableViewMutation();
@@ -280,7 +282,7 @@ const CurrentView = <TData extends MRT_RowData>({
       gap={1}
       paddingTop={0.5}
       marginBottom={-0.5}
-      flex='0 1 max-content'
+      flex={isMobile ? '1 1 0' : '0 1 max-content'}
       width={0}
       minWidth={0}
     >
@@ -299,7 +301,7 @@ const CurrentView = <TData extends MRT_RowData>({
           showSave
         />
       </Box>
-      {isModified && (
+      {isModified && !isMobile && (
         <Button
           id={`${id ?? 'current-view'}-save-button`}
           label={strings.SAVE_VIEW_BUTTON}

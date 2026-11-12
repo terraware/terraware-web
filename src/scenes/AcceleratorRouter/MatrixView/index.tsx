@@ -21,6 +21,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
@@ -42,6 +43,7 @@ import {
   VariableValueSelectValue,
   VariableValueTextValue,
 } from 'src/types/documentProducer/VariableValue';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
@@ -54,6 +56,7 @@ type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
 type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
 
 const MatrixView = () => {
+  const { isMobile } = useDeviceInfo();
   const [searchProjectsWithVariables, { data: projectsData }] = useLazySearchProjectsWithVariablesQuery();
   const projects = useMemo(() => projectsData ?? [], [projectsData]);
   const { currentData: allVariablesData } = useListVariablesQuery({});
@@ -981,6 +984,8 @@ const MatrixView = () => {
       enableGlobalFilterRankedResults: false,
       initialState: { showColumnFilters: false },
       positionGlobalFilter: 'right',
+      enableColumnDragging: !isMobile,
+      muiTopToolbarProps: { sx: mobileTopToolbarSx },
       renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
         // remove the last element (show all columns)
         const columnMenuItemsCopy = [...internalColumnMenuItems];
@@ -1082,6 +1087,7 @@ const MatrixView = () => {
       currentView,
       defaultViewSettings,
       globalFilter,
+      isMobile,
       onCurrentViewChange,
       setColumnFilters,
       setColumnOrder,
