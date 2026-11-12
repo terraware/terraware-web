@@ -369,9 +369,15 @@ export default function SpeciesListView(): JSX.Element {
     return map;
   }, [species, availableProjects]);
 
+  const growthFormOptions = useMemo(() => growthForms(activeLocale), [activeLocale]);
+  const ecosystemTypeOptions = useMemo(
+    () => ecosystemTypes().sort((a, b) => a.label.localeCompare(b.label, activeLocale ?? undefined)),
+    [activeLocale]
+  );
+
   const results = useMemo<SpeciesSearchResultRow[]>(() => {
-    const growthFormLabels = new Map(growthForms(activeLocale).map(({ value, label }) => [value, label]));
-    const ecosystemTypeLabels = new Map(ecosystemTypes().map(({ value, label }) => [value, label]));
+    const growthFormLabels = new Map(growthFormOptions.map(({ value, label }) => [value, label]));
+    const ecosystemTypeLabels = new Map(ecosystemTypeOptions.map(({ value, label }) => [value, label]));
 
     return species.map((sp) => ({
       ...sp,
@@ -380,32 +386,38 @@ export default function SpeciesListView(): JSX.Element {
       ecosystemTypes: sp.ecosystemTypes?.map((value) => ecosystemTypeLabels.get(value) ?? value),
       acceleratorProjects: acceleratorProjectNamesBySpeciesId[sp.id],
     }));
-  }, [species, acceleratorProjectNamesBySpeciesId, activeLocale]);
+  }, [species, acceleratorProjectNamesBySpeciesId, growthFormOptions, ecosystemTypeOptions]);
 
-  // Unique filter option values derived from results (client-side)
+  // Unique filter options derived from the species present in the table.
   const uniqueConservationCategories = useMemo(() => {
     const values = new Set(results?.map((r) => r.conservationCategory).filter((v): v is string => Boolean(v)));
     return conservationCategories().filter((c) => values.has(c.value));
   }, [results]);
 
-  const uniqueGrowthForms = useMemo(
-    () =>
-      Array.from(new Set(results?.flatMap((r) => r.growthForms ?? []).filter((v): v is string => Boolean(v)))).sort(),
-    [results]
-  );
+  const uniqueGrowthForms = useMemo(() => {
+    const values = new Set<string>(species.flatMap((sp) => sp.growthForms ?? []));
+    return growthFormOptions.filter((option) => values.has(option.value));
+  }, [species, growthFormOptions]);
 
   const uniqueSeedStorageBehaviors = useMemo(
-    () => Array.from(new Set(results?.map((r) => r.seedStorageBehavior).filter((v): v is string => Boolean(v)))).sort(),
-    [results]
-  );
-
-  const uniqueEcosystemTypes = useMemo(
     () =>
       Array.from(
-        new Set(results?.flatMap((r) => r.ecosystemTypes ?? []).filter((v): v is string => Boolean(v)))
-      ).sort(),
-    [results]
+        new Map(
+          species
+            .filter((sp) => sp.seedStorageBehavior)
+            .map((sp) => [
+              sp.seedStorageBehavior,
+              { value: sp.seedStorageBehavior, label: getSeedStorageBehaviorString(sp) },
+            ])
+        ).values()
+      ).sort((a, b) => a.label.localeCompare(b.label, activeLocale ?? undefined)),
+    [species, activeLocale]
   );
+
+  const uniqueEcosystemTypes = useMemo(() => {
+    const values = new Set(species.flatMap((sp) => sp.ecosystemTypes ?? []));
+    return ecosystemTypeOptions.filter((option) => values.has(option.value));
+  }, [species, ecosystemTypeOptions]);
 
   const uniqueAcceleratorProjects = useMemo(
     () =>
@@ -733,6 +745,13 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueGrowthForms,
+        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, values: string[]) =>
+          values.length === 0 ||
+          values.some((value) =>
+            row.original.growthForms?.includes(
+              uniqueGrowthForms.find((option) => option.value === value)?.label ?? value
+            )
+          ),
         sortUndefined: 'last',
         Cell: GrowthFormsCell,
       },
@@ -743,6 +762,9 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniqueSeedStorageBehaviors,
+        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, columnId: string, value: string) =>
+          row.getValue(columnId) ===
+          (uniqueSeedStorageBehaviors.find((option) => option.value === value)?.label ?? value),
         sortUndefined: 'last',
       },
       {
@@ -752,6 +774,13 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueEcosystemTypes,
+        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, values: string[]) =>
+          values.length === 0 ||
+          values.some((value) =>
+            row.original.ecosystemTypes?.includes(
+              uniqueEcosystemTypes.find((option) => option.value === value)?.label ?? value
+            )
+          ),
         sortUndefined: 'last',
         Cell: EcosystemTypesCell,
       },

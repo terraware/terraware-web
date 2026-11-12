@@ -23,6 +23,7 @@ const LocalizedSpeciesList = ({ locale }: { locale: string }) => {
 
 beforeEach(() => {
   localStorage.removeItem('species-list-table_columnFilters');
+  localStorage.removeItem('species-list-table-currentView');
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
   mockGet('/api/v1/users/me/savedTableViews', { views: [] });
@@ -50,6 +51,7 @@ beforeEach(() => {
 
 afterEach(() => {
   localStorage.removeItem('species-list-table_columnFilters');
+  localStorage.removeItem('species-list-table-currentView');
 });
 
 describe('SpeciesListView localization', () => {
@@ -99,6 +101,97 @@ describe('SpeciesListView localization', () => {
 
     expect(screen.getByRole('link', { name: 'Acacia koa' })).toBeVisible();
     await waitFor(() => {
+      expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
+      expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
+    });
+  });
+
+  it.each([
+    ['growthForms', ['Tree']],
+    ['seedStorageBehavior', 'Orthodox'],
+    ['ecosystemTypes', ['Mangroves']],
+  ])('restores an existing %s filter in a different language', async (id, value) => {
+    localStorage.setItem('species-list-table_columnFilters', JSON.stringify([{ id, value }]));
+    renderWithProviders(<SpeciesListView />, {
+      localization: { activeLocale: 'es', selectedLocale: 'es' },
+    });
+
+    expect(await screen.findByRole('link', { name: 'Acacia koa' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['GROWTH_FORM', 'TREE'],
+    ['SEED_STORAGE_BEHAVIOR', 'ORTHODOX'],
+    ['ECOSYSTEM_TYPE', 'ECOSYSTEM_MANGROVE'],
+  ] as const)('keeps a selected %s filter when switching languages', async (columnKey, valueKey) => {
+    const { user, rerender } = renderWithProviders(<LocalizedSpeciesList locale='en' />);
+    await screen.findByRole('link', { name: 'Acacia koa' });
+    await user.click(screen.getByRole('button', { name: MRT_Localization_EN.showHideFilters }));
+    await user.click(screen.getByRole('combobox', { name: new RegExp(strings[columnKey]) }));
+    await user.click(await screen.findByRole('option', { name: strings[valueKey] }));
+    await user.keyboard('{Escape}');
+
+    for (const locale of ['es', 'fr']) {
+      setTestLocale(locale);
+      rerender(<LocalizedSpeciesList locale={locale} />);
+
+      await waitFor(() => {
+        expect(screen.getByRole('link', { name: 'Acacia koa' })).toBeVisible();
+        expect(screen.getByRole('cell', { name: strings[valueKey] })).toBeVisible();
+        expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
+      });
+      expect(screen.getByRole('combobox', { name: new RegExp(strings[columnKey]) })).toHaveTextContent(
+        strings[valueKey]
+      );
+    }
+  });
+
+  it.each([
+    ['GROWTH_FORM', 'TREE'],
+    ['ECOSYSTEM_TYPE', 'ECOSYSTEM_MANGROVE'],
+  ] as const)('shows all species after deselecting the last %s filter option', async (columnKey, valueKey) => {
+    const { user } = renderWithProviders(<SpeciesListView />, {
+      localization: { activeLocale: 'es', selectedLocale: 'es' },
+    });
+    await screen.findByRole('link', { name: 'Acacia koa' });
+    await user.click(screen.getByRole('button', { name: MRT_Localization_EN.showHideFilters }));
+    await user.click(screen.getByRole('combobox', { name: new RegExp(strings[columnKey]) }));
+    const option = await screen.findByRole('option', { name: strings[valueKey] });
+    await user.click(option);
+    await user.click(option);
+    await user.keyboard('{Escape}');
+
+    expect(screen.getByRole('link', { name: 'Acacia koa' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Dryopteris filix-mas' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Unknown species' })).toBeVisible();
+  });
+
+  it('restores a saved view with existing species filters in a different language', async () => {
+    const view = {
+      id: 42,
+      name: 'Trees in mangroves',
+      baseView: 'default',
+      tableName: 'species',
+      settings: {
+        columnFilters: [
+          { id: 'growthForms', value: ['Tree'] },
+          { id: 'seedStorageBehavior', value: 'Orthodox' },
+          { id: 'ecosystemTypes', value: ['Mangroves'] },
+        ],
+      },
+    };
+    localStorage.setItem('species-list-table-currentView', JSON.stringify({ savedViewId: '42' }));
+    mockGet('/api/v1/users/me/savedTableViews', { views: [view] });
+    renderWithProviders(<SpeciesListView />, {
+      localization: { activeLocale: 'fr', selectedLocale: 'fr' },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole('combobox', { name: new RegExp(strings.CURRENT_VIEW) })).toHaveTextContent(view.name);
+      expect(screen.getByRole('link', { name: 'Acacia koa' })).toBeVisible();
       expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
       expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
     });
