@@ -319,6 +319,8 @@ const ObservationMap = ({
           if (plots.find((plot) => plot.monitoringPlotId === Number(featureId))) {
             observed = true;
           }
+        } else if (isBiomassSelected && selectedResults.isAdHoc) {
+          observed = false;
         } else if (layerId === 'sites') {
           observed = true;
         } else if (layerId === 'strata') {
@@ -345,7 +347,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [selectFeature, adHocObservationResults, selectedResults]
+    [isBiomassSelected, selectFeature, adHocObservationResults, selectedResults]
   );
 
   const siteLayers = useMemo((): MapLayer[] => {

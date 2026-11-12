@@ -181,7 +181,7 @@ const ObservationStatsDrawer = ({
       const totals = isBiomass && plotResults ? getBiomassPlotTotals(plotResults) : undefined;
 
       return {
-        name: plot ? `${plot.plotNumber}` : undefined,
+        name: plot ? `${plot.plotNumber}` : plotResults ? `${plotResults.monitoringPlotNumber}` : undefined,
         observedPlants: totals ? totals.totalPlants : plotResults?.totalPlants,
         observedSpecies: totals ? totals.totalSpecies : plotResults?.totalSpecies,
         observedDensity: plotResults?.plantingDensity,
@@ -262,12 +262,12 @@ const ObservationStatsDrawer = ({
 
       drawerRows.push({
         key: strings.PLANTS,
-        value: properties.observedPlants ? `${properties.observedPlants}` : strings.NO_DATA_YET,
+        value: properties.observedPlants !== undefined ? `${properties.observedPlants}` : strings.NO_DATA_YET,
       });
 
       drawerRows.push({
         key: strings.SPECIES,
-        value: properties.observedSpecies ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
+        value: properties.observedSpecies !== undefined ? `${properties.observedSpecies}` : strings.NO_DATA_YET,
       });
 
       if (!isBiomass) {
