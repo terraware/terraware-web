@@ -1,8 +1,9 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
+import ChartMessage from 'src/components/common/Chart/ChartMessage';
 import { useLocalization } from 'src/providers';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
@@ -21,7 +22,6 @@ export default function SpeciesTotalPlantsChart({
     labels: string[];
     values: number[];
   };
-  const theme = useTheme();
   const { strings } = useLocalization();
 
   const totals = useMemo((): Data => {
@@ -54,25 +54,7 @@ export default function SpeciesTotalPlantsChart({
 
   return (
     <Box position='relative' height='100%'>
-      {!hasData && (
-        <Box
-          sx={{
-            backgroundColor: theme.palette.TwClrBgSecondary,
-            padding: '10px',
-            color: theme.palette.TwClrBaseBlack,
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 1,
-            borderRadius: '4px',
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {strings.DATA_IS_NOT_YET_AVAILABLE}
-        </Box>
-      )}
+      {!hasData && <ChartMessage message={strings.DATA_IS_NOT_YET_AVAILABLE} />}
       <BarChart chartId={chartId} chartData={chartData} barWidth={0} minHeight={minHeight} />
     </Box>
   );

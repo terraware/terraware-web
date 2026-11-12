@@ -1,8 +1,9 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box } from '@mui/material';
 
 import BarChart from 'src/components/common/Chart/BarChart';
+import ChartMessage from 'src/components/common/Chart/ChartMessage';
 import { useLocalization } from 'src/providers';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
@@ -25,7 +26,6 @@ export default function SpeciesSurvivalRateChart({
     labels: string[];
     values: number[];
   };
-  const theme = useTheme();
   const { strings } = useLocalization();
 
   const chartData = useMemo(() => {
@@ -59,27 +59,15 @@ export default function SpeciesSurvivalRateChart({
   return (
     <Box position='relative' height='100%'>
       {(isTemporary || isAdHoc || !hasData) && (
-        <Box
-          sx={{
-            backgroundColor: theme.palette.TwClrBgSecondary,
-            padding: '10px',
-            color: theme.palette.TwClrBaseBlack,
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            zIndex: 1,
-            borderRadius: '4px',
-            textAlign: 'center',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {isAdHoc
-            ? strings.SURVIVAL_RATE_IS_NOT_APPLICABLE_FOR_AD_HOC_PLOTS
-            : isTemporary
-              ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS
-              : strings.DATA_IS_NOT_YET_AVAILABLE}
-        </Box>
+        <ChartMessage
+          message={
+            isAdHoc
+              ? strings.SURVIVAL_RATE_IS_NOT_APPLICABLE_FOR_AD_HOC_PLOTS
+              : isTemporary
+                ? strings.SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS
+                : strings.DATA_IS_NOT_YET_AVAILABLE
+          }
+        />
       )}
       <Box>
         <BarChart chartId={chartId} chartData={chartData} barWidth={0} minHeight={minHeight} />
