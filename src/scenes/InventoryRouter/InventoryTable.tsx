@@ -20,6 +20,7 @@ import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -771,7 +772,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                     </Box>
                   ),
                   renderToolbarInternalActions: ({ table }) => (
-                    <Box display='flex' gap={0.5}>
+                    <TableToolbarActions>
                       <ColumnFilterObserver table={table} onChange={setColumnFilters} />
                       <Tooltip title={strings.EXPORT}>
                         <IconButton onClick={() => handleExport(table)}>
@@ -783,7 +784,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       <MRT_ShowHideColumnsButton table={table} />
                       <MRT_ToggleDensePaddingButton table={table} />
                       <MRT_ToggleFullScreenButton table={table} />
-                    </Box>
+                    </TableToolbarActions>
                   ),
                   muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
                   muiTableBodyProps: {

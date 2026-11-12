@@ -16,6 +16,7 @@ import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
@@ -380,7 +381,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
             />
           ),
           renderToolbarInternalActions: ({ table }) => (
-            <Box display='flex' gap={0.5}>
+            <TableToolbarActions>
               {plantingSitesLoaded && rows.length > 0 && (
                 <Tooltip title={strings.EXPORT}>
                   <IconButton
@@ -400,7 +401,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
-            </Box>
+            </TableToolbarActions>
           ),
         }}
       />

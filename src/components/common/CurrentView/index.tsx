@@ -274,8 +274,17 @@ const CurrentView = <TData extends MRT_RowData>({
   const closeSaveViewModal = useCallback(() => setSaveSource(undefined), []);
 
   return (
-    <Box display='flex' alignItems='center' gap={1} paddingTop={0.5} marginBottom={-0.5}>
-      <Box width='300px' flexShrink={0}>
+    <Box
+      display='flex'
+      alignItems='center'
+      gap={1}
+      paddingTop={0.5}
+      marginBottom={-0.5}
+      flex='0 1 max-content'
+      width={0}
+      minWidth={0}
+    >
+      <Box width='300px' maxWidth='100%' minWidth={0}>
         <CurrentViewSelect
           defaultViewLabel={defaultViewLabel}
           id={id}

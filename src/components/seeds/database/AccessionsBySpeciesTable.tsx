@@ -27,6 +27,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
@@ -507,7 +508,7 @@ export default function AccessionsBySpeciesTable({
             />
           ),
           renderToolbarInternalActions: ({ table }) => (
-            <Box display='flex' gap={0.5}>
+            <TableToolbarActions>
               <Tooltip title={strings.EXPORT}>
                 <IconButton onClick={() => downloadReportHandler(table)}>
                   <Icon name='iconExport' size='medium' />
@@ -518,7 +519,7 @@ export default function AccessionsBySpeciesTable({
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
-            </Box>
+            </TableToolbarActions>
           ),
           muiTableBodyCellProps: ({ row, column, table }) => {
             const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);

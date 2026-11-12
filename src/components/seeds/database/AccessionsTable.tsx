@@ -20,6 +20,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
@@ -832,7 +833,7 @@ export default function AccessionsTable({
             />
           ),
           renderToolbarInternalActions: ({ table }) => (
-            <Box display='flex' gap={0.5}>
+            <TableToolbarActions>
               <Tooltip title={strings.EXPORT}>
                 <IconButton onClick={() => downloadReportHandler(table)}>
                   <Icon name='iconExport' size='medium' />
@@ -843,7 +844,7 @@ export default function AccessionsTable({
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
-            </Box>
+            </TableToolbarActions>
           ),
           muiTableBodyCellProps: ({ row, column, table }) => {
             const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
