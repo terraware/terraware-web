@@ -16,6 +16,7 @@ import {
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
@@ -564,7 +565,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                 />
               ),
               renderToolbarInternalActions: ({ table }) => (
-                <Box display='flex' gap={0.5}>
+                <TableToolbarActions>
                   <Tooltip title={strings.EXPORT}>
                     <IconButton onClick={() => handleExport(table)}>
                       <Icon name='iconExport' size='medium' />
@@ -575,7 +576,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                   <MRT_ShowHideColumnsButton table={table} />
                   <MRT_ToggleDensePaddingButton table={table} />
                   <MRT_ToggleFullScreenButton table={table} />
-                </Box>
+                </TableToolbarActions>
               ),
               muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
               muiTableBodyProps: {

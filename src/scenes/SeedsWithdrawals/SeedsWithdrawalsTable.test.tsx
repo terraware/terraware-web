@@ -122,7 +122,7 @@ describe('SeedsWithdrawalsTable', () => {
     expect(screen.getByRole('link', { name: 'ACC-001' })).toHaveAttribute('href', '/accessions/42');
   });
 
-  it('names the destination nursery alongside the purpose, and only for nursery withdrawals', async () => {
+  it('names the destination nursery in the destination column, leaving the purpose on its own', async () => {
     renderTable([
       buildSearchResult({ 'purpose(raw)': 'Nursery', destination: '', batch_facility_name: 'Kigali Nursery' }),
       buildSearchResult({
@@ -134,8 +134,10 @@ describe('SeedsWithdrawalsTable', () => {
       }),
     ]);
 
-    expect(await screen.findByRole('cell', { name: `${strings.NURSERY}: Kigali Nursery` })).toBeVisible();
+    expect(await screen.findByRole('cell', { name: 'Kigali Nursery' })).toBeVisible();
+    expect(screen.getByRole('cell', { name: strings.NURSERY })).toBeVisible();
     expect(screen.getByRole('cell', { name: strings.VIABILITY_TESTING })).toBeVisible();
+    expect(screen.getByRole('cell', { name: 'Lab bench 3' })).toBeVisible();
   });
 
   it('shows the recorded quantity with the unit it was withdrawn in', async () => {
@@ -323,10 +325,7 @@ describe('SeedsWithdrawalsTable', () => {
       '/accessions/42?viabilityTestId=77'
     );
     // Both links live on the purpose cell; the destination cell only names the nursery.
-    expect(screen.getByRole('link', { name: `${strings.NURSERY}: Kigali Nursery` })).toHaveAttribute(
-      'href',
-      '/inventory/batch/31'
-    );
+    expect(screen.getByRole('link', { name: strings.NURSERY })).toHaveAttribute('href', '/inventory/batch/31');
     expect(screen.getByRole('cell', { name: 'Kigali Nursery' })).toBeVisible();
     expect(screen.queryByRole('link', { name: 'Kigali Nursery' })).not.toBeInTheDocument();
   });

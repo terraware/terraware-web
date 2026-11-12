@@ -17,6 +17,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import ThumbnailImage from 'src/components/common/ThumbnailImage';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { API_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
@@ -356,13 +357,13 @@ export default function VirtualWalkthroughsTable({
         enableBottomToolbar={false}
         storageKey={TABLE.storageKey}
         renderToolbarInternalActions={({ table }) => (
-          <Box display='flex' gap={0.5}>
+          <TableToolbarActions>
             <MRT_ToggleGlobalFilterButton table={table} />
             <MRT_ToggleFiltersButton table={table} />
             <MRT_ShowHideColumnsButton table={table} />
             <MRT_ToggleDensePaddingButton table={table} />
             <MRT_ToggleFullScreenButton table={table} />
-          </Box>
+          </TableToolbarActions>
         )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,

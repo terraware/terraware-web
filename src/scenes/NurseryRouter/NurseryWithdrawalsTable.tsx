@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
-import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
+import { IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import dayjs, { Dayjs } from 'dayjs';
 import {
@@ -20,6 +20,7 @@ import {
 
 import CurrentView from 'src/components/common/CurrentView';
 import TextTruncated from 'src/components/common/TextTruncated';
+import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -895,7 +896,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             />
           ),
           renderToolbarInternalActions: ({ table }) => (
-            <Box display='flex' gap={0.5}>
+            <TableToolbarActions>
               <Tooltip title={strings.EXPORT}>
                 <IconButton onClick={() => void onExport()}>
                   <Icon name='iconExport' size='medium' />
@@ -906,7 +907,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
-            </Box>
+            </TableToolbarActions>
           ),
           muiTableBodyProps: {
             sx: {

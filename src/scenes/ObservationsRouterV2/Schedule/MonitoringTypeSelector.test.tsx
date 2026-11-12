@@ -37,34 +37,34 @@ describe('MonitoringTypeSelector', () => {
   it('checks the option matching the selected monitoring type', () => {
     renderSelector('Biomass Measurements');
 
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).not.toBeChecked();
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE)).toBeChecked();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE)).not.toBeChecked();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE)).toBeChecked();
   });
 
   it('disables a monitoring type that already has an upcoming observation and says when it starts', () => {
     renderSelector('Monitoring', { Monitoring: '2026-07-14' });
 
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).toBeDisabled();
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).not.toBeChecked();
-    expect(screen.getByText(alreadyScheduled(strings.SURVIVAL_MONITORING, '2026-07-14'))).toBeInTheDocument();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE)).toBeDisabled();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE)).not.toBeChecked();
+    expect(screen.getByText(alreadyScheduled(strings.PLANT_MONITORING, '2026-07-14'))).toBeInTheDocument();
 
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE)).toBeEnabled();
-    expect(screen.queryByText(alreadyScheduled(strings.VEGETATION_MONITORING, '2026-07-14'))).not.toBeInTheDocument();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE)).toBeEnabled();
+    expect(screen.queryByText(alreadyScheduled(strings.BIOMASS_MONITORING, '2026-07-14'))).not.toBeInTheDocument();
   });
 
   it('disables every monitoring type when the planting site has no plantings', () => {
     renderSelector('Monitoring', {}, false);
 
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).toBeDisabled();
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_SURVIVAL_TITLE)).not.toBeChecked();
-    expect(radioFor(strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE)).toBeDisabled();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE)).toBeDisabled();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE)).not.toBeChecked();
+    expect(radioFor(strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE)).toBeDisabled();
     expect(screen.getAllByText(strings.SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS)).toHaveLength(2);
   });
 
   it('reports the monitoring type the user picks', async () => {
     const { onChange, user } = renderSelector('Monitoring', { Monitoring: '2026-07-14' });
 
-    await user.click(radioFor(strings.SCHEDULE_OBSERVATION_VEGETATION_TITLE));
+    await user.click(radioFor(strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE));
 
     expect(onChange).toHaveBeenCalledWith('Biomass Measurements');
   });
