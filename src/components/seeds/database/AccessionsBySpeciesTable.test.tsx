@@ -10,8 +10,8 @@ import AccessionsBySpeciesTable from './AccessionsBySpeciesTable';
 
 const ORG_ID = 1;
 
-const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchResponseElementWithId =>
-  ({
+const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchResponseElementWithId => {
+  const row = {
     id: '1',
     accessionNumber: 'ACC-001',
     speciesName: 'Acacia koa',
@@ -20,7 +20,10 @@ const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchRespo
     'estimatedCount(raw)': '100',
     'remainingQuantity(raw)': '100',
     ...overrides,
-  }) as unknown as SearchResponseElementWithId;
+  };
+  // The search API localizes `state`; `state(raw)` carries the enum value. They match in English.
+  return { 'state(raw)': row.state, ...row } as unknown as SearchResponseElementWithId;
+};
 
 const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner' | 'Contributor' = 'Owner') => {
   // The by-species table pulls the project list on mount; keep the request handled.

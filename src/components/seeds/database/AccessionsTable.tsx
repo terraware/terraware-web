@@ -28,7 +28,7 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
 import strings from 'src/strings';
-import { ACCESSION_2_STATES, isWithdrawableAccessionState } from 'src/types/Accession';
+import { ACCESSION_2_STATES, accessionState, isWithdrawableAccessionState, stateName } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
@@ -110,13 +110,13 @@ const hasWithdrawableQuantity = (row: SearchResponseElementWithId): boolean =>
   Number(row['remainingQuantity(raw)']) > 0;
 
 const isWithdrawable = (row: SearchResponseElementWithId): boolean =>
-  isWithdrawableAccessionState(row.state as string | undefined) && hasWithdrawableQuantity(row);
+  isWithdrawableAccessionState(accessionState(row)) && hasWithdrawableQuantity(row);
 
 const unavailableTooltip = (row: SearchResponseElementWithId): string => {
-  if (row.state === 'Awaiting Check-In') {
+  if (accessionState(row) === 'Awaiting Check-In') {
     return strings.WITHDRAW_ACCESSION_AWAITING_CHECK_IN;
   }
-  if (row.state === 'Used Up') {
+  if (accessionState(row) === 'Used Up') {
     return strings.WITHDRAW_ACCESSION_USED_UP;
   }
   if (!hasWithdrawableQuantity(row)) {
@@ -317,7 +317,10 @@ export default function AccessionsTable({
     }
   }, [location, navigate, query, searchResults, selectedOrganization, setColumnFilters, setShowColumnFilters]);
 
-  const uniqueStates = useMemo(() => ACCESSION_2_STATES as string[], []);
+  const uniqueStates = useMemo(
+    () => (activeLocale ? ACCESSION_2_STATES.map((state) => stateName(state)) : []),
+    [activeLocale]
+  );
 
   const uniqueFacilityNames = useMemo(
     () => Array.from(new Set(searchResults?.map((r) => r.facility_name as string).filter(Boolean))).sort(),

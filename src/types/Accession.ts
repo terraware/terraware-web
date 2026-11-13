@@ -1,5 +1,6 @@
 import { AccessionPayloadV2Read, Geolocation, GetViabilityTestPayload } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
+import { SearchResponseElement } from 'src/types/Search';
 
 import { Batch } from './Batch';
 
@@ -20,6 +21,9 @@ export const ACCESSION_2_STATES: AccessionState[] = [
   'In Storage',
   'Used Up',
 ];
+
+export const accessionState = (row: SearchResponseElement): AccessionState | undefined =>
+  row['state(raw)'] as AccessionState | undefined;
 
 export const isWithdrawableAccessionState = (state?: string): boolean =>
   state !== undefined && state !== 'Awaiting Check-In' && state !== 'Used Up';
