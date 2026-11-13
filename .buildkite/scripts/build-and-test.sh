@@ -25,8 +25,8 @@ yarn ts
 
 echo "--- :jest: Run unit tests"
 # The agents' vCPUs are hyperthreads, so rstest's default of one worker per vCPU, minus one,
-# oversubscribes the physical cores and roughly doubles the run time of CPU-heavy tests.
-yarn test:ci --pool.maxWorkers=50%
+# slows CPU-heavy tests enough that they can time out.
+yarn test:ci --pool.maxWorkers=75%
 
 echo "--- :package: Build"
 echo "$APP_VERSION" > public/build-version.txt
