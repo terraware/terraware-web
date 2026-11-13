@@ -145,6 +145,23 @@ describe('BatchTimeInStage', () => {
     expect(segment).toHaveAttribute('aria-describedby', tooltip.getAttribute('id'));
   });
 
+  it('styles the tooltip bubble and keeps the two counts on separate lines', async () => {
+    const { user } = renderCard(buildTimeInStage({ activeGrowth: buildStageTime({ days: 21, countedQuantity: 12 }) }), {
+      activeGrowthQuantity: 4,
+    });
+
+    await user.hover(
+      within(segmentFor(strings.ACTIVE_GROWTH_SENTENCE_CASE)).getByLabelText(
+        `${strings.ACTIVE_GROWTH_SENTENCE_CASE}: ${strings.formatString(strings.X_DAYS, 21).toString()}`
+      )
+    );
+
+    const bubble = (await screen.findByRole('tooltip')).querySelector('.MuiTooltip-tooltip');
+
+    expect(getComputedStyle(bubble as Element).maxWidth).toBe('464px');
+    expect(bubble?.textContent).toContain('\n');
+  });
+
   it('opens the counts by keyboard as well as by pointer', async () => {
     const { user } = renderCard(buildTimeInStage({ germinating: buildStageTime({ days: 14, countedQuantity: 57 }) }), {
       germinatingQuantity: 0,

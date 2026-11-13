@@ -93,13 +93,16 @@ const TooltipWrapper = ({ title, children }: { title?: string; children: JSX.Ele
       arrow
       describeChild
       placement='top-start'
-      sx={{
-        maxWidth: '464px',
-        '& .MuiTooltip-arrow': { color: theme.palette.TwClrBaseGray800 },
-        '& .MuiTooltip-tooltip': {
-          backgroundColor: theme.palette.TwClrBaseGray800,
-          color: theme.palette.TwClrBaseWhite,
-          padding: '8px',
+      slotProps={{
+        arrow: { sx: { color: theme.palette.TwClrBaseGray800 } },
+        tooltip: {
+          sx: {
+            backgroundColor: theme.palette.TwClrBaseGray800,
+            color: theme.palette.TwClrBaseWhite,
+            maxWidth: '464px',
+            padding: '8px',
+            whiteSpace: 'pre-line',
+          },
         },
       }}
       title={title}
