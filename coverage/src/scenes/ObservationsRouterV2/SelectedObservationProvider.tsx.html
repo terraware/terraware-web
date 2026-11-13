@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">15.78% </span>
+                <span class="strong">57.89% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/19</span>
+                <span class='fraction'>11/19</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>10/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -148,37 +148,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
@@ -206,16 +206,16 @@ const SelectedObservationContext = createContext&lt;SelectedObservationContextTy
   /* eslint-enable @typescript-eslint/no-empty-function */
 });
 &nbsp;
-const SelectedObservationProvider = <span class="fstat-no" title="function not covered" >({ children }: { children: React.ReactNode }) =&gt; {</span>
-  const [selectedObservationId, setSelectedObservationId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const [selectedAdHocPlot, setSelectedAdHocPlot] = <span class="cstat-no" title="statement not covered" >useState&lt;AdHocPlotSelection&gt;();</span>
+const SelectedObservationProvider = ({ children }: { children: React.ReactNode }) =&gt; {
+  const [selectedObservationId, setSelectedObservationId] = useState&lt;number&gt;();
+  const [selectedAdHocPlot, setSelectedAdHocPlot] = useState&lt;AdHocPlotSelection&gt;();
 &nbsp;
-  const selectAdHocPlot = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(plot: AdHocPlotSelection) =&gt; {</span></span>
+  const selectAdHocPlot = useCallback(<span class="fstat-no" title="function not covered" >(plot: AdHocPlotSelection) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedObservationId(plot.observationId);</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedAdHocPlot(plot);</span>
   }, []);
 &nbsp;
-  const clearAdHocPlot = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const clearAdHocPlot = useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    if (selectedAdHocPlot) {</span>
 <span class="cstat-no" title="statement not covered" >      setSelectedObservationId(<span class="fstat-no" title="function not covered" >(observationId) =&gt;</span></span>
 <span class="cstat-no" title="statement not covered" >        observationId === selectedAdHocPlot.observationId ? undefined : observationId</span>
@@ -224,20 +224,20 @@ const SelectedObservationProvider = <span class="fstat-no" title="function not c
 <span class="cstat-no" title="statement not covered" >    setSelectedAdHocPlot(undefined);</span>
   }, [selectedAdHocPlot]);
 &nbsp;
-  const selectObservation = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >(observationId: number | undefined) =&gt; {</span></span>
+  const selectObservation = useCallback(<span class="fstat-no" title="function not covered" >(observationId: number | undefined) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedObservationId(observationId);</span>
 <span class="cstat-no" title="statement not covered" >    setSelectedAdHocPlot(undefined);</span>
   }, []);
 &nbsp;
   const value = useMemo(
-<span class="fstat-no" title="function not covered" >    () =&gt; <span class="cstat-no" title="statement not covered" >({ clearAdHocPlot, selectAdHocPlot, selectObservation, selectedAdHocPlot, selectedObservationId }),</span></span>
+    () =&gt; ({ clearAdHocPlot, selectAdHocPlot, selectObservation, selectedAdHocPlot, selectedObservationId }),
     [clearAdHocPlot, selectAdHocPlot, selectObservation, selectedAdHocPlot, selectedObservationId]
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return &lt;SelectedObservationContext.Provider value={value}&gt;{children}&lt;/SelectedObservationContext.Provider&gt;;</span>
+  return &lt;SelectedObservationContext.Provider value={value}&gt;{children}&lt;/SelectedObservationContext.Provider&gt;;
 };
 &nbsp;
-export const useSelectedObservation = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >useContext(SelectedObservationContext);</span></span>
+export const useSelectedObservation = () =&gt; useContext(SelectedObservationContext);
 &nbsp;
 export default SelectedObservationProvider;
 &nbsp;</pre></td></tr></table></pre>
@@ -247,7 +247,7 @@ export default SelectedObservationProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T19:45:36.085Z
+                at 2026-11-13T20:21:47.008Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
