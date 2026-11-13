@@ -23,8 +23,8 @@ import {
   useTheme,
 } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
-import { MRT_TableInstance } from 'material-react-table';
 
+import { TableSource, isDataColumnId, toViewTable } from 'src/components/common/CurrentView/viewTable';
 import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
 import { useLocalization } from 'src/providers';
 import { ProjectsWithVariablesSearchResult } from 'src/queries/search/projectsWithVariables';
@@ -35,7 +35,7 @@ type ColumnsModalProps = {
   onClose: () => void;
   onSave: (columns: string[]) => void;
   allVariables: VariableUnion[];
-  table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+  table: TableSource<ProjectsWithVariablesSearchResult>;
 };
 
 export function baseColumns() {
@@ -51,6 +51,7 @@ export function baseColumns() {
 export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const { strings } = useLocalization();
   const { onClose, onSave, allVariables, table } = props;
+  const view = useMemo(() => toViewTable(table), [table]);
 
   const [activeTab, setActiveTab] = useState(0);
   const [selectedDeliverables, setSelectedDeliverables] = useState(new Set());
@@ -69,8 +70,11 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   }, [allVariables, searchTerm]);
 
   useEffect(() => {
-    const columnOrder = table.getState().columnOrder;
-    const visibleColumnIds = table.getVisibleFlatColumns().map((col) => col.id);
+    const columnOrder = view.getSettings().columnOrder;
+    const visibleColumnIds = view
+      .getColumns()
+      .filter((col) => col.isVisible && isDataColumnId(col.id))
+      .map((col) => col.id);
 
     if (columnOrder.length > 0) {
       const orderedVisibleColumns = columnOrder.filter((columnId) => visibleColumnIds.includes(columnId));
@@ -78,10 +82,10 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
     } else {
       setSelectedColumns(visibleColumnIds);
     }
-  }, [table]);
+  }, [view]);
 
   // Get current pinning state from the table
-  const columnPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+  const columnPinning = view.getSettings().columnPinning;
   const pinnedColumns = useMemo(
     () => [...(columnPinning.left || []), ...(columnPinning.right || [])],
     [columnPinning.left, columnPinning.right]
@@ -202,13 +206,12 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   }, [allVariables, baseColumnsIds, selectedColumns]);
 
   const handleUnpinAll = useCallback(() => {
-    // Unpin all columns using Material React Table's functionality
-    table?.setColumnPinning({ left: [], right: [] });
-  }, [table]);
+    view.setColumnPinning({ left: [], right: [] });
+  }, [view]);
 
   const handlePinColumn = useCallback(
     (columnId: string, position: 'left' | 'right' = 'left') => {
-      const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+      const currentPinning = view.getSettings().columnPinning;
 
       const newPinning = {
         left:
@@ -221,57 +224,26 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
             : (currentPinning.right || []).filter((id) => id !== columnId),
       };
 
-      table?.setColumnPinning(newPinning);
+      view.setColumnPinning(newPinning);
     },
-    [table]
+    [view]
   );
 
   const handleUnpinColumn = useCallback(
     (columnId: string) => {
-      const currentPinning = table?.getState()?.columnPinning || { left: [], right: [] };
+      const currentPinning = view.getSettings().columnPinning;
 
       const newPinning = {
         left: (currentPinning.left || []).filter((id) => id !== columnId.toString()),
         right: (currentPinning.right || []).filter((id) => id !== columnId.toString()),
       };
 
-      table?.setColumnPinning(newPinning);
+      view.setColumnPinning(newPinning);
     },
-    [table]
+    [view]
   );
 
-  const isColumnPinned = useCallback(
-    (columnName: string) => {
-      // Find the column by name and check if it's pinned
-      const column = table
-        ?.getVisibleFlatColumns()
-        ?.find(
-          (col) =>
-            'accessorKey' in col.columnDef &&
-            (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
-        );
-
-      return column ? pinnedColumns.includes(column.id) : false;
-    },
-    [pinnedColumns, table]
-  );
-
-  const getColumnId = useCallback(
-    (columnName: string) => {
-      // Get the column ID for pinning operations
-      const column = table
-        ?.getVisibleFlatColumns()
-        ?.find(
-          (col) =>
-            col.columnDef &&
-            'accessorKey' in col.columnDef &&
-            (col.columnDef?.header === columnName || col.columnDef?.accessorKey === columnName || col.id === columnName)
-        );
-
-      return column?.id || columnName;
-    },
-    [table]
-  );
+  const isColumnPinned = useCallback((columnId: string) => pinnedColumns.includes(columnId), [pinnedColumns]);
 
   const handleResetColumns = useCallback(() => {
     setSelectedDeliverables(new Set());
@@ -351,18 +323,17 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
 
   const pinUnpinHandler = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>) => {
-      const columnName = event.currentTarget.dataset.columnName;
-      if (!columnName) {
+      const columnId = event.currentTarget.dataset.columnId;
+      if (!columnId) {
         return;
       }
-      const columnId = getColumnId(columnName);
-      if (isColumnPinned(columnName)) {
+      if (isColumnPinned(columnId)) {
         handleUnpinColumn(columnId);
       } else {
         handlePinColumn(columnId, 'left');
       }
     },
-    [getColumnId, handlePinColumn, handleUnpinColumn, isColumnPinned]
+    [handlePinColumn, handleUnpinColumn, isColumnPinned]
   );
 
   const removeColumnHandler = useCallback(
@@ -580,7 +551,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                   variableStableId;
                 return (
                   <ListItem
-                    key={columnName}
+                    key={variableStableId}
                     draggable
                     onDragStart={handleDragStart}
                     onDragEnd={handleDragEnd}
@@ -616,9 +587,14 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                     </Typography>
 
                     {/* Pin/Unpin Button */}
-                    <Tooltip title={isColumnPinned(columnName) ? 'Unpin column' : 'Pin to left'}>
-                      <IconButton size='small' onClick={pinUnpinHandler} sx={{ ml: 0.5 }} data-column-name={columnName}>
-                        {isColumnPinned(columnName) ? (
+                    <Tooltip title={isColumnPinned(variableStableId) ? 'Unpin column' : 'Pin to left'}>
+                      <IconButton
+                        size='small'
+                        onClick={pinUnpinHandler}
+                        sx={{ ml: 0.5 }}
+                        data-column-id={variableStableId}
+                      >
+                        {isColumnPinned(variableStableId) ? (
                           <PinIcon sx={{ fontSize: 14, color: 'primary.main' }} />
                         ) : (
                           <UnpinIcon sx={{ fontSize: 14 }} />
@@ -633,7 +609,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                         onClick={removeColumnHandler}
                         sx={{ ml: 0.5 }}
                         data-variable-stable-id={variableStableId}
-                        disabled={columnName === strings.DEAL_NAME}
+                        disabled={variableStableId === 'projectName'}
                       >
                         <CloseIcon sx={{ fontSize: 14 }} />
                       </IconButton>
