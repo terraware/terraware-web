@@ -4,6 +4,7 @@ import {
   ObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload,
   ObservationStratumResultsPayload,
+  ObservationSubstratumResultsPayload,
 } from 'src/queries/generated/observations';
 import { ObservationSpeciesResults, ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
@@ -64,6 +65,13 @@ const biomassMeasurementsOf = (strata: ObservationStratumResultsPayload[]) =>
 
 export const getBiomassPlotTotals = (plot: ObservationMonitoringPlotResultsPayload): BiomassTotals =>
   plot.biomassMeasurements ? summarizeBiomass([plot.biomassMeasurements]) : EMPTY_BIOMASS_TOTALS;
+
+export const getBiomassSubstratumTotals = (substratum: ObservationSubstratumResultsPayload): BiomassTotals =>
+  summarizeBiomass(
+    substratum.monitoringPlots
+      .map((plot) => plot.biomassMeasurements)
+      .filter((plotMeasurements) => plotMeasurements !== undefined)
+  );
 
 export const getBiomassStratumTotals = (stratum: ObservationStratumResultsPayload): BiomassTotals =>
   summarizeBiomass(biomassMeasurementsOf([stratum]));
