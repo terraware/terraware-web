@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { rs } from '@rstest/core';
 import { EditableTableColumn } from '@terraware/web-components';
 import { screen } from '@testing-library/react';
 import { MRT_ToggleFiltersButton } from 'material-react-table';
@@ -12,6 +13,11 @@ import { LocalizationContext } from 'src/providers/contexts';
 import { renderWithProviders } from 'src/test-utils';
 
 import EditableTable from './EditableTable';
+
+const { featureEnabled } = rs.hoisted(() => ({ featureEnabled: rs.fn(() => false) }));
+rs.mock('src/features', () => ({ useFeatureEnabled: featureEnabled }));
+
+beforeEach(() => featureEnabled.mockReturnValue(false));
 
 const columns: EditableTableColumn<{ name: string }>[] = [
   { id: 'name', accessorKey: 'name', header: 'Name', filterVariant: 'text' },
@@ -60,4 +66,32 @@ it('switches table controls and column menus with the language while preserving 
 it.each(['es', 'fr', 'es-MX', 'gx', 'unrecognized'])('preserves caller overrides for %s', (locale) => {
   renderWithProviders(<LocalizedTable locale={locale} empty />);
   expect(screen.getByText('Custom empty message')).toBeVisible();
+});
+
+it.each([
+  [false, false, 'Legacy row'],
+  [false, true, 'Legacy row'],
+  [true, false, 'Legacy row'],
+  [true, true, 'V2 row'],
+])('requires flag=%s and table opt-in=%s to switch implementations', (flag, optIn, expected) => {
+  featureEnabled.mockReturnValue(flag);
+  renderWithProviders(
+    <EditableTable
+      columns={columns}
+      data={[{ name: 'Legacy row' }]}
+      clearAllFiltersLabel='Clear filters'
+      v2Props={
+        optIn
+          ? {
+              columns: [{ id: 'name', accessorKey: 'name', header: 'Name' }],
+              data: [{ name: 'V2 row' }],
+              clearAllFiltersLabel: 'Clear filters',
+            }
+          : undefined
+      }
+    />
+  );
+  expect(screen.getByRole('cell', { name: expected })).toBeVisible();
+  expect(screen.queryByRole('cell', { name: expected === 'V2 row' ? 'Legacy row' : 'V2 row' })).not.toBeInTheDocument();
+  expect(featureEnabled).toHaveBeenCalledWith('Editable Table V2');
 });
