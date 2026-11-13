@@ -435,7 +435,7 @@ const PurposeAndDestinationStep = ({
         </Box>
       )}
 
-      {isPlanting && draft.plantingSiteId !== undefined && (
+      {isPlanting && !!selectedPlantingSite?.strata?.length && (
         <Box sx={fieldRowSx}>
           <Box sx={fieldCellSx}>
             <Dropdown

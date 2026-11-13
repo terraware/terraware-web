@@ -450,6 +450,31 @@ describe('BatchWithdrawModal purposes and validation', () => {
     expect(nextButton()).toBeEnabled();
   });
 
+  it('lets an out-plant withdrawal to a site without strata continue and submit with no substratum', async () => {
+    const siteWithoutStrata = buildPlantingSite({ id: PLANTING_SITE_ID, name: 'Old Site', strata: [] });
+    mockModalData({ sites: [siteWithoutStrata] });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await user.click(await findPlantingRadio());
+    await waitFor(() => expect(document.querySelector('#to-planting-site input')).not.toBeNull());
+    await selectDropdownOption(user, 'to-planting-site', siteWithoutStrata.name);
+
+    await waitFor(() => expect(nextButton()).toBeEnabled());
+    expect(screen.queryByText(strings.STRATUM_REQUIRED)).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.SUBSTRATUM_REQUIRED)).not.toBeInTheDocument();
+
+    await user.click(nextButton());
+    await typeQuantity(user, outplantInput(1), 6);
+    await clickNextWhenEnabled(user);
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    const body = await withdrawals[0].json();
+    expect(body).toMatchObject({ purpose: 'Out Plant', plantingSiteId: PLANTING_SITE_ID });
+    expect(body).not.toHaveProperty('substratumId');
+  });
+
   it('requires a destination nursery before a nursery transfer can continue', async () => {
     mockModalData();
     const { user } = renderModal({ organization: buildOrganization({ facilities: [NURSERY_A, NURSERY_B] }) });
