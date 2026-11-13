@@ -247,6 +247,8 @@ BACK,Précédent,2e8211b0
 BACK_TO_EDIT,Retour à la modification,b3d8a9a6
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
+BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
+BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASELINE,Référence,332af00e
 BASELINE_SURVEY,Enquête de référence,bc76c649
 BATCH,Lot,9fdfdd9b
@@ -2927,6 +2929,7 @@ X_PLOT,{0} placette,69151ad1
 X_PLOTS,{0} placettes,af2dd663
 X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
+X_STILL_IN_THIS_STAGE,{0} toujours à cette étape,6e034985
 X_TARGET,Objectif {0},d8170b6e
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
 YEARLY_CUMULATIVE,Cumulatif annuel,ed9a120d

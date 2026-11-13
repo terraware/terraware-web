@@ -156,6 +156,8 @@ export type BatchAccessionPayload = {
 export type BatchStageTimePayload = {
   /** True if a manual quantity edit changed this stage's quantity, so its time in stage can't be calculated. */
   cleared: boolean;
+  /** Number of seedlings that contributed to the calculation of "days". */
+  countedQuantity: number;
   /** Average number of days seedlings have spent in this stage, rounded to the nearest day. 0 means less than one day. Null if no seedlings have been in this stage or if a manual quantity edit made the time unknown. */
   days?: number;
   /** True if seedlings are currently in this stage, so the average will keep increasing. */
