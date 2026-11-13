@@ -1,3 +1,4 @@
+915f3dad SW-9301 Add hover text to each stage (#7169)
 71b0c28c SW-9304 Exclude sites without substrata from observation scheduling (#7177)
 42f15db6 SW-9304 Label and filter Baseline Survey observations (#7167)
 f32c5648 Format dates and quantities using the application language (#7165)
