@@ -248,6 +248,8 @@ BACK,Atrás,2e8211b0
 BACK_TO_EDIT,Volver a editar,b3d8a9a6
 BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
+BASED_ON_X_BATCH,Basado en {0} lote,919ed414
+BASED_ON_X_BATCHES,Basado en {0} lotes,8c41bee7
 BASELINE,Línea base,332af00e
 BASELINE_SURVEY,Encuesta de referencia,bc76c649
 BATCH,Lote,9fdfdd9b
@@ -1385,6 +1387,7 @@ NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c
 NOT_COMPLETE,Sin completar,a8606bc8
 NOT_COVERED,No Cubierto,c01864d7
 NOT_CUMULATIVE,No acumulativo,86f75ffc
+NOT_ENOUGH_DATA,No hay suficientes datos,e8ae3480
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
@@ -2358,6 +2361,14 @@ SPECIES_TARGET_ADDED,Meta de especie agregada: {0} en {1}.,024829c9
 SPECIES_TARGET_DELETED,Meta de especie eliminada: {0} en {1}.,fd85928a
 SPECIES_TARGET_UPDATED,Meta de especie actualizada: {0} en {1} cambió de {2} a {3}.,f14397fe
 SPECIES_TARGETS,Objetivos de especies,96d27e04
+SPECIES_TIME_IN_STAGE_MIN_BATCHES,Se necesitan al menos 3 lotes para mostrar un promedio.,a94efaad
+SPECIES_TIME_IN_STAGE_NO_BATCHES,Ningún lote tiene plántulas que hayan terminado esta etapa.,7707be37
+SPECIES_TIME_IN_STAGE_ONLY_ONE_BATCH,Solo 1 lote tiene plántulas que han terminado esta etapa.,2f0a6c99
+SPECIES_TIME_IN_STAGE_ONLY_X_BATCHES,Solo {0} lotes tienen plántulas que han terminado esta etapa.,77e18477
+SPECIES_TIME_IN_STAGE_RANGE_PENDING,Un rango típico aparece cuando hay disponibles 5 lotes con al menos 10 plántulas terminadas cada uno.,646699da
+SPECIES_TIME_IN_STAGE_TITLE,Días promedio por etapa de crecimiento para esta especie,b13fd122
+SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP,Cada valor promedia las plántulas que terminaron la etapa en todos los lotes de esta especie. Las plántulas que aún están en una etapa y las etapas editadas manualmente no se incluyen.,d2df9dc4
+SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP_RANGE,El rango típico muestra cuánto tiempo tomó a la mitad de los lotes. Los lotes con muy pocas plántulas no se incluyen en el rango.,f57f1e23
 SPECIES_TO_PLANT,Especies a plantar,ad7f9878
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
@@ -2685,6 +2696,8 @@ TUTORIAL_PREFIX,Tutorial: {0},71025393
 TW_DATA,Datos de TW,ea2a4098
 TYPE,Tipo,c1d026e9
 TYPE_OF_FOREST,Tipo de bosque,6fd02b1c
+TYPICAL_UNDER_ONE_TO_X_DAYS,típicamente <1–{0} días,acb54d6a
+TYPICAL_X_TO_Y_DAYS,típicamente {0}–{1} días,05bd5303
 UN_SDG,Objetivos de Desarrollo Sostenible (ODS) de las Naciones Unidas,7d6c756a
 UNABLE_TO_ADD_PERSON,No se puede añadir una persona,7d19ff74
 UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.,c6aeba80
