@@ -3453,8 +3453,42 @@
 <a name='L3388'></a><a href='#L3388'>3388</a>
 <a name='L3389'></a><a href='#L3389'>3389</a>
 <a name='L3390'></a><a href='#L3390'>3390</a>
-<a name='L3391'></a><a href='#L3391'>3391</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">153x</span>
+<a name='L3391'></a><a href='#L3391'>3391</a>
+<a name='L3392'></a><a href='#L3392'>3392</a>
+<a name='L3393'></a><a href='#L3393'>3393</a>
+<a name='L3394'></a><a href='#L3394'>3394</a>
+<a name='L3395'></a><a href='#L3395'>3395</a>
+<a name='L3396'></a><a href='#L3396'>3396</a>
+<a name='L3397'></a><a href='#L3397'>3397</a>
+<a name='L3398'></a><a href='#L3398'>3398</a>
+<a name='L3399'></a><a href='#L3399'>3399</a>
+<a name='L3400'></a><a href='#L3400'>3400</a>
+<a name='L3401'></a><a href='#L3401'>3401</a>
+<a name='L3402'></a><a href='#L3402'>3402</a>
+<a name='L3403'></a><a href='#L3403'>3403</a>
+<a name='L3404'></a><a href='#L3404'>3404</a>
+<a name='L3405'></a><a href='#L3405'>3405</a>
+<a name='L3406'></a><a href='#L3406'>3406</a>
+<a name='L3407'></a><a href='#L3407'>3407</a>
+<a name='L3408'></a><a href='#L3408'>3408</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">154x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7125,6 +7159,8 @@ export const strings = {
   BACK_TO_EDIT: 'Volver a editar',
   BACK_TO_TERRAWARE: 'Volver a Terraware',
   BAG_ID: 'ID de Bolsa',
+  BASED_ON_X_BATCH: 'Basado en {0} lote',
+  BASED_ON_X_BATCHES: 'Basado en {0} lotes',
   BASELINE: 'Línea base',
   BASELINE_SURVEY: 'Encuesta de referencia',
   BATCH: 'Lote',
@@ -8410,6 +8446,7 @@ export const strings = {
   NOT_COMPLETE: 'Sin completar',
   NOT_COVERED: 'No Cubierto',
   NOT_CUMULATIVE: 'No acumulativo',
+  NOT_ENOUGH_DATA: 'No hay suficientes datos',
   NOT_ENOUGH_SEEDS_IN_ACCESSION: 'No hay suficientes semillas en la accesión.',
   NOT_NEEDED: 'No es necesario',
   NOT_OBSERVED: 'No observado',
@@ -8649,6 +8686,7 @@ export const strings = {
   PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST:
     'Recolección silvestre: plántulas recolectadas en bosques naturales y replantadas posteriormente.',
   PLANT_MONITORING: 'Monitoreo de plantas',
+  PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX: 'Observacion-Monitoreo-Plantas',
   PLANTED_PLANTS: 'Plantas plantadas',
   PLANTED_SPECIES: 'Especies plantadas',
   PLANTED_SPECIES_TOOLTIP:
@@ -9537,6 +9575,17 @@ export const strings = {
   SPECIES_TARGET_DELETED: 'Meta de especie eliminada: {0} en {1}.',
   SPECIES_TARGET_UPDATED: 'Meta de especie actualizada: {0} en {1} cambió de {2} a {3}.',
   SPECIES_TARGETS: 'Objetivos de especies',
+  SPECIES_TIME_IN_STAGE_MIN_BATCHES: 'Se necesitan al menos 3 lotes para mostrar un promedio.',
+  SPECIES_TIME_IN_STAGE_NO_BATCHES: 'Ningún lote tiene plántulas que hayan terminado esta etapa.',
+  SPECIES_TIME_IN_STAGE_ONLY_ONE_BATCH: 'Solo 1 lote tiene plántulas que han terminado esta etapa.',
+  SPECIES_TIME_IN_STAGE_ONLY_X_BATCHES: 'Solo {0} lotes tienen plántulas que han terminado esta etapa.',
+  SPECIES_TIME_IN_STAGE_RANGE_PENDING:
+    'Un rango típico aparece cuando hay disponibles 5 lotes con al menos 10 plántulas terminadas cada uno.',
+  SPECIES_TIME_IN_STAGE_TITLE: 'Días promedio por etapa de crecimiento para esta especie',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP:
+    'Cada valor promedia las plántulas que terminaron la etapa en todos los lotes de esta especie. Las plántulas que aún están en una etapa y las etapas editadas manualmente no se incluyen.',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP_RANGE:
+    'El rango típico muestra cuánto tiempo tomó a la mitad de los lotes. Los lotes con muy pocas plántulas no se incluyen en el rango.',
   SPECIES_TO_PLANT: 'Especies a plantar',
   SPECIES_TOOLTIP:
     'Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.',
@@ -9935,6 +9984,8 @@ export const strings = {
   TW_DATA: 'Datos de TW',
   TYPE: 'Tipo',
   TYPE_OF_FOREST: 'Tipo de bosque',
+  TYPICAL_UNDER_ONE_TO_X_DAYS: 'típicamente &lt;1–{0} días',
+  TYPICAL_X_TO_Y_DAYS: 'típicamente {0}–{1} días',
   UN_SDG: 'Objetivos de Desarrollo Sostenible (ODS) de las Naciones Unidas',
   UNABLE_TO_ADD_PERSON: 'No se puede añadir una persona',
   UNABLE_TO_LOAD_NOTIFICATIONS: 'No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.',
@@ -10240,7 +10291,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T13:30:07.728Z
+                at 2026-11-13T18:14:15.556Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

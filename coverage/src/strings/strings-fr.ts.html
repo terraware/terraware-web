@@ -3480,8 +3480,42 @@
 <a name='L3415'></a><a href='#L3415'>3415</a>
 <a name='L3416'></a><a href='#L3416'>3416</a>
 <a name='L3417'></a><a href='#L3417'>3417</a>
-<a name='L3418'></a><a href='#L3418'>3418</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">153x</span>
+<a name='L3418'></a><a href='#L3418'>3418</a>
+<a name='L3419'></a><a href='#L3419'>3419</a>
+<a name='L3420'></a><a href='#L3420'>3420</a>
+<a name='L3421'></a><a href='#L3421'>3421</a>
+<a name='L3422'></a><a href='#L3422'>3422</a>
+<a name='L3423'></a><a href='#L3423'>3423</a>
+<a name='L3424'></a><a href='#L3424'>3424</a>
+<a name='L3425'></a><a href='#L3425'>3425</a>
+<a name='L3426'></a><a href='#L3426'>3426</a>
+<a name='L3427'></a><a href='#L3427'>3427</a>
+<a name='L3428'></a><a href='#L3428'>3428</a>
+<a name='L3429'></a><a href='#L3429'>3429</a>
+<a name='L3430'></a><a href='#L3430'>3430</a>
+<a name='L3431'></a><a href='#L3431'>3431</a>
+<a name='L3432'></a><a href='#L3432'>3432</a>
+<a name='L3433'></a><a href='#L3433'>3433</a>
+<a name='L3434'></a><a href='#L3434'>3434</a>
+<a name='L3435'></a><a href='#L3435'>3435</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">154x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7182,6 +7216,8 @@ export const strings = {
   BACK_TO_EDIT: 'Retour à la modification',
   BACK_TO_TERRAWARE: 'Retour à Terraware',
   BAG_ID: 'Identifiant du sac',
+  BASED_ON_X_BATCH: 'Basé sur {0} lot',
+  BASED_ON_X_BATCHES: 'Basé sur {0} lots',
   BASELINE: 'Référence',
   BASELINE_SURVEY: 'Enquête de référence',
   BATCH: 'Lot',
@@ -7392,7 +7428,7 @@ export const strings = {
   COPY_PREVIOUS_SEASON_TOOLTIP:
     'Sélectionnez une saison précédemment créée qui contient les espèces que vous souhaitez utiliser pour la nouvelle saison.',
   COPYING_SPECIES_ACROSS_SUBSTRATUM: 'Copie de {0} espèces sur {1} substrats, avec toutes les cibles définies à 0',
-  COUNT: 'Compte',
+  COUNT: 'Nombre',
   COUNTRY: 'Pays',
   COUNTRY_ONLY: 'Pays uniquement',
   COUNTRY_REQUIRED: 'Pays *',
@@ -8482,6 +8518,7 @@ export const strings = {
   NOT_COMPLETE: 'Pas terminé',
   NOT_COVERED: 'Non couverte',
   NOT_CUMULATIVE: 'Non cumulatif',
+  NOT_ENOUGH_DATA: 'Données insuffisantes',
   NOT_ENOUGH_SEEDS_IN_ACCESSION: "Pas assez de semences dans l'accession",
   NOT_NEEDED: 'Non nécessaire',
   NOT_OBSERVED: 'Non observé',
@@ -8724,6 +8761,7 @@ export const strings = {
   PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST:
     'Récolte de sauvageons : plantules récoltées dans les forêts naturelles et replantées par la suite.',
   PLANT_MONITORING: 'Surveillance des végétaux',
+  PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX: 'Observation-Suivi-Plantes',
   PLANTED_PLANTS: 'Plantes semées',
   PLANTED_SPECIES: 'Espèces plantées',
   PLANTED_SPECIES_TOOLTIP:
@@ -9617,6 +9655,17 @@ export const strings = {
   SPECIES_TARGET_DELETED: "Objectif d'espèce supprimé : {0} dans {1}.",
   SPECIES_TARGET_UPDATED: "Objectif d'espèce mis à jour : {0} dans {1} modifié de {2} à {3}.",
   SPECIES_TARGETS: 'Objectifs par espèce',
+  SPECIES_TIME_IN_STAGE_MIN_BATCHES: 'Au moins 3 lots sont nécessaires pour afficher une moyenne.',
+  SPECIES_TIME_IN_STAGE_NO_BATCHES: 'Aucun lot n’a de semis ayant terminé cette étape.',
+  SPECIES_TIME_IN_STAGE_ONLY_ONE_BATCH: 'Un seul lot a des semis ayant terminé cette étape.',
+  SPECIES_TIME_IN_STAGE_ONLY_X_BATCHES: 'Seuls {0} lots ont des semis ayant terminé cette étape.',
+  SPECIES_TIME_IN_STAGE_RANGE_PENDING:
+    'Une plage typique apparaît lorsque 5 lots avec au moins 10 semis terminés chacun sont disponibles.',
+  SPECIES_TIME_IN_STAGE_TITLE: 'Nombre moyen de jours par étape de croissance pour cette espèce',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP:
+    'Chaque valeur correspond à la moyenne des semis ayant terminé l’étape, tous lots confondus pour cette espèce. Les semis encore dans une étape, ainsi que les étapes modifiées manuellement, ne sont pas inclus.',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP_RANGE:
+    'La plage typique indique la durée prise par la moitié centrale des lots. Les lots avec très peu de semis ne sont pas inclus dans la plage.',
   SPECIES_TO_PLANT: 'Espèces à planter',
   SPECIES_TOOLTIP:
     'Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.',
@@ -10013,6 +10062,8 @@ export const strings = {
   TW_DATA: 'Données TW',
   TYPE: 'Type',
   TYPE_OF_FOREST: 'Type de forêt',
+  TYPICAL_UNDER_ONE_TO_X_DAYS: 'typique &lt;1–{0} jours',
+  TYPICAL_X_TO_Y_DAYS: 'typique {0}–{1} jours',
   UN_SDG: 'Objectifs de développement durable des Nations Unies (SDG)',
   UNABLE_TO_ADD_PERSON: "Impossible d'ajouter une personne",
   UNABLE_TO_LOAD_NOTIFICATIONS: 'Impossible de charger les notifications. Réessayez plus tard.',
@@ -10321,7 +10372,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T13:30:07.728Z
+                at 2026-11-13T18:14:15.556Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

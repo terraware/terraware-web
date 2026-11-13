@@ -3506,8 +3506,42 @@
 <a name='L3441'></a><a href='#L3441'>3441</a>
 <a name='L3442'></a><a href='#L3442'>3442</a>
 <a name='L3443'></a><a href='#L3443'>3443</a>
-<a name='L3444'></a><a href='#L3444'>3444</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">153x</span>
+<a name='L3444'></a><a href='#L3444'>3444</a>
+<a name='L3445'></a><a href='#L3445'>3445</a>
+<a name='L3446'></a><a href='#L3446'>3446</a>
+<a name='L3447'></a><a href='#L3447'>3447</a>
+<a name='L3448'></a><a href='#L3448'>3448</a>
+<a name='L3449'></a><a href='#L3449'>3449</a>
+<a name='L3450'></a><a href='#L3450'>3450</a>
+<a name='L3451'></a><a href='#L3451'>3451</a>
+<a name='L3452'></a><a href='#L3452'>3452</a>
+<a name='L3453'></a><a href='#L3453'>3453</a>
+<a name='L3454'></a><a href='#L3454'>3454</a>
+<a name='L3455'></a><a href='#L3455'>3455</a>
+<a name='L3456'></a><a href='#L3456'>3456</a>
+<a name='L3457'></a><a href='#L3457'>3457</a>
+<a name='L3458'></a><a href='#L3458'>3458</a>
+<a name='L3459'></a><a href='#L3459'>3459</a>
+<a name='L3460'></a><a href='#L3460'>3460</a>
+<a name='L3461'></a><a href='#L3461'>3461</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">154x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7234,6 +7268,8 @@ export const strings = {
   BACK_TO_EDIT: 'RWRpdA dG8 QmFjaw',
   BACK_TO_TERRAWARE: 'VGVycmF3YXJl dG8 QmFjaw',
   BAG_ID: 'SUQ QmFn',
+  BASED_ON_X_BATCH: 'YmF0Y2g {0} b24 QmFzZWQ',
+  BASED_ON_X_BATCHES: 'YmF0Y2hlcw {0} b24 QmFzZWQ',
   BASELINE: 'QmFzZWxpbmU',
   BASELINE_SURVEY: 'U3VydmV5 QmFzZWxpbmU',
   BATCH: 'QmF0Y2g',
@@ -8541,6 +8577,7 @@ export const strings = {
   NOT_COMPLETE: 'Q29tcGxldGU Tm90',
   NOT_COVERED: 'Q292ZXJlZA Tm90',
   NOT_CUMULATIVE: 'Q3VtdWxhdGl2ZQ Tm90',
+  NOT_ENOUGH_DATA: 'ZGF0YQ ZW5vdWdo Tm90',
   NOT_ENOUGH_SEEDS_IN_ACCESSION: 'YWNjZXNzaW9u aW4 c2VlZHM ZW5vdWdo Tm90',
   NOT_NEEDED: 'TmVlZGVk Tm90',
   NOT_OBSERVED: 'T2JzZXJ2ZWQ Tm90',
@@ -8783,6 +8820,7 @@ export const strings = {
   PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST:
     'cmVwbGFudGVk c3Vic2VxdWVudGx5 YW5k Zm9yZXN0cw bmF0dXJhbA ZnJvbQ aGFydmVzdGVk c2VlZGxpbmdz LQ aGFydmVzdA V2lsZGxpbmc',
   PLANT_MONITORING: 'TW9uaXRvcmluZw UGxhbnQ',
+  PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX: 'UGxhbnQtTW9uaXRvcmluZy1PYnNlcnZhdGlvbg',
   PLANTED_PLANTS: 'UGxhbnRz UGxhbnRlZA',
   PLANTED_SPECIES: 'U3BlY2llcw UGxhbnRlZA',
   PLANTED_SPECIES_TOOLTIP:
@@ -9679,6 +9717,17 @@ export const strings = {
   SPECIES_TARGET_DELETED: '{1}. aW4 {0} ZGVsZXRlZDo dGFyZ2V0 U3BlY2llcw',
   SPECIES_TARGET_UPDATED: '{3}. dG8 {2} ZnJvbQ Y2hhbmdlZA {1} aW4 {0} dXBkYXRlZDo dGFyZ2V0 U3BlY2llcw',
   SPECIES_TARGETS: 'VGFyZ2V0cw U3BlY2llcw',
+  SPECIES_TIME_IN_STAGE_MIN_BATCHES: 'YXZlcmFnZS4 YW4 c2hvdw dG8 bmVlZGVk YXJl YmF0Y2hlcw Mw bGVhc3Q QXQ',
+  SPECIES_TIME_IN_STAGE_NO_BATCHES: 'c3RhZ2Uu dGhpcw ZmluaXNoZWQ dGhhdA c2VlZGxpbmdz aGF2ZQ YmF0Y2hlcw Tm8',
+  SPECIES_TIME_IN_STAGE_ONLY_ONE_BATCH: 'c3RhZ2Uu dGhpcw ZmluaXNoZWQ dGhhdA c2VlZGxpbmdz aGFz YmF0Y2g MQ T25seQ',
+  SPECIES_TIME_IN_STAGE_ONLY_X_BATCHES: 'c3RhZ2Uu dGhpcw ZmluaXNoZWQ dGhhdA c2VlZGxpbmdz aGF2ZQ YmF0Y2hlcw {0} T25seQ',
+  SPECIES_TIME_IN_STAGE_RANGE_PENDING:
+    'YXZhaWxhYmxlLg YXJl ZWFjaA c2VlZGxpbmdz ZmluaXNoZWQ MTA bGVhc3Q YXQ d2l0aA YmF0Y2hlcw NQ b25jZQ YXBwZWFycw cmFuZ2U dHlwaWNhbA QQ',
+  SPECIES_TIME_IN_STAGE_TITLE: 'c3BlY2llcw dGhpcw Zm9y c3RhZ2U Z3Jvd3Ro cGVy ZGF5cw QXZlcmFnZQ',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP:
+    'aW5jbHVkZWQu YXJlbid0 aGFuZCw Ynk ZWRpdGVk d2VyZQ dGhhdA c3RhZ2Vz YW5k c3RhZ2Us YQ aW4 c3RpbGw U2VlZGxpbmdz c3BlY2llcy4 dGhpcw b2Y YmF0Y2hlcw YWxs YWNyb3Nz c3RhZ2U dGhl ZmluaXNoZWQ dGhhdA c2VlZGxpbmdz dGhl YXZlcmFnZXM dmFsdWU RWFjaA',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP_RANGE:
+    'cmFuZ2Uu dGhl aW4 aW5jbHVkZWQ YXJlbid0 c2VlZGxpbmdz ZmV3 dmVyeQ d2l0aA QmF0Y2hlcw dG9vay4 YmF0Y2hlcw b2Y aGFsZg bWlkZGxl dGhl bG9uZw aG93 c2hvd3M cmFuZ2U dHlwaWNhbA VGhl',
   SPECIES_TO_PLANT: 'UGxhbnQ dG8 U3BlY2llcw',
   SPECIES_TOOLTIP:
     'cmF0ZXM c3Vydml2YWw c3BlY2llcw YW5k cGxvdA Y2FsY3VsYXRl dG8 dXNlZA YmU d2lsbA ZGVuc2l0aWVz cGxhbnQ dGhl d2hpY2g ZnJvbQ U3BlY2llcw',
@@ -10084,6 +10133,8 @@ export const strings = {
   TW_DATA: 'RGF0YQ VFc',
   TYPE: 'VHlwZQ',
   TYPE_OF_FOREST: 'Rm9yZXN0 b2Y VHlwZQ',
+  TYPICAL_UNDER_ONE_TO_X_DAYS: 'ZGF5cw PDHigJN7MH0 dHlwaWNhbA',
+  TYPICAL_X_TO_Y_DAYS: 'ZGF5cw {0}–{1} dHlwaWNhbA',
   UN_SDG: 'KFNERyk R29hbHM RGV2ZWxvcG1lbnQ U3VzdGFpbmFibGU VU4',
   UNABLE_TO_ADD_PERSON: 'UGVyc29u QWRk dG8 VW5hYmxl',
   UNABLE_TO_LOAD_NOTIFICATIONS: 'bGF0ZXIu YWdhaW4 VHJ5 bm90aWZpY2F0aW9ucy4 bG9hZA dG8 VW5hYmxl',
@@ -10399,7 +10450,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T13:30:07.728Z
+                at 2026-11-13T18:14:15.556Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

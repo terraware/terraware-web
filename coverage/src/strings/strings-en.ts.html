@@ -3388,8 +3388,42 @@
 <a name='L3323'></a><a href='#L3323'>3323</a>
 <a name='L3324'></a><a href='#L3324'>3324</a>
 <a name='L3325'></a><a href='#L3325'>3325</a>
-<a name='L3326'></a><a href='#L3326'>3326</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">153x</span>
+<a name='L3326'></a><a href='#L3326'>3326</a>
+<a name='L3327'></a><a href='#L3327'>3327</a>
+<a name='L3328'></a><a href='#L3328'>3328</a>
+<a name='L3329'></a><a href='#L3329'>3329</a>
+<a name='L3330'></a><a href='#L3330'>3330</a>
+<a name='L3331'></a><a href='#L3331'>3331</a>
+<a name='L3332'></a><a href='#L3332'>3332</a>
+<a name='L3333'></a><a href='#L3333'>3333</a>
+<a name='L3334'></a><a href='#L3334'>3334</a>
+<a name='L3335'></a><a href='#L3335'>3335</a>
+<a name='L3336'></a><a href='#L3336'>3336</a>
+<a name='L3337'></a><a href='#L3337'>3337</a>
+<a name='L3338'></a><a href='#L3338'>3338</a>
+<a name='L3339'></a><a href='#L3339'>3339</a>
+<a name='L3340'></a><a href='#L3340'>3340</a>
+<a name='L3341'></a><a href='#L3341'>3341</a>
+<a name='L3342'></a><a href='#L3342'>3342</a>
+<a name='L3343'></a><a href='#L3343'>3343</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">154x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6993,6 +7027,8 @@ export const strings = {
   BACK_TO_EDIT: 'Back to Edit',
   BACK_TO_TERRAWARE: 'Back to Terraware',
   BAG_ID: 'Bag ID',
+  BASED_ON_X_BATCH: 'Based on {0} batch',
+  BASED_ON_X_BATCHES: 'Based on {0} batches',
   BASELINE: 'Baseline',
   BASELINE_SURVEY: 'Baseline Survey',
   BATCH: 'Batch',
@@ -8247,6 +8283,7 @@ export const strings = {
   NOT_COMPLETE: 'Not Complete',
   NOT_COVERED: 'Not Covered',
   NOT_CUMULATIVE: 'Not Cumulative',
+  NOT_ENOUGH_DATA: 'Not enough data',
   NOT_ENOUGH_SEEDS_IN_ACCESSION: 'Not enough seeds in accession',
   NOT_NEEDED: 'Not Needed',
   NOT_OBSERVED: 'Not Observed',
@@ -8484,6 +8521,7 @@ export const strings = {
   PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST:
     'Wildling harvest - seedlings harvested from natural forests and subsequently replanted',
   PLANT_MONITORING: 'Plant Monitoring',
+  PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX: 'Plant-Monitoring-Observation',
   PLANTED_PLANTS: 'Planted Plants',
   PLANTED_SPECIES: 'Planted Species',
   PLANTED_SPECIES_TOOLTIP:
@@ -9351,6 +9389,17 @@ export const strings = {
   SPECIES_TARGET_DELETED: 'Species target deleted: {0} in {1}.',
   SPECIES_TARGET_UPDATED: 'Species target updated: {0} in {1} changed from {2} to {3}.',
   SPECIES_TARGETS: 'Species Targets',
+  SPECIES_TIME_IN_STAGE_MIN_BATCHES: 'At least 3 batches are needed to show an average.',
+  SPECIES_TIME_IN_STAGE_NO_BATCHES: 'No batches have seedlings that finished this stage.',
+  SPECIES_TIME_IN_STAGE_ONLY_ONE_BATCH: 'Only 1 batch has seedlings that finished this stage.',
+  SPECIES_TIME_IN_STAGE_ONLY_X_BATCHES: 'Only {0} batches have seedlings that finished this stage.',
+  SPECIES_TIME_IN_STAGE_RANGE_PENDING:
+    'A typical range appears once 5 batches with at least 10 finished seedlings each are available.',
+  SPECIES_TIME_IN_STAGE_TITLE: 'Average days per growth stage for this species',
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP:
+    "Each value averages the seedlings that finished the stage across all batches of this species. Seedlings still in a stage, and stages that were edited by hand, aren't included.",
+  SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP_RANGE:
+    "The typical range shows how long the middle half of batches took. Batches with very few seedlings aren't included in the range.",
   SPECIES_TO_PLANT: 'Species to Plant',
   SPECIES_TOOLTIP: 'Species from which the plant densities will be used to calculate plot and species survival rates',
   SPECIES_USAGE: 'Species Usage',
@@ -9745,6 +9794,8 @@ export const strings = {
   TW_DATA: 'TW Data',
   TYPE: 'Type',
   TYPE_OF_FOREST: 'Type of Forest',
+  TYPICAL_UNDER_ONE_TO_X_DAYS: 'typical &lt;1–{0} days',
+  TYPICAL_X_TO_Y_DAYS: 'typical {0}–{1} days',
   UN_SDG: 'UN Sustainable Development Goals (SDG)',
   UNABLE_TO_ADD_PERSON: 'Unable to Add Person',
   UNABLE_TO_LOAD_NOTIFICATIONS: 'Unable to load notifications. Try again later.',
@@ -10045,7 +10096,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T13:30:07.728Z
+                at 2026-11-13T18:14:15.556Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
