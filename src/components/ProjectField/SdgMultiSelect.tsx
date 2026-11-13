@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 import ProjectFieldMultiSelect from './MultiSelect';
 import { ProjectFieldEditProps } from './index';
@@ -10,6 +10,7 @@ type SdgMultiSelectProps = Omit<ProjectFieldEditProps, 'onChange' | 'value'> & {
   value: string[] | number[] | undefined;
 };
 const SdgMultiSelect = ({ id, label, onChange, value, md, height }: SdgMultiSelectProps) => {
+  const { strings } = useLocalization();
   const options = useMemo(
     (): Map<string, string> =>
       new Map([
@@ -31,7 +32,7 @@ const SdgMultiSelect = ({ id, label, onChange, value, md, height }: SdgMultiSele
         ['16', strings.SDG_16],
         ['17', strings.SDG_17],
       ]),
-    []
+    [strings]
   );
 
   return (

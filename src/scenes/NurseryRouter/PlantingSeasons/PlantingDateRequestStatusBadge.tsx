@@ -4,14 +4,15 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
+import { useLocalization } from 'src/providers';
 import { PlantingDateRequestStatus } from 'src/queries/search/plantingDateRequests';
-import strings from 'src/strings';
 
 type PlantingDateRequestStatusBadgeProps = {
   status?: PlantingDateRequestStatus;
 };
 
 const PlantingDateRequestStatusBadge = ({ status }: PlantingDateRequestStatusBadgeProps): JSX.Element => {
+  const { strings } = useLocalization();
   const theme = useTheme();
 
   const badgeProps = useMemo((): BadgeProps => {
@@ -35,7 +36,7 @@ const PlantingDateRequestStatusBadge = ({ status }: PlantingDateRequestStatusBad
       default:
         return { ...warningColors, label: strings.NOT_YET_REQUESTED };
     }
-  }, [status, theme]);
+  }, [status, theme, strings]);
 
   return <Badge {...badgeProps} />;
 };
