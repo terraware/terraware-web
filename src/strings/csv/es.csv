@@ -249,6 +249,8 @@ BACK,Atrás,2e8211b0
 BACK_TO_EDIT,Volver a editar,b3d8a9a6
 BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
+BASED_ON_X_SEEDLING,Basado en {0} plántula,3bbdb932
+BASED_ON_X_SEEDLINGS,Basado en {0} plántulas,a1e372d3
 BASED_ON_X_BATCH,Basado en {0} lote,919ed414
 BASED_ON_X_BATCHES,Basado en {0} lotes,8c41bee7
 BASELINE,Línea base,332af00e
@@ -2948,6 +2950,7 @@ X_PLOT,{0} parcela,69151ad1
 X_PLOTS,{0} parcelas,af2dd663
 X_SPECIES,{0} especies,42e62955
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
+X_STILL_IN_THIS_STAGE,{0} aún en esta etapa,6e034985
 X_TARGET,Meta {0},d8170b6e
 X_THIS_QUARTER,{0} este trimestre,6391f6a0
 YEARLY_CUMULATIVE,Acumulativo anual,ed9a120d

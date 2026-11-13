@@ -1,6 +1,6 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
@@ -63,16 +63,88 @@ const daysLabel = (days: number): string =>
     ? strings.LESS_THAN_ONE_DAY
     : strings.formatString(days === 1 ? strings.X_DAY : strings.X_DAYS, days).toString();
 
+/**
+ * Seedlings the batch currently holds in a stage. The server derives its own count by replaying the
+ * batch's quantity history, so it lands on these same numbers rather than reporting them separately.
+ */
+const stageQuantity = (batch: Batch, stage: Stage['key']): number => {
+  switch (stage) {
+    case 'germinating':
+      return batch.germinatingQuantity;
+    case 'activeGrowth':
+      return batch.activeGrowthQuantity;
+    case 'hardeningOff':
+      return batch.hardeningOffQuantity;
+    case 'ready':
+      return batch.readyQuantity;
+  }
+};
+
+/** Wraps its child in a tooltip only when there is a title; MUI renders one unconditionally. */
+const TooltipWrapper = ({ title, children }: { title?: string; children: JSX.Element }): JSX.Element => {
+  const theme = useTheme();
+
+  if (!title) {
+    return children;
+  }
+
+  return (
+    <Tooltip
+      arrow
+      describeChild
+      placement='top-start'
+      slotProps={{
+        arrow: { sx: { color: theme.palette.TwClrBaseGray800 } },
+        tooltip: {
+          sx: {
+            backgroundColor: theme.palette.TwClrBaseGray800,
+            color: theme.palette.TwClrBaseWhite,
+            maxWidth: '464px',
+            padding: '8px',
+            whiteSpace: 'pre-line',
+          },
+        },
+      }}
+      title={title}
+    >
+      {children}
+    </Tooltip>
+  );
+};
+
 type StageSegmentProps = {
   stage: Stage;
   stageTime?: BatchStageTimePayload;
   fillEvenly: boolean;
+  /** Seedlings the batch currently holds in this stage; the server's time-in-stage count matches it. */
+  inStage: number;
 };
 
-const StageSegment = ({ stage, stageTime, fillEvenly }: StageSegmentProps): JSX.Element => {
+const StageSegment = ({ stage, stageTime, fillEvenly, inStage }: StageSegmentProps): JSX.Element => {
   const theme = useTheme();
   const days = stageDays(stageTime);
   const hasDays = days !== undefined;
+  const countedQuantity = stageTime?.countedQuantity ?? 0;
+
+  // The counts explain the average, so they are only offered where there is an average to explain;
+  // the other states carry a tooltip saying why they have none.
+  const counts = hasDays
+    ? [
+        strings
+          .formatString(
+            countedQuantity === 1 ? strings.BASED_ON_X_SEEDLING : strings.BASED_ON_X_SEEDLINGS,
+            countedQuantity
+          )
+          .toString(),
+        strings.formatString(strings.X_STILL_IN_THIS_STAGE, inStage).toString(),
+      ].join('\n')
+    : undefined;
+
+  const valueText = hasDays
+    ? [daysLabel(days), stageTime?.inProgress ? strings.SO_FAR : undefined].filter(Boolean).join(' ')
+    : stageTime?.cleared
+      ? strings.NOT_AVAILABLE
+      : '—';
 
   return (
     <Box
@@ -98,42 +170,46 @@ const StageSegment = ({ stage, stageTime, fillEvenly }: StageSegmentProps): JSX.
       >
         {stage.label}
       </Typography>
-      <Box
-        sx={{
-          alignItems: 'center',
-          backgroundColor: stage.backgroundColor,
-          borderRadius: '8px',
-          color: stage.color,
-          display: 'flex',
-          fontSize: '16px',
-          gap: theme.spacing(0.5),
-          minHeight: '56px',
-          padding: theme.spacing(0, 2),
-          whiteSpace: 'nowrap',
-        }}
-      >
-        {hasDays ? (
-          <>
-            <Box component='span' fontWeight={600}>
-              {daysLabel(days)}
-            </Box>
-            {stageTime?.inProgress && <Box component='span'>{`${strings.SO_FAR}*`}</Box>}
-          </>
-        ) : (
-          <>
-            <Box component='span' fontWeight={600}>
-              {stageTime?.cleared ? strings.NOT_AVAILABLE : '—'}
-            </Box>
-            <IconTooltip
-              title={
-                stageTime?.cleared
-                  ? strings.TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP
-                  : strings.TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP
-              }
-            />
-          </>
-        )}
-      </Box>
+      <TooltipWrapper title={counts}>
+        <Box
+          aria-label={counts ? `${stage.label}: ${valueText}` : undefined}
+          tabIndex={counts ? 0 : undefined}
+          sx={{
+            alignItems: 'center',
+            backgroundColor: stage.backgroundColor,
+            borderRadius: '8px',
+            color: stage.color,
+            display: 'flex',
+            fontSize: '16px',
+            gap: theme.spacing(0.5),
+            minHeight: '56px',
+            padding: theme.spacing(0, 2),
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {hasDays ? (
+            <>
+              <Box component='span' fontWeight={600}>
+                {daysLabel(days)}
+              </Box>
+              {stageTime?.inProgress && <Box component='span'>{`${strings.SO_FAR}*`}</Box>}
+            </>
+          ) : (
+            <>
+              <Box component='span' fontWeight={600}>
+                {stageTime?.cleared ? strings.NOT_AVAILABLE : '—'}
+              </Box>
+              <IconTooltip
+                title={
+                  stageTime?.cleared
+                    ? strings.TIME_IN_STAGE_NOT_AVAILABLE_TOOLTIP
+                    : strings.TIME_IN_STAGE_NOT_APPLICABLE_TOOLTIP
+                }
+              />
+            </>
+          )}
+        </Box>
+      </TooltipWrapper>
     </Box>
   );
 };
@@ -194,6 +270,7 @@ const BatchTimeInStage = ({ batch }: BatchTimeInStageProps): JSX.Element | null 
               stage={stage}
               stageTime={timeInStage?.[stage.key]}
               fillEvenly={totalDays === 0}
+              inStage={stageQuantity(batch, stage.key)}
             />
           ))}
         </Box>
