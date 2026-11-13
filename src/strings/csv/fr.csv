@@ -1600,6 +1600,7 @@ PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE,Achat de plants : achat
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION,"Propagation végétative : propagation clonale, par exemple par bouturage, marcottage, greffage.",1565a014
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST,Récolte de sauvageons : plantules récoltées dans les forêts naturelles et replantées par la suite.,c1168454
 PLANT_MONITORING,Surveillance des végétaux,21ade0c5
+PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX,Observation-Suivi-Plantes,4f76f296
 PLANTED_PLANTS,Plantes semées,c3ba4493
 PLANTED_SPECIES,Espèces plantées,0dd1f725
 PLANTED_SPECIES_TOOLTIP,La rubrique « Espèces plantées » indique les pourcentages de chacune des espèces plantées. Les quatre premières espèces sont nommées et les autres sont incluses dans la rubrique « Autres espèces ».,f4a01a11

@@ -1601,6 +1601,7 @@ PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE,Seedling purchase - buy
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION,"Vegetative propagation - clonal propagation, e.g. cuttings, air layering, grafting",
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST,Wildling harvest - seedlings harvested from natural forests and subsequently replanted,
 PLANT_MONITORING,Plant Monitoring,
+PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX,Plant-Monitoring-Observation,Included as part of the filename for data files with plant monitoring observation data. Should not include whitespace.
 PLANTED_PLANTS,Planted Plants,
 PLANTED_SPECIES,Planted Species,
 PLANTED_SPECIES_TOOLTIP,"Planted Species shows the percentages of each of the species planted. The top 4 species are named, and the rest are included in Other Species.",

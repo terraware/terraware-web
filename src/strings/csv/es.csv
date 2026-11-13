@@ -1601,6 +1601,7 @@ PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE,Compra de plántulas: c
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION,"Propagación vegetativa: propagación clonal, por ejemplo, esquejes, acodo aéreo, injerto",1565a014
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST,Recolección silvestre: plántulas recolectadas en bosques naturales y replantadas posteriormente.,c1168454
 PLANT_MONITORING,Monitoreo de plantas,21ade0c5
+PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX,Observacion-Monitoreo-Plantas,4f76f296
 PLANTED_PLANTS,Plantas plantadas,c3ba4493
 PLANTED_SPECIES,Especies plantadas,0dd1f725
 PLANTED_SPECIES_TOOLTIP,"Las ""Especies plantadas"" indican el porcentaje de cada especie plantada. Se nombran las cuatro especies más comunes y el resto se agrupa en ""Otras especies"".",f4a01a11
