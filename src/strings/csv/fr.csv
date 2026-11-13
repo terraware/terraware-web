@@ -214,6 +214,7 @@ ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,Êtes-vous sûr de vouloir supprimer cette date de plantation ?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,8f7cb65e
 ARE_YOU_SURE_MARK_PLANTING_DATE_FULFILLED,Êtes-vous sûr de vouloir marquer cette date de plantation comme accomplie ?,4ab03693
+AREA,Superficie,be27ab89
 AREA_HA,Superficie (ha),8ab5d500
 AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
@@ -543,7 +544,7 @@ DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabil
 DELETE_VIEW,Supprimer la vue,10ce4e6e
 DELETE_VIEW_CONFIRMATION,« {0} » sera supprimé de vos vues enregistrées. Cela ne modifiera aucune donnée du projet.,5813e558
 DELETE_VIEW_TITLE,Supprimer la vue ?,3c9df51d
-DELETED_SPECIES,<deleted species>,c397460c
+DELETED_SPECIES,<espèce supprimée>,c397460c
 DELIVERABLE_APPROVED,Livrable approuvé,c2a1516b
 DELIVERABLE_CATEGORY,Catégorie : {0},bbe96e63
 DELIVERABLE_NAME,Nom du livrable,570b3a75
@@ -620,7 +621,7 @@ ECOLOGICAL_ROLE_KNOWN,Rôle écologique connu,6070c087
 ECOLOGICAL_ROLE_KNOWN_TOOLTIP,"Indiquez les rôles écologiques tels que le groupe fonctionnel de l'espèce, les services écosystémiques fournis, le rôle en tant qu'espèce clé, etc.",24e19617
 ECOSYSTEM_BOREAL_FOREST_TAIGA,Forêts boréales/Taïga,5beef0f6
 ECOSYSTEM_DESERT_XERIC_SHRUBLAND,Déserts et arbustes xériques,524541c7
-ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Prairies inondées et savanes,4a0fdf53
+ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Prairies et savanes inondées,4a922b92
 ECOSYSTEM_MANGROVE,Mangroves,3511a098
 ECOSYSTEM_MEDITERRANEAN_FOREST,"Forêts, bois et broussailles méditerranéennes",c4ce8459
 ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND,Prairies et broussailles montagnardes,e13ceda4
@@ -1153,6 +1154,7 @@ LONGITUDE,Longitude,bec9ea21
 LOSS_RATE,Taux de perte,544aa2af
 LOW,Basse,ddedeca3
 LOWEST,Les plus faibles,b651e8a7
+MAIN_PHOTO,Photo principale,8dedf85a
 MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
 MANAGE_PLANTING_PLANS_DESCRIPTION,"Gérez les plans de plantation pour les sites de plantation, y compris les objectifs du site et les saisons de plantation.",6d14df77
@@ -1184,6 +1186,7 @@ MAP_EDIT_SUMMARY_SUBSTRATUM_DELETED,La sous-strate {0} sera supprimée.,68a45214
 MAP_EDIT_SUMMARY_SUBSTRATUM_UPDATED,"La sous-strate {0} changera de {1} ha, et {2}% de sa nouvelle limite chevauche sa limite actuelle.",17b59d57
 MAP_EDIT_SUMMARY_TITLE,Vérifier les modifications de la carte,ba53ed3b
 MAP_NOT_UPLOADED,Carte non mise en ligne,2cc4bb13
+MAP_PHOTO,Photo de la carte,ea42a58e
 MAPS,Cartes,367c1e39
 MAPS_FOR,Cartes pour,31f1ee6a
 MAPS_GIS_DESCRIPTION,Les cartes présentées ici proviennent de la base de données SIG. Visualisez la carte Terraware du projet dans le tableau de bord des plantes du projet.,27749df5
@@ -1481,6 +1484,7 @@ ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Une ou plusieurs réponses nécessitent des m
 OPPORTUNITIES_INSTRUCTIONS,"Il peut s'agir des possibilités de développement de projet, de nouveaux marchés, de recommandations, de formation d'autres organisations, etc. (un quart de page au maximum.)",98ba6999
 OPPORTUNITIES_REQUIRED,Opportunités *,8d418e65
 OPT_IN,Fonctionnalités Opt-In,cbb9300b
+OPT_IN_FEATURES_DESCRIPTION,Activez cette option pour voir les fonctionnalités expérimentales ou en cours de développement,cef03c24
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Optionnel : coordonnées GPS de la parcelle,c15f1313
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS du coin sud-ouest si la zone observée ne correspond pas à l’emplacement initial de la parcelle.,d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Optionnel : Latitude de la parcelle,9de4497b
@@ -2106,6 +2110,7 @@ SE_CORNER,Coin SE,3e70b5c7
 SEARCH,Recherche,9f30c236
 SEARCH_OR_SELECT,Rechercher ou sélectionner...,cbd7f4ed
 SEARCH_SPECIES,Rechercher une espèce,5167bc5e
+SEARCH_VARIABLES,Rechercher des variables,401e4c5d
 SEASON_NAME_REQUIRED,Nom de la saison *,809a9261
 SEASON_TO_COPY,Saison à copier,fd2a6498
 SECTION_OWNER_ASSIGNED,Section Propriétaire assigné,2756744b
@@ -2162,6 +2167,7 @@ SELECT_BATCHES,Sélectionnez les lots,d15588c6
 SELECT_BUTTON,Sélectionnez,4e21939d
 SELECT_EXISTING_PROJECT,Sélectionner un projet existant,e3ffeef2
 SELECT_NURSERY,Sélectionner une pépinière,7af1b6f6
+SELECT_OPTIONS,Sélectionner des options...,9ae6a3c4
 SELECT_PLANTING_SITES_FOR_PROJECT,Sélectionner les sites de plantation pour {0},1476da48
 SELECT_PLANTING_SITES_FOR_PROJECT_DESCRIPTION,Utilisez la colonne des cases à cocher pour sélectionner les sites de plantation à ajouter à {0}.,b0ea2452
 SELECT_PROJECT,Sélectionner le projet,5db896a2
@@ -2430,7 +2436,6 @@ SUBSET_WEIGHT_COUNT,Poids/Nb du sous-ensemble,9dacedca
 SUBSET_WEIGHT_COUNT_TOOLTIP,Le poids du sous-ensemble doit être indiqué pour que la quantité d'accession puisse être retirée par poids. Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble.,ed2686ec
 SUBSET_WEIGHT_POSITIVE,Le poids du sous-ensemble doit être un nombre positif,8f1b1fed
 SUBSHRUB,Sous-arbrisseau,f13ec462
-SUBSTRATA,Substrats,6dda38f7
 SUBSTRATA,Sous-strates,6dda38f7
 SUBSTRATA_LABEL,Sous-strate,6dda38f7
 SUBSTRATE,Substrat,74ff28de
@@ -2549,6 +2554,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Ce livrable a été approuvé. La lis
 THIS_MODULE_CONTAINS,Ce module contient :,7982e848
 THIS_PERSON,cette personne,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Ce projet n’a aucune activité,cb693792
+THIS_PROJECT_HAS_NO_REPORTS,Ce projet n’a aucun rapport,97212b08
 THIS_REPORT_HAS_BEEN_APPROVED,Ce rapport a été approuvé.,030064cb
 THIS_VIEW_SAVES,Cette vue enregistre,85bfa1dc
 THREATENED,Menacée,57ca76f3

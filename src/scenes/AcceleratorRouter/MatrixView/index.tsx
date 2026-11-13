@@ -505,7 +505,7 @@ const MatrixView = () => {
                       }}
                     />
                   ))}
-                  {selections.length === 0 && <span style={{ color: '#999' }}>Select options...</span>}
+                  {selections.length === 0 && <span style={{ color: '#999' }}>{strings.SELECT_OPTIONS}</span>}
                 </div>
 
                 {isOpen &&

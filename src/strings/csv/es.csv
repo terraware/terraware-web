@@ -215,6 +215,7 @@ ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
 ARE_YOU_SURE_MARK_PLANTING_DATE_FULFILLED,¿Está seguro de que desea marcar esta Fecha de Plantación como cumplida?,4ab03693
+AREA,Área,be27ab89
 AREA_HA,Área (ha),8ab5d500
 AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
@@ -544,7 +545,7 @@ DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0
 DELETE_VIEW,Eliminar vista,10ce4e6e
 DELETE_VIEW_CONFIRMATION,"""{0}"" se eliminará de sus vistas guardadas. Esto no cambiará ningún dato del proyecto.",5813e558
 DELETE_VIEW_TITLE,¿Eliminar vista?,3c9df51d
-DELETED_SPECIES,<deleted species>,c397460c
+DELETED_SPECIES,<especie eliminada>,c397460c
 DELIVERABLE_APPROVED,Entregable aprobado,c2a1516b
 DELIVERABLE_CATEGORY,Categoría: {0},bbe96e63
 DELIVERABLE_NAME,Nombre del entregable,570b3a75
@@ -621,7 +622,7 @@ ECOLOGICAL_ROLE_KNOWN,Función ecológica conocida,6070c087
 ECOLOGICAL_ROLE_KNOWN_TOOLTIP,"Enumere las funciones ecológicas, como el grupo funcional de la especie, los servicios ecosistémicos que presta, su papel como especie clave, etc.",24e19617
 ECOSYSTEM_BOREAL_FOREST_TAIGA,Bosques boreales/Taiga,5beef0f6
 ECOSYSTEM_DESERT_XERIC_SHRUBLAND,Desiertos y matorrales xerófilos,524541c7
-ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Pastizal y sabana inundados,4a0fdf53
+ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Pastizales y sabanas inundados,4a922b92
 ECOSYSTEM_MANGROVE,Manglares,3511a098
 ECOSYSTEM_MEDITERRANEAN_FOREST,Bosque y matorral mediterráneo,c4ce8459
 ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND,Pastizal y matorral montano,e13ceda4
@@ -1154,6 +1155,7 @@ LONGITUDE,Longitud,bec9ea21
 LOSS_RATE,Tasa de pérdidas,544aa2af
 LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
+MAIN_PHOTO,Foto principal,8dedf85a
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
 MANAGE_PLANTING_PLANS_DESCRIPTION,"Gestione los planes de plantación para los Sitios de Plantación, incluyendo los objetivos del sitio y las temporadas de plantación.",6d14df77
@@ -1185,6 +1187,7 @@ MAP_EDIT_SUMMARY_SUBSTRATUM_DELETED,Se eliminará el sustrato {0}.,68a45214
 MAP_EDIT_SUMMARY_SUBSTRATUM_UPDATED,"El sustrato {0} cambiará en {1} ha, y el {2}% de su nuevo límite se superpone con su límite actual.",17b59d57
 MAP_EDIT_SUMMARY_TITLE,Revisar cambios en el mapa,ba53ed3b
 MAP_NOT_UPLOADED,Mapa sin subir,2cc4bb13
+MAP_PHOTO,Foto del mapa,ea42a58e
 MAPS,Mapas,367c1e39
 MAPS_FOR,Mapas para,31f1ee6a
 MAPS_GIS_DESCRIPTION,Los mapas que se muestran aquí pertenecen a la base de datos GIS. Vea el mapa Terraware del proyecto en el Panel de plantas del mismo.,27749df5
@@ -1482,6 +1485,7 @@ ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Una o más respuestas necesitan actualizacion
 OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)",98ba6999
 OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
 OPT_IN,Funciones Opt-In,cbb9300b
+OPT_IN_FEATURES_DESCRIPTION,Active esta opción para ver funciones experimentales o en desarrollo,cef03c24
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f1313
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b
@@ -2107,6 +2111,7 @@ SE_CORNER,Esquina SE,3e70b5c7
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
 SEARCH_SPECIES,Buscar especie,5167bc5e
+SEARCH_VARIABLES,Buscar variables,401e4c5d
 SEASON_NAME_REQUIRED,Nombre de la temporada *,809a9261
 SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
@@ -2163,6 +2168,7 @@ SELECT_BATCHES,Seleccionar lotes,d15588c6
 SELECT_BUTTON,Seleccionar,4e21939d
 SELECT_EXISTING_PROJECT,Seleccionar proyecto existente,e3ffeef2
 SELECT_NURSERY,Seleccionar Vivero,7af1b6f6
+SELECT_OPTIONS,Seleccione opciones...,9ae6a3c4
 SELECT_PLANTING_SITES_FOR_PROJECT,Seleccione sitios de plantación para {0},1476da48
 SELECT_PLANTING_SITES_FOR_PROJECT_DESCRIPTION,Use la columna de la casilla de verificación para seleccionar sitios de plantación que debe añadirse a {0}.,b0ea2452
 SELECT_PROJECT,Seleccionar proyecto,5db896a2
@@ -2549,6 +2555,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Este entregable ha sido aprobado. La 
 THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_PERSON,esta persona,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
+THIS_PROJECT_HAS_NO_REPORTS,Este proyecto no tiene informes,97212b08
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THIS_VIEW_SAVES,Esta vista guarda,85bfa1dc
 THREATENED,Amenazada,57ca76f3

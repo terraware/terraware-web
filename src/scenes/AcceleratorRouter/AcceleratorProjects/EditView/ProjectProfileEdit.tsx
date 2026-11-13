@@ -1017,7 +1017,7 @@ const ProjectProfileEdit = () => {
               }}
             >
               <PhotoSelectorWithPreview
-                title={'Main Photo'}
+                title={strings.MAIN_PHOTO}
                 onPhotoChanged={setMainPhoto}
                 uploadText={strings.UPLOAD_PHOTO}
                 uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}
@@ -1041,7 +1041,7 @@ const ProjectProfileEdit = () => {
               }}
             >
               <PhotoSelectorWithPreview
-                title={'Map Photo'}
+                title={strings.MAP_PHOTO}
                 onPhotoChanged={setMapPhoto}
                 uploadText={strings.UPLOAD_PHOTO}
                 uploadDescription={strings.UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2}

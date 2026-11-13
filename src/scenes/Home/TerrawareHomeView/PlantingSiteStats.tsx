@@ -182,7 +182,7 @@ const PlantingSiteStats = () => {
 
           <Grid size={primaryGridSize}>
             <StatsCardItem
-              label='Area'
+              label={strings.AREA}
               showLink={false}
               showBorder={!isDesktop}
               value={plantingSiteAreaHaDisplayValue}

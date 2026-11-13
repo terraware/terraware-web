@@ -5,7 +5,7 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import { isValid } from 'date-fns';
 
 import DatePicker from 'src/components/common/DatePicker';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import { FieldNodePayload } from 'src/types/Search';
 
 interface Props {
@@ -16,6 +16,7 @@ interface Props {
 }
 
 export default function DateRange(props: Props): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const [startDate, setStartDate] = React.useState(props.values[0]);
   const [endDate, setEndDate] = React.useState(props.values[1]);
@@ -60,7 +61,7 @@ export default function DateRange(props: Props): JSX.Element {
             value={startDate}
             onChange={(value) => onChangeDate('startDate', value)}
             label={strings.START}
-            aria-label='Start date'
+            aria-label={strings.START_DATE}
           />
         </Grid>
         <Grid size={6}>
@@ -69,7 +70,7 @@ export default function DateRange(props: Props): JSX.Element {
             value={endDate}
             onChange={(value) => onChangeDate('endDate', value)}
             label={strings.END}
-            aria-label='End date'
+            aria-label={strings.END_DATE}
           />
         </Grid>
       </Grid>

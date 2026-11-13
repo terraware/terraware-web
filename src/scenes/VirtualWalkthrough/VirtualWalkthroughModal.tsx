@@ -5,6 +5,8 @@ import { Box, IconButton } from '@mui/material';
 import { OverlayModal } from '@terraware/web-components';
 import { Application } from '@terraware/web-components/virtualWalkthrough';
 
+import { useLocalization } from 'src/providers';
+
 import VirtualWalkthroughWrapper, { VirtualWalkthroughViewerProps } from './VirtualWalkthroughWrapper';
 
 type VirtualWalkthroughModalProps = Omit<VirtualWalkthroughViewerProps, 'isFullScreen' | 'onToggleFullScreen'> & {
@@ -13,6 +15,7 @@ type VirtualWalkthroughModalProps = Omit<VirtualWalkthroughViewerProps, 'isFullS
 };
 
 const VirtualWalkthroughModal = ({ onClose, belowComponent, ...viewerProps }: VirtualWalkthroughModalProps) => {
+  const { strings } = useLocalization();
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const handleToggleFullScreen = useCallback(() => {
@@ -60,7 +63,7 @@ const VirtualWalkthroughModal = ({ onClose, belowComponent, ...viewerProps }: Vi
             zIndex: 1,
             '&:hover': { backgroundColor: '#f5f5f5' },
           }}
-          aria-label='Close'
+          aria-label={strings.CLOSE}
         >
           <Close />
         </IconButton>
