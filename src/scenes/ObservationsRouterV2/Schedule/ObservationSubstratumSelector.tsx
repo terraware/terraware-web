@@ -1,14 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Icon } from '@terraware/web-components';
+import { Badge, Checkbox, Icon } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useListObservationResultsQuery, useListObservationsQuery } from 'src/queries/generated/observations';
+import { useListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
@@ -33,6 +35,69 @@ const ObservationSubstratumSelector = ({
   const { strings } = useLocalization();
   const theme = useTheme();
   const { plantingSite } = usePlantingSite(plantingSiteId);
+  const { selectedOrganization } = useOrganization();
+  const isBaseline = monitoringType === 'Baseline Survey';
+  const observations = useListObservationsQuery({ plantingSiteId }, { skip: !isBaseline });
+  const completedResults = useListObservationResultsQuery(
+    { plantingSiteId, depth: 'Substratum', state: ['Completed'] },
+    { skip: !isBaseline }
+  );
+  const reportedPlants = useListPlantingSiteReportedPlantsQuery(
+    { organizationId: selectedOrganization?.id ?? -1 },
+    { skip: !isBaseline || !selectedOrganization }
+  );
+  const baselineStatusLoaded = !!(
+    observations.currentData &&
+    completedResults.currentData &&
+    reportedPlants.currentData
+  );
+  const baselineStatusError = observations.isError || completedResults.isError || reportedPlants.isError;
+
+  const baselineCompleted = useMemo(() => {
+    const dates = new Map<number, string>();
+    completedResults.currentData?.observations.forEach((observation) => {
+      if (observation.type !== 'Baseline Survey' || observation.state !== 'Completed' || !observation.completedTime) {
+        return;
+      }
+      const completedTime = observation.completedTime;
+      observation.strata
+        .flatMap((stratum) => stratum.substrata)
+        .forEach((substratum) => {
+          const id = substratum.substratumId;
+          if (id !== undefined && substratum.completedTime && (!dates.has(id) || completedTime > dates.get(id)!)) {
+            dates.set(id, completedTime);
+          }
+        });
+    });
+    return dates;
+  }, [completedResults.currentData]);
+
+  const baselineScheduled = useMemo(() => {
+    const dates = new Map<number, string>();
+    observations.currentData?.observations.forEach((observation) => {
+      if (observation.type !== 'Baseline Survey' || !['Upcoming', 'InProgress'].includes(observation.state)) {
+        return;
+      }
+      observation.requestedSubstratumIds?.forEach((id) => {
+        if (!dates.has(id) || observation.startDate < dates.get(id)!) {
+          dates.set(id, observation.startDate);
+        }
+      });
+    });
+    return dates;
+  }, [observations.currentData]);
+
+  const plantedSubstrata = useMemo(
+    () =>
+      new Set(
+        reportedPlants.currentData?.sites
+          .find((site) => site.id === plantingSiteId)
+          ?.strata.flatMap((stratum) => stratum.substrata)
+          .filter((substratum) => substratum.totalPlants > 0)
+          .map((substratum) => substratum.id)
+      ),
+    [plantingSiteId, reportedPlants.currentData]
+  );
 
   const [selectAll, setSelectAll] = useState<boolean>(false);
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
@@ -211,19 +276,34 @@ const ObservationSubstratumSelector = ({
                   />
                   <Typography
                     sx={{
-                      display: 'inline',
+                      display: isBaseline ? 'block' : 'inline',
                       fontWeight: 500,
                       color: theme.palette.TwClrTxtSecondary,
                       verticalAlign: 'bottom',
-                      paddingLeft: 1,
+                      paddingLeft: isBaseline ? 4 : 1,
                     }}
                   >
-                    {stratum.latestObservationCompletedTime
-                      ? strings.formatString(
-                          strings.LAST_OBSERVATION,
-                          getDateDisplayValue(stratum.latestObservationCompletedTime)
-                        )
-                      : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
+                    {isBaseline
+                      ? baselineStatusError
+                        ? strings.UNABLE_TO_LOAD_BASELINE_STATUS
+                        : baselineStatusLoaded
+                          ? strings.formatString(
+                              strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y,
+                              stratum.substrata.filter(
+                                (substratum) =>
+                                  baselineCompleted.has(substratum.id) || baselineScheduled.has(substratum.id)
+                              ).length,
+                              stratum.substrata.length,
+                              stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
+                              stratum.substrata.length
+                            )
+                          : strings.LOADING
+                      : stratum.latestObservationCompletedTime
+                        ? strings.formatString(
+                            strings.LAST_OBSERVATION,
+                            getDateDisplayValue(stratum.latestObservationCompletedTime)
+                          )
+                        : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
                   </Typography>
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
@@ -233,7 +313,8 @@ const ObservationSubstratumSelector = ({
                   {numTemporaryPlots}
                 </Typography>
               </Box>
-              {stratum.latestObservationCompletedTime &&
+              {!isBaseline &&
+                stratum.latestObservationCompletedTime &&
                 isAfter(stratum.boundaryModifiedTime, stratum.latestObservationCompletedTime) && (
                   <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
                     <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
@@ -267,7 +348,48 @@ const ObservationSubstratumSelector = ({
                           onChange={onChangeSubstratumCheckbox(substratum.id)}
                           value={selectedSubstrata.includes(substratum.id)}
                         />
-                        {substratum.latestObservationCompletedTime && (
+                        {isBaseline && (
+                          <Box
+                            component='span'
+                            display='inline-flex'
+                            gap={1}
+                            flexWrap='wrap'
+                            alignItems='center'
+                            paddingLeft={1}
+                          >
+                            {baselineCompleted.has(substratum.id) && (
+                              <Badge
+                                label={
+                                  strings.formatString(
+                                    strings.BASELINE_COMPLETED_X,
+                                    getDateDisplayValue(baselineCompleted.get(substratum.id)!)
+                                  ) as string
+                                }
+                                labelColor={theme.palette.TwClrTxt}
+                              />
+                            )}
+                            {baselineScheduled.has(substratum.id) && (
+                              <Badge
+                                label={
+                                  strings.formatString(
+                                    strings.BASELINE_SCHEDULED_X,
+                                    baselineScheduled.get(substratum.id)!
+                                  ) as string
+                                }
+                                labelColor={theme.palette.TwClrTxt}
+                              />
+                            )}
+                            {plantedSubstrata.has(substratum.id) && (
+                              <Badge
+                                label={strings.HAS_PLANTINGS}
+                                backgroundColor={theme.palette.TwClrBgSuccessTertiary}
+                                borderColor={theme.palette.TwClrBrdrSuccess}
+                                labelColor={theme.palette.TwClrTxtSuccess}
+                              />
+                            )}
+                          </Box>
+                        )}
+                        {!isBaseline && substratum.latestObservationCompletedTime && (
                           <Typography
                             sx={{
                               display: 'inline',
