@@ -99,11 +99,11 @@ describe('MonitoringTypeSelector', () => {
     [true, false],
     [true, true],
   ])(
-    'only offers baseline when both flags are enabled (baseline=%s, biomass=%s)',
+    'offers baseline based only on its feature flag (baseline=%s, biomass=%s)',
     async (baselineEnabled, biomassEnabled) => {
       const { preferenceRequests } = renderSelector('Monitoring', {}, true, baselineEnabled, biomassEnabled);
       await waitFor(() => expect(preferenceRequests).toHaveLength(1));
-      if (baselineEnabled && biomassEnabled) {
+      if (baselineEnabled) {
         expect(await screen.findByText(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).toBeInTheDocument();
       } else {
         expect(screen.queryByText(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).not.toBeInTheDocument();

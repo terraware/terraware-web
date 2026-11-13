@@ -56,6 +56,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
   const {
     dateFilter,
     observationType,
@@ -98,8 +99,9 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
       { label: strings.ALL_MONITORING_TYPES, value: 'All' },
       { label: strings.PLANT_MONITORING, value: 'Monitoring' },
       { label: strings.BIOMASS_MONITORING, value: 'Biomass Measurements' },
+      ...(baselineSurveyEnabled ? [{ label: strings.BASELINE_SURVEY, value: 'Baseline Survey' }] : []),
     ],
-    [strings.ALL_MONITORING_TYPES, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+    [baselineSurveyEnabled, strings]
   );
 
   const onObservationTypeChange = useCallback(
