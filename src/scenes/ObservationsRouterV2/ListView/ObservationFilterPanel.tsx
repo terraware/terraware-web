@@ -101,13 +101,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
       { label: strings.BIOMASS_MONITORING, value: 'Biomass Measurements' },
       ...(baselineSurveyEnabled ? [{ label: strings.BASELINE_SURVEY, value: 'Baseline Survey' }] : []),
     ],
-    [
-      baselineSurveyEnabled,
-      strings.ALL_MONITORING_TYPES,
-      strings.BASELINE_SURVEY,
-      strings.BIOMASS_MONITORING,
-      strings.PLANT_MONITORING,
-    ]
+    [baselineSurveyEnabled, strings]
   );
 
   const onObservationTypeChange = useCallback(
