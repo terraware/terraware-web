@@ -5,6 +5,7 @@ import { act, screen } from '@testing-library/react';
 import strings from 'src/strings';
 import { buildOrganization, buildUser, mockGet, renderWithProviders } from 'src/test-utils';
 import { SearchResponseElementWithId } from 'src/types/Search';
+import { TABLES } from 'src/types/Tables';
 
 import AccessionsTable from './AccessionsTable';
 
@@ -63,6 +64,37 @@ describe('AccessionsTable saved page', () => {
     expect(screen.getByRole('link', { name: 'ACC-030' })).toBeVisible();
     expect(screen.queryByRole('link', { name: 'ACC-001' })).not.toBeInTheDocument();
     expect(sessionStorage.getItem(pageIndexKey)).toBe('2');
+  });
+});
+
+describe('AccessionsTable status filter', () => {
+  const columnFiltersKey = `${TABLES.accessions.storageKey}_columnFilters`;
+
+  const localizedRows = () => [
+    buildRow({ id: '1', accessionNumber: 'ACC-001', state: 'Stocké', 'state(raw)': 'In Storage' }),
+    buildRow({ id: '2', accessionNumber: 'ACC-002', state: 'Séchage', 'state(raw)': 'Drying' }),
+  ];
+
+  afterEach(() => {
+    localStorage.removeItem(columnFiltersKey);
+  });
+
+  it('matches rows by raw status when the displayed status is localized', () => {
+    localStorage.setItem(columnFiltersKey, JSON.stringify([{ id: 'state', value: ['In Storage'] }]));
+
+    renderTable(localizedRows());
+
+    expect(screen.getByRole('link', { name: 'ACC-001' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'ACC-002' })).not.toBeInTheDocument();
+  });
+
+  it('discards a status filter saved as a localized label instead of hiding every row', () => {
+    localStorage.setItem(columnFiltersKey, JSON.stringify([{ id: 'state', value: ['Stocké'] }]));
+
+    renderTable(localizedRows());
+
+    expect(screen.getByRole('link', { name: 'ACC-001' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'ACC-002' })).toBeVisible();
   });
 });
 

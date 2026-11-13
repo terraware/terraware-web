@@ -28,7 +28,13 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
 import strings from 'src/strings';
-import { ACCESSION_2_STATES, accessionState, isWithdrawableAccessionState, stateName } from 'src/types/Accession';
+import {
+  ACCESSION_2_STATES,
+  accessionState,
+  isAccessionState,
+  isWithdrawableAccessionState,
+  stateName,
+} from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
@@ -317,8 +323,25 @@ export default function AccessionsTable({
     }
   }, [location, navigate, query, searchResults, selectedOrganization, setColumnFilters, setShowColumnFilters]);
 
-  const uniqueStates = useMemo(
-    () => (activeLocale ? ACCESSION_2_STATES.map((state) => stateName(state)) : []),
+  useEffect(() => {
+    const stateFilter = columnFilters.find((filter) => filter.id === 'state');
+    if (!Array.isArray(stateFilter?.value)) {
+      return;
+    }
+    const knownStates = (stateFilter.value as unknown[]).filter(isAccessionState);
+    if (knownStates.length === stateFilter.value.length) {
+      return;
+    }
+    setColumnFilters((prev) =>
+      prev.map((filter) => (filter.id === 'state' ? { ...filter, value: knownStates } : filter))
+    );
+  }, [columnFilters, setColumnFilters]);
+
+  const stateFilterOptions = useMemo(
+    () =>
+      (activeLocale
+        ? ACCESSION_2_STATES.map((state) => ({ label: stateName(state), value: state }))
+        : []) as unknown as string[],
     [activeLocale]
   );
 
@@ -416,14 +439,13 @@ export default function AccessionsTable({
         header: strings.STATUS,
         accessorKey: 'state',
         filterVariant: 'multi-select',
-        filterSelectOptions: uniqueStates,
-        filterFn: (row: SearchResponseElementWithId, columnId, filterValue: string[]) => {
+        filterSelectOptions: stateFilterOptions,
+        filterFn: (row: SearchResponseElementWithId, _columnId: string, filterValue: string[]) => {
           if (!filterValue.length) {
             return true;
           }
-          return filterValue.includes(
-            (row as unknown as { getValue: (id: string) => unknown }).getValue(columnId) as string
-          );
+          const { original } = row as unknown as MRT_Row<SearchResponseElementWithId>;
+          return filterValue.includes(accessionState(original) ?? '');
         },
       },
       {
@@ -663,7 +685,7 @@ export default function AccessionsTable({
   }, [
     activeLocale,
     facilityNameToTz,
-    uniqueStates,
+    stateFilterOptions,
     uniqueFacilityNames,
     uniqueSubLocationNames,
     uniqueSpeciesNames,

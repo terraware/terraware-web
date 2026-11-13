@@ -25,6 +25,9 @@ export const ACCESSION_2_STATES: AccessionState[] = [
 export const accessionState = (row: SearchResponseElement): AccessionState | undefined =>
   row['state(raw)'] as AccessionState | undefined;
 
+export const isAccessionState = (value: unknown): value is AccessionState =>
+  ACCESSION_2_STATES.includes(value as AccessionState);
+
 export const isWithdrawableAccessionState = (state?: string): boolean =>
   state !== undefined && state !== 'Awaiting Check-In' && state !== 'Used Up';
 

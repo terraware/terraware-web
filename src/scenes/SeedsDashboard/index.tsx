@@ -183,7 +183,7 @@ export default function SeedSummary(): JSX.Element {
                         <Grid key={state} size={cardGridSize()}>
                           <AccessionByStatus
                             label={stateName(state)}
-                            status={stateName(state)}
+                            status={state}
                             quantity={seedBankSummary.value?.accessionsByState[state]}
                           />
                         </Grid>
