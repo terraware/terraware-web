@@ -11,7 +11,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization, useUser } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
 import { useLazyGetPendingAccessionsQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
@@ -27,6 +27,7 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import CheckInAllConfirmationDialog from './CheckInAllConfirmationDialog';
 
 export default function CheckIn(): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
   const { isMobile } = useDeviceInfo();
@@ -248,7 +249,8 @@ export default function CheckIn(): JSX.Element {
                         type='text'
                         value={getDateTimeDisplayValue(
                           new Date(result.collectedTime as string).getTime(),
-                          facilityNameToTz[result.facility_name as string]
+                          facilityNameToTz[result.facility_name as string],
+                          activeLocale
                         )}
                         display={true}
                       />

@@ -72,7 +72,8 @@ const MatrixView = () => {
   const snackbar = useSnackbar();
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
-  const { strings, countries } = useLocalization();
+  const { strings, countries, activeLocale } = useLocalization();
+  const dateLocale = activeLocale === 'gx' ? 'fr' : activeLocale || 'en';
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const {
     columnFilters,
@@ -326,7 +327,7 @@ const MatrixView = () => {
             <DatePicker
               value={value ? new Date(value) : null}
               onDateChange={(date) => {
-                const dateString = date ? date.toLocaleString() : '';
+                const dateString = date?.toISODate() ?? '';
                 setValue(dateString);
                 table.setEditingCell(null);
                 const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
@@ -344,7 +345,7 @@ const MatrixView = () => {
         // eslint-disable-next-line react/display-name
         Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
           if (cell.getValue() && cell.getValue() instanceof Date) {
-            return <>{cell.getValue<Date>().toLocaleDateString()}</>;
+            return <>{cell.getValue<Date>().toLocaleDateString(dateLocale)}</>;
           }
           return null;
         };
@@ -769,6 +770,7 @@ const MatrixView = () => {
     strings,
     allVariables,
     countries,
+    dateLocale,
     isAllowedEditMatrixView,
     onSaveHandler,
     projects,

@@ -62,10 +62,10 @@ export const getShortTime = (dateTime: string, locale: string | undefined | null
 /**
  * Returns <ISO Date> <Hour>:<Minute> <AM/PM> (eg. 2023-09-05 3:31 PM)
  */
-export const getDateTimeDisplayValue = (timestamp: number, timeZone?: string): string => {
+export const getDateTimeDisplayValue = (timestamp: number, timeZone?: string, locale?: string | null): string => {
   const dateTime = timeZone ? DateTime.fromMillis(timestamp, { zone: timeZone }) : DateTime.fromMillis(timestamp);
   // DateTime has pre-supported formats but none satisfy our requirements
-  return `${getDateDisplayValue(timestamp, timeZone)} ${dateTime.toLocaleString(DateTime.TIME_SIMPLE)}`;
+  return `${getDateDisplayValue(timestamp, timeZone)} ${dateTime.setLocale(locale === 'gx' ? 'fr' : locale || 'en').toLocaleString(DateTime.TIME_SIMPLE)}`;
 };
 
 /**

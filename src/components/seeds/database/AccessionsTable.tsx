@@ -499,7 +499,7 @@ export default function AccessionsTable({
           }
           const facilityName = (row as Record<string, unknown>).facility_name as string | undefined;
           const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
-          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz);
+          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz, activeLocale);
         },
         filterVariant: 'date-range',
         filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedTime'),
@@ -507,7 +507,9 @@ export default function AccessionsTable({
           const dateTimeStr = (cell.row.original as Record<string, unknown>).collectedTime as string | null;
           const facilityName = (cell.row.original as Record<string, unknown>).facility_name as string | undefined;
           const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
-          return dateTimeStr ? <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz)}</span> : null;
+          return dateTimeStr ? (
+            <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz, activeLocale)}</span>
+          ) : null;
         },
       },
       {

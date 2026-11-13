@@ -154,7 +154,7 @@ const BiomassObservationDataTab = () => {
       value: !hasWater
         ? strings.NO_WATER
         : biomassMeasurement?.tideTime
-          ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
+          ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime(), undefined, activeLocale)
           : '- -',
     },
     {
