@@ -9,7 +9,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
@@ -24,6 +24,7 @@ import {
 
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
@@ -34,7 +35,7 @@ import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
-import { isWithdrawableAccessionState } from 'src/types/Accession';
+import { accessionState, isWithdrawableAccessionState } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
@@ -149,12 +150,12 @@ export default function AccessionsBySpeciesTable({
       const key = speciesId !== undefined ? `id:${speciesId}` : `name:${speciesName}`;
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
-      const isUsedUp = accession.state === 'Used Up';
+      const state = accessionState(accession);
+      const isUsedUp = state === 'Used Up';
       const hasWithdrawableQuantity = Number(accession['remainingQuantity(raw)']) > 0;
-      const isWithdrawable =
-        isWithdrawableAccessionState(accession.state as string | undefined) && hasWithdrawableQuantity;
-      const isDrying = accession.state === 'Drying';
-      const isInStorage = accession.state === 'In Storage';
+      const isWithdrawable = isWithdrawableAccessionState(state) && hasWithdrawableQuantity;
+      const isDrying = state === 'Drying';
+      const isInStorage = state === 'In Storage';
       const projectName = (accession.project_name as string) ?? '';
       const accessionId = accession.id !== undefined ? Number(accession.id) : undefined;
       if (existing) {

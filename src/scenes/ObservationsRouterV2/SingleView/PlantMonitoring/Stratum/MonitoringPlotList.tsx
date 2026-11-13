@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Typography, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { EditableTableColumn } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import {
   MRT_Cell,
@@ -17,6 +17,7 @@ import {
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';

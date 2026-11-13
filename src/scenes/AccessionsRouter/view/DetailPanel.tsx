@@ -19,7 +19,7 @@ import Accession2EditModal from '../edit/Accession2EditModal';
 
 export default function DetailPanel(): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { countries } = useLocalization();
+  const { countries, activeLocale } = useLocalization();
   const { accessionId: accessionIdParam } = useParams<{ accessionId: string }>();
   const { accession } = useAccession(Number(accessionIdParam));
   const { isAllowed } = useUser();
@@ -124,7 +124,7 @@ export default function DetailPanel(): JSX.Element {
             </Grid>
             <Grid sx={valueStyle} size={gridRightSide}>
               {accession.collectedTime
-                ? getDateTimeDisplayValue(new Date(accession.collectedTime).getTime(), timeZone)
+                ? getDateTimeDisplayValue(new Date(accession.collectedTime).getTime(), timeZone, activeLocale)
                 : '- -'}
             </Grid>
           </Grid>

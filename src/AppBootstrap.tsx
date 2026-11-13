@@ -1,8 +1,5 @@
 import React, { type JSX, useState } from 'react';
 
-import { LocalizationProvider as MuiLocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import {
@@ -15,6 +12,7 @@ import {
   useUser,
   useUserFundingEntity,
 } from 'src/providers';
+import DateLocalizationProvider from 'src/providers/DateLocalizationProvider';
 
 type BlockingBootstrapProps = {
   children?: React.ReactNode;
@@ -22,9 +20,9 @@ type BlockingBootstrapProps = {
 
 function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const [bootstrapped, setBootstrapped] = useState(false);
-  const { bootstrapped: userBootstrapped } = useUser();
-  const { bootstrapped: organizationBootstrapped } = useOrganization();
-  const { bootstrapped: localizationBootstrapped } = useLocalization();
+  const { bootstrapped: userBootstrapped, isLoadingUser } = useUser();
+  const { bootstrapped: organizationBootstrapped, isLoadingOrganizations } = useOrganization();
+  const { activeLocale, bootstrapped: localizationBootstrapped, selectedLocale } = useLocalization();
   const { bootstrapped: userFundingEntityBootstrapped } = useUserFundingEntity();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
@@ -37,7 +35,12 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
     setBootstrapped(true);
   }
 
-  if (!bootstrapped) {
+  // Switching languages resets the RTK Query cache, and strings for the new locale load
+  // asynchronously. Wait for both rather than rendering the app without a user or organizations,
+  // which would look like a user who doesn't belong to any organization.
+  const switchingLocale = isLoadingUser || isLoadingOrganizations || activeLocale !== selectedLocale;
+
+  if (!bootstrapped || switchingLocale) {
     return <BlockingSpinner />;
   }
 
@@ -62,9 +65,9 @@ export default function AppBootstrap({ children }: AppBootstrapProps): JSX.Eleme
             activeLocale={activeLocale}
             setActiveLocale={setActiveLocale}
           >
-            <MuiLocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateLocalizationProvider>
               <BlockingBootstrap>{children}</BlockingBootstrap>
-            </MuiLocalizationProvider>
+            </DateLocalizationProvider>
           </LocalizationProvider>
         </UserFundingEntityProvider>
       </OrganizationProvider>

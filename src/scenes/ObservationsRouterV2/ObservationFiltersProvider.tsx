@@ -16,7 +16,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyObservationsViewMode from './useStickyObservationsViewMode';
 
 export type PlotType = 'assigned' | 'adHoc';
-export type ObservationTypeFilter = 'All' | 'Monitoring' | 'Biomass Measurements';
+export type ObservationTypeFilter = 'All' | 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
 export type ViewMode = 'map' | 'split' | 'list';
 
 export type ObservationDateFilter = {
@@ -77,7 +77,7 @@ const EMPTY_FILTERS: Record<PlotType, PlotFilters> = {
   adHoc: EMPTY_PLOT_FILTERS,
   assigned: EMPTY_PLOT_FILTERS,
 };
-const OBSERVATION_TYPES: ObservationTypeFilter[] = ['All', 'Monitoring', 'Biomass Measurements'];
+const OBSERVATION_TYPES: ObservationTypeFilter[] = ['All', 'Monitoring', 'Biomass Measurements', 'Baseline Survey'];
 
 const readSessionValue = <T extends string>(key: string, allowed: T[], fallback: T): T => {
   try {
@@ -164,6 +164,9 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     readSessionValue(OBSERVATION_TYPE_SESSION_KEY, OBSERVATION_TYPES, 'All')
   );
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
+  const availableObservationType =
+    observationType === 'Baseline Survey' && !baselineSurveyEnabled ? 'All' : observationType;
   const { isMobile } = useDeviceInfo();
   const { setViewMode, viewMode: storedViewMode } = useStickyObservationsViewMode();
   const viewMode = isMobile ? 'split' : storedViewMode;
@@ -233,7 +236,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
   // Counts the filters in use, not the values within them, so a date range counts once.
   const activeFilterCount = [
     dateFilter.from !== undefined || dateFilter.to !== undefined,
-    (plotType === 'adHoc' || biomassSchedulingEnabled) && observationType !== 'All',
+    (plotType === 'adHoc' || biomassSchedulingEnabled) && availableObservationType !== 'All',
     plotType === 'adHoc' && (plotNumberFilter.min !== undefined || plotNumberFilter.max !== undefined),
     plotType === 'assigned' && statusFilter.length > 0,
     plotType === 'assigned' && stratumFilter.length > 0,
@@ -252,7 +255,8 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
       filtersByPlotType,
       filtersExpanded,
       // Without scheduled biomass observations, the only assigned observations are plant monitoring ones.
-      observationType: plotType === 'assigned' && !biomassSchedulingEnabled ? ('Monitoring' as const) : observationType,
+      observationType:
+        plotType === 'assigned' && !biomassSchedulingEnabled ? ('Monitoring' as const) : availableObservationType,
       plotNumberFilter,
       plotType,
       setDateFilter,
@@ -269,12 +273,12 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     }),
     [
       activeFilterCount,
+      availableObservationType,
       biomassSchedulingEnabled,
       clearFilters,
       dateFilter,
       filtersByPlotType,
       filtersExpanded,
-      observationType,
       plotNumberFilter,
       plotType,
       setDateFilter,

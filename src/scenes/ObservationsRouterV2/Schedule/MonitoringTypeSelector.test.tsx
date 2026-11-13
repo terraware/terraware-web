@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { rstest } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { DateTime } from 'luxon';
 
 import MonitoringTypeSelector from 'src/scenes/ObservationsRouterV2/Schedule/MonitoringTypeSelector';
@@ -99,11 +99,11 @@ describe('MonitoringTypeSelector', () => {
     [true, false],
     [true, true],
   ])(
-    'only offers baseline when both flags are enabled (baseline=%s, biomass=%s)',
+    'offers baseline based only on its feature flag (baseline=%s, biomass=%s)',
     async (baselineEnabled, biomassEnabled) => {
       const { preferenceRequests } = renderSelector('Monitoring', {}, true, baselineEnabled, biomassEnabled);
       await waitFor(() => expect(preferenceRequests).toHaveLength(1));
-      if (baselineEnabled && biomassEnabled) {
+      if (baselineEnabled) {
         expect(await screen.findByText(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).toBeInTheDocument();
       } else {
         expect(screen.queryByText(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).not.toBeInTheDocument();
@@ -162,6 +162,32 @@ const renderScheduleForm = (hasPlantings = false, blockMonitoring = false, block
 };
 
 describe('baseline scheduling form', () => {
+  it.each([false, true])('only offers sites with strata when biomass scheduling is %s', async (enabled) => {
+    const sites = [
+      buildPlantingSite({ id: 1, name: 'No strata', strata: [] }),
+      buildPlantingSite({ id: 2, name: 'With strata' }),
+      buildPlantingSite({ id: 3, name: 'Another site with strata' }),
+    ];
+    mockGet('/api/v1/users/me/preferences', {
+      preferences: { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: enabled },
+    });
+    mockGet('/api/v1/users/me', { user: buildUser() });
+    mockGet('/api/v1/tracking/sites', { sites });
+    mockGet('/api/v1/tracking/sites/reportedPlants', {
+      sites: sites.map((site) => ({ id: site.id, strata: [{ substrata: [{ totalPlants: 10 }] }] })),
+    });
+    mockGet('/api/v1/tracking/observations', { observations: [] });
+    const { user } = renderWithProviders(
+      <ScheduleObservationForm title={strings.SCHEDULE_OBSERVATION} onCancel={() => undefined} />
+    );
+
+    await user.click(document.querySelector('#site input')!);
+    const options = within(await screen.findByRole('list'));
+    expect(await options.findByText('With strata')).toBeInTheDocument();
+    expect(options.getByText('Another site with strata')).toBeInTheDocument();
+    expect(options.queryByText('No strata')).not.toBeInTheDocument();
+  });
+
   it.each([false, true])('schedules baseline with existing baselines and hasPlantings=%s', async (hasPlantings) => {
     const { endDate, onSchedule, startDate, user } = renderScheduleForm(hasPlantings);
     await user.click(

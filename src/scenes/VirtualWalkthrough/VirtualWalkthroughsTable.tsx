@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
-import { Confirm, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Confirm, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
@@ -14,6 +14,7 @@ import {
 } from 'material-react-table';
 
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import ThumbnailImage from 'src/components/common/ThumbnailImage';
@@ -67,7 +68,8 @@ export default function VirtualWalkthroughsTable({
     showColumnFilters,
     showGlobalFilter,
   } = useTableState(TABLE);
-  const { strings } = useLocalization();
+  const { strings, activeLocale } = useLocalization();
+  const dateLocale = activeLocale === 'gx' ? 'fr' : activeLocale || 'en';
 
   const getStatusLabel = useCallback(
     (file: OrganizationVirtualWalkthrough): string => {
@@ -313,7 +315,7 @@ export default function VirtualWalkthroughsTable({
       {
         id: 'createdTime',
         header: strings.DATE_UPLOADED,
-        accessorFn: (row) => (row.createdTime ? new Date(row.createdTime).toLocaleDateString() : ''),
+        accessorFn: (row) => (row.createdTime ? new Date(row.createdTime).toLocaleDateString(dateLocale) : ''),
       },
       {
         id: 'videoLink',
@@ -340,7 +342,17 @@ export default function VirtualWalkthroughsTable({
         Cell: RemoveCell,
       },
     ];
-  }, [FlagCell, LocationCell, RemoveCell, StatusCell, ThumbnailCell, VideoLinkCell, getStatusLabel, strings]);
+  }, [
+    FlagCell,
+    LocationCell,
+    RemoveCell,
+    StatusCell,
+    ThumbnailCell,
+    VideoLinkCell,
+    getStatusLabel,
+    strings,
+    dateLocale,
+  ]);
 
   return (
     <>

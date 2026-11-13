@@ -215,6 +215,7 @@ ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
 ARE_YOU_SURE_MARK_PLANTING_DATE_FULFILLED,¿Está seguro de que desea marcar esta Fecha de Plantación como cumplida?,4ab03693
+AREA,Área,be27ab89
 AREA_HA,Área (ha),8ab5d500
 AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
@@ -250,6 +251,8 @@ BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
 BASED_ON_X_SEEDLING,Basado en {0} plántula,3bbdb932
 BASED_ON_X_SEEDLINGS,Basado en {0} plántulas,a1e372d3
+BASED_ON_X_BATCH,Basado en {0} lote,919ed414
+BASED_ON_X_BATCHES,Basado en {0} lotes,8c41bee7
 BASELINE,Línea base,332af00e
 BASELINE_SURVEY,Encuesta de referencia,bc76c649
 BATCH,Lote,9fdfdd9b
@@ -544,7 +547,7 @@ DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0
 DELETE_VIEW,Eliminar vista,10ce4e6e
 DELETE_VIEW_CONFIRMATION,"""{0}"" se eliminará de sus vistas guardadas. Esto no cambiará ningún dato del proyecto.",5813e558
 DELETE_VIEW_TITLE,¿Eliminar vista?,3c9df51d
-DELETED_SPECIES,<deleted species>,c397460c
+DELETED_SPECIES,<especie eliminada>,c397460c
 DELIVERABLE_APPROVED,Entregable aprobado,c2a1516b
 DELIVERABLE_CATEGORY,Categoría: {0},bbe96e63
 DELIVERABLE_NAME,Nombre del entregable,570b3a75
@@ -621,7 +624,7 @@ ECOLOGICAL_ROLE_KNOWN,Función ecológica conocida,6070c087
 ECOLOGICAL_ROLE_KNOWN_TOOLTIP,"Enumere las funciones ecológicas, como el grupo funcional de la especie, los servicios ecosistémicos que presta, su papel como especie clave, etc.",24e19617
 ECOSYSTEM_BOREAL_FOREST_TAIGA,Bosques boreales/Taiga,5beef0f6
 ECOSYSTEM_DESERT_XERIC_SHRUBLAND,Desiertos y matorrales xerófilos,524541c7
-ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Pastizal y sabana inundados,4a0fdf53
+ECOSYSTEM_FLOODED_GRASSLAND_SAVANNA,Pastizales y sabanas inundados,4a922b92
 ECOSYSTEM_MANGROVE,Manglares,3511a098
 ECOSYSTEM_MEDITERRANEAN_FOREST,Bosque y matorral mediterráneo,c4ce8459
 ECOSYSTEM_MONTANE_GRASSLAND_SHRUBLAND,Pastizal y matorral montano,e13ceda4
@@ -1154,6 +1157,7 @@ LONGITUDE,Longitud,bec9ea21
 LOSS_RATE,Tasa de pérdidas,544aa2af
 LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
+MAIN_PHOTO,Foto principal,8dedf85a
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
 MANAGE_PLANTING_PLANS_DESCRIPTION,"Gestione los planes de plantación para los Sitios de Plantación, incluyendo los objetivos del sitio y las temporadas de plantación.",6d14df77
@@ -1185,6 +1189,7 @@ MAP_EDIT_SUMMARY_SUBSTRATUM_DELETED,Se eliminará el sustrato {0}.,68a45214
 MAP_EDIT_SUMMARY_SUBSTRATUM_UPDATED,"El sustrato {0} cambiará en {1} ha, y el {2}% de su nuevo límite se superpone con su límite actual.",17b59d57
 MAP_EDIT_SUMMARY_TITLE,Revisar cambios en el mapa,ba53ed3b
 MAP_NOT_UPLOADED,Mapa sin subir,2cc4bb13
+MAP_PHOTO,Foto del mapa,ea42a58e
 MAPS,Mapas,367c1e39
 MAPS_FOR,Mapas para,31f1ee6a
 MAPS_GIS_DESCRIPTION,Los mapas que se muestran aquí pertenecen a la base de datos GIS. Vea el mapa Terraware del proyecto en el Panel de plantas del mismo.,27749df5
@@ -1387,6 +1392,7 @@ NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c
 NOT_COMPLETE,Sin completar,a8606bc8
 NOT_COVERED,No Cubierto,c01864d7
 NOT_CUMULATIVE,No acumulativo,86f75ffc
+NOT_ENOUGH_DATA,No hay suficientes datos,e8ae3480
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
@@ -1481,6 +1487,7 @@ ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Una o más respuestas necesitan actualizacion
 OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)",98ba6999
 OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
 OPT_IN,Funciones Opt-In,cbb9300b
+OPT_IN_FEATURES_DESCRIPTION,Active esta opción para ver funciones experimentales o en desarrollo,cef03c24
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f1313
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b
@@ -1603,6 +1610,7 @@ PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_SEEDLING_PURCHASE,Compra de plántulas: c
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_VEGETATIVE_PROPAGATION,"Propagación vegetativa: propagación clonal, por ejemplo, esquejes, acodo aéreo, injerto",1565a014
 PLANT_MATERIAL_SOURCING_METHOD_TOOLTIP_WILDLING_HARVEST,Recolección silvestre: plántulas recolectadas en bosques naturales y replantadas posteriormente.,c1168454
 PLANT_MONITORING,Monitoreo de plantas,21ade0c5
+PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX,Observacion-Monitoreo-Plantas,4f76f296
 PLANTED_PLANTS,Plantas plantadas,c3ba4493
 PLANTED_SPECIES,Especies plantadas,0dd1f725
 PLANTED_SPECIES_TOOLTIP,"Las ""Especies plantadas"" indican el porcentaje de cada especie plantada. Se nombran las cuatro especies más comunes y el resto se agrupa en ""Otras especies"".",f4a01a11
@@ -2105,6 +2113,7 @@ SE_CORNER,Esquina SE,3e70b5c7
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
 SEARCH_SPECIES,Buscar especie,5167bc5e
+SEARCH_VARIABLES,Buscar variables,401e4c5d
 SEASON_NAME_REQUIRED,Nombre de la temporada *,809a9261
 SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
@@ -2161,6 +2170,7 @@ SELECT_BATCHES,Seleccionar lotes,d15588c6
 SELECT_BUTTON,Seleccionar,4e21939d
 SELECT_EXISTING_PROJECT,Seleccionar proyecto existente,e3ffeef2
 SELECT_NURSERY,Seleccionar Vivero,7af1b6f6
+SELECT_OPTIONS,Seleccione opciones...,9ae6a3c4
 SELECT_PLANTING_SITES_FOR_PROJECT,Seleccione sitios de plantación para {0},1476da48
 SELECT_PLANTING_SITES_FOR_PROJECT_DESCRIPTION,Use la columna de la casilla de verificación para seleccionar sitios de plantación que debe añadirse a {0}.,b0ea2452
 SELECT_PROJECT,Seleccionar proyecto,5db896a2
@@ -2359,6 +2369,14 @@ SPECIES_TARGET_ADDED,Meta de especie agregada: {0} en {1}.,024829c9
 SPECIES_TARGET_DELETED,Meta de especie eliminada: {0} en {1}.,fd85928a
 SPECIES_TARGET_UPDATED,Meta de especie actualizada: {0} en {1} cambió de {2} a {3}.,f14397fe
 SPECIES_TARGETS,Objetivos de especies,96d27e04
+SPECIES_TIME_IN_STAGE_MIN_BATCHES,Se necesitan al menos 3 lotes para mostrar un promedio.,a94efaad
+SPECIES_TIME_IN_STAGE_NO_BATCHES,Ningún lote tiene plántulas que hayan terminado esta etapa.,7707be37
+SPECIES_TIME_IN_STAGE_ONLY_ONE_BATCH,Solo 1 lote tiene plántulas que han terminado esta etapa.,2f0a6c99
+SPECIES_TIME_IN_STAGE_ONLY_X_BATCHES,Solo {0} lotes tienen plántulas que han terminado esta etapa.,77e18477
+SPECIES_TIME_IN_STAGE_RANGE_PENDING,Un rango típico aparece cuando hay disponibles 5 lotes con al menos 10 plántulas terminadas cada uno.,646699da
+SPECIES_TIME_IN_STAGE_TITLE,Días promedio por etapa de crecimiento para esta especie,b13fd122
+SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP,Cada valor promedia las plántulas que terminaron la etapa en todos los lotes de esta especie. Las plántulas que aún están en una etapa y las etapas editadas manualmente no se incluyen.,d2df9dc4
+SPECIES_TIME_IN_STAGE_TITLE_TOOLTIP_RANGE,El rango típico muestra cuánto tiempo tomó a la mitad de los lotes. Los lotes con muy pocas plántulas no se incluyen en el rango.,f57f1e23
 SPECIES_TO_PLANT,Especies a plantar,ad7f9878
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
@@ -2539,6 +2557,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Este entregable ha sido aprobado. La 
 THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
 THIS_PERSON,esta persona,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
+THIS_PROJECT_HAS_NO_REPORTS,Este proyecto no tiene informes,97212b08
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THIS_VIEW_SAVES,Esta vista guarda,85bfa1dc
 THREATENED,Amenazada,57ca76f3
@@ -2686,6 +2705,8 @@ TUTORIAL_PREFIX,Tutorial: {0},71025393
 TW_DATA,Datos de TW,ea2a4098
 TYPE,Tipo,c1d026e9
 TYPE_OF_FOREST,Tipo de bosque,6fd02b1c
+TYPICAL_UNDER_ONE_TO_X_DAYS,típicamente <1–{0} días,acb54d6a
+TYPICAL_X_TO_Y_DAYS,típicamente {0}–{1} días,05bd5303
 UN_SDG,Objetivos de Desarrollo Sostenible (ODS) de las Naciones Unidas,7d6c756a
 UNABLE_TO_ADD_PERSON,No se puede añadir una persona,7d19ff74
 UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva a intentarlo más tarde.,c6aeba80

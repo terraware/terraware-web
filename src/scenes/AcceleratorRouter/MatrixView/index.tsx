@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 
 import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
-import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { BusySpinner, EditableTableColumn, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
   MRT_Cell,
@@ -18,6 +18,7 @@ import {
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
+import EditableTable from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
@@ -71,7 +72,8 @@ const MatrixView = () => {
   const snackbar = useSnackbar();
   const { isAllowed } = useUser();
   const isAllowedEditMatrixView = isAllowed('UPDATE_MATRIX_VIEW');
-  const { strings, countries } = useLocalization();
+  const { strings, countries, activeLocale } = useLocalization();
+  const dateLocale = activeLocale === 'gx' ? 'fr' : activeLocale || 'en';
   const [currentView, setCurrentView] = useState<ViewOption>('acceleratorProjects');
   const {
     columnFilters,
@@ -325,7 +327,7 @@ const MatrixView = () => {
             <DatePicker
               value={value ? new Date(value) : null}
               onDateChange={(date) => {
-                const dateString = date ? date.toLocaleString() : '';
+                const dateString = date?.toISODate() ?? '';
                 setValue(dateString);
                 table.setEditingCell(null);
                 const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
@@ -343,7 +345,7 @@ const MatrixView = () => {
         // eslint-disable-next-line react/display-name
         Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
           if (cell.getValue() && cell.getValue() instanceof Date) {
-            return <>{cell.getValue<Date>().toLocaleDateString()}</>;
+            return <>{cell.getValue<Date>().toLocaleDateString(dateLocale)}</>;
           }
           return null;
         };
@@ -504,7 +506,7 @@ const MatrixView = () => {
                       }}
                     />
                   ))}
-                  {selections.length === 0 && <span style={{ color: '#999' }}>Select options...</span>}
+                  {selections.length === 0 && <span style={{ color: '#999' }}>{strings.SELECT_OPTIONS}</span>}
                 </div>
 
                 {isOpen &&
@@ -768,6 +770,7 @@ const MatrixView = () => {
     strings,
     allVariables,
     countries,
+    dateLocale,
     isAllowedEditMatrixView,
     onSaveHandler,
     projects,

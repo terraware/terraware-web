@@ -26,8 +26,9 @@ import { Button, DialogBox } from '@terraware/web-components';
 import { MRT_TableInstance } from 'material-react-table';
 
 import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
+import { useLocalization } from 'src/providers';
 import { ProjectsWithVariablesSearchResult } from 'src/queries/search/projectsWithVariables';
-import strings from 'src/strings';
+import defaultStrings from 'src/strings';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 
 type ColumnsModalProps = {
@@ -39,15 +40,16 @@ type ColumnsModalProps = {
 
 export function baseColumns() {
   return [
-    { id: 'projectName', name: strings.DEAL_NAME },
-    { id: 'phase', name: strings.PHASE },
-    { id: 'eligibleLand', name: strings.ELIGIBLE_LAND },
-    { id: 'countryName', name: strings.COUNTRY },
-    { id: 'projectLead', name: strings.PROJECT_LEAD },
+    { id: 'projectName', name: defaultStrings.DEAL_NAME },
+    { id: 'phase', name: defaultStrings.PHASE },
+    { id: 'eligibleLand', name: defaultStrings.ELIGIBLE_LAND },
+    { id: 'countryName', name: defaultStrings.COUNTRY },
+    { id: 'projectLead', name: defaultStrings.PROJECT_LEAD },
   ];
 }
 
 export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
+  const { strings } = useLocalization();
   const { onClose, onSave, allVariables, table } = props;
 
   const [activeTab, setActiveTab] = useState(0);
@@ -488,7 +490,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
               </Typography>
               <TextField
                 size='small'
-                placeholder='Search Variables'
+                placeholder={strings.SEARCH_VARIABLES}
                 value={searchTerm}
                 onChange={onSearch}
                 sx={{ mb: 2, width: '100%' }}

@@ -43,7 +43,10 @@ export default function LocaleSelector({
 
           if (user && user.locale !== newValue) {
             const updateUserLocale = async () => {
-              await updateCurrentUser({ ...user, locale: newValue });
+              const succeeded = await updateCurrentUser({ ...user, locale: newValue });
+              if (!succeeded) {
+                setSelectedLocale(selectedLocale);
+              }
             };
 
             void updateUserLocale();

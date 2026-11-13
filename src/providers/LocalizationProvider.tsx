@@ -38,6 +38,8 @@ export default function LocalizationProvider({
   const supportedLocales = useSupportedLocales();
   const dispatch = useAppDispatch();
   const previousLocaleRef = useRef<string | null>(null);
+  const activeLocaleRef = useRef(activeLocale);
+  activeLocaleRef.current = activeLocale;
 
   // Keep the locale that RTK Query sends as Accept-Language in sync synchronously (before the query
   // hooks below run) so the initial fetch is already localized.
@@ -60,11 +62,18 @@ export default function LocalizationProvider({
     return [...timeZonesData.timeZones].sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale ?? 'en'));
   }, [selectedLocale, timeZonesData]);
 
+  // Follow the user's saved locale only when it changes. After a language switch, the user is
+  // refetched and can still carry the previous locale until the profile update lands; reapplying it
+  // would flip the app back to the old language.
+  const userLocale = user ? user.locale || 'en' : undefined;
+  const lastUserLocaleRef = useRef<string | undefined>(undefined);
+
   useEffect(() => {
-    if (user) {
-      setSelectedLocale(user.locale || 'en');
+    if (userLocale && userLocale !== lastUserLocaleRef.current) {
+      lastUserLocaleRef.current = userLocale;
+      setSelectedLocale(userLocale);
     }
-  }, [user, setSelectedLocale]);
+  }, [userLocale, setSelectedLocale]);
 
   useEffect(() => {
     if (selectedLocale) {
@@ -83,6 +92,10 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     if (selectedLocale) {
+      // A quick switch to another locale can finish loading before this one does; don't let this one
+      // overwrite it.
+      let cancelled = false;
+
       const fetchStrings = async () => {
         const language = selectedLocale.replace(/[-_].*/, ''); // 'en-US' => 'en'
         const localeDetails =
@@ -101,6 +114,9 @@ export default function LocalizationProvider({
         const localeMap: ILocalizedStringsMap = {
           [selectedLocale]: { ...getComponentStrings(), ...(await localeDetails.loadModule()).strings },
         };
+        if (cancelled) {
+          return;
+        }
         defaultStrings.setContent(localeMap);
         defaultStrings.setLanguage(selectedLocale);
         const localizedStrings = new LocalizedStrings(localeMap);
@@ -109,9 +125,18 @@ export default function LocalizationProvider({
         setStrings(localizedStrings);
       };
 
-      void fetchStrings();
+      fetchStrings().catch(() => {
+        // Stay on the language that's already loaded rather than waiting forever for this one.
+        if (!cancelled && activeLocaleRef.current) {
+          setSelectedLocale(activeLocaleRef.current);
+        }
+      });
+
+      return () => {
+        cancelled = true;
+      };
     }
-  }, [selectedLocale, setActiveLocale, supportedLocales]);
+  }, [selectedLocale, setActiveLocale, setSelectedLocale, supportedLocales]);
 
   if (selectedLocale) {
     const context: ProvidedLocalizationData = {

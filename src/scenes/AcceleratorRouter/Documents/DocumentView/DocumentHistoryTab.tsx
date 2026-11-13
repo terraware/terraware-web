@@ -7,10 +7,10 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import PageContent from 'src/components/DocumentProducer/PageContent';
 import TableContent from 'src/components/DocumentProducer/TableContent';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
+import { useLocalization } from 'src/providers';
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
 import { useGetDocumentHistoryQuery } from 'src/queries/generated/documentProducerDocuments';
 import { useGetUserQuery } from 'src/queries/generated/users';
-import strings from 'src/strings';
 import { DocumentHistoryEvent } from 'src/types/documentProducer/Document';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
@@ -22,21 +22,18 @@ const EditedByName = ({ userId }: { userId?: number }): JSX.Element => {
   return <>{getUserDisplayName(currentData?.user)}</>;
 };
 
-const tableColumns: TableColumnType[] = [
-  { key: 'createdTime', name: strings.DATE, type: 'date' },
-  { key: 'name', name: strings.VERSION_NAME, type: 'string' },
-  { key: 'isSubmitted', name: strings.STATUS, type: 'string' },
-  { key: 'type', name: strings.EVENT, type: 'string' },
-  { key: 'modifiedByName', name: strings.EDITED_BY, type: 'string' },
-  {
-    key: 'menu',
-    name: '',
-    type: 'string',
-  },
-];
-
-const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
+const TableCellRenderer = (props: RendererProps<any>): JSX.Element => {
+  const { strings } = useLocalization();
   const { column, row, index } = props;
+
+  if (column.key === 'type') {
+    const labels: Record<DocumentHistoryEvent['type'], string> = {
+      Created: strings.CREATED,
+      Edited: strings.EDITED,
+      Saved: strings.SAVED,
+    };
+    return <CellRenderer {...props} value={labels[row.type as DocumentHistoryEvent['type']]} />;
+  }
 
   if (column.key === 'date') {
     if (props.value) {
@@ -69,6 +66,7 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
 };
 
 const DocumentHistoryTab = (): JSX.Element => {
+  const { strings } = useLocalization();
   const { documentId } = useDocumentProducerData();
   const snackbar = useSnackbar();
 
@@ -81,7 +79,19 @@ const DocumentHistoryTab = (): JSX.Element => {
     if (isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [isError, snackbar]);
+  }, [isError, snackbar, strings]);
+
+  const tableColumns = useMemo<TableColumnType[]>(
+    () => [
+      { key: 'createdTime', name: strings.DATE, type: 'date' },
+      { key: 'name', name: strings.VERSION_NAME, type: 'string' },
+      { key: 'isSubmitted', name: strings.STATUS, type: 'string' },
+      { key: 'type', name: strings.EVENT, type: 'string' },
+      { key: 'modifiedByName', name: strings.EDITED_BY, type: 'string' },
+      { key: 'menu', name: '', type: 'string' },
+    ],
+    [strings]
+  );
 
   const tableRows = useMemo<DocumentHistoryEvent[]>(
     () => (historyData?.history ?? []).map((event) => ({ ...event, docId: documentId, documentId })),
@@ -98,7 +108,7 @@ const DocumentHistoryTab = (): JSX.Element => {
       tableSelectable: false,
       tableOrderBy: 'date',
       tableColumns,
-      tableCellRenderer,
+      tableCellRenderer: TableCellRenderer,
     },
   };
 

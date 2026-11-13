@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Checkbox, CircularProgress, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
@@ -17,6 +17,7 @@ import {
 
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
@@ -28,7 +29,13 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
 import strings from 'src/strings';
-import { ACCESSION_2_STATES, isWithdrawableAccessionState } from 'src/types/Accession';
+import {
+  ACCESSION_2_STATES,
+  accessionState,
+  isAccessionState,
+  isWithdrawableAccessionState,
+  stateName,
+} from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
@@ -110,13 +117,13 @@ const hasWithdrawableQuantity = (row: SearchResponseElementWithId): boolean =>
   Number(row['remainingQuantity(raw)']) > 0;
 
 const isWithdrawable = (row: SearchResponseElementWithId): boolean =>
-  isWithdrawableAccessionState(row.state as string | undefined) && hasWithdrawableQuantity(row);
+  isWithdrawableAccessionState(accessionState(row)) && hasWithdrawableQuantity(row);
 
 const unavailableTooltip = (row: SearchResponseElementWithId): string => {
-  if (row.state === 'Awaiting Check-In') {
+  if (accessionState(row) === 'Awaiting Check-In') {
     return strings.WITHDRAW_ACCESSION_AWAITING_CHECK_IN;
   }
-  if (row.state === 'Used Up') {
+  if (accessionState(row) === 'Used Up') {
     return strings.WITHDRAW_ACCESSION_USED_UP;
   }
   if (!hasWithdrawableQuantity(row)) {
@@ -317,7 +324,27 @@ export default function AccessionsTable({
     }
   }, [location, navigate, query, searchResults, selectedOrganization, setColumnFilters, setShowColumnFilters]);
 
-  const uniqueStates = useMemo(() => ACCESSION_2_STATES as string[], []);
+  useEffect(() => {
+    setColumnFilters((prev) => {
+      const stateFilter = prev.find((filter) => filter.id === 'state');
+      if (!Array.isArray(stateFilter?.value)) {
+        return prev;
+      }
+      const knownStates = (stateFilter.value as unknown[]).filter(isAccessionState);
+      if (knownStates.length === stateFilter.value.length) {
+        return prev;
+      }
+      return prev.map((filter) => (filter.id === 'state' ? { ...filter, value: knownStates } : filter));
+    });
+  }, [columnFilters, setColumnFilters]);
+
+  const stateFilterOptions = useMemo(
+    () =>
+      (activeLocale
+        ? ACCESSION_2_STATES.map((state) => ({ label: stateName(state), value: state }))
+        : []) as unknown as string[],
+    [activeLocale]
+  );
 
   const uniqueFacilityNames = useMemo(
     () => Array.from(new Set(searchResults?.map((r) => r.facility_name as string).filter(Boolean))).sort(),
@@ -413,14 +440,13 @@ export default function AccessionsTable({
         header: strings.STATUS,
         accessorKey: 'state',
         filterVariant: 'multi-select',
-        filterSelectOptions: uniqueStates,
-        filterFn: (row: SearchResponseElementWithId, columnId, filterValue: string[]) => {
+        filterSelectOptions: stateFilterOptions,
+        filterFn: (row: SearchResponseElementWithId, _columnId: string, filterValue: string[]) => {
           if (!filterValue.length) {
             return true;
           }
-          return filterValue.includes(
-            (row as unknown as { getValue: (id: string) => unknown }).getValue(columnId) as string
-          );
+          const { original } = row as unknown as MRT_Row<SearchResponseElementWithId>;
+          return filterValue.includes(accessionState(original) ?? '');
         },
       },
       {
@@ -473,7 +499,7 @@ export default function AccessionsTable({
           }
           const facilityName = (row as Record<string, unknown>).facility_name as string | undefined;
           const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
-          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz);
+          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz, activeLocale);
         },
         filterVariant: 'date-range',
         filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedTime'),
@@ -481,7 +507,9 @@ export default function AccessionsTable({
           const dateTimeStr = (cell.row.original as Record<string, unknown>).collectedTime as string | null;
           const facilityName = (cell.row.original as Record<string, unknown>).facility_name as string | undefined;
           const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
-          return dateTimeStr ? <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz)}</span> : null;
+          return dateTimeStr ? (
+            <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz, activeLocale)}</span>
+          ) : null;
         },
       },
       {
@@ -660,7 +688,7 @@ export default function AccessionsTable({
   }, [
     activeLocale,
     facilityNameToTz,
-    uniqueStates,
+    stateFilterOptions,
     uniqueFacilityNames,
     uniqueSubLocationNames,
     uniqueSpeciesNames,

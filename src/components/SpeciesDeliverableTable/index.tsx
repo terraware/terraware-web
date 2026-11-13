@@ -10,7 +10,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useSpeciesDeliverableSearch } from 'src/providers/Participant/useSpeciesDeliverableSearch';
 import { useGetSpeciesForProjectQuery } from 'src/queries/generated/acceleratorProjectSpecies';
-import strings from 'src/strings';
+import defaultStrings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
 
 import AddSpeciesModal from './AddSpeciesModal';
@@ -19,11 +19,11 @@ import RemoveSpeciesDialog from './RemoveSpeciesDialog';
 import TableCellRenderer from './TableCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'species_scientificName', name: strings.SCIENTIFIC_NAME, type: 'string' },
-  { key: 'species_commonName', name: strings.COMMON_NAME, type: 'string' },
-  { key: 'participantProjectSpecies_speciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'participantProjectSpecies_rationale', name: strings.RATIONALE, type: 'string' },
-  { key: 'participantProjectSpecies_submissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'species_scientificName', name: defaultStrings.SCIENTIFIC_NAME, type: 'string' },
+  { key: 'species_commonName', name: defaultStrings.COMMON_NAME, type: 'string' },
+  { key: 'participantProjectSpecies_speciesNativeCategory', name: defaultStrings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'participantProjectSpecies_rationale', name: defaultStrings.RATIONALE, type: 'string' },
+  { key: 'participantProjectSpecies_submissionStatus', name: defaultStrings.STATUS, type: 'string' },
 ];
 
 const consoleUpdateColumns = (): TableColumnType[] => [
@@ -37,7 +37,7 @@ type SpeciesDeliverableTableProps = {
 };
 
 const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps): JSX.Element => {
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
@@ -111,7 +111,7 @@ const SpeciesDeliverableTable = ({ deliverable }: SpeciesDeliverableTableProps):
               <Button
                 icon='plus'
                 id='add-species-to-project'
-                label='Add Species to Project'
+                label={strings.ADD_SPECIES_TO_PROJECT}
                 onClick={() => setOpenedAddSpeciesModal(true)}
                 priority='secondary'
                 size='medium'

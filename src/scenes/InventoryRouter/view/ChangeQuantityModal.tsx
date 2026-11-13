@@ -6,8 +6,8 @@ import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-component
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import { useLocalization } from 'src/providers';
 import { ChangeBatchStatusRequestPayload, useChangeBatchStatusesMutation } from 'src/queries/generated/nurseryBatches';
-import strings from 'src/strings';
 import { ModalValuesType } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -26,6 +26,7 @@ export default function ChangeQuantityModal({
   reload,
   row,
 }: ChangeQuantityModalProps): JSX.Element {
+  const { strings } = useLocalization();
   const { type } = modalValues;
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
@@ -58,7 +59,7 @@ export default function ChangeQuantityModal({
       default:
         return '';
     }
-  }, [type]);
+  }, [type, strings]);
 
   const onCloseHandler = useCallback(() => {
     setMovedValue(undefined);
@@ -127,7 +128,19 @@ export default function ChangeQuantityModal({
       savingRef.current = false;
       setSaving(false);
     }
-  }, [changeBatchStatuses, markSubmitted, movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
+  }, [
+    changeBatchStatuses,
+    markSubmitted,
+    movedValue,
+    nextPhase,
+    onCloseHandler,
+    record,
+    reload,
+    row,
+    snackbar,
+    type,
+    strings,
+  ]);
 
   const onSave = useCallback(() => {
     void onSubmit();
@@ -211,7 +224,7 @@ export default function ChangeQuantityModal({
     } else {
       return strings.HARDENING_OFF;
     }
-  }, [type]);
+  }, [type, strings]);
 
   const fromValueFormatted = useMemo(() => {
     if (type === 'germinating') {
@@ -231,7 +244,7 @@ export default function ChangeQuantityModal({
     } else {
       return strings.READY_TO_PLANT;
     }
-  }, [nextPhase]);
+  }, [nextPhase, strings]);
 
   const toValueFormatted = useMemo(() => {
     if (nextPhase === 'ActiveGrowth') {
@@ -266,7 +279,7 @@ export default function ChangeQuantityModal({
         value: 'Ready',
       },
     ];
-  }, [type]);
+  }, [type, strings]);
 
   const onChangeGrowthPhase = useCallback(
     (value: string) => {

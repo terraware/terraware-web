@@ -4,8 +4,8 @@ import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
 import useBoolean from 'src/hooks/useBoolean';
+import { useLocalization } from 'src/providers';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
-import strings from 'src/strings';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -17,6 +17,7 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const COLLAPSED_MAX_HEIGHT = 120;
 
 const HighlightsBox = (props: ReportBoxProps) => {
+  const { strings } = useLocalization();
   const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView, printMode } =
     props;
   const theme = useTheme();
@@ -42,7 +43,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       setInternalEditing(false);
     }
-  }, [snackbar, setInternalEditing, reviewReportResponse.isError, reviewReportResponse.isSuccess]);
+  }, [snackbar, setInternalEditing, reviewReportResponse.isError, reviewReportResponse.isSuccess, strings]);
 
   const onSave = useCallback(() => {
     if (isAcceleratorReport(report)) {
@@ -76,7 +77,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
       showLessText: strings.SHOW_LESS,
       showMoreText: strings.SHOW_MORE,
     }),
-    []
+    [strings]
   );
 
   return (

@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { DateTime, Interval } from 'luxon';
 
 import Link from 'src/components/common/Link';
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
 
@@ -30,6 +31,7 @@ const ScheduledObservationItem = ({
 }: ScheduledObservationItemProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
 
   const { dateRange, daysUntilStart, timeUntilStart } = useMemo(() => {
     const locale = activeLocale || 'en-US';
@@ -47,6 +49,15 @@ const ScheduledObservationItem = ({
           : start.toRelative({ base: today, unit: days < 14 ? 'days' : days < 60 ? 'weeks' : 'months' }),
     };
   }, [activeLocale, observation.endDate, observation.startDate]);
+
+  const monitoringType = useMemo((): string => {
+    const labels: Record<ObservationPayload['type'], string> = {
+      'Baseline Survey': strings.BASELINE_SURVEY,
+      'Biomass Measurements': strings.BIOMASS_MONITORING,
+      Monitoring: strings.PLANT_MONITORING,
+    };
+    return labels[observation.type];
+  }, [observation.type, strings]);
 
   const isUrgent = daysUntilStart < URGENT_WITHIN_DAYS;
 
@@ -74,6 +85,11 @@ const ScheduledObservationItem = ({
           </Typography>
         )}
       </Box>
+      {biomassSchedulingEnabled && (
+        <Typography fontSize='14px' lineHeight='20px'>
+          {monitoringType}
+        </Typography>
+      )}
       {isRescheduling && <InlineRescheduleForm observation={observation} onClose={onRescheduleEnd} />}
       {showSiteName && !isRescheduling && (
         <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' lineHeight='20px'>

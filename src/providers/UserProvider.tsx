@@ -22,15 +22,18 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   const userAnalyticsState = useAppSelector(selectUserAnalytics);
   const dispatch = useAppDispatch();
 
-  const { currentData, refetch } = useGetMyselfQuery();
+  const { currentData, error: userError, refetch } = useGetMyselfQuery();
   const user = currentData?.user;
 
-  const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
+  const { currentData: preferencesData, error: preferencesError } = useGetUserPreferencesQuery(undefined);
   const userPreferences = useMemo<PreferencesType | undefined>(
     () => (preferencesData ? (preferencesData.preferences ?? {}) : undefined),
     [preferencesData]
   );
   const preferencesLoaded = preferencesData !== undefined;
+  const isLoadingUser =
+    (currentData === undefined && userError === undefined) ||
+    (preferencesData === undefined && preferencesError === undefined);
 
   const updatePreferences = useUpdateUserPreferences();
   const [updateCookieConsent] = useUpdateCookieConsentMutation();
@@ -74,13 +77,23 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     () => ({
       reloadUser,
       bootstrapped: Boolean(preferencesLoaded && user),
+      isLoadingUser,
       user,
       userPreferences: userPreferences ?? {},
       updateUserCookieConsent,
       updateUserPreferences,
       isAllowed,
     }),
-    [reloadUser, user, preferencesLoaded, userPreferences, updateUserCookieConsent, updateUserPreferences, isAllowed]
+    [
+      reloadUser,
+      user,
+      preferencesLoaded,
+      isLoadingUser,
+      userPreferences,
+      updateUserCookieConsent,
+      updateUserPreferences,
+      isAllowed,
+    ]
   );
 
   useEffect(() => {

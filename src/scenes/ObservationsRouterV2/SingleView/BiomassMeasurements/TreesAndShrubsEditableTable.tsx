@@ -1,9 +1,10 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
-import { Button, DialogBox, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Button, DialogBox, EditableTableColumn, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 
+import EditableTable from 'src/components/common/EditableTable';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import {

@@ -6,12 +6,14 @@ import Page from 'src/components/Page';
 import TfMain from 'src/components/common/TfMain';
 import { Feature, OPT_IN_FEATURES } from 'src/features';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
+import { useLocalization } from 'src/providers';
 import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function OptInFeaturesView(): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
@@ -116,7 +118,7 @@ export default function OptInFeaturesView(): JSX.Element {
                 justifyContent: 'center',
               }}
             >
-              Opt-in to see experimental or work-in-progress features
+              {strings.OPT_IN_FEATURES_DESCRIPTION}
             </Box>
             {OPT_IN_FEATURES.filter((f) => f.active).map((f, i) => (
               <Stack
