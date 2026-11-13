@@ -289,7 +289,8 @@ export type GetObservationMediaStreamApiArg = {
   plotId: number;
   fileId: number;
 };
-export type UploadOtherPlotMediaApiResponse = /** status 200 OK */ UploadPlotMediaResponsePayload;
+export type UploadOtherPlotMediaApiResponse =
+  /** status 200 The requested operation succeeded. */ UploadPlotMediaResponsePayload;
 export type UploadOtherPlotMediaApiArg = {
   observationId: number;
   plotId: number;
@@ -303,7 +304,8 @@ export type UploadOtherPlotMediaApiArg = {
     payload: UploadPlotMediaRequestPayload;
   };
 };
-export type UploadPlotPhotoApiResponse = /** status 200 OK */ UploadPlotMediaResponsePayload;
+export type UploadPlotPhotoApiResponse =
+  /** status 200 The requested operation succeeded. */ UploadPlotMediaResponsePayload;
 export type UploadPlotPhotoApiArg = {
   observationId: number;
   plotId: number;
@@ -393,6 +395,8 @@ export type ScheduleObservationResponsePayload = {
   status: SuccessOrError;
 };
 export type ScheduleObservationRequestPayload = {
+  /** If true, assign monitoring plots now instead of when the observation starts. */
+  assignPlots?: boolean;
   /** The end date for this observation, should be limited to 2 months from the start date. */
   endDate: string;
   /** Which type of observation to schedule. */

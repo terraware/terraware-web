@@ -1174,6 +1174,7 @@ MANGROVES,Manglares,3511a098
 MAP,Mapa,cc1fa56d
 MAP_EDIT_SUMMARY_MESSAGE,"Al guardar, se realizarán estos cambios en el sitio de plantación.",072017f7
 MAP_EDIT_SUMMARY_NO_CHANGES,"Al guardar, no se cambiarán el área, los estratos, los sustratos ni las parcelas de monitoreo del sitio de plantación.",3f386e45
+MAP_EDIT_SUMMARY_OBSERVATION_PLOTS_REASSIGNED,{0} observaciones recibirán nuevas ubicaciones de parcela.,c7be408f
 MAP_EDIT_SUMMARY_OBSERVATIONS_ABANDONED,Se abandonarán {0} observaciones en curso.,6c2778ac
 MAP_EDIT_SUMMARY_PERMANENT_PLOT_CREATED_EXISTING_AREA,Se agregará una parcela permanente al área existente del estrato {0}.,9a1768f4
 MAP_EDIT_SUMMARY_PERMANENT_PLOT_CREATED_NEW_AREA,Se agregará una parcela permanente al área nueva del estrato {0}.,d3659b31
@@ -1356,6 +1357,7 @@ NO_PROJECTS_NON_ADMIN_MSG,"Solo los administradores pueden agregar proyectos. Po
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para cada especie.,ff65d8d2
 NO_REQUESTS_FOR_SELECTED_FILTERS,No hay solicitudes para los filtros seleccionados.,a6a641ac
+NO_ROOM_FOR_MONITORING_PLOTS,No hay espacio para parcelas de monitoreo en este sitio de plantación.,e28cb2d2
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
 NO_SITE_BOUNDARY_YET,Aún no hay límite del sitio,48cfe15e

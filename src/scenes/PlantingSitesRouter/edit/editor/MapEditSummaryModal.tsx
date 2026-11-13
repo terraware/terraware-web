@@ -36,6 +36,11 @@ const MapEditSummaryModal = ({ onBackToEdit, onSave, summary }: MapEditSummaryMo
             strings.MAP_EDIT_SUMMARY_OBSERVATIONS_ABANDONED,
             numberFormatter.format(item.observationIds.length)
           );
+        case 'ObservationPlotsReassigned':
+          return format(
+            strings.MAP_EDIT_SUMMARY_OBSERVATION_PLOTS_REASSIGNED,
+            numberFormatter.format(item.observationIds.length)
+          );
         case 'PermanentPlotCreated':
           return format(
             item.inExistingArea
