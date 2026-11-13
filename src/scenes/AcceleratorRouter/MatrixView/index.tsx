@@ -16,7 +16,6 @@ import {
 
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
-import DatePicker from 'src/components/common/DatePicker';
 import EditableTable from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
@@ -38,7 +37,16 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
-import { SaveMatrixValue, buildMatrixValue, buildMatrixValueOperation, getMatrixValue } from './matrixValues';
+import DateEditor from './editors/DateEditor';
+import TextEditor from './editors/TextEditor';
+import {
+  MatrixRow,
+  MatrixValue,
+  SaveMatrixValue,
+  buildMatrixValue,
+  buildMatrixValueOperation,
+  getMatrixValue,
+} from './matrixValues';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
@@ -46,6 +54,7 @@ type ViewOption = typeof DEFAULT_VIEW | 'acceleratorProjects' | 'applicants';
 
 type MatrixColumn = EditableTableColumn<ProjectsWithVariablesSearchResult>;
 type CustomEditComponent = NonNullable<MatrixColumn['editConfig']>['customEditComponent'];
+type MatrixEditProps = Parameters<NonNullable<CustomEditComponent>>[0];
 
 const MatrixView = () => {
   const { isMobile } = useDeviceInfo();
@@ -239,41 +248,24 @@ const MatrixView = () => {
 
       let filterSelectOptions: string[] = [];
 
+      const saveVariableValue = async (row: MatrixRow, value: MatrixValue) => {
+        const variable = row.variables?.find((candidate) => candidate.stableId === variableId) ?? selectedVariable;
+        if (variable) {
+          await saveMatrixValue(row.id, value, variable);
+        }
+      };
+
       if (correspondingValue?.dateValue) {
         filterVariant = 'date-range';
         filterFunction = 'between';
         // eslint-disable-next-line react/display-name
-        Edit = ({
-          cell,
-          row,
-          table,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const [value, setValue] = useState(cell.getValue<string>() || '');
-
-          return (
-            <DatePicker
-              value={value ? new Date(value) : null}
-              onDateChange={(date) => {
-                const dateString = date?.toISODate() ?? '';
-                setValue(dateString);
-                table.setEditingCell(null);
-                const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-                const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-                if (variableToProcess && date) {
-                  onSaveHandler(row.original.id, date.toISODate() ?? '', variableToProcess);
-                }
-              }}
-              aria-label={''}
-              id={''}
-              label={undefined}
-            />
-          );
-        };
+        Edit = ({ cell, row, table }: MatrixEditProps) => (
+          <DateEditor
+            value={String(cell.getValue() ?? '')}
+            save={(value) => saveVariableValue(row.original, value)}
+            cancel={() => table.setEditingCell(null)}
+          />
+        );
         // eslint-disable-next-line react/display-name
         Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
           if (cell.getValue() && cell.getValue() instanceof Date) {
@@ -556,97 +548,27 @@ const MatrixView = () => {
         };
         filterVariant = 'range';
         filterFunction = 'between';
-        // Number input
         // eslint-disable-next-line react/display-name
-        Edit = ({
-          cell,
-          row,
-          table,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const [value, setValue] = useState<string>((cell.getValue<string>() || 0).toString());
-
-          const handleSave = () => {
-            table.setEditingCell(null);
-            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-            const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-            if (variableToProcess) {
-              onSaveHandler(row.original.id, value, variableToProcess);
-            }
-          };
-
-          return (
-            <TextField
-              type='number'
-              value={value}
-              onChange={(e) => {
-                const numValue = e.target.value;
-                setValue(numValue);
-              }}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSave();
-                } else if (e.key === 'Escape') {
-                  table.setEditingCell(null);
-                }
-              }}
-              onBlur={handleSave}
-              size='small'
-              fullWidth
-            />
-          );
-        };
+        Edit = ({ cell, row, table }: MatrixEditProps) => (
+          <TextEditor
+            type='number'
+            value={String(cell.getValue() ?? '')}
+            save={(value) => saveVariableValue(row.original, value)}
+            cancel={() => table.setEditingCell(null)}
+          />
+        );
       }
       if (correspondingValue?.linkUrl) {
         Cell = undefined;
-        // URL input
         // eslint-disable-next-line react/display-name
-        Edit = ({
-          cell,
-          row,
-          table,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          column: MRT_Column<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-          table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-        }) => {
-          const [value, setValue] = useState(cell.getValue<string>() || '');
-
-          const handleSave = () => {
-            table.setEditingCell(null);
-            const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-            const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-            if (variableToProcess) {
-              onSaveHandler(row.original.id, value, variableToProcess);
-            }
-          };
-
-          return (
-            <TextField
-              type='url'
-              value={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-              }}
-              onBlur={handleSave}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  handleSave();
-                } else if (e.key === 'Escape') {
-                  table.setEditingCell(null);
-                }
-              }}
-              size='small'
-              fullWidth
-              placeholder='https://...'
-            />
-          );
-        };
+        Edit = ({ cell, row, table }: MatrixEditProps) => (
+          <TextEditor
+            type='url'
+            value={String(cell.getValue() ?? '')}
+            save={(value) => saveVariableValue(row.original, value)}
+            cancel={() => table.setEditingCell(null)}
+          />
+        );
       }
       return {
         id: variableId,
@@ -680,6 +602,7 @@ const MatrixView = () => {
     dateLocale,
     isAllowedEditMatrixView,
     onSaveHandler,
+    saveMatrixValue,
     projects,
     uniqueVariableIds,
     variableNameMap,
