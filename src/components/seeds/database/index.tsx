@@ -36,6 +36,7 @@ const ALL_ACCESSION_FIELDS = [
   'id',
   'accessionNumber',
   'state',
+  'state(raw)',
   'facility_name',
   'subLocation_name',
   'speciesName',
