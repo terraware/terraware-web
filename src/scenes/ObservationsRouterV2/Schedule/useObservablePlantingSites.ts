@@ -62,6 +62,9 @@ const useObservablePlantingSites = (): ObservablePlantingSite[] => {
       return [];
     }
     return plantingSites.flatMap((site) => {
+      if (!site.strata?.some((stratum) => stratum.substrata.length > 0)) {
+        return [];
+      }
       const sitePlants = allSitesReportedPlants.find((_sitePlants) => _sitePlants.id === site.id);
       const siteHasPlantings = hasSubstratumPlantings(sitePlants);
       const siteUpcomingObservations = upcomingObservations.filter(

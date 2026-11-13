@@ -5,10 +5,18 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import strings from 'src/strings';
-import { buildPlantingSite, buildUser, captureRequests, mockGet, renderWithProviders } from 'src/test-utils';
+import {
+  buildPlantingSite,
+  buildStratum,
+  buildUser,
+  captureRequests,
+  mockGet,
+  renderWithProviders,
+} from 'src/test-utils';
 
 import ObservationFiltersProvider, { ObservationTypeFilter } from '../ObservationFiltersProvider';
 import PlantMonitoringList from './PlantMonitoringList';
+import ObservationListView from './index';
 
 const PREFERENCES_URL = '/api/v1/users/me/preferences';
 
@@ -74,6 +82,45 @@ describe('PlantMonitoringList', () => {
   afterEach(() => {
     localStorage.clear();
     sessionStorage.clear();
+  });
+
+  it.each([
+    [false, false],
+    [false, true],
+    [true, false],
+    [true, true],
+  ])('only offers scheduling with eligible sites (biomass=%s, eligible=%s)', async (enabled, eligible) => {
+    const sites = [
+      buildPlantingSite({ id: 1, name: 'No strata', strata: [] }),
+      buildPlantingSite({ id: 2, name: 'Empty strata', strata: [buildStratum({ substrata: [] })] }),
+      ...(eligible ? [buildPlantingSite({ id: 3 })] : []),
+    ];
+    const preferences = {
+      scheduledBiomassMonitoringObservations: enabled,
+      observationsViewMode: 'list',
+      'observations-list': { plantingSiteId: ALL_PLANTING_SITES },
+    };
+    mockGet(PREFERENCES_URL, { preferences });
+    mockGet('/api/v1/users/me', { user: buildUser() });
+    mockGet('/api/v1/users/me/savedTableViews', { views: [] });
+    mockGet('/api/v1/tracking/sites', { sites });
+    mockGet('/api/v1/tracking/sites/reportedPlants', {
+      sites: sites.map((site) => ({ id: site.id, strata: [{ substrata: [{ totalPlants: 10 }] }] })),
+    });
+    mockGet('/api/v1/tracking/observations', { observations: [] });
+    mockGet('/api/v1/tracking/observations/results', { observations: [PLANT_OBSERVATION] });
+    mockGet('/api/v1/species', { species: [] });
+    renderWithProviders(<ObservationListView />, {
+      route: '/observations',
+      currentUser: { userPreferences: preferences },
+    });
+
+    expect(await screen.findByRole('row', { name: PLANT_ROW })).toBeVisible();
+    if (eligible) {
+      expect(await screen.findByRole('button', { name: strings.SCHEDULE_OBSERVATION })).toBeVisible();
+    } else {
+      expect(screen.queryByRole('button', { name: strings.SCHEDULE_OBSERVATION })).not.toBeInTheDocument();
+    }
   });
 
   it('names the monitoring type of each observation when biomass scheduling is enabled', async () => {

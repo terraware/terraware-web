@@ -147,7 +147,7 @@ const ObservationListViewContent = (): JSX.Element => {
   );
 
   const scheduleObservationEnabled = useMemo(
-    () => observableSites && isAdmin(selectedOrganization),
+    () => observableSites.length > 0 && isAdmin(selectedOrganization),
     [observableSites, selectedOrganization]
   );
 
