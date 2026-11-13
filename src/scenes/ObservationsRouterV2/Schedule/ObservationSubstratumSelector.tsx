@@ -9,7 +9,6 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useListObservationResultsQuery, useListObservationsQuery } from 'src/queries/generated/observations';
 import { useListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
@@ -37,55 +36,10 @@ const ObservationSubstratumSelector = ({
   const { plantingSite } = usePlantingSite(plantingSiteId);
   const { selectedOrganization } = useOrganization();
   const isBaseline = monitoringType === 'Baseline Survey';
-  const observations = useListObservationsQuery({ plantingSiteId }, { skip: !isBaseline });
-  const completedResults = useListObservationResultsQuery(
-    { plantingSiteId, depth: 'Substratum', state: ['Completed'] },
-    { skip: !isBaseline }
-  );
   const reportedPlants = useListPlantingSiteReportedPlantsQuery(
     { organizationId: selectedOrganization?.id ?? -1 },
     { skip: !isBaseline || !selectedOrganization }
   );
-  const baselineStatusLoaded = !!(
-    observations.currentData &&
-    completedResults.currentData &&
-    reportedPlants.currentData
-  );
-  const baselineStatusError = observations.isError || completedResults.isError || reportedPlants.isError;
-
-  const baselineCompleted = useMemo(() => {
-    const dates = new Map<number, string>();
-    completedResults.currentData?.observations.forEach((observation) => {
-      if (observation.type !== 'Baseline Survey' || observation.state !== 'Completed' || !observation.completedTime) {
-        return;
-      }
-      const completedTime = observation.completedTime;
-      observation.strata
-        .flatMap((stratum) => stratum.substrata)
-        .forEach((substratum) => {
-          const id = substratum.substratumId;
-          if (id !== undefined && substratum.completedTime && (!dates.has(id) || completedTime > dates.get(id)!)) {
-            dates.set(id, completedTime);
-          }
-        });
-    });
-    return dates;
-  }, [completedResults.currentData]);
-
-  const baselineScheduled = useMemo(() => {
-    const dates = new Map<number, string>();
-    observations.currentData?.observations.forEach((observation) => {
-      if (observation.type !== 'Baseline Survey' || !['Upcoming', 'InProgress'].includes(observation.state)) {
-        return;
-      }
-      observation.requestedSubstratumIds?.forEach((id) => {
-        if (!dates.has(id) || observation.startDate < dates.get(id)!) {
-          dates.set(id, observation.startDate);
-        }
-      });
-    });
-    return dates;
-  }, [observations.currentData]);
 
   const plantedSubstrata = useMemo(
     () =>
@@ -284,20 +238,14 @@ const ObservationSubstratumSelector = ({
                     }}
                   >
                     {isBaseline
-                      ? baselineStatusError
-                        ? strings.UNABLE_TO_LOAD_BASELINE_STATUS
-                        : baselineStatusLoaded
-                          ? strings.formatString(
-                              strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y,
-                              stratum.substrata.filter(
-                                (substratum) =>
-                                  baselineCompleted.has(substratum.id) || baselineScheduled.has(substratum.id)
-                              ).length,
-                              stratum.substrata.length,
-                              stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
-                              stratum.substrata.length
-                            )
-                          : strings.LOADING
+                      ? strings.formatString(
+                          strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y,
+                          stratum.substrata.filter((substratum) => Boolean(substratum.latestBaselineSurveyStatus))
+                            .length,
+                          stratum.substrata.length,
+                          stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
+                          stratum.substrata.length
+                        )
                       : stratum.latestObservationCompletedTime
                         ? strings.formatString(
                             strings.LAST_OBSERVATION,
@@ -357,26 +305,33 @@ const ObservationSubstratumSelector = ({
                             alignItems='center'
                             paddingLeft={1}
                           >
-                            {baselineCompleted.has(substratum.id) && (
+                            {substratum.latestBaselineSurveyDate && substratum.latestBaselineSurveyStatus && (
                               <Badge
                                 label={
                                   strings.formatString(
-                                    strings.BASELINE_COMPLETED_X,
-                                    getDateDisplayValue(baselineCompleted.get(substratum.id)!)
+                                    substratum.latestBaselineSurveyStatus === 'Overdue'
+                                      ? strings.BASELINE_OVERDUE_X
+                                      : ['Completed', 'Abandoned'].includes(substratum.latestBaselineSurveyStatus)
+                                        ? strings.BASELINE_COMPLETED_X
+                                        : strings.BASELINE_SCHEDULED_X,
+                                    substratum.latestBaselineSurveyDate
                                   ) as string
                                 }
-                                labelColor={theme.palette.TwClrTxt}
-                              />
-                            )}
-                            {baselineScheduled.has(substratum.id) && (
-                              <Badge
-                                label={
-                                  strings.formatString(
-                                    strings.BASELINE_SCHEDULED_X,
-                                    baselineScheduled.get(substratum.id)!
-                                  ) as string
+                                backgroundColor={
+                                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                                    ? theme.palette.TwClrBgWarningTertiary
+                                    : undefined
                                 }
-                                labelColor={theme.palette.TwClrTxt}
+                                borderColor={
+                                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                                    ? theme.palette.TwClrBrdrWarning
+                                    : undefined
+                                }
+                                labelColor={
+                                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                                    ? theme.palette.TwClrTxtWarning
+                                    : theme.palette.TwClrTxt
+                                }
                               />
                             )}
                             {plantedSubstrata.has(substratum.id) && (

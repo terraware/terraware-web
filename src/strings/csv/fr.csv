@@ -254,6 +254,7 @@ BASED_ON_X_BATCH,Basé sur {0} lot,919ed414
 BASED_ON_X_BATCHES,Basé sur {0} lots,8c41bee7
 BASELINE,Référence,332af00e
 BASELINE_COMPLETED_X,Ligne de base terminée : {0},58bb5e0e
+BASELINE_OVERDUE_X,Référence en retard : {0},c1c91c3f
 BASELINE_SCHEDULED_X,Ligne de base programmée : {0},c95467b5
 BASELINE_SURVEY,Enquête de référence,bc76c649
 BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y,Ligne de base : {0} sur {1} · Plantations présentes : {2} sur {3},a2e54d66
@@ -2712,7 +2713,6 @@ TYPICAL_UNDER_ONE_TO_X_DAYS,typique <1–{0} jours,acb54d6a
 TYPICAL_X_TO_Y_DAYS,typique {0}–{1} jours,05bd5303
 UN_SDG,Objectifs de développement durable des Nations Unies (SDG),7d6c756a
 UNABLE_TO_ADD_PERSON,Impossible d'ajouter une personne,7d19ff74
-UNABLE_TO_LOAD_BASELINE_STATUS,Impossible de charger l’état de la ligne de base.,f0973ced
 UNABLE_TO_LOAD_NOTIFICATIONS,Impossible de charger les notifications. Réessayez plus tard.,c6aeba80
 UNASSIGNED,Non assigné·e,9acb5519
 UNCLAIMED,Non réclamé,a4964181

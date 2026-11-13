@@ -5,14 +5,7 @@ import { screen } from '@testing-library/react';
 import ObservationSubstratumSelector from 'src/scenes/ObservationsRouterV2/Schedule/ObservationSubstratumSelector';
 import { MonitoringType } from 'src/scenes/ObservationsRouterV2/Schedule/monitoringTypes';
 import strings from 'src/strings';
-import {
-  buildPlantingSite,
-  buildStratum,
-  buildSubstratum,
-  mockError,
-  mockGet,
-  renderWithProviders,
-} from 'src/test-utils';
+import { buildPlantingSite, buildStratum, buildSubstratum, mockGet, renderWithProviders } from 'src/test-utils';
 
 const PLANTING_SITE_ID = 1;
 const SITE_URL = `/api/v1/tracking/sites/${PLANTING_SITE_ID}`;
@@ -49,17 +42,11 @@ const site = buildPlantingSite({
 
 const renderSelector = (
   monitoringType: MonitoringType = 'Monitoring',
-  sitePayload = site,
-  baselineData: { observations?: unknown[]; results?: unknown[]; plants?: unknown[]; error?: boolean } = {}
+  sitePayload: unknown = site,
+  plants: unknown[] = []
 ) => {
   mockGet(SITE_URL, { site: sitePayload });
-  mockGet('/api/v1/tracking/observations', { observations: baselineData.observations ?? [] });
-  mockGet('/api/v1/tracking/sites/reportedPlants', { sites: baselineData.plants ?? [] });
-  if (baselineData.error) {
-    mockError('get', '/api/v1/tracking/observations/results');
-  } else {
-    mockGet('/api/v1/tracking/observations/results', { observations: baselineData.results ?? [] });
-  }
+  mockGet('/api/v1/tracking/sites/reportedPlants', { sites: plants });
 
   return renderWithProviders(
     <ObservationSubstratumSelector
@@ -88,80 +75,82 @@ const plotsAssigned = (total: number, temporary: number, permanent: number) => {
 };
 
 describe('ObservationSubstratumSelector', () => {
-  it('shows Baseline coverage, the latest completion, the earliest scheduled start and plantings per substratum', async () => {
-    const completed = (type: string, date: string, substratumId = 11) => ({
-      type,
-      state: 'Completed',
-      completedTime: `${date}T12:00:00Z`,
-      strata: [{ substrata: [{ substratumId, completedTime: `${date}T12:00:00Z` }] }],
-    });
-    const scheduled = (state: string, startDate: string, type = 'Baseline Survey') => ({
-      state,
-      startDate,
-      type,
-      requestedSubstratumIds: [12],
-    });
-    renderSelector('Baseline Survey', site, {
-      results: [
-        completed('Baseline Survey', '2026-06-02'),
-        completed('Baseline Survey', '2026-05-01'),
-        completed('Monitoring', '2026-08-01', 21),
-        completed('Biomass Measurements', '2026-08-01', 22),
-      ],
-      observations: [
-        scheduled('Upcoming', '2026-11-20'),
-        scheduled('InProgress', '2026-11-16'),
-        scheduled('Completed', '2026-01-01'),
-        scheduled('Abandoned', '2026-01-01'),
-        scheduled('Upcoming', '2026-01-01', 'Monitoring'),
-        scheduled('Upcoming', '2026-01-01', 'Biomass Measurements'),
-      ],
-      plants: [
+  it('shows Baseline coverage and plantings from the latest per-substratum site fields', async () => {
+    const baselineSite = {
+      ...site,
+      strata: site.strata?.map((stratum, index) => ({
+        ...stratum,
+        substrata: stratum.substrata.map((substratum, substratumIndex) => ({
+          ...substratum,
+          ...(index === 0
+            ? {
+                latestBaselineSurveyDate: substratumIndex === 0 ? '2026-06-02' : '2026-11-16',
+                latestBaselineSurveyId: substratumIndex + 1,
+                latestBaselineSurveyStatus: substratumIndex === 0 ? ('Completed' as const) : ('Upcoming' as const),
+              }
+            : {}),
+        })),
+      })),
+    };
+    renderSelector('Baseline Survey', baselineSite, [
+      {
+        id: 1,
+        strata: [
+          {
+            substrata: [
+              { id: 21, totalPlants: 10 },
+              { id: 22, totalPlants: 0 },
+            ],
+          },
+        ],
+      },
+    ]);
+    expect(
+      await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 2, 2, 0, 2) as string)
+    ).toBeVisible();
+    expect(
+      await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 0, 2, 1, 2) as string)
+    ).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings.BASELINE_SCHEDULED_X, '2026-11-16') as string)).toBeVisible();
+    expect(screen.getByText(strings.HAS_PLANTINGS)).toBeVisible();
+    expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['Completed', 'BASELINE_COMPLETED_X'],
+    ['Abandoned', 'BASELINE_COMPLETED_X'],
+    ['Upcoming', 'BASELINE_SCHEDULED_X'],
+    ['InProgress', 'BASELINE_SCHEDULED_X'],
+    ['Overdue', 'BASELINE_OVERDUE_X'],
+  ] as const)('shows %s Baselines with the matching status pill', async (status, label) => {
+    renderSelector('Baseline Survey', {
+      ...site,
+      strata: [
         {
-          id: 1,
-          strata: [
+          ...site.strata![0],
+          substrata: [
             {
-              substrata: [
-                { id: 21, totalPlants: 10 },
-                { id: 22, totalPlants: 0 },
-              ],
+              ...site.strata![0].substrata[0],
+              latestBaselineSurveyDate: '2026-06-02',
+              latestBaselineSurveyId: 1,
+              latestBaselineSurveyStatus: status,
+            },
+            {
+              ...site.strata![0].substrata[1],
+              latestBaselineSurveyDate: null,
+              latestBaselineSurveyId: null,
+              latestBaselineSurveyStatus: null,
             },
           ],
         },
       ],
     });
     expect(
-      await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 2, 2, 0, 2) as string)
-    ).toBeVisible();
-    expect(
-      screen.getByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 0, 2, 1, 2) as string)
-    ).toBeVisible();
-    expect(screen.getByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)).toBeVisible();
-    expect(screen.getByText(strings.formatString(strings.BASELINE_SCHEDULED_X, '2026-11-16') as string)).toBeVisible();
-    expect(screen.getByText(strings.HAS_PLANTINGS)).toBeVisible();
-    expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
-    expect(screen.queryByText(/2026-05-01|2026-08-01|2026-01-01|2026-11-20/)).not.toBeInTheDocument();
-  });
-
-  it('counts a substratum only once when it has both a completed and scheduled Baseline', async () => {
-    renderSelector('Baseline Survey', site, {
-      observations: [
-        { type: 'Baseline Survey', state: 'Upcoming', startDate: '2026-11-16', requestedSubstratumIds: [11] },
-      ],
-      results: [
-        {
-          type: 'Baseline Survey',
-          state: 'Completed',
-          completedTime: '2026-06-02T12:00:00Z',
-          strata: [{ substrata: [{ substratumId: 11, completedTime: '2026-06-02T12:00:00Z' }, { substratumId: 12 }] }],
-        },
-      ],
-    });
-    expect(
       await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 1, 2, 0, 2) as string)
     ).toBeVisible();
-    expect(screen.getByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)).toBeVisible();
-    expect(screen.getByText(strings.formatString(strings.BASELINE_SCHEDULED_X, '2026-11-16') as string)).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings[label], '2026-06-02') as string)).toBeVisible();
+    expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
   });
 
   it('shows zero coverage without legacy observation text when no Baselines or plantings exist', async () => {
@@ -173,14 +162,6 @@ describe('ObservationSubstratumSelector', () => {
     ).toHaveLength(2);
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
-  });
-
-  it('reports a Baseline status error instead of claiming zero coverage', async () => {
-    renderSelector('Baseline Survey', site, { error: true });
-    expect(await screen.findAllByText(strings.UNABLE_TO_LOAD_BASELINE_STATUS)).toHaveLength(2);
-    expect(
-      screen.queryByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 0, 2, 0, 2) as string)
-    ).not.toBeInTheDocument();
   });
 
   it.each(['Monitoring', 'Biomass Measurements'] as const)(

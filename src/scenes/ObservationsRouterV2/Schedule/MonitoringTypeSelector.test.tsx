@@ -138,7 +138,6 @@ const renderScheduleForm = (hasPlantings = false, blockMonitoring = false, block
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/tracking/sites', { sites: [site] });
   mockGet('/api/v1/tracking/sites/1', { site });
-  mockGet('/api/v1/tracking/observations/results', { observations: [] });
   mockGet('/api/v1/tracking/sites/reportedPlants', {
     sites: [{ id: site.id, strata: [{ substrata: [{ totalPlants: hasPlantings ? 10 : 0 }] }] }],
   });
