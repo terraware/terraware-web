@@ -24,10 +24,10 @@ const MonitoringTypeSelector = ({
 }: MonitoringTypeSelectorProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
-  const monitoringTypes: MonitoringType[] =
-    biomassSchedulingEnabled && baselineSurveyEnabled ? ['Baseline Survey', ...MONITORING_TYPES] : MONITORING_TYPES;
+  const monitoringTypes: MonitoringType[] = baselineSurveyEnabled
+    ? ['Baseline Survey', ...MONITORING_TYPES]
+    : MONITORING_TYPES;
 
   const optionsContent = useMemo(
     (): Record<MonitoringType, { badge: string; description: string; title: string }> => ({
