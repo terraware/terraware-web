@@ -18,7 +18,7 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
-import { getBiomassPlotUnrecognizedSpecies, isMonitoringPlotObserved } from 'src/utils/observation';
+import { getBiomassPlotUnrecognizedSpecies, hasObservationData, isMonitoringPlotObserved } from 'src/utils/observation';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -251,6 +251,7 @@ const BiomassObservationDataTab = () => {
           label={strings.EXPORT_DATA}
           icon='iconImport'
           onClick={() => void downloadBiomassObservationDetails(observationId)}
+          disabled={!hasObservationData(results)}
           sx={{ fontWeight: '400 !important' }}
         />
       </Box>
