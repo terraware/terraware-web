@@ -16,6 +16,7 @@ import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'sr
 import { PlantingSitePayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { AdHocObservationResults, getPlotStatus } from 'src/types/Observations';
+import { MultiPolygon } from 'src/types/Tracking';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 import { getShortDate } from 'src/utils/dateFormatter';
 import downloadZipFile from 'src/utils/downloadZipFile';
@@ -642,6 +643,53 @@ const useObservationExports = () => {
     [getObservationResults, getPlantingSite, makeBiomassCsvFiles, strings.BIOMASS_OBSERVATION_FILENAME_PREFIX]
   );
 
+  const downloadAdHocObservationDetails = useCallback(
+    async (observationId: number) => {
+      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
+      const observationResults = results.observation;
+      const adHocPlot = observationResults.adHocPlot;
+      if (!adHocPlot) {
+        return;
+      }
+
+      const siteResults = await getPlantingSite(
+        { id: observationResults.plantingSiteId, includeZones: false },
+        true
+      ).unwrap();
+      const site = siteResults.site;
+
+      const content = makeAdHocObservationsCsv(
+        [
+          {
+            ...observationResults,
+            adHocPlot,
+            boundary: adHocPlot.boundary as unknown as MultiPolygon,
+            plantingSiteName: site.name,
+            strata: observationResults.strata as AdHocObservationResults['strata'],
+            timeZone: site.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZone,
+            totalLive: observationResults.species.reduce(
+              (total, observedSpecies) => total + observedSpecies.totalLive,
+              0
+            ),
+            totalPlants: observationResults.totalPlants,
+          },
+        ],
+        { [site.id]: site }
+      );
+
+      const fileName = `${adHocPlot.monitoringPlotNumber}-${site.name}-${observationResults.startDate}-${strings.PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX}`;
+
+      downloadCsv(sanitize(fileName), await content.text());
+    },
+    [
+      defaultTimeZone,
+      getObservationResults,
+      getPlantingSite,
+      selectedOrganization?.timeZone,
+      strings.PLANT_MONITORING_OBSERVATION_FILENAME_PREFIX,
+    ]
+  );
+
   const downloadAdHocObservationsZip = useCallback(
     async ({
       adHocObservationsResults,
@@ -682,6 +730,7 @@ const useObservationExports = () => {
   );
 
   return {
+    downloadAdHocObservationDetails,
     downloadAdHocObservationsZip,
     downloadObservationResults,
     downloadObservationCsv,
