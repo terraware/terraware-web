@@ -16,8 +16,15 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useAcceleratorProjectSpeciesData } from 'src/providers/AcceleratorProject/AcceleratorProjectSpeciesContext';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
 import { useLocalization, useProject } from 'src/providers/hooks';
-import strings from 'src/strings';
-import { getConservationCategoryString } from 'src/types/Species';
+import { getSpeciesNativeCategoryLabel } from 'src/types/AcceleratorProjectSpecies';
+import {
+  getConservationCategoryString,
+  getEcosystemTypesString,
+  getGrowthFormsString,
+  getPlantMaterialSourcingMethodsString,
+  getSeedStorageBehaviorString,
+  getSuccessionalGroupsString,
+} from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ApproveDeliverableDialog from '../Deliverables/ApproveDeliverableDialog';
@@ -25,7 +32,7 @@ import RejectedBox from './RejectedBox';
 
 export default function SpeciesDetailView(): JSX.Element {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { goToAcceleratorProjectSpeciesEdit } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const { projectId } = useProject();
@@ -99,7 +106,7 @@ export default function SpeciesDetailView(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale]
+    [activeLocale, strings]
   );
 
   const actions = useMemo(() => {
@@ -128,7 +135,7 @@ export default function SpeciesDetailView(): JSX.Element {
         <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={optionItems} />
       </Box>
     );
-  }, [activeLocale, currentAcceleratorProjectSpecies, onOptionItemClick, optionItems, theme]);
+  }, [activeLocale, currentAcceleratorProjectSpecies, onOptionItemClick, optionItems, strings, theme]);
 
   const crumbs: Crumb[] = useMemo(
     () =>
@@ -144,7 +151,7 @@ export default function SpeciesDetailView(): JSX.Element {
             },
           ]
         : [],
-    [activeLocale, currentDeliverable?.name, deliverableId, projectId]
+    [activeLocale, currentDeliverable?.name, deliverableId, projectId, strings]
   );
 
   const GridItemWrapper = useCallback(
@@ -237,7 +244,7 @@ export default function SpeciesDetailView(): JSX.Element {
                   label={strings.NATIVE_NON_NATIVE}
                   id='speciesNativeCategory'
                   type='text'
-                  value={currentAcceleratorProjectSpecies.speciesNativeCategory}
+                  value={getSpeciesNativeCategoryLabel(currentAcceleratorProjectSpecies.speciesNativeCategory)}
                   display={true}
                 />
               </GridItemWrapper>
@@ -291,7 +298,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 <TextField
                   id={'growthForms'}
                   label={strings.GROWTH_FORM}
-                  value={currentSpecies.growthForms?.join(', ')}
+                  value={getGrowthFormsString(currentSpecies)}
                   type='text'
                   aria-label='date-picker'
                   display={true}
@@ -333,7 +340,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 <TextField
                   id={'successionalGroup'}
                   label={strings.SUCCESSIONAL_GROUP}
-                  value={currentSpecies.successionalGroups?.join(', ')}
+                  value={getSuccessionalGroupsString(currentSpecies)}
                   type='text'
                   display={true}
                 />
@@ -342,7 +349,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 <TextField
                   id={'ecosystemType'}
                   label={strings.ECOSYSTEM_TYPE}
-                  value={currentSpecies.ecosystemTypes?.join(', ')}
+                  value={getEcosystemTypesString(currentSpecies)}
                   type='text'
                   display={true}
                 />
@@ -371,7 +378,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 <TextField
                   id={'seedStorageBehavior'}
                   label={strings.SEED_STORAGE_BEHAVIOR}
-                  value={currentSpecies.seedStorageBehavior}
+                  value={getSeedStorageBehaviorString(currentSpecies)}
                   type='text'
                   display={true}
                 />
@@ -380,7 +387,7 @@ export default function SpeciesDetailView(): JSX.Element {
                 <TextField
                   id={'plantMaterialSourcingMethod'}
                   label={strings.PLANT_MATERIAL_SOURCING_METHOD}
-                  value={currentSpecies.plantMaterialSourcingMethods?.join(', ')}
+                  value={getPlantMaterialSourcingMethodsString(currentSpecies)}
                   type='text'
                   display={true}
                   tooltipTitle={

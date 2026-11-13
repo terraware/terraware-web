@@ -12,14 +12,14 @@ export type SpeciesNativeCategory = AcceleratorProjectSpecies['speciesNativeCate
 export type AcceleratorProjectForSpecies = ParticipantProjectForSpeciesPayload;
 export type SpeciesForAcceleratorProject = SpeciesForParticipantProjectPayload;
 
-const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
+export const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
   switch (value) {
     case 'Native':
       return strings.NATIVE;
     case 'Non-native':
       return strings.NON_NATIVE;
     default:
-      return `${value}`;
+      return value ?? '';
   }
 };
 
