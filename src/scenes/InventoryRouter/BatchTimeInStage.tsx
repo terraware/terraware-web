@@ -1,7 +1,7 @@
 import React, { type JSX, useMemo } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { IconTooltip, Tooltip } from '@terraware/web-components';
+import { Box, Grid, Tooltip, Typography, useTheme } from '@mui/material';
+import { IconTooltip } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { BatchStageTimePayload } from 'src/queries/generated/nurseryBatches';
@@ -81,8 +81,33 @@ const stageQuantity = (batch: Batch, stage: Stage['key']): number => {
 };
 
 /** Wraps its child in a tooltip only when there is a title; MUI renders one unconditionally. */
-const TooltipWrapper = ({ title, children }: { title?: string; children: JSX.Element }): JSX.Element =>
-  title ? <Tooltip title={title}>{children}</Tooltip> : children;
+const TooltipWrapper = ({ title, children }: { title?: string; children: JSX.Element }): JSX.Element => {
+  const theme = useTheme();
+
+  if (!title) {
+    return children;
+  }
+
+  return (
+    <Tooltip
+      arrow
+      describeChild
+      placement='top-start'
+      sx={{
+        maxWidth: '464px',
+        '& .MuiTooltip-arrow': { color: theme.palette.TwClrBaseGray800 },
+        '& .MuiTooltip-tooltip': {
+          backgroundColor: theme.palette.TwClrBaseGray800,
+          color: theme.palette.TwClrBaseWhite,
+          padding: '8px',
+        },
+      }}
+      title={title}
+    >
+      {children}
+    </Tooltip>
+  );
+};
 
 type StageSegmentProps = {
   stage: Stage;
@@ -112,6 +137,12 @@ const StageSegment = ({ stage, stageTime, fillEvenly, inStage }: StageSegmentPro
       ].join('\n')
     : undefined;
 
+  const valueText = hasDays
+    ? [daysLabel(days), stageTime?.inProgress ? strings.SO_FAR : undefined].filter(Boolean).join(' ')
+    : stageTime?.cleared
+      ? strings.NOT_AVAILABLE
+      : '—';
+
   return (
     <Box
       sx={{
@@ -138,6 +169,8 @@ const StageSegment = ({ stage, stageTime, fillEvenly, inStage }: StageSegmentPro
       </Typography>
       <TooltipWrapper title={counts}>
         <Box
+          aria-label={counts ? `${stage.label}: ${valueText}` : undefined}
+          tabIndex={counts ? 0 : undefined}
           sx={{
             alignItems: 'center',
             backgroundColor: stage.backgroundColor,

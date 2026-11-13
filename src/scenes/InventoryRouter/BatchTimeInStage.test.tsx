@@ -132,8 +132,35 @@ describe('BatchTimeInStage', () => {
       .formatString(strings.X_STILL_IN_THIS_STAGE, 4)
       .toString()}`;
 
-    await user.hover(within(segmentFor(strings.ACTIVE_GROWTH_SENTENCE_CASE)).getByLabelText(counts));
+    // The counts describe the segment rather than naming it, so the segment keeps announcing its
+    // own duration and the counts arrive as the tooltip's description.
+    const segment = within(segmentFor(strings.ACTIVE_GROWTH_SENTENCE_CASE)).getByLabelText(
+      `${strings.ACTIVE_GROWTH_SENTENCE_CASE}: ${strings.formatString(strings.X_DAYS, 21).toString()}`
+    );
 
+    await user.hover(segment);
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent(counts);
+    expect(segment).toHaveAttribute('aria-describedby', tooltip.getAttribute('id'));
+  });
+
+  it('opens the counts by keyboard as well as by pointer', async () => {
+    const { user } = renderCard(buildTimeInStage({ germinating: buildStageTime({ days: 14, countedQuantity: 57 }) }), {
+      germinatingQuantity: 0,
+    });
+
+    const counts = `${strings.formatString(strings.BASED_ON_X_SEEDLINGS, 57).toString()} ${strings
+      .formatString(strings.X_STILL_IN_THIS_STAGE, 0)
+      .toString()}`;
+
+    await user.tab();
+
+    expect(
+      within(segmentFor(strings.GERMINATING)).getByLabelText(
+        `${strings.GERMINATING}: ${strings.formatString(strings.X_DAYS, 14).toString()}`
+      )
+    ).toHaveFocus();
     expect(await screen.findByRole('tooltip')).toHaveTextContent(counts);
   });
 
@@ -146,7 +173,11 @@ describe('BatchTimeInStage', () => {
       .formatString(strings.X_STILL_IN_THIS_STAGE, 1)
       .toString()}`;
 
-    await user.hover(within(segmentFor(strings.READY)).getByLabelText(counts));
+    await user.hover(
+      within(segmentFor(strings.READY)).getByLabelText(
+        `${strings.READY}: ${strings.formatString(strings.X_DAYS, 6).toString()}`
+      )
+    );
 
     expect(await screen.findByRole('tooltip')).toHaveTextContent(counts);
   });
