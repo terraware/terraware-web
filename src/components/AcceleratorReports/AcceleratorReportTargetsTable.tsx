@@ -2,8 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { useTheme } from '@mui/material';
-import { Badge, EditableTableColumn } from '@terraware/web-components';
-import { MRT_Cell } from 'material-react-table';
+import { Badge, EditableTableColumn, EditableTableColumnV2 } from '@terraware/web-components';
 
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import EditableTable from 'src/components/common/EditableTable';
@@ -45,6 +44,33 @@ type RowIndicator = {
   notes?: string;
   precision: number;
   [key: string]: string | number | undefined;
+};
+
+type IndicatorCell = { getValue: () => unknown; row: { original: RowIndicator } };
+type IndicatorColumn = {
+  id: string;
+  header: string;
+  accessorKey: string;
+  size?: number;
+  enableEditing: boolean;
+  Cell?: (context: { cell: IndicatorCell }) => JSX.Element | null;
+  editConfig?: { editVariant: 'text'; onSave: (row: RowIndicator, value: unknown) => Promise<void> };
+};
+
+const tableSx = {
+  padding: 0,
+  width: '100%',
+  maxWidth: '100%',
+  '& .MuiPaper-root': {
+    width: '100%',
+    maxWidth: '100%',
+    borderRadius: '24px',
+    paddingTop: '12px',
+  },
+  '& .MuiTableContainer-root': {
+    maxWidth: '100%',
+    overflowX: 'auto',
+  },
 };
 
 export default function AcceleratorReportTargetsTable(): JSX.Element {
@@ -399,8 +425,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const theme = useTheme();
 
   const CategoryCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
-      const category = cell.getValue<string>();
+    ({ cell }: { cell: IndicatorCell }) => {
+      const category = cell.row.original.component;
       const isGreen = category === 'Biodiversity' || category === 'Climate' || category === 'Project Objectives';
       return (
         <Badge
@@ -415,14 +441,12 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   );
 
   const ClassIdCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => (
-      <>{indicatorClassLabel(cell.getValue<IndicatorClass | undefined>(), strings)}</>
-    ),
+    ({ cell }: { cell: IndicatorCell }) => <>{indicatorClassLabel(cell.row.original.classId, strings)}</>,
     [strings]
   );
 
-  const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
-    const raw = cell.getValue<number | string | undefined>();
+  const NumericCell = useCallback(({ cell }: { cell: IndicatorCell }) => {
+    const raw = cell.getValue();
     if (raw === undefined || raw === null || raw === '') {
       return null;
     }
@@ -435,7 +459,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   }, []);
 
   const tableColumns = useMemo(() => {
-    const baseColumns: EditableTableColumn<RowIndicator>[] = [
+    const baseColumns: IndicatorColumn[] = [
       {
         id: 'name',
         header: strings.INDICATOR_NAME,
@@ -456,10 +480,10 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       },
     ];
 
-    const yearColumns: EditableTableColumn<RowIndicator>[] = yearRange.map((year) => ({
+    const yearColumns: IndicatorColumn[] = yearRange.map((year) => ({
       id: `year${year}`,
       header: year.toString(),
-      accessorKey: `year${year}` as keyof RowIndicator,
+      accessorKey: `year${year}`,
       enableEditing: isAllowedUpdateReportsTargets,
       Cell: NumericCell,
       editConfig: {
@@ -468,31 +492,31 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       },
     }));
 
-    const lastColumns: EditableTableColumn<RowIndicator>[] = [
+    const lastColumns: IndicatorColumn[] = [
       {
         id: 'category',
         header: strings.CATEGORY,
-        accessorKey: 'component' as keyof RowIndicator,
+        accessorKey: 'component',
         enableEditing: false,
         Cell: CategoryCell,
       },
       {
         id: 'indicatorLevel',
         header: strings.INDICATOR_LEVEL,
-        accessorKey: 'type' as keyof RowIndicator,
+        accessorKey: 'type',
         enableEditing: false,
       },
       {
         id: 'cumulativeOrLevel',
         header: strings.IS_CUMULATIVE,
-        accessorKey: 'classId' as keyof RowIndicator,
+        accessorKey: 'classId',
         enableEditing: false,
         Cell: ClassIdCell,
       },
       {
         id: 'notes',
         header: strings.NOTES,
-        accessorKey: 'notes' as keyof RowIndicator,
+        accessorKey: 'notes',
         enableEditing: false,
       },
       {
@@ -527,10 +551,13 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     return ['name', 'baseline', ...yearIds, ...metaColumns, 'endOfProjectTarget'];
   }, [yearRange]);
 
+  const legacyColumns: EditableTableColumn<RowIndicator>[] = tableColumns;
+  const v2Columns: EditableTableColumnV2<RowIndicator>[] = tableColumns;
+
   return (
     <EditableTable
       clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      columns={tableColumns}
+      columns={legacyColumns}
       data={allIndicatorRows}
       enableEditing={true}
       enableSorting={true}
@@ -558,20 +585,29 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
           sx: { maxHeight: 'none', overflowX: 'auto' },
         },
       }}
-      sx={{
-        padding: 0,
-        width: '100%',
-        maxWidth: '100%',
-        '& .MuiPaper-root': {
-          width: '100%',
-          maxWidth: '100%',
-          borderRadius: '24px',
-          paddingTop: '12px',
+      sx={tableSx}
+      v2Props={{
+        clearAllFiltersLabel: strings.CLEAR_ALL_FILTERS,
+        columns: v2Columns,
+        data: allIndicatorRows,
+        enableEditing: true,
+        enableSorting: true,
+        enableGlobalFilter: true,
+        enableColumnFilters: true,
+        enablePagination: false,
+        enableColumnPinning: true,
+        enableTopToolbar: false,
+        enableColumnActions: false,
+        enableHiding: false,
+        enableColumnDragging: false,
+        enableColumnOrdering: false,
+        initialSorting: [{ id: 'name', desc: false }],
+        tableOptions: {
+          state: { columnOrder },
+          initialState: { columnPinning: { left: ['name'], right: ['endOfProjectTarget'] } },
         },
-        '& .MuiTableContainer-root': {
-          maxWidth: '100%',
-          overflowX: 'auto',
-        },
+        containerProps: { sx: { maxHeight: 'none', overflowX: 'auto' } },
+        sx: tableSx,
       }}
     />
   );
