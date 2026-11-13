@@ -123,7 +123,7 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           disabled: exportDisabled,
           label: strings.EXPORT_RESULTS,
           onClick: () => {
-            void (observationType === 'Biomass Measurements'
+            void (observationType === 'Biomass Measurements' || observationType === 'Baseline Survey'
               ? downloadBiomassObservationDetails(observationId)
               : downloadObservationResults(observationId));
           },
@@ -202,7 +202,11 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationState: observationResult.state,
           observationType: observationResult.type,
           monitoringType:
-            observationResult.type === 'Biomass Measurements' ? strings.BIOMASS_MONITORING : strings.PLANT_MONITORING,
+            observationResult.type === 'Baseline Survey'
+              ? strings.BASELINE_SURVEY
+              : observationResult.type === 'Biomass Measurements'
+                ? strings.BIOMASS_MONITORING
+                : strings.PLANT_MONITORING,
           state: getStatus(observationResult.state, strings),
           plantingSiteName: plantingSiteNames.get(observationResult.plantingSiteId),
           strata: observationResult.strata.map((stratumResult) => stratumResult.name).join('\r'),

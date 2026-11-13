@@ -1,3 +1,5 @@
+import { ObservationType } from 'src/types/Observations';
+
 import { baseApi as api } from '../baseApi';
 import { PrefixedSearch, SearchApiResponse, SearchCountApiResponse } from '../generated/search';
 import { QueryTagTypes } from '../tags';
@@ -89,7 +91,7 @@ const injectedRtkApi = api.injectEndpoints({
 type CountObservationsApiArgs = {
   organizationId: number;
   plantingSiteId?: number;
-  observationType?: 'Monitoring' | 'Biomass Measurements';
+  observationType?: ObservationType;
   isAdHoc?: boolean;
   state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
 };
