@@ -36,6 +36,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     refetch: refetchOrganizations,
   } = useListOrganizationsQuery('Facility');
   const organizations = organizationsData?.organizations;
+  const isLoadingOrganizations = organizationsData === undefined && organizationsError === undefined;
   const organizationsFailed =
     organizationsError !== undefined && !('status' in organizationsError && organizationsError.status === 401);
 
@@ -155,6 +156,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       redirectAndNotify,
       reloadOrganizations,
       isFetchingOrganizations,
+      isLoadingOrganizations,
       bootstrapped,
     }),
     [
@@ -164,6 +166,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       redirectAndNotify,
       reloadOrganizations,
       isFetchingOrganizations,
+      isLoadingOrganizations,
       bootstrapped,
     ]
   );

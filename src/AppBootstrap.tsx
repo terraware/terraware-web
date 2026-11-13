@@ -22,9 +22,9 @@ type BlockingBootstrapProps = {
 
 function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
   const [bootstrapped, setBootstrapped] = useState(false);
-  const { bootstrapped: userBootstrapped } = useUser();
-  const { bootstrapped: organizationBootstrapped } = useOrganization();
-  const { bootstrapped: localizationBootstrapped } = useLocalization();
+  const { bootstrapped: userBootstrapped, isLoadingUser } = useUser();
+  const { bootstrapped: organizationBootstrapped, isLoadingOrganizations } = useOrganization();
+  const { activeLocale, bootstrapped: localizationBootstrapped, selectedLocale } = useLocalization();
   const { bootstrapped: userFundingEntityBootstrapped } = useUserFundingEntity();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
@@ -37,7 +37,12 @@ function BlockingBootstrap({ children }: BlockingBootstrapProps): JSX.Element {
     setBootstrapped(true);
   }
 
-  if (!bootstrapped) {
+  // Switching languages resets the RTK Query cache, and strings for the new locale load
+  // asynchronously. Wait for both rather than rendering the app without a user or organizations,
+  // which would look like a user who doesn't belong to any organization.
+  const switchingLocale = isLoadingUser || isLoadingOrganizations || activeLocale !== selectedLocale;
+
+  if (!bootstrapped || switchingLocale) {
     return <BlockingSpinner />;
   }
 
