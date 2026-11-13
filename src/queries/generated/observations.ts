@@ -377,7 +377,7 @@ export type ObservationPayload = {
   /** Date this observation started. */
   startDate: string;
   state: 'Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned';
-  type: 'Monitoring' | 'Biomass Measurements';
+  type: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
 };
 export type SuccessOrError = 'ok' | 'error';
 export type ListObservationsResponsePayload = {
@@ -396,7 +396,7 @@ export type ScheduleObservationRequestPayload = {
   /** The end date for this observation, should be limited to 2 months from the start date. */
   endDate: string;
   /** Which type of observation to schedule. */
-  observationType?: 'Monitoring' | 'Biomass Measurements';
+  observationType?: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
   /** Which planting site this observation needs to be scheduled for. */
   plantingSiteId: number;
   /** The IDs of the substrata this observation should cover. */
@@ -557,7 +557,7 @@ export type CompleteAdHocObservationRequestPayload = {
   lngFirst?: boolean;
   notes?: string;
   /** Observation type for this observation. */
-  observationType: 'Monitoring' | 'Biomass Measurements';
+  observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
   /** Date and time the observation was performed in the field. */
   observedTime: string;
   /** Which planting site this observation needs to be scheduled for. */
@@ -849,7 +849,7 @@ export type ObservationResultsPayload = {
   survivalRateStdDev?: number;
   totalPlants?: number;
   totalSpecies?: number;
-  type: 'Monitoring' | 'Biomass Measurements';
+  type: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
 };
 export type ListObservationResultsResponsePayload = {
   observations: ObservationResultsPayload[];

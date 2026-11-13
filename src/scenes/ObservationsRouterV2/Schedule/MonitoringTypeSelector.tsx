@@ -2,6 +2,7 @@ import React, { type JSX, useMemo } from 'react';
 
 import { Box, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import { getRgbaFromHex } from 'src/utils/color';
 
@@ -23,9 +24,18 @@ const MonitoringTypeSelector = ({
 }: MonitoringTypeSelectorProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
+  const monitoringTypes: MonitoringType[] =
+    biomassSchedulingEnabled && baselineSurveyEnabled ? ['Baseline Survey', ...MONITORING_TYPES] : MONITORING_TYPES;
 
   const optionsContent = useMemo(
     (): Record<MonitoringType, { badge: string; description: string; title: string }> => ({
+      'Baseline Survey': {
+        badge: strings.BASELINE_SURVEY,
+        description: strings.RECORD_PLOT_CONDITIONS_AND_PLANTS_ALREADY_THERE,
+        title: strings.MEASURE_MY_SITE_BEFORE_PLANTING,
+      },
       Monitoring: {
         badge: strings.PLANT_MONITORING,
         description: strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_DESCRIPTION,
@@ -50,18 +60,21 @@ const MonitoringTypeSelector = ({
         onChange={(_event, value) => onChange(value as MonitoringType)}
         value={selectedMonitoringType}
       >
-        {MONITORING_TYPES.map((monitoringType) => {
+        {monitoringTypes.map((monitoringType) => {
           const { badge, description, title } = optionsContent[monitoringType];
           const upcomingStartDate = upcomingObservationStartDates[monitoringType];
-          const unavailableMessage = !hasPlantings
-            ? strings.SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS
-            : upcomingStartDate !== undefined
-              ? (strings.formatString(
-                  strings.SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,
-                  badge,
-                  upcomingStartDate
-                ) as string)
-              : undefined;
+          const unavailableMessage =
+            monitoringType === 'Baseline Survey'
+              ? undefined
+              : !hasPlantings
+                ? strings.SCHEDULE_OBSERVATION_TYPE_REQUIRES_PLANTINGS
+                : upcomingStartDate !== undefined
+                  ? (strings.formatString(
+                      strings.SCHEDULE_OBSERVATION_TYPE_ALREADY_SCHEDULED,
+                      badge,
+                      upcomingStartDate
+                    ) as string)
+                  : undefined;
           const disabled = unavailableMessage !== undefined;
           const selected = !disabled && selectedMonitoringType === monitoringType;
 

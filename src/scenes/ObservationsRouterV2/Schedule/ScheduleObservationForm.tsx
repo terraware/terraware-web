@@ -50,6 +50,7 @@ export default function ScheduleObservationForm({
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -112,10 +113,12 @@ export default function ScheduleObservationForm({
   const showMonitoringTypeSelector =
     biomassSchedulingEnabled && observationId === undefined && !!selectedPlantingSiteId;
   const selectedMonitoringTypeUnavailable =
-    showMonitoringTypeSelector && (!hasPlantings || upcomingObservationStartDates[monitoringType] !== undefined);
+    showMonitoringTypeSelector &&
+    !(baselineSurveyEnabled && monitoringType === 'Baseline Survey') &&
+    (!hasPlantings || upcomingObservationStartDates[monitoringType] !== undefined);
 
   useEffect(() => {
-    if (upcomingObservationStartDates[monitoringType] === undefined) {
+    if (monitoringType === 'Baseline Survey' || upcomingObservationStartDates[monitoringType] === undefined) {
       return;
     }
     const schedulableType = MONITORING_TYPES.find((type) => upcomingObservationStartDates[type] === undefined);
