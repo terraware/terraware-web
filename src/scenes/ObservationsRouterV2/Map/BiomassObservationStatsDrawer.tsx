@@ -20,14 +20,12 @@ type BiomassObservationStatsProperties = {
 };
 
 type BiomassObservationStatsDrawerProps = {
-  monitoringPlotId?: number;
   observationId: number;
   onViewOnMap?: () => void;
   plantingSiteId: number;
 };
 
 const BiomassObservationStatsDrawer = ({
-  monitoringPlotId,
   observationId,
   onViewOnMap,
   plantingSiteId,
@@ -47,15 +45,7 @@ const BiomassObservationStatsDrawer = ({
     [observationResultsLoading, plantingSiteLoading]
   );
 
-  const monitoringPlot = useMemo(() => {
-    if (monitoringPlotId === undefined) {
-      return results?.adHocPlot;
-    }
-    return results?.strata
-      .flatMap((stratum) => stratum.substrata)
-      .flatMap((substratum) => substratum.monitoringPlots)
-      .find((plot) => plot.monitoringPlotId === monitoringPlotId);
-  }, [monitoringPlotId, results]);
+  const monitoringPlot = results?.adHocPlot;
 
   const properties = useMemo((): BiomassObservationStatsProperties | undefined => {
     const measurements = monitoringPlot?.biomassMeasurements;

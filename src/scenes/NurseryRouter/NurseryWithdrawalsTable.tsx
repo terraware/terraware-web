@@ -21,6 +21,7 @@ import {
 import CurrentView from 'src/components/common/CurrentView';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -49,6 +50,7 @@ import { Project } from 'src/types/Project';
 import { TABLES } from 'src/types/Tables';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useDebounce from 'src/utils/useDebounce';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -169,6 +171,7 @@ const moveHiddenByDefaultColumnsBeforeMenu = (columnOrder: MRT_ColumnOrderState)
 };
 
 export default function NurseryWithdrawalsTable(): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const { activeLocale, strings } = useLocalization();
@@ -885,7 +888,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           enableColumnActions: true,
           enableHiding: true,
           enableGrouping: false,
-          enableColumnDragging: true,
+          enableColumnDragging: !isMobile,
           positionGlobalFilter: 'right',
           renderTopToolbarCustomActions: ({ table }) => (
             <CurrentView
@@ -921,6 +924,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           },
           muiTopToolbarProps: {
             sx: {
+              ...mobileTopToolbarSx,
               position: 'relative',
               '& > .MuiBox-root': {
                 position: 'relative',

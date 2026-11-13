@@ -19,6 +19,7 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -32,6 +33,7 @@ import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useAbandonObservationModal } from '../Abandon';
 import { useObservationFilters } from '../ObservationFiltersProvider';
@@ -149,6 +151,7 @@ type PlantMonitoringListProps = {
 };
 
 const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
+  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
@@ -345,7 +348,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       enableColumnActions: true,
       enableHiding: true,
       enableGrouping: false,
-      enableColumnDragging: true,
+      enableColumnDragging: !isMobile,
       positionGlobalFilter: 'right' as const,
       muiTableBodyProps: {
         sx: {
@@ -359,6 +362,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       },
       muiTopToolbarProps: {
         sx: {
+          ...mobileTopToolbarSx,
           position: 'relative',
           '& > .MuiBox-root': {
             position: 'relative',
@@ -379,7 +383,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         },
       }),
     }),
-    [emptyMessage, theme]
+    [emptyMessage, isMobile, theme]
   );
 
   return (

@@ -17,6 +17,7 @@ import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
@@ -523,7 +524,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               enableColumnPinning: true,
               enableColumnActions: true,
               enableHiding: true,
-              enableColumnDragging: true,
+              enableColumnDragging: !isMobile,
               enableColumnOrdering: true,
               positionGlobalFilter: 'right',
               getRowId: (row) => String(row.id),
@@ -602,6 +603,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               }),
               muiTopToolbarProps: {
                 sx: {
+                  ...mobileTopToolbarSx,
                   position: 'relative',
                   '& > .MuiBox-root': {
                     position: 'relative',

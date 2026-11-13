@@ -20,6 +20,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
@@ -31,6 +32,7 @@ import { TABLES } from 'src/types/Tables';
 import { getBiomassPlotTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type MonitoringPlotRow = {
@@ -78,6 +80,7 @@ type MonitoringPlotListProps = {
 };
 
 export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlotListProps): JSX.Element {
+  const { isMobile } = useDeviceInfo();
   const tableDefinition = isBiomass ? TABLES.biomassObservationMonitoringPlots : TABLES.observationMonitoringPlots;
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -394,7 +397,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
           enableColumnActions: true,
           enableHiding: true,
           enableGrouping: false,
-          enableColumnDragging: true,
+          enableColumnDragging: !isMobile,
           positionGlobalFilter: 'right',
           muiTableBodyRowProps: ({ row }: { row: MRT_Row<MonitoringPlotRow> }) => ({
             id: `row${row.index + 1}`,
@@ -415,6 +418,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
           muiTablePaperProps: { elevation: 0 },
           muiTopToolbarProps: {
             sx: {
+              ...mobileTopToolbarSx,
               position: 'relative',
               '& > .MuiBox-root': { position: 'relative' },
               '& .Mui-ToolbarDropZone': { display: 'none' },
