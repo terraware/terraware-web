@@ -44,6 +44,12 @@ describe('MapEditSummaryModal', () => {
     ).toBeInTheDocument();
   });
 
+  it('says how many observations will get new plot locations', () => {
+    renderModal([{ type: 'ObservationPlotsReassigned', observationIds: [4, 5, 6] }]);
+
+    expect(screen.getByText(sentence(strings.MAP_EDIT_SUMMARY_OBSERVATION_PLOTS_REASSIGNED, '3'))).toBeInTheDocument();
+  });
+
   it('says nothing will change when the summary is empty', () => {
     renderModal([]);
 

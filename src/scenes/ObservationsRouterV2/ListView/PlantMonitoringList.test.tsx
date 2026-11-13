@@ -1,11 +1,13 @@
 import React from 'react';
 
 import { screen, waitFor, within } from '@testing-library/react';
+import { UserEvent } from '@testing-library/user-event';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
-import { ObservationResultsPayload } from 'src/queries/generated/observations';
+import { ObservationPayload, ObservationResultsPayload } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import {
+  RenderWithProvidersOptions,
   buildPlantingSite,
   buildUser,
   captureRequests,
@@ -56,42 +58,83 @@ const BASELINE_OBSERVATION = buildObservationResults({
 });
 const BASELINE_ROW = /April 2026/;
 
+type ListPreferences = {
+  assignPlotsWhenScheduling?: boolean;
+  baselineSurveyObservations?: boolean;
+  scheduledBiomassMonitoringObservations?: boolean;
+};
+
+type RenderListOptions = {
+  localization?: RenderWithProvidersOptions['localization'];
+  numPlots?: number;
+  observations?: ObservationResultsPayload[];
+  observationType?: ObservationTypeFilter;
+  showFilterPanel?: boolean;
+};
+
+const toObservationPayload = (results: ObservationResultsPayload, numPlots: number): ObservationPayload => ({
+  endDate: '2026-12-31',
+  id: results.observationId,
+  isAdHoc: results.isAdHoc,
+  numIncompletePlots: numPlots,
+  numPlots,
+  numUnclaimedPlots: numPlots,
+  plantingSiteId: results.plantingSiteId,
+  plantingSiteName: 'Site',
+  startDate: results.startDate,
+  state: results.state,
+  type: results.type,
+});
+
 /**
- * Renders the list with scheduled observations of each type.
- * The returned requests are the ones that carry the feature flag, so a test can tell "the flag said
- * no" apart from "the flag hasn't arrived yet".
+ * Renders the list, by default with scheduled observations of each type. The returned requests are
+ * the ones that carry the feature flags, so a test can tell "the flag said no" apart from "the flag
+ * hasn't arrived yet".
  */
 const renderList = (
-  scheduledBiomassMonitoringObservations: boolean,
-  observationType?: ObservationTypeFilter,
+  preferences: ListPreferences,
   {
-    baselineSurveyObservations = false,
-    showFilterPanel = false,
+    localization,
+    numPlots = 0,
     observations = [PLANT_OBSERVATION, BIOMASS_OBSERVATION, BASELINE_OBSERVATION],
-  } = {}
+    observationType,
+    showFilterPanel = false,
+  }: RenderListOptions = {}
 ) => {
   if (observationType !== undefined) {
     sessionStorage.setItem(OBSERVATION_TYPE_SESSION_KEY, observationType);
   }
 
-  const preferenceRequests = captureRequests('get', PREFERENCES_URL, {
-    preferences: { scheduledBiomassMonitoringObservations, baselineSurveyObservations },
-  });
+  const preferenceRequests = captureRequests('get', PREFERENCES_URL, { preferences });
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/users/me/savedTableViews', { views: [] });
   mockGet('/api/v1/tracking/sites', { sites: [buildPlantingSite()] });
   mockGet('/api/v1/tracking/observations/results', { observations });
+  const observationRequests = captureRequests('get', '/api/v1/tracking/observations', {
+    observations: observations.map((observation) => toObservationPayload(observation, numPlots)),
+  });
   // Reached by the row action menu's export options.
   mockGet('/api/v1/species', { species: [] });
 
-  const { user } = renderWithProviders(
+  const result = renderWithProviders(
     <ObservationFiltersProvider>
       {showFilterPanel && <ObservationFilterPanel plantingSiteId={ALL_PLANTING_SITES} />}
       <PlantMonitoringList plantingSiteId={ALL_PLANTING_SITES} />
-    </ObservationFiltersProvider>
+    </ObservationFiltersProvider>,
+    { localization }
   );
 
-  return { preferenceRequests, user };
+  return { ...result, observationRequests, preferenceRequests };
+};
+
+const EXPORT_LOCATIONS_CSV = () => `${strings.EXPORT_LOCATIONS} (${strings.CSV_FILE})`;
+const EXPORT_LOCATIONS_GPX = () => `${strings.EXPORT_LOCATIONS} (${strings.GPX_FILE})`;
+
+const openRowMenu = async (user: UserEvent, rowName: RegExp) => {
+  const row = await screen.findByRole('row', { name: rowName });
+  // The menu button has no accessible name of its own; its tooltip wrapper carries the label.
+  await user.click(within(within(row).getByLabelText(strings.MORE_OPTIONS)).getByRole('button'));
+  return screen.findByRole('menu');
 };
 
 describe('PlantMonitoringList', () => {
@@ -140,7 +183,7 @@ describe('PlantMonitoringList', () => {
   });
 
   it('names the monitoring type of each observation when biomass scheduling is enabled', async () => {
-    renderList(true);
+    renderList({ scheduledBiomassMonitoringObservations: true });
 
     expect(await screen.findByRole('columnheader', { name: new RegExp(strings.MONITORING_TYPE) })).toBeVisible();
 
@@ -155,7 +198,7 @@ describe('PlantMonitoringList', () => {
   });
 
   it('leaves out biomass observations and the monitoring type when biomass scheduling is disabled', async () => {
-    const { preferenceRequests } = renderList(false);
+    const { preferenceRequests } = renderList({ scheduledBiomassMonitoringObservations: false });
 
     await waitFor(() => expect(preferenceRequests).toHaveLength(1));
     expect(await screen.findByRole('row', { name: PLANT_ROW })).toBeVisible();
@@ -166,7 +209,7 @@ describe('PlantMonitoringList', () => {
   });
 
   it('shows only biomass observations when the monitoring type filter is set to biomass', async () => {
-    renderList(true, 'Biomass Measurements');
+    renderList({ scheduledBiomassMonitoringObservations: true }, { observationType: 'Biomass Measurements' });
 
     expect(await screen.findByRole('row', { name: BIOMASS_ROW })).toBeVisible();
     expect(screen.queryByRole('row', { name: PLANT_ROW })).not.toBeInTheDocument();
@@ -174,7 +217,7 @@ describe('PlantMonitoringList', () => {
   });
 
   it('shows only plant monitoring observations when the monitoring type filter is set to monitoring', async () => {
-    renderList(true, 'Monitoring');
+    renderList({ scheduledBiomassMonitoringObservations: true }, { observationType: 'Monitoring' });
 
     // The monitoring type column only appears once the flag has arrived, so waiting for it keeps
     // the missing biomass row from being explained by the flag rather than by the filter.
@@ -186,7 +229,10 @@ describe('PlantMonitoringList', () => {
   });
 
   it('restores a saved baseline filter and shows only Baseline Surveys', async () => {
-    renderList(true, 'Baseline Survey', { baselineSurveyObservations: true });
+    renderList(
+      { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: true },
+      { observationType: 'Baseline Survey' }
+    );
 
     expect(await screen.findByRole('row', { name: BASELINE_ROW })).toBeVisible();
     await waitFor(() => expect(screen.queryByRole('row', { name: PLANT_ROW })).not.toBeInTheDocument());
@@ -194,7 +240,7 @@ describe('PlantMonitoringList', () => {
   });
 
   it('does not apply a saved baseline filter when the baseline flag is off', async () => {
-    renderList(true, 'Baseline Survey');
+    renderList({ scheduledBiomassMonitoringObservations: true }, { observationType: 'Baseline Survey' });
 
     expect(await screen.findByRole('row', { name: PLANT_ROW })).toBeVisible();
     expect(screen.getByRole('row', { name: BIOMASS_ROW })).toBeVisible();
@@ -202,7 +248,10 @@ describe('PlantMonitoringList', () => {
   });
 
   it('filters Baseline Surveys from the monitoring type dropdown and can clear the filter', async () => {
-    const { user } = renderList(true, undefined, { baselineSurveyObservations: true, showFilterPanel: true });
+    const { user } = renderList(
+      { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: true },
+      { showFilterPanel: true }
+    );
     expect(await screen.findByRole('row', { name: BASELINE_ROW })).toBeVisible();
     await selectDropdownOption(user, 'observation-type-filter', strings.BASELINE_SURVEY);
 
@@ -220,7 +269,7 @@ describe('PlantMonitoringList', () => {
   });
 
   it('does not offer a Baseline Survey filter when its flag is off', async () => {
-    const { user } = renderList(true, undefined, { showFilterPanel: true });
+    const { user } = renderList({ scheduledBiomassMonitoringObservations: true }, { showFilterPanel: true });
     expect(await screen.findByRole('row', { name: BASELINE_ROW })).toBeVisible();
     const input = screen.getByPlaceholderText(strings.ALL_MONITORING_TYPES);
     await user.click(input);
@@ -235,9 +284,83 @@ describe('PlantMonitoringList', () => {
   ])(
     'shows the appropriate empty message for a baseline filter ($observations.length observations)',
     async ({ observations, message }) => {
-      renderList(true, 'Baseline Survey', { baselineSurveyObservations: true, observations });
+      renderList(
+        { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: true },
+        { observationType: 'Baseline Survey', observations }
+      );
       expect(await screen.findByText(message())).toBeVisible();
       expect(screen.queryByRole('row', { name: PLANT_ROW })).not.toBeInTheDocument();
     }
   );
+
+  it('keeps location exports of upcoming observations disabled, with an explanation, when plots are assigned at start', async () => {
+    const { preferenceRequests, user } = renderList({ assignPlotsWhenScheduling: false });
+
+    await waitFor(() => expect(preferenceRequests).toHaveLength(1));
+    const menu = await openRowMenu(user, PLANT_ROW);
+
+    const csvItem = within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_CSV() });
+    expect(csvItem).toHaveAttribute('aria-disabled', 'true');
+    expect(within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_GPX() })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+    expect(within(menu).getAllByLabelText(strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP)).toHaveLength(2);
+    expect(within(menu).getByRole('menuitem', { name: strings.EXPORT_RESULTS })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+  });
+
+  it('lets upcoming observations export their locations when plots are assigned at scheduling', async () => {
+    const { user } = renderList({ assignPlotsWhenScheduling: true }, { numPlots: 3 });
+
+    const menu = await openRowMenu(user, PLANT_ROW);
+
+    await waitFor(() =>
+      expect(within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_CSV() })).not.toHaveAttribute('aria-disabled')
+    );
+    expect(within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_GPX() })).not.toHaveAttribute('aria-disabled');
+    expect(within(menu).queryByLabelText(strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP)).not.toBeInTheDocument();
+    expect(within(menu).getByRole('menuitem', { name: strings.EXPORT_RESULTS })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+  });
+
+  it('keeps location exports disabled for upcoming observations that have no plots yet', async () => {
+    const { observationRequests, user } = renderList({ assignPlotsWhenScheduling: true }, { numPlots: 0 });
+
+    await waitFor(() => expect(observationRequests).toHaveLength(1));
+    const menu = await openRowMenu(user, PLANT_ROW);
+
+    expect(within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_CSV() })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+    expect(within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_GPX() })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+    expect(within(menu).getAllByLabelText(strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP)).toHaveLength(2);
+  });
+
+  it('stops completed observations from being rescheduled or ended in a language other than English', async () => {
+    const { user } = renderList(
+      {},
+      {
+        localization: { activeLocale: 'fr', selectedLocale: 'fr' },
+        observations: [buildObservationResults({ completedTime: '2026-02-10T00:00:00Z', state: 'Completed' })],
+      }
+    );
+
+    const menu = await openRowMenu(user, /2026/);
+
+    expect(within(menu).getByRole('menuitem', { name: strings.RESCHEDULE })).toHaveAttribute('aria-disabled', 'true');
+    expect(within(menu).getByRole('menuitem', { name: strings.END_OBSERVATION })).toHaveAttribute(
+      'aria-disabled',
+      'true'
+    );
+    expect(within(menu).getByRole('menuitem', { name: EXPORT_LOCATIONS_CSV() })).not.toHaveAttribute('aria-disabled');
+  });
 });
