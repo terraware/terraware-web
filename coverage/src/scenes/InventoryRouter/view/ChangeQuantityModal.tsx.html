@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.13% </span>
+                <span class="strong">98.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>105/107</span>
+                <span class='fraction'>106/108</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.13% </span>
+                <span class="strong">98.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>105/107</span>
+                <span class='fraction'>106/108</span>
             </div>
         
             
@@ -409,7 +409,20 @@
 <a name='L344'></a><a href='#L344'>344</a>
 <a name='L345'></a><a href='#L345'>345</a>
 <a name='L346'></a><a href='#L346'>346</a>
-<a name='L347'></a><a href='#L347'>347</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a>
+<a name='L354'></a><a href='#L354'>354</a>
+<a name='L355'></a><a href='#L355'>355</a>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -437,6 +450,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">186x</span>
 <span class="cline-any cline-yes">186x</span>
 <span class="cline-any cline-yes">186x</span>
 <span class="cline-any cline-yes">186x</span>
@@ -537,6 +551,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -763,8 +789,8 @@ import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-component
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import { useLocalization } from 'src/providers';
 import { ChangeBatchStatusRequestPayload, useChangeBatchStatusesMutation } from 'src/queries/generated/nurseryBatches';
-import strings from 'src/strings';
 import { ModalValuesType } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -783,6 +809,7 @@ export default function ChangeQuantityModal({
   reload,
   row,
 }: ChangeQuantityModalProps): JSX.Element {
+  const { strings } = useLocalization();
   const { type } = modalValues;
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
@@ -815,7 +842,7 @@ export default function ChangeQuantityModal({
 <span class="branch-3 cbranch-no" title="branch not covered" >      default:</span>
 <span class="cstat-no" title="statement not covered" >        return '';</span>
     }
-  }, [type]);
+  }, [type, strings]);
 &nbsp;
   const onCloseHandler = useCallback(() =&gt; {
     setMovedValue(undefined);
@@ -884,7 +911,19 @@ export default function ChangeQuantityModal({
       savingRef.current = false;
       setSaving(false);
     }
-  }, [changeBatchStatuses, markSubmitted, movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
+  }, [
+    changeBatchStatuses,
+    markSubmitted,
+    movedValue,
+    nextPhase,
+    onCloseHandler,
+    record,
+    reload,
+    row,
+    snackbar,
+    type,
+    strings,
+  ]);
 &nbsp;
   const onSave = useCallback(() =&gt; {
     void onSubmit();
@@ -968,7 +1007,7 @@ export default function ChangeQuantityModal({
     } else {
       return strings.HARDENING_OFF;
     }
-  }, [type]);
+  }, [type, strings]);
 &nbsp;
   const fromValueFormatted = useMemo(() =&gt; {
     if (type === 'germinating') {
@@ -988,7 +1027,7 @@ export default function ChangeQuantityModal({
     } else {
       return strings.READY_TO_PLANT;
     }
-  }, [nextPhase]);
+  }, [nextPhase, strings]);
 &nbsp;
   const toValueFormatted = useMemo(() =&gt; {
     if (nextPhase === 'ActiveGrowth') {
@@ -1023,7 +1062,7 @@ export default function ChangeQuantityModal({
         value: 'Ready',
       },
     ];
-  }, [type]);
+  }, [type, strings]);
 &nbsp;
   const onChangeGrowthPhase = useCallback(
     (value: string) =&gt; {
@@ -1108,7 +1147,7 @@ export default function ChangeQuantityModal({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T18:14:15.556Z
+                at 2026-11-13T18:34:10.681Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
