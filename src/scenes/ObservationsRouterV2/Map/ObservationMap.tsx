@@ -188,8 +188,9 @@ const ObservationMap = ({
     }
   }, [getObservationResponse, plantingSiteId, adHocObservationResults, selectedObservationId]);
 
-  // The filter says biomass only when it is set to that one type, so fall back to what is selected.
-  const isBiomassSelected = isBiomass || selectedResults?.type === 'Biomass Measurements';
+  // The filter may include multiple observation types, so fall back to what is selected.
+  const isBiomassSelected =
+    isBiomass || selectedResults?.type === 'Biomass Measurements' || selectedResults?.type === 'Baseline Survey';
 
   // An ad-hoc observation's measurements arrive with the list; a scheduled one's arrive with the
   // selected observation, which is refetched at plot depth.
@@ -198,7 +199,9 @@ const ObservationMap = ({
     if (selectedResults && !candidates.some((result) => result.observationId === selectedResults.observationId)) {
       candidates.push(selectedResults);
     }
-    return candidates.filter((observation) => observation.type === 'Biomass Measurements');
+    return candidates.filter(
+      (observation) => observation.type === 'Biomass Measurements' || observation.type === 'Baseline Survey'
+    );
   }, [adHocObservationResults, selectedResults]);
 
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(
