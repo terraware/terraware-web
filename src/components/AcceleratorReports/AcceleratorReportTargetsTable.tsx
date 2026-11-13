@@ -2,10 +2,11 @@ import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { useTheme } from '@mui/material';
-import { Badge, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Badge, EditableTableColumn } from '@terraware/web-components';
 import { MRT_Cell } from 'material-react-table';
 
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
+import EditableTable from 'src/components/common/EditableTable';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';

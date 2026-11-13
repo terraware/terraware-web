@@ -259,7 +259,7 @@ describe('Editor', () => {
       await waitFor(() => expect(creates).toHaveLength(1));
       expect(await creates[0].json()).toMatchObject({ boundary: SITE_BOUNDARY, name: 'Draft Planting Site' });
       expect(await screen.findByText(strings.PLANTING_SITE_CREATED)).toBeInTheDocument();
-      expect(currentPath()).toBe(PLANTING_SITES_TAB);
+      await waitFor(() => expect(currentPath()).toBe(PLANTING_SITES_TAB));
       expect(puts).toHaveLength(0);
     });
   });

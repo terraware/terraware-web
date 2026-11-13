@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, IconButton, Tooltip, useTheme } from '@mui/material';
-import { BusySpinner, Button, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { BusySpinner, Button, EditableTableColumn } from '@terraware/web-components';
 import { Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
@@ -13,6 +13,7 @@ import {
 } from 'material-react-table';
 
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';

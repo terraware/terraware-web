@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTableColumn, Icon } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import {
   MRT_Cell,
@@ -14,6 +14,7 @@ import {
 
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';

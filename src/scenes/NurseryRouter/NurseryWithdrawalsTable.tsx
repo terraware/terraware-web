@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Link } from 'react-router';
 
 import { IconButton, Tooltip, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTableColumn, Icon } from '@terraware/web-components';
 import dayjs, { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
@@ -19,6 +19,7 @@ import {
 } from 'material-react-table';
 
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';

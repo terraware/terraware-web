@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Checkbox, CircularProgress, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
@@ -17,6 +17,7 @@ import {
 
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';

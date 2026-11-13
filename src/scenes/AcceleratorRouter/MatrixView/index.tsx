@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 
 import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
-import { BusySpinner, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { BusySpinner, EditableTableColumn, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
   MRT_Cell,
@@ -18,6 +18,7 @@ import {
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
+import EditableTable from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';

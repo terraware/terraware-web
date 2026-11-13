@@ -9,7 +9,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
@@ -24,6 +24,7 @@ import {
 
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';

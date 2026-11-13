@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, IconButton, Tooltip, useTheme } from '@mui/material';
-import { Button, EditableTable, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
+import { Button, EditableTableColumn, Icon, TableColumnType } from '@terraware/web-components';
 import _, { isArray } from 'lodash';
 import {
   MRT_Cell,
@@ -18,6 +18,7 @@ import {
 
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import CurrentView from 'src/components/common/CurrentView';
+import EditableTable from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
