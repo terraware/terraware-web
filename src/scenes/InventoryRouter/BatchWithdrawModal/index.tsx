@@ -15,6 +15,7 @@ import {
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
 import { useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
+import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useLazyListBatchesByIdsQuery } from 'src/queries/search/batches';
 import { useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
 import { useLazyListSpeciesTargetsForSubstratumQuery } from 'src/queries/search/speciesTargetsForSubstratum';
@@ -316,6 +317,14 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   const isPlanting = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
   const isNurseryTransfer = draft.purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+
+  const { data: plantingSitesData } = useListPlantingSitesQuery(
+    { organizationId: selectedOrganization?.id ?? -1, full: true },
+    { skip: !open || !isPlanting || !selectedOrganization }
+  );
+  const selectedPlantingSite = plantingSitesData?.sites.find((site) => site.id === draft.plantingSiteId);
+  const requiresSubstratum = !selectedPlantingSite || !!selectedPlantingSite.strata?.length;
+
   const showsDestinationSummary = step === 1 && (isPlanting || isNurseryTransfer);
 
   const projectFilteredBatches = useMemo(() => {
@@ -359,13 +368,16 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       return false;
     }
     if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT) {
-      return draft.plantingSiteId !== undefined && draft.stratumId !== undefined && draft.substratumId !== undefined;
+      return (
+        draft.plantingSiteId !== undefined &&
+        (!requiresSubstratum || (draft.stratumId !== undefined && draft.substratumId !== undefined))
+      );
     }
     if (draft.purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER) {
       return draft.destinationFacilityId !== undefined;
     }
     return true;
-  }, [draft]);
+  }, [draft, requiresSubstratum]);
 
   const canGoNextFromStep2 = useMemo(() => {
     if (!quantityStepBatches) {
