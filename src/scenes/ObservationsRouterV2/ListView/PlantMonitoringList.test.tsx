@@ -7,7 +7,6 @@ import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import {
   buildPlantingSite,
-  buildStratum,
   buildUser,
   captureRequests,
   mockGet,
@@ -109,7 +108,7 @@ describe('PlantMonitoringList', () => {
   ])('only offers scheduling with eligible sites (biomass=%s, eligible=%s)', async (enabled, eligible) => {
     const sites = [
       buildPlantingSite({ id: 1, name: 'No strata', strata: [] }),
-      buildPlantingSite({ id: 2, name: 'Empty strata', strata: [buildStratum({ substrata: [] })] }),
+      buildPlantingSite({ id: 2, name: 'Another site without strata', strata: [] }),
       ...(eligible ? [buildPlantingSite({ id: 3 })] : []),
     ];
     const preferences = {

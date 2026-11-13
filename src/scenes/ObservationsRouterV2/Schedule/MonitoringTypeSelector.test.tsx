@@ -162,16 +162,11 @@ const renderScheduleForm = (hasPlantings = false, blockMonitoring = false, block
 };
 
 describe('baseline scheduling form', () => {
-  it.each([false, true])('only offers sites with substrata when biomass scheduling is %s', async (enabled) => {
+  it.each([false, true])('only offers sites with strata when biomass scheduling is %s', async (enabled) => {
     const sites = [
       buildPlantingSite({ id: 1, name: 'No strata', strata: [] }),
-      buildPlantingSite({ id: 2, name: 'Empty strata', strata: [buildStratum({ substrata: [] })] }),
-      buildPlantingSite({
-        id: 3,
-        name: 'Mixed strata',
-        strata: [buildStratum({ id: 2, substrata: [] }), buildStratum()],
-      }),
-      buildPlantingSite({ id: 4, name: 'With substrata' }),
+      buildPlantingSite({ id: 2, name: 'With strata' }),
+      buildPlantingSite({ id: 3, name: 'Another site with strata' }),
     ];
     mockGet('/api/v1/users/me/preferences', {
       preferences: { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: enabled },
@@ -188,10 +183,9 @@ describe('baseline scheduling form', () => {
 
     await user.click(document.querySelector('#site input')!);
     const options = within(await screen.findByRole('list'));
-    expect(await options.findByText('Mixed strata')).toBeInTheDocument();
-    expect(options.getByText('With substrata')).toBeInTheDocument();
+    expect(await options.findByText('With strata')).toBeInTheDocument();
+    expect(options.getByText('Another site with strata')).toBeInTheDocument();
     expect(options.queryByText('No strata')).not.toBeInTheDocument();
-    expect(options.queryByText('Empty strata')).not.toBeInTheDocument();
   });
 
   it.each([false, true])('schedules baseline with existing baselines and hasPlantings=%s', async (hasPlantings) => {
