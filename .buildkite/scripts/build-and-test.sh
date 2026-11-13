@@ -24,7 +24,9 @@ echo "--- :typescript: TypeScript check"
 yarn ts
 
 echo "--- :jest: Run unit tests"
-yarn test:ci
+# The agents' vCPUs are hyperthreads, so rstest's default of one worker per vCPU, minus one,
+# oversubscribes the physical cores and roughly doubles the run time of CPU-heavy tests.
+yarn test:ci --pool.maxWorkers=50%
 
 echo "--- :package: Build"
 echo "$APP_VERSION" > public/build-version.txt
