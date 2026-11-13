@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 
 import {
   MRT_ColumnFiltersState,
@@ -22,6 +22,7 @@ type UseTableStateOptions = {
   persistedMultiSelectColumnIds?: string[];
   persistColumnPinning?: boolean;
   persistFilters?: boolean;
+  normalizeColumnFilters?: (filters: MRT_ColumnFiltersState) => MRT_ColumnFiltersState;
   persistGlobalFilter?: boolean;
   persistSorting?: boolean;
   persistPageIndex?: {
@@ -59,6 +60,7 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     persistedMultiSelectColumnIds = [],
     persistColumnPinning = false,
     persistFilters = false,
+    normalizeColumnFilters,
     persistGlobalFilter = false,
     persistSorting = false,
     persistPageIndex,
@@ -133,7 +135,7 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
     }
   });
 
-  const [columnFilters, setColumnFilters] = useState<MRT_ColumnFiltersState>(() => {
+  const [columnFilters, setColumnFiltersState] = useState<MRT_ColumnFiltersState>(() => {
     if (!persistFilters) {
       return [];
     }
@@ -142,11 +144,25 @@ const useTableState = ({ storageKey }: TableDefinition, options?: UseTableStateO
       if (!saved) {
         return [];
       }
-      return normalizePersistedColumnFilters(JSON.parse(saved) as MRT_ColumnFiltersState, persistedMultiSelectIds);
+      const filters = normalizePersistedColumnFilters(
+        JSON.parse(saved) as MRT_ColumnFiltersState,
+        persistedMultiSelectIds
+      );
+      return normalizeColumnFilters ? normalizeColumnFilters(filters) : filters;
     } catch {
       return [];
     }
   });
+
+  const setColumnFilters = useCallback<Dispatch<SetStateAction<MRT_ColumnFiltersState>>>(
+    (updater) => {
+      setColumnFiltersState((previous) => {
+        const next = typeof updater === 'function' ? updater(previous) : updater;
+        return normalizeColumnFilters ? normalizeColumnFilters(next) : next;
+      });
+    },
+    [normalizeColumnFilters]
+  );
 
   const [showColumnFilters, setShowColumnFilters] = useState<boolean>(() => {
     if (!persistFilters) {

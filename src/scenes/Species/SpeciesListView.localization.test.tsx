@@ -36,6 +36,8 @@ beforeEach(() => {
         growthForms: ['Tree'],
         seedStorageBehavior: 'Orthodox',
         ecosystemTypes: ['Mangroves'],
+        conservationCategory: 'EN',
+        rare: true,
       }),
       buildSpecies({
         id: 2,
@@ -88,6 +90,8 @@ describe('SpeciesListView localization', () => {
     ['GROWTH_FORM', 'TREE'],
     ['SEED_STORAGE_BEHAVIOR', 'ORTHODOX'],
     ['ECOSYSTEM_TYPE', 'ECOSYSTEM_MANGROVE'],
+    ['CONSERVATION_CATEGORY', 'IUCN_ENDANGERED'],
+    ['RARE', 'YES'],
   ] as const)('filters by the translated %s value', async (columnKey, valueKey) => {
     const { user } = renderWithProviders(<SpeciesListView />, {
       localization: { activeLocale: 'es', selectedLocale: 'es' },
@@ -110,6 +114,8 @@ describe('SpeciesListView localization', () => {
     ['growthForms', ['Tree']],
     ['seedStorageBehavior', 'Orthodox'],
     ['ecosystemTypes', ['Mangroves']],
+    ['conservationCategory', 'EN'],
+    ['rare', 'Yes'],
   ])('restores an existing %s filter in a different language', async (id, value) => {
     localStorage.setItem('species-list-table_columnFilters', JSON.stringify([{ id, value }]));
     renderWithProviders(<SpeciesListView />, {
@@ -122,9 +128,33 @@ describe('SpeciesListView localization', () => {
   });
 
   it.each([
+    ['growthForms', ['Árbol']],
+    ['seedStorageBehavior', 'Ortodoxo'],
+    ['ecosystemTypes', ['Manglares']],
+    ['conservationCategory', 'Endangered (EN)'],
+    ['rare', 'Oui'],
+    ['rare', 'Sí'],
+    ['status', 'Nativo'],
+  ])('discards an invalid saved %s filter', async (id, value) => {
+    localStorage.setItem('species-list-table_columnFilters', JSON.stringify([{ id, value }]));
+    renderWithProviders(<SpeciesListView />, {
+      localization: { activeLocale: 'es', selectedLocale: 'es' },
+    });
+
+    expect(await screen.findByRole('link', { name: 'Acacia koa' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Dryopteris filix-mas' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Unknown species' })).toBeVisible();
+    await waitFor(() =>
+      expect(JSON.parse(localStorage.getItem('species-list-table_columnFilters') ?? '[]')).toEqual([])
+    );
+  });
+
+  it.each([
     ['GROWTH_FORM', 'TREE'],
     ['SEED_STORAGE_BEHAVIOR', 'ORTHODOX'],
     ['ECOSYSTEM_TYPE', 'ECOSYSTEM_MANGROVE'],
+    ['CONSERVATION_CATEGORY', 'IUCN_ENDANGERED'],
+    ['RARE', 'YES'],
   ] as const)('keeps a selected %s filter when switching languages', async (columnKey, valueKey) => {
     const { user, rerender } = renderWithProviders(<LocalizedSpeciesList locale='en' />);
     await screen.findByRole('link', { name: 'Acacia koa' });
@@ -169,7 +199,7 @@ describe('SpeciesListView localization', () => {
     expect(screen.getByRole('link', { name: 'Unknown species' })).toBeVisible();
   });
 
-  it('restores a saved view with existing species filters in a different language', async () => {
+  it('restores valid filters from a saved view and discards invalid ones', async () => {
     const view = {
       id: 42,
       name: 'Trees in mangroves',
@@ -180,6 +210,8 @@ describe('SpeciesListView localization', () => {
           { id: 'growthForms', value: ['Tree'] },
           { id: 'seedStorageBehavior', value: 'Orthodox' },
           { id: 'ecosystemTypes', value: ['Mangroves'] },
+          { id: 'conservationCategory', value: 'En danger (EN)' },
+          { id: 'rare', value: 'Sí' },
         ],
       },
     };
@@ -195,6 +227,11 @@ describe('SpeciesListView localization', () => {
       expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
       expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
     });
+    expect(JSON.parse(localStorage.getItem('species-list-table_columnFilters') ?? '[]')).toEqual([
+      { id: 'growthForms', value: ['Tree'] },
+      { id: 'seedStorageBehavior', value: 'Orthodox' },
+      { id: 'ecosystemTypes', value: ['Mangroves'] },
+    ]);
   });
 
   it('keeps missing seed storage behavior after populated values when sorted ascending', async () => {
@@ -214,6 +251,19 @@ describe('SpeciesListView localization', () => {
           .map((link) => link.textContent)
       ).toEqual(['Acacia koa', 'Dryopteris filix-mas', 'Unknown species']);
     });
+  });
+
+  it('keeps commas inside a single translated ecosystem label', async () => {
+    mockGet('/api/v1/species', {
+      species: [buildSpecies({ ecosystemTypes: ['Temperate grasslands, savannas and shrublands'] })],
+    });
+    renderWithProviders(<SpeciesListView />, {
+      localization: { activeLocale: 'fr', selectedLocale: 'fr' },
+    });
+
+    expect(
+      await screen.findByRole('cell', { name: strings.ECOSYSTEM_TEMPERATE_GRASSLAND_SAVANNA_SHRUBLAND })
+    ).toBeVisible();
   });
 
   it('exports translated species field values to CSV', async () => {
