@@ -2695,6 +2695,7 @@ TUTORIAL_PREFIX,Tutoriel : {0},71025393
 TW_DATA,Données TW,ea2a4098
 TYPE,Type,c1d026e9
 TYPE_OF_FOREST,Type de forêt,6fd02b1c
+TYPICAL_UNDER_ONE_TO_X_DAYS,typique <1–{0} jours,acb54d6a
 TYPICAL_X_TO_Y_DAYS,typique {0}–{1} jours,05bd5303
 UN_SDG,Objectifs de développement durable des Nations Unies (SDG),7d6c756a
 UNABLE_TO_ADD_PERSON,Impossible d'ajouter une personne,7d19ff74

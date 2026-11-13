@@ -2695,6 +2695,7 @@ TUTORIAL_PREFIX,Tutorial: {0},
 TW_DATA,TW Data,
 TYPE,Type,
 TYPE_OF_FOREST,Type of Forest,
+TYPICAL_UNDER_ONE_TO_X_DAYS,typical <1–{0} days,"Lower end of the range is under a day; {0} is the upper day count, e.g. ""typical <1–5 days"""
 TYPICAL_X_TO_Y_DAYS,typical {0}–{1} days,"{0} and {1} are day counts, e.g. ""typical 17–26 days"""
 UN_SDG,UN Sustainable Development Goals (SDG),
 UNABLE_TO_ADD_PERSON,Unable to Add Person,

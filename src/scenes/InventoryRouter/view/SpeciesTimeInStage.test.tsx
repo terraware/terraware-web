@@ -63,15 +63,46 @@ describe('SpeciesTimeInStage', () => {
     expect(segmentFor(strings.ACTIVE_GROWTH_SENTENCE_CASE, daysText(1))).toBeInTheDocument();
   });
 
-  it('leaves out a range whose ends are the same day', () => {
-    renderCard(
+  it('leaves out a range whose ends are the same day', async () => {
+    const { user } = renderCard(
       buildTimeInStage({
-        ready: buildStageTime({ batchCount: 6, days: 3, typicalMinDays: 3, typicalMaxDays: 3 }),
+        ready: buildStageTime({
+          batchCount: 6,
+          days: 3,
+          typicalMinDays: 3,
+          typicalMaxDays: 3,
+          typicalRangeBatchCount: 5,
+        }),
       })
     );
 
     expect(segmentFor(strings.READY, daysText(3))).toBeInTheDocument();
     expect(screen.queryByText(new RegExp(rangeText(3, 3)))).not.toBeInTheDocument();
+
+    // The range collapsed, but it was still calculated, so it is not pending.
+    await user.hover(segmentFor(strings.READY, daysText(3)));
+
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip).toHaveTextContent(batchesText(6));
+    expect(tooltip).not.toHaveTextContent(strings.SPECIES_TIME_IN_STAGE_RANGE_PENDING);
+  });
+
+  it('reports a sub-day lower quartile as under a day rather than zero', () => {
+    renderCard(
+      buildTimeInStage({
+        ready: buildStageTime({
+          batchCount: 7,
+          days: 1,
+          typicalMinDays: 0,
+          typicalMaxDays: 2,
+          typicalRangeBatchCount: 5,
+        }),
+      })
+    );
+
+    const underOne = strings.formatString(strings.TYPICAL_UNDER_ONE_TO_X_DAYS, 2).toString();
+    expect(segmentFor(strings.READY, `${daysText(1)} \u00b7 ${underOne}`)).toBeInTheDocument();
+    expect(screen.queryByText(new RegExp(rangeText(0, 2)))).not.toBeInTheDocument();
   });
 
   it('says a range is still pending when the average has none', async () => {

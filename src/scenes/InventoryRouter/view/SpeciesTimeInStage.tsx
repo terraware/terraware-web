@@ -81,13 +81,16 @@ const SegmentTooltip = ({ title, children }: { title: string; children: JSX.Elem
       arrow
       describeChild
       placement='top-start'
-      sx={{
-        maxWidth: '464px',
-        '& .MuiTooltip-arrow': { color: theme.palette.TwClrBaseGray800 },
-        '& .MuiTooltip-tooltip': {
-          backgroundColor: theme.palette.TwClrBaseGray800,
-          color: theme.palette.TwClrBaseWhite,
-          padding: '8px',
+      slotProps={{
+        arrow: { sx: { color: theme.palette.TwClrBaseGray800 } },
+        tooltip: {
+          sx: {
+            backgroundColor: theme.palette.TwClrBaseGray800,
+            color: theme.palette.TwClrBaseWhite,
+            maxWidth: '464px',
+            padding: '8px',
+            whiteSpace: 'pre-line',
+          },
         },
       }}
       title={title}
@@ -108,15 +111,23 @@ const StageSegment = ({ stage, stageTime }: StageSegmentProps): JSX.Element => {
   const typicalMin = stageDays(stageTime.typicalMinDays);
   const typicalMax = stageDays(stageTime.typicalMaxDays);
 
+  const hasQuartiles = typicalMin !== undefined && typicalMax !== undefined;
+
   const typicalRange =
-    typicalMin !== undefined && typicalMax !== undefined && typicalMin !== typicalMax
-      ? strings.formatString(strings.TYPICAL_X_TO_Y_DAYS, typicalMin, typicalMax).toString()
+    hasQuartiles && typicalMin !== typicalMax
+      ? // A quartile of 0 means less than a day, the same as the average does.
+        strings
+          .formatString(
+            typicalMin === 0 ? strings.TYPICAL_UNDER_ONE_TO_X_DAYS : strings.TYPICAL_X_TO_Y_DAYS,
+            ...(typicalMin === 0 ? [typicalMax] : [typicalMin, typicalMax])
+          )
+          .toString()
       : undefined;
 
   const tooltip =
     days === undefined
       ? notEnoughDataReason(stageTime.batchCount)
-      : typicalRange
+      : hasQuartiles
         ? batchesLabel(stageTime.batchCount)
         : `${batchesLabel(stageTime.batchCount)}\n${strings.SPECIES_TIME_IN_STAGE_RANGE_PENDING}`;
 
