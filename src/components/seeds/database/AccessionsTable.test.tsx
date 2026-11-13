@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { act, screen } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 
 import strings from 'src/strings';
 import { buildOrganization, buildUser, mockGet, renderWithProviders } from 'src/test-utils';
@@ -25,9 +25,14 @@ const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchRespo
   return { 'state(raw)': row.state, ...row } as unknown as SearchResponseElementWithId;
 };
 
-const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner' | 'Contributor' = 'Owner') =>
+const renderTable = (
+  searchResults: SearchResponseElementWithId[],
+  role: 'Owner' | 'Contributor' = 'Owner',
+  route?: string
+) =>
   renderWithProviders(<AccessionsTable searchResults={searchResults} />, {
     organization: { selectedOrganization: buildOrganization({ id: ORG_ID, role }) },
+    route,
   });
 
 beforeEach(() => {
@@ -94,6 +99,15 @@ describe('AccessionsTable status filter', () => {
     renderTable(localizedRows());
 
     expect(screen.getByRole('link', { name: 'ACC-001' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'ACC-002' })).toBeVisible();
+  });
+
+  it('applies the status filter from the dashboard over a stale localized filter', async () => {
+    localStorage.setItem(columnFiltersKey, JSON.stringify([{ id: 'state', value: ['Stocké'] }]));
+
+    renderTable(localizedRows(), 'Owner', '/seeds/accessions?accessions_filter_state=Drying');
+
+    await waitFor(() => expect(screen.queryByRole('link', { name: 'ACC-001' })).not.toBeInTheDocument());
     expect(screen.getByRole('link', { name: 'ACC-002' })).toBeVisible();
   });
 });

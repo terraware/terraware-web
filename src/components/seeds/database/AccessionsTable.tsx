@@ -324,17 +324,17 @@ export default function AccessionsTable({
   }, [location, navigate, query, searchResults, selectedOrganization, setColumnFilters, setShowColumnFilters]);
 
   useEffect(() => {
-    const stateFilter = columnFilters.find((filter) => filter.id === 'state');
-    if (!Array.isArray(stateFilter?.value)) {
-      return;
-    }
-    const knownStates = (stateFilter.value as unknown[]).filter(isAccessionState);
-    if (knownStates.length === stateFilter.value.length) {
-      return;
-    }
-    setColumnFilters((prev) =>
-      prev.map((filter) => (filter.id === 'state' ? { ...filter, value: knownStates } : filter))
-    );
+    setColumnFilters((prev) => {
+      const stateFilter = prev.find((filter) => filter.id === 'state');
+      if (!Array.isArray(stateFilter?.value)) {
+        return prev;
+      }
+      const knownStates = (stateFilter.value as unknown[]).filter(isAccessionState);
+      if (knownStates.length === stateFilter.value.length) {
+        return prev;
+      }
+      return prev.map((filter) => (filter.id === 'state' ? { ...filter, value: knownStates } : filter));
+    });
   }, [columnFilters, setColumnFilters]);
 
   const stateFilterOptions = useMemo(
