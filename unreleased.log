@@ -1,3 +1,4 @@
+42f15db6 SW-9304 Label and filter Baseline Survey observations (#7167)
 f32c5648 Format dates and quantities using the application language (#7165)
 5e3f79c8 Use the selected language for date picker calendars (#7164)
 e80868a5 Localize remaining UI text and correct translation catalogs (#7163)
