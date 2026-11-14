@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
+import { HttpResponse, http } from 'msw/http';
 
 import ObservationSubstratumSelector from 'src/scenes/ObservationsRouterV2/Schedule/ObservationSubstratumSelector';
 import { MonitoringType } from 'src/scenes/ObservationsRouterV2/Schedule/monitoringTypes';
 import strings from 'src/strings';
-import { buildPlantingSite, buildStratum, buildSubstratum, mockGet, renderWithProviders } from 'src/test-utils';
+import { buildPlantingSite, buildStratum, buildSubstratum, mockGet, renderWithProviders, server } from 'src/test-utils';
 
 const PLANTING_SITE_ID = 1;
 const SITE_URL = `/api/v1/tracking/sites/${PLANTING_SITE_ID}`;
@@ -75,6 +76,36 @@ const plotsAssigned = (total: number, temporary: number, permanent: number) => {
 };
 
 describe('ObservationSubstratumSelector', () => {
+  it.each(['loading', 'failed'])('omits planting coverage while reported plantings are %s', async (state) => {
+    mockGet(SITE_URL, { site });
+    let finishLoading: () => void = () => undefined;
+    const pending = new Promise<void>((resolve) => {
+      finishLoading = resolve;
+    });
+    server.use(
+      http.get('/api/v1/tracking/sites/reportedPlants', async () => {
+        if (state === 'loading') {
+          await pending;
+        }
+        return HttpResponse.json({ status: 'error' }, { status: 500 });
+      })
+    );
+    renderWithProviders(
+      <ObservationSubstratumSelector
+        monitoringType='Baseline Survey'
+        onChangeSelectedSubstrata={() => undefined}
+        plantingSiteId={PLANTING_SITE_ID}
+      />
+    );
+    expect(await screen.findAllByText(strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string)).toHaveLength(2);
+    expect(screen.queryByText(/ · /)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string)
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
+    finishLoading();
+  });
+
   it('shows Baseline coverage and plantings from the latest per-substratum site fields', async () => {
     const baselineSite = {
       ...site,

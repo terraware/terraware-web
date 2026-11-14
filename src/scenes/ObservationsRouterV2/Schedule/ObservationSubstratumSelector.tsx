@@ -237,23 +237,33 @@ const ObservationSubstratumSelector = ({
                       paddingLeft: isBaseline ? 4 : 1,
                     }}
                   >
-                    {isBaseline
-                      ? `${strings.formatString(
+                    {isBaseline ? (
+                      <>
+                        {strings.formatString(
                           strings.BASELINE_X_OF_Y,
                           stratum.substrata.filter((substratum) => Boolean(substratum.latestBaselineSurveyStatus))
                             .length,
                           stratum.substrata.length
-                        ) as string} · ${strings.formatString(
-                          strings.HAS_PLANTINGS_X_OF_Y,
-                          stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
-                          stratum.substrata.length
-                        ) as string}`
-                      : stratum.latestObservationCompletedTime
-                        ? strings.formatString(
-                            strings.LAST_OBSERVATION,
-                            getDateDisplayValue(stratum.latestObservationCompletedTime)
-                          )
-                        : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
+                        )}
+                        {reportedPlants.isSuccess && reportedPlants.currentData && (
+                          <>
+                            {' · '}
+                            {strings.formatString(
+                              strings.HAS_PLANTINGS_X_OF_Y,
+                              stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
+                              stratum.substrata.length
+                            )}
+                          </>
+                        )}
+                      </>
+                    ) : stratum.latestObservationCompletedTime ? (
+                      strings.formatString(
+                        strings.LAST_OBSERVATION,
+                        getDateDisplayValue(stratum.latestObservationCompletedTime)
+                      )
+                    ) : (
+                      strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED
+                    )}
                   </Typography>
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
