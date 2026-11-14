@@ -27,7 +27,7 @@ export type ViewTableColumn = {
 export type ViewTable = {
   getSettings: () => TableSettings;
   getInitialSettings: () => Partial<TableSettings>;
-  getColumns: () => ViewTableColumn[];
+  getColumns: (order?: 'definition' | 'display') => ViewTableColumn[];
   getVisibleColumnsInDisplayOrder: () => ViewTableColumn[];
   setColumnFilters: (value: TableSettings['columnFilters']) => void;
   setColumnOrder: (value: TableSettings['columnOrder']) => void;
@@ -64,7 +64,8 @@ const fromMrtTable = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>
       };
     },
     getInitialSettings: () => table.initialState,
-    getColumns: () => table.getAllLeafColumns().map(toViewColumn),
+    getColumns: (order) =>
+      (order === 'definition' ? table.getAllFlatColumns() : table.getAllLeafColumns()).map(toViewColumn),
     getVisibleColumnsInDisplayOrder: () =>
       [
         ...table.getLeftVisibleLeafColumns(),
@@ -118,7 +119,8 @@ export const fromEditableTableV2 = <TData extends MRT_RowData>(table: EditableTa
         sorting: state.sorting,
       };
     },
-    getColumns: () => table.getAllLeafColumns().map(toViewColumn),
+    getColumns: (order) =>
+      (order === 'definition' ? table.getAllFlatColumns() : table.getAllLeafColumns()).map(toViewColumn),
     getVisibleColumnsInDisplayOrder: () =>
       [
         ...table.getStartVisibleLeafColumns(),

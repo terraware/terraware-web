@@ -6,12 +6,14 @@ import {
   MRT_ColumnPinningState,
   MRT_RowData,
   MRT_SortingState,
-  MRT_TableInstance,
   MRT_VisibilityState,
-  getDefaultColumnOrderIds,
 } from 'material-react-table';
 
 import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
+
+import { TableSource, isDataColumnId, toViewTable } from './viewTable';
+
+export { isDataColumnId } from './viewTable';
 
 export type TableSettings = {
   columnFilters: MRT_ColumnFiltersState;
@@ -22,23 +24,14 @@ export type TableSettings = {
   sorting: MRT_SortingState;
 };
 
-export const getTableSettings = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>): TableSettings => {
-  const state = table.getState();
-  return {
-    columnFilters: state.columnFilters,
-    columnOrder: state.columnOrder,
-    columnPinning: state.columnPinning,
-    columnVisibility: state.columnVisibility,
-    globalFilter: state.globalFilter ?? '',
-    sorting: state.sorting,
-  };
-};
+export const getTableSettings = <TData extends MRT_RowData>(table: TableSource<TData>): TableSettings =>
+  toViewTable(table).getSettings();
 
 export const getDefaultTableSettings = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   overrides?: Partial<TableSettings>
 ): TableSettings => {
-  const { initialState } = table;
+  const initialState = toViewTable(table).getInitialSettings();
   return {
     columnFilters: initialState.columnFilters ?? [],
     columnOrder: initialState.columnOrder ?? [],
@@ -50,28 +43,18 @@ export const getDefaultTableSettings = <TData extends MRT_RowData>(
   };
 };
 
-export const isDataColumnId = (columnId: string) => !columnId.startsWith('mrt-');
-
-const withDisplayColumns = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
-  columnOrder: MRT_ColumnOrderState
-): MRT_ColumnOrderState =>
-  getDefaultColumnOrderIds({
-    ...table.options,
-    state: { ...table.getState(), columnOrder: columnOrder.filter(isDataColumnId) },
-  });
-
 export const applyTableSettings = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   settings: Partial<TableSettings>,
   defaults: TableSettings
 ) => {
-  table.setColumnFilters(normalizePersistedColumnFilters(settings.columnFilters ?? defaults.columnFilters));
-  table.setColumnOrder(withDisplayColumns(table, settings.columnOrder ?? defaults.columnOrder));
-  table.setColumnPinning(settings.columnPinning ?? defaults.columnPinning);
-  table.setColumnVisibility(settings.columnVisibility ?? defaults.columnVisibility);
-  table.setGlobalFilter(settings.globalFilter ?? defaults.globalFilter);
-  table.setSorting(settings.sorting ?? defaults.sorting);
+  const view = toViewTable(table);
+  view.setColumnFilters(normalizePersistedColumnFilters(settings.columnFilters ?? defaults.columnFilters));
+  view.setColumnOrder(settings.columnOrder ?? defaults.columnOrder);
+  view.setColumnPinning(settings.columnPinning ?? defaults.columnPinning);
+  view.setColumnVisibility(settings.columnVisibility ?? defaults.columnVisibility);
+  view.setGlobalFilter(settings.globalFilter ?? defaults.globalFilter);
+  view.setSorting(settings.sorting ?? defaults.sorting);
 };
 
 export const isBlankFilterValue = (value: unknown) => value === undefined || value === null || value === '';
@@ -102,20 +85,22 @@ const normalizePinning = (pinning: MRT_ColumnPinningState) => ({
 });
 
 export const isTableModified = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: TableSource<TData>,
   viewSettings: Partial<TableSettings>,
   defaults: TableSettings
 ) => {
   const current = getTableSettings(table);
   const view = { ...defaults, ...viewSettings };
-  const columns = table.getAllFlatColumns().filter((column) => isDataColumnId(column.id));
+  const columns = toViewTable(table)
+    .getColumns('definition')
+    .filter((column) => isDataColumnId(column.id));
 
   const columnVisibilityChanged = columns.some(
     (column) => (current.columnVisibility[column.id] ?? true) !== (view.columnVisibility[column.id] ?? true)
   );
 
   const unpinnedVisibleColumnIds = columns
-    .filter((column) => column.getIsVisible() && !column.getIsPinned())
+    .filter((column) => column.isVisible && !column.isPinned)
     .map((column) => column.id);
   const orderColumns = (order: MRT_ColumnOrderState) => [
     ...order.filter((columnId) => unpinnedVisibleColumnIds.includes(columnId)),
