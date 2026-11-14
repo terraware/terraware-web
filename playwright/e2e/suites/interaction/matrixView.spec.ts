@@ -69,7 +69,9 @@ const setMultiSelectOptions = async (
       await optionRow.click();
     }
   }
-  await page.getByRole('button', { name: 'Done', exact: true }).click();
+  const doneButton = page.getByRole('button', { name: 'Done', exact: true });
+  await doneButton.click();
+  await expect(doneButton).not.toBeVisible();
   return cell;
 };
 
