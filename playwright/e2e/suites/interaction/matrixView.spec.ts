@@ -69,10 +69,7 @@ const setMultiSelectOptions = async (
       await optionRow.click();
     }
   }
-  await page
-    .getByRole('paragraph')
-    .filter({ hasText: /^Projects$/ })
-    .click();
+  await page.getByRole('button', { name: 'Done', exact: true }).click();
   return cell;
 };
 
