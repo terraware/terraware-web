@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.47% </span>
+                <span class="strong">82.35% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/17</span>
+                <span class='fraction'>14/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.25% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/16</span>
+                <span class='fraction'>14/16</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -100,28 +100,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">785x</span>
-<span class="cline-any cline-yes">785x</span>
-<span class="cline-any cline-yes">785x</span>
+<span class="cline-any cline-yes">801x</span>
+<span class="cline-any cline-yes">801x</span>
+<span class="cline-any cline-yes">801x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">785x</span>
-<span class="cline-any cline-yes">198x</span>
+<span class="cline-any cline-yes">801x</span>
+<span class="cline-any cline-yes">206x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">785x</span>
-<span class="cline-any cline-yes">198x</span>
+<span class="cline-any cline-yes">801x</span>
+<span class="cline-any cline-yes">206x</span>
 <span class="cline-any cline-yes">99x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">107x</span>
 <span class="cline-any cline-yes">99x</span>
-<span class="cline-any cline-yes">99x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">144x</span>
+<span class="cline-any cline-yes">148x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">785x</span>
+<span class="cline-any cline-yes">801x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -133,7 +133,7 @@ import { useGetOneObservationResults } from 'src/hooks/observations';
 const useBiomassPlot = () =&gt; {
   const params = useParams&lt;{ monitoringPlotId?: string; observationId: string }&gt;();
   const observationId = Number(params.observationId);
-  const monitoringPlotId = params.monitoringPlotId === undefined ? undefined : <span class="branch-1 cbranch-no" title="branch not covered" >Number(params.monitoringPlotId);</span>
+  const monitoringPlotId = params.monitoringPlotId === undefined ? undefined : Number(params.monitoringPlotId);
 &nbsp;
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() =&gt; observationResultsResponse?.observation, [observationResultsResponse?.observation]);
@@ -142,10 +142,10 @@ const useBiomassPlot = () =&gt; {
     if (results?.adHocPlot) {
       return results.adHocPlot;
     }
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (monitoringPlotId === undefined) {
+    if (monitoringPlotId === undefined) {
       return undefined;
     }
-<span class="cstat-no" title="statement not covered" >    return results?.strata</span>
+    return results?.strata
       .flatMap(<span class="fstat-no" title="function not covered" >(stratum) =&gt; <span class="cstat-no" title="statement not covered" >stratum.substrata.flatMap(<span class="fstat-no" title="function not covered" >(substratum) =&gt; <span class="cstat-no" title="statement not covered" >substratum.monitoringPlots)</span></span>)</span></span>
       .find(<span class="fstat-no" title="function not covered" >(plot) =&gt; <span class="cstat-no" title="statement not covered" >plot.monitoringPlotId === monitoringPlotId)</span></span>;
   }, [monitoringPlotId, results]);
@@ -163,7 +163,7 @@ export default useBiomassPlot;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-13T21:37:05.940Z
+                at 2026-11-14T03:24:43.542Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

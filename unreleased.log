@@ -1,3 +1,7 @@
+27e99c62 Cap CI unit test workers at 75% of the CPUs (#7168)
+ec989de1 Update dependency @terraware/web-components to v5.2.5 (#7198)
+74cd7f14 Update Node.js to v24.22.3 (#7199)
+a7d78648 SW-9272 Show Baseline Survey details like scheduled biomass observations (#7178)
 915f3dad SW-9301 Add hover text to each stage (#7169)
 71b0c28c SW-9304 Exclude sites without substrata from observation scheduling (#7177)
 42f15db6 SW-9304 Label and filter Baseline Survey observations (#7167)
