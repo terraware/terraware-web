@@ -40,6 +40,8 @@ import DateEditor from './editors/DateEditor';
 import MultiSelectEditor from './editors/MultiSelectEditor';
 import SelectEditor from './editors/SelectEditor';
 import TextEditor from './editors/TextEditor';
+import { buildMatrixColumnsV2 } from './matrixColumnsV2';
+import { buildMatrixV2Props } from './matrixV2Props';
 import {
   MatrixRow,
   MatrixValue,
@@ -710,11 +712,57 @@ const MatrixView = () => {
     ]
   );
 
+  const v2Columns = useMemo(
+    () =>
+      buildMatrixColumnsV2({
+        variableIds: uniqueVariableIds,
+        variables: allVariables ?? [],
+        countryNames: countries.map((country) => country.name ?? ''),
+        dateLocale,
+        canEdit: isAllowedEditMatrixView,
+        save: saveMatrixValue,
+      }),
+    [uniqueVariableIds, allVariables, countries, dateLocale, isAllowedEditMatrixView, saveMatrixValue]
+  );
+
   return (
     <Page title={strings.PROJECTS}>
       {loading === true && <BusySpinner />}
       <Card sx={{ borderRadius: '24px', padding: theme.spacing(3), boxShadow: 'none' }}>
         <EditableTable
+          v2Props={buildMatrixV2Props({
+            columns: v2Columns,
+            data: projects,
+            isMobile,
+            tableOptions: {
+              state: {
+                columnFilters: visibleColumnFilters,
+                sorting,
+                columnPinning,
+                columnOrder,
+                columnVisibility,
+                globalFilter,
+              },
+              onGlobalFilterChange: setGlobalFilter,
+              onColumnFiltersChange: setColumnFilters,
+              onSortingChange: setSorting,
+              onColumnPinningChange: setColumnPinning,
+              onColumnOrderChange: setColumnOrder,
+              onColumnVisibilityChange: setColumnVisibility,
+            },
+            controls: {
+              allVariables,
+              showColumnsModal,
+              onColumnsClick: onColumnsClickHandler,
+              onColumnsClose: onCloseColumnsModalHandler,
+              onColumnsSelected,
+            },
+            view: {
+              defaultPreset: currentView,
+              defaultSettings: defaultViewSettings,
+              onPresetChange: onCurrentViewChange,
+            },
+          })}
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
           columns={matrixColumns}
           data={projects}
