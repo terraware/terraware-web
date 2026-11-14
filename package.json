@@ -234,7 +234,7 @@
     "serialize-javascript": "^7.1.4",
     "simple-git": "^4.0.2",
     "string-width": "8.3.0",
-    "strip-ansi": "6.0.1",
+    "strip-ansi": "7.2.0",
     "tmp": "^0.2.7",
     "wrap-ansi": "10.0.2",
     "ws": "^8.22.2"
