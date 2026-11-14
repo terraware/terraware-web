@@ -584,6 +584,7 @@ DIFFICULT_ACCESSIBILITY,Accesibilidad difícil,18c83274
 DISCARD_CHANGES,Descartar cambios,f79f534a
 DISMISS,Cerrar notificación,a56709f4
 DO_NOT_USE,No usar,6950f9e5
+DO_YOU_WANT_TO_SCHEDULE_ANOTHER_BASELINE_FOR_THEM,¿Desea programar otra línea base para ellos?,fc52162f
 DOC_PRODUCER,Productor de documentos,e40f8aa1
 DOCUMENT,Documento,57650c76
 DOCUMENT_DETAILS,Editar detalles del documento,92155983
@@ -894,6 +895,7 @@ GLOBAL_ROLE_ACCELERATOR_ADMIN,Administrador de acelerador,b60aa07a
 GLOBAL_ROLE_READ_ONLY,De solo lectura,28709939
 GLOBAL_ROLE_SUPER_ADMIN,Superadministrador,4e519ab0
 GLOBAL_ROLE_TF_EXPERT,Experto en TF,3edccd76
+GO_BACK,Regresar,93f780e3
 GO_TO,Ir a {0},c922d4a7
 GO_TO_NURSERIES,Ir a los viveros,545d3e5a
 GO_TO_PLANTING_SITES,Ir a Sitios de plantación,63065313
@@ -2076,6 +2078,7 @@ SAVED_VIEW_UPDATED,{0} actualizado,aa7ecb38
 SAVED_VIEWS_PRIVATE,Solo usted puede ver las vistas que guarde.,374179a6
 SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
+SCHEDULE_ANYWAY,Programar de todos modos,051f6f28
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
 SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,Registrar el crecimiento de las plantas y las condiciones actuales.,3870c828
 SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,Medir la supervivencia de las plantas y las condiciones actuales del sitio,2747bb6a
@@ -2302,6 +2305,7 @@ SOIL_TYPE_SILT_LOAM,Franco limoso,b540d046
 SOIL_TYPE_SILTY_CLAY,Arcilla limosa,99ec02c4
 SOIL_TYPE_SILTY_CLAY_LOAM,Franco arcillo-limoso,e8c051d9
 SOIL_TYPE_UNKNOWN,Desconocido,97ccc176
+SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE,Algunos sustratos ya tienen una línea base,60922f40
 SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,bf2e66a4
@@ -2556,6 +2560,7 @@ THANK_YOU_FOR_USING_TERRAWARE,¡Muchas gracias por utilizar Terraware!,c6999786
 THERE_ARE_NO_PLANTING_PLANS,No hay Planes de Plantación.,3c854b17
 THERE_ARE_NO_PLANTING_SEASONS,No hay Temporadas de Plantación.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Todavía no hay especies agregadas a este Proyecto.,02f58d0e
+THESE_SUBSTRATA_ARE_ALREADY_INCLUDED_IN_A_COMPLETED_OR_SCHEDULED_BASELINE_SURVEY,Estos sustratos ya están incluidos en una encuesta de línea base completada o programada:,ac5828de
 THIS_ACTION_IS_NON_REVERSIBLE,Este proceso no se puede anular.,aecdef3a
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Este entregable ha sido aprobado. Si el proyecto carga un nuevo documento, el estado volverá a ""En revisión"".",96ae1308
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Este entregable ha sido aprobado. Si el proyecto vuelve a enviar el cuestionario, el estado volverá a ""En revisión"".",89b908e0
@@ -2941,6 +2946,7 @@ X_ACCESSION,{0} Accesión,cfd54196
 X_ACCESSIONS,{0} Accesiones,e8ccdbc4
 X_BATCH,{0} lote,9d74cde8
 X_BATCHES,{0} lotes,a7a1d48d
+X_COMPLETED_Y,{0} (completado el {1}),801c7a02
 X_CUMULATIVE_TARGET,Meta acumulada {0},25c175af
 X_DAY,{0} día,f85a4e0a
 X_DAYS,{0} días,bec81ab4
@@ -2950,10 +2956,12 @@ X_HECTARES,{0} hectáreas,6f24cf52
 X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
 X_OF_YEAR_CUMULATIVE_TARGET,{0} del objetivo acumulativo anual,6658988a
 X_OF_YEAR_TARGET,{0} del objetivo anual,c57dbf7a
+X_OVERDUE_Y,{0} (vencido el {1}),11c7edeb
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plantas,8cb7c65d
 X_PLOT,{0} parcela,69151ad1
 X_PLOTS,{0} parcelas,af2dd663
+X_SCHEDULED_Y,{0} (programado para el {1}),ee2e9f83
 X_SPECIES,{0} especies,42e62955
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 X_STILL_IN_THIS_STAGE,{0} aún en esta etapa,6e034985

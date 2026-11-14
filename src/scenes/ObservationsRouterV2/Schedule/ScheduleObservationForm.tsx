@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useSearchParams } from 'react-router';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { Button, DialogBox, Dropdown, DropdownItem } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -11,6 +11,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { useFeatureEnabled } from 'src/features';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import {
   RescheduleObservationRequestPayload,
@@ -53,6 +54,7 @@ export default function ScheduleObservationForm({
   const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
+  const { plantingSite: selectedSiteDetails } = usePlantingSite(selectedPlantingSiteId);
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const [getObservation, getObservationResponse] = useLazyGetObservationQuery();
 
@@ -132,6 +134,19 @@ export default function ScheduleObservationForm({
   const [endDateError, setEndDateError] = useState<string>();
   const [substratumError, setSubstratumError] = useState<string>();
   const [showSmallSiteWarning, setShowSmallSiteWarning] = useState<boolean>();
+  const [showBaselineWarning, setShowBaselineWarning] = useState(false);
+
+  const baselineOverlaps = useMemo(
+    () =>
+      observationId === undefined && monitoringType === 'Baseline Survey'
+        ? (selectedSiteDetails?.strata
+            ?.flatMap((stratum) => stratum.substrata)
+            .filter(
+              (substratum) => requestedSubstratumIds?.includes(substratum.id) && substratum.latestBaselineSurveyStatus
+            ) ?? [])
+        : [],
+    [monitoringType, observationId, requestedSubstratumIds, selectedSiteDetails]
+  );
 
   const siteOptions = useMemo((): DropdownItem[] => {
     if (plantingSite) {
@@ -165,25 +180,14 @@ export default function ScheduleObservationForm({
         _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
       }
 
-      const _showSmallSiteWarning =
-        selectedSiteAreaHa !== undefined && selectedSiteAreaHa < WARN_IF_SITE_LESS_THAN_HECTARES;
-
       setStartDateError(_startDateError);
       setEndDateError(_endDateError);
       setSubstratumError(_substratumError);
-      setShowSmallSiteWarning(_showSmallSiteWarning);
-      return _startDateError || _endDateError || _substratumError || _showSmallSiteWarning;
+      return _startDateError || _endDateError || _substratumError;
     } else {
       return _startDateError || _endDateError || _substratumError;
     }
-  }, [
-    startDate,
-    endDate,
-    observationId,
-    strings.SELECT_AT_LEAST_ONE_SUBSTRATUM,
-    requestedSubstratumIds,
-    selectedSiteAreaHa,
-  ]);
+  }, [startDate, endDate, observationId, strings.SELECT_AT_LEAST_ONE_SUBSTRATUM, requestedSubstratumIds]);
 
   const doSave = useCallback(() => {
     if (onReschedule && startDate && endDate) {
@@ -201,6 +205,7 @@ export default function ScheduleObservationForm({
     }
 
     setShowSmallSiteWarning(false);
+    setShowBaselineWarning(false);
   }, [
     biomassSchedulingEnabled,
     endDate,
@@ -212,12 +217,31 @@ export default function ScheduleObservationForm({
     startDate,
   ]);
 
+  const saveWithBaselineWarning = useCallback(() => {
+    setShowSmallSiteWarning(false);
+    if (baselineOverlaps.length > 0) {
+      setShowBaselineWarning(true);
+    } else {
+      doSave();
+    }
+  }, [baselineOverlaps, doSave]);
+
+  const closeBaselineWarning = useCallback(() => setShowBaselineWarning(false), []);
+
   const onSubmit = useCallback(() => {
     setValidate(true);
     if (!findErrors()) {
-      doSave();
+      if (
+        observationId === undefined &&
+        selectedSiteAreaHa !== undefined &&
+        selectedSiteAreaHa < WARN_IF_SITE_LESS_THAN_HECTARES
+      ) {
+        setShowSmallSiteWarning(true);
+      } else {
+        saveWithBaselineWarning();
+      }
     }
-  }, [doSave, findErrors, setValidate]);
+  }, [findErrors, observationId, saveWithBaselineWarning, selectedSiteAreaHa]);
 
   const setStartDateCallback = useCallback(
     (value: DateTime<boolean> | undefined) => setStartDate(value?.toISODate() || undefined),
@@ -325,7 +349,50 @@ export default function ScheduleObservationForm({
         </Card>
       </PageForm>
       {showSmallSiteWarning && (
-        <SmallSiteWarningDialog onSave={doSave} open={showSmallSiteWarning} setOpen={setShowSmallSiteWarning} />
+        <SmallSiteWarningDialog
+          onSave={saveWithBaselineWarning}
+          open={showSmallSiteWarning}
+          setOpen={setShowSmallSiteWarning}
+        />
+      )}
+      {showBaselineWarning && (
+        <DialogBox
+          open={true}
+          onClose={closeBaselineWarning}
+          title={strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE}
+          size='medium'
+          skrim={true}
+          middleButtons={[
+            <Button
+              key='go-back'
+              label={strings.GO_BACK}
+              priority='secondary'
+              type='passive'
+              onClick={closeBaselineWarning}
+            />,
+            <Button key='schedule-anyway' label={strings.SCHEDULE_ANYWAY} onClick={doSave} />,
+          ]}
+        >
+          <Typography textAlign='left'>
+            {strings.THESE_SUBSTRATA_ARE_ALREADY_INCLUDED_IN_A_COMPLETED_OR_SCHEDULED_BASELINE_SURVEY}
+          </Typography>
+          <Box component='ul' textAlign='left'>
+            {baselineOverlaps.map((substratum) => (
+              <Typography component='li' key={substratum.id}>
+                {strings.formatString(
+                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                    ? strings.X_OVERDUE_Y
+                    : ['Completed', 'Abandoned'].includes(substratum.latestBaselineSurveyStatus!)
+                      ? strings.X_COMPLETED_Y
+                      : strings.X_SCHEDULED_Y,
+                  substratum.fullName,
+                  substratum.latestBaselineSurveyDate ?? ''
+                )}
+              </Typography>
+            ))}
+          </Box>
+          <Typography textAlign='left'>{strings.DO_YOU_WANT_TO_SCHEDULE_ANOTHER_BASELINE_FOR_THEM}</Typography>
+        </DialogBox>
       )}
     </TfMain>
   );
