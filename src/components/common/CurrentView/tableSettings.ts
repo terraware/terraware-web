@@ -92,7 +92,7 @@ export const isTableModified = <TData extends MRT_RowData>(
   const current = getTableSettings(table);
   const view = { ...defaults, ...viewSettings };
   const columns = toViewTable(table)
-    .getColumns()
+    .getColumns('definition')
     .filter((column) => isDataColumnId(column.id));
 
   const columnVisibilityChanged = columns.some(
