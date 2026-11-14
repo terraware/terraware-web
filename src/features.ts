@@ -4,6 +4,7 @@ import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName =
+  | 'Editable Table V2'
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Scheduled Biomass Monitoring Observations'
@@ -28,6 +29,15 @@ export type Feature = {
 
 // list of feature names and associated properties
 export const OPT_IN_FEATURES: Feature[] = [
+  {
+    name: 'Editable Table V2',
+    preferenceName: 'editableTableV2',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Use the new TanStack-based editable table component.'],
+    disclosure: ['This is a WIP'],
+  },
   {
     name: 'Show Production View',
     preferenceName: 'showProductionUIView',

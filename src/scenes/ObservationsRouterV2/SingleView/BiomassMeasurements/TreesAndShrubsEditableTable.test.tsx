@@ -4,9 +4,14 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { mockGet, renderWithProviders, server } from 'src/test-utils';
+import { buildUser, mockGet, renderWithProviders, server } from 'src/test-utils';
 
 import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+  mockGet('/api/v1/users/me', { user: buildUser() });
+});
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 

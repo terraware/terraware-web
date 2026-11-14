@@ -5,9 +5,14 @@ import { UserEvent } from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { mockGet, renderWithProviders, server } from 'src/test-utils';
+import { buildUser, mockGet, renderWithProviders, server } from 'src/test-utils';
 
 import MonitoringPlotSpeciesEditableTable from './MonitoringPlotSpeciesEditableTable';
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+  mockGet('/api/v1/users/me', { user: buildUser() });
+});
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
