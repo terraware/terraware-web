@@ -254,7 +254,11 @@ BASED_ON_X_SEEDLINGS,Basado en {0} plántulas,a1e372d3
 BASED_ON_X_BATCH,Basado en {0} lote,919ed414
 BASED_ON_X_BATCHES,Basado en {0} lotes,8c41bee7
 BASELINE,Línea base,332af00e
+BASELINE_COMPLETED_X,Línea base completada: {0},58bb5e0e
+BASELINE_OVERDUE_X,Línea base vencida: {0},c1c91c3f
+BASELINE_SCHEDULED_X,Línea base programada: {0},c95467b5
 BASELINE_SURVEY,Encuesta de referencia,bc76c649
+BASELINE_X_OF_Y,Línea base: {0} de {1},e222f357
 BATCH,Lote,9fdfdd9b
 BATCH_CREATED,Lote creado,1a382f74
 BATCH_HISTORY_NO_EVENTS,Aún no hay historial.,f8822669
@@ -912,6 +916,8 @@ HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La cantidad en aclimatación no 
 HARDENING_OFF_QUANTITY_REMAINING,Cantidad en aclimatación ({0} restantes),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Cantidad en aclimatación *,8bda8f0f
 HARDENING_OFF_SENTENCE_CASE,Acondicionamiento,5b744226
+HAS_PLANTINGS,Tiene plantaciones,fba8ffe7
+HAS_PLANTINGS_X_OF_Y,Tiene plantaciones: {0} de {1},3829a694
 HECTARES,Hectáreas,316902d7
 HEIGHT_AT_MATURITY,Altura en la madurez (cm),f8025719
 HEIGHT_M,Altura (m),fe61fc34
