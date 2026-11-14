@@ -1,4 +1,10 @@
-import { MatrixRow, buildMatrixValue, getMatrixOptionIds, getMatrixValue } from './matrixValues';
+import {
+  MatrixRow,
+  buildMatrixValue,
+  buildMatrixValueOperation,
+  getMatrixOptionIds,
+  getMatrixValue,
+} from './matrixValues';
 
 const row: MatrixRow = {
   id: 1,
@@ -20,6 +26,27 @@ const row: MatrixRow = {
     },
   ],
 };
+
+it('appends list values without overwriting hidden items but updates existing non-list values', () => {
+  const value = { type: 'Select' as const, optionIds: [4] };
+  expect(buildMatrixValueOperation({ ...row.variables[0], isList: true }, value)).toEqual({
+    operation: 'Append',
+    variableId: 2,
+    value,
+  });
+  expect(buildMatrixValueOperation(row.variables[0], value)).toEqual({
+    operation: 'Update',
+    valueId: 3,
+    existingValueId: 3,
+    value,
+  });
+  expect(buildMatrixValueOperation({ ...row.variables[0], values: [] }, value)).toEqual({
+    operation: 'Append',
+    variableId: 2,
+    value,
+  });
+  expect(buildMatrixValueOperation({ ...row.variables[0], id: '', values: [] }, value)).toBeUndefined();
+});
 
 it('keeps option names intact for display and IDs separate for saves', () => {
   expect(getMatrixValue(row, 'v')).toBe('Forest, coastal');
