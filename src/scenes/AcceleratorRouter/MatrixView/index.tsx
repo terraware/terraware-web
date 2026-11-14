@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Card, Checkbox, Chip, IconButton, Tooltip, useTheme } from '@mui/material';
+import { Card, IconButton, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
-  MRT_Column,
   MRT_Row,
   MRT_TableInstance,
   MRT_TableOptions,
@@ -38,6 +37,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
 import DateEditor from './editors/DateEditor';
+import MultiSelectEditor from './editors/MultiSelectEditor';
 import SelectEditor from './editors/SelectEditor';
 import TextEditor from './editors/TextEditor';
 import {
@@ -295,199 +295,14 @@ const MatrixView = () => {
 
         if (selectedVariable && 'isMultiple' in selectedVariable && selectedVariable.isMultiple) {
           // eslint-disable-next-line react/display-name
-          Edit = ({
-            cell,
-            row,
-            table,
-          }: {
-            cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-            column: MRT_Column<ProjectsWithVariablesSearchResult>;
-            row: MRT_Row<ProjectsWithVariablesSearchResult>;
-            table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-          }) => {
-            const [selectedLabels] = React.useState<string[]>(
-              cell.getValue<string>()
-                ? cell
-                    .getValue<string>()
-                    .trim()
-                    ?.split(',')
-                    .map((item) => item.trim())
-                : []
-            );
-            const [selections, setSelections] = React.useState<string[]>([]);
-            const [isOpen, setIsOpen] = useState(false);
-            const [position, setPosition] = useState({ top: 0, left: 0 });
-            const triggerRef = useRef<HTMLDivElement>(null);
-            const portalRef = useRef<HTMLDivElement>(null);
-
-            const optionsMap = useMemo(
-              () =>
-                new Map<string, string>(
-                  getSelectOptions()
-                    .filter((opt) => opt.value && opt.label)
-                    .map((opt) => [opt.value, opt.label])
-                ),
-              []
-            );
-
-            useEffect(() => {
-              if (selectedLabels) {
-                setSelections(
-                  selectedLabels.map((sl) => getSelectOptions().find((opt) => opt.label === sl)?.value || '')
-                );
-              }
-            }, [optionsMap, selectedLabels]);
-
-            const handleSave = useCallback(() => {
-              const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-              const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-              if (variableToProcess) {
-                onSaveHandler(row.original.id, selections, variableToProcess);
-              }
-              table.setEditingCell(null);
-            }, [row.original.id, row.original.variables, selections, table]);
-
-            const onAdd = (value: string | null) => {
-              const updatedValues = [...selections];
-              const valueIndex = updatedValues.findIndex((v) => v === value);
-              if (value && valueIndex < 0) {
-                updatedValues.push(value);
-                setSelections(updatedValues);
-              }
-            };
-
-            const onRemove = (value: string | null) => {
-              const updatedValues = [...selections];
-              const valueIndex = updatedValues.findIndex((v) => v === value);
-              if (valueIndex >= 0) {
-                updatedValues.splice(valueIndex, 1);
-                setSelections(updatedValues);
-              }
-            };
-
-            const handleOpen = useCallback(() => {
-              if (triggerRef.current) {
-                const rect = triggerRef.current.getBoundingClientRect();
-                setPosition({
-                  top: rect.bottom + window.scrollY,
-                  left: rect.left + window.scrollX,
-                });
-                setIsOpen(true);
-              }
-            }, []);
-
-            const handleClose = useCallback(() => {
-              handleSave();
-              setIsOpen(false);
-            }, [handleSave]);
-
-            useEffect(() => {
-              const handleClickOutside = (event: MouseEvent) => {
-                if (
-                  isOpen &&
-                  portalRef.current &&
-                  triggerRef.current &&
-                  !portalRef.current.contains(event.target as Node) &&
-                  !triggerRef.current.contains(event.target as Node)
-                ) {
-                  handleClose();
-                }
-              };
-
-              if (isOpen) {
-                document.addEventListener('mousedown', handleClickOutside);
-              }
-
-              return () => {
-                document.removeEventListener('mousedown', handleClickOutside);
-              };
-            }, [handleClose, isOpen]);
-
-            return (
-              <>
-                <div
-                  ref={triggerRef}
-                  onClick={handleOpen}
-                  style={{
-                    border: '1px solid #ccc',
-                    borderRadius: '4px',
-                    padding: '8px',
-                    minHeight: '40px',
-                    cursor: 'pointer',
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: '4px',
-                    alignItems: 'center',
-                    width: '100%',
-                  }}
-                >
-                  {selections.map((value) => (
-                    <Chip
-                      key={value}
-                      label={optionsMap.get(value) || value}
-                      size='small'
-                      onDelete={(e) => {
-                        e.stopPropagation();
-                        onRemove(value);
-                      }}
-                    />
-                  ))}
-                  {selections.length === 0 && <span style={{ color: '#999' }}>{strings.SELECT_OPTIONS}</span>}
-                </div>
-
-                {isOpen &&
-                  createPortal(
-                    <div
-                      ref={portalRef}
-                      style={{
-                        position: 'fixed',
-                        top: position.top,
-                        left: position.left,
-                        zIndex: 9999,
-                        backgroundColor: 'white',
-                        border: '1px solid #ccc',
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
-                        maxHeight: '200px',
-                        overflowY: 'auto',
-                        minWidth: '200px',
-                      }}
-                    >
-                      {Array.from(optionsMap.entries()).map(([value, label]) => (
-                        <div
-                          key={value}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            if (selections.includes(value)) {
-                              onRemove(value);
-                            } else {
-                              onAdd(value);
-                            }
-                          }}
-                          style={{
-                            padding: '8px 12px',
-                            cursor: 'pointer',
-                            display: 'flex',
-                            alignItems: 'center',
-                            borderBottom: '1px solid #f0f0f0',
-                          }}
-                          onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLElement).style.backgroundColor = 'white';
-                          }}
-                        >
-                          <Checkbox checked={selections.includes(value)} size='small' style={{ marginRight: '8px' }} />
-                          {label}
-                        </div>
-                      ))}
-                    </div>,
-                    document.body
-                  )}
-              </>
-            );
-          };
+          Edit = ({ row, table }: MatrixEditProps) => (
+            <MultiSelectEditor
+              value={getMatrixOptionIds(row.original, variableId)}
+              options={getSelectOptions()}
+              save={(value) => saveVariableValue(row.original, value)}
+              cancel={() => table.setEditingCell(null)}
+            />
+          );
         } else {
           // eslint-disable-next-line react/display-name
           Edit = ({ row, table }: MatrixEditProps) => (
