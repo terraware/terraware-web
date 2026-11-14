@@ -105,7 +105,7 @@
     "luxon": "^3.7.2",
     "mapbox-gl": "^3.34.2",
     "material-react-table": "^3.2.1",
-    "playcanvas": "2.23.3",
+    "playcanvas": "2.24.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-error-boundary": "^6.1.6",
