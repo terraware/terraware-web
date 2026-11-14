@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Card, Checkbox, Chip, IconButton, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
@@ -38,6 +38,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
 import DateEditor from './editors/DateEditor';
+import SelectEditor from './editors/SelectEditor';
 import TextEditor from './editors/TextEditor';
 import {
   MatrixRow,
@@ -47,6 +48,7 @@ import {
   buildMatrixValueOperation,
   getMatrixValue,
 } from './matrixValues';
+import { getMatrixOptionIds } from './matrixValues';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
@@ -488,57 +490,14 @@ const MatrixView = () => {
           };
         } else {
           // eslint-disable-next-line react/display-name
-          Edit = ({
-            cell,
-            row,
-            table,
-          }: {
-            cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-            column: MRT_Column<ProjectsWithVariablesSearchResult>;
-            row: MRT_Row<ProjectsWithVariablesSearchResult>;
-            table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
-          }) => {
-            const currentDisplayValue = cell.getValue<string>() || '';
-            const options = getSelectOptions();
-
-            const currentOption = options.find((opt) => opt.label === currentDisplayValue);
-            const [selectedValue, setSelectedValue] = useState(currentOption?.value || '');
-
-            const handleSave = () => {
-              const variable = row.original.variables?.find((_variable) => _variable.stableId === variableId);
-              const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
-              if (variableToProcess) {
-                onSaveHandler(row.original.id, selectedValue, variableToProcess);
-              }
-              table.setEditingCell(null);
-            };
-
-            return (
-              <TextField
-                select
-                value={selectedValue}
-                onChange={(e) => {
-                  setSelectedValue(e.target.value);
-                }}
-                onBlur={handleSave}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    handleSave();
-                  } else if (e.key === 'Escape') {
-                    table.setEditingCell(null);
-                  }
-                }}
-                size='small'
-                fullWidth
-              >
-                {options.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            );
-          };
+          Edit = ({ row, table }: MatrixEditProps) => (
+            <SelectEditor
+              value={getMatrixOptionIds(row.original, variableId)[0] ?? ''}
+              options={getSelectOptions()}
+              save={(value) => saveVariableValue(row.original, value)}
+              cancel={() => table.setEditingCell(null)}
+            />
+          );
         }
       }
       if (correspondingValue?.['numberValue(raw)'] !== undefined) {
