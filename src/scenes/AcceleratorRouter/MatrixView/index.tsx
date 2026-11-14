@@ -3,7 +3,6 @@ import { createPortal } from 'react-dom';
 
 import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import { BusySpinner, EditableTableColumn, Icon } from '@terraware/web-components';
-import { isArray } from 'lodash';
 import {
   MRT_Cell,
   MRT_Column,
@@ -35,19 +34,11 @@ import {
 import { SearchNodePayload } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
-import {
-  NewNonSectionValuePayloadUnion,
-  VariableValueDateValue,
-  VariableValueEmailValue,
-  VariableValueLinkValue,
-  VariableValueNumberValue,
-  VariableValueSelectValue,
-  VariableValueTextValue,
-} from 'src/types/documentProducer/VariableValue';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
+import { SaveMatrixValue, buildMatrixValue, buildMatrixValueOperation, getMatrixValue } from './matrixValues';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
@@ -141,88 +132,29 @@ const MatrixView = () => {
     return map;
   }, [allVariables]);
 
-  const onSaveHandler = useCallback(
-    (
-      projectId: number,
-      updatedValue: string | number | string[],
-      variable:
-        | {
-            stableId: string;
-            id: string;
-            variableName: string;
-            type: string;
-            isList?: boolean;
-            isMultiselect?: boolean;
-            values?: {
-              variableValueId: string;
-              options?: { id: string; name: string; position: string }[];
-              numberValue?: string;
-              textValue?: string;
-              dateValue?: string;
-              linkUrl?: string;
-            }[];
-          }
-        | VariableUnion
-    ) => {
-      const values = 'values' in variable ? variable?.values : undefined;
-
-      let newValue: NewNonSectionValuePayloadUnion | undefined;
-      let firstValue;
-      if (variable.type === 'Text') {
-        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueTextValue) : undefined;
-        newValue = { type: 'Text', textValue: updatedValue.toString() };
-      }
-      if (variable.type === 'Number') {
-        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueNumberValue) : undefined;
-        newValue = { type: 'Number', numberValue: Number(updatedValue) };
-      }
-      if (variable.type === 'Select') {
-        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueSelectValue) : undefined;
-        newValue = {
-          type: 'Select',
-          optionIds: isArray(updatedValue) ? updatedValue.map((uVal) => Number(uVal)) : [Number(updatedValue)],
-        };
-      }
-      if (variable.type === 'Date') {
-        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueDateValue) : undefined;
-        newValue = { type: 'Date', dateValue: updatedValue.toString() };
-      }
-      if (variable.type === 'Email') {
-        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueEmailValue) : undefined;
-        newValue = { type: 'Email', emailValue: updatedValue.toString() };
-      }
-      if (variable.type === 'Link') {
-        firstValue = values && values.length > 0 ? (values[0] as unknown as VariableValueLinkValue) : undefined;
-        newValue = { type: 'Link', url: updatedValue.toString() };
-      }
-      const valueIdToUpdate = firstValue?.id || -1;
-      if (newValue) {
+  const saveMatrixValue = useCallback<SaveMatrixValue>(
+    async (projectId, updatedValue, variable) => {
+      const newValue = buildMatrixValue(variable.type, updatedValue);
+      const operation = newValue ? buildMatrixValueOperation(variable, newValue) : undefined;
+      if (operation) {
         setLoading(true);
-        if (valueIdToUpdate.toString() !== '-1') {
-          void updateProjectVariableValues({
-            projectId,
-            updateVariableValuesRequestPayload: {
-              operations: [
-                { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
-              ],
-              updateStatuses: false,
-            },
-          });
-        } else {
-          const varId = variable.id;
-          if (varId) {
-            void updateProjectVariableValues({
-              projectId,
-              updateVariableValuesRequestPayload: {
-                operations: [{ operation: 'Append', variableId: Number(varId), value: newValue }],
-                updateStatuses: false,
-              },
-            });
-          }
-        }
+        await updateProjectVariableValues({
+          projectId,
+          updateVariableValuesRequestPayload: {
+            operations: [operation],
+            updateStatuses: false,
+          },
+        }).unwrap();
       }
     },
     [updateProjectVariableValues]
+  );
+
+  const onSaveHandler = useCallback(
+    (...args: Parameters<SaveMatrixValue>) => {
+      void saveMatrixValue(...args).catch(() => setLoading(false));
+    },
+    [saveMatrixValue]
   );
 
   const matrixColumns = useMemo<MatrixColumn[]>(() => {
@@ -735,32 +667,7 @@ const MatrixView = () => {
         filterVariant,
         filterSelectOptions,
         filterFn: filterFunction,
-        accessorFn: (row) => {
-          const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
-          const variableValue = variable?.values?.[0];
-
-          if (!variableValue || variable?.isList?.toString() === 'true') {
-            return '';
-          }
-
-          if (variableValue['numberValue(raw)']) {
-            return variableValue['numberValue(raw)'];
-          }
-          if (variableValue.textValue) {
-            return variableValue.textValue;
-          }
-          if (variableValue.dateValue) {
-            return new Date(variableValue.dateValue);
-          }
-          if (variableValue.options) {
-            return variableValue.options.map((option) => option.name).join(', ');
-          }
-          if (variableValue.linkUrl) {
-            return variableValue.linkUrl;
-          }
-
-          return '';
-        },
+        accessorFn: (row) => getMatrixValue(row, variableId),
         Cell,
       };
     });
@@ -868,10 +775,12 @@ const MatrixView = () => {
         'variables.isList',
         'variables.isMultiSelect',
         'variables.values.textValue',
+        'variables.values.variableValueId',
         'variables.values.numberValue(raw)',
         'variables.values.linkUrl',
         'variables.values.dateValue',
         'variables.values.options.name',
+        'variables.values.options.id',
         'variables.values.options.position',
       ],
       sortOrder: {
