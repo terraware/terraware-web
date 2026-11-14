@@ -38,7 +38,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
-import { SaveMatrixValue, buildMatrixValue, getMatrixValue } from './matrixValues';
+import { SaveMatrixValue, buildMatrixValue, buildMatrixValueOperation, getMatrixValue } from './matrixValues';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
@@ -134,38 +134,17 @@ const MatrixView = () => {
 
   const saveMatrixValue = useCallback<SaveMatrixValue>(
     async (projectId, updatedValue, variable) => {
-      const values = 'values' in variable ? variable?.values : undefined;
       const newValue = buildMatrixValue(variable.type, updatedValue);
-      const valueIdToUpdate = values?.[0]?.variableValueId;
-      if (newValue) {
+      const operation = newValue ? buildMatrixValueOperation(variable, newValue) : undefined;
+      if (operation) {
         setLoading(true);
-        if (valueIdToUpdate) {
-          await updateProjectVariableValues({
-            projectId,
-            updateVariableValuesRequestPayload: {
-              operations: [
-                {
-                  operation: 'Update',
-                  valueId: Number(valueIdToUpdate),
-                  value: newValue,
-                  existingValueId: Number(valueIdToUpdate),
-                },
-              ],
-              updateStatuses: false,
-            },
-          }).unwrap();
-        } else {
-          const varId = variable.id;
-          if (varId) {
-            await updateProjectVariableValues({
-              projectId,
-              updateVariableValuesRequestPayload: {
-                operations: [{ operation: 'Append', variableId: Number(varId), value: newValue }],
-                updateStatuses: false,
-              },
-            }).unwrap();
-          }
-        }
+        await updateProjectVariableValues({
+          projectId,
+          updateVariableValuesRequestPayload: {
+            operations: [operation],
+            updateStatuses: false,
+          },
+        }).unwrap();
       }
     },
     [updateProjectVariableValues]
