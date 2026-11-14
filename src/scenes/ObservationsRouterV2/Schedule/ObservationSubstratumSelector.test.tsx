@@ -106,10 +106,14 @@ describe('ObservationSubstratumSelector', () => {
       },
     ]);
     expect(
-      await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 2, 2, 0, 2) as string)
+      await screen.findByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 2, 2)} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2)}`
+      )
     ).toBeVisible();
     expect(
-      await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 0, 2, 1, 2) as string)
+      await screen.findByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 0, 2)} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 1, 2)}`
+      )
     ).toBeVisible();
     expect(screen.getByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)).toBeVisible();
     expect(screen.getByText(strings.formatString(strings.BASELINE_SCHEDULED_X, '2026-11-16') as string)).toBeVisible();
@@ -147,7 +151,9 @@ describe('ObservationSubstratumSelector', () => {
       ],
     });
     expect(
-      await screen.findByText(strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 1, 2, 0, 2) as string)
+      await screen.findByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 1, 2)} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2)}`
+      )
     ).toBeVisible();
     expect(screen.getByText(strings.formatString(strings[label], '2026-06-02') as string)).toBeVisible();
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
@@ -157,7 +163,7 @@ describe('ObservationSubstratumSelector', () => {
     renderSelector('Baseline Survey');
     expect(
       await screen.findAllByText(
-        strings.formatString(strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y, 0, 2, 0, 2) as string
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 0, 2)} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2)}`
       )
     ).toHaveLength(2);
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();

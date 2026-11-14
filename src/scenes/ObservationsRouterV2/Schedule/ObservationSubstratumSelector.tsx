@@ -238,14 +238,16 @@ const ObservationSubstratumSelector = ({
                     }}
                   >
                     {isBaseline
-                      ? strings.formatString(
-                          strings.BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y,
+                      ? `${strings.formatString(
+                          strings.BASELINE_X_OF_Y,
                           stratum.substrata.filter((substratum) => Boolean(substratum.latestBaselineSurveyStatus))
                             .length,
-                          stratum.substrata.length,
+                          stratum.substrata.length
+                        )} · ${strings.formatString(
+                          strings.HAS_PLANTINGS_X_OF_Y,
                           stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
                           stratum.substrata.length
-                        )
+                        )}`
                       : stratum.latestObservationCompletedTime
                         ? strings.formatString(
                             strings.LAST_OBSERVATION,

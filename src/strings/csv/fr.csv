@@ -257,7 +257,7 @@ BASELINE_COMPLETED_X,Ligne de base terminée : {0},58bb5e0e
 BASELINE_OVERDUE_X,Référence en retard : {0},c1c91c3f
 BASELINE_SCHEDULED_X,Ligne de base programmée : {0},c95467b5
 BASELINE_SURVEY,Enquête de référence,bc76c649
-BASELINE_X_OF_Y_HAS_PLANTINGS_X_OF_Y,Ligne de base : {0} sur {1} · Plantations présentes : {2} sur {3},a2e54d66
+BASELINE_X_OF_Y,Référence : {0} sur {1},e222f357
 BATCH,Lot,9fdfdd9b
 BATCH_CREATED,Lot créé,1a382f74
 BATCH_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
@@ -916,6 +916,7 @@ HARDENING_OFF_QUANTITY_REMAINING,Quantité à acclimater ({0} restante),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Quantité à acclimater *,8bda8f0f
 HARDENING_OFF_SENTENCE_CASE,Acclimatation,5b744226
 HAS_PLANTINGS,Plantations présentes,fba8ffe7
+HAS_PLANTINGS_X_OF_Y,Contient des plantations : {0} sur {1},3829a694
 HECTARES,Hectares,316902d7
 HEIGHT_AT_MATURITY,Hauteur à maturité (cm),f8025719
 HEIGHT_M,Hauteur (m),fe61fc34
