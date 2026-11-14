@@ -5,12 +5,17 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { buildPlantingSite, mockGet, renderWithProviders, server } from 'src/test-utils';
+import { buildPlantingSite, buildUser, mockGet, renderWithProviders, server } from 'src/test-utils';
 
 import BiomassMeasurementsDetails from './BiomassMeasurementsDetails';
 import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 rstest.mock('./BiomassObservationDataTab', () => ({ default: () => null }));
+
+beforeEach(() => {
+  mockGet('/api/v1/users/me/preferences', { preferences: {} });
+  mockGet('/api/v1/users/me', { user: buildUser() });
+});
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
