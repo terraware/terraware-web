@@ -164,7 +164,12 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
   });
 
   return (
-    <Page crumbs={crumbs} title={title} titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}>
+    <Page
+      crumbs={crumbs}
+      title={title}
+      titleContainerStyle={{ paddingTop: 3, paddingBottom: 1 }}
+      hierarchicalCrumbs={false}
+    >
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>

@@ -72,25 +72,41 @@ beforeEach(() => {
 });
 
 describe('downloadBiomassObservationDetails', () => {
-  test('keeps the individual observation export as three CSV files', async () => {
-    const { result } = renderHook(useObservationExports);
-    await result.current.downloadBiomassObservationDetails(42);
+  test.each(['Biomass Measurements', 'Baseline Survey'])(
+    'exports a scheduled %s as three biomass CSV files',
+    async (type) => {
+      mocks.observation.mockReturnValue({
+        unwrap: () =>
+          Promise.resolve({
+            observation: {
+              plantingSiteId: 1,
+              observationId: 42,
+              startDate: '2026-09-01',
+              isAdHoc: false,
+              type,
+              strata: [],
+            },
+          }),
+      });
+      const { result } = renderHook(useObservationExports);
+      await result.current.downloadBiomassObservationDetails(42);
 
-    for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
-      expect(trigger).toHaveBeenCalledTimes(1);
-      expect(trigger).toHaveBeenCalledWith([42], true);
+      for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
+        expect(trigger).toHaveBeenCalledTimes(1);
+        expect(trigger).toHaveBeenCalledWith([42], true);
+      }
+      expect(downloadZipFile).toHaveBeenCalledTimes(1);
+      expect(downloadZipFile).toHaveBeenCalledWith({
+        dirName: 'Site-2026-09-01-Biomass Monitoring',
+        suffix: '.csv',
+        files: [
+          { fileName: 'Site-2026-09-01-Biomass Monitoring-Plot', content: 'plot 42' },
+          { fileName: 'Site-2026-09-01-Biomass Monitoring-Species', content: 'species 42' },
+          { fileName: 'Site-2026-09-01-Biomass Monitoring-Trees', content: 'trees 42' },
+        ],
+      });
     }
-    expect(downloadZipFile).toHaveBeenCalledTimes(1);
-    expect(downloadZipFile).toHaveBeenCalledWith({
-      dirName: 'Site-2026-09-01-Biomass Monitoring',
-      suffix: '.csv',
-      files: [
-        { fileName: 'Site-2026-09-01-Biomass Monitoring-Plot', content: 'plot 42' },
-        { fileName: 'Site-2026-09-01-Biomass Monitoring-Species', content: 'species 42' },
-        { fileName: 'Site-2026-09-01-Biomass Monitoring-Trees', content: 'trees 42' },
-      ],
-    });
-  });
+  );
 });
 
 describe('downloadAdHocObservationsZip', () => {

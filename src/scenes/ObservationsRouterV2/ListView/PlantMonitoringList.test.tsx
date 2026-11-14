@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
@@ -13,11 +14,14 @@ import {
   renderWithProviders,
   selectDropdownOption,
 } from 'src/test-utils';
+import downloadZipFile from 'src/utils/downloadZipFile';
 
 import ObservationFiltersProvider, { ObservationTypeFilter } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import PlantMonitoringList from './PlantMonitoringList';
 import ObservationListView from './index';
+
+rstest.mock('src/utils/downloadZipFile', () => ({ default: rstest.fn() }));
 
 const PREFERENCES_URL = '/api/v1/users/me/preferences';
 
@@ -152,6 +156,44 @@ describe('PlantMonitoringList', () => {
     const baselineRow = screen.getByRole('row', { name: BASELINE_ROW });
     expect(within(baselineRow).getByText(strings.BASELINE_SURVEY)).toBeVisible();
     expect(within(baselineRow).queryByText(strings.PLANT_MONITORING)).not.toBeInTheDocument();
+  });
+
+  it('links Baseline details and exports biomass data without survival rate', async () => {
+    const baseline = { ...BASELINE_OBSERVATION, state: 'Completed' as const };
+    const { user } = renderList(true, 'Baseline Survey', {
+      baselineSurveyObservations: true,
+      observations: [baseline],
+    });
+    mockGet('/api/v1/tracking/observations/3/results', { observation: baseline });
+    mockGet('/api/v1/tracking/sites/1', { site: buildPlantingSite() });
+    const exportRequests = captureRequests('post', '/api/v1/search', { results: [] });
+
+    const row = await screen.findByRole('row', { name: BASELINE_ROW });
+    expect(within(row).getByRole('link', { name: BASELINE_ROW })).toHaveAttribute('href', '/observations/3');
+    const actions = within(row).getByRole('cell', { name: strings.MORE_OPTIONS });
+    await user.click(within(actions).getByRole('button'));
+    await user.click(await screen.findByRole('menuitem', { name: strings.EXPORT_RESULTS }));
+
+    await waitFor(() => expect(downloadZipFile).toHaveBeenCalledTimes(1));
+    expect(exportRequests).toHaveLength(3);
+    const queries = await Promise.all(exportRequests.map((request) => request.json()));
+    expect(queries.map((query) => query.prefix).sort()).toEqual([
+      'observationBiomassSpecies',
+      'observationPlots',
+      'recordedTrees',
+    ]);
+    for (const query of queries) {
+      expect(JSON.stringify(query.search)).toContain('"values":["3"]');
+      expect(query.fields.join(' ')).not.toMatch(/survivalRate|plantingDensity/);
+    }
+    expect(downloadZipFile).toHaveBeenCalledWith(
+      expect.objectContaining({
+        files: expect.arrayContaining([
+          expect.objectContaining({ fileName: expect.stringContaining(strings.TREES_AND_SHRUBS) }),
+        ]),
+        suffix: '.csv',
+      })
+    );
   });
 
   it('leaves out biomass observations and the monitoring type when biomass scheduling is disabled', async () => {

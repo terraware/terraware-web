@@ -153,7 +153,7 @@ const BiomassSiteDetails = (): JSX.Element => {
             <ObservationMapWrapper
               isMapVisible={isMapVisible}
               observationId={observationId}
-              observationType='Biomass Measurements'
+              observationType={results?.type}
               plantingSiteId={results?.plantingSiteId}
             />
           }

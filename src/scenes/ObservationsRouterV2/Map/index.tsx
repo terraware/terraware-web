@@ -112,7 +112,7 @@ const ObservationMapWrapper = ({
           <ObservationMap
             adHocObservationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? observations : []}
             isAdHoc={isAdHoc}
-            isBiomass={observationType === 'Biomass Measurements'}
+            isBiomass={observationType === 'Biomass Measurements' || observationType === 'Baseline Survey'}
             isSingleView={!!singleObservationResult}
             mapRef={mapRef}
             observationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : observations}

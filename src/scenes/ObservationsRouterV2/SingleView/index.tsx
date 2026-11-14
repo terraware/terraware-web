@@ -42,7 +42,7 @@ const ObservationSingleView = (): JSX.Element => {
     return <BusySpinner />;
   }
 
-  if (results.type === 'Biomass Measurements') {
+  if (results.type === 'Biomass Measurements' || results.type === 'Baseline Survey') {
     return <BiomassMeasurementsView />;
   } else {
     return <PlantMonitoringView />;

@@ -1,12 +1,16 @@
 import React from 'react';
 
+import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
 import strings from 'src/strings';
-import { mockGet, renderWithProviders, server } from 'src/test-utils';
+import { buildPlantingSite, mockGet, renderWithProviders, server } from 'src/test-utils';
 
+import BiomassMeasurementsDetails from './BiomassMeasurementsDetails';
 import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
+
+rstest.mock('./BiomassObservationDataTab', () => ({ default: () => null }));
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
@@ -66,6 +70,39 @@ const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1
     );
   return { user, requests, edit, removeRow };
 };
+
+describe('Biomass plot detail breadcrumbs', () => {
+  it.each([
+    ['Biomass Measurements', ''],
+    ['Biomass Measurements', '?plantingSiteId=1'],
+    ['Baseline Survey', ''],
+    ['Baseline Survey', '?plantingSiteId=1'],
+  ])('links scheduled %s details to the observation and stratum with query "%s"', async (type, query) => {
+    mockGet('/build-version.txt');
+    mockGet('/api/v1/tracking/sites/1', { site: buildPlantingSite({ id: 1, name: 'Test Site', timeZone: 'UTC' }) });
+    mockGet('/api/v1/tracking/observations/7/results', {
+      observation: {
+        observationId: 7,
+        plantingSiteId: 1,
+        startDate: '2026-11-01',
+        isAdHoc: false,
+        type,
+        strata: [],
+      },
+    });
+    renderWithProviders(<BiomassMeasurementsDetails />, {
+      route: `/observations/7/stratum/East/plot/9${query}`,
+      path: '/observations/:observationId/stratum/:stratumName/plot/:monitoringPlotId',
+    });
+
+    expect(await screen.findByRole('link', { name: 'November 2026 (Test Site)' })).toHaveAttribute(
+      'href',
+      '/observations/7'
+    );
+    expect(screen.getByRole('link', { name: 'East' })).toHaveAttribute('href', '/observations/7/stratum/East');
+    expect(screen.getByRole('link', { name: strings.OBSERVATIONS })).toHaveAttribute('href', `/observations${query}`);
+  });
+});
 
 describe('TreesAndShrubsEditableTable', () => {
   it.each([
