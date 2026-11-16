@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { rs } from '@rstest/core';
-import { EditableTableColumn, EditableTableToolbarContext, isMrtTable } from '@terraware/web-components';
-import { screen } from '@testing-library/react';
+import { EditableTableColumn, EditableTableToolbarContext, getStrings, isMrtTable } from '@terraware/web-components';
+import { screen, waitFor } from '@testing-library/react';
 import { MRT_ToggleFiltersButton } from 'material-react-table';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
@@ -86,4 +86,48 @@ it.each([
   renderWithProviders(optIn ? <EditableTable {...props} supportsV2 /> : <EditableTable {...props} />);
   expect(screen.getByText(flag && optIn ? 'V2 controls' : 'Legacy controls')).toBeVisible();
   expect(screen.getByRole('cell', { name: 'Acacia koa' })).toBeVisible();
+});
+
+it.each([false, true])('filters through the shared toolbar (V2: %s)', async (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const { user } = renderWithProviders(
+    <EditableTable supportsV2 columns={columns} data={data} clearAllFiltersLabel='Clear filters' enableColumnFilters />
+  );
+  await user.click(screen.getByRole('button', { name: /filters/i }));
+  await user.type(screen.getByRole('textbox'), 'Acacia');
+  await waitFor(() => expect(screen.queryByRole('cell', { name: 'Other species' })).not.toBeInTheDocument());
+  expect(screen.getByRole('button', { name: 'Clear filters' })).toBeVisible();
+  await user.click(screen.getByRole('button', { name: 'Clear filters' }));
+  expect(await screen.findByRole('cell', { name: 'Other species' })).toBeVisible();
+});
+
+it.each([false, true])('hides only the show-all column action (V2: %s)', async (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const { user } = renderWithProviders(
+    <EditableTable
+      supportsV2
+      columns={columns}
+      data={data}
+      clearAllFiltersLabel='Clear filters'
+      enableColumnActions
+      enableHiding
+      enableShowAllColumnsMenuItem={false}
+    />
+  );
+  const labels = getStrings();
+  await user.click(
+    screen.getByRole('button', {
+      name: flag ? `${labels.TABLE_COLUMN_ACTIONS}: Name` : MRT_Localization_EN.columnActions,
+    })
+  );
+  expect(
+    screen.queryByRole('menuitem', {
+      name: flag ? labels.TABLE_SHOW_ALL_COLUMNS : MRT_Localization_EN.showAllColumns,
+    })
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole('menuitem', {
+      name: (flag ? labels.TABLE_HIDE_COLUMN : MRT_Localization_EN.hideColumn).replace('{column}', 'Name'),
+    })
+  ).toBeVisible();
 });
