@@ -248,10 +248,10 @@ BACK,Précédent,2e8211b0
 BACK_TO_EDIT,Retour à la modification,b3d8a9a6
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
-BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
-BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASED_ON_X_BATCH,Basé sur {0} lot,919ed414
 BASED_ON_X_BATCHES,Basé sur {0} lots,8c41bee7
+BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
+BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASELINE,Référence,332af00e
 BASELINE_SURVEY,Enquête de référence,bc76c649
 BATCH,Lot,9fdfdd9b
@@ -2001,6 +2001,7 @@ REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
 REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
+REQUESTED_SPECIES,Espèces demandées,d2f82712
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
@@ -2841,6 +2842,7 @@ VIEW_ON_MAP,Voir sur la carte,fb873a55
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4
+VIEW_QUANTITIES,Voir les quantités,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
 VIEW_SESSION,Voir la session,7f126865
@@ -2941,6 +2943,7 @@ X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
 X_HECTARES_HA,{0} Hectares (ha),e2af9d30
+X_LEFT,{0} restants,d5d2cf6b
 X_OF_YEAR_CUMULATIVE_TARGET,{0} de l'objectif cumulatif annuel,6658988a
 X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
 X_PER_HA,{0}/ha,0fe29eac
