@@ -303,6 +303,7 @@ export default function ScheduleObservationForm({
                       monitoringType={monitoringType}
                       onChangeSelectedSubstrata={setRequestedSubstratumIds}
                       plantingSiteId={selectedPlantingSiteId}
+                      preselectBaselineSubstrata={observationId === undefined}
                     />
                   </Grid>
                 )}
