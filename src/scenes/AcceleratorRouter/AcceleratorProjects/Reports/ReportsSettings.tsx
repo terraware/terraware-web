@@ -2,9 +2,8 @@ import React, { type JSX, type ReactNode, useCallback, useMemo, useState } from 
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Badge, Button, EditableTableColumn, Textfield } from '@terraware/web-components';
+import { Badge, Button, EditableTableCellContext, EditableTableColumn, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { MRT_Cell } from 'material-react-table';
 
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
@@ -191,8 +190,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   );
 
   const NameCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const row = cell.row.original;
+    ({ row: { original: row } }: EditableTableCellContext<IndicatorRow>) => {
       if (row.indicatorType !== 'autoCalculated' && isAllowed('UPDATE_REPORTS_SETTINGS')) {
         return (
           <Link fontSize='16px' onClick={() => onClickIndicatorRow(row)} style={{ textAlign: 'left' }}>
@@ -206,8 +204,8 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   );
 
   const CategoryCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const category = cell.getValue<string>();
+    ({ cell }: EditableTableCellContext<IndicatorRow>) => {
+      const category = cell.getValue() as string;
       const isGreen = category === 'Biodiversity' || category === 'Climate' || category === 'Project Objectives';
       return (
         <Badge
@@ -222,8 +220,8 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   );
 
   const CommonCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const isCommon = cell.getValue<boolean>();
+    ({ cell }: EditableTableCellContext<IndicatorRow>) => {
+      const isCommon = Boolean(cell.getValue());
       if (isCommon) {
         return (
           <Badge
@@ -247,8 +245,8 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   );
 
   const PrimaryDataSourceCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const value = cell.getValue<string>();
+    ({ cell }: EditableTableCellContext<IndicatorRow>) => {
+      const value = cell.getValue() as string;
       if (value === strings.TW_DATA) {
         return (
           <Badge
@@ -265,15 +263,15 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   );
 
   const ClassIdCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      return <>{indicatorClassLabel(cell.getValue<IndicatorClass>(), strings)}</>;
+    ({ cell }: EditableTableCellContext<IndicatorRow>) => {
+      return <>{indicatorClassLabel(cell.getValue() as IndicatorClass, strings)}</>;
     },
     [strings]
   );
 
   const ActiveCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const isActive = cell.getValue<boolean>();
+    ({ cell }: EditableTableCellContext<IndicatorRow>) => {
+      const isActive = Boolean(cell.getValue());
       return <>{isActive ? strings.YES : strings.NO}</>;
     },
     [strings]
@@ -444,6 +442,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
           </Box>
         )}
         <EditableTable
+          supportsV2
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
           columns={indicatorColumns}
           data={allIndicatorRows}
@@ -458,11 +457,11 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
           enableColumnActions={false}
           enableHiding={false}
           enableColumnDragging={false}
+          enableColumnOrdering={false}
           containerProps={{
             sx: { maxHeight: 'none', overflowX: 'auto' },
           }}
           tableOptions={{
-            enableColumnOrdering: false,
             initialState: {
               columnPinning: { left: ['name'] },
             },
