@@ -1,20 +1,28 @@
 import React from 'react';
 
 import { rs } from '@rstest/core';
+import { getStrings } from '@terraware/web-components';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
+import { useFeatureEnabled } from 'src/features';
 import ReportsSettings from 'src/scenes/AcceleratorRouter/AcceleratorProjects/Reports/ReportsSettings';
 import MatrixView from 'src/scenes/AcceleratorRouter/MatrixView';
 import strings from 'src/strings';
 import { buildUser, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
 
-rs.mock('src/features', () => ({ useFeatureEnabled: () => false }));
+rs.mock('src/features', () => ({ useFeatureEnabled: rs.fn(() => false) }));
 
-it.each(['targets', 'settings', 'matrix'] as const)(
-  'preserves #7218 MRT presentation with the flag off: %s',
-  async (scene) => {
+it.each([
+  ['targets', false],
+  ['settings', false],
+  ['matrix', false],
+  ['matrix', true],
+] as const)(
+  'preserves #7218 toolbar placement and presentation with both table engines: %s (V2: %s)',
+  async (scene, flag) => {
+    rs.mocked(useFeatureEnabled).mockReturnValue(flag);
     const path = '/api/v1/accelerator/projects/1/reports';
     mockGet(`${path}/years`, { years: { startYear: 2025, endYear: 2025 } });
     mockGet(`${path}/indicators`, { indicators: [] });
@@ -64,13 +72,30 @@ it.each(['targets', 'settings', 'matrix'] as const)(
         .filter((label) => buttons.includes(label!))
     ).toEqual(buttons);
     const manage = document.getElementById('manageColumns')!;
-    expect(manage.parentElement?.querySelectorAll('button')).toHaveLength(4);
-    await user.click(screen.getAllByRole('button', { name: MRT_Localization_EN.columnActions! })[0]);
+    const controls = manage.parentElement!;
+    expect(controls.querySelectorAll('button')).toHaveLength(4);
+    expect(within(controls).getByRole('button', { name: MRT_Localization_EN.showHideFilters! })).toBeInTheDocument();
+    const currentView = screen.getByRole('combobox', { name: strings.CURRENT_VIEW });
+    expect(controls).not.toContainElement(currentView);
+    expect(currentView.closest('.MuiFormControl-root')!.parentElement!.parentElement).not.toContainElement(manage);
+    const labels = getStrings();
+    await user.click(
+      screen.getAllByRole('button', {
+        name: flag ? `${labels.TABLE_COLUMN_ACTIONS}: ${strings.DEAL_NAME}` : MRT_Localization_EN.columnActions!,
+      })[0]
+    );
     await waitFor(() => expect(screen.getAllByRole('menuitem').length).toBeGreaterThan(0));
-    expect(screen.queryByRole('menuitem', { name: MRT_Localization_EN.showAllColumns! })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('menuitem', {
+        name: flag ? labels.TABLE_SHOW_ALL_COLUMNS : MRT_Localization_EN.showAllColumns!,
+      })
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole('menuitem', {
-        name: MRT_Localization_EN.sortByColumnAsc!.replace('{column}', strings.DEAL_NAME),
+        name: (flag ? labels.TABLE_SORT_ASCENDING : MRT_Localization_EN.sortByColumnAsc!).replace(
+          '{column}',
+          strings.DEAL_NAME
+        ),
       })
     ).toBeVisible();
   }
