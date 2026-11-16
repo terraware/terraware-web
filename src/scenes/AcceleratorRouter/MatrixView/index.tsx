@@ -735,6 +735,7 @@ const MatrixView = () => {
         'variables.values.linkUrl',
         'variables.values.dateValue',
         'variables.values.options.name',
+        'variables.values.options.id',
         'variables.values.options.position',
       ],
       sortOrder: {
