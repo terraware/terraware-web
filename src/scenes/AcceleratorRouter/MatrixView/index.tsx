@@ -2,14 +2,13 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom';
 
 import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
-import { BusySpinner, EditableTableColumn, Icon } from '@terraware/web-components';
+import { BusySpinner, EditableTableColumn, EditableTableProps, Icon } from '@terraware/web-components';
 import { isArray } from 'lodash';
 import {
   MRT_Cell,
   MRT_Column,
   MRT_Row,
   MRT_TableInstance,
-  MRT_TableOptions,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
@@ -982,19 +981,20 @@ const MatrixView = () => {
     ]
   );
 
-  const tableOptions = useMemo<Partial<MRT_TableOptions<ProjectsWithVariablesSearchResult>>>(
+  const tableProps = useMemo<
+    Pick<
+      EditableTableProps<ProjectsWithVariablesSearchResult>,
+      | 'tableOptions'
+      | 'positionGlobalFilter'
+      | 'enableColumnDragging'
+      | 'renderTopToolbarCustomActions'
+      | 'muiTableHeadCellProps'
+      | 'muiTableBodyCellProps'
+    >
+  >(
     () => ({
-      enableGlobalFilterRankedResults: false,
-      initialState: { showColumnFilters: false },
       positionGlobalFilter: 'right',
       enableColumnDragging: !isMobile,
-      muiTopToolbarProps: { sx: mobileTopToolbarSx },
-      renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
-        // remove the last element (show all columns)
-        const columnMenuItemsCopy = [...internalColumnMenuItems];
-        void columnMenuItemsCopy.pop();
-        return columnMenuItemsCopy;
-      },
       renderTopToolbarCustomActions: ({ table }) => (
         <CurrentView
           defaultPreset={currentView}
@@ -1008,28 +1008,6 @@ const MatrixView = () => {
           tableDefinition={TABLES.matrixView}
         />
       ),
-      state: {
-        columnFilters: visibleColumnFilters,
-        sorting,
-        columnPinning,
-        columnOrder,
-        columnVisibility,
-        globalFilter,
-        showGlobalFilter: true,
-      },
-      onGlobalFilterChange: setGlobalFilter,
-      onColumnFiltersChange: setColumnFilters,
-      onSortingChange: setSorting,
-      onColumnPinningChange: setColumnPinning,
-      onColumnOrderChange: setColumnOrder,
-      onColumnVisibilityChange: setColumnVisibility,
-      muiTableBodyRowProps: {
-        sx: {
-          '& td': {
-            borderBottom: 'none',
-          },
-        },
-      },
       muiTableBodyCellProps: ({ cell, column }) => ({
         sx: {
           '&[data-pinned="true"]:before': {
@@ -1056,11 +1034,6 @@ const MatrixView = () => {
         },
         title: column.id === 'projectName' ? cell.getValue()?.toString() || '' : undefined,
       }),
-      muiTableProps: {
-        sx: {
-          tableLayout: 'fixed',
-        },
-      },
       muiTableHeadCellProps: ({ column }) => ({
         sx: {
           height: '56px',
@@ -1082,6 +1055,44 @@ const MatrixView = () => {
         },
         title: column.columnDef.header,
       }),
+      tableOptions: {
+        enableGlobalFilterRankedResults: false,
+        initialState: { showColumnFilters: false },
+        muiTopToolbarProps: { sx: mobileTopToolbarSx },
+        renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
+          // remove the last element (show all columns)
+          const columnMenuItemsCopy = [...internalColumnMenuItems];
+          void columnMenuItemsCopy.pop();
+          return columnMenuItemsCopy;
+        },
+        state: {
+          columnFilters: visibleColumnFilters,
+          sorting,
+          columnPinning,
+          columnOrder,
+          columnVisibility,
+          globalFilter,
+          showGlobalFilter: true,
+        },
+        onGlobalFilterChange: setGlobalFilter,
+        onColumnFiltersChange: setColumnFilters,
+        onSortingChange: setSorting,
+        onColumnPinningChange: setColumnPinning,
+        onColumnOrderChange: setColumnOrder,
+        onColumnVisibilityChange: setColumnVisibility,
+        muiTableBodyRowProps: {
+          sx: {
+            '& td': {
+              borderBottom: 'none',
+            },
+          },
+        },
+        muiTableProps: {
+          sx: {
+            tableLayout: 'fixed',
+          },
+        },
+      },
     }),
     [
       columnOrder,
@@ -1119,7 +1130,7 @@ const MatrixView = () => {
           enableGlobalFilter
           renderToolbarInternalActions={renderToolbarInternalActions}
           sx={{ padding: 0 }}
-          tableOptions={tableOptions}
+          {...tableProps}
         />
       </Card>
     </Page>

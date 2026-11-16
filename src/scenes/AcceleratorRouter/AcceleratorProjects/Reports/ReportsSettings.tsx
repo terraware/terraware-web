@@ -455,16 +455,16 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
           enableColumnPinning={true}
           enableTopToolbar={false}
           initialSorting={[{ id: 'name', desc: false }]}
+          enableColumnActions={false}
+          enableHiding={false}
+          enableColumnDragging={false}
+          containerProps={{
+            sx: { maxHeight: 'none', overflowX: 'auto' },
+          }}
           tableOptions={{
-            enableColumnActions: false,
-            enableHiding: false,
-            enableColumnDragging: false,
             enableColumnOrdering: false,
             initialState: {
               columnPinning: { left: ['name'] },
-            },
-            muiTableContainerProps: {
-              sx: { maxHeight: 'none', overflowX: 'auto' },
             },
           }}
           sx={{

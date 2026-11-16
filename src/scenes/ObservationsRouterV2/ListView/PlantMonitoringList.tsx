@@ -366,11 +366,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         ) : null,
       defaultColumn: { enableEditing: false },
       enableColumnPinning: true,
-      enableColumnActions: true,
-      enableHiding: true,
       enableGrouping: false,
-      enableColumnDragging: !isMobile,
-      positionGlobalFilter: 'right' as const,
       muiTableBodyProps: {
         sx: {
           '& tr:nth-of-type(odd) > td': {
@@ -393,8 +389,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           },
         },
       },
-      muiTableHeadCellProps: ({ column }: { column: { id: string } }) =>
-        column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
       muiTableBodyRowProps: ({ row }: { row: MRT_Row<PlantMonitoringRow> }) => ({
         id: `row${row.index + 1}`,
         sx: {
@@ -404,7 +398,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         },
       }),
     }),
-    [emptyMessage, isMobile, theme]
+    [emptyMessage, theme]
   );
 
   return (
@@ -423,6 +417,21 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         enableTopToolbar={true}
         enableBottomToolbar={false}
         initialSorting={[{ id: 'observationDate', desc: true }]}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter='right'
+        muiTableHeadCellProps={({ column }) =>
+          column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {}
+        }
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView
+            defaultSettings={tableState.defaultViewSettings}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           ...commonTableOptions,
@@ -437,14 +446,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView
-              defaultSettings={tableState.defaultViewSettings}
-              organizationId={selectedOrganization?.id}
-              table={table}
-              tableDefinition={TABLE}
-            />
-          ),
           renderToolbarInternalActions: ({ table }) => (
             <TableToolbarActions>
               <MRT_ToggleGlobalFilterButton table={table} />

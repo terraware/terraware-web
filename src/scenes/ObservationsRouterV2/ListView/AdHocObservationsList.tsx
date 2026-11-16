@@ -334,14 +334,23 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         initialSorting={[{ id: 'completedDate', desc: true }]}
         storageKey={TABLE.storageKey}
         sx={{ padding: 0 }}
+        enableColumnActions={true}
+        enableColumnDragging={!isMobile}
+        enableHiding={true}
+        positionGlobalFilter={'right' as const}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView
+            defaultSettings={tableState.defaultViewSettings}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           defaultColumn: { enableEditing: false },
-          enableColumnActions: true,
-          enableColumnDragging: !isMobile,
           enableColumnPinning: true,
           enableGrouping: false,
-          enableHiding: true,
           muiTableBodyProps: {
             sx: {
               '& tr:nth-of-type(odd) > td': {
@@ -358,7 +367,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
             },
           }),
           muiTablePaperProps: { elevation: 0 },
-          positionGlobalFilter: 'right' as const,
           muiTopToolbarProps: { sx: mobileTopToolbarSx },
           renderEmptyRowsFallback: () =>
             emptyMessage ? (
@@ -377,14 +385,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView
-              defaultSettings={tableState.defaultViewSettings}
-              organizationId={selectedOrganization?.id}
-              table={table}
-              tableDefinition={TABLE}
-            />
-          ),
           renderToolbarInternalActions: ({ table }) => (
             <TableToolbarActions>
               {plantingSitesLoaded && rows.length > 0 && (

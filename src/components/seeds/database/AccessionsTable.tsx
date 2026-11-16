@@ -763,6 +763,22 @@ export default function AccessionsTable({
         enableColumnFilters={true}
         enableColumnOrdering={true}
         storageKey={TABLE.storageKey}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter={'right'}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView
+            defaultSettings={defaultViewSettings}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        )}
+        muiTableBodyCellProps={({ row, column, table }) => {
+          const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+          return { id: `row${visualIndex + 1}-${column.id}` };
+        }}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           autoResetPageIndex,
@@ -792,10 +808,6 @@ export default function AccessionsTable({
           onShowGlobalFilterChange: setShowGlobalFilter,
           onDensityChange,
           enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
-          enableColumnDragging: !isMobile,
-          positionGlobalFilter: 'right',
           getRowId: (row) => String(row.id),
           ...(canWithdraw
             ? {
@@ -856,14 +868,6 @@ export default function AccessionsTable({
                 },
               }
             : {}),
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView
-              defaultSettings={defaultViewSettings}
-              organizationId={selectedOrganization?.id}
-              table={table}
-              tableDefinition={TABLE}
-            />
-          ),
           renderToolbarInternalActions: ({ table }) => (
             <TableToolbarActions>
               <Tooltip title={strings.EXPORT}>
@@ -878,10 +882,6 @@ export default function AccessionsTable({
               <MRT_ToggleFullScreenButton table={table} />
             </TableToolbarActions>
           ),
-          muiTableBodyCellProps: ({ row, column, table }) => {
-            const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-            return { id: `row${visualIndex + 1}-${column.id}` };
-          },
           muiTableBodyProps: {
             sx: {
               '& tr:nth-of-type(odd) > td': {

@@ -364,6 +364,18 @@ export default function PlantingProgressList(): JSX.Element {
         enableTopToolbar={true}
         enableBottomToolbar={true}
         initialSorting={[{ id: hasStrata ? 'substratumName' : 'siteName', desc: false }]}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter={'right'}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView
+            key={activeTableDefinition.stableId}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={activeTableDefinition}
+          />
+        )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           state: {
@@ -384,11 +396,7 @@ export default function PlantingProgressList(): JSX.Element {
           onDensityChange,
           enableRowSelection: true,
           enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
           enableGrouping: false,
-          enableColumnDragging: !isMobile,
-          positionGlobalFilter: 'right',
           getRowId: (row, index) => String(index),
           renderToolbarAlertBannerContent: ({ selectedAlert }) => (
             <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
@@ -410,14 +418,6 @@ export default function PlantingProgressList(): JSX.Element {
                 />
               </Box>
             </Box>
-          ),
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView
-              key={activeTableDefinition.stableId}
-              organizationId={selectedOrganization?.id}
-              table={table}
-              tableDefinition={activeTableDefinition}
-            />
           ),
           renderToolbarInternalActions: ({ table }) => (
             <TableToolbarActions>
