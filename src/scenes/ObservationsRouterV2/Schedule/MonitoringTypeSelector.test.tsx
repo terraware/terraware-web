@@ -12,6 +12,7 @@ import strings from 'src/strings';
 import {
   buildPlantingSite,
   buildStratum,
+  buildSubstratum,
   buildUser,
   captureRequests,
   mockGet,
@@ -122,11 +123,19 @@ describe('MonitoringTypeSelector', () => {
   });
 });
 
-const renderScheduleForm = (hasPlantings = false, blockMonitoring = false, blockBiomass = false) => {
+const renderScheduleForm = (
+  hasPlantings = false,
+  blockMonitoring = false,
+  blockBiomass = false,
+  substrata?: ReturnType<typeof buildSubstratum>[],
+  areaHa = 10
+) => {
   const site = buildPlantingSite({
+    areaHa,
     strata: [
       buildStratum({
         plotCounts: [{ observationType: 'Baseline Survey', numPermanentPlots: 0, numTemporaryPlots: 4 }],
+        ...(substrata ? { substrata } : {}),
       }),
     ],
   });
@@ -188,18 +197,124 @@ describe('baseline scheduling form', () => {
     expect(options.queryByText('No strata')).not.toBeInTheDocument();
   });
 
-  it.each([false, true])('schedules baseline with existing baselines and hasPlantings=%s', async (hasPlantings) => {
-    const { endDate, onSchedule, startDate, user } = renderScheduleForm(hasPlantings);
+  it.each([false, true])(
+    'schedules baseline without overlapping substrata and hasPlantings=%s',
+    async (hasPlantings) => {
+      const { endDate, onSchedule, startDate, user } = renderScheduleForm(hasPlantings);
+      await user.click(
+        await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
+      );
+      expect(radioFor(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).toBeChecked();
+      expect(screen.getByRole('button', { name: strings.SAVE })).toBeEnabled();
+
+      await user.click(screen.getByRole('button', { name: strings.SAVE }));
+      expect(screen.getAllByText(strings.REQUIRED_FIELD).length).toBeGreaterThan(0);
+      expect(onSchedule).not.toHaveBeenCalled();
+
+      for (const [label, date] of [
+        [strings.OBSERVATION_START_DATE, startDate],
+        [strings.OBSERVATION_END_DATE, endDate],
+      ]) {
+        await user.click(screen.getByLabelText(label));
+        await user.keyboard('{Control>}a{/Control}');
+        await user.paste(date);
+      }
+      await user.click(screen.getByRole('button', { name: strings.SAVE }));
+      expect(screen.getByText(strings.SELECT_AT_LEAST_ONE_SUBSTRATUM)).toBeInTheDocument();
+      expect(onSchedule).not.toHaveBeenCalled();
+
+      await user.click(screen.getByLabelText(strings.SELECT_ALL));
+      await user.click(screen.getByRole('button', { name: strings.SAVE }));
+      expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
+      expect(onSchedule).toHaveBeenCalledWith({
+        endDate,
+        observationType: 'Baseline Survey',
+        plantingSiteId: 1,
+        requestedSubstratumIds: [1],
+        startDate,
+      });
+    }
+  );
+
+  it.each([
+    ['Completed', 'X_COMPLETED_Y'],
+    ['Abandoned', 'X_COMPLETED_Y'],
+    ['Upcoming', 'X_SCHEDULED_Y'],
+    ['InProgress', 'X_SCHEDULED_Y'],
+    ['Overdue', 'X_OVERDUE_Y'],
+  ] as const)('warns only about selected substrata with %s baselines after validation', async (status, label) => {
+    const { endDate, onSchedule, startDate, user } = renderScheduleForm(false, false, false, [
+      buildSubstratum({
+        id: 11,
+        name: 'A',
+        fullName: 'East A',
+        latestBaselineSurveyStatus: status,
+        latestBaselineSurveyDate: '2026-06-02',
+      }),
+      buildSubstratum({
+        id: 12,
+        name: 'B',
+        fullName: 'East B',
+        latestBaselineSurveyStatus: 'Upcoming',
+        latestBaselineSurveyDate: '2026-11-16',
+      }),
+      buildSubstratum({ id: 13, name: 'C', fullName: 'East C' }),
+    ]);
     await user.click(
       await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
     );
-    expect(radioFor(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).toBeChecked();
-    expect(screen.getByRole('button', { name: strings.SAVE })).toBeEnabled();
-
+    await user.click(await screen.findByLabelText('A'));
+    await user.click(screen.getByLabelText('C'));
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.getAllByText(strings.REQUIRED_FIELD).length).toBeGreaterThan(0);
+    expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
     expect(onSchedule).not.toHaveBeenCalled();
 
+    for (const [dateLabel, date] of [
+      [strings.OBSERVATION_START_DATE, startDate],
+      [strings.OBSERVATION_END_DATE, endDate],
+    ]) {
+      await user.click(screen.getByLabelText(dateLabel));
+      await user.keyboard('{Control>}a{/Control}');
+      await user.paste(date);
+    }
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(await screen.findByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).toBeVisible();
+    expect(
+      screen.getByText(strings.THESE_SUBSTRATA_ARE_ALREADY_INCLUDED_IN_A_COMPLETED_OR_SCHEDULED_BASELINE_SURVEY)
+    ).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings[label], 'East A', '2026-06-02') as string)).toBeVisible();
+    expect(screen.queryByText(/East B/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/East C/)).not.toBeInTheDocument();
+    expect(screen.getByText(strings.DO_YOU_WANT_TO_SCHEDULE_ANOTHER_BASELINE_FOR_THEM)).toBeVisible();
+    expect(onSchedule).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: strings.GO_BACK }));
+    await waitFor(() =>
+      expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument()
+    );
+    expect(onSchedule).not.toHaveBeenCalled();
+
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    await user.click(await screen.findByRole('button', { name: strings.SCHEDULE_ANYWAY }));
+    expect(onSchedule).toHaveBeenCalledWith({
+      endDate,
+      observationType: 'Baseline Survey',
+      plantingSiteId: 1,
+      requestedSubstratumIds: [11, 13],
+      startDate,
+    });
+  });
+
+  it.each([
+    ['Monitoring', 'SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE'],
+    ['Biomass Measurements', 'SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE'],
+  ] as const)('does not warn about existing baselines when scheduling %s', async (type, title) => {
+    const { endDate, onSchedule, startDate, user } = renderScheduleForm(true, false, false, [
+      buildSubstratum({ latestBaselineSurveyStatus: 'Completed', latestBaselineSurveyDate: '2026-06-02' }),
+    ]);
+    await user.click(await screen.findByRole('radio', { name: (name) => name.includes(strings[title]) }));
+    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
     for (const [label, date] of [
       [strings.OBSERVATION_START_DATE, startDate],
       [strings.OBSERVATION_END_DATE, endDate],
@@ -209,11 +324,46 @@ describe('baseline scheduling form', () => {
       await user.paste(date);
     }
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
-    expect(screen.getByText(strings.SELECT_AT_LEAST_ONE_SUBSTRATUM)).toBeInTheDocument();
-    expect(onSchedule).not.toHaveBeenCalled();
+    expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
+    expect(onSchedule).toHaveBeenCalledWith({
+      endDate,
+      observationType: type,
+      plantingSiteId: 1,
+      requestedSubstratumIds: [1],
+      startDate,
+    });
+  });
 
-    await user.click(screen.getByLabelText(strings.SELECT_ALL));
+  it('requires the baseline confirmation after the small-site warning', async () => {
+    const { endDate, onSchedule, startDate, user } = renderScheduleForm(
+      false,
+      false,
+      false,
+      [buildSubstratum({ latestBaselineSurveyStatus: 'Completed', latestBaselineSurveyDate: '2026-06-02' })],
+      2
+    );
+    await user.click(
+      await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
+    );
+    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(screen.queryByText(strings.OBSERVATION_SMALL_SITE_WARNING)).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
+    for (const [label, date] of [
+      [strings.OBSERVATION_START_DATE, startDate],
+      [strings.OBSERVATION_END_DATE, endDate],
+    ]) {
+      await user.click(screen.getByLabelText(label));
+      await user.keyboard('{Control>}a{/Control}');
+      await user.paste(date);
+    }
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+    expect(await screen.findByText(strings.OBSERVATION_SMALL_SITE_WARNING)).toBeVisible();
+    const saveButtons = screen.getAllByRole('button', { name: strings.SAVE });
+    await user.click(saveButtons[saveButtons.length - 1]);
+    expect(await screen.findByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).toBeVisible();
+    expect(onSchedule).not.toHaveBeenCalled();
+    await user.click(screen.getByRole('button', { name: strings.SCHEDULE_ANYWAY }));
     expect(onSchedule).toHaveBeenCalledWith({
       endDate,
       observationType: 'Baseline Survey',
