@@ -161,6 +161,7 @@ export enum APP_PATHS {
   SEEDLINGS_DASHBOARD = '/seedlings-dashboard',
   SEEDS_DASHBOARD = '/seeds-dashboard',
   SEEDS_WITHDRAWALS = '/seeds/withdrawals',
+  SEEDS_WITHDRAWALS_DETAILS = '/seeds/withdrawals/:withdrawalId',
   SETTINGS = '/settings',
   SPECIES = '/species',
   SPECIES_DETAILS = '/species/:speciesId',

@@ -11,6 +11,19 @@ export type ListAccessionEventsArgs = {
   organizationId: number;
 };
 
+export type ListSeedBankWithdrawalCreationsArgs = {
+  organizationId: number;
+  seedBankId: number;
+};
+
+export type SeedWithdrawalCreation = {
+  withdrawalId: number;
+  accessionId: number;
+  /** Milliseconds since the epoch. */
+  createdTime: number;
+  createdByUserId: number;
+};
+
 const ACCESSION_EVENT_SUBJECTS = [
   'Accession',
   'AccessionPhoto',
@@ -34,9 +47,39 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (results: ListEventLogEntriesApiResponse) =>
         results.events.map((event) => ({ ...event })).reverse(),
     }),
+
+    listSeedBankWithdrawalCreations: build.query<SeedWithdrawalCreation[], ListSeedBankWithdrawalCreationsArgs>({
+      query: ({ organizationId, seedBankId }) => ({
+        url: '/api/v1/events/list',
+        method: 'POST',
+        body: {
+          organizationId,
+          facilityId: seedBankId,
+          subjects: ['Withdrawal'] satisfies ListEventLogEntriesRequestPayload['subjects'],
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' }],
+      transformResponse: (results: ListEventLogEntriesApiResponse) =>
+        results.events.flatMap((event) =>
+          event.action.type === 'Created' && event.subject.type === 'Withdrawal'
+            ? [
+                {
+                  withdrawalId: event.subject.withdrawalId,
+                  accessionId: event.subject.accessionId,
+                  createdTime: new Date(event.timestamp).getTime(),
+                  createdByUserId: event.userId,
+                },
+              ]
+            : []
+        ),
+    }),
   }),
 });
 
 export { injectedRtkApi as api };
 
-export const { useListAccessionEventsQuery, useLazyListAccessionEventsQuery } = injectedRtkApi;
+export const {
+  useLazyListAccessionEventsQuery,
+  useLazyListSeedBankWithdrawalCreationsQuery,
+  useListAccessionEventsQuery,
+} = injectedRtkApi;

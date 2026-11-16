@@ -21,7 +21,7 @@ import CurrentView from 'src/components/common/CurrentView';
 import EditableTable from 'src/components/common/EditableTable';
 import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
-import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS, VIABILITY_TEST_QUERY_PARAM } from 'src/constants';
+import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -79,11 +79,11 @@ const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
 
 const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [{ field: 'date', direction: 'Descending' }];
 
-/** The accession page, optionally opening straight onto one of its viability tests. */
-const getAccessionLocation = (accessionId: number, viabilityTestId?: number): string => {
-  const path = APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', String(accessionId));
-  return viabilityTestId ? `${path}?${VIABILITY_TEST_QUERY_PARAM}=${viabilityTestId}` : path;
-};
+const getAccessionLocation = (accessionId: number): string =>
+  APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', String(accessionId));
+
+const getWithdrawalDetailsLocation = (withdrawalId: number): string =>
+  APP_PATHS.SEEDS_WITHDRAWALS_DETAILS.replace(':withdrawalId', String(withdrawalId));
 
 const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDate?: string } | undefined => {
   if (!dateFilterValue || !Array.isArray(dateFilterValue)) {
@@ -188,7 +188,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       const row = cell.row.original;
       const value = cell.getValue() as string;
       return (
-        <Link to={getAccessionLocation(row.accessionId)} style={accessionLinkStyles}>
+        <Link to={getWithdrawalDetailsLocation(row.id)} style={accessionLinkStyles}>
           {value}
         </Link>
       );
@@ -210,30 +210,10 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
   );
 
   const PurposeCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchSeedWithdrawalPayload> }) => {
-      const row = cell.row.original;
-      const label = seedWithdrawalPurposeLabel(cell.getValue() as SeedWithdrawalPurpose | undefined, strings);
-
-      if (row.purpose === 'Viability Testing' && row.viabilityTestId) {
-        return (
-          <Link to={getAccessionLocation(row.accessionId, row.viabilityTestId)} style={accessionLinkStyles}>
-            {label}
-          </Link>
-        );
-      }
-
-      // A nursery withdrawal creates the batch its seeds were transferred into.
-      if (row.purpose === 'Nursery' && row.batchId) {
-        return (
-          <Link to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(row.batchId))} style={accessionLinkStyles}>
-            {label}
-          </Link>
-        );
-      }
-
-      return <span>{label}</span>;
-    },
-    [accessionLinkStyles, strings]
+    ({ cell }: { cell: MRT_Cell<SearchSeedWithdrawalPayload> }) => (
+      <span>{seedWithdrawalPurposeLabel(cell.getValue() as SeedWithdrawalPurpose | undefined, strings)}</span>
+    ),
+    [strings]
   );
 
   const EstimatedCountCell = useCallback(

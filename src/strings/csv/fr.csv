@@ -248,10 +248,10 @@ BACK,Précédent,2e8211b0
 BACK_TO_EDIT,Retour à la modification,b3d8a9a6
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
-BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
-BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASED_ON_X_BATCH,Basé sur {0} lot,919ed414
 BASED_ON_X_BATCHES,Basé sur {0} lots,8c41bee7
+BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
+BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASELINE,Référence,332af00e
 BASELINE_SURVEY,Enquête de référence,bc76c649
 BATCH,Lot,9fdfdd9b
@@ -1848,6 +1848,7 @@ QUANTITY_MUST_BE_GREATER_THAN_ZERO,La quantité doit être supérieure à 0,7c49
 QUANTITY_NOTES,Notes sur la quantité,94baf637
 QUANTITY_TO_PLANT,Quantité à planter,14ee1db4
 QUANTITY_TO_PLANT_TOOLTIP,Nombre de plants prévus pour être plantés à cette Date de plantation.,d031febb
+QUANTITY_WITHDRAWN,Quantité retirée,0ec632a2
 QUARTER_YEAR,T{0} {1},637ce0a5
 QUARTERLY,Trimestriel,f69e32e0
 QUARTERLY_HIGHLIGHTS,Faits saillants trimestriels,863a818b
