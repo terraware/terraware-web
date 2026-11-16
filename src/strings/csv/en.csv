@@ -1740,6 +1740,7 @@ PLOT_SPECIES_TOOLTIP,"Species is the number of species represented by all of the
 PLOT_SURVIVAL_RATE_TOOLTIP, Survival Rate is calculated based on the specified initial plant density and the number of observed plants recorded as live. Plants recorded as pre-existing or which species are unknown or are not in the Species list are not included.,
 PLOT_TOTAL_PLANTS_TOOLTIP,"Total Plants is the number of all observed plants, including plants recorded as live and dead. Plants recorded as pre-existing are not included.",
 PLOT_TYPE,Plot Type,
+PLOTS,Plots,
 PLOTS_AD_HOC,Ad Hoc Plots,
 PLOTS_PERMANENT,Permanent Plots,
 PLOTS_SIZE_NOTE,*Data collected with 25x25m plots,
@@ -2979,6 +2980,7 @@ X_SPECIES_Y_PLANTS,"{0} species, {1} plants",
 X_STILL_IN_THIS_STAGE,{0} still in this stage,
 X_TARGET,{0} Target,{0} is the year of the indicator
 X_THIS_QUARTER,{0} this quarter,
+X_WILL_BE_ASSIGNED_FOR_THE_SELECTED_AREAS,{0} will be assigned for the selected areas.,{0} is an approximate plot count such as “~17 plots”
 X_WITHDRAWN,{0} withdrawn,
 YEARLY_CUMULATIVE,Yearly Cumulative,
 YES,Yes,

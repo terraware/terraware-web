@@ -199,6 +199,8 @@ describe('ObservationSubstratumSelector', () => {
     ).toHaveLength(2);
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
+    expect(screen.getByText(strings.PLOTS)).toBeInTheDocument();
+    expect(screen.getAllByText(approx(0))).toHaveLength(4);
   });
 
   it.each(['Monitoring', 'Biomass Measurements'] as const)(
@@ -208,6 +210,9 @@ describe('ObservationSubstratumSelector', () => {
       expect(await screen.findAllByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).toHaveLength(2);
       expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
       expect(screen.queryByText(/Baseline:/)).not.toBeInTheDocument();
+      expect(screen.getByText(strings.PERMANENT_PLOTS)).toBeInTheDocument();
+      expect(screen.getByText(strings.TEMPORARY_PLOTS)).toBeInTheDocument();
+      expect(screen.queryByText(strings.PLOTS)).not.toBeInTheDocument();
     }
   );
 
@@ -254,6 +259,41 @@ describe('ObservationSubstratumSelector', () => {
     expect(screen.getByLabelText('Ewe Highlands')).toBeChecked();
     screen.getAllByLabelText('North').forEach((checkbox) => expect(checkbox).toBeChecked());
     screen.getAllByLabelText('South').forEach((checkbox) => expect(checkbox).toBeChecked());
+  });
+
+  it('combines Baseline plot counts into one column and selected total', async () => {
+    renderSelector('Baseline Survey', {
+      ...site,
+      strata: site.strata?.map((stratum, index) => ({
+        ...stratum,
+        plotCounts: [{ observationType: 'Baseline Survey', numPermanentPlots: 0, numTemporaryPlots: index ? 8 : 5 }],
+      })),
+    });
+
+    expect(await screen.findByText(strings.PLOTS)).toBeInTheDocument();
+    expect(screen.queryByText(strings.PERMANENT_PLOTS)).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.TEMPORARY_PLOTS)).not.toBeInTheDocument();
+    expect(screen.getByText('5')).toBeInTheDocument();
+    expect(screen.getByText('8')).toBeInTheDocument();
+    expect(screen.getAllByText(/^~/).map((cell) => cell.textContent)).toEqual([
+      approx(3),
+      approx(2),
+      approx(2),
+      approx(6),
+    ]);
+
+    expect(
+      screen.getByText(
+        (_, element) =>
+          element?.tagName === 'P' &&
+          element.textContent ===
+            strings.formatString(
+              strings.X_WILL_BE_ASSIGNED_FOR_THE_SELECTED_AREAS,
+              strings.formatString(strings.X_PLOTS, approx(13)) as string
+            )
+      )
+    ).toBeInTheDocument();
+    expect(screen.queryByText(plotsAssigned(13, 13, 0))).not.toBeInTheDocument();
   });
 
   it('shows no total once everything is deselected', async () => {
