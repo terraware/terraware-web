@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Icon } from '@terraware/web-components';
+import { Checkbox, Icon, Pill } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
@@ -15,7 +15,7 @@ import { isAfter } from 'src/utils/dateUtils';
 import getSubstratumPlotEstimates, { PlotCounts } from './getSubstratumPlotEstimates';
 import { MonitoringType } from './monitoringTypes';
 
-const PLOT_COUNT_COLUMN_WIDTH = '88px';
+const PLOT_COUNT_COLUMN_WIDTH = '64px';
 
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
@@ -34,7 +34,7 @@ const ObservationSubstratumSelector = ({
   const theme = useTheme();
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const [selectAll, setSelectAll] = useState<boolean>(true);
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
 
   const plotCountsFor = useCallback(
@@ -200,7 +200,7 @@ const ObservationSubstratumSelector = ({
           return (
             <Grid key={index} size={12}>
               <Box display='flex' alignItems='center'>
-                <Box flex={1}>
+                <Box flex={1} display='flex' alignItems='center' flexWrap='wrap' gap={1}>
                   <Checkbox
                     id={`observation-stratum-${stratum.id}`}
                     indeterminate={isStratumPartiallySelected(stratum)}
@@ -209,22 +209,19 @@ const ObservationSubstratumSelector = ({
                     onChange={onChangeStratumCheckbox(stratum)}
                     value={isStratumFullySelected(stratum)}
                   />
-                  <Typography
-                    sx={{
-                      display: 'inline',
-                      fontWeight: 500,
-                      color: theme.palette.TwClrTxtSecondary,
-                      verticalAlign: 'bottom',
-                      paddingLeft: 1,
-                    }}
-                  >
-                    {stratum.latestObservationCompletedTime
-                      ? strings.formatString(
-                          strings.LAST_OBSERVATION,
-                          getDateDisplayValue(stratum.latestObservationCompletedTime)
-                        )
-                      : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
-                  </Typography>
+                  {stratum.latestObservationCompletedTime ? (
+                    <Box flexShrink={0} whiteSpace='nowrap'>
+                      <Pill
+                        id={stratum.id}
+                        label={strings.LAST_OBSERVATION}
+                        value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
+                      />
+                    </Box>
+                  ) : (
+                    <Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
+                      {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
+                    </Typography>
+                  )}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
                   {numPermanentPlots}
@@ -259,7 +256,7 @@ const ObservationSubstratumSelector = ({
 
                   return (
                     <Box display='flex' alignItems='center' key={_index}>
-                      <Box flex={1}>
+                      <Box flex={1} display='flex' alignItems='center' flexWrap='wrap' gap={1}>
                         <Checkbox
                           id={`observation-substratum-${stratum.id}`}
                           label={substratum.name}
@@ -268,20 +265,13 @@ const ObservationSubstratumSelector = ({
                           value={selectedSubstrata.includes(substratum.id)}
                         />
                         {substratum.latestObservationCompletedTime && (
-                          <Typography
-                            sx={{
-                              display: 'inline',
-                              fontWeight: 500,
-                              color: theme.palette.TwClrTxtSecondary,
-                              verticalAlign: 'bottom',
-                              paddingLeft: 1,
-                            }}
-                          >
-                            {strings.formatString(
-                              strings.LAST_OBSERVATION,
-                              getDateDisplayValue(substratum.latestObservationCompletedTime)
-                            )}
-                          </Typography>
+                          <Box flexShrink={0} whiteSpace='nowrap'>
+                            <Pill
+                              id={substratum.id}
+                              label={strings.LAST_OBSERVATION}
+                              value={getDateDisplayValue(substratum.latestObservationCompletedTime)}
+                            />
+                          </Box>
                         )}
                       </Box>
                       <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>

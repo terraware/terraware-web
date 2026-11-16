@@ -208,6 +208,8 @@ describe('baseline scheduling form', () => {
       await user.keyboard('{Control>}a{/Control}');
       await user.paste(date);
     }
+
+    await user.click(screen.getByLabelText(strings.SELECT_ALL));
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.getByText(strings.SELECT_AT_LEAST_ONE_SUBSTRATUM)).toBeInTheDocument();
     expect(onSchedule).not.toHaveBeenCalled();

@@ -67,7 +67,7 @@ const enterDate = async (user: UserEvent, label: string, date: string) => {
 };
 
 const fillAndSubmit = async (user: UserEvent) => {
-  await user.click(await screen.findByRole('checkbox', { name: strings.SELECT_ALL }));
+  await screen.findByRole('checkbox', { name: strings.SELECT_ALL });
   await enterDate(user, strings.OBSERVATION_START_DATE, START_DATE);
   await enterDate(user, strings.OBSERVATION_END_DATE, END_DATE);
   await user.click(screen.getByRole('button', { name: strings.SAVE }));
