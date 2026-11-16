@@ -1,6 +1,6 @@
-import { getTableColumns, getVisibleTableColumns } from '@terraware/web-components';
+import { EditableTableInstance, getTableColumns, getVisibleTableColumns } from '@terraware/web-components';
 import dayjs from 'dayjs';
-import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
+import { MRT_RowData } from 'material-react-table';
 
 import strings from 'src/strings';
 
@@ -9,10 +9,10 @@ import { TableSettings, isBlankFilterValue, isDataColumnId, nonEmptyFilters } fr
 const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
 const RANGE_VARIANTS = ['date-range', 'datetime-range', 'range', 'range-slider', 'time-range'];
 
-const getColumn = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, columnId: string) =>
+const getColumn = <TData extends MRT_RowData>(table: EditableTableInstance<TData>, columnId: string) =>
   getTableColumns(table, 'display').find((column) => column.id === columnId);
 
-const getColumnHeader = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, columnId: string) => {
+const getColumnHeader = <TData extends MRT_RowData>(table: EditableTableInstance<TData>, columnId: string) => {
   const header = getColumn(table, columnId)?.header;
   return typeof header === 'string' ? header : columnId;
 };
@@ -28,7 +28,7 @@ const formatValue = (value: unknown) => {
 };
 
 const formatFilterValue = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   columnId: string,
   value: unknown
 ) => {
@@ -59,11 +59,13 @@ const formatFilterValue = <TData extends MRT_RowData>(
     : toLabel(value);
 };
 
-const formatSort = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, sorting: TableSettings['sorting']) =>
-  sorting.map((sort) => `${getColumnHeader(table, sort.id)} ${sort.desc ? '↓' : '↑'}`).join(', ');
+const formatSort = <TData extends MRT_RowData>(
+  table: EditableTableInstance<TData>,
+  sorting: TableSettings['sorting']
+) => sorting.map((sort) => `${getColumnHeader(table, sort.id)} ${sort.desc ? '↓' : '↑'}`).join(', ');
 
 export const getSaveViewSummary = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   settings: TableSettings,
   baseViewLabel?: string
 ): string[] => {
@@ -96,7 +98,7 @@ export const getSaveViewSummary = <TData extends MRT_RowData>(
 };
 
 export const getViewSummary = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   settings: TableSettings,
   baseViewLabel?: string
 ) => {
