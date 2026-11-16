@@ -1,3 +1,4 @@
+6e6905df SW-9237 Seeds Withdrawals: New Withdrawal Details page to show photos Accessions, Batch, and more (#7205)
 45880562 Fix Baseline export test for disabled empty exports (#7206)
 f463b721 SW-9281 Observations: Export Data link should be disabled when there is no Observation data (#7180)
 27e99c62 Cap CI unit test workers at 75% of the CPUs (#7168)
