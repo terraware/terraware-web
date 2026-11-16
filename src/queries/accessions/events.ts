@@ -11,9 +11,8 @@ export type ListAccessionEventsArgs = {
   organizationId: number;
 };
 
-export type ListSeedBankWithdrawalCreationsArgs = {
+export type ListWithdrawalCreationsArgs = {
   organizationId: number;
-  seedBankId: number;
 };
 
 export type SeedWithdrawalCreation = {
@@ -48,13 +47,12 @@ const injectedRtkApi = api.injectEndpoints({
         results.events.map((event) => ({ ...event })).reverse(),
     }),
 
-    listSeedBankWithdrawalCreations: build.query<SeedWithdrawalCreation[], ListSeedBankWithdrawalCreationsArgs>({
-      query: ({ organizationId, seedBankId }) => ({
+    listWithdrawalCreations: build.query<SeedWithdrawalCreation[], ListWithdrawalCreationsArgs>({
+      query: ({ organizationId }) => ({
         url: '/api/v1/events/list',
         method: 'POST',
         body: {
           organizationId,
-          facilityId: seedBankId,
           subjects: ['Withdrawal'] satisfies ListEventLogEntriesRequestPayload['subjects'],
         },
       }),
@@ -78,8 +76,5 @@ const injectedRtkApi = api.injectEndpoints({
 
 export { injectedRtkApi as api };
 
-export const {
-  useLazyListAccessionEventsQuery,
-  useLazyListSeedBankWithdrawalCreationsQuery,
-  useListAccessionEventsQuery,
-} = injectedRtkApi;
+export const { useLazyListAccessionEventsQuery, useLazyListWithdrawalCreationsQuery, useListAccessionEventsQuery } =
+  injectedRtkApi;

@@ -14,6 +14,7 @@ const SEED_BANK_ID = 101;
 const ANCHOR_ID = 7;
 const USER_ID = 20;
 const BATCH_ID = 31;
+const OTHER_SEED_BANK_ID = 102;
 
 type SeedWithdrawalSearchResult = Record<string, string>;
 
@@ -33,15 +34,27 @@ const buildSearchResult = (overrides: Partial<SeedWithdrawalSearchResult> = {}):
   ...overrides,
 });
 
-type Creation = { withdrawalId: number; accessionId: number; timestamp: string; userId?: number };
+type Creation = {
+  withdrawalId: number;
+  accessionId: number;
+  timestamp: string;
+  userId?: number;
+  facilityId?: number;
+};
 
-const buildCreationEvent = ({ withdrawalId, accessionId, timestamp, userId = USER_ID }: Creation) => ({
+const buildCreationEvent = ({
+  withdrawalId,
+  accessionId,
+  timestamp,
+  userId = USER_ID,
+  facilityId = SEED_BANK_ID,
+}: Creation) => ({
   action: { type: 'Created' },
   subject: {
     type: 'Withdrawal',
     withdrawalId,
     accessionId,
-    facilityId: SEED_BANK_ID,
+    facilityId,
     fullText: 'Withdrawal created',
     shortText: 'Created',
   },
@@ -49,6 +62,20 @@ const buildCreationEvent = ({ withdrawalId, accessionId, timestamp, userId = USE
   userId,
   userName: 'Ada Lovelace',
 });
+
+/**
+ * Answers with the creation events the request actually asked for: a request narrowed to one seed
+ * bank only sees that bank's events, so a page that narrows the query loses the other banks' rows.
+ */
+const mockCreations = (events: ReturnType<typeof buildCreationEvent>[]) => {
+  server.use(
+    http.post('/api/v1/events/list', async ({ request }) => {
+      const body = (await request.json()) as { facilityId?: number };
+      const visible = body.facilityId ? events.filter((event) => event.subject.facilityId === body.facilityId) : events;
+      return HttpResponse.json({ status: 'ok', events: visible });
+    })
+  );
+};
 
 /**
  * The page searches twice: once for the withdrawal in the URL, then once for its whole group. This
@@ -177,6 +204,47 @@ describe('SeedsWithdrawalDetailsView', () => {
       '/accessions/42?viabilityTestId=77'
     );
     expect(screen.queryByText(strings.BATCH)).not.toBeInTheDocument();
+  });
+
+  it('keeps the accessions of a bulk withdrawal that spans seed banks', async () => {
+    mockSearch([
+      buildSearchResult(),
+      buildSearchResult({
+        id: '9',
+        accession_id: '44',
+        accession_accessionNumber: 'ACC-003',
+        accession_facility_id: String(OTHER_SEED_BANK_ID),
+        accession_facility_name: 'Coastal Seed Bank',
+      }),
+    ]);
+    mockCreations([
+      buildCreationEvent({ withdrawalId: ANCHOR_ID, accessionId: 42, timestamp: '2026-03-14T10:00:00Z' }),
+      buildCreationEvent({
+        withdrawalId: 9,
+        accessionId: 44,
+        timestamp: '2026-03-14T10:00:01Z',
+        facilityId: OTHER_SEED_BANK_ID,
+      }),
+    ]);
+
+    renderDetails();
+
+    expect(await screen.findByRole('link', { name: 'ACC-001' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'ACC-003' })).toBeVisible();
+    expect(within(detailsCard(strings.FROM_SEED_BANK)).getByText('Main Seed Bank, Coastal Seed Bank')).toBeVisible();
+  });
+
+  it('falls back to the withdrawal itself when the creation history cannot be read', async () => {
+    mockSearch([
+      buildSearchResult(),
+      buildSearchResult({ id: '9', accession_id: '44', accession_accessionNumber: 'ACC-003' }),
+    ]);
+    server.use(http.post('/api/v1/events/list', () => new HttpResponse(null, { status: 500 })));
+
+    renderDetails();
+
+    expect(await screen.findByRole('link', { name: 'ACC-001' })).toBeVisible();
+    expect(screen.queryByText('ACC-003')).not.toBeInTheDocument();
   });
 
   it('leaves out a withdrawal made seconds later for a different purpose', async () => {

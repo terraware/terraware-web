@@ -13,9 +13,10 @@ import { seedWithdrawalPurposeLabel } from 'src/utils/withdrawalPurposes';
 type WithdrawalOverviewProps = {
   withdrawal: SearchSeedWithdrawalPayload;
   batches: { id: number; batchNumber?: string }[];
+  seedBankNames: string[];
 };
 
-const WithdrawalOverview = ({ withdrawal, batches }: WithdrawalOverviewProps): JSX.Element => {
+const WithdrawalOverview = ({ withdrawal, batches, seedBankNames }: WithdrawalOverviewProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
@@ -41,7 +42,7 @@ const WithdrawalOverview = ({ withdrawal, batches }: WithdrawalOverviewProps): J
 
   const overviewCardData = [
     { title: strings.PURPOSE, contents: seedWithdrawalPurposeLabel(withdrawal.purpose, strings) },
-    { title: strings.FROM_SEED_BANK, contents: withdrawal.seedBankName ?? '' },
+    { title: strings.FROM_SEED_BANK, contents: seedBankNames.join(', ') },
     { title: strings.DESTINATION, contents: withdrawal.destination ?? '' },
     ...(batchLinks ? [{ title: strings.BATCH, contents: batchLinks }] : []),
     ...(viabilityTestLink ? [{ title: strings.VIABILITY_TEST, contents: viabilityTestLink }] : []),

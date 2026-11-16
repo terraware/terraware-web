@@ -10,7 +10,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListSeedBankWithdrawalCreationsQuery } from 'src/queries/accessions/events';
+import { useLazyListWithdrawalCreationsQuery } from 'src/queries/accessions/events';
 import { useLazySearchSeedWithdrawalsQuery } from 'src/queries/search/seedWithdrawals';
 import { findWithdrawalGroupIds, isGroupedPurpose } from 'src/scenes/SeedsWithdrawals/withdrawalGroup';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -31,7 +31,7 @@ const SeedsWithdrawalDetailsView = (): JSX.Element => {
   const organizationId = selectedOrganization?.id;
 
   const [searchAnchor, searchAnchorResponse] = useLazySearchSeedWithdrawalsQuery();
-  const [listCreations, listCreationsResponse] = useLazyListSeedBankWithdrawalCreationsQuery();
+  const [listCreations, listCreationsResponse] = useLazyListWithdrawalCreationsQuery();
   const [searchGroup, searchGroupResponse] = useLazySearchSeedWithdrawalsQuery();
 
   useEffect(() => {
@@ -45,21 +45,23 @@ const SeedsWithdrawalDetailsView = (): JSX.Element => {
   const isGrouped = anchor !== undefined && isGroupedPurpose(anchor.purpose);
 
   useEffect(() => {
-    if (organizationId && isGrouped && anchor?.seedBankId) {
-      void listCreations({ organizationId, seedBankId: anchor.seedBankId }, true);
+    if (organizationId && isGrouped) {
+      void listCreations({ organizationId }, true);
     }
-  }, [anchor?.seedBankId, isGrouped, listCreations, organizationId]);
+  }, [isGrouped, listCreations, organizationId]);
 
   const groupIds = useMemo(() => {
     if (!anchor) {
       return [];
     }
-    if (!isGrouped || !anchor.seedBankId) {
+    const creations = listCreationsResponse.currentData;
+    // Without the creation history there is nothing to group on, so fall back to showing the
+    // withdrawal that was asked for rather than leaving the page empty.
+    if (!isGrouped || listCreationsResponse.isError) {
       return [anchor.id];
     }
-    const creations = listCreationsResponse.currentData;
     return creations ? findWithdrawalGroupIds(creations, anchor.id) : [];
-  }, [anchor, isGrouped, listCreationsResponse.currentData]);
+  }, [anchor, isGrouped, listCreationsResponse.currentData, listCreationsResponse.isError]);
 
   useEffect(() => {
     if (organizationId && groupIds.length > 0) {
@@ -81,6 +83,16 @@ const SeedsWithdrawalDetailsView = (): JSX.Element => {
     });
     return Array.from(numbersById, ([id, batchNumber]) => ({ id, batchNumber }));
   }, [withdrawals]);
+
+  // A bulk withdrawal can span seed banks, since accessions are selected by species rather than by
+  // where they are stored.
+  const seedBankNames = useMemo(
+    () =>
+      Array.from(
+        new Set(withdrawals.flatMap((withdrawal) => (withdrawal.seedBankName ? [withdrawal.seedBankName] : [])))
+      ),
+    [withdrawals]
+  );
 
   const isLoading =
     searchAnchorResponse.isFetching ||
@@ -122,7 +134,7 @@ const SeedsWithdrawalDetailsView = (): JSX.Element => {
           </Typography>
           {anchor && (
             <>
-              <WithdrawalOverview withdrawal={anchor} batches={batches} />
+              <WithdrawalOverview withdrawal={anchor} batches={batches} seedBankNames={seedBankNames} />
               <Box marginTop={theme.spacing(3)}>
                 <WithdrawalAccessionsTable withdrawals={withdrawals} />
               </Box>
