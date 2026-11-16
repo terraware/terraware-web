@@ -263,44 +263,16 @@ const ObservationSubstratumSelector = ({
                     onChange={onChangeStratumCheckbox(stratum)}
                     value={isStratumFullySelected(stratum)}
                   />
-                  {isBaseline ? (
-                    <Typography
-                      sx={{
-                        color: theme.palette.TwClrTxtSecondary,
-                        flexBasis: '100%',
-                        fontWeight: 500,
-                        paddingLeft: 4,
-                      }}
-                    >
-                      {strings.formatString(
-                        strings.BASELINE_X_OF_Y,
-                        stratum.substrata.filter((substratum) => Boolean(substratum.latestBaselineSurveyStatus)).length,
-                        stratum.substrata.length
-                      )}
-                      {reportedPlants.isSuccess && reportedPlants.currentData && (
-                        <>
-                          {' · '}
-                          {strings.formatString(
-                            strings.HAS_PLANTINGS_X_OF_Y,
-                            stratum.substrata.filter((substratum) => plantedSubstrata.has(substratum.id)).length,
-                            stratum.substrata.length
-                          )}
-                        </>
-                      )}
-                    </Typography>
-                  ) : stratum.latestObservationCompletedTime ? (
+                  {!isBaseline && (stratum.latestObservationCompletedTime ? (
                     <Box flexShrink={0} whiteSpace='nowrap'>
-                      <Pill
-                        id={stratum.id}
-                        label={strings.LAST_OBSERVATION}
-                        value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
-                      />
+                      <Pill id={stratum.id} label={strings.LAST_OBSERVATION}
+                        value={getDateDisplayValue(stratum.latestObservationCompletedTime)} />
                     </Box>
                   ) : (
                     <Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
                       {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
                     </Typography>
-                  )}
+                  ))}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
                   {isBaseline ? numPermanentPlots + numTemporaryPlots : numPermanentPlots}

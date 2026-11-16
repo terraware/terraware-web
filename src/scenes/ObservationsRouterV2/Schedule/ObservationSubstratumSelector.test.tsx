@@ -285,7 +285,7 @@ describe('ObservationSubstratumSelector', () => {
     expect(onChange).toHaveBeenLastCalledWith([]);
   });
 
-  it.each(['loading', 'failed'])('omits planting coverage while reported plantings are %s', async (state) => {
+  it.each(['loading', 'failed'])('omits planting tags while reported plantings are %s', async (state) => {
     mockGet(SITE_URL, { site });
     let finishLoading: () => void = () => undefined;
     const pending = new Promise<void>((resolve) => {
@@ -306,16 +306,15 @@ describe('ObservationSubstratumSelector', () => {
         plantingSiteId={PLANTING_SITE_ID}
       />
     );
-    expect(await screen.findAllByText(strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string)).toHaveLength(2);
+    expect(await screen.findByText('Ewe Highlands')).toBeVisible();
+    expect(screen.queryByText(/Baseline:.*of/)).not.toBeInTheDocument();
     expect(screen.queryByText(/ · /)).not.toBeInTheDocument();
-    expect(
-      screen.queryByText(strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string)
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Has plantings:.*of/)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
     finishLoading();
   });
 
-  it('shows Baseline coverage and plantings from the latest per-substratum site fields', async () => {
+  it('shows substratum tags without Baseline stratum summaries', async () => {
     const baselineSite = {
       ...site,
       strata: site.strata?.map((stratum, index) => ({
@@ -346,18 +345,13 @@ describe('ObservationSubstratumSelector', () => {
       },
     ]);
     expect(
-      await screen.findByText(
-        `${strings.formatString(strings.BASELINE_X_OF_Y, 2, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string}`
-      )
+      await screen.findByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)
     ).toBeVisible();
-    expect(
-      await screen.findByText(
-        `${strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 1, 2) as string}`
-      )
-    ).toBeVisible();
-    expect(screen.getByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)).toBeVisible();
     expect(screen.getByText(strings.formatString(strings.BASELINE_SCHEDULED_X, '2026-11-16') as string)).toBeVisible();
-    expect(screen.getByText(strings.HAS_PLANTINGS)).toBeVisible();
+    expect(await screen.findByText(strings.HAS_PLANTINGS)).toBeVisible();
+    expect(screen.queryByText(/Baseline:.*of/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Has plantings:.*of/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/ · /)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
   });
 
@@ -390,22 +384,15 @@ describe('ObservationSubstratumSelector', () => {
         },
       ],
     });
-    expect(
-      await screen.findByText(
-        `${strings.formatString(strings.BASELINE_X_OF_Y, 1, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string}`
-      )
-    ).toBeVisible();
-    expect(screen.getByText(strings.formatString(strings[label], '2026-06-02') as string)).toBeVisible();
+    expect(await screen.findByText(strings.formatString(strings[label], '2026-06-02') as string)).toBeVisible();
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
   });
 
-  it('shows zero coverage without legacy observation text when no Baselines or plantings exist', async () => {
+  it('omits summaries and tags when no Baselines or plantings exist', async () => {
     renderSelector('Baseline Survey');
-    expect(
-      await screen.findAllByText(
-        `${strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string}`
-      )
-    ).toHaveLength(2);
+    expect(await screen.findByText('Ewe Highlands')).toBeVisible();
+    expect(screen.queryByText(/Baseline:.*of/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/Has plantings:.*of/)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
     expect(screen.getByText(strings.PLOTS)).toBeInTheDocument();
