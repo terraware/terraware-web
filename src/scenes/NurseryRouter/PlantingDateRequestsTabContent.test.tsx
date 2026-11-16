@@ -214,6 +214,26 @@ describe('PlantingDateRequestsTabContent', () => {
       expect(within(total).getByText(strings.PARTIALLY_FULFILLED)).toBeInTheDocument();
     });
 
+    it('counts a species that is still outstanding even when another was overwithdrawn', async () => {
+      searchResults = [
+        buildRequest({
+          status: 'Partial',
+          plantingDateRequestSpecies: [
+            buildRequestedSpecies('7', 'Acacia koa', 100),
+            buildRequestedSpecies('8', 'Metrosideros polymorpha', 100),
+          ],
+          withdrawals: [buildWithdrawal('7', 150)],
+        }),
+      ];
+
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const dialog = await openQuantities(user);
+      const total = within(dialog).getByText(strings.TOTAL).parentElement as HTMLElement;
+
+      expect(within(total).getByText(strings.formatString(strings.X_LEFT, '100') as string)).toBeInTheDocument();
+    });
+
     it('offers a withdrawal for a request that is still open', async () => {
       const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
 

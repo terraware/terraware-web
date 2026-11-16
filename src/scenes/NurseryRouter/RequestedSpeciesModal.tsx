@@ -60,7 +60,15 @@ const RequestedSpeciesModal = ({
     [activeLocale, request.species]
   );
 
-  const remainingPlants = Math.max(0, request.requestedPlants - request.withdrawnPlants);
+  const remainingPlants = useMemo(
+    () =>
+      species.reduce(
+        (total, speciesDetail) =>
+          total + Math.max(0, speciesDetail.requestedQuantity - speciesDetail.withdrawnQuantity),
+        0
+      ),
+    [species]
+  );
 
   return (
     <Box sx={dialogStyles}>
