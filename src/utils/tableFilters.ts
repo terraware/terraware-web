@@ -48,4 +48,19 @@ const makeDateRangeFilterFn =
     return true;
   };
 
-export { makeDateRangeFilterFn };
+/**
+ * Multi-select column filter that matches the cell value exactly.
+ *
+ */
+const exactMultiSelectFilterFn = <T>(row: T, columnId: string, filterValue: unknown[]): boolean => {
+  if (!filterValue || filterValue.length === 0) {
+    return true;
+  }
+
+  const cellValue = (row as unknown as { getValue: (id: string) => unknown }).getValue(columnId);
+  const rowValue = cellValue === null || cellValue === undefined ? '' : String(cellValue);
+
+  return filterValue.some((value) => String(value) === rowValue);
+};
+
+export { exactMultiSelectFilterFn, makeDateRangeFilterFn };

@@ -1,4 +1,4 @@
-import { makeDateRangeFilterFn } from './tableFilters';
+import { exactMultiSelectFilterFn, makeDateRangeFilterFn } from './tableFilters';
 
 type TestRow = { date?: string; other?: string };
 
@@ -66,5 +66,35 @@ describe('makeDateRangeFilterFn', () => {
     const invalidDayjs = { format: () => '', isValid: () => false };
     expect(filterFn(makeRow({ date: '2024-03-15' }), 'date', [invalidDayjs, null])).toBe(true);
     expect(filterFn(makeRow({ date: '2024-03-15' }), 'date', [null, invalidDayjs])).toBe(true);
+  });
+});
+
+describe('exactMultiSelectFilterFn', () => {
+  // At runtime MRT calls the filter with a Row wrapper that exposes getValue.
+  const makeSpeciesRow = (speciesName: unknown) =>
+    ({ getValue: () => speciesName }) as unknown as { speciesName: unknown };
+
+  test('returns true when no options are selected', () => {
+    expect(exactMultiSelectFilterFn(makeSpeciesRow('Acacia'), 'speciesName', [])).toBe(true);
+    expect(exactMultiSelectFilterFn(makeSpeciesRow('Acacia'), 'speciesName', undefined as unknown as unknown[])).toBe(
+      true
+    );
+  });
+
+  test('keeps only rows whose value is one of the selected options', () => {
+    expect(exactMultiSelectFilterFn(makeSpeciesRow('Acacia koa'), 'speciesName', ['Acacia koa', 'Banana'])).toBe(true);
+    expect(exactMultiSelectFilterFn(makeSpeciesRow('Metrosideros'), 'speciesName', ['Acacia koa', 'Banana'])).toBe(
+      false
+    );
+  });
+
+  test('does not match on substrings', () => {
+    expect(exactMultiSelectFilterFn(makeSpeciesRow('Acacia koa'), 'speciesName', ['Acacia'])).toBe(false);
+    expect(exactMultiSelectFilterFn(makeSpeciesRow('Acacia'), 'speciesName', ['Acacia koa'])).toBe(false);
+  });
+
+  test('treats missing values as empty', () => {
+    expect(exactMultiSelectFilterFn(makeSpeciesRow(undefined), 'speciesName', ['Acacia'])).toBe(false);
+    expect(exactMultiSelectFilterFn(makeSpeciesRow(null), 'speciesName', ['Acacia'])).toBe(false);
   });
 });
