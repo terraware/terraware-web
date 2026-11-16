@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useEffect } from 'react';
 import { BusySpinner } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -17,6 +18,7 @@ export default function ScheduleObservation(): JSX.Element {
   const snackbar = useSnackbar();
   const { strings } = useLocalization();
   const trackEvent = useTrackEvent();
+  const assignPlotsWhenScheduling = useFeatureEnabled('Assign Plots When Scheduling');
 
   const goToObservations = useCallback(() => navigate(APP_PATHS.OBSERVATIONS), [navigate]);
 
@@ -24,7 +26,12 @@ export default function ScheduleObservation(): JSX.Element {
 
   useEffect(() => {
     if (scheduleResponse.isError) {
-      snackbar.toastError();
+      const error = scheduleResponse.error;
+      if (error && 'status' in error && error.status === 409) {
+        snackbar.toastError(strings.NO_ROOM_FOR_MONITORING_PLOTS);
+      } else {
+        snackbar.toastError();
+      }
     } else if (scheduleResponse.isSuccess) {
       const args = scheduleResponse.originalArgs;
       if (args) {
@@ -38,21 +45,13 @@ export default function ScheduleObservation(): JSX.Element {
       snackbar.toastSuccess(strings.OBSERVATION_SCHEDULED);
       goToObservations();
     }
-  }, [
-    goToObservations,
-    snackbar,
-    scheduleResponse.isError,
-    scheduleResponse.isSuccess,
-    scheduleResponse.originalArgs,
-    strings.OBSERVATION_SCHEDULED,
-    trackEvent,
-  ]);
+  }, [goToObservations, snackbar, scheduleResponse, strings, trackEvent]);
 
   const onSave = useCallback(
     (data: ScheduleObservationRequestPayload) => {
-      void schedule(data);
+      void schedule({ ...data, assignPlots: assignPlotsWhenScheduling || undefined });
     },
-    [schedule]
+    [assignPlotsWhenScheduling, schedule]
   );
 
   return (
