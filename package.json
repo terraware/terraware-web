@@ -210,7 +210,7 @@
     "patch-package": "^8.0.1",
     "playwright": "^1.65.1",
     "playwright-core": "^1.65.1",
-    "prettier": "^3.9.10",
+    "prettier": "^3.10.1",
     "prop-types": "^15.8.1",
     "react-test-renderer": "19.3.1",
     "sass": "^1.108.2",
