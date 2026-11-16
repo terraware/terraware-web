@@ -166,7 +166,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const baselineSurveyEnabled = useFeatureEnabled('Baseline Survey');
   const availableObservationType =
-    observationType === 'Baseline Survey' && !baselineSurveyEnabled ? 'All' : observationType;
+    observationType === 'Baseline Survey' && (!baselineSurveyEnabled || plotType === 'adHoc') ? 'All' : observationType;
   const { isMobile } = useDeviceInfo();
   const { setViewMode, viewMode: storedViewMode } = useStickyObservationsViewMode();
   const viewMode = isMobile ? 'split' : storedViewMode;

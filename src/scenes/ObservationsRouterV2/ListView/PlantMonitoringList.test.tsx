@@ -325,6 +325,38 @@ describe('PlantMonitoringList', () => {
   });
 
   it.each([
+    [false, false],
+    [false, true],
+    [true, false],
+    [true, true],
+  ])(
+    'excludes Baseline from ad-hoc types with baseline=%s and scheduled biomass=%s',
+    async (baselineSurveyObservations, scheduledBiomassMonitoringObservations) => {
+      sessionStorage.setItem('plot-selection', 'adHoc');
+      const { user, preferenceRequests } = renderList(
+        { baselineSurveyObservations, scheduledBiomassMonitoringObservations },
+        {
+          observationType: 'Baseline Survey',
+          showFilterPanel: true,
+          observations: [PLANT_OBSERVATION, BIOMASS_OBSERVATION].map((observation) => ({
+            ...observation,
+            isAdHoc: true,
+          })),
+        }
+      );
+      await waitFor(() => expect(preferenceRequests).toHaveLength(1));
+      expect(await screen.findByRole('row', { name: PLANT_ROW })).toBeVisible();
+      expect(screen.getByRole('row', { name: BIOMASS_ROW })).toBeVisible();
+      await user.click(screen.getByPlaceholderText(strings.ALL_MONITORING_TYPES));
+      const options = await screen.findByRole('list');
+      expect(within(options).getByText(strings.ALL_MONITORING_TYPES)).toBeVisible();
+      expect(within(options).getByText(strings.PLANT_MONITORING)).toBeVisible();
+      expect(within(options).getByText(strings.BIOMASS_MONITORING)).toBeVisible();
+      expect(within(options).queryByText(strings.BASELINE_SURVEY)).not.toBeInTheDocument();
+    }
+  );
+
+  it.each([
     { observations: [PLANT_OBSERVATION], message: () => strings.NO_OBSERVATIONS_MATCH_FILTERS },
     { observations: [], message: () => strings.NO_ASSIGNED_PLOT_OBSERVATIONS_RECORDED },
   ])(
