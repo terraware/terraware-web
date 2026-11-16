@@ -43,6 +43,7 @@ import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedlingsDashboard from 'src/scenes/SeedlingsDashboard';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
 import SeedsWithdrawalsView from 'src/scenes/SeedsWithdrawals';
+import SeedsWithdrawalDetailsView from 'src/scenes/SeedsWithdrawals/SeedsWithdrawalDetailsView';
 import SettingsLayout from 'src/scenes/Settings/SettingsLayout';
 import SettingsRedirect from 'src/scenes/Settings/SettingsRedirect';
 import SpeciesRouter from 'src/scenes/Species';
@@ -216,6 +217,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.SEEDS_WITHDRAWALS} element={<SeedsWithdrawalsView />} />
+            <Route path={APP_PATHS.SEEDS_WITHDRAWALS_DETAILS} element={<SeedsWithdrawalDetailsView />} />
             <Route path={APP_PATHS.PLANTING_PLANS + '/*'} element={<PlantingPlansRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
             <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />

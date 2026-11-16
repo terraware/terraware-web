@@ -8,12 +8,15 @@ import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
 const SEED_WITHDRAWAL_FIELDS = [
+  'id',
   'accession_id',
   'accession_accessionNumber',
   'accession_species_scientificName',
+  'accession_facility_id',
   'accession_facility_name',
   'accession_project_name',
   'batch_id',
+  'batch_batchNumber',
   'batch_facility_name',
   'date',
   'destination',
@@ -53,6 +56,15 @@ const parseSearchSeedWithdrawalsArgs = (args: SearchSeedWithdrawalsApiArgs, fiel
         { operation: 'field', field: 'withdrawnBy_firstName', type, values },
         { operation: 'field', field: 'withdrawnBy_lastName', type, values },
       ],
+    });
+  }
+
+  if (args.withdrawalIds?.length) {
+    searchChildren.push({
+      operation: 'field',
+      field: 'id',
+      type: 'Exact',
+      values: args.withdrawalIds.map(String),
     });
   }
 
@@ -224,9 +236,11 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: SearchSeedWithdrawalApiResponse) => ({
         cursor: response.cursor,
         results: response.results.map((result): SearchSeedWithdrawalPayload => ({
+          id: Number(result.id),
           accessionId: Number(result.accession_id),
           accessionNumber: result.accession_accessionNumber,
           batchId: result.batch_id ? Number(result.batch_id) : undefined,
+          batchNumber: result.batch_batchNumber,
           date: result.date,
           estimatedCount:
             result['estimatedCount(raw)'] !== undefined ? Number(result['estimatedCount(raw)']) : undefined,
@@ -240,6 +254,7 @@ const injectedRtkApi = api.injectEndpoints({
           projectName: result.accession_project_name,
           purpose: result['purpose(raw)'] as SeedWithdrawalPurpose,
           quantity: result['quantity(raw)'] !== undefined ? Number(result['quantity(raw)']) : undefined,
+          seedBankId: result.accession_facility_id ? Number(result.accession_facility_id) : undefined,
           seedBankName: result.accession_facility_name,
           speciesName: result.accession_species_scientificName,
           units: result['units(raw)'] as UnitType | undefined,
@@ -284,8 +299,11 @@ export type SeedWithdrawalFilterOptions = {
 };
 
 type SeedWithdrawalApiResult = {
+  id: string;
   accession_id: string;
+  accession_facility_id?: string;
   batch_id?: string;
+  batch_batchNumber?: string;
   batch_facility_name?: string;
   'estimatedCount(raw)'?: string;
   'estimatedWeightQuantity(raw)'?: string;
@@ -318,6 +336,7 @@ export type SeedWithdrawalSearchResults = {
 
 export type SearchSeedWithdrawalsApiArgs = {
   organizationId?: number;
+  withdrawalIds?: number[];
   searchTerm?: string;
   accessionNumber?: string;
   date?: { minDate?: string; maxDate?: string };
@@ -336,9 +355,11 @@ export type SearchSeedWithdrawalsApiArgs = {
 };
 
 export type SearchSeedWithdrawalPayload = {
+  id: number;
   accessionId: number;
   accessionNumber: string;
   batchId?: number;
+  batchNumber?: string;
   date: string;
   estimatedCount?: number;
   estimatedWeightQuantity?: number;
@@ -348,6 +369,7 @@ export type SearchSeedWithdrawalPayload = {
   projectName?: string;
   purpose?: SeedWithdrawalPurpose;
   quantity?: number;
+  seedBankId?: number;
   seedBankName?: string;
   speciesName?: string;
   units?: UnitType;

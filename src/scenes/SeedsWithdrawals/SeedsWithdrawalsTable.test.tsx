@@ -38,6 +38,7 @@ const cursorsFor = async (requests: Request[], term: string): Promise<(string | 
 type SeedWithdrawalSearchResult = Record<string, string>;
 
 const buildSearchResult = (overrides: Partial<SeedWithdrawalSearchResult> = {}): SeedWithdrawalSearchResult => ({
+  id: '7',
   accession_id: '42',
   accession_accessionNumber: 'ACC-001',
   accession_species_scientificName: 'Acacia koa',
@@ -115,10 +116,10 @@ describe('SeedsWithdrawalsTable', () => {
     expect(screen.queryByText('Shipped in two boxes')).not.toBeInTheDocument();
   });
 
-  it('links the date and the accession number to the accession', async () => {
+  it('links the date to the withdrawal details and the accession number to the accession', async () => {
     renderTable([buildSearchResult()]);
 
-    expect(await screen.findByRole('link', { name: '2026-03-14' })).toHaveAttribute('href', '/accessions/42');
+    expect(await screen.findByRole('link', { name: '2026-03-14' })).toHaveAttribute('href', '/seeds/withdrawals/7');
     expect(screen.getByRole('link', { name: 'ACC-001' })).toHaveAttribute('href', '/accessions/42');
   });
 
@@ -302,9 +303,10 @@ describe('SeedsWithdrawalsTable', () => {
     expect(await screen.findByRole('cell', { name: '480' })).toBeVisible();
     expect(screen.getByRole('cell', { name: `12 ${strings.G}` })).toBeVisible();
   });
-  it('links a viability withdrawal to its test and a nursery one to its batch', async () => {
+  it('leaves the purpose as plain text, with the batch and test reached from the details page', async () => {
     renderTable([
       buildSearchResult({
+        id: '7',
         'purpose(raw)': 'Viability Testing',
         viabilityTest_id: '77',
         destination: '',
@@ -312,6 +314,7 @@ describe('SeedsWithdrawalsTable', () => {
         batch_facility_name: '',
       }),
       buildSearchResult({
+        id: '8',
         accession_accessionNumber: 'ACC-002',
         'purpose(raw)': 'Nursery',
         destination: '',
@@ -320,27 +323,10 @@ describe('SeedsWithdrawalsTable', () => {
       }),
     ]);
 
-    expect(await screen.findByRole('link', { name: strings.VIABILITY_TESTING })).toHaveAttribute(
-      'href',
-      '/accessions/42?viabilityTestId=77'
-    );
-    // Both links live on the purpose cell; the destination cell only names the nursery.
-    expect(screen.getByRole('link', { name: strings.NURSERY })).toHaveAttribute('href', '/inventory/batch/31');
-    expect(screen.getByRole('cell', { name: 'Kigali Nursery' })).toBeVisible();
-    expect(screen.queryByRole('link', { name: 'Kigali Nursery' })).not.toBeInTheDocument();
-  });
-
-  it('leaves the purpose as plain text when no batch was created', async () => {
-    renderTable([
-      buildSearchResult({
-        'purpose(raw)': 'Other',
-        destination: 'Elsewhere',
-        batch_id: '',
-        batch_facility_name: '',
-      }),
-    ]);
-
-    expect(await screen.findByRole('cell', { name: 'Elsewhere' })).toBeVisible();
-    expect(screen.queryByRole('link', { name: 'Elsewhere' })).not.toBeInTheDocument();
+    expect(await screen.findByRole('cell', { name: strings.VIABILITY_TESTING })).toBeVisible();
+    expect(screen.getByRole('cell', { name: strings.NURSERY })).toBeVisible();
+    [strings.VIABILITY_TESTING, strings.NURSERY, 'Kigali Nursery'].forEach((name) => {
+      expect(screen.queryByRole('link', { name })).not.toBeInTheDocument();
+    });
   });
 });
