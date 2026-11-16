@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.42% </span>
+                <span class="strong">53.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/28</span>
+                <span class='fraction'>15/28</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.44% </span>
+                <span class="strong">51.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/27</span>
+                <span class='fraction'>14/27</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.42% </span>
+                <span class="strong">53.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/28</span>
+                <span class='fraction'>15/28</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -233,21 +233,25 @@
 <a name='L168'></a><a href='#L168'>168</a>
 <a name='L169'></a><a href='#L169'>169</a>
 <a name='L170'></a><a href='#L170'>170</a>
-<a name='L171'></a><a href='#L171'>171</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">117x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -291,13 +295,15 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -417,9 +423,10 @@ api.enhanceEndpoints({
       ],
     },
     scheduleObservation: {
-      invalidatesTags: (result) =&gt; [
+      invalidatesTags: (result, _error, payload) =&gt; [
         ...(result ? [{ type: QueryTagTypes.Observation, id: result.id }] : []),
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites, id: payload.plantingSiteId },
       ],
     },
     completeAdHocObservation: {
@@ -461,15 +468,17 @@ api.enhanceEndpoints({
 <span class="cstat-no" title="statement not covered" >        observation ? [{ type: QueryTagTypes.Observation, id: observation.observation.id }] : [],</span>
     },
     rescheduleObservation: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_results, _error, payload) =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
+      invalidatesTags: (_results, _error, payload) =&gt; [
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
       ],
     },
     abandonObservation: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_results, _error, observationId) =&gt; <span class="cstat-no" title="statement not covered" >[</span></span>
+      invalidatesTags: (_results, _error, observationId) =&gt; [
         { type: QueryTagTypes.Observation, id: observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
         { type: QueryTagTypes.Activities },
         { type: QueryTagTypes.FunderActivities },
         { type: QueryTagTypes.PlantingSiteObservation },
@@ -580,7 +589,7 @@ api.enhanceEndpoints({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-16T18:47:39.642Z
+                at 2026-11-16T19:46:22.448Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

@@ -1,3 +1,5 @@
+58b74e36 SW-9306 Warn before scheduling a Baseline Survey over existing baselines (#7181)
+d381e30f SW-9305 Show Baseline Survey status pills when selecting substrata (#7179)
 7ec5d1be Update dependencies (#7203)
 e0366118 SW-9297 Accession filter by species should only show selected species (#7207)
 29b06880 SW-9188 Support assigning observation plots at scheduling time (#7176)
