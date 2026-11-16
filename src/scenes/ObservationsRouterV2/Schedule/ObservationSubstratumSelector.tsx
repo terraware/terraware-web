@@ -314,7 +314,15 @@ const ObservationSubstratumSelector = ({
                           value={selectedSubstrata.includes(substratum.id)}
                         />
                         {isBaseline && (
-                          <Box component='span' display='inline-flex' gap={1} flexWrap='wrap' alignItems='center'>
+                          <Box
+                            component='span'
+                            display='inline-flex'
+                            gap={1}
+                            flexWrap='wrap'
+                            alignItems='center'
+                            marginTop={1}
+                            sx={{ '& > span': { padding: theme.spacing(0, 0.5) } }}
+                          >
                             {substratum.latestBaselineSurveyDate && substratum.latestBaselineSurveyStatus && (
                               <Badge
                                 label={
