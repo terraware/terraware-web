@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box } from '@mui/material';
-import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
+import { EditableTableInstance } from '@terraware/web-components';
+import { MRT_RowData } from 'material-react-table';
 
 import DeleteViewModal from 'src/components/common/DeleteViewModal';
 import SaveViewModal from 'src/components/common/SaveViewModal';
@@ -50,7 +51,7 @@ export type CurrentViewProps<TData extends MRT_RowData> = {
   onPresetChange?: (preset: string) => void;
   organizationId?: number;
   presetViews?: ViewOption[];
-  table: MRT_TableInstance<TData>;
+  table: EditableTableInstance<TData>;
   tableDefinition: TableDefinition;
 };
 

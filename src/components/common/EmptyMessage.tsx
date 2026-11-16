@@ -102,7 +102,9 @@ export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
               </Box>
               {rowItem.altItem !== undefined ? (
                 <>
-                  <Typography sx={{ textAlign: 'left', margin: `${theme.spacing(2)} 0` }}>- {strings.OR} -</Typography>
+                  <Typography sx={{ textAlign: 'left', margin: `${theme.spacing(2)} 0` }}>
+                    - {strings.OR_UPPERCASE} -
+                  </Typography>
                   <Box sx={rowItemGroupStyles}>
                     <Box sx={rowItemInfoStyles}>
                       <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt} lineHeight='20px'>

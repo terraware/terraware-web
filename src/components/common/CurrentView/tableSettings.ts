@@ -1,4 +1,5 @@
 import {
+  EditableTableInstance,
   TableSettings,
   applyTableSettings as applySettings,
   getInitialTableSettings,
@@ -13,7 +14,6 @@ import {
   MRT_ColumnOrderState,
   MRT_ColumnPinningState,
   MRT_RowData,
-  MRT_TableInstance,
 } from 'material-react-table';
 
 import normalizePersistedColumnFilters from 'src/utils/tableColumnFilters';
@@ -22,7 +22,7 @@ export type { TableSettings } from '@terraware/web-components';
 export { getTableSettings, isDataColumnId } from '@terraware/web-components';
 
 export const getDefaultTableSettings = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   overrides?: Partial<TableSettings>
 ): TableSettings => {
   return {
@@ -32,7 +32,7 @@ export const getDefaultTableSettings = <TData extends MRT_RowData>(
 };
 
 export const applyTableSettings = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   settings: Partial<TableSettings>,
   defaults: TableSettings
 ) => {
@@ -74,7 +74,7 @@ const normalizePinning = (pinning: MRT_ColumnPinningState) => ({
 });
 
 export const isTableModified = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   viewSettings: Partial<TableSettings>,
   defaults: TableSettings
 ) => {

@@ -121,7 +121,7 @@ export const exportNurseryWithdrawalResults = async ({
   nurseryWithdrawalResults: NurseryWithdrawalResults;
 }) => {
   const today = DateTime.now().toFormat('yyyy-MM-dd');
-  const filteredSuffix = isFiltered ? `_${strings.FILTERED}` : '';
+  const filteredSuffix = isFiltered ? `_${strings.FILTERED_LOWERCASE}` : '';
   const filename = `${strings.INVENTORY_WITHDRAWALS}_${today}${filteredSuffix}`;
   const fileBlob = makeNurseryWithdrawalResultsCsv({ nurseryWithdrawalResults });
   const fileContent = await fileBlob.text();

@@ -1,17 +1,23 @@
 import React from 'react';
 
-import { EditableTableColumn } from '@terraware/web-components';
+import { rs } from '@rstest/core';
+import { EditableTableColumn, EditableTableToolbarContext, isMrtTable } from '@terraware/web-components';
 import { screen } from '@testing-library/react';
 import { MRT_ToggleFiltersButton } from 'material-react-table';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { MRT_Localization_FR } from 'material-react-table/locales/fr';
 
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import { LocalizationContext } from 'src/providers/contexts';
 import { renderWithProviders } from 'src/test-utils';
 
 import EditableTable from './EditableTable';
+
+rs.mock('src/features', () => ({ useFeatureEnabled: rs.fn() }));
+
+beforeEach(() => rs.mocked(useFeatureEnabled).mockReturnValue(false));
 
 const columns: EditableTableColumn<{ name: string }>[] = [
   { id: 'name', accessorKey: 'name', header: 'Name', filterVariant: 'text' },
@@ -60,4 +66,24 @@ it('switches table controls and column menus with the language while preserving 
 it.each(['es', 'fr', 'es-MX', 'gx', 'unrecognized'])('preserves caller overrides for %s', (locale) => {
   renderWithProviders(<LocalizedTable locale={locale} empty />);
   expect(screen.getByText('Custom empty message')).toBeVisible();
+});
+
+it.each([
+  [false, false],
+  [false, true],
+  [true, false],
+  [true, true],
+])('requires the feature flag (%s) and table opt-in (%s)', (flag, optIn) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const props = {
+    columns,
+    data,
+    clearAllFiltersLabel: 'Clear filters',
+    renderToolbarInternalActions: ({ table }: EditableTableToolbarContext<{ name: string }>) => (
+      <span>{isMrtTable(table) ? 'Legacy controls' : 'V2 controls'}</span>
+    ),
+  };
+  renderWithProviders(optIn ? <EditableTable {...props} supportsV2 /> : <EditableTable {...props} />);
+  expect(screen.getByText(flag && optIn ? 'V2 controls' : 'Legacy controls')).toBeVisible();
+  expect(screen.getByRole('cell', { name: 'Acacia koa' })).toBeVisible();
 });
