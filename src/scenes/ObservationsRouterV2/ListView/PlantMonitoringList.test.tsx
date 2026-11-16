@@ -159,7 +159,11 @@ describe('PlantMonitoringList', () => {
   });
 
   it('links Baseline details and exports biomass data without survival rate', async () => {
-    const baseline = { ...BASELINE_OBSERVATION, state: 'Completed' as const };
+    const baseline = {
+      ...BASELINE_OBSERVATION,
+      completedTime: '2026-04-15T00:00:00Z',
+      state: 'Completed' as const,
+    };
     const { user } = renderList(true, 'Baseline Survey', {
       baselineSurveyObservations: true,
       observations: [baseline],
