@@ -60,6 +60,9 @@ const ObservationSubstratumSelector = ({
   const baselineSelectionInitialized = useRef(false);
   const previousPlantingSite = useRef<typeof plantingSite>(undefined);
   const shouldPreselectBaseline = isBaseline && preselectBaselineSubstrata;
+  const substratumIds =
+    plantingSite?.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [];
+  const allSubstrataSelected = substratumIds.length > 0 && substratumIds.every((id) => selectedSubstrata.includes(id));
 
   const onChangeSelectAll = useCallback(
     (value: boolean) => {
@@ -219,7 +222,7 @@ const ObservationSubstratumSelector = ({
                 id='selectAll'
                 name='SelectAll'
                 label={strings.SELECT_ALL}
-                value={selectAll}
+                value={allSubstrataSelected}
                 onChange={onChangeSelectAll}
               />
             </Box>

@@ -78,6 +78,44 @@ const plotsAssigned = (total: number, temporary: number, permanent: number) => {
 };
 
 describe('ObservationSubstratumSelector', () => {
+  it.each(['Baseline Survey', 'Monitoring', 'Biomass Measurements'] as const)(
+    'keeps Select All in sync with individual and stratum selections for %s',
+    async (monitoringType) => {
+      mockGet(SITE_URL, { site });
+      mockGet('/api/v1/tracking/sites/reportedPlants', { sites: [] });
+      const { user } = renderWithProviders(
+        <ObservationSubstratumSelector
+          monitoringType={monitoringType}
+          plantingSiteId={1}
+          onChangeSelectedSubstrata={() => undefined}
+          preselectBaselineSubstrata
+        />
+      );
+      await screen.findByLabelText('Ewe Highlands');
+      const selectAll = screen.getByLabelText(strings.SELECT_ALL);
+      if (monitoringType === 'Baseline Survey') {
+        await waitFor(() => expect(selectAll).toBeChecked());
+      } else {
+        await user.click(selectAll);
+      }
+      for (const checkbox of [screen.getAllByLabelText('North')[0], screen.getByLabelText('Ewe Highlands')]) {
+        expect(selectAll).toBeChecked();
+        await user.click(checkbox);
+        expect(selectAll).not.toBeChecked();
+        await user.click(checkbox);
+        expect(selectAll).toBeChecked();
+        await user.click(checkbox);
+        await user.click(selectAll);
+        expect(selectAll).toBeChecked();
+        expect(checkbox).toBeChecked();
+        expect(screen.getAllByLabelText('South')[0]).toBeChecked();
+      }
+      await user.click(selectAll);
+      expect(selectAll).not.toBeChecked();
+      expect(screen.getByLabelText('Ewe Highlands')).not.toBeChecked();
+    }
+  );
+
   it('preselects only uncovered Baseline substrata on type changes and preserves manual edits and refreshes', async () => {
     const baselineSite = {
       ...buildPlantingSite(),
