@@ -66,6 +66,7 @@ it('keeps complete option names for filters and numeric option IDs for saves', (
   expect(getMatrixValue(row, 'v')).toBe('Forest, coastal');
   expect(getMatrixOptionIds(row, 'v')).toEqual(['7']);
   expect(matchesMatrixSelection(row, 'v', ['Forest, coastal'])).toBe(true);
+  expect(matchesMatrixSelection({ original: row }, 'v', ['Forest, coastal'])).toBe(true);
   expect(matchesMatrixSelection(row, 'v', ['Forest'])).toBe(false);
   expect(matchesMatrixSelection(row, 'v', ['Coastal forest'])).toBe(false);
   expect(matchesMatrixSelection(row, 'v', [])).toBe(true);
