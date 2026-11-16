@@ -27,10 +27,12 @@ export const getMatrixValue = (row: MatrixRow, stableId: string) => {
   return value.linkUrl ?? '';
 };
 
-export const getMatrixOptionIds = (row: MatrixRow, stableId: string) =>
-  row.variables
-    ?.find((variable) => variable.stableId === stableId)
-    ?.values?.[0]?.options?.map((option) => String(option.id)) ?? [];
+export const getMatrixOptionIds = (row: MatrixRow, stableId: string) => {
+  const variable = row.variables?.find((candidate) => candidate.stableId === stableId);
+  return variable?.isList?.toString() === 'true'
+    ? []
+    : (variable?.values?.[0]?.options?.map((option) => String(option.id)) ?? []);
+};
 
 export const matchesMatrixSelection = (
   row: MatrixRow | { original: MatrixRow },

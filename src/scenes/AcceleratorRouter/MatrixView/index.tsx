@@ -1,30 +1,21 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Box, Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import {
   BusySpinner,
   EditableTableCellContext,
   EditableTableColumn,
   EditableTableEditContext,
-  EditableTableProps,
   Icon,
 } from '@terraware/web-components';
-import {
-  MRT_TableInstance,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-} from 'material-react-table';
 
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { SharedEditableTableProps } from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
-import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
@@ -588,7 +579,7 @@ const MatrixView = () => {
           ...(Edit ? { editVariant: 'custom' as const, customEditComponent: Edit } : {}),
           onSave: (row, newValue) => {
             const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
-            const variableToProcess = variable ?? (correspondingVariable || selectedVariable);
+            const variableToProcess = variable ?? selectedVariable;
             if (variableToProcess) {
               return onSaveHandler(row.id, newValue as MatrixValue, variableToProcess);
             }
@@ -787,43 +778,9 @@ const MatrixView = () => {
     [setColumnFilters, setColumnOrder, setColumnVisibility, uniqueVariableIds]
   );
 
-  const renderToolbarInternalActions = useCallback(
-    ({ table }: { table: MRT_TableInstance<ProjectsWithVariablesSearchResult> }) => (
-      <TableToolbarActions>
-        <MRT_ToggleFiltersButton table={table} />
-        <Tooltip title={strings.MANAGE_COLUMNS}>
-          <IconButton onClick={onColumnsClickHandler} id='manageColumns'>
-            <Icon name='iconColumns' />
-          </IconButton>
-        </Tooltip>
-        <MRT_ToggleDensePaddingButton table={table} />
-        <MRT_ToggleFullScreenButton table={table} />
-        {showColumnsModal &&
-          allVariables &&
-          createPortal(
-            <ColumnsModal
-              onClose={onCloseColumnsModalHandler}
-              onSave={onColumnsSelected}
-              allVariables={allVariables}
-              table={table}
-            />,
-            document.body
-          )}
-      </TableToolbarActions>
-    ),
-    [
-      allVariables,
-      onCloseColumnsModalHandler,
-      onColumnsClickHandler,
-      onColumnsSelected,
-      showColumnsModal,
-      strings.MANAGE_COLUMNS,
-    ]
-  );
-
   const tableProps = useMemo<
     Pick<
-      EditableTableProps<ProjectsWithVariablesSearchResult>,
+      SharedEditableTableProps<ProjectsWithVariablesSearchResult>,
       | 'tableOptions'
       | 'positionGlobalFilter'
       | 'enableColumnDragging'
@@ -836,20 +793,39 @@ const MatrixView = () => {
       positionGlobalFilter: 'right',
       enableColumnDragging: !isMobile,
       renderTopToolbarCustomActions: ({ table }) => (
-        <CurrentView
-          defaultPreset={currentView}
-          defaultSettings={defaultViewSettings}
-          onPresetChange={onCurrentViewChange}
-          presetViews={[
-            { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
-            { label: strings.APPLICANTS, value: 'applicants' },
-          ]}
-          table={table}
-          tableDefinition={TABLES.matrixView}
-        />
+        <Box display='flex' alignItems='center' gap={1}>
+          <CurrentView
+            defaultPreset={currentView}
+            defaultSettings={defaultViewSettings}
+            onPresetChange={onCurrentViewChange}
+            presetViews={[
+              { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
+              { label: strings.APPLICANTS, value: 'applicants' },
+            ]}
+            table={table}
+            tableDefinition={TABLES.matrixView}
+          />
+          <Tooltip title={strings.MANAGE_COLUMNS}>
+            <IconButton aria-label={strings.MANAGE_COLUMNS} onClick={onColumnsClickHandler} id='manageColumns'>
+              <Icon name='iconColumns' />
+            </IconButton>
+          </Tooltip>
+          {showColumnsModal &&
+            allVariables &&
+            createPortal(
+              <ColumnsModal
+                onClose={onCloseColumnsModalHandler}
+                onSave={onColumnsSelected}
+                allVariables={allVariables}
+                table={table}
+              />,
+              document.body
+            )}
+        </Box>
       ),
       muiTableBodyCellProps: ({ cell, column }) => ({
         sx: {
+          borderBottom: 'none',
           '&[data-pinned="true"]:before': {
             backgroundColor: 'transparent !important',
           },
@@ -896,15 +872,6 @@ const MatrixView = () => {
         title: column.columnDef.header,
       }),
       tableOptions: {
-        enableGlobalFilterRankedResults: false,
-        initialState: { showColumnFilters: false },
-        muiTopToolbarProps: { sx: mobileTopToolbarSx },
-        renderColumnActionsMenuItems: ({ internalColumnMenuItems }) => {
-          // remove the last element (show all columns)
-          const columnMenuItemsCopy = [...internalColumnMenuItems];
-          void columnMenuItemsCopy.pop();
-          return columnMenuItemsCopy;
-        },
         state: {
           columnFilters: visibleColumnFilters,
           sorting,
@@ -912,7 +879,6 @@ const MatrixView = () => {
           columnOrder,
           columnVisibility,
           globalFilter,
-          showGlobalFilter: true,
         },
         onGlobalFilterChange: setGlobalFilter,
         onColumnFiltersChange: setColumnFilters,
@@ -920,21 +886,10 @@ const MatrixView = () => {
         onColumnPinningChange: setColumnPinning,
         onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
-        muiTableBodyRowProps: {
-          sx: {
-            '& td': {
-              borderBottom: 'none',
-            },
-          },
-        },
-        muiTableProps: {
-          sx: {
-            tableLayout: 'fixed',
-          },
-        },
       },
     }),
     [
+      allVariables,
       columnOrder,
       columnPinning,
       columnVisibility,
@@ -943,6 +898,9 @@ const MatrixView = () => {
       globalFilter,
       isMobile,
       onCurrentViewChange,
+      onCloseColumnsModalHandler,
+      onColumnsClickHandler,
+      onColumnsSelected,
       setColumnFilters,
       setColumnOrder,
       setColumnPinning,
@@ -950,6 +908,7 @@ const MatrixView = () => {
       setGlobalFilter,
       setSorting,
       sorting,
+      showColumnsModal,
       strings,
       visibleColumnFilters,
     ]
@@ -960,16 +919,20 @@ const MatrixView = () => {
       {loading === true && <BusySpinner />}
       <Card sx={{ borderRadius: '24px', padding: theme.spacing(3), boxShadow: 'none' }}>
         <EditableTable
+          supportsV2
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
           columns={matrixColumns}
           data={projects}
           enableColumnFilters
           enableColumnOrdering
           enableColumnPinning
+          enableShowAllColumnsMenuItem={false}
           enableEditing
           enableGlobalFilter
-          renderToolbarInternalActions={renderToolbarInternalActions}
-          sx={{ padding: 0 }}
+          showColumnFiltersButton
+          showDensityButton
+          showFullScreenButton
+          sx={{ padding: 0, '& .MuiTable-root': { tableLayout: 'fixed' } }}
           {...tableProps}
         />
       </Card>
