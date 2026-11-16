@@ -1,3 +1,4 @@
+import { getTableColumns, getVisibleTableColumns } from '@terraware/web-components';
 import dayjs from 'dayjs';
 import { MRT_RowData, MRT_TableInstance } from 'material-react-table';
 
@@ -9,10 +10,10 @@ const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
 const RANGE_VARIANTS = ['date-range', 'datetime-range', 'range', 'range-slider', 'time-range'];
 
 const getColumn = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, columnId: string) =>
-  table.getAllLeafColumns().find((column) => column.id === columnId);
+  getTableColumns(table, 'display').find((column) => column.id === columnId);
 
 const getColumnHeader = <TData extends MRT_RowData>(table: MRT_TableInstance<TData>, columnId: string) => {
-  const header = getColumn(table, columnId)?.columnDef.header;
+  const header = getColumn(table, columnId)?.header;
   return typeof header === 'string' ? header : columnId;
 };
 
@@ -31,7 +32,7 @@ const formatFilterValue = <TData extends MRT_RowData>(
   columnId: string,
   value: unknown
 ) => {
-  const columnDef = getColumn(table, columnId)?.columnDef;
+  const columnDef = getColumn(table, columnId);
 
   if (Array.isArray(value) && RANGE_VARIANTS.includes(columnDef?.filterVariant ?? '')) {
     const [min, max] = value as unknown[];
@@ -80,11 +81,7 @@ export const getSaveViewSummary = <TData extends MRT_RowData>(
   const sort = settings.sorting.length
     ? [strings.formatString(strings.VIEW_SUMMARY_SORT, formatSort(table, settings.sorting)) as string]
     : [];
-  const columns = [
-    ...table.getLeftVisibleLeafColumns(),
-    ...table.getCenterVisibleLeafColumns(),
-    ...table.getRightVisibleLeafColumns(),
-  ]
+  const columns = getVisibleTableColumns(table)
     .filter((column) => isDataColumnId(column.id))
     .map((column) => getColumnHeader(table, column.id));
 

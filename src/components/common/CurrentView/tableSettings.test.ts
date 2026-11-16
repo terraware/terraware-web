@@ -439,6 +439,12 @@ describe('isTableModified', () => {
       expect(isTableModified(result.current, { columnOrder: ['count'] }, defaults)).toBe(false);
     });
 
+    test('detects rearranging columns omitted from a partial saved order', () => {
+      const { result, defaults } = setup();
+      act(() => result.current.setColumnOrder(['name', 'count', 'status', 'date']));
+      expect(isTableModified(result.current, { columnOrder: ['name'] }, defaults)).toBe(true);
+    });
+
     test('ignores display columns in the order', () => {
       const { result, defaults } = setup({ enableRowSelection: true });
       const dataOrder = ['name', 'status', 'count', 'date'];
