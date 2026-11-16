@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
-import { Button, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Button, EditableTableColumn, EditableTableEditContext, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 
 import EditableTable from 'src/components/common/EditableTable';
@@ -34,6 +34,8 @@ type SpeciesRow = {
 };
 
 type TableRow = SpeciesRow & { rowKey: string };
+
+type SpeciesEditContext = EditableTableEditContext<TableRow> & { row: { id: string } };
 
 type QuadratSpeciesEditableTableProps = {
   editable: boolean;
@@ -111,7 +113,7 @@ export default function QuadratSpeciesEditableTable({
   );
 
   const saveAbundance = useCallback(
-    (row: TableRow, numValue: number) => {
+    async (row: TableRow, numValue: number) => {
       if (!position) {
         return;
       }
@@ -126,13 +128,19 @@ export default function QuadratSpeciesEditableTable({
         scientificName: row.speciesId ? undefined : row.scientificName || row.speciesName,
         abundance: numValue,
       };
-      void updateObservation({ updates: [uploadPayload] });
+      if (!(await updateObservation({ updates: [uploadPayload] }))) {
+        setRowEdits((prev) => ({
+          ...prev,
+          [row.rowKey]: { ...prev[row.rowKey], abundanceCount: row.abundanceCount },
+        }));
+        throw new Error('Unable to save abundance');
+      }
     },
     [position, updateObservation]
   );
 
   const saveBiomassSpecies = useCallback(
-    (fieldId: string, row: TableRow, value: string) => {
+    async (fieldId: 'isInvasive' | 'isThreatened', row: TableRow, value: string) => {
       const boolValue = value === 'true';
       const key = getRowKey(row);
       setSpeciesFlags((prev) => ({ ...prev, [key]: { ...prev[key], [fieldId]: boolValue } }));
@@ -142,7 +150,10 @@ export default function QuadratSpeciesEditableTable({
         scientificName: row.speciesId === undefined ? row.scientificName || row.speciesName : undefined,
         [fieldId]: boolValue,
       };
-      void updateObservation({ updates: [payload] });
+      if (!(await updateObservation({ updates: [payload] }))) {
+        setSpeciesFlags((prev) => ({ ...prev, [key]: { ...prev[key], [fieldId]: row[fieldId] } }));
+        throw new Error('Unable to save biomass species');
+      }
     },
     [updateObservation]
   );
@@ -414,7 +425,7 @@ export default function QuadratSpeciesEditableTable({
   );
 
   const SpeciesCellEditor = useCallback(
-    ({ row, table }: { row: { id: string; original: TableRow }; table: { setEditingCell: (cell: null) => void } }) =>
+    ({ row, cancel }: SpeciesEditContext) =>
       row.id === DRAFT_ROW_ID ? (
         <SpeciesSearchSelect
           id='addQuadratSpecies'
@@ -430,7 +441,7 @@ export default function QuadratSpeciesEditableTable({
           onChange={(picked) => {
             if (picked) {
               setPendingSpeciesChange({ row: row.original, species: picked });
-              table.setEditingCell(null);
+              cancel();
             }
           }}
           placeholder={row.original.speciesName ?? strings.SEARCH_SPECIES}
@@ -443,16 +454,11 @@ export default function QuadratSpeciesEditableTable({
 
   const FlagCellEditor = useCallback(
     (fieldId: 'isInvasive' | 'isThreatened') => {
-      const FlagEditor = ({
-        row,
-        table,
-      }: {
-        row: { id: string; original: TableRow };
-        table: { setEditingCell: (cell: null) => void };
-      }) => {
+      const FlagEditor = ({ row, save, isSaving }: SpeciesEditContext) => {
         const isDraftRow = row.id === DRAFT_ROW_ID;
         return (
           <TextField
+            disabled={isSaving}
             fullWidth
             id={`${isDraftRow ? 'add' : 'edit'}QuadratSpecies-${fieldId}`}
             onChange={(event) => {
@@ -460,8 +466,7 @@ export default function QuadratSpeciesEditableTable({
               if (isDraftRow) {
                 updateDraft({ [fieldId]: value });
               } else {
-                saveBiomassSpecies(fieldId, row.original, value);
-                table.setEditingCell(null);
+                void save(value).catch(() => undefined);
               }
             }}
             select
@@ -479,7 +484,7 @@ export default function QuadratSpeciesEditableTable({
       };
       return FlagEditor;
     },
-    [draft, saveBiomassSpecies, strings.NO, strings.SELECT, strings.YES, updateDraft]
+    [draft, strings.NO, strings.SELECT, strings.YES, updateDraft]
   );
 
   const invasiveEditor = useMemo(() => FlagCellEditor('isInvasive'), [FlagCellEditor]);
@@ -511,8 +516,9 @@ export default function QuadratSpeciesEditableTable({
               header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
               editConfig: {
                 editVariant: 'custom',
-                customEditComponent: ({ row, table: iTable }) => (
+                customEditComponent: ({ row, save, cancel, isSaving }) => (
                   <TextField
+                    disabled={isSaving}
                     type='number'
                     defaultValue={row.original.abundanceCount ?? ''}
                     id={row.id === DRAFT_ROW_ID ? 'addQuadratSpeciesAbundance' : undefined}
@@ -541,14 +547,16 @@ export default function QuadratSpeciesEditableTable({
                         numValue <= MAX_ABUNDANCE &&
                         (row.original.speciesId || row.original.scientificName || row.original.speciesName)
                       ) {
-                        saveAbundance(row.original, numValue);
+                        void save(numValue).catch(() => undefined);
+                      } else {
+                        cancel();
                       }
-                      iTable.setEditingCell(null);
                     }}
                     size='small'
                     fullWidth
                   />
                 ),
+                onSave: (row, value) => saveAbundance(row, Number(value)),
               },
             },
             {
@@ -578,19 +586,28 @@ export default function QuadratSpeciesEditableTable({
         accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
         header: strings.INVASIVE,
         Cell: IsInvasiveCell,
-        editConfig: { editVariant: 'custom', customEditComponent: invasiveEditor },
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: invasiveEditor,
+          onSave: (row, value) => saveBiomassSpecies('isInvasive', row, value),
+        },
       },
       {
         id: 'isThreatened',
         accessorFn: (row) => (row.isThreatened ? 'true' : 'false'),
         header: strings.THREATENED,
         Cell: IsThreatenedCell,
-        editConfig: { editVariant: 'custom', customEditComponent: threatenedEditor },
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: threatenedEditor,
+          onSave: (row, value) => saveBiomassSpecies('isThreatened', row, value),
+        },
       },
     ],
     [
       strings,
       abundanceColumns,
+      saveBiomassSpecies,
       canManageSpecies,
       invasiveEditor,
       threatenedEditor,
