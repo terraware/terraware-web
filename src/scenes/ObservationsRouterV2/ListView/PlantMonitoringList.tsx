@@ -32,7 +32,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationState, ObservationType, getStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { hasPendingResults } from 'src/utils/observation';
+import { hasObservationData, hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -59,6 +59,7 @@ type PlantMonitoringRow = {
   survivalRate?: number;
   survivalRatePending?: boolean;
   completedDate?: string;
+  hasData: boolean;
 };
 
 const TABLE = TABLES.assignedObservations;
@@ -96,7 +97,7 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
   } = useObservationExports();
   const navigate = useSyncNavigate();
 
-  const { observationId, observationState, observationType, state } = row;
+  const { hasData, observationId, observationState, observationType, state } = row;
   const exportDisabled = state === 'Upcoming';
   const rescheduleDisabled = state === 'Completed' || state === 'Abandoned';
 
@@ -120,7 +121,7 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
         },
         {
-          disabled: exportDisabled,
+          disabled: !hasData,
           label: strings.EXPORT_RESULTS,
           onClick: () => {
             void (observationType === 'Biomass Measurements' || observationType === 'Baseline Survey'
@@ -217,6 +218,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           survivalRate: observationResult.survivalRate,
           survivalRatePending: observationResult.pending,
           completedDate,
+          hasData: hasObservationData(observationResult),
         };
       }),
     [observationResults, plantingSiteNames, strings]
