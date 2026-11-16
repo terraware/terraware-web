@@ -135,12 +135,7 @@ export type AutoCalculatedIndicatorPayload = {
   description: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   indicator:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
   notes?: string;

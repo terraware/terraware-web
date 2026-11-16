@@ -57,8 +57,8 @@ export type DeleteOrganizationSplatApiArg = {
   organizationId: number;
   fileId: number;
 };
-export type GetOrganizationSplatFileApiResponse = /** status 200 The requested operation succeeded. */
-  | object
+export type GetOrganizationSplatFileApiResponse =
+  | /** status 200 The requested operation succeeded. */ object
   | /** status 202 The video is still being processed and the model is not ready yet. */ object;
 export type GetOrganizationSplatFileApiArg = {
   organizationId: number;

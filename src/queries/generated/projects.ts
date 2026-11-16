@@ -46,9 +46,8 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as api };
 export type ListProjectsApiResponse = /** status 200 OK */ ListProjectsResponsePayload;
 export type ListProjectsApiArg =
-  /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */
-    | number
-    | undefined;
+  | /** If specified, list projects in this organization. If absent, list projects in all the user's organizations. */ number
+  | undefined;
 export type CreateProjectApiResponse = /** status 200 OK */ CreateProjectResponsePayload;
 export type CreateProjectApiArg = CreateProjectRequestPayload;
 export type DeleteProjectApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;

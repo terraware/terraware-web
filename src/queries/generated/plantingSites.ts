@@ -553,6 +553,11 @@ export type UpdatePlantingSiteMapRequestPayload = {
 export type PlantingSiteEditSummaryItemPayloadBase = {
   type: string;
 };
+export type ObservationPlotsReassignedPayload = {
+  type: 'ObservationPlotsReassigned';
+} & PlantingSiteEditSummaryItemPayloadBase & {
+    observationIds: number[];
+  };
 export type ObservationsAbandonedPayload = {
   type: 'ObservationsAbandoned';
 } & PlantingSiteEditSummaryItemPayloadBase & {
@@ -648,6 +653,7 @@ export type SummarizePlantingSiteMapEditResponsePayload = {
   status: SuccessOrError;
   /** Changes the edit would make. Site-wide items come first, followed by each stratum's items. */
   summary: (
+    | ObservationPlotsReassignedPayload
     | ObservationsAbandonedPayload
     | PermanentPlotCreatedPayload
     | PlotAcceptedPayload

@@ -426,12 +426,7 @@ export type RefreshAcceleratorReportAutoCalculatedIndicatorsApiArg = {
   projectId: number;
   reportId: number;
   indicators: (
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate'
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate'
   )[];
 };
 export type ReviewAcceleratorReportIndicatorsApiResponse =
@@ -510,12 +505,7 @@ export type RefreshOneAcceleratorReportAutoCalculatedIndicatorsApiResponse =
 export type RefreshOneAcceleratorReportAutoCalculatedIndicatorsApiArg = {
   reportId: number;
   indicators: (
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate'
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate'
   )[];
 };
 export type ReviewOneAcceleratorReportIndicatorsApiResponse =
@@ -579,12 +569,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   description?: string;
   endOfProjectTarget?: number;
   indicator:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   isPublishable: boolean;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   overrideValue?: number;
@@ -714,12 +699,7 @@ export type SimpleErrorResponsePayload = {
 };
 export type UpdateAutoCalculatedIndicatorTargetRequestPayload = {
   indicator:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   target?: number;
   year: number;
 };
@@ -727,12 +707,7 @@ export type UpdateAutoCalculatedIndicatorBaselineTargetRequestPayload = {
   baseline?: number;
   endOfProjectTarget?: number;
   indicator:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
 };
 export type YearlyIndicatorTargetPayload = {
   target?: number;
@@ -742,12 +717,7 @@ export type AutoCalculatedIndicatorTargetsPayload = {
   baseline?: number;
   endOfProjectTarget?: number;
   indicatorId:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   yearlyTargets: YearlyIndicatorTargetPayload[];
 };
 export type GetAutoCalculatedIndicatorTargetsResponsePayload = {
@@ -838,12 +808,7 @@ export type GetAcceleratorReportResponsePayload = {
 };
 export type ReportAutoCalculatedIndicatorEntriesPayload = {
   indicator:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   overrideValue?: number;
   progressNotes?: string;
   projectsComments?: string;

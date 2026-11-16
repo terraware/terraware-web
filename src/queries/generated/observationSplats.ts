@@ -82,8 +82,8 @@ export type DeleteObservationSplatApiArg = {
   observationId: number;
   fileId: number;
 };
-export type GetObservationSplatFileApiResponse = /** status 200 The requested operation succeeded. */
-  | object
+export type GetObservationSplatFileApiResponse =
+  | /** status 200 The requested operation succeeded. */ object
   | /** status 202 The video is still being processed and the model is not ready yet. */ object;
 export type GetObservationSplatFileApiArg = {
   observationId: number;
