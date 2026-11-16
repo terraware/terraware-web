@@ -44,12 +44,15 @@ const project: MatrixRow = {
 };
 
 describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
-  const setup = (definition: VariableUnion = variable, row = project, filter?: string) => {
+  const setup = (definition: VariableUnion = variable, row = project, filter?: string | unknown[]) => {
     localStorage.clear();
     featureEnabled.mockReturnValue(enabled);
     localStorage.setItem('matrixView-columnVisibility', JSON.stringify({ v: true }));
     if (filter) {
-      localStorage.setItem('matrixView_columnFilters', JSON.stringify([{ id: 'v', value: [filter] }]));
+      localStorage.setItem(
+        'matrixView_columnFilters',
+        JSON.stringify([{ id: 'v', value: Array.isArray(filter) ? filter : [filter] }])
+      );
     }
     const currentUser = buildUser({ globalRoles: ['Super-Admin'] });
     mockGet('/api/v1/users/me', { user: currentUser });
@@ -68,7 +71,7 @@ describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
         },
       ],
     };
-    mockPost('/api/v1/search', { results: filter ? [row, control] : [row] });
+    mockPost('/api/v1/search', { results: typeof filter === 'string' ? [row, control] : [row] });
     const requests = captureRequests('post', '/api/v1/document-producer/projects/1/values');
     return { ...renderWithProviders(<MatrixView />, { currentUser: { user: currentUser } }), requests };
   };
@@ -167,5 +170,17 @@ describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
     await user.click(screen.getByRole('button', { name: strings.CLEAR_ALL_FILTERS }));
     expect(await screen.findByRole('cell', { name: 'Project' })).toBeVisible();
     expect(await screen.findByRole('cell', { name: 'Control' })).toBeVisible();
+  });
+
+  it.each(['Number', 'Date'] as const)('restores persisted %s ranges in the shared columns', async (type) => {
+    const base = { id: 2, stableId: 'v', name: 'Habitat', internalOnly: false, isList: false, isRequired: false };
+    const definition: VariableUnion = type === 'Number' ? { ...base, type, decimalPlaces: 0 } : { ...base, type };
+    const values = type === 'Number' ? { 'numberValue(raw)': 0 } : { dateValue: '2026-01-01T12:00:00Z' };
+    setup(
+      definition,
+      { ...project, variables: [{ ...project.variables[0], type, values: [{ variableValueId: '3', ...values }] }] },
+      type === 'Number' ? [null, 0] : ['2026-01-01', '2026-01-01']
+    );
+    expect(await screen.findByRole('cell', { name: 'Project' })).toBeVisible();
   });
 });

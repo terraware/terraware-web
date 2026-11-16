@@ -48,6 +48,7 @@ import {
   buildMatrixValueOperation,
   getMatrixOptionIds,
   getMatrixValue,
+  matchesMatrixRange,
   matchesMatrixSelection,
 } from './matrixValues';
 
@@ -236,7 +237,7 @@ const MatrixView = () => {
 
       if (variableType === 'Date') {
         filterVariant = 'date-range';
-        filterFunction = 'between';
+        filterFunction = (row, _columnId, range) => matchesMatrixRange(row, variableId, range);
         // eslint-disable-next-line react/display-name
         Edit = ({ cell, save, cancel, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
           const [value, setValue] = useState((cell.getValue() as string) || '');
@@ -511,7 +512,7 @@ const MatrixView = () => {
           return value === '' ? null : <FormattedNumber value={value as number} />;
         };
         filterVariant = 'range';
-        filterFunction = 'between';
+        filterFunction = (row, _columnId, range) => matchesMatrixRange(row, variableId, range);
         // Number input
         // eslint-disable-next-line react/display-name
         Edit = ({ cell, save, cancel, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
