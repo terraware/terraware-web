@@ -860,6 +860,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableTopToolbar={true}
         enableBottomToolbar={true}
         initialSorting={sorting}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter={'right'}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView
+            defaultSettings={defaultViewSettings}
+            organizationId={selectedOrganization?.id}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        )}
+        muiTableHeadCellProps={({ column }) =>
+          column.id === MENU_COLUMN_ID ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {}
+        }
+        muiTableBodyCellProps={({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` })}
         tableOptions={{
           state: {
             pagination,
@@ -886,19 +902,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           manualFiltering: true,
           rowCount: totalRowCount || 0,
           enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
           enableGrouping: false,
-          enableColumnDragging: !isMobile,
-          positionGlobalFilter: 'right',
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView
-              defaultSettings={defaultViewSettings}
-              organizationId={selectedOrganization?.id}
-              table={table}
-              tableDefinition={TABLE}
-            />
-          ),
           renderToolbarInternalActions: ({ table }) => (
             <TableToolbarActions>
               <Tooltip title={strings.EXPORT}>
@@ -935,9 +939,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               },
             },
           },
-          muiTableHeadCellProps: ({ column }) =>
-            column.id === MENU_COLUMN_ID ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
-          muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
           muiTableBodyRowProps: {
             sx: {
               '& td': {

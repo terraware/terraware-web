@@ -413,6 +413,24 @@ export default function AccessionsBySpeciesTable({
         enableColumnFilters={true}
         enableColumnOrdering={true}
         storageKey={TABLE.storageKey}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter={'right'}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView
+            defaultSettings={defaultViewSettings}
+            onPresetChange={handlePresetChange}
+            organizationId={selectedOrganization?.id}
+            presetViews={presetViews}
+            table={table}
+            tableDefinition={TABLE}
+          />
+        )}
+        muiTableBodyCellProps={({ row, column, table }) => {
+          const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+          return { id: `row${visualIndex + 1}-${column.id}` };
+        }}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           defaultColumn: {
@@ -440,10 +458,6 @@ export default function AccessionsBySpeciesTable({
           onShowGlobalFilterChange: setShowGlobalFilter,
           onDensityChange,
           enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
-          enableColumnDragging: !isMobile,
-          positionGlobalFilter: 'right',
           getRowId: (row) => row.id,
           ...(canWithdraw
             ? {
@@ -501,16 +515,6 @@ export default function AccessionsBySpeciesTable({
                 },
               }
             : {}),
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView
-              defaultSettings={defaultViewSettings}
-              onPresetChange={handlePresetChange}
-              organizationId={selectedOrganization?.id}
-              presetViews={presetViews}
-              table={table}
-              tableDefinition={TABLE}
-            />
-          ),
           renderToolbarInternalActions: ({ table }) => (
             <TableToolbarActions>
               <Tooltip title={strings.EXPORT}>
@@ -525,10 +529,6 @@ export default function AccessionsBySpeciesTable({
               <MRT_ToggleFullScreenButton table={table} />
             </TableToolbarActions>
           ),
-          muiTableBodyCellProps: ({ row, column, table }) => {
-            const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-            return { id: `row${visualIndex + 1}-${column.id}` };
-          },
           muiTableBodyProps: {
             sx: {
               '& tr:nth-of-type(odd) > td': {

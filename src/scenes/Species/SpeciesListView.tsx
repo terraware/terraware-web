@@ -947,6 +947,22 @@ export default function SpeciesListView(): JSX.Element {
           enablePagination={true}
           enableTopToolbar={true}
           enableBottomToolbar={true}
+          enableColumnActions={true}
+          enableHiding={true}
+          enableColumnDragging={!isMobile}
+          positionGlobalFilter={'right'}
+          renderTopToolbarCustomActions={({ table }) => (
+            <CurrentView
+              defaultSettings={defaultViewSettings}
+              organizationId={organizationId}
+              table={table}
+              tableDefinition={TABLE}
+            />
+          )}
+          muiTableBodyCellProps={({ row, column, table }) => {
+            const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+            return { id: `row${visualIndex + 1}-${column.id}` };
+          }}
           tableOptions={{
             enableGlobalFilterRankedResults: false,
             autoResetPageIndex,
@@ -972,19 +988,7 @@ export default function SpeciesListView(): JSX.Element {
             onShowGlobalFilterChange: setShowGlobalFilter,
             onDensityChange,
             enableColumnPinning: true,
-            enableColumnActions: true,
-            enableHiding: true,
-            enableColumnDragging: !isMobile,
-            positionGlobalFilter: 'right',
             getRowId: (row) => String(row.id),
-            renderTopToolbarCustomActions: ({ table }) => (
-              <CurrentView
-                defaultSettings={defaultViewSettings}
-                organizationId={organizationId}
-                table={table}
-                tableDefinition={TABLE}
-              />
-            ),
             renderToolbarInternalActions: ({ table }) => (
               <TableToolbarActions>
                 <Tooltip title={strings.EXPORT}>
@@ -999,10 +1003,6 @@ export default function SpeciesListView(): JSX.Element {
                 <MRT_ToggleFullScreenButton table={table} />
               </TableToolbarActions>
             ),
-            muiTableBodyCellProps: ({ row, column, table }) => {
-              const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-              return { id: `row${visualIndex + 1}-${column.id}` };
-            },
             muiTableBodyProps: {
               sx: {
                 '& tr:nth-of-type(odd) > td': {
