@@ -579,6 +579,34 @@ describe('QuadratSpeciesEditableTable request order', () => {
 });
 
 describe('QuadratSpeciesEditableTable abundance editing', () => {
+  it('keeps a failed abundance edit open for retry and closes it only after saving', async () => {
+    const { requests, releaseUpdate, user } = setupQuadrat({
+      holdUpdates: (requestNumber) => requestNumber === 1,
+      updateFails: (requestNumber) => requestNumber === 1,
+    });
+    await screen.findByRole('cell', { name: ABUTILON.scientificName });
+    await user.dblClick(cellsOf(1)[1]);
+    const abundance = screen.getByRole('spinbutton');
+    await user.clear(abundance);
+    await user.type(abundance, '7');
+    await user.tab();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(abundance).toBeDisabled();
+
+    releaseUpdate(1);
+    await waitFor(() => expect(abundance).toBeEnabled());
+    expect(abundance).toHaveValue(7);
+    await user.click(abundance);
+    await user.tab();
+
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'QuadratSpecies', position: POSITION, speciesId: ABUTILON.id, abundance: 7 }],
+    });
+    await waitFor(() => expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument());
+    expect(cellsOf(1)[1]).toHaveTextContent('7');
+  });
+
   it('keeps the recorded abundance when an edit counts no squares', async () => {
     const { requests, user } = setupQuadrat();
     await screen.findByRole('cell', { name: ABUTILON.scientificName });
