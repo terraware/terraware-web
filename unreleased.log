@@ -1,3 +1,4 @@
+29b06880 SW-9188 Support assigning observation plots at scheduling time (#7176)
 6e6905df SW-9237 Seeds Withdrawals: New Withdrawal Details page to show photos Accessions, Batch, and more (#7205)
 45880562 Fix Baseline export test for disabled empty exports (#7206)
 f463b721 SW-9281 Observations: Export Data link should be disabled when there is no Observation data (#7180)
