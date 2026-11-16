@@ -1591,6 +1591,7 @@ PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Limite de {0} plus),121ba2ad
 PHOTOS_VIDEOS,Photos/Vidéos,5d533136
+PIN_TO_LEFT,Épingler à gauche,ef1066fe
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
@@ -2738,6 +2739,7 @@ UNIT,Unité,48d10134
 UNITS,Unités,ce3e3f06
 UNKNOWN,Inconnu,97ccc176
 UNPIN_ALL,Désépingler tout,97a06369
+UNPIN_COLUMN,Désépingler la colonne,36b80da4
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Pour résoudre ce problème, republiez tous les rapports mis à jour afin que les rapports destinés au bailleur de fonds reflètent les dernières données.",b2104255

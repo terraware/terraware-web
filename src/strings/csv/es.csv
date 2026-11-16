@@ -1592,6 +1592,7 @@ PHOTOS_AND_VIDEOS,Fotos y videos,754d8e11
 PHOTOS_TO_UPLOAD,Fotos a subir,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Límite de {0} más),121ba2ad
 PHOTOS_VIDEOS,Fotos/Videos,5d533136
+PIN_TO_LEFT,Fijar a la izquierda,ef1066fe
 PLACEHOLDER,Marcador de posición,e7c25185
 PLANT,plantar,9089fdf9
 PLANT_DENSITY,Densidad de plantación,feae2a2d
@@ -2739,6 +2740,7 @@ UNIT,Unidad,48d10134
 UNITS,Unidades,ce3e3f06
 UNKNOWN,Desconocido,97ccc176
 UNPIN_ALL,Desanclar todas,97a06369
+UNPIN_COLUMN,Desanclar columna,36b80da4
 UNPUBLISHED_CHANGES,Cambios no publicados,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Este informe NO coincide con el informe publicado. Esto puede deberse a cambios no publicados en este informe.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Para resolver este problema, vuelva a publicar cualquier informe actualizado para que los informes del financiador reflejen los datos más recientes.",b2104255
