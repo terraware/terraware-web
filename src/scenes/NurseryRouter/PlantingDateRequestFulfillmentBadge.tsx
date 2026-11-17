@@ -18,9 +18,9 @@ const PlantingDateRequestFulfillmentBadge = ({ status }: PlantingDateRequestFulf
     switch (status) {
       case 'Pending':
         return {
-          backgroundColor: theme.palette.TwClrBgWarningTertiary,
-          borderColor: theme.palette.TwClrBrdrWarning,
-          labelColor: theme.palette.TwClrTxtWarning,
+          backgroundColor: '#eff2f2',
+          borderColor: '#c9d1d1',
+          labelColor: '#4a5758',
           label: strings.NEW,
         };
       case 'Partial':

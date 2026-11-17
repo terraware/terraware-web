@@ -1405,6 +1405,7 @@ NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
 NOT_SET,Non défini,6b047afe
+NOT_STARTED,Non commencé,de481428
 NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_VERIFIED,Non vérifié,fbd9066a
 NOT_WITHDRAWN_TO_DATE,Aucun retrait à ce jour,bbb78c00
@@ -2012,7 +2013,7 @@ REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
 REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
-REQUESTED_SPECIES,Espèces demandées,d2f82712
+REQUESTED_X,Demandé {0},d71a2203
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
@@ -2861,6 +2862,7 @@ VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,
 VIEW_QUANTITIES,Voir les quantités,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
+VIEW_REQUESTED_SPECIES_QUANTITIES,Voir les quantités de chaque espèce demandée,a5ae86c4
 VIEW_SESSION,Voir la session,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une carte.",f4d62997
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
@@ -2939,6 +2941,7 @@ WITHDRAWN_FOR_PLANTING,Retiré pour la plantation,dd024a58
 WITHDRAWN_PLANTS,Plantes retirées,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Dépasse la quantité restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La quantité retirée doit être supérieure à 0,75e6b589
+WITHDRAWN_X,Retiré {0},0bf8078d
 WOOD_DENSITY_LEVEL,Niveau de densité du bois,83a6a766
 WOODY_SPECIES,Espèces ligneuses,362f68d0
 WORDS,Mots,45f70926
@@ -2950,6 +2953,7 @@ WORKSHOPS,Ateliers,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
 X_ACCESSION,{0} accession,cfd54196
 X_ACCESSIONS,{0} accessions,e8ccdbc4
+X_AND_N_MORE,{0} et {1} de plus,582a270c
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
 X_COMPLETED_Y,{0} (terminé le {1}),801c7a02
@@ -2968,12 +2972,14 @@ X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
 X_PLOT,{0} placette,69151ad1
 X_PLOTS,{0} placettes,af2dd663
+X_REQUESTED,{0} demandés,e7603259
 X_SCHEDULED_Y,{0} (planifié pour le {1}),ee2e9f83
 X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_STILL_IN_THIS_STAGE,{0} toujours à cette étape,6e034985
 X_TARGET,Objectif {0},d8170b6e
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
+X_WITHDRAWN,{0} retirés,d3f3ea43
 YEARLY_CUMULATIVE,Cumulatif annuel,ed9a120d
 YES,Oui,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Vous avez accepté les conditions le {0}.,b2a20246
