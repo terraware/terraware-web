@@ -2,6 +2,7 @@ export { buildAccession, buildViabilityTest } from './accession';
 export { buildBatch, buildBatchSearchRow } from './batch';
 export { buildAcceleratorAdmin, buildFunderUser, buildUser } from './user';
 export { buildFacility, buildOrganization, buildSeedBank } from './organization';
+export { buildObservation } from './observation';
 export { buildSiteObservationStats, buildStratumStats, buildSubstratumStats } from './observationStats';
 export { buildPersonSearchResult } from './people';
 export type { PersonSearchResult } from './people';
