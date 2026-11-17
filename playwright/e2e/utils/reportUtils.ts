@@ -1,17 +1,19 @@
 import { APIRequestContext, expect } from '@playwright/test';
 
-export type ReportQuarter = 'Q1' | 'Q2' | 'Q3' | 'Q4';
+import type {
+  AcceleratorReportPayload,
+  ListAcceleratorReportConfigResponsePayload,
+  ListAcceleratorReportsResponsePayload,
+  ReportReviewPayload,
+} from '../../../src/queries/generated/acceleratorReports';
 
-export type ReportContent = {
-  achievements: string[];
-  additionalComments: string;
-  challenges: { challenge: string; mitigationPlan: string }[];
-  financialSummaries: string;
-  highlights: string;
-};
+export type ReportQuarter = NonNullable<AcceleratorReportPayload['quarter']>;
 
-type ReportConfig = { reportingStartDate: string; reportingEndDate: string };
-type Report = { id: number; quarter?: ReportQuarter; status: string };
+export type ReportContent = Required<
+  Pick<ReportReviewPayload, 'achievements' | 'additionalComments' | 'challenges' | 'financialSummaries' | 'highlights'>
+>;
+
+type Report = Pick<AcceleratorReportPayload, 'id' | 'quarter' | 'status'>;
 
 const expectOk = async (response: Awaited<ReturnType<APIRequestContext['get']>>, description: string) => {
   expect(response.ok(), `${description} failed with ${response.status()}: ${await response.text()}`).toBeTruthy();
@@ -29,7 +31,7 @@ export const ensureYearlyReportConfig = async (request: APIRequestContext, proje
 
   const configsResponse = await request.get(`${reportsUrl(projectId)}/configs`);
   await expectOk(configsResponse, 'Listing report configs');
-  const { configs } = (await configsResponse.json()) as { configs: ReportConfig[] };
+  const { configs } = (await configsResponse.json()) as ListAcceleratorReportConfigResponsePayload;
 
   if (!configs.some((config) => config.reportingStartDate === reportingStartDate)) {
     const createResponse = await request.put(`${reportsUrl(projectId)}/configs`, {
@@ -47,7 +49,7 @@ export const getQuarterlyReport = async (
 ): Promise<Report> => {
   const listResponse = await request.get(`${reportsUrl(projectId)}?year=${year}`);
   await expectOk(listResponse, 'Listing reports');
-  const { reports } = (await listResponse.json()) as { reports: Report[] };
+  const { reports } = (await listResponse.json()) as ListAcceleratorReportsResponsePayload;
 
   const report = reports.find((candidate) => candidate.quarter === quarter);
   expect(report, `No ${year}-${quarter} report for project ${projectId}`).toBeDefined();
@@ -70,7 +72,7 @@ export const approveReportWithContent = async (
   }
 
   const reviewResponse = await request.post(`${reportsUrl(projectId)}/${report.id}/review`, {
-    data: { review: { ...content, status: 'Approved' } },
+    data: { review: { ...content, status: 'Approved' } satisfies ReportReviewPayload },
   });
   await expectOk(reviewResponse, `Approving report ${report.id}`);
 };
