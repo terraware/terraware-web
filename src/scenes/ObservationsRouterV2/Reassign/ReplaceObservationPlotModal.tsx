@@ -5,7 +5,9 @@ import { BusySpinner, Button, DialogBox, Dropdown, Textfield } from '@terraware/
 
 import { useLocalization, useOrganization } from 'src/providers';
 import {
+  AffectedUpcomingObservationPayload,
   ReplaceObservationPlotRequestPayload,
+  usePreviewReplaceObservationPlotMutation,
   useReplaceObservationPlotMutation,
 } from 'src/queries/generated/observations';
 import {
@@ -17,6 +19,7 @@ import { ReplaceObservationPlotDuration } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useReassignPlotModal } from '.';
+import ReplacePlotAffectedObservationsModal from './ReplacePlotAffectedObservationsModal';
 
 export default function ReplaceObservationPlotModal(): JSX.Element {
   const { open, monitoringPlotId, observationId, isPermanent, closeReassignPlotModal } = useReassignPlotModal();
@@ -28,11 +31,13 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
   const [duration, setDuration] = useState<ReplaceObservationPlotDuration | undefined>();
   const [validate, setValidate] = useState<boolean>(false);
   const [replaceRequest, setReplaceRequest] = useState<ReplaceObservationPlotRequestPayload | undefined>();
+  const [affectedObservations, setAffectedObservations] = useState<AffectedUpcomingObservationPayload[]>();
 
   const { data: monitoringPlots } = useSearchMonitoringPlotsQuery(monitoringPlotId ? [monitoringPlotId] : [], {
     skip: !monitoringPlotId,
   });
   const [replacePlot, replacePlotResults] = useReplaceObservationPlotMutation();
+  const [previewReplacePlot, { isLoading: previewLoading }] = usePreviewReplaceObservationPlotMutation();
   const [searchMonitoringPlots, { isLoading: searchPlotsLoading }] = useLazySearchMonitoringPlotsQuery();
 
   const monitoringPlot = useMemo(() => (monitoringPlots?.length ? monitoringPlots[0] : undefined), [monitoringPlots]);
@@ -41,10 +46,10 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
     e.stopPropagation();
   }, []);
 
-  const replaceObservationPlot = useCallback(() => {
-    setValidate(true);
+  const sendReplaceRequest = useCallback(() => {
     if (observationId && monitoringPlotId && justification && duration) {
       const requestPayload = { justification, duration };
+      setAffectedObservations(undefined);
       setReplaceRequest(requestPayload);
       void replacePlot({
         observationId,
@@ -52,7 +57,38 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
         replaceObservationPlotRequestPayload: requestPayload,
       });
     }
-  }, [duration, justification, monitoringPlotId, observationId, replacePlot, setReplaceRequest]);
+  }, [duration, justification, monitoringPlotId, observationId, replacePlot]);
+
+  const replaceObservationPlot = useCallback(async () => {
+    setValidate(true);
+    if (!observationId || !monitoringPlotId || !justification || !duration) {
+      return;
+    }
+
+    // Long-term replacements can change other upcoming observations, so ask for confirmation first.
+    if (duration === 'LongTerm') {
+      try {
+        const preview = await previewReplacePlot({
+          observationId,
+          plotId: monitoringPlotId,
+          previewReplaceObservationPlotRequestPayload: { duration },
+        }).unwrap();
+        if (preview.affectedObservations.length) {
+          setAffectedObservations(preview.affectedObservations);
+          return;
+        }
+      } catch {
+        snackbar.toastError();
+        return;
+      }
+    }
+
+    sendReplaceRequest();
+  }, [duration, justification, monitoringPlotId, observationId, previewReplacePlot, sendReplaceRequest, snackbar]);
+
+  const onSendRequest = useCallback(() => void replaceObservationPlot(), [replaceObservationPlot]);
+
+  const onBackFromAffectedObservations = useCallback(() => setAffectedObservations(undefined), []);
 
   const durations = useMemo(() => {
     return [
@@ -66,10 +102,16 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
     setDuration(undefined);
     setJustification(undefined);
     setValidate(false);
+    setAffectedObservations(undefined);
   }, [closeReassignPlotModal]);
 
   const onSuccess = useCallback(
-    async (addedPlotIds: number[], removedPlotIds: number[]) => {
+    async (
+      addedPlotIds: number[],
+      removedPlotIds: number[],
+      reassignedObservationIds: number[],
+      deletedObservationIds: number[]
+    ) => {
       const modifiedPlots = [...addedPlotIds, ...removedPlotIds];
       const plots = modifiedPlots.length ? await searchMonitoringPlots(modifiedPlots).unwrap() : [];
 
@@ -123,9 +165,32 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
         }
       }
 
+      const upcomingObservationLineItems: (string | JSX.Element)[] = [];
+      if (reassignedObservationIds.length) {
+        upcomingObservationLineItems.push(
+          <br key='reassigned' />,
+          strings.formatString(
+            strings.REASSIGNMENT_REQUEST_UPCOMING_OBSERVATIONS_REASSIGNED,
+            reassignedObservationIds.length
+          ) as string
+        );
+      }
+      if (deletedObservationIds.length) {
+        upcomingObservationLineItems.push(
+          <br key='deleted' />,
+          strings.formatString(
+            strings.REASSIGNMENT_REQUEST_UPCOMING_OBSERVATIONS_DELETED,
+            deletedObservationIds.length
+          ) as string
+        );
+      }
+
       if (noReplacedPlotsFound) {
         snackbar.pageWarning(
-          lineItems.concat([<br key='warn' />, strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING]),
+          lineItems.concat(
+            [<br key='warn' />, strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING],
+            upcomingObservationLineItems
+          ),
           strings.REASSIGNMENT_REQUEST_STATUS,
           { label: strings.CLOSE }
         );
@@ -147,6 +212,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
           lineItems.push(strings.REASSIGNMENT_REQUEST_NO_PLOTS_ADDED);
         }
 
+        lineItems.push(...upcomingObservationLineItems);
         snackbar.pageInfo(lineItems, strings.REASSIGNMENT_REQUEST_STATUS, { label: strings.CLOSE });
       }
       onClose();
@@ -158,8 +224,9 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
     if (replacePlotResults.isError) {
       snackbar.toastError();
     } else if (replacePlotResults.isSuccess) {
-      const { addedMonitoringPlotIds, removedMonitoringPlotIds } = replacePlotResults.data;
-      void onSuccess(addedMonitoringPlotIds, removedMonitoringPlotIds);
+      const { addedMonitoringPlotIds, removedMonitoringPlotIds, reassignedObservationIds, deletedObservationIds } =
+        replacePlotResults.data;
+      void onSuccess(addedMonitoringPlotIds, removedMonitoringPlotIds, reassignedObservationIds, deletedObservationIds);
     }
   }, [
     selectedOrganization,
@@ -172,11 +239,18 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
   ]);
   return (
     <>
-      {(replacePlotResults.isLoading || searchPlotsLoading) && <BusySpinner withSkrim={true} />}
+      {(replacePlotResults.isLoading || previewLoading || searchPlotsLoading) && <BusySpinner withSkrim={true} />}
       <div onClick={stopPropagation} onMouseDown={stopPropagation}>
+        {open && affectedObservations && (
+          <ReplacePlotAffectedObservationsModal
+            affectedObservations={affectedObservations}
+            onBack={onBackFromAffectedObservations}
+            onConfirm={sendReplaceRequest}
+          />
+        )}
         <DialogBox
           onClose={onClose}
-          open={open}
+          open={open && !affectedObservations}
           title={strings.REQUEST_REASSIGNMENT}
           size='medium'
           middleButtons={[
@@ -188,12 +262,7 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
               priority='secondary'
               key='button-1'
             />,
-            <Button
-              id='replaceObservationPlot'
-              onClick={replaceObservationPlot}
-              label={strings.SEND_REQUEST}
-              key='button-2'
-            />,
+            <Button id='replaceObservationPlot' onClick={onSendRequest} label={strings.SEND_REQUEST} key='button-2' />,
           ]}
           scrolled={false}
         >
