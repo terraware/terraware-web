@@ -1,3 +1,4 @@
+e5aa01b5 Localize MatrixView column pin tooltips (#7233)
 58b74e36 SW-9306 Warn before scheduling a Baseline Survey over existing baselines (#7181)
 d381e30f SW-9305 Show Baseline Survey status pills when selecting substrata (#7179)
 7ec5d1be Update dependencies (#7203)
