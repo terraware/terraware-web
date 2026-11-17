@@ -24,7 +24,6 @@ ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,{0} retirados a {1},f2bd4039
 ACCESSION_EVENT_WITHDRAWAL_DELETED,se eliminó un retiro,2fa169b8
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,se eliminó un retiro para prueba de viabilidad,d9b09155
 ACCESSION_EVENT_WITHDRAWAL_ON_DATE,{0} el {1},e6e61cb5
-ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,{0} (~{1}),0afe1bef
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,El retiro {0} cambió de {1} a {2},8dd1f01b
 ACCESSION_HISTORY_NO_EVENTS,Aún no hay historial.,f8822669
 ACCESSION_ID,ID de accesión,a87726c0
@@ -2807,6 +2806,7 @@ USING_OBSERVATION_DATA_FROM,Usando datos de observación de {0},c489a0dd
 VALUE,Valor,b8e67ab1
 VALUE_CANT_EXCEED_100,El valor no puede sobrepasar 100%,e78b7737
 VALUE_CHANGED_FROM_TO,{0} cambió de {1} a {2},205532d3
+VALUE_WITH_ESTIMATE,{0} (~{1}),cb750b5e
 VARIABLE_DETAILS,Detalles de las variables,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,El valor ha excedido los decimales máximos de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,El valor es superior al valor máximo de {0},4bb003ef

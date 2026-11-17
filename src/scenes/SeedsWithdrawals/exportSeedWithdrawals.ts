@@ -24,6 +24,19 @@ export const seedWithdrawalEstimatedWeight = (withdrawal: SearchSeedWithdrawalPa
     : `${withdrawal.estimatedWeightQuantity}`;
 };
 
+export const seedWithdrawalEstimatedCount = (withdrawal: SearchSeedWithdrawalPayload): string =>
+  withdrawal.estimatedCount === undefined ? '' : `${withdrawal.estimatedCount} ${unitAbbv().Seeds}`;
+
+export const seedWithdrawalQuantityWithEstimate = (withdrawal: SearchSeedWithdrawalPayload): string => {
+  const quantity = seedWithdrawalQuantity(withdrawal);
+  const estimate =
+    withdrawal.units === 'Seeds' ? seedWithdrawalEstimatedWeight(withdrawal) : seedWithdrawalEstimatedCount(withdrawal);
+
+  return quantity && estimate
+    ? (strings.formatString(strings.VALUE_WITH_ESTIMATE, quantity, estimate) as string)
+    : quantity;
+};
+
 const makeSeedWithdrawalsCsv = (seedWithdrawals: SearchSeedWithdrawalPayload[]): Blob => {
   const columnHeaders = [
     { key: 'date', displayLabel: strings.DATE },
