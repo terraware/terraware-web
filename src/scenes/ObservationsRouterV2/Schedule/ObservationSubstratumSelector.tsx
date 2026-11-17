@@ -200,17 +200,19 @@ const ObservationSubstratumSelector = ({
               width={PLOT_COUNT_COLUMN_WIDTH}
               flexShrink={0}
             >
-              {strings.PERMANENT_PLOTS}
+              {isBaseline ? strings.PLOTS : strings.PERMANENT_PLOTS}
             </Typography>
-            <Typography
-              fontSize='12px'
-              color={theme.palette.TwClrTxtSecondary}
-              textAlign='right'
-              width={PLOT_COUNT_COLUMN_WIDTH}
-              flexShrink={0}
-            >
-              {strings.TEMPORARY_PLOTS}
-            </Typography>
+            {!isBaseline && (
+              <Typography
+                fontSize='12px'
+                color={theme.palette.TwClrTxtSecondary}
+                textAlign='right'
+                width={PLOT_COUNT_COLUMN_WIDTH}
+                flexShrink={0}
+              >
+                {strings.TEMPORARY_PLOTS}
+              </Typography>
+            )}
           </Box>
         </Grid>
         {plantingSite.strata?.map((stratum, index) => {
@@ -268,11 +270,13 @@ const ObservationSubstratumSelector = ({
                   )}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                  {numPermanentPlots}
+                  {isBaseline ? numPermanentPlots + numTemporaryPlots : numPermanentPlots}
                 </Typography>
-                <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                  {numTemporaryPlots}
-                </Typography>
+                {!isBaseline && (
+                  <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
+                    {numTemporaryPlots}
+                  </Typography>
+                )}
               </Box>
               {!isBaseline &&
                 stratum.latestObservationCompletedTime &&
@@ -310,7 +314,15 @@ const ObservationSubstratumSelector = ({
                           value={selectedSubstrata.includes(substratum.id)}
                         />
                         {isBaseline && (
-                          <Box component='span' display='inline-flex' gap={1} flexWrap='wrap' alignItems='center'>
+                          <Box
+                            component='span'
+                            display='inline-flex'
+                            gap={1}
+                            flexWrap='wrap'
+                            alignItems='center'
+                            marginTop={1}
+                            sx={{ '& > span': { padding: theme.spacing(0, 0.5) } }}
+                          >
                             {substratum.latestBaselineSurveyDate && substratum.latestBaselineSurveyStatus && (
                               <Badge
                                 label={
@@ -361,11 +373,15 @@ const ObservationSubstratumSelector = ({
                         )}
                       </Box>
                       <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                        {approximate(estimate?.numPermanentPlots ?? 0)}
+                        {approximate(
+                          (estimate?.numPermanentPlots ?? 0) + (isBaseline ? (estimate?.numTemporaryPlots ?? 0) : 0)
+                        )}
                       </Typography>
-                      <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                        {approximate(estimate?.numTemporaryPlots ?? 0)}
-                      </Typography>
+                      {!isBaseline && (
+                        <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
+                          {approximate(estimate?.numTemporaryPlots ?? 0)}
+                        </Typography>
+                      )}
                     </Box>
                   );
                 })}
@@ -378,7 +394,9 @@ const ObservationSubstratumSelector = ({
             <Divider sx={{ marginBottom: theme.spacing(3) }} />
             <Typography fontSize='14px'>
               {strings.formatString(
-                strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,
+                isBaseline
+                  ? strings.X_WILL_BE_ASSIGNED_FOR_THE_SELECTED_AREAS
+                  : strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,
                 <b>{totalAssignedPlotsText}</b>,
                 <>{approximate(assignedPlots.temporary)}</>,
                 <>{approximate(assignedPlots.permanent)}</>

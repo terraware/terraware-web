@@ -1741,6 +1741,7 @@ PLOT_SPECIES_TOOLTIP,"Especies es el número de especies representadas por todas
 PLOT_SURVIVAL_RATE_TOOLTIP,"La tasa de supervivencia se calcula en función de la densidad inicial de plantas especificada y el número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes, aquellas cuyo nombre científico es desconocido o que no están en la lista de especies.",4e745c92
 PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todas las plantas observadas, incluyendo las registradas como vivas y muertas. No se incluyen las plantas registradas como preexistentes.",244fd18c
 PLOT_TYPE,Tipo de parcela,4b579233
+PLOTS,Parcelas,1137d7eb
 PLOTS_AD_HOC,Parcelas ad hoc,104e30b2
 PLOTS_PERMANENT,Parcelas fijas,d06e9f3a
 PLOTS_SIZE_NOTE,*Datos recopilados con parcelas de 25x25 m,1c6249f4
@@ -2980,6 +2981,7 @@ X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 X_STILL_IN_THIS_STAGE,{0} aún en esta etapa,6e034985
 X_TARGET,Meta {0},d8170b6e
 X_THIS_QUARTER,{0} este trimestre,6391f6a0
+X_WILL_BE_ASSIGNED_FOR_THE_SELECTED_AREAS,Se asignarán {0} a las áreas seleccionadas.,cc3acd77
 X_WITHDRAWN,{0} retirados,d3f3ea43
 YEARLY_CUMULATIVE,Acumulativo anual,ed9a120d
 YES,Sí,d8b0d802
