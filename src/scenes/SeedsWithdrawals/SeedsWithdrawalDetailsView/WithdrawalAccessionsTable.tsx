@@ -5,7 +5,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Table from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
 import { SearchSeedWithdrawalPayload } from 'src/queries/search/seedWithdrawals';
-import { seedWithdrawalQuantity } from 'src/scenes/SeedsWithdrawals/exportSeedWithdrawals';
+import { seedWithdrawalQuantityWithEstimate } from 'src/scenes/SeedsWithdrawals/exportSeedWithdrawals';
 
 import WithdrawalAccessionsRenderer from './WithdrawalAccessionsRenderer';
 
@@ -31,7 +31,7 @@ const WithdrawalAccessionsTable = ({ withdrawals }: WithdrawalAccessionsTablePro
         id: withdrawal.id,
         accessionId: withdrawal.accessionId,
         accessionNumber: withdrawal.accessionNumber,
-        quantity: seedWithdrawalQuantity(withdrawal),
+        quantity: seedWithdrawalQuantityWithEstimate(withdrawal),
         speciesName: withdrawal.speciesName,
       })),
     [withdrawals]

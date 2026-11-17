@@ -19,10 +19,10 @@ test.describe('ObservationsTests', () => {
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Save' })).toBeVisible();
 
-    // select planting site & strata
+    // select planting site
     await page.locator('#site').click();
     await page.locator('li.select-value').first().click();
-    await page.getByLabel('Select All').click();
+    await expect(page.getByLabel('Select All')).toBeChecked();
 
     // enter observation start date (today)
     await page.getByLabel('Observation Start Date').fill(new Date().toISOString().split('T')[0]);

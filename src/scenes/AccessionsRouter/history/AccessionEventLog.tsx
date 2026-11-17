@@ -102,13 +102,13 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
         return description;
       }
 
-      if (target.kind === 'batch') {
+      if (target.kind === 'withdrawal') {
         return (
           <RouterLink
             fontSize='16px'
             fontWeight={400}
             lineHeight='24px'
-            to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(target.batchId))}
+            to={APP_PATHS.SEEDS_WITHDRAWALS_DETAILS.replace(':withdrawalId', String(target.withdrawalId))}
           >
             {description}
           </RouterLink>

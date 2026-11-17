@@ -248,10 +248,10 @@ describe('accessionEventTarget', () => {
     });
   });
 
-  // A seedbank withdrawal ID is not a nursery withdrawal ID, so linking it to
-  // /nursery/withdrawals/:withdrawalId would open an unrelated withdrawal.
-  it('gives withdrawal events nothing to open', () => {
-    expect(accessionEventTarget(event(withdrawal(), created))).toBeUndefined();
+  // The seeds withdrawal details page, never /nursery/withdrawals/:withdrawalId: these are separate
+  // ID spaces, so a seedbank withdrawal ID there would open an unrelated nursery withdrawal.
+  it('sends withdrawal events to their details page', () => {
+    expect(accessionEventTarget(event(withdrawal(), created))).toEqual({ kind: 'withdrawal', withdrawalId: 555111 });
   });
 
   it('gives accession events nothing to open, since this is already that page', () => {
@@ -391,9 +391,10 @@ describe('viability test creation copy', () => {
 });
 
 describe('click targets for withdrawals', () => {
-  it('sends a nursery transfer to its batch', () => {
-    const entry = event(withdrawal(493), createdWith({ batchId: '720', purpose: 'Nursery' }));
-    expect(accessionEventTarget(entry)).toEqual({ kind: 'batch', batchId: 720 });
+  // The batch of a nursery transfer is reached from the withdrawal details page, not from here.
+  it.each(['Nursery', 'Out-planting', 'Other'])('sends a %s withdrawal to its details page', (purpose) => {
+    const entry = event(withdrawal(493), createdWith({ batchId: '720', purpose }));
+    expect(accessionEventTarget(entry)).toEqual({ kind: 'withdrawal', withdrawalId: 493 });
   });
 
   it('sends a test withdrawal to the test it was made for', () => {
@@ -407,8 +408,9 @@ describe('click targets for withdrawals', () => {
     });
   });
 
-  it('gives an unpaired withdrawal with no batch nothing to open', () => {
-    expect(accessionEventTarget(event(withdrawal(493), createdWith({ purpose: 'Other' })))).toBeUndefined();
+  it('gives a deleted withdrawal nothing to open', () => {
+    const entry = event({ ...withdrawal(493), deleted: true }, createdWith({ purpose: 'Other' }));
+    expect(accessionEventTarget(entry)).toBeUndefined();
   });
 });
 

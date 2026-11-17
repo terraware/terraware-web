@@ -219,6 +219,7 @@ describe('baseline scheduling form', () => {
         await user.keyboard('{Control>}a{/Control}');
         await user.paste(date);
       }
+      await user.click(screen.getByLabelText(strings.SELECT_ALL));
       await user.click(screen.getByRole('button', { name: strings.SAVE }));
       expect(screen.getByText(strings.SELECT_AT_LEAST_ONE_SUBSTRATUM)).toBeInTheDocument();
       expect(onSchedule).not.toHaveBeenCalled();
@@ -263,7 +264,8 @@ describe('baseline scheduling form', () => {
     await user.click(
       await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
     );
-    await user.click(await screen.findByLabelText('A'));
+    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await user.click(screen.getByLabelText('A'));
     await user.click(screen.getByLabelText('C'));
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.getAllByText(strings.REQUIRED_FIELD).length).toBeGreaterThan(0);
@@ -314,7 +316,7 @@ describe('baseline scheduling form', () => {
       buildSubstratum({ latestBaselineSurveyStatus: 'Completed', latestBaselineSurveyDate: '2026-06-02' }),
     ]);
     await user.click(await screen.findByRole('radio', { name: (name) => name.includes(strings[title]) }));
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    expect(await screen.findByLabelText(strings.SELECT_ALL)).toBeChecked();
     for (const [label, date] of [
       [strings.OBSERVATION_START_DATE, startDate],
       [strings.OBSERVATION_END_DATE, endDate],
@@ -323,6 +325,7 @@ describe('baseline scheduling form', () => {
       await user.keyboard('{Control>}a{/Control}');
       await user.paste(date);
     }
+
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
     expect(onSchedule).toHaveBeenCalledWith({
@@ -345,7 +348,7 @@ describe('baseline scheduling form', () => {
     await user.click(
       await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
     );
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    expect(await screen.findByLabelText(strings.SELECT_ALL)).toBeChecked();
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.queryByText(strings.OBSERVATION_SMALL_SITE_WARNING)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
