@@ -4,7 +4,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { DateTime } from 'luxon';
 
-import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import ScheduledObservationsMenu, {
   RESCHEDULE_OBSERVATION_PARAM,
 } from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
@@ -69,13 +69,18 @@ const MORE_OVERDUE = [10, 11].map((id) =>
 
 const rescheduleUrl = (id: number) => `/api/v1/tracking/observations/${id}`;
 
-const renderMenu = (canReschedule = true, observations = [SECOND, FIRST], route?: string) => {
+const renderMenu = (
+  canReschedule = true,
+  observations = [SECOND, FIRST],
+  route?: string,
+  plantingSiteId: PlantingSiteId = ALL_PLANTING_SITES
+) => {
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/tracking/observations', { observations });
 
   return renderWithProviders(
-    <ScheduledObservationsMenu canReschedule={canReschedule} plantingSiteId={ALL_PLANTING_SITES} />,
+    <ScheduledObservationsMenu canReschedule={canReschedule} plantingSiteId={plantingSiteId} />,
     { route }
   );
 };
@@ -331,6 +336,17 @@ describe('ScheduledObservationsMenu sections', () => {
       expect(await screen.findByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
       expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'true');
       expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
+    });
+
+    it("waits until the observation's site is selected", async () => {
+      const { rerender } = renderMenu(true, ALL, request(SECOND.id), FIRST.plantingSiteId);
+
+      await waitFor(() => expect(document.querySelector('.MuiBadge-badge')).toHaveTextContent('6'));
+      expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
+
+      rerender(<ScheduledObservationsMenu canReschedule plantingSiteId={SECOND.plantingSiteId} />);
+
+      expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(SECOND.startDate);
     });
 
     it('opens to the upcoming observations when the observation is not scheduled', async () => {

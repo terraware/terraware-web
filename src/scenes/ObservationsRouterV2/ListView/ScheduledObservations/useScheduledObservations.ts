@@ -11,12 +11,14 @@ export type ScheduledObservationSection = 'upcoming' | 'inProgress' | 'overdue';
 
 export type ScheduledObservations = Record<ScheduledObservationSection, ObservationPayload[]>;
 
+const EMPTY: ObservationPayload[] = [];
+
 const byDate = (key: 'endDate' | 'startDate') => (a: ObservationPayload, b: ObservationPayload) =>
   a[key].localeCompare(b[key]) || a.id - b.id;
 
 const useScheduledObservations = (
   plantingSiteId: PlantingSiteId | undefined
-): { isLoaded: boolean; scheduledObservations: ScheduledObservations } => {
+): { allObservations: ObservationPayload[]; isLoaded: boolean; scheduledObservations: ScheduledObservations } => {
   const { selectedOrganization } = useOrganization();
   const { currentData } = useListObservationsQuery(
     selectedOrganization ? { organizationId: selectedOrganization.id } : skipToken
@@ -37,7 +39,11 @@ const useScheduledObservations = (
     };
   }, [currentData?.observations, plantingSiteId]);
 
-  return { isLoaded: currentData !== undefined, scheduledObservations };
+  return {
+    allObservations: currentData?.observations ?? EMPTY,
+    isLoaded: currentData !== undefined,
+    scheduledObservations,
+  };
 };
 
 export default useScheduledObservations;

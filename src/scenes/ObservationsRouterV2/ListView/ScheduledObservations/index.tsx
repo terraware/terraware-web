@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router';
 import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
 
-import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
 
@@ -24,7 +24,7 @@ type ScheduledObservationsMenuProps = {
 const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledObservationsMenuProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { isLoaded, scheduledObservations } = useScheduledObservations(plantingSiteId);
+  const { allObservations, isLoaded, scheduledObservations } = useScheduledObservations(plantingSiteId);
   const observations = useMemo(
     () => [...scheduledObservations.upcoming, ...scheduledObservations.inProgress, ...scheduledObservations.overdue],
     [scheduledObservations]
@@ -41,7 +41,13 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedId = searchParams.get(RESCHEDULE_OBSERVATION_PARAM);
 
-  const pendingRequest = isLoaded ? requestedId : null;
+  // A request for an observation at another site waits until that site is selected.
+  const requestedObservation = allObservations.find((observation) => observation.id === Number(requestedId));
+  const isAtOtherSite =
+    requestedObservation !== undefined &&
+    plantingSiteId !== ALL_PLANTING_SITES &&
+    requestedObservation.plantingSiteId !== plantingSiteId;
+  const pendingRequest = isLoaded && !isAtOtherSite ? requestedId : null;
   const [handledRequest, setHandledRequest] = useState<string | null>(null);
   if (pendingRequest !== handledRequest) {
     setHandledRequest(pendingRequest);
