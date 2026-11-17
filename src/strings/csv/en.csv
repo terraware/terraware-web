@@ -24,7 +24,6 @@ ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,{0} withdrawn to {1},{0} is the quantity wit
 ACCESSION_EVENT_WITHDRAWAL_DELETED,deleted a withdrawal,
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,deleted a withdrawal for viability test,
 ACCESSION_EVENT_WITHDRAWAL_ON_DATE,{0} on {1},"Adds the withdrawal date to an accession history log entry: {0} is the rest of the entry, such as ""96 seeds (~2 g) withdrawn for Nursery"", and {1} is the date"
-VALUE_WITH_ESTIMATE,{0} (~{1}),"A quantity followed by the server's estimate of the same amount in the other unit, so a weight is followed by a seed count and a seed count by a weight"
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,Withdrawal {0} changed from {1} to {2},
 ACCESSION_HISTORY_NO_EVENTS,No history yet.,
 ACCESSION_ID,Accession ID,
@@ -2806,6 +2805,7 @@ USING_OBSERVATION_DATA_FROM,Using observation data from {0},
 VALUE,Value,
 VALUE_CANT_EXCEED_100,Value can’t exceed 100%,
 VALUE_CHANGED_FROM_TO,{0} changed from {1} to {2},
+VALUE_WITH_ESTIMATE,{0} (~{1}),"A quantity followed by the server's estimate of the same amount in the other unit, so a weight is followed by a seed count and a seed count by a weight"
 VARIABLE_DETAILS,Variable Details,
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,The value has exceeded the maximum decimal places of {0},
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,The value is above the maximum value of {0},
