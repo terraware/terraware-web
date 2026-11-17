@@ -12,7 +12,7 @@ type Strings = ProvidedLocalizationData['strings'];
 export type AccessionEventTarget =
   | { kind: 'photo'; accessionId: number; fullText: string }
   | { kind: 'viabilityTest'; accessionId: number; viabilityTestId: number }
-  | { kind: 'batch'; batchId: number };
+  | { kind: 'withdrawal'; withdrawalId: number };
 
 export const accessionEventTarget = (
   event: EventLogEntryPayload,
@@ -34,16 +34,12 @@ export const accessionEventTarget = (
         viabilityTestId: subject.viabilityTestId,
       };
     case 'Withdrawal': {
-      const batchId = createdField(event.action, 'batchId');
-
-      if (batchId !== undefined) {
-        return { kind: 'batch', batchId: Number(batchId) };
-      }
-
+      // A viability test withdrawal opens the test it was withdrawn for; every other purpose has a
+      // withdrawal details page.
       const viabilityTestId = pairs?.get(subject.withdrawalId);
 
       return viabilityTestId === undefined
-        ? undefined
+        ? { kind: 'withdrawal', withdrawalId: subject.withdrawalId }
         : { kind: 'viabilityTest', accessionId: subject.accessionId, viabilityTestId };
     }
     default:
@@ -194,11 +190,7 @@ export const renderAccessionEventDescription = (
           const quantity =
             estimate === undefined
               ? withdrawnQuantity
-              : (strings.formatString(
-                  strings.ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,
-                  withdrawnQuantity,
-                  estimate
-                ) as string);
+              : (strings.formatString(strings.VALUE_WITH_ESTIMATE, withdrawnQuantity, estimate) as string);
 
           const purpose = createdField(action, 'purpose');
           const batchId = createdField(action, 'batchId');

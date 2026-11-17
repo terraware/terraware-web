@@ -24,7 +24,6 @@ ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,{0} retiré vers {1},f2bd4039
 ACCESSION_EVENT_WITHDRAWAL_DELETED,a supprimé un retrait,2fa169b8
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,un retrait a été supprimé pour un test de viabilité,d9b09155
 ACCESSION_EVENT_WITHDRAWAL_ON_DATE,{0} le {1},e6e61cb5
-ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,{0} (~{1}),0afe1bef
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,Le retrait {0} a été modifié de {1} à {2},8dd1f01b
 ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
@@ -1066,7 +1065,7 @@ LAST_EDITED_BY,Dernière modification,0b49c0a8
 LAST_MODIFIED_ON,Dernière modification effectuée le,93d681f9
 LAST_MODIFIED_ON_BY,Dernière modification le {0} par {1},afd4b34c
 LAST_NAME,Nom de famille,84595f78
-LAST_OBSERVATION,Dernière observation : {0},f2de6421
+LAST_OBSERVATION,Dernière observation,62aac09a
 LAST_REPORT_PUBLISHED,Rapport {0} publié {1},0199dbf5
 LAST_UPDATED,Dernière mise à jour,9ea41799
 LATEST_OBSERVATION,Dernière observation,52d53fd1
@@ -1406,6 +1405,7 @@ NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
 NOT_SET,Non défini,6b047afe
+NOT_STARTED,Non commencé,de481428
 NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_VERIFIED,Non vérifié,fbd9066a
 NOT_WITHDRAWN_TO_DATE,Aucun retrait à ce jour,bbb78c00
@@ -1591,6 +1591,7 @@ PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Limite de {0} plus),121ba2ad
 PHOTOS_VIDEOS,Photos/Vidéos,5d533136
+PIN_TO_LEFT,Épingler à gauche,ef1066fe
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
@@ -2012,6 +2013,7 @@ REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
 REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
+REQUESTED_X,Demandé {0},d71a2203
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
@@ -2738,6 +2740,7 @@ UNIT,Unité,48d10134
 UNITS,Unités,ce3e3f06
 UNKNOWN,Inconnu,97ccc176
 UNPIN_ALL,Désépingler tout,97a06369
+UNPIN_COLUMN,Désépingler la colonne,36b80da4
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Pour résoudre ce problème, republiez tous les rapports mis à jour afin que les rapports destinés au bailleur de fonds reflètent les dernières données.",b2104255
@@ -2803,6 +2806,7 @@ USING_OBSERVATION_DATA_FROM,Utilisation des données d'observation de {0},c489a0
 VALUE,Valeur,b8e67ab1
 VALUE_CANT_EXCEED_100,La valeur ne peut pas dépasser 100 %,e78b7737
 VALUE_CHANGED_FROM_TO,{0} a été modifié de {1} à {2},205532d3
+VALUE_WITH_ESTIMATE,{0} (~{1}),cb750b5e
 VARIABLE_DETAILS,Détails de la variable,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,La valeur a dépassé le nombre maximum de décimales de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,La valeur est supérieure à la valeur maximale de {0},4bb003ef
@@ -2855,8 +2859,10 @@ VIEW_ON_MAP,Voir sur la carte,fb873a55
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4
+VIEW_QUANTITIES,Voir les quantités,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
+VIEW_REQUESTED_SPECIES_QUANTITIES,Voir les quantités de chaque espèce demandée,a5ae86c4
 VIEW_SESSION,Voir la session,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une carte.",f4d62997
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
@@ -2935,6 +2941,7 @@ WITHDRAWN_FOR_PLANTING,Retiré pour la plantation,dd024a58
 WITHDRAWN_PLANTS,Plantes retirées,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Dépasse la quantité restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La quantité retirée doit être supérieure à 0,75e6b589
+WITHDRAWN_X,Retiré {0},0bf8078d
 WOOD_DENSITY_LEVEL,Niveau de densité du bois,83a6a766
 WOODY_SPECIES,Espèces ligneuses,362f68d0
 WORDS,Mots,45f70926
@@ -2946,6 +2953,7 @@ WORKSHOPS,Ateliers,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
 X_ACCESSION,{0} accession,cfd54196
 X_ACCESSIONS,{0} accessions,e8ccdbc4
+X_AND_N_MORE,{0} et {1} de plus,582a270c
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
 X_COMPLETED_Y,{0} (terminé le {1}),801c7a02
@@ -2956,6 +2964,7 @@ X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
 X_HECTARES_HA,{0} Hectares (ha),e2af9d30
+X_LEFT,{0} restants,d5d2cf6b
 X_OF_YEAR_CUMULATIVE_TARGET,{0} de l'objectif cumulatif annuel,6658988a
 X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
 X_OVERDUE_Y,{0} (en retard depuis le {1}),11c7edeb
@@ -2963,12 +2972,14 @@ X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
 X_PLOT,{0} placette,69151ad1
 X_PLOTS,{0} placettes,af2dd663
+X_REQUESTED,{0} demandés,e7603259
 X_SCHEDULED_Y,{0} (planifié pour le {1}),ee2e9f83
 X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_STILL_IN_THIS_STAGE,{0} toujours à cette étape,6e034985
 X_TARGET,Objectif {0},d8170b6e
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
+X_WITHDRAWN,{0} retirés,d3f3ea43
 YEARLY_CUMULATIVE,Cumulatif annuel,ed9a120d
 YES,Oui,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Vous avez accepté les conditions le {0}.,b2a20246
