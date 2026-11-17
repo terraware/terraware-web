@@ -2020,7 +2020,6 @@ REQUIRED,Obligatorio,ede65856
 REQUIRED_FIELD,Campo obligatorio,4e1802b3
 REQUIRED_QUESTION_MARK,¿Es obligatorio?,d99ba5a7
 RESCHEDULE,Reprogramar,2bb033c0
-RESCHEDULE_OBSERVATION,Reprogramar observación,b7403925
 RESET,Restablecer,d51ffc01
 RESET_BOUNDARY_SETUP,Restablecer configuración de límites,ef1aee2b
 RESET_COLUMNS,Restablecer columnas,871d2d56

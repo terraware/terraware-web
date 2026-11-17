@@ -2019,7 +2019,6 @@ REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
 REQUIRED_QUESTION_MARK,Obligatoire ?,d99ba5a7
 RESCHEDULE,Reporter,2bb033c0
-RESCHEDULE_OBSERVATION,Reporter l'observation,b7403925
 RESET,Réinitialisation,d51ffc01
 RESET_BOUNDARY_SETUP,Réinitialiser la configuration des limites,ef1aee2b
 RESET_COLUMNS,Réinitialiser les colonnes,871d2d56

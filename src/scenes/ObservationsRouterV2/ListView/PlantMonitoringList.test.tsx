@@ -406,6 +406,14 @@ describe('PlantMonitoringList', () => {
     );
   });
 
+  it('leaves rescheduling to the Scheduled Observations menu', async () => {
+    const { user } = renderList({});
+
+    const menu = await openRowMenu(user, PLANT_ROW);
+
+    expect(within(menu).queryByRole('menuitem', { name: strings.RESCHEDULE })).not.toBeInTheDocument();
+  });
+
   it('keeps location exports disabled for upcoming observations that have no plots yet', async () => {
     const { observationRequests, user } = renderList({ assignPlotsWhenScheduling: true }, { numPlots: 0 });
 
@@ -423,7 +431,7 @@ describe('PlantMonitoringList', () => {
     expect(within(menu).getAllByLabelText(strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP)).toHaveLength(2);
   });
 
-  it('stops completed observations from being rescheduled or ended in a language other than English', async () => {
+  it('stops completed observations from being ended in a language other than English', async () => {
     const { user } = renderList(
       {},
       {
@@ -434,7 +442,6 @@ describe('PlantMonitoringList', () => {
 
     const menu = await openRowMenu(user, /2026/);
 
-    expect(within(menu).getByRole('menuitem', { name: strings.RESCHEDULE })).toHaveAttribute('aria-disabled', 'true');
     expect(within(menu).getByRole('menuitem', { name: strings.END_OBSERVATION })).toHaveAttribute(
       'aria-disabled',
       'true'

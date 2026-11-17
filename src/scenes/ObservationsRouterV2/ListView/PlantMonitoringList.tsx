@@ -27,7 +27,6 @@ import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useListObservationsQuery } from 'src/queries/generated/observations';
@@ -98,11 +97,9 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
     downloadObservationGpx,
     downloadObservationResults,
   } = useObservationExports();
-  const navigate = useSyncNavigate();
 
   const { hasData, hasPlots, observationId, observationState, observationType } = row;
   const exportLocationsDisabled = observationState === 'Upcoming' && !hasPlots;
-  const rescheduleDisabled = observationState === 'Completed' || observationState === 'Abandoned';
 
   return (
     <TableRowPopupMenu
@@ -130,13 +127,6 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
             void (observationType === 'Biomass Measurements' || observationType === 'Baseline Survey'
               ? downloadBiomassObservationDetails(observationId)
               : downloadObservationResults(observationId));
-          },
-        },
-        {
-          disabled: rescheduleDisabled,
-          label: strings.RESCHEDULE,
-          onClick: () => {
-            navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
           },
         },
         {

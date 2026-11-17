@@ -187,7 +187,11 @@ describe('baseline scheduling form', () => {
     });
     mockGet('/api/v1/tracking/observations', { observations: [] });
     const { user } = renderWithProviders(
-      <ScheduleObservationForm title={strings.SCHEDULE_OBSERVATION} onCancel={() => undefined} />
+      <ScheduleObservationForm
+        title={strings.SCHEDULE_OBSERVATION}
+        onCancel={() => undefined}
+        onSchedule={() => undefined}
+      />
     );
 
     await user.click(document.querySelector('#site input')!);
