@@ -7,15 +7,18 @@ import {
   EditableTableCellContext,
   EditableTableColumn,
   EditableTableEditContext,
+  EditableTableToolbarContext,
   Icon,
+  isMrtTable,
 } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import CurrentView, { DEFAULT_VIEW } from 'src/components/common/CurrentView';
 import DatePicker from 'src/components/common/DatePicker';
-import EditableTable, { SharedEditableTableProps } from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar, SharedEditableTableProps } from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
+import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useUser } from 'src/providers';
@@ -778,6 +781,37 @@ const MatrixView = () => {
     [setColumnFilters, setColumnOrder, setColumnVisibility, uniqueVariableIds]
   );
 
+  const renderManageColumns = useCallback(
+    ({ table }: EditableTableToolbarContext<ProjectsWithVariablesSearchResult>) => (
+      <>
+        <Tooltip title={strings.MANAGE_COLUMNS}>
+          <IconButton aria-label={strings.MANAGE_COLUMNS} onClick={onColumnsClickHandler} id='manageColumns'>
+            <Icon name='iconColumns' />
+          </IconButton>
+        </Tooltip>
+        {showColumnsModal &&
+          allVariables &&
+          createPortal(
+            <ColumnsModal
+              onClose={onCloseColumnsModalHandler}
+              onSave={onColumnsSelected}
+              allVariables={allVariables}
+              table={table}
+            />,
+            document.body
+          )}
+      </>
+    ),
+    [
+      allVariables,
+      onCloseColumnsModalHandler,
+      onColumnsClickHandler,
+      onColumnsSelected,
+      showColumnsModal,
+      strings.MANAGE_COLUMNS,
+    ]
+  );
+
   const tableProps = useMemo<
     Pick<
       SharedEditableTableProps<ProjectsWithVariablesSearchResult>,
@@ -785,6 +819,7 @@ const MatrixView = () => {
       | 'positionGlobalFilter'
       | 'enableColumnDragging'
       | 'renderTopToolbarCustomActions'
+      | 'renderMrtToolbarInternalActions'
       | 'muiTableHeadCellProps'
       | 'muiTableBodyCellProps'
     >
@@ -792,8 +827,13 @@ const MatrixView = () => {
     () => ({
       positionGlobalFilter: 'right',
       enableColumnDragging: !isMobile,
-      renderTopToolbarCustomActions: ({ table }) => (
-        <Box display='flex' alignItems='center' gap={1}>
+      renderMrtToolbarInternalActions: (context) => (
+        <EditableTableToolbar {...context} showColumnFiltersButton showDensityButton showFullScreenButton>
+          {renderManageColumns(context)}
+        </EditableTableToolbar>
+      ),
+      renderTopToolbarCustomActions: ({ table }) => {
+        const currentViewControl = (
           <CurrentView
             defaultPreset={currentView}
             defaultSettings={defaultViewSettings}
@@ -805,27 +845,18 @@ const MatrixView = () => {
             table={table}
             tableDefinition={TABLES.matrixView}
           />
-          <Tooltip title={strings.MANAGE_COLUMNS}>
-            <IconButton aria-label={strings.MANAGE_COLUMNS} onClick={onColumnsClickHandler} id='manageColumns'>
-              <Icon name='iconColumns' />
-            </IconButton>
-          </Tooltip>
-          {showColumnsModal &&
-            allVariables &&
-            createPortal(
-              <ColumnsModal
-                onClose={onCloseColumnsModalHandler}
-                onSave={onColumnsSelected}
-                allVariables={allVariables}
-                table={table}
-              />,
-              document.body
-            )}
-        </Box>
-      ),
+        );
+        return isMrtTable(table) ? (
+          currentViewControl
+        ) : (
+          <Box display='flex' alignItems='center' gap={1}>
+            {currentViewControl}
+            {renderManageColumns({ table })}
+          </Box>
+        );
+      },
       muiTableBodyCellProps: ({ cell, column }) => ({
         sx: {
-          borderBottom: 'none',
           '&[data-pinned="true"]:before': {
             backgroundColor: 'transparent !important',
           },
@@ -872,6 +903,9 @@ const MatrixView = () => {
         title: column.columnDef.header,
       }),
       tableOptions: {
+        enableGlobalFilterRankedResults: false,
+        initialState: { showColumnFilters: false },
+        muiTopToolbarProps: { sx: mobileTopToolbarSx },
         state: {
           columnFilters: visibleColumnFilters,
           sorting,
@@ -879,6 +913,7 @@ const MatrixView = () => {
           columnOrder,
           columnVisibility,
           globalFilter,
+          showGlobalFilter: true,
         },
         onGlobalFilterChange: setGlobalFilter,
         onColumnFiltersChange: setColumnFilters,
@@ -886,10 +921,11 @@ const MatrixView = () => {
         onColumnPinningChange: setColumnPinning,
         onColumnOrderChange: setColumnOrder,
         onColumnVisibilityChange: setColumnVisibility,
+        muiTableBodyRowProps: { sx: { '& td': { borderBottom: 'none' } } },
+        muiTableProps: { sx: { tableLayout: 'fixed' } },
       },
     }),
     [
-      allVariables,
       columnOrder,
       columnPinning,
       columnVisibility,
@@ -898,9 +934,7 @@ const MatrixView = () => {
       globalFilter,
       isMobile,
       onCurrentViewChange,
-      onCloseColumnsModalHandler,
-      onColumnsClickHandler,
-      onColumnsSelected,
+      renderManageColumns,
       setColumnFilters,
       setColumnOrder,
       setColumnPinning,
@@ -908,7 +942,6 @@ const MatrixView = () => {
       setGlobalFilter,
       setSorting,
       sorting,
-      showColumnsModal,
       strings,
       visibleColumnFilters,
     ]
