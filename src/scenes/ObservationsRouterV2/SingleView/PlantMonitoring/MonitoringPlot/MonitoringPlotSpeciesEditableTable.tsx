@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, IconButton, TextField, useTheme } from '@mui/material';
-import { Button, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Button, EditableTableColumn, EditableTableEditContext, Icon } from '@terraware/web-components';
 import { MRT_Row, MRT_TableInstance, createRow } from 'material-react-table';
 
 import EditableTable from 'src/components/common/EditableTable';
@@ -28,6 +28,8 @@ const DRAFT_ROW_ID = 'mrt-row-create';
 const REMOVE_BUTTON_CLASS = 'monitoringPlotSpeciesRemove';
 
 type CountFieldId = 'totalExisting' | 'totalLive' | 'totalDead';
+
+type SpeciesEditContext = EditableTableEditContext<ObservationSpeciesResults> & { row: { id: string } };
 
 /** A species being added. Counts stay as strings so a half-typed value isn't coerced to 0. */
 type DraftSpecies = {
@@ -114,9 +116,9 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   const pendingUpdates = useRef<Promise<unknown>>(Promise.resolve());
 
   const updateObservation = useCallback(
-    (updates: MonitoringSpeciesUpdateOperationPayload[]): Promise<unknown> => {
+    (updates: MonitoringSpeciesUpdateOperationPayload[]): Promise<boolean> => {
       if (!monitoringPlot) {
-        return pendingUpdates.current;
+        return Promise.resolve(false);
       }
       const mainPayload: UpdateCompletedObservationPlotApiArg = {
         observationId,
@@ -124,8 +126,11 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
         updateObservationRequestPayload: { updates },
       };
       // A failed request must not strand everything queued behind it.
-      pendingUpdates.current = pendingUpdates.current.catch(() => undefined).then(() => update(mainPayload));
-      return pendingUpdates.current;
+      const queued = pendingUpdates.current
+        .catch(() => undefined)
+        .then(async () => !('error' in (await update(mainPayload))));
+      pendingUpdates.current = queued;
+      return queued;
     },
     [observationId, monitoringPlot, update]
   );
@@ -141,14 +146,24 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   );
 
   const saveSpeciesCount = useCallback(
-    (fieldId: CountFieldId, row: ObservationSpeciesResults, value: any) => {
+    async (fieldId: CountFieldId, row: ObservationSpeciesResults, value: unknown) => {
       const numValue = Number(value);
       if (value !== undefined && value !== '' && !isNaN(numValue) && numValue >= 0) {
         setOptimisticValues((previous) => ({
           ...previous,
           [getRowKey(row)]: { ...previous[getRowKey(row)], [fieldId]: numValue },
         }));
-        void updateObservation([{ type: 'MonitoringSpecies', ...rowIdentity(row), [fieldId]: numValue }]);
+        if (!(await updateObservation([{ type: 'MonitoringSpecies', ...rowIdentity(row), [fieldId]: numValue }]))) {
+          setOptimisticValues((previous) =>
+            previous[getRowKey(row)]?.[fieldId] !== numValue
+              ? previous
+              : {
+                  ...previous,
+                  [getRowKey(row)]: { ...previous[getRowKey(row)], [fieldId]: row[fieldId] },
+                }
+          );
+          throw new Error('Unable to save species count');
+        }
       }
     },
     [rowIdentity, updateObservation]
@@ -257,13 +272,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   );
 
   const SpeciesCellEditor = useCallback(
-    ({
-      row,
-      table,
-    }: {
-      row: MRT_Row<ObservationSpeciesResults>;
-      table: MRT_TableInstance<ObservationSpeciesResults>;
-    }) =>
+    ({ row, cancel }: SpeciesEditContext) =>
       row.id === DRAFT_ROW_ID ? (
         <SpeciesSearchSelect
           excludedSpeciesIds={recordedSpeciesIds}
@@ -279,7 +288,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
             // Typing a search term is not yet a change; only a picked species asks to confirm one.
             if (species) {
               setPendingSpeciesChange({ row: row.original, species });
-              table.setEditingCell(null);
+              cancel();
             }
           }}
           placeholder={row.original.speciesScientificName}
@@ -290,15 +299,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
 
   const countCellEditor = useCallback(
     (fieldId: CountFieldId) => {
-      const CountCellEditor = ({
-        cell,
-        row,
-        table,
-      }: {
-        cell: { getValue: () => any };
-        row: MRT_Row<ObservationSpeciesResults>;
-        table: MRT_TableInstance<ObservationSpeciesResults>;
-      }) =>
+      const CountCellEditor = ({ cell, row, save, cancel, isSaving }: SpeciesEditContext) =>
         row.id === DRAFT_ROW_ID ? (
           <TextField
             fullWidth
@@ -313,18 +314,23 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
         ) : (
           <TextField
             autoFocus
-            defaultValue={cell.getValue() ?? ''}
+            defaultValue={cell.getValue() as number | undefined}
+            disabled={isSaving}
             fullWidth
             inputProps={{ min: 0 }}
             onBlur={(event) => {
-              saveSpeciesCount(fieldId, row.original, event.target.value);
-              table.setEditingCell(null);
+              const value = event.target.value;
+              if (value !== '' && Number.isFinite(Number(value)) && Number(value) >= 0) {
+                void save(Number(value)).catch(() => undefined);
+              } else {
+                cancel();
+              }
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 (event.target as HTMLInputElement).blur();
               } else if (event.key === 'Escape') {
-                table.setEditingCell(null);
+                cancel();
               }
             }}
             size='small'
@@ -333,7 +339,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
         );
       return CountCellEditor;
     },
-    [draft, saveSpeciesCount, strings.REQUIRED]
+    [draft, strings.REQUIRED]
   );
 
   const RemoveCell = useCallback(
@@ -371,6 +377,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
               editConfig: {
                 editVariant: 'custom' as const,
                 customEditComponent: countCellEditor('totalExisting'),
+                onSave: (row, value) => saveSpeciesCount('totalExisting', row, value),
               },
             } as EditableTableColumn<ObservationSpeciesResults>,
           ]
@@ -382,6 +389,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
         editConfig: {
           editVariant: 'custom',
           customEditComponent: countCellEditor('totalLive'),
+          onSave: (row, value) => saveSpeciesCount('totalLive', row, value),
         },
       },
       {
@@ -391,6 +399,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
         editConfig: {
           editVariant: 'custom',
           customEditComponent: countCellEditor('totalDead'),
+          onSave: (row, value) => saveSpeciesCount('totalDead', row, value),
         },
       },
     ],
@@ -402,6 +411,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
       isAdHoc,
       SpeciesCellEditor,
       countCellEditor,
+      saveSpeciesCount,
     ]
   );
 

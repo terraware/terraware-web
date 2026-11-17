@@ -160,6 +160,29 @@ describe('TreesAndShrubsEditableTable', () => {
     });
   });
 
+  it('keeps a failed measurement edit open and retries it instead of accepting the optimistic value', async () => {
+    const { user, requests, edit } = setup('Tree', 'Mangrove', 1, true);
+    await edit('12', '13');
+    await waitFor(() => expect(requests).toHaveLength(1));
+    const input = screen.getByRole('textbox');
+    await waitFor(() => expect(input).toBeEnabled());
+    expect(input).toHaveValue('13');
+
+    server.use(
+      http.patch(UPDATE_URL, ({ request }) => {
+        requests.push(request.clone());
+        return HttpResponse.json({ status: 'ok' });
+      })
+    );
+    await user.click(input);
+    await user.tab();
+    await waitFor(() => expect(requests).toHaveLength(2));
+    await waitFor(() => expect(screen.queryByRole('textbox')).not.toBeInTheDocument());
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'RecordedTree', recordedTreeId: 11, height: '13' }],
+    });
+  });
+
   describe('bole height', () => {
     it('saves a bole height for a terrestrial tree', async () => {
       const { requests, edit } = setup('Tree', 'Terrestrial');
