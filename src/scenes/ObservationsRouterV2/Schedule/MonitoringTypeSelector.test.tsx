@@ -316,7 +316,7 @@ describe('baseline scheduling form', () => {
       buildSubstratum({ latestBaselineSurveyStatus: 'Completed', latestBaselineSurveyDate: '2026-06-02' }),
     ]);
     await user.click(await screen.findByRole('radio', { name: (name) => name.includes(strings[title]) }));
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    expect(await screen.findByLabelText(strings.SELECT_ALL)).toBeChecked();
     for (const [label, date] of [
       [strings.OBSERVATION_START_DATE, startDate],
       [strings.OBSERVATION_END_DATE, endDate],
@@ -348,7 +348,7 @@ describe('baseline scheduling form', () => {
     await user.click(
       await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
     );
-    expect(await screen.findByLabelText(strings.SELECT_ALL)).toBeChecked();
+    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.queryByText(strings.OBSERVATION_SMALL_SITE_WARNING)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();

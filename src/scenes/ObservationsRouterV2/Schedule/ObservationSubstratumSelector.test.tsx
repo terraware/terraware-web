@@ -93,11 +93,7 @@ describe('ObservationSubstratumSelector', () => {
       );
       await screen.findByLabelText('Ewe Highlands');
       const selectAll = screen.getByLabelText(strings.SELECT_ALL);
-      if (monitoringType === 'Baseline Survey') {
-        await waitFor(() => expect(selectAll).toBeChecked());
-      } else {
-        await user.click(selectAll);
-      }
+      await waitFor(() => expect(selectAll).toBeChecked());
       for (const checkbox of [screen.getAllByLabelText('North')[0], screen.getByLabelText('Ewe Highlands')]) {
         expect(selectAll).toBeChecked();
         await user.click(checkbox);
@@ -115,6 +111,25 @@ describe('ObservationSubstratumSelector', () => {
       expect(screen.getByLabelText('Ewe Highlands')).not.toBeChecked();
     }
   );
+
+  it('starts Baseline reschedules with all substrata selected even when Baselines exist', async () => {
+    renderSelector(
+      'Baseline Survey',
+      buildPlantingSite({
+        strata: [
+          buildStratum({
+            substrata: [
+              buildSubstratum({ name: 'Covered', latestBaselineSurveyStatus: 'Completed' }),
+              buildSubstratum({ id: 2, name: 'Uncovered' }),
+            ],
+          }),
+        ],
+      })
+    );
+    expect(await screen.findByLabelText('Covered')).toBeChecked();
+    expect(screen.getByLabelText('Uncovered')).toBeChecked();
+    expect(screen.getByLabelText(strings.SELECT_ALL)).toBeChecked();
+  });
 
   it('preselects only uncovered Baseline substrata on type changes and preserves manual edits and refreshes', async () => {
     const baselineSite = {
