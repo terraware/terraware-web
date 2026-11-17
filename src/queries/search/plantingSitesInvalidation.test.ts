@@ -3,6 +3,7 @@ import { describe, expect, it } from '@rstest/core';
 import { HttpResponse, http } from 'msw/http';
 
 import { api as draftPlantingSitesApi } from 'src/queries/generated/draftPlantingSites';
+import { api as observationsApi } from 'src/queries/generated/observations';
 import { api as plantingSitesApi } from 'src/queries/generated/plantingSites';
 import { draftPlantingSitesSearchApi } from 'src/queries/search/draftPlantingSites';
 import { plantingSitesSearchApi } from 'src/queries/search/plantingSites';
@@ -56,6 +57,47 @@ const searchAndLeave = async (
 };
 
 describe('planting sites list cache invalidation', () => {
+  it.each(['schedule', 'reschedule', 'abandon'] as const)(
+    'fetches fresh site details after an observation is changed via %s',
+    async (mutation) => {
+      let fetches = 0;
+      server.use(
+        http.get('/api/v1/tracking/sites/42', () => {
+          fetches++;
+          return HttpResponse.json({ status: 'ok', site: { id: 42 } });
+        }),
+        http.post('/api/v1/tracking/observations', () => HttpResponse.json({ status: 'ok', id: 7 })),
+        http.put('/api/v1/tracking/observations/7', () => HttpResponse.json({ status: 'ok' })),
+        http.post('/api/v1/tracking/observations/7/abandon', () => HttpResponse.json({ status: 'ok' }))
+      );
+      const store = makeStore();
+      await searchAndLeave(store, plantingSitesApi.endpoints.getPlantingSite.initiate({ id: 42 }));
+      expect(fetches).toBe(1);
+      const dates = { startDate: '2026-11-16', endDate: '2026-11-30' };
+      if (mutation === 'schedule') {
+        await store.dispatch(
+          observationsApi.endpoints.scheduleObservation.initiate({
+            ...dates,
+            observationType: 'Baseline Survey',
+            plantingSiteId: 42,
+            requestedSubstratumIds: [1],
+          })
+        );
+      } else if (mutation === 'reschedule') {
+        await store.dispatch(
+          observationsApi.endpoints.rescheduleObservation.initiate({
+            observationId: 7,
+            rescheduleObservationRequestPayload: dates,
+          })
+        );
+      } else {
+        await store.dispatch(observationsApi.endpoints.abandonObservation.initiate(7));
+      }
+      await searchAndLeave(store, plantingSitesApi.endpoints.getPlantingSite.initiate({ id: 42 }));
+      expect(fetches).toBe(2);
+    }
+  );
+
   it('searches again for the sites and their count after a site is created', async () => {
     const searchesFor = trackSearches();
     const store = makeStore();

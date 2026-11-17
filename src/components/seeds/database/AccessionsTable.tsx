@@ -42,7 +42,7 @@ import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
+import { exactMultiSelectFilterFn, makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
@@ -469,6 +469,7 @@ export default function AccessionsTable({
         accessorKey: 'speciesName',
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueSpeciesNames,
+        filterFn: exactMultiSelectFilterFn,
       },
       {
         id: 'project_name',

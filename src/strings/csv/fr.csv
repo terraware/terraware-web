@@ -24,7 +24,6 @@ ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,{0} retiré vers {1},f2bd4039
 ACCESSION_EVENT_WITHDRAWAL_DELETED,a supprimé un retrait,2fa169b8
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,un retrait a été supprimé pour un test de viabilité,d9b09155
 ACCESSION_EVENT_WITHDRAWAL_ON_DATE,{0} le {1},e6e61cb5
-ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,{0} (~{1}),0afe1bef
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,Le retrait {0} a été modifié de {1} à {2},8dd1f01b
 ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
@@ -248,11 +247,14 @@ BACK,Précédent,2e8211b0
 BACK_TO_EDIT,Retour à la modification,b3d8a9a6
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
-BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
-BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASED_ON_X_BATCH,Basé sur {0} lot,919ed414
 BASED_ON_X_BATCHES,Basé sur {0} lots,8c41bee7
+BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
+BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASELINE,Référence,332af00e
+BASELINE_COMPLETED_X,Ligne de base terminée : {0},58bb5e0e
+BASELINE_OVERDUE_X,Référence en retard : {0},c1c91c3f
+BASELINE_SCHEDULED_X,Ligne de base programmée : {0},c95467b5
 BASELINE_SURVEY,Enquête de référence,bc76c649
 BATCH,Lot,9fdfdd9b
 BATCH_CREATED,Lot créé,1a382f74
@@ -579,6 +581,7 @@ DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
 DISCARD_CHANGES,Annuler les modifications,f79f534a
 DISMISS,Fermer,a56709f4
 DO_NOT_USE,Ne pas utiliser,6950f9e5
+DO_YOU_WANT_TO_SCHEDULE_ANOTHER_BASELINE_FOR_THEM,Voulez-vous planifier une autre ligne de base pour eux ?,fc52162f
 DOC_PRODUCER,Producteur de docs,e40f8aa1
 DOCUMENT,Document,57650c76
 DOCUMENT_DETAILS,Modifier les détails du document,92155983
@@ -889,6 +892,7 @@ GLOBAL_ROLE_ACCELERATOR_ADMIN,Administrateur de l'accélérateur,b60aa07a
 GLOBAL_ROLE_READ_ONLY,Lecture seule,28709939
 GLOBAL_ROLE_SUPER_ADMIN,Superadministrateur,4e519ab0
 GLOBAL_ROLE_TF_EXPERT,Expert TF,3edccd76
+GO_BACK,Retourner,93f780e3
 GO_TO,Aller à {0},c922d4a7
 GO_TO_NURSERIES,Aller aux pépinières,545d3e5a
 GO_TO_PLANTING_SITES,Aller à Sites de plantation,63065313
@@ -911,6 +915,7 @@ HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité à acclimater ne pe
 HARDENING_OFF_QUANTITY_REMAINING,Quantité à acclimater ({0} restante),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Quantité à acclimater *,8bda8f0f
 HARDENING_OFF_SENTENCE_CASE,Acclimatation,5b744226
+HAS_PLANTINGS,Plantations présentes,fba8ffe7
 HECTARES,Hectares,316902d7
 HEIGHT_AT_MATURITY,Hauteur à maturité (cm),f8025719
 HEIGHT_M,Hauteur (m),fe61fc34
@@ -1058,7 +1063,7 @@ LAST_EDITED_BY,Dernière modification,0b49c0a8
 LAST_MODIFIED_ON,Dernière modification effectuée le,93d681f9
 LAST_MODIFIED_ON_BY,Dernière modification le {0} par {1},afd4b34c
 LAST_NAME,Nom de famille,84595f78
-LAST_OBSERVATION,Dernière observation : {0},f2de6421
+LAST_OBSERVATION,Dernière observation,62aac09a
 LAST_REPORT_PUBLISHED,Rapport {0} publié {1},0199dbf5
 LAST_UPDATED,Dernière mise à jour,9ea41799
 LATEST_OBSERVATION,Dernière observation,52d53fd1
@@ -1173,6 +1178,7 @@ MANGROVES,Mangroves,3511a098
 MAP,Carte,cc1fa56d
 MAP_EDIT_SUMMARY_MESSAGE,L'enregistrement appliquera ces modifications au site de plantation.,072017f7
 MAP_EDIT_SUMMARY_NO_CHANGES,"L'enregistrement ne modifiera pas la superficie, les strates, les sous-strates ou les placettes de suivi du site de plantation.",3f386e45
+MAP_EDIT_SUMMARY_OBSERVATION_PLOTS_REASSIGNED,{0} observations recevront de nouveaux emplacements de parcelles.,c7be408f
 MAP_EDIT_SUMMARY_OBSERVATIONS_ABANDONED,{0} observations en cours seront abandonnées.,6c2778ac
 MAP_EDIT_SUMMARY_PERMANENT_PLOT_CREATED_EXISTING_AREA,Une placette permanente sera ajoutée à la zone existante de la strate {0}.,9a1768f4
 MAP_EDIT_SUMMARY_PERMANENT_PLOT_CREATED_NEW_AREA,Une placette permanente sera ajoutée à la nouvelle zone de la strate {0}.,d3659b31
@@ -1355,6 +1361,7 @@ NO_PROJECTS_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des projets.
 NO_QUANTITY_SET,Pas de quantité définie,5922c859
 NO_REASSIGNMENTS_TEXT,Sélectionnez un substrat et une quantité à réaffecter pour chaque espèce.,ff65d8d2
 NO_REQUESTS_FOR_SELECTED_FILTERS,Aucune demande pour les filtres sélectionnés.,a6a641ac
+NO_ROOM_FOR_MONITORING_PLOTS,Il n'y a pas de place pour des parcelles de suivi sur ce site de plantation.,e28cb2d2
 NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
 NO_SITE_BOUNDARY_YET,Aucune limite de site pour le moment,48cfe15e
@@ -1396,6 +1403,7 @@ NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
 NOT_SET,Non défini,6b047afe
+NOT_STARTED,Non commencé,de481428
 NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_VERIFIED,Non vérifié,fbd9066a
 NOT_WITHDRAWN_TO_DATE,Aucun retrait à ce jour,bbb78c00
@@ -1581,6 +1589,7 @@ PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Limite de {0} plus),121ba2ad
 PHOTOS_VIDEOS,Photos/Vidéos,5d533136
+PIN_TO_LEFT,Épingler à gauche,ef1066fe
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
@@ -1729,6 +1738,7 @@ PLOT_SPECIES_TOOLTIP,"Espèces correspond au nombre d'espèces représentées pa
 PLOT_SURVIVAL_RATE_TOOLTIP,"Le taux de survie est calculé en fonction de la densité initiale de plantes spécifiée et du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes, dont l'espèce est inconnue ou qui ne figurent pas dans la liste des espèces, ne sont pas incluses.",4e745c92
 PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes. Les plantes enregistrées comme préexistantes ne sont pas incluses.",244fd18c
 PLOT_TYPE,Type de parcelle,4b579233
+PLOTS,Parcelles,1137d7eb
 PLOTS_AD_HOC,Parcelles ad hoc,104e30b2
 PLOTS_PERMANENT,Placettes permanentes,d06e9f3a
 PLOTS_SIZE_NOTE,*Données collectées avec des parcelles de 25x25 m,1c6249f4
@@ -1848,6 +1858,7 @@ QUANTITY_MUST_BE_GREATER_THAN_ZERO,La quantité doit être supérieure à 0,7c49
 QUANTITY_NOTES,Notes sur la quantité,94baf637
 QUANTITY_TO_PLANT,Quantité à planter,14ee1db4
 QUANTITY_TO_PLANT_TOOLTIP,Nombre de plants prévus pour être plantés à cette Date de plantation.,d031febb
+QUANTITY_WITHDRAWN,Quantité retirée,0ec632a2
 QUARTER_YEAR,T{0} {1},637ce0a5
 QUARTERLY,Trimestriel,f69e32e0
 QUARTERLY_HIGHLIGHTS,Faits saillants trimestriels,863a818b
@@ -2001,6 +2012,7 @@ REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
 REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
+REQUESTED_X,Demandé {0},d71a2203
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
@@ -2069,6 +2081,7 @@ SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38
 SAVED_VIEWS_PRIVATE,Vous seul pouvez voir les vues que vous enregistrez.,374179a6
 SAVING,Enregistrement en cours...,d4ce4849
 SCARIFY,Scarification,b34359c6
+SCHEDULE_ANYWAY,Planifier quand même,051f6f28
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
 SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,Enregistrer la croissance des plantes et les conditions actuelles.,3870c828
 SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,Mesurer la survie des plantes et les conditions actuelles du site,2747bb6a
@@ -2295,6 +2308,7 @@ SOIL_TYPE_SILT_LOAM,Terre limoneuse,b540d046
 SOIL_TYPE_SILTY_CLAY,Argile limoneuse,99ec02c4
 SOIL_TYPE_SILTY_CLAY_LOAM,Terre argilo-limoneuse,e8c051d9
 SOIL_TYPE_UNKNOWN,Inconnu,97ccc176
+SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE,Certains substrats ont déjà une ligne de base,60922f40
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Une erreur s'est produite...,bf2e66a4
@@ -2549,6 +2563,7 @@ THANK_YOU_FOR_USING_TERRAWARE,Merci d'utiliser Terraware !,c6999786
 THERE_ARE_NO_PLANTING_PLANS,Il n'y a aucun plan de plantation.,3c854b17
 THERE_ARE_NO_PLANTING_SEASONS,Il n'y a pas de Saisons de plantation.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Aucune espèce n'a encore été ajoutée à ce projet.,02f58d0e
+THESE_SUBSTRATA_ARE_ALREADY_INCLUDED_IN_A_COMPLETED_OR_SCHEDULED_BASELINE_SURVEY,Ces substrats sont déjà inclus dans une enquête de ligne de base terminée ou planifiée :,ac5828de
 THIS_ACTION_IS_NON_REVERSIBLE,Cette action n'est pas réversible.,aecdef3a
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Ce livrable a été approuvé. Si le projet téléverse un nouveau document, le statut repassera à « En cours d’examen ».",96ae1308
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Ce livrable a été approuvé. Si le projet soumet à nouveau le questionnaire, le statut repassera à « En cours d’examen ».",89b908e0
@@ -2724,6 +2739,7 @@ UNIT,Unité,48d10134
 UNITS,Unités,ce3e3f06
 UNKNOWN,Inconnu,97ccc176
 UNPIN_ALL,Désépingler tout,97a06369
+UNPIN_COLUMN,Désépingler la colonne,36b80da4
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Pour résoudre ce problème, republiez tous les rapports mis à jour afin que les rapports destinés au bailleur de fonds reflètent les dernières données.",b2104255
@@ -2789,6 +2805,7 @@ USING_OBSERVATION_DATA_FROM,Utilisation des données d'observation de {0},c489a0
 VALUE,Valeur,b8e67ab1
 VALUE_CANT_EXCEED_100,La valeur ne peut pas dépasser 100 %,e78b7737
 VALUE_CHANGED_FROM_TO,{0} a été modifié de {1} à {2},205532d3
+VALUE_WITH_ESTIMATE,{0} (~{1}),cb750b5e
 VARIABLE_DETAILS,Détails de la variable,48294b19
 VARIABLE_ERROR_NUMBER_DECIMAL_PLACES,La valeur a dépassé le nombre maximum de décimales de {0},3a248e96
 VARIABLE_ERROR_NUMBER_MAX_LIMIT,La valeur est supérieure à la valeur maximale de {0},4bb003ef
@@ -2841,8 +2858,10 @@ VIEW_ON_MAP,Voir sur la carte,fb873a55
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4
+VIEW_QUANTITIES,Voir les quantités,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
+VIEW_REQUESTED_SPECIES_QUANTITIES,Voir les quantités de chaque espèce demandée,a5ae86c4
 VIEW_SESSION,Voir la session,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une carte.",f4d62997
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
@@ -2921,6 +2940,7 @@ WITHDRAWN_FOR_PLANTING,Retiré pour la plantation,dd024a58
 WITHDRAWN_PLANTS,Plantes retirées,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Dépasse la quantité restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La quantité retirée doit être supérieure à 0,75e6b589
+WITHDRAWN_X,Retiré {0},0bf8078d
 WOOD_DENSITY_LEVEL,Niveau de densité du bois,83a6a766
 WOODY_SPECIES,Espèces ligneuses,362f68d0
 WORDS,Mots,45f70926
@@ -2932,8 +2952,10 @@ WORKSHOPS,Ateliers,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
 X_ACCESSION,{0} accession,cfd54196
 X_ACCESSIONS,{0} accessions,e8ccdbc4
+X_AND_N_MORE,{0} et {1} de plus,582a270c
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
+X_COMPLETED_Y,{0} (terminé le {1}),801c7a02
 X_CUMULATIVE_TARGET,Objectif cumulatif {0},25c175af
 X_DAY,{0} jour,f85a4e0a
 X_DAYS,{0} jours,bec81ab4
@@ -2941,17 +2963,23 @@ X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
 X_HECTARES_HA,{0} Hectares (ha),e2af9d30
+X_LEFT,{0} restants,d5d2cf6b
 X_OF_YEAR_CUMULATIVE_TARGET,{0} de l'objectif cumulatif annuel,6658988a
 X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
+X_OVERDUE_Y,{0} (en retard depuis le {1}),11c7edeb
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
 X_PLOT,{0} placette,69151ad1
 X_PLOTS,{0} placettes,af2dd663
+X_REQUESTED,{0} demandés,e7603259
+X_SCHEDULED_Y,{0} (planifié pour le {1}),ee2e9f83
 X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_STILL_IN_THIS_STAGE,{0} toujours à cette étape,6e034985
 X_TARGET,Objectif {0},d8170b6e
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
+X_WILL_BE_ASSIGNED_FOR_THE_SELECTED_AREAS,{0} seront attribuées aux zones sélectionnées.,cc3acd77
+X_WITHDRAWN,{0} retirés,d3f3ea43
 YEARLY_CUMULATIVE,Cumulatif annuel,ed9a120d
 YES,Oui,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Vous avez accepté les conditions le {0}.,b2a20246

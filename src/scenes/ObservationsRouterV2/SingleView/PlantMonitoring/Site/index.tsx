@@ -25,6 +25,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import {
   getObservationSpeciesDeadPlantsCount,
   getObservationSpeciesLivePlantsCount,
+  hasObservationData,
   hasPendingResults,
 } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -221,6 +222,7 @@ const SiteDetails = (): JSX.Element => {
             label={strings.EXPORT_DATA}
             icon='iconImport'
             onClick={() => void downloadObservationResults(observationId)}
+            disabled={!hasObservationData(results)}
             sx={{ fontWeight: '400 !important' }}
           />
         </Box>

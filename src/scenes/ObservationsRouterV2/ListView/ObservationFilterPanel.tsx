@@ -99,9 +99,11 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
       { label: strings.ALL_MONITORING_TYPES, value: 'All' },
       { label: strings.PLANT_MONITORING, value: 'Monitoring' },
       { label: strings.BIOMASS_MONITORING, value: 'Biomass Measurements' },
-      ...(baselineSurveyEnabled ? [{ label: strings.BASELINE_SURVEY, value: 'Baseline Survey' }] : []),
+      ...(baselineSurveyEnabled && plotType === 'assigned'
+        ? [{ label: strings.BASELINE_SURVEY, value: 'Baseline Survey' }]
+        : []),
     ],
-    [baselineSurveyEnabled, strings]
+    [baselineSurveyEnabled, plotType, strings]
   );
 
   const onObservationTypeChange = useCallback(

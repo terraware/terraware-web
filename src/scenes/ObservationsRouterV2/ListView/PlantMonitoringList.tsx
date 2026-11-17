@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
@@ -29,10 +30,11 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useListObservationsQuery } from 'src/queries/generated/observations';
 import { ObservationState, ObservationType, getStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { hasPendingResults } from 'src/utils/observation';
+import { hasObservationData, hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -45,6 +47,7 @@ import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
   observationId: number;
+  hasPlots: boolean;
   observationDate?: string;
   observationState?: ObservationState;
   observationType: ObservationType;
@@ -59,6 +62,7 @@ type PlantMonitoringRow = {
   survivalRate?: number;
   survivalRatePending?: boolean;
   completedDate?: string;
+  hasData: boolean;
 };
 
 const TABLE = TABLES.assignedObservations;
@@ -96,31 +100,31 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
   } = useObservationExports();
   const navigate = useSyncNavigate();
 
-  const { observationId, observationState, observationType, state } = row;
-  const exportDisabled = state === 'Upcoming';
-  const rescheduleDisabled = state === 'Completed' || state === 'Abandoned';
+  const { hasData, hasPlots, observationId, observationState, observationType } = row;
+  const exportLocationsDisabled = observationState === 'Upcoming' && !hasPlots;
+  const rescheduleDisabled = observationState === 'Completed' || observationState === 'Abandoned';
 
   return (
     <TableRowPopupMenu
       menuItems={[
         {
-          disabled: exportDisabled,
+          disabled: exportLocationsDisabled,
           label: `${strings.EXPORT_LOCATIONS} (${strings.CSV_FILE})`,
           onClick: () => {
             void downloadObservationCsv(observationId);
           },
-          tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+          tooltip: exportLocationsDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
         },
         {
-          disabled: exportDisabled,
+          disabled: exportLocationsDisabled,
           label: `${strings.EXPORT_LOCATIONS} (${strings.GPX_FILE})`,
           onClick: () => {
             void downloadObservationGpx(observationId);
           },
-          tooltip: exportDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
+          tooltip: exportLocationsDisabled ? strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP : undefined,
         },
         {
-          disabled: exportDisabled,
+          disabled: !hasData,
           label: strings.EXPORT_RESULTS,
           onClick: () => {
             void (observationType === 'Biomass Measurements' || observationType === 'Baseline Survey'
@@ -157,6 +161,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { selectedOrganization } = useOrganization();
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const assignPlotsWhenScheduling = useFeatureEnabled('Assign Plots When Scheduling');
   const { observationType } = useObservationFilters();
   const { activeLocale, strings } = useLocalization();
 
@@ -187,6 +192,19 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   const plantingSiteNames = useMemo(() => new Map(plantingSites.map((site) => [site.id, site.name])), [plantingSites]);
 
+  const { currentData: observationsData } = useListObservationsQuery(
+    assignPlotsWhenScheduling && selectedOrganization ? { organizationId: selectedOrganization.id } : skipToken
+  );
+  const observationIdsWithPlots = useMemo(
+    () =>
+      new Set(
+        (observationsData?.observations ?? [])
+          .filter((observation) => observation.numPlots > 0)
+          .map((observation) => observation.id)
+      ),
+    [observationsData]
+  );
+
   const rows = useMemo(
     () =>
       observationResults.map((observationResult): PlantMonitoringRow => {
@@ -198,6 +216,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
         return {
           observationId: observationResult.observationId,
+          hasPlots: observationIdsWithPlots.has(observationResult.observationId),
           observationDate: completedDate ?? observationResult.startDate,
           observationState: observationResult.state,
           observationType: observationResult.type,
@@ -217,9 +236,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           survivalRate: observationResult.survivalRate,
           survivalRatePending: observationResult.pending,
           completedDate,
+          hasData: hasObservationData(observationResult),
         };
       }),
-    [observationResults, plantingSiteNames, strings]
+    [observationIdsWithPlots, observationResults, plantingSiteNames, strings]
   );
 
   const ObservationDateCell = useCallback(

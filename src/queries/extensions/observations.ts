@@ -12,9 +12,10 @@ api.enhanceEndpoints({
       ],
     },
     scheduleObservation: {
-      invalidatesTags: (result) => [
+      invalidatesTags: (result, _error, payload) => [
         ...(result ? [{ type: QueryTagTypes.Observation, id: result.id }] : []),
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites, id: payload.plantingSiteId },
       ],
     },
     completeAdHocObservation: {
@@ -59,12 +60,14 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
       ],
     },
     abandonObservation: {
       invalidatesTags: (_results, _error, observationId) => [
         { type: QueryTagTypes.Observation, id: observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
         { type: QueryTagTypes.Activities },
         { type: QueryTagTypes.FunderActivities },
         { type: QueryTagTypes.PlantingSiteObservation },

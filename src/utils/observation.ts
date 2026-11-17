@@ -119,6 +119,21 @@ export const getObservationSpeciesDeadPlantsCount = (
   return species && species.length > 0 ? species?.reduce((sum, s) => sum + (s.totalDead || 0), 0) : undefined;
 };
 
+export const hasObservationData = (results: ObservationResultsPayload | undefined): boolean =>
+  results !== undefined &&
+  (results.completedTime !== undefined ||
+    results.totalPlants !== undefined ||
+    isMonitoringPlotObserved(results.adHocPlot) ||
+    results.strata.some(
+      (stratum) =>
+        stratum.completedTime !== undefined ||
+        stratum.substrata.some(
+          (substratum) =>
+            substratum.completedTime !== undefined ||
+            substratum.monitoringPlots.some((plot) => isMonitoringPlotObserved(plot))
+        )
+    ));
+
 export const hasPendingResults = (results: ObservationResultsPayload | undefined): boolean =>
   !!results &&
   (results.pending ||

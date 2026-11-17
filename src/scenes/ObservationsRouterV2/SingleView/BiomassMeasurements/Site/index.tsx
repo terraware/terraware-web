@@ -19,7 +19,11 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { getBiomassObservationTotals, getBiomassObservationUnrecognizedSpecies } from 'src/utils/observation';
+import {
+  getBiomassObservationTotals,
+  getBiomassObservationUnrecognizedSpecies,
+  hasObservationData,
+} from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import LiveTreesPerSpecies from '../LiveTreesPerSpecies';
@@ -138,6 +142,7 @@ const BiomassSiteDetails = (): JSX.Element => {
             id='exportBiomassObservation'
             label={strings.EXPORT_DATA}
             onClick={() => void downloadBiomassObservationDetails(observationId)}
+            disabled={!hasObservationData(results)}
             icon='iconImport'
             priority='ghost'
             sx={{ fontWeight: '400 !important' }}

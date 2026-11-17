@@ -1,27 +1,29 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Icon } from '@terraware/web-components';
+import { Badge, Checkbox, Icon, Pill } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { Stratum } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
 import getSubstratumPlotEstimates, { PlotCounts } from './getSubstratumPlotEstimates';
 import { MonitoringType } from './monitoringTypes';
 
-const PLOT_COUNT_COLUMN_WIDTH = '88px';
+const PLOT_COUNT_COLUMN_WIDTH = '64px';
 
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
   monitoringType: MonitoringType;
   onChangeSelectedSubstrata: (requestedSubstratumIds: number[]) => void;
   plantingSiteId: number;
+  preselectBaselineSubstrata?: boolean;
 }
 
 const ObservationSubstratumSelector = ({
@@ -29,13 +31,50 @@ const ObservationSubstratumSelector = ({
   monitoringType,
   onChangeSelectedSubstrata,
   plantingSiteId,
+  preselectBaselineSubstrata = false,
 }: ObservationSubstratumSelectorProps) => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { plantingSite } = usePlantingSite(plantingSiteId);
+  const { selectedOrganization } = useOrganization();
+  const isBaseline = monitoringType === 'Baseline Survey';
+  const reportedPlants = useListPlantingSiteReportedPlantsQuery(
+    { organizationId: selectedOrganization?.id ?? -1 },
+    { skip: !isBaseline || !selectedOrganization }
+  );
 
-  const [selectAll, setSelectAll] = useState<boolean>(false);
+  const plantedSubstrata = useMemo(
+    () =>
+      new Set(
+        reportedPlants.currentData?.sites
+          .find((site) => site.id === plantingSiteId)
+          ?.strata.flatMap((stratum) => stratum.substrata)
+          .filter((substratum) => substratum.totalPlants > 0)
+          .map((substratum) => substratum.id)
+      ),
+    [plantingSiteId, reportedPlants.currentData]
+  );
+
+  const [selectAll, setSelectAll] = useState<boolean>(true);
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
+  const baselineSelectionInitialized = useRef(false);
+  const previousPlantingSite = useRef<typeof plantingSite>(undefined);
+  const shouldPreselectBaseline = isBaseline && preselectBaselineSubstrata;
+  const substratumIds =
+    plantingSite?.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [];
+  const allSubstrataSelected = substratumIds.length > 0 && substratumIds.every((id) => selectedSubstrata.includes(id));
+
+  const onChangeSelectAll = useCallback(
+    (value: boolean) => {
+      setSelectAll(value);
+      setSelectedSubstrata(
+        value
+          ? (plantingSite?.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [])
+          : []
+      );
+    },
+    [plantingSite]
+  );
 
   const plotCountsFor = useCallback(
     (stratum: Stratum) =>
@@ -98,13 +137,26 @@ const ObservationSubstratumSelector = ({
   );
 
   useEffect(() => {
-    if (plantingSite) {
-      // Initialize all substratum selections
-      const initialSelectedSubstrata =
-        plantingSite.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [];
-      setSelectedSubstrata(selectAll ? initialSelectedSubstrata : []);
+    baselineSelectionInitialized.current = false;
+  }, [plantingSiteId, shouldPreselectBaseline]);
+
+  useEffect(() => {
+    if (!plantingSite || plantingSite.id !== plantingSiteId) {
+      return;
     }
-  }, [plantingSite, selectAll]);
+    const substrata = plantingSite.strata?.flatMap((stratum) => stratum.substrata) ?? [];
+    if (shouldPreselectBaseline) {
+      if (!baselineSelectionInitialized.current) {
+        baselineSelectionInitialized.current = true;
+        const selected = substrata.filter((substratum) => !substratum.latestBaselineSurveyStatus);
+        setSelectedSubstrata(selected.map((substratum) => substratum.id));
+        setSelectAll(selected.length > 0 && selected.length === substrata.length);
+      }
+    } else if (previousPlantingSite.current !== plantingSite) {
+      setSelectedSubstrata(selectAll ? substrata.map((substratum) => substratum.id) : []);
+    }
+    previousPlantingSite.current = plantingSite;
+  }, [plantingSite, plantingSiteId, selectAll, shouldPreselectBaseline]);
 
   useEffect(() => {
     onChangeSelectedSubstrata(selectedSubstrata);
@@ -170,8 +222,8 @@ const ObservationSubstratumSelector = ({
                 id='selectAll'
                 name='SelectAll'
                 label={strings.SELECT_ALL}
-                value={selectAll}
-                onChange={setSelectAll}
+                value={allSubstrataSelected}
+                onChange={onChangeSelectAll}
               />
             </Box>
             <Typography
@@ -181,17 +233,19 @@ const ObservationSubstratumSelector = ({
               width={PLOT_COUNT_COLUMN_WIDTH}
               flexShrink={0}
             >
-              {strings.PERMANENT_PLOTS}
+              {isBaseline ? strings.PLOTS : strings.PERMANENT_PLOTS}
             </Typography>
-            <Typography
-              fontSize='12px'
-              color={theme.palette.TwClrTxtSecondary}
-              textAlign='right'
-              width={PLOT_COUNT_COLUMN_WIDTH}
-              flexShrink={0}
-            >
-              {strings.TEMPORARY_PLOTS}
-            </Typography>
+            {!isBaseline && (
+              <Typography
+                fontSize='12px'
+                color={theme.palette.TwClrTxtSecondary}
+                textAlign='right'
+                width={PLOT_COUNT_COLUMN_WIDTH}
+                flexShrink={0}
+              >
+                {strings.TEMPORARY_PLOTS}
+              </Typography>
+            )}
           </Box>
         </Grid>
         {plantingSite.strata?.map((stratum, index) => {
@@ -200,7 +254,7 @@ const ObservationSubstratumSelector = ({
           return (
             <Grid key={index} size={12}>
               <Box display='flex' alignItems='center'>
-                <Box flex={1}>
+                <Box flex={1} display='flex' alignItems='center' flexWrap='wrap' gap={1}>
                   <Checkbox
                     id={`observation-stratum-${stratum.id}`}
                     indeterminate={isStratumPartiallySelected(stratum)}
@@ -209,48 +263,49 @@ const ObservationSubstratumSelector = ({
                     onChange={onChangeStratumCheckbox(stratum)}
                     value={isStratumFullySelected(stratum)}
                   />
-                  <Typography
-                    sx={{
-                      display: 'inline',
-                      fontWeight: 500,
-                      color: theme.palette.TwClrTxtSecondary,
-                      verticalAlign: 'bottom',
-                      paddingLeft: 1,
-                    }}
-                  >
-                    {stratum.latestObservationCompletedTime
-                      ? strings.formatString(
-                          strings.LAST_OBSERVATION,
-                          getDateDisplayValue(stratum.latestObservationCompletedTime)
-                        )
-                      : strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
-                  </Typography>
+                  {!isBaseline &&
+                    (stratum.latestObservationCompletedTime ? (
+                      <Box flexShrink={0} whiteSpace='nowrap'>
+                        <Pill
+                          id={stratum.id}
+                          label={strings.LAST_OBSERVATION}
+                          value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
+                        />
+                      </Box>
+                    ) : (
+                      <Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
+                        {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
+                      </Typography>
+                    ))}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                  {numPermanentPlots}
+                  {isBaseline ? numPermanentPlots + numTemporaryPlots : numPermanentPlots}
                 </Typography>
-                <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                  {numTemporaryPlots}
-                </Typography>
+                {!isBaseline && (
+                  <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
+                    {numTemporaryPlots}
+                  </Typography>
+                )}
               </Box>
-              {stratum.latestObservationCompletedTime &&
+              {!isBaseline &&
+                stratum.latestObservationCompletedTime &&
                 isAfter(stratum.boundaryModifiedTime, stratum.latestObservationCompletedTime) && (
                   <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
                     <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
-                    <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
+                    <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1}>
                       {strings.formatString(
                         strings.STRATUM_GEOMETRY_CHANGED,
                         stratum.name,
                         DateTime.fromISO(stratum.boundaryModifiedTime).toFormat('yyyy-MM-dd')
-                      )}
+                      )}{' '}
+                      <Link
+                        target='_blank'
+                        fontSize={'16px'}
+                        to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
+                      >
+                        {strings.VIEW_MAP}
+                      </Link>
                     </Typography>
-                    <Link
-                      target='_blank'
-                      fontSize={'16px'}
-                      to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
-                    >
-                      {strings.VIEW_MAP}
-                    </Link>
                   </Box>
                 )}
               <Box sx={{ paddingLeft: `${theme.spacing(4)}` }}>
@@ -259,7 +314,7 @@ const ObservationSubstratumSelector = ({
 
                   return (
                     <Box display='flex' alignItems='center' key={_index}>
-                      <Box flex={1}>
+                      <Box flex={1} display='flex' alignItems='center' flexWrap='wrap' gap={1}>
                         <Checkbox
                           id={`observation-substratum-${stratum.id}`}
                           label={substratum.name}
@@ -267,29 +322,75 @@ const ObservationSubstratumSelector = ({
                           onChange={onChangeSubstratumCheckbox(substratum.id)}
                           value={selectedSubstrata.includes(substratum.id)}
                         />
-                        {substratum.latestObservationCompletedTime && (
-                          <Typography
-                            sx={{
-                              display: 'inline',
-                              fontWeight: 500,
-                              color: theme.palette.TwClrTxtSecondary,
-                              verticalAlign: 'bottom',
-                              paddingLeft: 1,
-                            }}
+                        {isBaseline && (
+                          <Box
+                            component='span'
+                            display='inline-flex'
+                            gap={1}
+                            flexWrap='wrap'
+                            alignItems='center'
+                            marginTop={1}
+                            sx={{ '& > span': { padding: theme.spacing(0, 0.5) } }}
                           >
-                            {strings.formatString(
-                              strings.LAST_OBSERVATION,
-                              getDateDisplayValue(substratum.latestObservationCompletedTime)
+                            {substratum.latestBaselineSurveyDate && substratum.latestBaselineSurveyStatus && (
+                              <Badge
+                                label={
+                                  strings.formatString(
+                                    substratum.latestBaselineSurveyStatus === 'Overdue'
+                                      ? strings.BASELINE_OVERDUE_X
+                                      : ['Completed', 'Abandoned'].includes(substratum.latestBaselineSurveyStatus)
+                                        ? strings.BASELINE_COMPLETED_X
+                                        : strings.BASELINE_SCHEDULED_X,
+                                    substratum.latestBaselineSurveyDate
+                                  ) as string
+                                }
+                                backgroundColor={
+                                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                                    ? theme.palette.TwClrBgWarningTertiary
+                                    : undefined
+                                }
+                                borderColor={
+                                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                                    ? theme.palette.TwClrBrdrWarning
+                                    : undefined
+                                }
+                                labelColor={
+                                  substratum.latestBaselineSurveyStatus === 'Overdue'
+                                    ? theme.palette.TwClrTxtWarning
+                                    : theme.palette.TwClrTxt
+                                }
+                              />
                             )}
-                          </Typography>
+                            {plantedSubstrata.has(substratum.id) && (
+                              <Badge
+                                label={strings.HAS_PLANTINGS}
+                                backgroundColor={theme.palette.TwClrBgSuccessTertiary}
+                                borderColor={theme.palette.TwClrBrdrSuccess}
+                                labelColor={theme.palette.TwClrTxtSuccess}
+                              />
+                            )}
+                          </Box>
+                        )}
+                        {!isBaseline && substratum.latestObservationCompletedTime && (
+                          <Box flexShrink={0} whiteSpace='nowrap'>
+                            <Pill
+                              id={substratum.id}
+                              label={strings.LAST_OBSERVATION}
+                              value={getDateDisplayValue(substratum.latestObservationCompletedTime)}
+                            />
+                          </Box>
                         )}
                       </Box>
                       <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                        {approximate(estimate?.numPermanentPlots ?? 0)}
+                        {approximate(
+                          (estimate?.numPermanentPlots ?? 0) + (isBaseline ? (estimate?.numTemporaryPlots ?? 0) : 0)
+                        )}
                       </Typography>
-                      <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
-                        {approximate(estimate?.numTemporaryPlots ?? 0)}
-                      </Typography>
+                      {!isBaseline && (
+                        <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
+                          {approximate(estimate?.numTemporaryPlots ?? 0)}
+                        </Typography>
+                      )}
                     </Box>
                   );
                 })}
@@ -302,7 +403,9 @@ const ObservationSubstratumSelector = ({
             <Divider sx={{ marginBottom: theme.spacing(3) }} />
             <Typography fontSize='14px'>
               {strings.formatString(
-                strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,
+                isBaseline
+                  ? strings.X_WILL_BE_ASSIGNED_FOR_THE_SELECTED_AREAS
+                  : strings.SCHEDULE_OBSERVATION_PLOTS_ASSIGNED,
                 <b>{totalAssignedPlotsText}</b>,
                 <>{approximate(assignedPlots.temporary)}</>,
                 <>{approximate(assignedPlots.permanent)}</>

@@ -295,6 +295,12 @@ export type SubstratumResponsePayload = {
   boundary: MultiPolygon;
   fullName: string;
   id: number;
+  /** Latest completed plot date in the site's time zone for Completed/Abandoned; start date otherwise. */
+  latestBaselineSurveyDate?: string;
+  /** Latest qualifying Baseline Survey by substratum-specific date, then ID. */
+  latestBaselineSurveyId?: number;
+  /** Completed/Abandoned require a completed plot here; other states require this substratum to be requested. */
+  latestBaselineSurveyStatus?: 'Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned';
   latestObservationCompletedTime?: string;
   latestObservationId?: number;
   latestObservationNumPlots?: number;

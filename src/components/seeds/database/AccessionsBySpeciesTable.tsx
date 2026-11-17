@@ -40,6 +40,7 @@ import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { TABLES } from 'src/types/Tables';
 import { makeCsv } from 'src/utils/csv';
+import { exactMultiSelectFilterFn } from 'src/utils/tableFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -300,6 +301,7 @@ export default function AccessionsBySpeciesTable({
         accessorKey: 'speciesName',
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueSpeciesNames,
+        filterFn: exactMultiSelectFilterFn,
         Cell: SpeciesNameCell,
       },
       {
