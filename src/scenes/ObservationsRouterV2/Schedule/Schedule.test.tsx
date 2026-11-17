@@ -112,7 +112,8 @@ describe('Schedule observation page', () => {
 
     await waitFor(() => expect(document.querySelector('#site input')).toBeEnabled());
     await selectDropdownOption(user, 'site', 'Mahogany Ridge');
-    await user.click(await screen.findByLabelText('South'));
+    // Every substratum starts out selected.
+    await user.click(await screen.findByLabelText('North'));
     await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
     await save(user);
 
@@ -140,7 +141,7 @@ describe('Schedule observation page', () => {
         name: (name) => name.includes(strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE),
       })
     );
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
     await save(user);
 
@@ -192,7 +193,7 @@ describe('Schedule observation page', () => {
     expect(screen.getAllByText(strings.REQUIRED_FIELD)).toHaveLength(3);
 
     await selectDropdownOption(user, 'site', 'Ceiba Grove');
-    await screen.findByLabelText('Riverside');
+    await user.click(await screen.findByLabelText('Riverside'));
     await save(user);
 
     expect(screen.getByText(strings.SELECT_AT_LEAST_ONE_SUBSTRATUM)).toBeInTheDocument();
@@ -225,7 +226,7 @@ describe('Schedule observation page', () => {
     const requests = captureRequests('post', OBSERVATIONS_URL, { id: 100 });
     const { user } = renderSchedulePage();
 
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, start().toISODate()!, end().toISODate()!);
     await save(user);
 
@@ -238,7 +239,7 @@ describe('Schedule observation page', () => {
     const requests = captureRequests('post', OBSERVATIONS_URL, { id: 100 });
     const { user } = renderSchedulePage();
 
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, isoDaysFromNow(0), isoDaysFromNow(30));
     await save(user);
 
@@ -251,7 +252,7 @@ describe('Schedule observation page', () => {
     mockError('post', OBSERVATIONS_URL);
     const { store, user } = renderSchedulePage();
 
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
     await save(user);
 
@@ -270,7 +271,7 @@ describe('Schedule observation page', () => {
     mockError('post', OBSERVATIONS_URL, 409);
     const { store, user } = renderSchedulePage({ assignPlotsWhenScheduling: true });
 
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
     await save(user);
 
@@ -289,7 +290,7 @@ describe('Schedule observation page', () => {
     const { preferenceRequests, user } = renderSchedulePage({ assignPlotsWhenScheduling: true });
 
     await waitFor(() => expect(preferenceRequests).toHaveLength(1));
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
     await save(user);
 
@@ -303,7 +304,7 @@ describe('Schedule observation page', () => {
     const { preferenceRequests, user } = renderSchedulePage();
 
     await waitFor(() => expect(preferenceRequests).toHaveLength(1));
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
     await save(user);
 
@@ -316,7 +317,7 @@ describe('Schedule observation page', () => {
     const requests = captureRequests('post', OBSERVATIONS_URL, { id: 100 });
     const { user } = renderSchedulePage();
 
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+    await screen.findByLabelText(strings.SELECT_ALL);
     await user.click(screen.getByRole('button', { name: strings.CANCEL }));
 
     expect(screen.getByTestId('location')).toHaveTextContent(/^\/observations$/);
@@ -327,7 +328,7 @@ describe('Schedule observation page', () => {
     const smallSite = { ...RIDGE, areaHa: 2.5 };
 
     const fillAndSave = async (user: UserEvent) => {
-      await user.click(await screen.findByLabelText(strings.SELECT_ALL));
+      await screen.findByLabelText(strings.SELECT_ALL);
       await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
       await save(user);
       // The dialog shares its title with the page, so find it by its message instead.
