@@ -1,8 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { Badge, BusySpinner, Button, Dropdown, DropdownItem } from '@terraware/web-components';
-import { BadgeProps } from '@terraware/web-components/components/Badge';
+import { BusySpinner, Button, Dropdown, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -20,6 +19,8 @@ import {
 } from 'src/queries/search/plantingDateRequests';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
+import PlantingDateRequestFulfillmentBadge from './PlantingDateRequestFulfillmentBadge';
+import RequestedSpeciesModal from './RequestedSpeciesModal';
 import WithdrawFromBatchesModal from './WithdrawFromBatchesModal';
 
 const ALL_OPEN_FILTER = 'allOpen';
@@ -164,6 +165,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
         : strings.NO_REQUESTS_FOR_SELECTED_FILTERS
       : undefined;
   const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
+  const [quantitiesRequest, setQuantitiesRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
   const [isPreparingWithdraw, setIsPreparingWithdraw] = useState(false);
   const [prefetchBatchesForWithdraw] = useLazyListBatchesForWithdrawQuery();
 
@@ -173,6 +175,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
         return;
       }
       const requestSpeciesIds = row.species.map((s) => s.speciesId);
+      setQuantitiesRequest(undefined);
       setIsPreparingWithdraw(true);
       try {
         await prefetchBatchesForWithdraw({ organizationId, speciesIds: requestSpeciesIds }, true).unwrap();
@@ -252,10 +255,19 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
             row={row}
             activeLocale={activeLocale}
             onWithdrawClick={() => void handleWithdrawClick(row)}
+            onViewQuantitiesClick={() => setQuantitiesRequest(row)}
           />
         ))
       )}
       {isPreparingWithdraw && <BusySpinner withSkrim />}
+      {quantitiesRequest && (
+        <RequestedSpeciesModal
+          open={true}
+          onClose={() => setQuantitiesRequest(undefined)}
+          onWithdrawClick={() => void handleWithdrawClick(quantitiesRequest)}
+          request={quantitiesRequest}
+        />
+      )}
       {withdrawRequest && (
         <WithdrawFromBatchesModal
           open={true}
@@ -273,12 +285,14 @@ type PlantingDateRequestListItemProps = {
   row: PlantingDateRequestRow;
   activeLocale: string | null;
   onWithdrawClick: () => void;
+  onViewQuantitiesClick: () => void;
 };
 
 const PlantingDateRequestListItem = ({
   row,
   activeLocale,
   onWithdrawClick,
+  onViewQuantitiesClick,
 }: PlantingDateRequestListItemProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -337,6 +351,11 @@ const PlantingDateRequestListItem = ({
               {strings.SEE_MORE}
             </Typography>
           )}
+          <Box component='span' marginLeft={theme.spacing(1)}>
+            <Link fontSize='14px' onClick={onViewQuantitiesClick} style={{ textDecoration: 'underline' }}>
+              {strings.VIEW_QUANTITIES}
+            </Link>
+          </Box>
         </Box>
       </Box>
 
@@ -347,7 +366,7 @@ const PlantingDateRequestListItem = ({
         gap={theme.spacing(2)}
       >
         <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
-          <RequestStatusBadge status={row.status} />
+          <PlantingDateRequestFulfillmentBadge status={row.status} />
           {row.status !== 'Fulfilled' && (
             <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
           )}
@@ -400,48 +419,6 @@ const NumberColumn = ({
       )}
     </Box>
   );
-};
-
-const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null => {
-  const theme = useTheme();
-  const { strings } = useLocalization();
-  const badgeProps = useMemo((): BadgeProps | undefined => {
-    switch (status) {
-      case 'Pending':
-        return {
-          backgroundColor: theme.palette.TwClrBgWarningTertiary,
-          borderColor: theme.palette.TwClrBrdrWarning,
-          labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.NEW,
-        };
-      case 'Partial':
-        return {
-          backgroundColor: theme.palette.TwClrBgWarningTertiary,
-          borderColor: theme.palette.TwClrBrdrWarning,
-          labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.PARTIALLY_FULFILLED,
-        };
-      case 'Fulfilled':
-        return {
-          backgroundColor: theme.palette.TwClrBgSuccessTertiary,
-          borderColor: theme.palette.TwClrBrdrSuccess,
-          labelColor: theme.palette.TwClrTxtSuccess,
-          label: strings.FULFILLED,
-        };
-      default:
-        return {
-          backgroundColor: theme.palette.TwClrBgInfoTertiary,
-          borderColor: theme.palette.TwClrBrdrInfo,
-          labelColor: theme.palette.TwClrTxtInfo,
-          label: status,
-        };
-    }
-  }, [status, theme, strings]);
-
-  if (!badgeProps) {
-    return null;
-  }
-  return <Badge {...badgeProps} />;
 };
 
 export default PlantingDateRequestsTabContent;

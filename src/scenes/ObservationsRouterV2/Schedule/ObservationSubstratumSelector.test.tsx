@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { screen } from '@testing-library/react';
+import { HttpResponse, http } from 'msw/http';
 
 import ObservationSubstratumSelector from 'src/scenes/ObservationsRouterV2/Schedule/ObservationSubstratumSelector';
 import { MonitoringType } from 'src/scenes/ObservationsRouterV2/Schedule/monitoringTypes';
 import strings from 'src/strings';
-import { buildPlantingSite, buildStratum, buildSubstratum, mockGet, renderWithProviders } from 'src/test-utils';
+import { buildPlantingSite, buildStratum, buildSubstratum, mockGet, renderWithProviders, server } from 'src/test-utils';
 
 const PLANTING_SITE_ID = 1;
 const SITE_URL = `/api/v1/tracking/sites/${PLANTING_SITE_ID}`;
@@ -40,8 +41,13 @@ const site = buildPlantingSite({
   ],
 });
 
-const renderSelector = (monitoringType: MonitoringType = 'Monitoring', sitePayload = site) => {
+const renderSelector = (
+  monitoringType: MonitoringType = 'Monitoring',
+  sitePayload: unknown = site,
+  plants: unknown[] = []
+) => {
   mockGet(SITE_URL, { site: sitePayload });
+  mockGet('/api/v1/tracking/sites/reportedPlants', { sites: plants });
 
   return renderWithProviders(
     <ObservationSubstratumSelector
@@ -70,6 +76,141 @@ const plotsAssigned = (total: number, temporary: number, permanent: number) => {
 };
 
 describe('ObservationSubstratumSelector', () => {
+  it.each(['loading', 'failed'])('omits planting coverage while reported plantings are %s', async (state) => {
+    mockGet(SITE_URL, { site });
+    let finishLoading: () => void = () => undefined;
+    const pending = new Promise<void>((resolve) => {
+      finishLoading = resolve;
+    });
+    server.use(
+      http.get('/api/v1/tracking/sites/reportedPlants', async () => {
+        if (state === 'loading') {
+          await pending;
+        }
+        return HttpResponse.json({ status: 'error' }, { status: 500 });
+      })
+    );
+    renderWithProviders(
+      <ObservationSubstratumSelector
+        monitoringType='Baseline Survey'
+        onChangeSelectedSubstrata={() => undefined}
+        plantingSiteId={PLANTING_SITE_ID}
+      />
+    );
+    expect(await screen.findAllByText(strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string)).toHaveLength(2);
+    expect(screen.queryByText(/ · /)).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string)
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
+    finishLoading();
+  });
+
+  it('shows Baseline coverage and plantings from the latest per-substratum site fields', async () => {
+    const baselineSite = {
+      ...site,
+      strata: site.strata?.map((stratum, index) => ({
+        ...stratum,
+        substrata: stratum.substrata.map((substratum, substratumIndex) => ({
+          ...substratum,
+          ...(index === 0
+            ? {
+                latestBaselineSurveyDate: substratumIndex === 0 ? '2026-06-02' : '2026-11-16',
+                latestBaselineSurveyId: substratumIndex + 1,
+                latestBaselineSurveyStatus: substratumIndex === 0 ? ('Completed' as const) : ('Upcoming' as const),
+              }
+            : {}),
+        })),
+      })),
+    };
+    renderSelector('Baseline Survey', baselineSite, [
+      {
+        id: 1,
+        strata: [
+          {
+            substrata: [
+              { id: 21, totalPlants: 10 },
+              { id: 22, totalPlants: 0 },
+            ],
+          },
+        ],
+      },
+    ]);
+    expect(
+      await screen.findByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 2, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string}`
+      )
+    ).toBeVisible();
+    expect(
+      await screen.findByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 1, 2) as string}`
+      )
+    ).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings.BASELINE_COMPLETED_X, '2026-06-02') as string)).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings.BASELINE_SCHEDULED_X, '2026-11-16') as string)).toBeVisible();
+    expect(screen.getByText(strings.HAS_PLANTINGS)).toBeVisible();
+    expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
+  });
+
+  it.each([
+    ['Completed', 'BASELINE_COMPLETED_X'],
+    ['Abandoned', 'BASELINE_COMPLETED_X'],
+    ['Upcoming', 'BASELINE_SCHEDULED_X'],
+    ['InProgress', 'BASELINE_SCHEDULED_X'],
+    ['Overdue', 'BASELINE_OVERDUE_X'],
+  ] as const)('shows %s Baselines with the matching status pill', async (status, label) => {
+    renderSelector('Baseline Survey', {
+      ...site,
+      strata: [
+        {
+          ...site.strata![0],
+          substrata: [
+            {
+              ...site.strata![0].substrata[0],
+              latestBaselineSurveyDate: '2026-06-02',
+              latestBaselineSurveyId: 1,
+              latestBaselineSurveyStatus: status,
+            },
+            {
+              ...site.strata![0].substrata[1],
+              latestBaselineSurveyDate: null,
+              latestBaselineSurveyId: null,
+              latestBaselineSurveyStatus: null,
+            },
+          ],
+        },
+      ],
+    });
+    expect(
+      await screen.findByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 1, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string}`
+      )
+    ).toBeVisible();
+    expect(screen.getByText(strings.formatString(strings[label], '2026-06-02') as string)).toBeVisible();
+    expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
+  });
+
+  it('shows zero coverage without legacy observation text when no Baselines or plantings exist', async () => {
+    renderSelector('Baseline Survey');
+    expect(
+      await screen.findAllByText(
+        `${strings.formatString(strings.BASELINE_X_OF_Y, 0, 2) as string} · ${strings.formatString(strings.HAS_PLANTINGS_X_OF_Y, 0, 2) as string}`
+      )
+    ).toHaveLength(2);
+    expect(screen.queryByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
+  });
+
+  it.each(['Monitoring', 'Biomass Measurements'] as const)(
+    'keeps the legacy observation display for %s',
+    async (type) => {
+      renderSelector(type);
+      expect(await screen.findAllByText(strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED)).toHaveLength(2);
+      expect(screen.queryByText(strings.HAS_PLANTINGS)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Baseline:/)).not.toBeInTheDocument();
+    }
+  );
+
   it('shows each stratum its plot counts and each substratum an estimate', async () => {
     renderSelector();
 

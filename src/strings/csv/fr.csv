@@ -253,7 +253,11 @@ BASED_ON_X_BATCHES,Basé sur {0} lots,8c41bee7
 BASED_ON_X_SEEDLING,Basé sur {0} plantule,3bbdb932
 BASED_ON_X_SEEDLINGS,Basé sur {0} plantules,a1e372d3
 BASELINE,Référence,332af00e
+BASELINE_COMPLETED_X,Ligne de base terminée : {0},58bb5e0e
+BASELINE_OVERDUE_X,Référence en retard : {0},c1c91c3f
+BASELINE_SCHEDULED_X,Ligne de base programmée : {0},c95467b5
 BASELINE_SURVEY,Enquête de référence,bc76c649
+BASELINE_X_OF_Y,Référence : {0} sur {1},e222f357
 BATCH,Lot,9fdfdd9b
 BATCH_CREATED,Lot créé,1a382f74
 BATCH_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
@@ -579,6 +583,7 @@ DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
 DISCARD_CHANGES,Annuler les modifications,f79f534a
 DISMISS,Fermer,a56709f4
 DO_NOT_USE,Ne pas utiliser,6950f9e5
+DO_YOU_WANT_TO_SCHEDULE_ANOTHER_BASELINE_FOR_THEM,Voulez-vous planifier une autre ligne de base pour eux ?,fc52162f
 DOC_PRODUCER,Producteur de docs,e40f8aa1
 DOCUMENT,Document,57650c76
 DOCUMENT_DETAILS,Modifier les détails du document,92155983
@@ -889,6 +894,7 @@ GLOBAL_ROLE_ACCELERATOR_ADMIN,Administrateur de l'accélérateur,b60aa07a
 GLOBAL_ROLE_READ_ONLY,Lecture seule,28709939
 GLOBAL_ROLE_SUPER_ADMIN,Superadministrateur,4e519ab0
 GLOBAL_ROLE_TF_EXPERT,Expert TF,3edccd76
+GO_BACK,Retourner,93f780e3
 GO_TO,Aller à {0},c922d4a7
 GO_TO_NURSERIES,Aller aux pépinières,545d3e5a
 GO_TO_PLANTING_SITES,Aller à Sites de plantation,63065313
@@ -911,6 +917,8 @@ HARDENING_OFF_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité à acclimater ne pe
 HARDENING_OFF_QUANTITY_REMAINING,Quantité à acclimater ({0} restante),19e3987b
 HARDENING_OFF_QUANTITY_REQUIRED,Quantité à acclimater *,8bda8f0f
 HARDENING_OFF_SENTENCE_CASE,Acclimatation,5b744226
+HAS_PLANTINGS,Plantations présentes,fba8ffe7
+HAS_PLANTINGS_X_OF_Y,Contient des plantations : {0} sur {1},3829a694
 HECTARES,Hectares,316902d7
 HEIGHT_AT_MATURITY,Hauteur à maturité (cm),f8025719
 HEIGHT_M,Hauteur (m),fe61fc34
@@ -1583,6 +1591,7 @@ PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Limite de {0} plus),121ba2ad
 PHOTOS_VIDEOS,Photos/Vidéos,5d533136
+PIN_TO_LEFT,Épingler à gauche,ef1066fe
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
@@ -2004,6 +2013,7 @@ REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
 REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
+REQUESTED_SPECIES,Espèces demandées,d2f82712
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
@@ -2072,6 +2082,7 @@ SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38
 SAVED_VIEWS_PRIVATE,Vous seul pouvez voir les vues que vous enregistrez.,374179a6
 SAVING,Enregistrement en cours...,d4ce4849
 SCARIFY,Scarification,b34359c6
+SCHEDULE_ANYWAY,Planifier quand même,051f6f28
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
 SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,Enregistrer la croissance des plantes et les conditions actuelles.,3870c828
 SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,Mesurer la survie des plantes et les conditions actuelles du site,2747bb6a
@@ -2298,6 +2309,7 @@ SOIL_TYPE_SILT_LOAM,Terre limoneuse,b540d046
 SOIL_TYPE_SILTY_CLAY,Argile limoneuse,99ec02c4
 SOIL_TYPE_SILTY_CLAY_LOAM,Terre argilo-limoneuse,e8c051d9
 SOIL_TYPE_UNKNOWN,Inconnu,97ccc176
+SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE,Certains substrats ont déjà une ligne de base,60922f40
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Une erreur s'est produite...,bf2e66a4
@@ -2552,6 +2564,7 @@ THANK_YOU_FOR_USING_TERRAWARE,Merci d'utiliser Terraware !,c6999786
 THERE_ARE_NO_PLANTING_PLANS,Il n'y a aucun plan de plantation.,3c854b17
 THERE_ARE_NO_PLANTING_SEASONS,Il n'y a pas de Saisons de plantation.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Aucune espèce n'a encore été ajoutée à ce projet.,02f58d0e
+THESE_SUBSTRATA_ARE_ALREADY_INCLUDED_IN_A_COMPLETED_OR_SCHEDULED_BASELINE_SURVEY,Ces substrats sont déjà inclus dans une enquête de ligne de base terminée ou planifiée :,ac5828de
 THIS_ACTION_IS_NON_REVERSIBLE,Cette action n'est pas réversible.,aecdef3a
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Ce livrable a été approuvé. Si le projet téléverse un nouveau document, le statut repassera à « En cours d’examen ».",96ae1308
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Ce livrable a été approuvé. Si le projet soumet à nouveau le questionnaire, le statut repassera à « En cours d’examen ».",89b908e0
@@ -2727,6 +2740,7 @@ UNIT,Unité,48d10134
 UNITS,Unités,ce3e3f06
 UNKNOWN,Inconnu,97ccc176
 UNPIN_ALL,Désépingler tout,97a06369
+UNPIN_COLUMN,Désépingler la colonne,36b80da4
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21
 UNPUBLISHED_CHANGES_WARNING_RESOLUTION,"Pour résoudre ce problème, republiez tous les rapports mis à jour afin que les rapports destinés au bailleur de fonds reflètent les dernières données.",b2104255
@@ -2844,6 +2858,7 @@ VIEW_ON_MAP,Voir sur la carte,fb873a55
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4
+VIEW_QUANTITIES,Voir les quantités,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
 VIEW_SESSION,Voir la session,7f126865
@@ -2937,6 +2952,7 @@ X_ACCESSION,{0} accession,cfd54196
 X_ACCESSIONS,{0} accessions,e8ccdbc4
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
+X_COMPLETED_Y,{0} (terminé le {1}),801c7a02
 X_CUMULATIVE_TARGET,Objectif cumulatif {0},25c175af
 X_DAY,{0} jour,f85a4e0a
 X_DAYS,{0} jours,bec81ab4
@@ -2944,12 +2960,15 @@ X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
 X_HECTARES_HA,{0} Hectares (ha),e2af9d30
+X_LEFT,{0} restants,d5d2cf6b
 X_OF_YEAR_CUMULATIVE_TARGET,{0} de l'objectif cumulatif annuel,6658988a
 X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
+X_OVERDUE_Y,{0} (en retard depuis le {1}),11c7edeb
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
 X_PLOT,{0} placette,69151ad1
 X_PLOTS,{0} placettes,af2dd663
+X_SCHEDULED_Y,{0} (planifié pour le {1}),ee2e9f83
 X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_STILL_IN_THIS_STAGE,{0} toujours à cette étape,6e034985
