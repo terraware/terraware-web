@@ -1,14 +1,15 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Badge, Box, Divider, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
+import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
 
-import Link from 'src/components/common/Link';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
+import { ObservationPayload } from 'src/queries/generated/observations';
 
 import ScheduledObservationItem from './ScheduledObservationItem';
-import useUpcomingObservations from './useUpcomingObservations';
+import ScheduledObservationSections from './ScheduledObservationSections';
+import useScheduledObservations, { type ScheduledObservationSection } from './useScheduledObservations';
 
 const FLYOUT_LIMIT = 3;
 
@@ -20,10 +21,15 @@ type ScheduledObservationsMenuProps = {
 const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledObservationsMenuProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const observations = useUpcomingObservations(plantingSiteId);
+  const scheduledObservations = useScheduledObservations(plantingSiteId);
+  const observations = useMemo(
+    () => [...scheduledObservations.upcoming, ...scheduledObservations.inProgress, ...scheduledObservations.overdue],
+    [scheduledObservations]
+  );
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [expandedSection, setExpandedSection] = useState<ScheduledObservationSection | undefined>('upcoming');
   const [reschedulingId, setReschedulingId] = useState<number>();
   const endReschedule = useCallback(() => setReschedulingId(undefined), []);
 
@@ -43,22 +49,55 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
     return strings.formatString(strings.SCHEDULED_OBSERVATIONS_ACROSS_SITES, observations.length, siteNames.length);
   }, [observations.length, siteNames, strings]);
 
-  const onButtonClick = useCallback(
-    (event?: React.MouseEvent<HTMLElement>) => setAnchorEl(event?.currentTarget ?? null),
-    []
-  );
+  const onButtonClick = useCallback((event?: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event?.currentTarget ?? null);
+    setExpandedSection('upcoming');
+  }, []);
   const closeFlyout = useCallback(() => {
     setAnchorEl(null);
     setReschedulingId(undefined);
   }, []);
-  const openPanel = useCallback(() => {
+  const openPanel = useCallback((section: ScheduledObservationSection) => {
     setAnchorEl(null);
+    setExpandedSection(section);
     setPanelOpen(true);
   }, []);
   const closePanel = useCallback(() => {
     setPanelOpen(false);
     setReschedulingId(undefined);
   }, []);
+
+  const toggleSection = useCallback((section: ScheduledObservationSection) => {
+    setExpandedSection((current) => (current === section ? undefined : section));
+    setReschedulingId(undefined);
+  }, []);
+
+  const renderObservation = useCallback(
+    (observation: ObservationPayload) => (
+      <ScheduledObservationItem
+        canReschedule={canReschedule}
+        isRescheduling={reschedulingId === observation.id}
+        observation={observation}
+        onRescheduleEnd={endReschedule}
+        onRescheduleStart={setReschedulingId}
+        showSiteName={showSiteName}
+      />
+    ),
+    [canReschedule, endReschedule, reschedulingId, showSiteName]
+  );
+
+  const sections = (paddingX: number, limit?: number) =>
+    observations.length > 0 && (
+      <ScheduledObservationSections
+        expandedSection={expandedSection}
+        limit={limit}
+        observations={scheduledObservations}
+        onToggle={toggleSection}
+        onViewAll={limit === undefined ? undefined : openPanel}
+        paddingX={paddingX}
+        renderObservation={renderObservation}
+      />
+    );
 
   const header = (onClose: () => void) => (
     <Box sx={{ alignItems: 'flex-start', display: 'flex', justifyContent: 'space-between' }}>
@@ -118,40 +157,21 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
             sx: {
               border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
               borderRadius: '8px',
+              display: 'flex',
+              flexDirection: 'column',
               marginTop: theme.spacing(1),
               maxWidth: `calc(100vw - ${theme.spacing(4)})`,
+              overflow: 'hidden',
               width: '400px',
             },
           },
         }}
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
       >
-        <Box padding={theme.spacing(2)}>{header(closeFlyout)}</Box>
-        {observations.slice(0, FLYOUT_LIMIT).map((observation) => (
-          <React.Fragment key={observation.id}>
-            <Divider />
-            <Box padding={theme.spacing(2)}>
-              <ScheduledObservationItem
-                canReschedule={canReschedule}
-                isRescheduling={reschedulingId === observation.id}
-                observation={observation}
-                onRescheduleEnd={endReschedule}
-                onRescheduleStart={setReschedulingId}
-                showSiteName={showSiteName}
-              />
-            </Box>
-          </React.Fragment>
-        ))}
-        {observations.length > FLYOUT_LIMIT && (
-          <>
-            <Divider />
-            <Box bgcolor={theme.palette.TwClrBgSecondary} padding={theme.spacing(1.5, 2)}>
-              <Link fontSize='14px' onClick={openPanel}>
-                {strings.formatString(strings.VIEW_ALL_SCHEDULED_OBSERVATIONS, observations.length)}
-              </Link>
-            </Box>
-          </>
-        )}
+        <Box flexShrink={0} padding={theme.spacing(2)}>
+          {header(closeFlyout)}
+        </Box>
+        {sections(2, FLYOUT_LIMIT)}
       </Popover>
 
       <Drawer
@@ -159,38 +179,12 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
         disableEnforceFocus
         onClose={closePanel}
         open={panelOpen}
-        PaperProps={{ sx: { maxWidth: '100vw', width: { sm: '480px', xs: '100%' } } }}
+        PaperProps={{ sx: { maxWidth: '100vw', overflow: 'hidden', width: { sm: '480px', xs: '100%' } } }}
       >
-        <Box padding={theme.spacing(3, 3, 2)}>{header(closePanel)}</Box>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            gap: theme.spacing(2),
-            overflowY: 'auto',
-            padding: theme.spacing(0, 3, 3),
-          }}
-        >
-          {observations.map((observation) => (
-            <Box
-              key={observation.id}
-              sx={{
-                border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                borderRadius: '8px',
-                padding: theme.spacing(2),
-              }}
-            >
-              <ScheduledObservationItem
-                canReschedule={canReschedule}
-                isRescheduling={reschedulingId === observation.id}
-                observation={observation}
-                onRescheduleEnd={endReschedule}
-                onRescheduleStart={setReschedulingId}
-                showSiteName={showSiteName}
-              />
-            </Box>
-          ))}
+        <Box flexShrink={0} padding={theme.spacing(3, 3, 2)}>
+          {header(closePanel)}
         </Box>
+        {sections(3)}
       </Drawer>
     </>
   );
