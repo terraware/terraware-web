@@ -1,3 +1,4 @@
+227a80f5 Verify funders have a single email notification toggle (#7249)
 eeb1ed34 SW-9003 Add E2E tests for viewing funder reports (#7248)
 edb642c1 Cover saving only returned email notification categories (#7247)
 bc07196d SW-9368 Show combined plot count in Baseline Survey map drawer (#7242)
