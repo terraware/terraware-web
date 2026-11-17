@@ -616,7 +616,7 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
                     </Typography>
 
                     {/* Pin/Unpin Button */}
-                    <Tooltip title={isColumnPinned(columnName) ? 'Unpin column' : 'Pin to left'}>
+                    <Tooltip title={isColumnPinned(columnName) ? strings.UNPIN_COLUMN : strings.PIN_TO_LEFT}>
                       <IconButton size='small' onClick={pinUnpinHandler} sx={{ ml: 0.5 }} data-column-name={columnName}>
                         {isColumnPinned(columnName) ? (
                           <PinIcon sx={{ fontSize: 14, color: 'primary.main' }} />

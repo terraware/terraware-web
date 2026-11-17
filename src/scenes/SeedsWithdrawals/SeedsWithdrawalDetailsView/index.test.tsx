@@ -206,6 +206,47 @@ describe('SeedsWithdrawalDetailsView', () => {
     expect(screen.queryByText(strings.BATCH)).not.toBeInTheDocument();
   });
 
+  it('follows a seed count with the estimated weight, and a weight with the estimated count', async () => {
+    mockSearch([
+      buildSearchResult({
+        'quantity(raw)': '500',
+        'units(raw)': 'Seeds',
+        'estimatedWeightQuantity(raw)': '300',
+        'estimatedWeightUnits(raw)': 'Grams',
+      }),
+      buildSearchResult({
+        id: '9',
+        accession_id: '44',
+        accession_accessionNumber: 'ACC-003',
+        'quantity(raw)': '40',
+        'units(raw)': 'Grams',
+        'estimatedCount(raw)': '67',
+      }),
+    ]);
+    mockPost('/api/v1/events/list', {
+      events: [
+        buildCreationEvent({ withdrawalId: ANCHOR_ID, accessionId: 42, timestamp: '2026-03-14T10:00:00Z' }),
+        buildCreationEvent({ withdrawalId: 9, accessionId: 44, timestamp: '2026-03-14T10:00:01Z' }),
+      ],
+    });
+
+    renderDetails();
+
+    expect(await screen.findByRole('cell', { name: `500 ${strings.CT} (~300 ${strings.G})` })).toBeVisible();
+    expect(screen.getByRole('cell', { name: `40 ${strings.G} (~67 ${strings.CT})` })).toBeVisible();
+  });
+
+  it('leaves the quantity on its own when the accession has no subset weight to estimate from', async () => {
+    mockSearch([buildSearchResult({ 'quantity(raw)': '500', 'units(raw)': 'Seeds' })]);
+    mockPost('/api/v1/events/list', {
+      events: [buildCreationEvent({ withdrawalId: ANCHOR_ID, accessionId: 42, timestamp: '2026-03-14T10:00:00Z' })],
+    });
+
+    renderDetails();
+
+    expect(await screen.findByRole('cell', { name: `500 ${strings.CT}` })).toBeVisible();
+  });
+
   it('keeps the accessions of a bulk withdrawal that spans seed banks', async () => {
     mockSearch([
       buildSearchResult(),
