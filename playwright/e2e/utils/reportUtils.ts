@@ -5,7 +5,7 @@ import type {
   ListAcceleratorReportConfigResponsePayload,
   ListAcceleratorReportsResponsePayload,
   ReportReviewPayload,
-} from '../../../src/queries/generated/acceleratorReports';
+} from 'src/queries/generated/acceleratorReports';
 
 export type ReportQuarter = NonNullable<AcceleratorReportPayload['quarter']>;
 
