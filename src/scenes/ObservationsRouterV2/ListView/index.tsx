@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useRef } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useMatch, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -23,7 +23,7 @@ import useFilteredObservationResults from '../useFilteredObservationResults';
 import AdHocObservationsList from './AdHocObservationsList';
 import ObservationFilters from './ObservationFilters';
 import PlantMonitoringList from './PlantMonitoringList';
-import ScheduledObservationsMenu from './ScheduledObservations';
+import ScheduledObservationsMenu, { type ScheduledObservationsMenuHandle } from './ScheduledObservations';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 
 const ObservationListViewContent = (): JSX.Element => {
@@ -46,6 +46,12 @@ const ObservationListViewContent = (): JSX.Element => {
 
   const plantingSiteIdFilter = selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId;
   const showAllSitesOption = plantingSites.length > 1;
+
+  const scheduledObservationsMenuRef = useRef<ScheduledObservationsMenuHandle>(null);
+  const openReschedule = useCallback(
+    (observationId: number) => scheduledObservationsMenuRef.current?.openToObservation(observationId),
+    []
+  );
 
   const lastParamRef = useRef<string | null>(null);
   useEffect(() => {
@@ -179,6 +185,7 @@ const ObservationListViewContent = (): JSX.Element => {
         <ScheduledObservationsMenu
           canReschedule={isAdmin(selectedOrganization)}
           plantingSiteId={selectedPlantingSiteId}
+          ref={scheduledObservationsMenuRef}
         />
         {typeof selectedPlantingSiteId === 'number' && (
           <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
@@ -296,7 +303,7 @@ const ObservationListViewContent = (): JSX.Element => {
         (plotType === 'adHoc' ? (
           <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
         ) : (
-          <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} />
+          <PlantMonitoringList onReschedule={openReschedule} plantingSiteId={selectedPlantingSiteId} />
         ))}
       {mobileAppCard}
     </Page>

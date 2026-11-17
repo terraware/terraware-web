@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -21,7 +21,7 @@ import downloadZipFile from 'src/utils/downloadZipFile';
 import ObservationFiltersProvider, { ObservationTypeFilter } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import PlantMonitoringList from './PlantMonitoringList';
-import ScheduledObservationsMenu from './ScheduledObservations';
+import ScheduledObservationsMenu, { type ScheduledObservationsMenuHandle } from './ScheduledObservations';
 import ObservationListView from './index';
 
 rstest.mock('src/utils/downloadZipFile', () => ({ default: rstest.fn() }));
@@ -92,6 +92,18 @@ const toObservationPayload = (results: ObservationResultsPayload, numPlots: numb
   type: results.type,
 });
 
+const ListWithScheduledObservations = () => {
+  const menuRef = useRef<ScheduledObservationsMenuHandle>(null);
+  const openReschedule = useCallback((id: number) => menuRef.current?.openToObservation(id), []);
+
+  return (
+    <>
+      <ScheduledObservationsMenu canReschedule plantingSiteId={ALL_PLANTING_SITES} ref={menuRef} />
+      <PlantMonitoringList onReschedule={openReschedule} plantingSiteId={ALL_PLANTING_SITES} />
+    </>
+  );
+};
+
 /**
  * Renders the list, by default with scheduled observations of each type. The returned requests are
  * the ones that carry the feature flags, so a test can tell "the flag said no" apart from "the flag
@@ -126,8 +138,11 @@ const renderList = (
   const result = renderWithProviders(
     <ObservationFiltersProvider>
       {showFilterPanel && <ObservationFilterPanel plantingSiteId={ALL_PLANTING_SITES} />}
-      {showScheduledObservations && <ScheduledObservationsMenu canReschedule plantingSiteId={ALL_PLANTING_SITES} />}
-      <PlantMonitoringList plantingSiteId={ALL_PLANTING_SITES} />
+      {showScheduledObservations ? (
+        <ListWithScheduledObservations />
+      ) : (
+        <PlantMonitoringList plantingSiteId={ALL_PLANTING_SITES} />
+      )}
     </ObservationFiltersProvider>,
     { localization }
   );

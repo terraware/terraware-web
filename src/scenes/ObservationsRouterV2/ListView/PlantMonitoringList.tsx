@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -43,7 +42,6 @@ import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
-import { RESCHEDULE_OBSERVATION_PARAM } from './ScheduledObservations';
 import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
@@ -90,7 +88,12 @@ const toLocalDate = (dateStr?: string) => {
   return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null;
 };
 
-const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
+type PlantMonitoringActionsMenuContentProps = {
+  onReschedule?: (observationId: number) => void;
+  row: PlantMonitoringRow;
+};
+
+const PlantMonitoringActionsMenuContent = ({ onReschedule, row }: PlantMonitoringActionsMenuContentProps) => {
   const { strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
   const {
@@ -99,7 +102,6 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
     downloadObservationGpx,
     downloadObservationResults,
   } = useObservationExports();
-  const [, setSearchParams] = useSearchParams();
 
   const { hasData, hasPlots, observationId, observationState, observationType } = row;
   const exportLocationsDisabled = observationState === 'Upcoming' && !hasPlots;
@@ -137,11 +139,7 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           disabled: isFinished,
           label: strings.RESCHEDULE,
           onClick: () => {
-            setSearchParams((current) => {
-              const params = new URLSearchParams(current);
-              params.set(RESCHEDULE_OBSERVATION_PARAM, observationId.toString());
-              return params;
-            });
+            onReschedule?.(observationId);
           },
         },
         {
@@ -157,10 +155,11 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
 };
 
 type PlantMonitoringListProps = {
+  onReschedule?: (observationId: number) => void;
   plantingSiteId?: PlantingSiteId;
 };
 
-const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
+const PlantMonitoringList = ({ onReschedule, plantingSiteId }: PlantMonitoringListProps) => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
@@ -302,8 +301,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   }, []);
 
   const ActionsMenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => <PlantMonitoringActionsMenuContent row={cell.row.original} />,
-    []
+    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => (
+      <PlantMonitoringActionsMenuContent onReschedule={onReschedule} row={cell.row.original} />
+    ),
+    [onReschedule]
   );
 
   const columns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {

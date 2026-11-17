@@ -1,10 +1,18 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import React, {
+  type JSX,
+  type Ref,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 
 import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
 
-import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
 
@@ -14,17 +22,24 @@ import useScheduledObservations, { type ScheduledObservationSection } from './us
 
 const FLYOUT_LIMIT = 3;
 
-export const RESCHEDULE_OBSERVATION_PARAM = 'rescheduleObservationId';
+export type ScheduledObservationsMenuHandle = {
+  openToObservation: (observationId: number) => void;
+};
 
 type ScheduledObservationsMenuProps = {
   canReschedule: boolean;
   plantingSiteId: PlantingSiteId;
+  ref?: Ref<ScheduledObservationsMenuHandle>;
 };
 
-const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledObservationsMenuProps): JSX.Element => {
+const ScheduledObservationsMenu = ({
+  canReschedule,
+  plantingSiteId,
+  ref,
+}: ScheduledObservationsMenuProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { allObservations, isLoaded, scheduledObservations } = useScheduledObservations(plantingSiteId);
+  const scheduledObservations = useScheduledObservations(plantingSiteId);
   const observations = useMemo(
     () => [...scheduledObservations.upcoming, ...scheduledObservations.inProgress, ...scheduledObservations.overdue],
     [scheduledObservations]
@@ -38,47 +53,25 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
   const [focusedId, setFocusedId] = useState<number>();
   const buttonRef = useRef<HTMLSpanElement>(null);
 
-  const [searchParams, setSearchParams] = useSearchParams();
-  const requestedId = searchParams.get(RESCHEDULE_OBSERVATION_PARAM);
+  useImperativeHandle(
+    ref,
+    () => ({
+      openToObservation: (id: number) => {
+        const section = SECTIONS.find((key) => scheduledObservations[key].some((observation) => observation.id === id));
+        const index = section ? scheduledObservations[section].findIndex((observation) => observation.id === id) : -1;
+        const showInPanel = index >= FLYOUT_LIMIT;
 
-  // A request for an observation at another site waits until that site is selected.
-  const requestedObservation = allObservations.find((observation) => observation.id === Number(requestedId));
-  const isAtOtherSite =
-    requestedObservation !== undefined &&
-    plantingSiteId !== ALL_PLANTING_SITES &&
-    requestedObservation.plantingSiteId !== plantingSiteId;
-  const pendingRequest = isLoaded && !isAtOtherSite ? requestedId : null;
-  const [handledRequest, setHandledRequest] = useState<string | null>(null);
-  if (pendingRequest !== handledRequest) {
-    setHandledRequest(pendingRequest);
-    if (pendingRequest) {
-      const id = Number(pendingRequest);
-      const section = SECTIONS.find((key) => scheduledObservations[key].some((observation) => observation.id === id));
-      const index = section ? scheduledObservations[section].findIndex((observation) => observation.id === id) : -1;
-      const showInPanel = index >= FLYOUT_LIMIT;
-
-      setExpandedSection(section ?? 'upcoming');
-      setReschedulingId(
-        section && canReschedule && isReschedulable(scheduledObservations[section][index]) ? id : undefined
-      );
-      setFocusedId(section ? id : undefined);
-      setFlyoutOpen(!showInPanel);
-      setPanelOpen(showInPanel);
-    }
-  }
-
-  useEffect(() => {
-    if (pendingRequest) {
-      setSearchParams(
-        (current) => {
-          const params = new URLSearchParams(current);
-          params.delete(RESCHEDULE_OBSERVATION_PARAM);
-          return params;
-        },
-        { replace: true }
-      );
-    }
-  }, [pendingRequest, setSearchParams]);
+        setExpandedSection(section ?? 'upcoming');
+        setReschedulingId(
+          section && canReschedule && isReschedulable(scheduledObservations[section][index]) ? id : undefined
+        );
+        setFocusedId(section ? id : undefined);
+        setFlyoutOpen(!showInPanel);
+        setPanelOpen(showInPanel);
+      },
+    }),
+    [canReschedule, scheduledObservations]
+  );
 
   useEffect(() => {
     if (focusedId === undefined) {
