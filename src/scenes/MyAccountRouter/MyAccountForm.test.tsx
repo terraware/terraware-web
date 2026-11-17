@@ -4,7 +4,7 @@ import { screen, waitFor } from '@testing-library/react';
 
 import MyAccountForm from 'src/scenes/MyAccountRouter/MyAccountForm';
 import strings from 'src/strings';
-import { buildUser, captureRequests, mockGet, mockPut, renderWithProviders } from 'src/test-utils';
+import { buildFunderUser, buildUser, captureRequests, mockGet, mockPut, renderWithProviders } from 'src/test-utils';
 
 const EMAIL_SETTINGS_URL = '/api/v1/users/me/emailNotifications';
 const ME_URL = '/api/v1/users/me';
@@ -30,15 +30,10 @@ const mockProfileSaveSideEffects = () => {
   mockPut('/api/v1/users/me/preferences');
 };
 
-const renderForm = (edit: boolean) => {
+const renderForm = (edit: boolean, profile = buildUser({ firstName: 'Ada' })) => {
   let returnedToView = false;
   const result = renderWithProviders(
-    <MyAccountForm
-      edit={edit}
-      user={buildUser({ firstName: 'Ada' })}
-      reloadUser={() => undefined}
-      backToView={() => (returnedToView = true)}
-    />
+    <MyAccountForm edit={edit} user={profile} reloadUser={() => undefined} backToView={() => (returnedToView = true)} />
   );
   return { ...result, returnedToView: () => returnedToView };
 };
@@ -48,6 +43,24 @@ const settingSwitch = (name: string) => screen.getByRole('switch', { name });
 const findMasterSwitch = () => screen.findByRole('switch', { name: strings.EMAIL_NOTIFICATIONS });
 
 describe('MyAccountForm email notification settings', () => {
+  it('shows funders only the master email toggle and saves it without categories', async () => {
+    mockGet('/api/v1/disclaimer', { status: 'ok' });
+    mockEmailSettings([], false);
+    mockProfileSaveSideEffects();
+    mockPut(ME_URL);
+    const emailRequests = captureRequests('put', EMAIL_SETTINGS_URL);
+    const { user, returnedToView } = renderForm(true, buildFunderUser());
+
+    const master = await findMasterSwitch();
+    expect(screen.getAllByRole('switch')).toEqual([master]);
+    await user.click(master);
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+    await waitFor(() => expect(returnedToView()).toBe(true));
+    expect(emailRequests).toHaveLength(1);
+    expect(await emailRequests[0].json()).toEqual({ categories: [], emailNotificationsEnabled: true });
+  });
+
   it('shows only the categories the server returns, in a fixed order, and saves only those categories', async () => {
     mockEmailSettings([
       { category: 'PlantingAndObservations', optedIn: true },
