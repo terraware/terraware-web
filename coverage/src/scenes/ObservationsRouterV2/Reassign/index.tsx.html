@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">17.64% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/17</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -132,7 +132,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -140,31 +140,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,7 +170,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">108x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { createContext, useCallback, useContext, useState } from 'react';
@@ -196,29 +196,29 @@ const ReassignPlotModalContext = createContext&lt;ReassignPlotModalContextType&g
   closeReassignPlotModal: <span class="fstat-no" title="function not covered" >() =&gt; {},</span>
 });
 &nbsp;
-const ReassignPlotModalProvider = <span class="fstat-no" title="function not covered" >({ children }: { children: React.ReactNode }) =&gt; {</span>
-  const [open, setOpen] = <span class="cstat-no" title="statement not covered" >useState(false);</span>
-  const [monitoringPlotId, setMonitoringPlotId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const [observationId, setObservationId] = <span class="cstat-no" title="statement not covered" >useState&lt;number&gt;();</span>
-  const [isPermanent, setIsPermanent] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;();</span>
+const ReassignPlotModalProvider = ({ children }: { children: React.ReactNode }) =&gt; {
+  const [open, setOpen] = useState(false);
+  const [monitoringPlotId, setMonitoringPlotId] = useState&lt;number&gt;();
+  const [observationId, setObservationId] = useState&lt;number&gt;();
+  const [isPermanent, setIsPermanent] = useState&lt;boolean&gt;();
 &nbsp;
-  const openReassignPlotModal = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (nextObservationId: number, nextMonitoringPlotId: number, nextPermanent: boolean) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >      setOpen(true);</span>
-<span class="cstat-no" title="statement not covered" >      setMonitoringPlotId(nextMonitoringPlotId);</span>
-<span class="cstat-no" title="statement not covered" >      setObservationId(nextObservationId);</span>
-<span class="cstat-no" title="statement not covered" >      setIsPermanent(nextPermanent);</span>
+  const openReassignPlotModal = useCallback(
+    (nextObservationId: number, nextMonitoringPlotId: number, nextPermanent: boolean) =&gt; {
+      setOpen(true);
+      setMonitoringPlotId(nextMonitoringPlotId);
+      setObservationId(nextObservationId);
+      setIsPermanent(nextPermanent);
     },
     []
   );
 &nbsp;
-  const closeReassignPlotModal = <span class="cstat-no" title="statement not covered" >useCallback(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    setOpen(false);</span>
-<span class="cstat-no" title="statement not covered" >    setMonitoringPlotId(undefined);</span>
-<span class="cstat-no" title="statement not covered" >    setObservationId(undefined);</span>
+  const closeReassignPlotModal = useCallback(() =&gt; {
+    setOpen(false);
+    setMonitoringPlotId(undefined);
+    setObservationId(undefined);
   }, [setMonitoringPlotId, setObservationId, setOpen]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;ReassignPlotModalContext.Provider
       value={{ open, monitoringPlotId, observationId, isPermanent, openReassignPlotModal, closeReassignPlotModal }}
     &gt;
@@ -228,7 +228,7 @@ const ReassignPlotModalProvider = <span class="fstat-no" title="function not cov
   );
 };
 &nbsp;
-export const useReassignPlotModal = <span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >useContext(ReassignPlotModalContext);</span></span>
+export const useReassignPlotModal = () =&gt; useContext(ReassignPlotModalContext);
 &nbsp;
 export default ReassignPlotModalProvider;
 &nbsp;</pre></td></tr></table></pre>
@@ -238,7 +238,7 @@ export default ReassignPlotModalProvider;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-17T21:30:41.664Z
+                at 2026-11-17T22:25:39.037Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
