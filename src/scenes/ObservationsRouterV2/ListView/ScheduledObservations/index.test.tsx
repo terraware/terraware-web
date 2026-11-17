@@ -46,6 +46,15 @@ const OVERDUE_MONTHS = buildObservation({
   startDate: DateTime.now().minus({ months: 4 }).toISODate()!,
   state: 'Overdue',
 });
+const PARTLY_OBSERVED = buildObservation({
+  endDate: isoDaysFromNow(5),
+  id: 12,
+  numIncompletePlots: 2,
+  numPlots: 3,
+  plantingSiteName: 'Partly Observed Site',
+  startDate: isoDaysFromNow(-5),
+  state: 'InProgress',
+});
 const MORE_OVERDUE = [10, 11].map((id) =>
   buildObservation({
     endDate: isoDaysFromNow(-id),
@@ -280,5 +289,15 @@ describe('ScheduledObservationsMenu sections', () => {
 
     await waitFor(() => expect(requests).toHaveLength(1));
     expect(await requests[0].json()).toEqual({ endDate: isoDaysFromNow(20), startDate: isoDaysFromNow(5) });
+  });
+
+  it('does not offer rescheduling once plots have been observed', async () => {
+    const { user } = renderMenu(true, [FIRST, IN_PROGRESS, PARTLY_OBSERVED]);
+
+    await openFlyout(user);
+    await user.click(section(strings.IN_PROGRESS));
+
+    expect(screen.getByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
+    expect(screen.getAllByText(strings.RESCHEDULE)).toHaveLength(1);
   });
 });

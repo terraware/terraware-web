@@ -38,6 +38,7 @@ const ScheduledObservationItem = ({
   const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
+  const hasObservedPlots = observation.state !== 'Upcoming' && observation.numIncompletePlots < observation.numPlots;
 
   const { dateRange, tag } = useMemo(() => {
     const locale = activeLocale || 'en-US';
@@ -132,7 +133,7 @@ const ScheduledObservationItem = ({
           {dateRange}
         </Typography>
       )}
-      {canReschedule && !isRescheduling && (
+      {canReschedule && !hasObservedPlots && !isRescheduling && (
         <Box marginTop={theme.spacing(0.5)}>
           <Link fontSize='14px' onClick={() => onRescheduleStart(observation.id)}>
             {strings.RESCHEDULE}
