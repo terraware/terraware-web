@@ -31,7 +31,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useListObservationsQuery } from 'src/queries/generated/observations';
-import { ObservationState, ObservationType, getStatus } from 'src/types/Observations';
+import { ObservationState, ObservationType, getObservationTypeLabel, getStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { hasObservationData, hasPendingResults } from 'src/utils/observation';
@@ -220,12 +220,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationDate: completedDate ?? observationResult.startDate,
           observationState: observationResult.state,
           observationType: observationResult.type,
-          monitoringType:
-            observationResult.type === 'Baseline Survey'
-              ? strings.BASELINE_SURVEY
-              : observationResult.type === 'Biomass Measurements'
-                ? strings.BIOMASS_MONITORING
-                : strings.PLANT_MONITORING,
+          monitoringType: getObservationTypeLabel(observationResult.type, strings),
           state: getStatus(observationResult.state, strings),
           plantingSiteName: plantingSiteNames.get(observationResult.plantingSiteId),
           strata: observationResult.strata.map((stratumResult) => stratumResult.name).join('\r'),

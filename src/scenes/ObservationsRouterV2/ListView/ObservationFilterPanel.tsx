@@ -9,7 +9,7 @@ import { useFeatureEnabled } from 'src/features';
 import { useListObservationResults } from 'src/hooks/observations';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
-import { ObservationState, getStatus } from 'src/types/Observations';
+import { ObservationState, getObservationTypeLabel, getStatus } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { OBSERVATION_STATES, ObservationTypeFilter, useObservationFilters } from '../ObservationFiltersProvider';
@@ -97,10 +97,10 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   const observationTypeOptions = useMemo(
     () => [
       { label: strings.ALL_MONITORING_TYPES, value: 'All' },
-      { label: strings.PLANT_MONITORING, value: 'Monitoring' },
-      { label: strings.BIOMASS_MONITORING, value: 'Biomass Measurements' },
+      { label: getObservationTypeLabel('Monitoring', strings), value: 'Monitoring' },
+      { label: getObservationTypeLabel('Biomass Measurements', strings), value: 'Biomass Measurements' },
       ...(baselineSurveyEnabled && plotType === 'assigned'
-        ? [{ label: strings.BASELINE_SURVEY, value: 'Baseline Survey' }]
+        ? [{ label: getObservationTypeLabel('Baseline Survey', strings), value: 'Baseline Survey' }]
         : []),
     ],
     [baselineSurveyEnabled, plotType, strings]

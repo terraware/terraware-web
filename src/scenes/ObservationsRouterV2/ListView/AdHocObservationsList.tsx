@@ -26,7 +26,7 @@ import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
-import { AdHocObservationResults } from 'src/types/Observations';
+import { AdHocObservationResults, getObservationTypeLabel } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { MultiPolygon } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -218,7 +218,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
       {
         id: 'monitoringType',
         header: strings.MONITORING_TYPE,
-        accessorFn: (row) => (row.isBiomass ? strings.BIOMASS_MONITORING : strings.PLANT_MONITORING),
+        accessorFn: (row) => getObservationTypeLabel(row.isBiomass ? 'Biomass Measurements' : 'Monitoring', strings),
       },
       {
         id: 'plotDescription',
