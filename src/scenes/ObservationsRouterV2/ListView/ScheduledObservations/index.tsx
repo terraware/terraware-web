@@ -1,4 +1,5 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
@@ -7,11 +8,13 @@ import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
 
-import ScheduledObservationItem from './ScheduledObservationItem';
-import ScheduledObservationSections from './ScheduledObservationSections';
+import ScheduledObservationItem, { isReschedulable } from './ScheduledObservationItem';
+import ScheduledObservationSections, { SECTIONS } from './ScheduledObservationSections';
 import useScheduledObservations, { type ScheduledObservationSection } from './useScheduledObservations';
 
 const FLYOUT_LIMIT = 3;
+
+export const RESCHEDULE_OBSERVATION_PARAM = 'rescheduleObservationId';
 
 type ScheduledObservationsMenuProps = {
   canReschedule: boolean;
@@ -21,17 +24,66 @@ type ScheduledObservationsMenuProps = {
 const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledObservationsMenuProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const scheduledObservations = useScheduledObservations(plantingSiteId);
+  const { isLoaded, scheduledObservations } = useScheduledObservations(plantingSiteId);
   const observations = useMemo(
     () => [...scheduledObservations.upcoming, ...scheduledObservations.inProgress, ...scheduledObservations.overdue],
     [scheduledObservations]
   );
 
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+  const [flyoutOpen, setFlyoutOpen] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
   const [expandedSection, setExpandedSection] = useState<ScheduledObservationSection | undefined>('upcoming');
   const [reschedulingId, setReschedulingId] = useState<number>();
   const endReschedule = useCallback(() => setReschedulingId(undefined), []);
+  const [focusedId, setFocusedId] = useState<number>();
+  const buttonRef = useRef<HTMLSpanElement>(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const requestedId = searchParams.get(RESCHEDULE_OBSERVATION_PARAM);
+
+  const pendingRequest = isLoaded ? requestedId : null;
+  const [handledRequest, setHandledRequest] = useState<string | null>(null);
+  if (pendingRequest !== handledRequest) {
+    setHandledRequest(pendingRequest);
+    if (pendingRequest) {
+      const id = Number(pendingRequest);
+      const section = SECTIONS.find((key) => scheduledObservations[key].some((observation) => observation.id === id));
+      const index = section ? scheduledObservations[section].findIndex((observation) => observation.id === id) : -1;
+      const showInPanel = index >= FLYOUT_LIMIT;
+
+      setExpandedSection(section ?? 'upcoming');
+      setReschedulingId(
+        section && canReschedule && isReschedulable(scheduledObservations[section][index]) ? id : undefined
+      );
+      setFocusedId(section ? id : undefined);
+      setFlyoutOpen(!showInPanel);
+      setPanelOpen(showInPanel);
+    }
+  }
+
+  useEffect(() => {
+    if (pendingRequest) {
+      setSearchParams(
+        (current) => {
+          const params = new URLSearchParams(current);
+          params.delete(RESCHEDULE_OBSERVATION_PARAM);
+          return params;
+        },
+        { replace: true }
+      );
+    }
+  }, [pendingRequest, setSearchParams]);
+
+  useEffect(() => {
+    if (focusedId === undefined) {
+      return;
+    }
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(`scheduled-observation-${focusedId}`)?.scrollIntoView?.({ block: 'nearest' });
+      setFocusedId(undefined);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [focusedId]);
 
   const siteNames = useMemo(
     () => [...new Set(observations.map((observation) => observation.plantingSiteName))],
@@ -49,16 +101,17 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
     return strings.formatString(strings.SCHEDULED_OBSERVATIONS_ACROSS_SITES, observations.length, siteNames.length);
   }, [observations.length, siteNames, strings]);
 
-  const onButtonClick = useCallback((event?: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event?.currentTarget ?? null);
+  const getAnchor = useCallback(() => buttonRef.current, []);
+  const onButtonClick = useCallback(() => {
+    setFlyoutOpen(true);
     setExpandedSection('upcoming');
   }, []);
   const closeFlyout = useCallback(() => {
-    setAnchorEl(null);
+    setFlyoutOpen(false);
     setReschedulingId(undefined);
   }, []);
   const openPanel = useCallback((section: ScheduledObservationSection) => {
-    setAnchorEl(null);
+    setFlyoutOpen(false);
     setExpandedSection(section);
     setPanelOpen(true);
   }, []);
@@ -120,6 +173,7 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
       <Tooltip title={strings.SCHEDULED_OBSERVATIONS}>
         <Badge
           badgeContent={observations.length}
+          ref={buttonRef}
           overlap='circular'
           sx={{
             '& .MuiBadge-badge': {
@@ -140,18 +194,18 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
             size='medium'
             sx={{
               '&.button': { margin: 0 },
-              ...(anchorEl ? { backgroundColor: theme.palette.TwClrBgBrandTertiary } : {}),
+              ...(flyoutOpen ? { backgroundColor: theme.palette.TwClrBgBrandTertiary } : {}),
             }}
           />
         </Badge>
       </Tooltip>
 
       <Popover
-        anchorEl={anchorEl}
+        anchorEl={getAnchor}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
         disableEnforceFocus
         onClose={closeFlyout}
-        open={!!anchorEl}
+        open={flyoutOpen}
         slotProps={{
           paper: {
             sx: {

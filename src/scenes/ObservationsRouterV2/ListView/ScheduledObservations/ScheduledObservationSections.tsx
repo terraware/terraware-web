@@ -9,7 +9,7 @@ import { ObservationPayload } from 'src/queries/generated/observations';
 
 import { type ScheduledObservationSection, type ScheduledObservations } from './useScheduledObservations';
 
-const SECTIONS: ScheduledObservationSection[] = ['upcoming', 'inProgress', 'overdue'];
+export const SECTIONS: ScheduledObservationSection[] = ['upcoming', 'inProgress', 'overdue'];
 
 type ScheduledObservationSectionsProps = {
   expandedSection?: ScheduledObservationSection;
@@ -113,7 +113,9 @@ const ScheduledObservationSections = ({
                 {visibleObservations.map((observation) => (
                   <React.Fragment key={observation.id}>
                     <Divider />
-                    <Box padding={theme.spacing(2, paddingX)}>{renderObservation(observation)}</Box>
+                    <Box id={`scheduled-observation-${observation.id}`} padding={theme.spacing(2, paddingX)}>
+                      {renderObservation(observation)}
+                    </Box>
                   </React.Fragment>
                 ))}
                 {onViewAll && sectionObservations.length > visibleObservations.length && (

@@ -5,7 +5,9 @@ import { UserEvent } from '@testing-library/user-event';
 import { DateTime } from 'luxon';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
-import ScheduledObservationsMenu from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
+import ScheduledObservationsMenu, {
+  RESCHEDULE_OBSERVATION_PARAM,
+} from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
 import strings from 'src/strings';
 import { buildObservation, buildUser, captureRequests, mockError, mockGet, renderWithProviders } from 'src/test-utils';
 
@@ -67,13 +69,14 @@ const MORE_OVERDUE = [10, 11].map((id) =>
 
 const rescheduleUrl = (id: number) => `/api/v1/tracking/observations/${id}`;
 
-const renderMenu = (canReschedule = true, observations = [SECOND, FIRST]) => {
+const renderMenu = (canReschedule = true, observations = [SECOND, FIRST], route?: string) => {
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/tracking/observations', { observations });
 
   return renderWithProviders(
-    <ScheduledObservationsMenu canReschedule={canReschedule} plantingSiteId={ALL_PLANTING_SITES} />
+    <ScheduledObservationsMenu canReschedule={canReschedule} plantingSiteId={ALL_PLANTING_SITES} />,
+    { route }
   );
 };
 
@@ -299,5 +302,43 @@ describe('ScheduledObservationsMenu sections', () => {
 
     expect(screen.getByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
     expect(screen.getAllByText(strings.RESCHEDULE)).toHaveLength(1);
+  });
+
+  describe('when another page asks to reschedule an observation', () => {
+    const request = (id: number) => `/?${RESCHEDULE_OBSERVATION_PARAM}=${id}`;
+
+    it("opens the flyout to the observation's reschedule form", async () => {
+      renderMenu(true, ALL, request(IN_PROGRESS.id));
+
+      expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(IN_PROGRESS.startDate);
+      expect(screen.getByLabelText(strings.END_DATE)).toHaveValue(IN_PROGRESS.endDate);
+      expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'true');
+      expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('shows the whole section when the observation is past the first few', async () => {
+      const [lastOverdue, otherOverdue] = MORE_OVERDUE;
+      renderMenu(true, ALL, request(lastOverdue.id));
+
+      expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(lastOverdue.startDate);
+      expect(screen.getByText(lastOverdue.plantingSiteName)).toBeInTheDocument();
+      expect(screen.getByText(otherOverdue.plantingSiteName)).toBeInTheDocument();
+    });
+
+    it('shows, without a form, an observation that can no longer be rescheduled', async () => {
+      renderMenu(true, [FIRST, PARTLY_OBSERVED], request(PARTLY_OBSERVED.id));
+
+      expect(await screen.findByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
+      expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
+    });
+
+    it('opens to the upcoming observations when the observation is not scheduled', async () => {
+      renderMenu(true, ALL, request(999));
+
+      expect(await screen.findByText(FIRST.plantingSiteName)).toBeInTheDocument();
+      expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
+    });
   });
 });

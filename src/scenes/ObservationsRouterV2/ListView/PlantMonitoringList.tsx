@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -42,6 +43,7 @@ import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
+import { RESCHEDULE_OBSERVATION_PARAM } from './ScheduledObservations';
 import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
@@ -97,9 +99,11 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
     downloadObservationGpx,
     downloadObservationResults,
   } = useObservationExports();
+  const [, setSearchParams] = useSearchParams();
 
   const { hasData, hasPlots, observationId, observationState, observationType } = row;
   const exportLocationsDisabled = observationState === 'Upcoming' && !hasPlots;
+  const isFinished = observationState === 'Completed' || observationState === 'Abandoned';
 
   return (
     <TableRowPopupMenu
@@ -130,7 +134,18 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           },
         },
         {
-          disabled: observationState === 'Completed' || observationState === 'Abandoned',
+          disabled: isFinished,
+          label: strings.RESCHEDULE,
+          onClick: () => {
+            setSearchParams((current) => {
+              const params = new URLSearchParams(current);
+              params.set(RESCHEDULE_OBSERVATION_PARAM, observationId.toString());
+              return params;
+            });
+          },
+        },
+        {
+          disabled: isFinished,
           label: strings.END_OBSERVATION,
           onClick: () => {
             openAbandonObservationModal(observationId);

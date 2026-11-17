@@ -21,6 +21,7 @@ import downloadZipFile from 'src/utils/downloadZipFile';
 import ObservationFiltersProvider, { ObservationTypeFilter } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import PlantMonitoringList from './PlantMonitoringList';
+import ScheduledObservationsMenu from './ScheduledObservations';
 import ObservationListView from './index';
 
 rstest.mock('src/utils/downloadZipFile', () => ({ default: rstest.fn() }));
@@ -74,6 +75,7 @@ type RenderListOptions = {
   observations?: ObservationResultsPayload[];
   observationType?: ObservationTypeFilter;
   showFilterPanel?: boolean;
+  showScheduledObservations?: boolean;
 };
 
 const toObservationPayload = (results: ObservationResultsPayload, numPlots: number): ObservationPayload => ({
@@ -103,6 +105,7 @@ const renderList = (
     observations = [PLANT_OBSERVATION, BIOMASS_OBSERVATION, BASELINE_OBSERVATION],
     observationType,
     showFilterPanel = false,
+    showScheduledObservations = false,
   }: RenderListOptions = {}
 ) => {
   if (observationType !== undefined) {
@@ -123,6 +126,7 @@ const renderList = (
   const result = renderWithProviders(
     <ObservationFiltersProvider>
       {showFilterPanel && <ObservationFilterPanel plantingSiteId={ALL_PLANTING_SITES} />}
+      {showScheduledObservations && <ScheduledObservationsMenu canReschedule plantingSiteId={ALL_PLANTING_SITES} />}
       <PlantMonitoringList plantingSiteId={ALL_PLANTING_SITES} />
     </ObservationFiltersProvider>,
     { localization }
@@ -406,12 +410,13 @@ describe('PlantMonitoringList', () => {
     );
   });
 
-  it('leaves rescheduling to the Scheduled Observations menu', async () => {
-    const { user } = renderList({});
+  it("opens the observation's reschedule form in the Scheduled Observations menu", async () => {
+    const { user } = renderList({}, { showScheduledObservations: true });
 
     const menu = await openRowMenu(user, PLANT_ROW);
+    await user.click(within(menu).getByRole('menuitem', { name: strings.RESCHEDULE }));
 
-    expect(within(menu).queryByRole('menuitem', { name: strings.RESCHEDULE })).not.toBeInTheDocument();
+    expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(PLANT_OBSERVATION.startDate);
   });
 
   it('keeps location exports disabled for upcoming observations that have no plots yet', async () => {
@@ -431,7 +436,7 @@ describe('PlantMonitoringList', () => {
     expect(within(menu).getAllByLabelText(strings.EXPORT_LOCATIONS_DISABLED_TOOLTIP)).toHaveLength(2);
   });
 
-  it('stops completed observations from being ended in a language other than English', async () => {
+  it('stops completed observations from being rescheduled or ended in a language other than English', async () => {
     const { user } = renderList(
       {},
       {
@@ -442,6 +447,7 @@ describe('PlantMonitoringList', () => {
 
     const menu = await openRowMenu(user, /2026/);
 
+    expect(within(menu).getByRole('menuitem', { name: strings.RESCHEDULE })).toHaveAttribute('aria-disabled', 'true');
     expect(within(menu).getByRole('menuitem', { name: strings.END_OBSERVATION })).toHaveAttribute(
       'aria-disabled',
       'true'
