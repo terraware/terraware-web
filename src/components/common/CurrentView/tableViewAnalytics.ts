@@ -1,3 +1,4 @@
+import { getTableColumns } from '@terraware/web-components';
 import { isEqual } from 'lodash';
 import { MRT_ColumnOrderState, MRT_RowData, MRT_TableInstance } from 'material-react-table';
 
@@ -20,8 +21,7 @@ const isColumnOrderChanged = <TData extends MRT_RowData>(
   columnOrder: MRT_ColumnOrderState,
   defaultColumnOrder: MRT_ColumnOrderState
 ) => {
-  const dataColumnIds = table
-    .getAllLeafColumns()
+  const dataColumnIds = getTableColumns(table, 'definition')
     .map((column) => column.id)
     .filter(isDataColumnId);
   const normalize = (order: MRT_ColumnOrderState) => [
