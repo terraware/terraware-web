@@ -91,7 +91,15 @@ it.each([
 it.each([false, true])('filters through the shared toolbar (V2: %s)', async (flag) => {
   rs.mocked(useFeatureEnabled).mockReturnValue(flag);
   const { user } = renderWithProviders(
-    <EditableTable supportsV2 columns={columns} data={data} clearAllFiltersLabel='Clear filters' enableColumnFilters />
+    <EditableTable
+      supportsV2
+      columns={columns}
+      data={data}
+      clearAllFiltersLabel='Clear filters'
+      enableColumnFilters
+      showColumnFiltersButton
+      tableOptions={{ initialState: { showColumnFilters: false } }}
+    />
   );
   await user.click(screen.getByRole('button', { name: /filters/i }));
   await user.type(screen.getByRole('textbox'), 'Acacia');

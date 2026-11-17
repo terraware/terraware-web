@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { ReactNode, useCallback } from 'react';
 
 import {
   EditableTableOptionsV2,
@@ -23,7 +23,6 @@ import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 
 import TableToolbarActions from './table/TableToolbarActions';
-import { mobileTopToolbarSx } from './table/mobileTopToolbarSx';
 
 type SharedOptions<TData extends MRT_RowData> = Pick<
   EditableTableOptionsV2<TData> & NonNullable<EditableTableProps<TData>['tableOptions']>,
@@ -35,7 +34,11 @@ type SharedOptions<TData extends MRT_RowData> = Pick<
   | 'onColumnVisibilityChange'
   | 'onGlobalFilterChange'
   | 'onSortingChange'
->;
+> &
+  Pick<
+    NonNullable<EditableTableProps<TData>['tableOptions']>,
+    'enableGlobalFilterRankedResults' | 'muiTopToolbarProps' | 'muiTableBodyRowProps' | 'muiTableProps'
+  >;
 
 export type SharedEditableTableProps<TData extends MRT_RowData> = Omit<
   EditableTableProps<TData>,
@@ -45,6 +48,7 @@ export type SharedEditableTableProps<TData extends MRT_RowData> = Omit<
   tableOptions?: SharedOptions<TData>;
   renderTopToolbarCustomActions?: (context: EditableTableToolbarContext<TData>) => React.ReactNode;
   renderToolbarInternalActions?: (context: EditableTableToolbarContext<TData>) => React.ReactNode;
+  renderMrtToolbarInternalActions?: (context: EditableTableToolbarContext<TData>) => React.ReactNode;
   enableShowAllColumnsMenuItem?: boolean;
   showColumnFiltersButton?: boolean;
 };
@@ -52,20 +56,46 @@ export type SharedEditableTableProps<TData extends MRT_RowData> = Omit<
 type Props<TData extends MRT_RowData> =
   (EditableTableProps<TData> & { supportsV2?: false }) | SharedEditableTableProps<TData>;
 
+export const EditableTableToolbar = <TData extends MRT_RowData>({
+  table,
+  children,
+  showColumnFiltersButton,
+  showDensityButton,
+  showFullScreenButton,
+}: EditableTableToolbarContext<TData> & {
+  children?: ReactNode;
+  showColumnFiltersButton?: boolean;
+  showDensityButton?: boolean;
+  showFullScreenButton?: boolean;
+}) =>
+  isMrtTable(table) ? (
+    <TableToolbarActions>
+      {showColumnFiltersButton && <MRT_ToggleFiltersButton table={table} />}
+      {children}
+      {showDensityButton && <MRT_ToggleDensePaddingButton table={table} />}
+      {showFullScreenButton && <MRT_ToggleFullScreenButton table={table} />}
+    </TableToolbarActions>
+  ) : null;
+
 const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
   const useV2 = useFeatureEnabled('Editable Table V2');
   const showFilters = props.supportsV2 && (props.showColumnFiltersButton ?? props.enableColumnFilters);
   const hideShowAllColumns = props.supportsV2 && props.enableShowAllColumnsMenuItem === false;
   const { showDensityButton, showFullScreenButton } = props;
+  const hasSharedControls =
+    props.supportsV2 &&
+    (props.showColumnFiltersButton !== undefined ||
+      showDensityButton !== undefined ||
+      showFullScreenButton !== undefined);
   const renderSharedToolbar = useCallback(
-    ({ table }: EditableTableToolbarContext<TData>) =>
-      isMrtTable(table) ? (
-        <TableToolbarActions>
-          {showFilters && <MRT_ToggleFiltersButton table={table} />}
-          {showDensityButton && <MRT_ToggleDensePaddingButton table={table} />}
-          {showFullScreenButton && <MRT_ToggleFullScreenButton table={table} />}
-        </TableToolbarActions>
-      ) : null,
+    ({ table }: EditableTableToolbarContext<TData>) => (
+      <EditableTableToolbar
+        table={table}
+        showColumnFiltersButton={showFilters}
+        showDensityButton={showDensityButton}
+        showFullScreenButton={showFullScreenButton}
+      />
+    ),
     [showDensityButton, showFilters, showFullScreenButton]
   );
   const renderColumnActionsMenuItems = useCallback(
@@ -101,15 +131,12 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
     <WebEditableTable
       {...props}
       renderToolbarInternalActions={
-        props.renderToolbarInternalActions ?? (props.supportsV2 ? renderSharedToolbar : undefined)
+        (props.supportsV2 ? props.renderMrtToolbarInternalActions : undefined) ??
+        props.renderToolbarInternalActions ??
+        (hasSharedControls ? renderSharedToolbar : undefined)
       }
       tableOptions={{
-        ...(props.supportsV2 && {
-          enableGlobalFilterRankedResults: false,
-          muiTopToolbarProps: { sx: mobileTopToolbarSx },
-        }),
         ...props.tableOptions,
-        ...(props.supportsV2 && { state: { showGlobalFilter: true, ...props.tableOptions?.state } }),
         ...(hideShowAllColumns && { renderColumnActionsMenuItems }),
         localization: { ...localization, ...(!props.supportsV2 ? props.tableOptions?.localization : undefined) },
       }}
