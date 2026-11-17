@@ -275,7 +275,7 @@ describe('ObservationSubstratumSelector', () => {
     expect(screen.queryByText(strings.TEMPORARY_PLOTS)).not.toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();
     expect(screen.getByText('8')).toBeInTheDocument();
-    expect(screen.getAllByText(/^~/).map((cell) => cell.textContent)).toEqual([
+    expect(screen.getAllByText(/^~\d+$/).map((cell) => cell.textContent)).toEqual([
       approx(3),
       approx(2),
       approx(2),
