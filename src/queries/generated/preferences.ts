@@ -24,9 +24,8 @@ export type UpdateCookieConsentApiResponse = /** status 200 OK */ SimpleSuccessR
 export type UpdateCookieConsentApiArg = UpdateUserCookieConsentRequestPayload;
 export type GetUserPreferencesApiResponse = /** status 200 OK */ GetUserPreferencesResponsePayload;
 export type GetUserPreferencesApiArg =
-  /** If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */
-    | number
-    | undefined;
+  | /** If present, get the user's per-organization preferences for this organization. If not present, get the user's global preferences. */ number
+  | undefined;
 export type UpdateUserPreferencesApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type UpdateUserPreferencesApiArg = UpdateUserPreferencesRequestPayload;
 export type SuccessOrError = 'ok' | 'error';

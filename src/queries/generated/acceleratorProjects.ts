@@ -42,12 +42,7 @@ export type UpdateProjectAcceleratorDetailsApiArg = {
 };
 export type IndicatorProgressPayload = {
   indicator:
-    | 'Seeds Collected'
-    | 'Seedlings'
-    | 'Trees Planted'
-    | 'Species Planted'
-    | 'Hectares Planted'
-    | 'Survival Rate';
+    'Seeds Collected' | 'Seedlings' | 'Trees Planted' | 'Species Planted' | 'Hectares Planted' | 'Survival Rate';
   progress: number;
 };
 export type ProjectAcceleratorDetailsPayload = {

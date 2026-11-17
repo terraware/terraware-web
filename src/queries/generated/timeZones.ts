@@ -16,9 +16,8 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as api };
 export type ListTimeZoneNamesApiResponse = /** status 200 OK */ ListTimeZoneNamesResponsePayload;
 export type ListTimeZoneNamesApiArg =
-  /** Language code and optional country code suffix. If not specified, the preferred locale from the Accept-Language header is used if supported; otherwise US English is the default. */
-    | string
-    | undefined;
+  | /** Language code and optional country code suffix. If not specified, the preferred locale from the Accept-Language header is used if supported; otherwise US English is the default. */ string
+  | undefined;
 export type SuccessOrError = 'ok' | 'error';
 export type TimeZonePayload = {
   /** Time zone name in IANA tz database format */
