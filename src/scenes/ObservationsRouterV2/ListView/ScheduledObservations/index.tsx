@@ -1,13 +1,4 @@
-import React, {
-  type JSX,
-  type Ref,
-  useCallback,
-  useEffect,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { type JSX, type Ref, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
 
 import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
@@ -21,19 +12,23 @@ import ScheduledObservationSections, { SECTIONS } from './ScheduledObservationSe
 import useScheduledObservations, { type ScheduledObservationSection } from './useScheduledObservations';
 
 const FLYOUT_LIMIT = 3;
+const BUTTON_ID = 'scheduled-observations';
 
 export type ScheduledObservationsMenuHandle = {
+  open: () => void;
   openToObservation: (observationId: number) => void;
 };
 
 type ScheduledObservationsMenuProps = {
   canReschedule: boolean;
+  onFlyoutOpenChange?: (open: boolean) => void;
   plantingSiteId: PlantingSiteId;
   ref?: Ref<ScheduledObservationsMenuHandle>;
 };
 
 const ScheduledObservationsMenu = ({
   canReschedule,
+  onFlyoutOpenChange,
   plantingSiteId,
   ref,
 }: ScheduledObservationsMenuProps): JSX.Element => {
@@ -45,21 +40,32 @@ const ScheduledObservationsMenu = ({
     [scheduledObservations]
   );
 
-  const [flyoutOpen, setFlyoutOpen] = useState(false);
+  const [flyoutOpen, setFlyoutOpenState] = useState(false);
+  const setFlyoutOpen = useCallback(
+    (open: boolean) => {
+      setFlyoutOpenState(open);
+      onFlyoutOpenChange?.(open);
+    },
+    [onFlyoutOpenChange]
+  );
   const [panelOpen, setPanelOpen] = useState(false);
   const [expandedSection, setExpandedSection] = useState<ScheduledObservationSection | undefined>('upcoming');
   const [reschedulingId, setReschedulingId] = useState<number>();
   const endReschedule = useCallback(() => setReschedulingId(undefined), []);
   const [focusedId, setFocusedId] = useState<number>();
-  const buttonRef = useRef<HTMLSpanElement>(null);
 
   useImperativeHandle(
     ref,
     () => ({
+      open: () => {
+        setFlyoutOpen(true);
+        setExpandedSection('upcoming');
+      },
       openToObservation: (id: number) => {
         const section = SECTIONS.find((key) => scheduledObservations[key].some((observation) => observation.id === id));
         const index = section ? scheduledObservations[section].findIndex((observation) => observation.id === id) : -1;
-        const showInPanel = index >= FLYOUT_LIMIT;
+        // The header holding the flyout's button is unmounted while the title bar is hidden.
+        const showInPanel = index >= FLYOUT_LIMIT || !document.getElementById(BUTTON_ID);
 
         setExpandedSection(section ?? 'upcoming');
         setReschedulingId(
@@ -70,7 +76,7 @@ const ScheduledObservationsMenu = ({
         setPanelOpen(showInPanel);
       },
     }),
-    [canReschedule, scheduledObservations]
+    [canReschedule, scheduledObservations, setFlyoutOpen]
   );
 
   useEffect(() => {
@@ -100,20 +106,19 @@ const ScheduledObservationsMenu = ({
     return strings.formatString(strings.SCHEDULED_OBSERVATIONS_ACROSS_SITES, observations.length, siteNames.length);
   }, [observations.length, siteNames, strings]);
 
-  const getAnchor = useCallback(() => buttonRef.current, []);
-  const onButtonClick = useCallback(() => {
-    setFlyoutOpen(true);
-    setExpandedSection('upcoming');
-  }, []);
+  const getAnchor = useCallback(() => document.getElementById(BUTTON_ID), []);
   const closeFlyout = useCallback(() => {
     setFlyoutOpen(false);
     setReschedulingId(undefined);
-  }, []);
-  const openPanel = useCallback((section: ScheduledObservationSection) => {
-    setFlyoutOpen(false);
-    setExpandedSection(section);
-    setPanelOpen(true);
-  }, []);
+  }, [setFlyoutOpen]);
+  const openPanel = useCallback(
+    (section: ScheduledObservationSection) => {
+      setFlyoutOpen(false);
+      setExpandedSection(section);
+      setPanelOpen(true);
+    },
+    [setFlyoutOpen]
+  );
   const closePanel = useCallback(() => {
     setPanelOpen(false);
     setReschedulingId(undefined);
@@ -169,36 +174,6 @@ const ScheduledObservationsMenu = ({
 
   return (
     <>
-      <Tooltip title={strings.SCHEDULED_OBSERVATIONS}>
-        <Badge
-          badgeContent={observations.length}
-          ref={buttonRef}
-          overlap='circular'
-          sx={{
-            '& .MuiBadge-badge': {
-              backgroundColor: theme.palette.TwClrBaseOrange700,
-              color: theme.palette.TwClrTxtInverse,
-              fontWeight: 600,
-              pointerEvents: 'none',
-              right: 0,
-              top: '10px',
-            },
-          }}
-        >
-          <Button
-            icon='calendar'
-            id='scheduled-observations'
-            onClick={onButtonClick}
-            priority='secondary'
-            size='medium'
-            sx={{
-              '&.button': { margin: 0 },
-              ...(flyoutOpen ? { backgroundColor: theme.palette.TwClrBgBrandTertiary } : {}),
-            }}
-          />
-        </Badge>
-      </Tooltip>
-
       <Popover
         anchorEl={getAnchor}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
@@ -240,6 +215,53 @@ const ScheduledObservationsMenu = ({
         {sections(3)}
       </Drawer>
     </>
+  );
+};
+
+type ScheduledObservationsButtonProps = {
+  active: boolean;
+  onClick: () => void;
+  plantingSiteId: PlantingSiteId;
+};
+
+export const ScheduledObservationsButton = ({
+  active,
+  onClick,
+  plantingSiteId,
+}: ScheduledObservationsButtonProps): JSX.Element => {
+  const { strings } = useLocalization();
+  const theme = useTheme();
+  const { upcoming, inProgress, overdue } = useScheduledObservations(plantingSiteId);
+
+  return (
+    <Tooltip title={strings.SCHEDULED_OBSERVATIONS}>
+      <Badge
+        badgeContent={upcoming.length + inProgress.length + overdue.length}
+        overlap='circular'
+        sx={{
+          '& .MuiBadge-badge': {
+            backgroundColor: theme.palette.TwClrBaseOrange700,
+            color: theme.palette.TwClrTxtInverse,
+            fontWeight: 600,
+            pointerEvents: 'none',
+            right: 0,
+            top: '10px',
+          },
+        }}
+      >
+        <Button
+          icon='calendar'
+          id={BUTTON_ID}
+          onClick={onClick}
+          priority='secondary'
+          size='medium'
+          sx={{
+            '&.button': { margin: 0 },
+            ...(active ? { backgroundColor: theme.palette.TwClrBgBrandTertiary } : {}),
+          }}
+        />
+      </Badge>
+    </Tooltip>
   );
 };
 

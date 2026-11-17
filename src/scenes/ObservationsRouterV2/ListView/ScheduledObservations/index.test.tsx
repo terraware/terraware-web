@@ -1,4 +1,4 @@
-import React, { createRef } from 'react';
+import React, { createRef, useCallback, useState } from 'react';
 
 import { act, screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import ScheduledObservationsMenu, {
+  ScheduledObservationsButton,
   type ScheduledObservationsMenuHandle,
 } from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
 import strings from 'src/strings';
@@ -69,18 +70,38 @@ const MORE_OVERDUE = [10, 11].map((id) =>
 
 const rescheduleUrl = (id: number) => `/api/v1/tracking/observations/${id}`;
 
+type MenuWithButtonProps = {
+  canReschedule: boolean;
+  menuRef: React.RefObject<ScheduledObservationsMenuHandle | null>;
+};
+
+const MenuWithButton = ({ canReschedule, menuRef }: MenuWithButtonProps) => {
+  const [flyoutOpen, setFlyoutOpen] = useState(false);
+  const open = useCallback(() => menuRef.current?.open(), [menuRef]);
+
+  return (
+    <>
+      <ScheduledObservationsButton active={flyoutOpen} onClick={open} plantingSiteId={ALL_PLANTING_SITES} />
+      <ScheduledObservationsMenu
+        canReschedule={canReschedule}
+        onFlyoutOpenChange={setFlyoutOpen}
+        plantingSiteId={ALL_PLANTING_SITES}
+        ref={menuRef}
+      />
+    </>
+  );
+};
+
 const renderMenu = (
   canReschedule = true,
   observations = [SECOND, FIRST],
-  ref?: React.Ref<ScheduledObservationsMenuHandle>
+  ref = createRef<ScheduledObservationsMenuHandle>()
 ) => {
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/tracking/observations', { observations });
 
-  return renderWithProviders(
-    <ScheduledObservationsMenu canReschedule={canReschedule} plantingSiteId={ALL_PLANTING_SITES} ref={ref} />
-  );
+  return renderWithProviders(<MenuWithButton canReschedule={canReschedule} menuRef={ref} />);
 };
 
 const openFlyout = async (user: UserEvent) => {

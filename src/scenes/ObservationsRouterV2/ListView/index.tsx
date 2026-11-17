@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useMatch, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -23,7 +23,10 @@ import useFilteredObservationResults from '../useFilteredObservationResults';
 import AdHocObservationsList from './AdHocObservationsList';
 import ObservationFilters from './ObservationFilters';
 import PlantMonitoringList from './PlantMonitoringList';
-import ScheduledObservationsMenu, { type ScheduledObservationsMenuHandle } from './ScheduledObservations';
+import ScheduledObservationsMenu, {
+  ScheduledObservationsButton,
+  type ScheduledObservationsMenuHandle,
+} from './ScheduledObservations';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 
 const ObservationListViewContent = (): JSX.Element => {
@@ -52,6 +55,8 @@ const ObservationListViewContent = (): JSX.Element => {
     (observationId: number) => scheduledObservationsMenuRef.current?.openToObservation(observationId),
     []
   );
+  const openScheduledObservations = useCallback(() => scheduledObservationsMenuRef.current?.open(), []);
+  const [scheduledFlyoutOpen, setScheduledFlyoutOpen] = useState(false);
 
   const lastParamRef = useRef<string | null>(null);
   useEffect(() => {
@@ -182,17 +187,17 @@ const ObservationListViewContent = (): JSX.Element => {
   const headerIcons = useMemo(
     () => (
       <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(isMobile ? 1 : 2) }}>
-        <ScheduledObservationsMenu
-          canReschedule={isAdmin(selectedOrganization)}
+        <ScheduledObservationsButton
+          active={scheduledFlyoutOpen}
+          onClick={openScheduledObservations}
           plantingSiteId={selectedPlantingSiteId}
-          ref={scheduledObservationsMenuRef}
         />
         {typeof selectedPlantingSiteId === 'number' && (
           <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
         )}
       </Box>
     ),
-    [isMobile, selectedOrganization, selectedPlantingSiteId, theme]
+    [isMobile, openScheduledObservations, scheduledFlyoutOpen, selectedPlantingSiteId, theme]
   );
 
   const headerActions = useMemo(
@@ -306,6 +311,12 @@ const ObservationListViewContent = (): JSX.Element => {
           <PlantMonitoringList onReschedule={openReschedule} plantingSiteId={selectedPlantingSiteId} />
         ))}
       {mobileAppCard}
+      <ScheduledObservationsMenu
+        canReschedule={isAdmin(selectedOrganization)}
+        onFlyoutOpenChange={setScheduledFlyoutOpen}
+        plantingSiteId={selectedPlantingSiteId}
+        ref={scheduledObservationsMenuRef}
+      />
     </Page>
   );
 };
