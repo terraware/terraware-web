@@ -693,6 +693,51 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enablePagination={true}
                 enableTopToolbar={true}
                 enableBottomToolbar={true}
+                enableColumnActions={true}
+                enableHiding={true}
+                enableColumnDragging={!isMobile}
+                positionGlobalFilter={'right'}
+                renderTopToolbarCustomActions={({ table }) => (
+                  <Box
+                    display='flex'
+                    alignItems='center'
+                    flexWrap={isMobile ? 'wrap' : undefined}
+                    gap={2}
+                    rowGap={1}
+                    sx={{ flex: 1, minWidth: 0 }}
+                  >
+                    <CurrentView
+                      defaultSettings={defaultViewSettings}
+                      onPresetChange={handlePresetChange}
+                      organizationId={selectedOrganization?.id}
+                      presetViews={presetViews}
+                      table={table}
+                      tableDefinition={tableDefinition}
+                    />
+                    <Box
+                      ref={setPillListPortalEl}
+                      display='flex'
+                      alignItems='center'
+                      sx={{
+                        flex: isMobile ? '1 0 100%' : 1,
+                        overflow: 'hidden',
+                        '&:has(> div:empty)': { display: isMobile ? 'none' : undefined },
+                      }}
+                    />
+                  </Box>
+                )}
+                muiTableBodyCellProps={({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` })}
+                muiTableHeadCellProps={({ column }) => ({
+                  sx:
+                    column.id === 'quantitiesMenu'
+                      ? {
+                          '& > *': {
+                            display: 'none !important',
+                          },
+                          padding: '8px',
+                        }
+                      : {},
+                })}
                 tableOptions={{
                   enableGlobalFilterRankedResults: false,
                   autoResetPageIndex,
@@ -717,11 +762,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   onDensityChange,
                   enableRowSelection: true,
                   enableColumnPinning: true,
-                  enableColumnActions: true,
-                  enableHiding: true,
-                  enableColumnDragging: !isMobile,
                   enableColumnOrdering: true,
-                  positionGlobalFilter: 'right',
                   positionToolbarAlertBanner: selectedRows.length > 0 ? 'top' : 'none',
                   getRowId: (row, index) => String(index),
                   renderToolbarAlertBannerContent: ({ selectedAlert }) => (
@@ -757,35 +798,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       </Box>
                     </Box>
                   ),
-                  renderTopToolbarCustomActions: ({ table }) => (
-                    <Box
-                      display='flex'
-                      alignItems='center'
-                      flexWrap={isMobile ? 'wrap' : undefined}
-                      gap={2}
-                      rowGap={1}
-                      sx={{ flex: 1, minWidth: 0 }}
-                    >
-                      <CurrentView
-                        defaultSettings={defaultViewSettings}
-                        onPresetChange={handlePresetChange}
-                        organizationId={selectedOrganization?.id}
-                        presetViews={presetViews}
-                        table={table}
-                        tableDefinition={tableDefinition}
-                      />
-                      <Box
-                        ref={setPillListPortalEl}
-                        display='flex'
-                        alignItems='center'
-                        sx={{
-                          flex: isMobile ? '1 0 100%' : 1,
-                          overflow: 'hidden',
-                          '&:has(> div:empty)': { display: isMobile ? 'none' : undefined },
-                        }}
-                      />
-                    </Box>
-                  ),
                   renderToolbarInternalActions: ({ table }) => (
                     <TableToolbarActions>
                       <ColumnFilterObserver table={table} onChange={setColumnFilters} />
@@ -801,7 +813,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       <MRT_ToggleFullScreenButton table={table} />
                     </TableToolbarActions>
                   ),
-                  muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
                   muiTableBodyProps: {
                     sx: {
                       '& tr:nth-of-type(odd) > td': {
@@ -812,17 +823,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   muiTablePaperProps: {
                     elevation: 0,
                   },
-                  muiTableHeadCellProps: ({ column }) => ({
-                    sx:
-                      column.id === 'quantitiesMenu'
-                        ? {
-                            '& > *': {
-                              display: 'none !important',
-                            },
-                            padding: '8px',
-                          }
-                        : {},
-                  }),
                   muiTopToolbarProps: {
                     sx: {
                       ...mobileTopToolbarSx,

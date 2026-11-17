@@ -373,12 +373,22 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
             <MRT_ToggleFullScreenButton table={table} />
           </TableToolbarActions>
         )}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
+        )}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter={'right'}
+        muiTableBodyCellProps={({ row, column }) => ({
+          id: `row${row.index + 1}-${column.id}`,
+        })}
+        muiTableHeadCellProps={({ column }) =>
+          column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {}
+        }
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           defaultColumn: { enableEditing: false },
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
-          ),
           state: {
             columnFilters,
             columnOrder,
@@ -395,19 +405,12 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
           enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
           enableGrouping: false,
-          enableColumnDragging: !isMobile,
-          positionGlobalFilter: 'right',
           muiTableBodyRowProps: ({ row }: { row: MRT_Row<MonitoringPlotRow> }) => ({
             id: `row${row.index + 1}`,
             sx: {
               '& td': { borderBottom: 'none' },
             },
-          }),
-          muiTableBodyCellProps: ({ row, column }) => ({
-            id: `row${row.index + 1}-${column.id}`,
           }),
           muiTableBodyProps: {
             sx: {
@@ -425,8 +428,6 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
               '& .Mui-ToolbarDropZone': { display: 'none' },
             },
           },
-          muiTableHeadCellProps: ({ column }) =>
-            column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
         }}
         sx={{ padding: 0 }}
       />
