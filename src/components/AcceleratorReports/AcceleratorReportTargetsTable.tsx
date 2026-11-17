@@ -540,10 +540,13 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       enableColumnPinning={true}
       enableTopToolbar={false}
       initialSorting={[{ id: 'name', desc: false }]}
+      enableColumnActions={false}
+      enableHiding={false}
+      enableColumnDragging={false}
+      containerProps={{
+        sx: { maxHeight: 'none', overflowX: 'auto' },
+      }}
       tableOptions={{
-        enableColumnActions: false,
-        enableHiding: false,
-        enableColumnDragging: false,
         enableColumnOrdering: false,
         state: {
           columnOrder,
@@ -553,9 +556,6 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
             left: ['name'],
             right: ['endOfProjectTarget'],
           },
-        },
-        muiTableContainerProps: {
-          sx: { maxHeight: 'none', overflowX: 'auto' },
         },
       }}
       sx={{

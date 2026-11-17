@@ -501,6 +501,25 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             enablePagination={true}
             enableTopToolbar={true}
             enableBottomToolbar={true}
+            enableColumnActions={true}
+            enableHiding={true}
+            enableColumnDragging={!isMobile}
+            positionGlobalFilter={'right'}
+            renderTopToolbarCustomActions={({ table }) => (
+              <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
+            )}
+            muiTableBodyCellProps={({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` })}
+            muiTableHeadCellProps={({ column }) => ({
+              sx:
+                column.id === 'quantitiesMenu' || column.id === 'withdraw'
+                  ? {
+                      '& > *': {
+                        display: 'none !important',
+                      },
+                      padding: '8px',
+                    }
+                  : {},
+            })}
             tableOptions={{
               enableGlobalFilterRankedResults: false,
               autoResetPageIndex,
@@ -523,11 +542,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               onDensityChange,
               enableRowSelection: true,
               enableColumnPinning: true,
-              enableColumnActions: true,
-              enableHiding: true,
-              enableColumnDragging: !isMobile,
               enableColumnOrdering: true,
-              positionGlobalFilter: 'right',
               getRowId: (row) => String(row.id),
               renderToolbarAlertBannerContent: ({ selectedAlert }) => (
                 <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
@@ -559,13 +574,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                   </Box>
                 </Box>
               ),
-              renderTopToolbarCustomActions: ({ table }) => (
-                <CurrentView
-                  organizationId={selectedOrganization?.id}
-                  table={table}
-                  tableDefinition={tableDefinition}
-                />
-              ),
               renderToolbarInternalActions: ({ table }) => (
                 <TableToolbarActions>
                   <Tooltip title={strings.EXPORT}>
@@ -580,7 +588,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                   <MRT_ToggleFullScreenButton table={table} />
                 </TableToolbarActions>
               ),
-              muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
               muiTableBodyProps: {
                 sx: {
                   '& tr:nth-of-type(odd) > td': {
@@ -591,17 +598,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
               muiTablePaperProps: {
                 elevation: 0,
               },
-              muiTableHeadCellProps: ({ column }) => ({
-                sx:
-                  column.id === 'quantitiesMenu' || column.id === 'withdraw'
-                    ? {
-                        '& > *': {
-                          display: 'none !important',
-                        },
-                        padding: '8px',
-                      }
-                    : {},
-              }),
               muiTopToolbarProps: {
                 sx: {
                   ...mobileTopToolbarSx,

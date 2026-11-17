@@ -23,7 +23,7 @@ type MockSpecies = {
   totalLive: number;
 };
 
-const setup = ({ gateFirstUpdate = false } = {}) => {
+const setup = ({ gateFirstUpdate = false, failFirstUpdate = false } = {}) => {
   mockGet('/api/v1/species', { species: [ACACIA, DUOSPERMA, ABUTILON] });
 
   // The results endpoint is stateful so that the refetch an update triggers reflects the change,
@@ -64,6 +64,9 @@ const setup = ({ gateFirstUpdate = false } = {}) => {
       // not queued behind it would reach the API — and apply its changes — first.
       if (requests.length === 1 && gateFirstUpdate) {
         await firstUpdateGate;
+      }
+      if (requests.length === 1 && failFirstUpdate) {
+        return new HttpResponse(null, { status: 500 });
       }
       updates.forEach((operation) => {
         const target =
@@ -222,6 +225,31 @@ describe('MonitoringPlotSpeciesEditableTable', () => {
     });
     // The row leaves the table as soon as it has nothing recorded against it.
     await waitFor(() => expect(screen.queryByRole('cell', { name: strings.UNKNOWN })).not.toBeInTheDocument());
+  });
+
+  it('keeps a failed count edit open with its entered value for retry', async () => {
+    const { user, requests, rowFor, releaseFirstUpdate } = setup({ gateFirstUpdate: true, failFirstUpdate: true });
+    const row = await rowFor(ACACIA.scientificName);
+    await user.dblClick(within(row).getByRole('cell', { name: '4' }));
+    const count = screen.getByRole('spinbutton');
+    await user.clear(count);
+    await user.type(count, '9');
+    await user.tab();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(count).toBeDisabled();
+
+    releaseFirstUpdate();
+    await waitFor(() => expect(count).toBeEnabled());
+    expect(count).toHaveValue(9);
+    await user.click(count);
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [{ type: 'MonitoringSpecies', certainty: 'Known', speciesId: ACACIA.id, totalLive: 9 }],
+    });
+    await waitFor(() => expect(screen.queryByRole('spinbutton')).not.toBeInTheDocument());
+    expect(within(await rowFor(ACACIA.scientificName)).getByRole('cell', { name: '9' })).toBeInTheDocument();
   });
 
   it('does not let an in-flight count edit overtake the removal that supersedes it', async () => {

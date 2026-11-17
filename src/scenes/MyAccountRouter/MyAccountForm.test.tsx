@@ -61,14 +61,17 @@ describe('MyAccountForm email notification settings', () => {
     expect(await emailRequests[0].json()).toEqual({ categories: [], emailNotificationsEnabled: true });
   });
 
-  it('shows a switch only for the categories the server returns, in a fixed order', async () => {
+  it('shows only the categories the server returns, in a fixed order, and saves only those categories', async () => {
     mockEmailSettings([
       { category: 'PlantingAndObservations', optedIn: true },
       { category: 'SeedBank', optedIn: true },
       { category: 'Nursery', optedIn: false },
     ]);
+    mockProfileSaveSideEffects();
+    mockPut(ME_URL);
+    const emailRequests = captureRequests('put', EMAIL_SETTINGS_URL);
 
-    renderForm(false);
+    const { user, returnedToView } = renderForm(true);
 
     const master = await findMasterSwitch();
     expect(screen.getAllByRole('switch')).toEqual([
@@ -78,6 +81,20 @@ describe('MyAccountForm email notification settings', () => {
       settingSwitch(strings.PLANTING_AND_OBSERVATIONS),
     ]);
     expect(screen.queryByRole('switch', { name: strings.ACCELERATOR })).not.toBeInTheDocument();
+
+    await user.click(settingSwitch(strings.NURSERY));
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+    await waitFor(() => expect(returnedToView()).toBe(true));
+    expect(emailRequests).toHaveLength(1);
+    expect(await emailRequests[0].json()).toEqual({
+      categories: [
+        { category: 'PlantingAndObservations', optedIn: true },
+        { category: 'SeedBank', optedIn: true },
+        { category: 'Nursery', optedIn: true },
+      ],
+      emailNotificationsEnabled: true,
+    });
   });
 
   it('reflects the saved settings and disables every switch when not editing', async () => {

@@ -107,13 +107,7 @@ export type ParticipantProjectSpeciesPayload = {
   speciesId: number;
   speciesNativeCategory?: 'Native' | 'Non-native';
   submissionStatus:
-    | 'Not Submitted'
-    | 'In Review'
-    | 'Needs Translation'
-    | 'Approved'
-    | 'Rejected'
-    | 'Not Needed'
-    | 'Completed';
+    'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed' | 'Completed';
 };
 export type GetParticipantProjectSpeciesResponsePayload = {
   participantProjectSpecies: ParticipantProjectSpeciesPayload;
@@ -135,13 +129,7 @@ export type UpdateParticipantProjectSpeciesPayload = {
   rationale?: string;
   speciesNativeCategory?: 'Native' | 'Non-native';
   submissionStatus:
-    | 'Not Submitted'
-    | 'In Review'
-    | 'Needs Translation'
-    | 'Approved'
-    | 'Rejected'
-    | 'Not Needed'
-    | 'Completed';
+    'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed' | 'Completed';
 };
 export type ProjectPayload = {
   botanicalCountryCode?: string;
@@ -282,13 +270,7 @@ export type ParticipantProjectForSpeciesPayload = {
   participantProjectSpeciesId: number;
   participantProjectSpeciesNativeCategory?: 'Native' | 'Non-native';
   participantProjectSpeciesSubmissionStatus:
-    | 'Not Submitted'
-    | 'In Review'
-    | 'Needs Translation'
-    | 'Approved'
-    | 'Rejected'
-    | 'Not Needed'
-    | 'Completed';
+    'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed' | 'Completed';
   projectId: number;
   projectName: string;
   speciesId: number;

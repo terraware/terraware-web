@@ -222,12 +222,19 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
           <MRT_ToggleFullScreenButton table={table} />
         </TableToolbarActions>
       )}
+      renderTopToolbarCustomActions={({ table }) => (
+        <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
+      )}
+      enableColumnActions={true}
+      enableHiding={true}
+      enableColumnDragging={!isMobile}
+      positionGlobalFilter={'right'}
+      muiTableBodyCellProps={({ row, column }) => ({
+        id: `row${row.index + 1}-${column.id}`,
+      })}
       tableOptions={{
         enableGlobalFilterRankedResults: false,
         defaultColumn: { enableEditing: false },
-        renderTopToolbarCustomActions: ({ table }) => (
-          <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
-        ),
         state: {
           columnFilters,
           columnOrder,
@@ -244,19 +251,12 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
         onShowColumnFiltersChange: setShowColumnFilters,
         onShowGlobalFilterChange: setShowGlobalFilter,
         enableColumnPinning: true,
-        enableColumnActions: true,
-        enableHiding: true,
         enableGrouping: false,
-        enableColumnDragging: !isMobile,
-        positionGlobalFilter: 'right',
         muiTableBodyRowProps: ({ row }: { row: MRT_Row<StratumRow> }) => ({
           id: `row${row.index + 1}`,
           sx: {
             '& td': { borderBottom: 'none' },
           },
-        }),
-        muiTableBodyCellProps: ({ row, column }) => ({
-          id: `row${row.index + 1}-${column.id}`,
         }),
         muiTableBodyProps: {
           sx: {

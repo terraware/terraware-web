@@ -74,8 +74,8 @@ export type UpdateFacilityApiArg = {
   facilityId: number;
   updateFacilityRequestPayload: UpdateFacilityRequestPayload;
 };
-export type SendFacilityAlertApiResponse = /** status 200 The requested operation succeeded. */
-  | SimpleSuccessResponsePayload
+export type SendFacilityAlertApiResponse =
+  | /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload
   | /** status 202 The request was received, but the user is still configuring or placing sensors, so no notification has been generated. */ SimpleSuccessResponsePayload;
 export type SendFacilityAlertApiArg = {
   facilityId: number;

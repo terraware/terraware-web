@@ -48,9 +48,8 @@ const injectedRtkApi = api.injectEndpoints({
 });
 export { injectedRtkApi as api };
 export type ListOrganizationsApiResponse = /** status 200 OK */ ListOrganizationsResponsePayload;
-export type ListOrganizationsApiArg = /** Return this level of information about the organization's contents. */
-  | ('Organization' | 'Facility')
-  | undefined;
+export type ListOrganizationsApiArg =
+  /** Return this level of information about the organization's contents. */ ('Organization' | 'Facility') | undefined;
 export type CreateOrganizationApiResponse = /** status 200 OK */ GetOrganizationResponsePayload;
 export type CreateOrganizationApiArg = CreateOrganizationRequestPayload;
 export type DeleteOrganizationApiResponse =

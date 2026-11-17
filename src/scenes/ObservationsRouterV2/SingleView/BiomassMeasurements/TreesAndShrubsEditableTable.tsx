@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Box, IconButton, MenuItem, TextField, useTheme } from '@mui/material';
-import { Button, DialogBox, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Button, DialogBox, EditableTableColumn, EditableTableEditContext, Icon } from '@terraware/web-components';
 import { MRT_TableInstance, createRow } from 'material-react-table';
 
 import EditableTable from 'src/components/common/EditableTable';
@@ -27,6 +27,8 @@ import useBiomassPlot from './useBiomassPlot';
 type TreeRow = ExistingTreePayload & {
   speciesName?: string;
 };
+
+type TreeEditContext = EditableTableEditContext<TreeRow> & { row: { id: string } };
 
 const REMOVE_BUTTON_CLASS = 'recordedTreeRemove';
 
@@ -142,7 +144,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const commitRecordedTree = useCallback(
-    (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
+    async (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
       if (value !== undefined) {
         setOptimisticValues((prev) => ({
           ...prev,
@@ -153,30 +155,45 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           recordedTreeId: row.id,
           [fieldId]: value,
         };
-        void updateObservation({ updates: [payload] });
+        const saved = await updateObservation({ updates: [payload] });
+        if (!saved) {
+          setOptimisticValues((prev) =>
+            prev[row.id]?.[fieldId as keyof TreeRow] !== optimisticValue
+              ? prev
+              : {
+                  ...prev,
+                  [row.id]: { ...prev[row.id], [fieldId]: row[fieldId as keyof TreeRow] },
+                }
+          );
+        }
+        return saved;
       }
     },
     [updateObservation]
   );
 
   const saveRecordedTree = useCallback(
-    (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
+    async (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
       const range = measurementRanges[fieldId];
       if (range && Number(value) > range.max) {
         setPendingMeasurement({
-          keep: () => commitRecordedTree(fieldId, row, value, optimisticValue),
+          keep: () => {
+            void commitRecordedTree(fieldId, row, value, optimisticValue);
+          },
           label: range.label,
           value: String(value),
         });
         return;
       }
-      commitRecordedTree(fieldId, row, value, optimisticValue);
+      if ((await commitRecordedTree(fieldId, row, value, optimisticValue)) === false) {
+        throw new Error('Unable to save recorded tree');
+      }
     },
     [commitRecordedTree, measurementRanges]
   );
 
   const saveBiomassSpecies = useCallback(
-    (fieldId: string, row: TreeRow, value: string) => {
+    async (fieldId: string, row: TreeRow, value: string) => {
       const boolValue = value === 'true';
       setOptimisticValues((prev) => ({
         ...prev,
@@ -188,7 +205,17 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         scientificName: row.speciesId === undefined ? row.speciesName : undefined,
         [fieldId]: boolValue,
       };
-      void updateObservation({ updates: [payload] });
+      if (!(await updateObservation({ updates: [payload] }))) {
+        setOptimisticValues((prev) =>
+          prev[row.id]?.[fieldId as keyof TreeRow] !== boolValue
+            ? prev
+            : {
+                ...prev,
+                [row.id]: { ...prev[row.id], [fieldId]: row[fieldId as keyof TreeRow] },
+              }
+        );
+        throw new Error('Unable to save biomass species');
+      }
     },
     [updateObservation]
   );
@@ -399,7 +426,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const SpeciesCellEditor = useCallback(
-    ({ row, table }: { row: { id: string; original: TreeRow }; table: { setEditingCell: (cell: null) => void } }) =>
+    ({ row, cancel }: TreeEditContext) =>
       row.id === DRAFT_ROW_ID ? (
         <SpeciesSearchSelect id='addTreeSpecies' onChange={updateDraftSpecies} placeholder={strings.SEARCH_SPECIES} />
       ) : (
@@ -409,7 +436,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             // Typing a search term is not yet a change; only a picked species asks to confirm one.
             if (species) {
               setPendingSpeciesChange({ row: row.original, species });
-              table.setEditingCell(null);
+              cancel();
             }
           }}
           placeholder={row.original.speciesName ?? strings.SEARCH_SPECIES}
@@ -442,13 +469,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const FlagCellEditor = useCallback(
     (fieldId: DraftFlagField) => {
-      const FlagEditor = ({
-        row,
-        table,
-      }: {
-        row: { id: string; original: TreeRow };
-        table: { setEditingCell: (cell: null) => void };
-      }) => {
+      const FlagEditor = ({ row, save, isSaving }: TreeEditContext) => {
         const isDraftRow = row.id === DRAFT_ROW_ID;
         const draftValue =
           fieldId === 'isDead'
@@ -456,6 +477,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
             : (draft?.[fieldId] ?? recordedSpeciesFlag(fieldId, draft?.species));
         return (
           <TextField
+            disabled={isSaving}
             fullWidth
             id={`${isDraftRow ? 'add' : 'edit'}Tree-${fieldId}`}
             onChange={(event) => {
@@ -464,12 +486,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
                 updateDraft({ [fieldId]: value });
                 return;
               }
-              if (fieldId === 'isDead') {
-                saveRecordedTree('isDead', row.original, value, value === 'true');
-              } else {
-                saveBiomassSpecies(fieldId, row.original, value);
-              }
-              table.setEditingCell(null);
+              void save(value).catch(() => undefined);
             }}
             select
             size='small'
@@ -482,7 +499,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       };
       return FlagEditor;
     },
-    [draft, recordedSpeciesFlag, saveBiomassSpecies, saveRecordedTree, strings.NO, strings.YES, updateDraft]
+    [draft, recordedSpeciesFlag, strings.NO, strings.YES, updateDraft]
   );
 
   const invasiveEditor = useMemo(() => FlagCellEditor('isInvasive'), [FlagCellEditor]);
@@ -544,37 +561,33 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const measurementEditor = useCallback(
     (draftFieldId: DraftMeasurementField, saveFieldFor: (row: TreeRow) => string) => {
-      const MeasurementEditor = ({
-        cell,
-        row,
-        table,
-      }: {
-        cell: { getValue: () => unknown };
-        row: { id: string; original: TreeRow };
-        table: { setEditingCell: (cell: null) => void };
-      }) =>
+      const MeasurementEditor = ({ cell, row, save, cancel, isSaving }: TreeEditContext) =>
         row.id === DRAFT_ROW_ID ? (
           renderDraftMeasurement(draftFieldId)
         ) : (
           <TextField
             autoFocus
+            disabled={isSaving}
             defaultValue={(cell.getValue() as string | number | undefined) ?? ''}
             fullWidth
             onBlur={(event) => {
-              saveRecordedTree(saveFieldFor(row.original), row.original, event.target.value);
-              table.setEditingCell(null);
+              void save(event.target.value).catch(() => undefined);
             }}
             onKeyDown={(event) => {
               if (event.key === 'Enter') {
                 (event.target as HTMLInputElement).blur();
               } else if (event.key === 'Escape') {
-                table.setEditingCell(null);
+                cancel();
               }
             }}
             size='small'
           />
         );
-      return MeasurementEditor;
+      return {
+        editVariant: 'custom' as const,
+        customEditComponent: MeasurementEditor,
+        onSave: (row: TreeRow, value: unknown) => saveRecordedTree(saveFieldFor(row), row, value),
+      };
     },
     [renderDraftMeasurement, saveRecordedTree]
   );
@@ -687,30 +700,21 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         accessorKey: 'diameterAtBreastHeight',
         header: strings.DBH_CM,
         enableEditing: (row) => row.id === DRAFT_ROW_ID || row.original.treeGrowthForm !== 'Shrub',
-        editConfig: {
-          editVariant: 'custom',
-          customEditComponent: measurementEditor('diameterAtBreastHeight', () => 'diameterAtBreastHeight'),
-        },
+        editConfig: measurementEditor('diameterAtBreastHeight', () => 'diameterAtBreastHeight'),
       },
       {
         id: 'pointOfMeasurement',
         accessorKey: 'pointOfMeasurement',
         header: strings.POM_M,
         enableEditing: (row) => row.id === DRAFT_ROW_ID || row.original.treeGrowthForm !== 'Shrub',
-        editConfig: {
-          editVariant: 'custom',
-          customEditComponent: measurementEditor('pointOfMeasurement', () => 'pointOfMeasurement'),
-        },
+        editConfig: measurementEditor('pointOfMeasurement', () => 'pointOfMeasurement'),
       },
       {
         id: 'height',
         accessorKey: 'height',
         header: strings.HEIGHT_M,
         enableEditing: (row) => row.id === DRAFT_ROW_ID || row.original.treeGrowthForm !== 'Shrub',
-        editConfig: {
-          editVariant: 'custom',
-          customEditComponent: measurementEditor('height', () => 'height'),
-        },
+        editConfig: measurementEditor('height', () => 'height'),
       },
       {
         id: 'crownDiameter',
@@ -719,13 +723,10 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         Cell: CrownDiameterCell,
         enableEditing: (row) =>
           row.id === DRAFT_ROW_ID || row.original.treeGrowthForm === 'Shrub' || forestType === 'Mangrove',
-        editConfig: {
-          editVariant: 'custom',
-          customEditComponent: measurementEditor(
-            draft?.treeGrowthForm === 'Shrub' ? 'shrubDiameter' : 'treeCrownDiameter',
-            (row) => (row.treeGrowthForm === 'Shrub' ? 'shrubDiameter' : 'treeCrownDiameter')
-          ),
-        },
+        editConfig: measurementEditor(
+          draft?.treeGrowthForm === 'Shrub' ? 'shrubDiameter' : 'treeCrownDiameter',
+          (row) => (row.treeGrowthForm === 'Shrub' ? 'shrubDiameter' : 'treeCrownDiameter')
+        ),
       },
       {
         id: 'boleHeight',
@@ -736,7 +737,8 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         enableEditing: (row) =>
           row.original.treeGrowthForm !== 'Shrub' && row.original.trunkNumber === 1 && forestType !== 'Mangrove',
         editConfig: {
-          onSave: (row, value) => saveRecordedTree('boleHeight', row, value === '' ? null : value),
+          onSave: (row, value) =>
+            saveRecordedTree('boleHeight', row, value === '' ? null : value).catch(() => undefined),
         },
       },
       {
@@ -744,21 +746,33 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
         header: strings.INVASIVE,
         Cell: IsInvasiveCell,
-        editConfig: { editVariant: 'custom', customEditComponent: invasiveEditor },
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: invasiveEditor,
+          onSave: (row, value) => saveBiomassSpecies('isInvasive', row, value),
+        },
       },
       {
         id: 'isThreatened',
         accessorFn: (row) => (row.isThreatened ? 'true' : 'false'),
         header: strings.THREATENED,
         Cell: IsThreatenedCell,
-        editConfig: { editVariant: 'custom', customEditComponent: threatenedEditor },
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: threatenedEditor,
+          onSave: (row, value) => saveBiomassSpecies('isThreatened', row, value),
+        },
       },
       {
         id: 'isDead',
         accessorFn: (row) => (row.isDead ? 'true' : 'false'),
         header: strings.DEAD,
         Cell: IsDeadCell,
-        editConfig: { editVariant: 'custom', customEditComponent: deadEditor },
+        editConfig: {
+          editVariant: 'custom',
+          customEditComponent: deadEditor,
+          onSave: (row, value) => saveRecordedTree('isDead', row, value, value === 'true'),
+        },
       },
       {
         id: 'description',
@@ -767,12 +781,13 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         Cell: DescriptionCell,
         enableEditing: (row) => row.id !== DRAFT_ROW_ID,
         editConfig: {
-          onSave: (row, value) => saveRecordedTree('description', row, value),
+          onSave: (row, value) => saveRecordedTree('description', row, value).catch(() => undefined),
         },
       },
     ],
     [
       saveRecordedTree,
+      saveBiomassSpecies,
       SpeciesCellEditor,
       GrowthFormEditor,
       invasiveEditor,
@@ -958,7 +973,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         <TreeNoteModal
           description={noteModalRow.description ?? ''}
           onClose={() => setNoteModalRow(undefined)}
-          onSave={(value) => saveRecordedTree('description', noteModalRow, value)}
+          onSave={(value) => {
+            void saveRecordedTree('description', noteModalRow, value).catch(() => undefined);
+          }}
         />
       )}
       <EditableTable

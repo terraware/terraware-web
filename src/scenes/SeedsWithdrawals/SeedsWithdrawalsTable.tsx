@@ -476,6 +476,19 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       enableTopToolbar={true}
       enableBottomToolbar={true}
       initialSorting={sorting}
+      enableColumnActions={true}
+      enableHiding={true}
+      enableColumnDragging={!isMobile}
+      positionGlobalFilter={'right'}
+      renderTopToolbarCustomActions={({ table }) => (
+        <CurrentView
+          defaultSettings={defaultViewSettings}
+          organizationId={selectedOrganization?.id}
+          table={table}
+          tableDefinition={TABLE}
+        />
+      )}
+      muiTableBodyCellProps={({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` })}
       tableOptions={{
         state: {
           pagination,
@@ -502,19 +515,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         manualFiltering: true,
         rowCount: totalRowCount,
         enableColumnPinning: true,
-        enableColumnActions: true,
-        enableHiding: true,
         enableGrouping: false,
-        enableColumnDragging: !isMobile,
-        positionGlobalFilter: 'right',
-        renderTopToolbarCustomActions: ({ table }) => (
-          <CurrentView
-            defaultSettings={defaultViewSettings}
-            organizationId={selectedOrganization?.id}
-            table={table}
-            tableDefinition={TABLE}
-          />
-        ),
         renderToolbarInternalActions: ({ table }) => (
           <TableToolbarActions>
             <Tooltip title={strings.EXPORT}>
@@ -551,7 +552,6 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
             },
           },
         },
-        muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
         muiTableBodyRowProps: {
           sx: {
             '& td': {

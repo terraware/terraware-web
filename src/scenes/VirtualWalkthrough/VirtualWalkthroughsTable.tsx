@@ -378,12 +378,12 @@ export default function VirtualWalkthroughsTable({
             <MRT_ToggleFullScreenButton table={table} />
           </TableToolbarActions>
         )}
+        renderTopToolbarCustomActions={({ table }) => (
+          <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
+        )}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           muiTopToolbarProps: { sx: mobileTopToolbarSx },
-          renderTopToolbarCustomActions: ({ table }) => (
-            <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
-          ),
           state: { columnFilters, showColumnFilters, showGlobalFilter },
           onColumnFiltersChange: setColumnFilters,
           onShowColumnFiltersChange: setShowColumnFilters,
