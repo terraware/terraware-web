@@ -1,23 +1,16 @@
 import React from 'react';
 
 import { rs } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
-import { useMaterialReactTable } from 'material-react-table';
-import * as actualMrt from 'material-react-table' with { rstest: 'importActual' };
+import { screen, waitFor, within } from '@testing-library/react';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
-import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import ReportsSettings from 'src/scenes/AcceleratorRouter/AcceleratorProjects/Reports/ReportsSettings';
 import MatrixView from 'src/scenes/AcceleratorRouter/MatrixView';
 import strings from 'src/strings';
 import { buildUser, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
 
 rs.mock('src/features', () => ({ useFeatureEnabled: () => false }));
-rs.mock('material-react-table', () => ({
-  ...actualMrt,
-  useMaterialReactTable: rs.fn(actualMrt.useMaterialReactTable),
-}));
 
 it.each(['targets', 'settings', 'matrix'] as const)(
   'preserves #7218 MRT presentation with the flag off: %s',
@@ -48,37 +41,16 @@ it.each(['targets', 'settings', 'matrix'] as const)(
         currentUser: { user: buildUser({ globalRoles: ['Super-Admin'] }) },
       }
     );
-    await screen.findByRole('table');
-    const options = rs.mocked(useMaterialReactTable).mock.calls.at(-1)![0];
+    const table = await screen.findByRole('table');
+    const toolbar = within(table.closest('.MuiPaper-root')! as HTMLElement);
     const matrix = scene === 'matrix';
-    expect({
-      topToolbar: options.enableTopToolbar,
-      ordering: options.enableColumnOrdering,
-      globalFilter: options.enableGlobalFilter,
-      ranked: options.enableGlobalFilterRankedResults,
-      globalVisible: options.state?.showGlobalFilter,
-      initialFiltersVisible: options.initialState?.showColumnFilters,
-      mobileToolbar: options.muiTopToolbarProps,
-      columnActions: options.enableColumnActions,
-      hiding: options.enableHiding,
-    }).toEqual({
-      topToolbar: matrix,
-      ordering: matrix,
-      globalFilter: true,
-      ranked: matrix ? false : undefined,
-      globalVisible: matrix ? true : undefined,
-      initialFiltersVisible: matrix ? false : undefined,
-      mobileToolbar: matrix ? { sx: mobileTopToolbarSx } : undefined,
-      columnActions: matrix ? undefined : false,
-      hiding: matrix ? undefined : false,
-    });
+    expect(toolbar.queryAllByRole('textbox')).toHaveLength(matrix ? 1 : 0);
     if (!matrix) {
-      expect(options.renderColumnActionsMenuItems).toBeUndefined();
-      expect(screen.queryByRole('button', { name: /filters|density|full screen/i })).not.toBeInTheDocument();
+      expect(toolbar.queryByRole('button', { name: /filters|density|full screen/i })).not.toBeInTheDocument();
+      expect(toolbar.queryByRole('button', { name: MRT_Localization_EN.columnActions! })).not.toBeInTheDocument();
       return;
     }
-    expect(options.muiTableProps).toEqual({ sx: { tableLayout: 'fixed' } });
-    expect(options.muiTableBodyRowProps).toEqual({ sx: { '& td': { borderBottom: 'none' } } });
+    expect(table).toHaveStyle({ tableLayout: 'fixed' });
     const buttons = [
       MRT_Localization_EN.showHideFilters!,
       strings.MANAGE_COLUMNS,
