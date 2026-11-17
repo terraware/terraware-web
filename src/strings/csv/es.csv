@@ -2014,6 +2014,7 @@ REQUEST_UPDATE_ACTION,Solicitar actualización...,790ef713
 REQUEST_UPDATE_REASON,Indique el motivo por el que solicita la actualización.,52430788
 REQUESTED,Solicitado,17e828cc
 REQUESTED_PLANTS,Plantas solicitadas,4c4fac82
+REQUESTED_SPECIES,Especies solicitadas,d2f82712
 REQUESTS_X,Solicitudes ({0}),b70edf58
 REQUIRED,Obligatorio,ede65856
 REQUIRED_FIELD,Campo obligatorio,4e1802b3
@@ -2858,6 +2859,7 @@ VIEW_ON_MAP,Ver en el mapa,fb873a55
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Ver el informe de financiación publicado,8dbc3bb4
+VIEW_QUANTITIES,Ver cantidades,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Ver Resumen Trimestral,1be47dfc
 VIEW_REPORTS,Ver informes,7fc5e229
 VIEW_SESSION,Ver sesión,7f126865
@@ -2959,6 +2961,7 @@ X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52
 X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
+X_LEFT,Quedan {0},d5d2cf6b
 X_OF_YEAR_CUMULATIVE_TARGET,{0} del objetivo acumulativo anual,6658988a
 X_OF_YEAR_TARGET,{0} del objetivo anual,c57dbf7a
 X_OVERDUE_Y,{0} (vencido el {1}),11c7edeb
