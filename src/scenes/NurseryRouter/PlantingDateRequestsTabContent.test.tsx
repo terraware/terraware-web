@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw/http';
@@ -7,6 +8,13 @@ import { HttpResponse, http } from 'msw/http';
 import PlantingDateRequestsTabContent from 'src/scenes/NurseryRouter/PlantingDateRequestsTabContent';
 import strings from 'src/strings';
 import { dialogTitled, mockGet, renderWithProviders, selectDropdownOption, server } from 'src/test-utils';
+
+/** Only the dialog reads this; the tab content gets its own device info from the component library. */
+let isDesktop: boolean;
+rstest.mock('src/utils/useDeviceInfo', () => ({
+  __esModule: true,
+  default: () => ({ isDesktop, isTablet: !isDesktop, isMobile: false }),
+}));
 
 const buildRequest = (overrides: Record<string, unknown> = {}) => ({
   scheduledPlantingDate_plantingSeason_id: '1',
@@ -63,7 +71,7 @@ const statusesOf = (body: Record<string, any>): string[] =>
 
 const openQuantities = async (user: UserEvent): Promise<HTMLElement> => {
   await user.click(await screen.findByRole('button', { name: strings.VIEW_QUANTITIES }));
-  return dialogTitled(strings.REQUESTED_SPECIES);
+  return dialogTitled(strings.VIEW_REQUESTED_SPECIES_QUANTITIES);
 };
 
 /** The dialog row for a species, which is the only place its quantities are unambiguous. */
@@ -77,6 +85,7 @@ const speciesRow = (dialog: HTMLElement, scientificName: string): HTMLElement =>
 const columnsOf = (row: HTMLElement): (string | null)[] => Array.from(row.children).map((cell) => cell.textContent);
 
 beforeEach(() => {
+  isDesktop = true;
   searchRequests = [];
   searchResults = [buildRequest()];
 
@@ -165,7 +174,7 @@ describe('PlantingDateRequestsTabContent', () => {
       const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
 
       await screen.findByRole('button', { name: strings.VIEW_QUANTITIES });
-      expect(screen.queryByText(strings.REQUESTED_SPECIES)).not.toBeInTheDocument();
+      expect(screen.queryByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).not.toBeInTheDocument();
 
       const dialog = await openQuantities(user);
 
@@ -232,6 +241,19 @@ describe('PlantingDateRequestsTabContent', () => {
       const total = within(dialog).getByText(strings.TOTAL).parentElement as HTMLElement;
 
       expect(within(total).getByText(strings.formatString(strings.X_LEFT, '100') as string)).toBeInTheDocument();
+    });
+
+    it('drops the remaining count on narrower viewports, where it would crowd the status', async () => {
+      isDesktop = false;
+
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const dialog = await openQuantities(user);
+      const total = within(dialog).getByText(strings.TOTAL).parentElement as HTMLElement;
+
+      expect(within(total).queryByText(/left/)).not.toBeInTheDocument();
+      expect(within(total).getByText('1,400')).toBeInTheDocument();
+      expect(within(total).getByText(strings.PARTIALLY_FULFILLED)).toBeInTheDocument();
     });
 
     it('offers a withdrawal for a request that is still open', async () => {

@@ -17,10 +17,11 @@ const PlantingDateRequestFulfillmentBadge = ({ status }: PlantingDateRequestFulf
   const badgeProps = useMemo((): BadgeProps => {
     switch (status) {
       case 'Pending':
+        // Deliberately neutral rather than the warning colors Partial uses, so the two read apart.
         return {
-          backgroundColor: theme.palette.TwClrBgWarningTertiary,
-          borderColor: theme.palette.TwClrBrdrWarning,
-          labelColor: theme.palette.TwClrTxtWarning,
+          backgroundColor: theme.palette.TwClrBgSecondary,
+          borderColor: theme.palette.TwClrBrdrSecondary,
+          labelColor: theme.palette.TwClrTxtSecondary,
           label: strings.NEW,
         };
       case 'Partial':

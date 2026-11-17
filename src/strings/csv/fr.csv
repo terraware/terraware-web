@@ -2013,7 +2013,6 @@ REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
 REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
-REQUESTED_SPECIES,Espèces demandées,d2f82712
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
@@ -2861,6 +2860,7 @@ VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,
 VIEW_QUANTITIES,Voir les quantités,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Voir les faits saillants trimestriels,1be47dfc
 VIEW_REPORTS,Voir les rapports,7fc5e229
+VIEW_REQUESTED_SPECIES_QUANTITIES,Voir les quantités de chaque espèce demandée,a5ae86c4
 VIEW_SESSION,Voir la session,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Afficher les sites, strata et substrats sur une carte.",f4d62997
 VIEW_SPECIES_LIST,Afficher la liste des espèces,ff94b19b
