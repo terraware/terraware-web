@@ -278,20 +278,20 @@ const ObservationSubstratumSelector = ({
                 isAfter(stratum.boundaryModifiedTime, stratum.latestObservationCompletedTime) && (
                   <Box display='flex' alignItems='center' marginTop={2} marginBottom={1}>
                     <Icon name='warning' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
-                    <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1} paddingRight={1}>
+                    <Typography color={theme.palette.TwClrTxtSecondary} paddingLeft={1}>
                       {strings.formatString(
                         strings.STRATUM_GEOMETRY_CHANGED,
                         stratum.name,
                         DateTime.fromISO(stratum.boundaryModifiedTime).toFormat('yyyy-MM-dd')
-                      )}
+                      )}{' '}
+                      <Link
+                        target='_blank'
+                        fontSize={'16px'}
+                        to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
+                      >
+                        {strings.VIEW_MAP}
+                      </Link>
                     </Typography>
-                    <Link
-                      target='_blank'
-                      fontSize={'16px'}
-                      to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
-                    >
-                      {strings.VIEW_MAP}
-                    </Link>
                   </Box>
                 )}
               <Box sx={{ paddingLeft: `${theme.spacing(4)}` }}>
