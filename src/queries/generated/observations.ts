@@ -176,6 +176,16 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.replaceObservationPlotRequestPayload,
       }),
     }),
+    previewReplaceObservationPlot: build.mutation<
+      PreviewReplaceObservationPlotApiResponse,
+      PreviewReplaceObservationPlotApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/plots/${queryArg.plotId}/replace/preview`,
+        method: 'POST',
+        body: queryArg.previewReplaceObservationPlotRequestPayload,
+      }),
+    }),
     getObservationResults: build.query<GetObservationResultsApiResponse, GetObservationResultsApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/results`,
@@ -351,6 +361,13 @@ export type ReplaceObservationPlotApiArg = {
   observationId: number;
   plotId: number;
   replaceObservationPlotRequestPayload: ReplaceObservationPlotRequestPayload;
+};
+export type PreviewReplaceObservationPlotApiResponse =
+  /** status 200 The requested operation succeeded. */ PreviewReplaceObservationPlotResponsePayload;
+export type PreviewReplaceObservationPlotApiArg = {
+  observationId: number;
+  plotId: number;
+  previewReplaceObservationPlotRequestPayload: PreviewReplaceObservationPlotRequestPayload;
 };
 export type GetObservationResultsApiResponse = /** status 200 OK */ GetObservationResultsResponsePayload;
 export type GetObservationResultsApiArg = {
@@ -1288,6 +1305,10 @@ export type UpdatePlotPhotoRequestPayload = {
 export type ReplaceObservationPlotResponsePayload = {
   /** IDs of monitoring plots that were added to the observation. Empty if no plots were added. */
   addedMonitoringPlotIds: number[];
+  /** IDs of other upcoming observations that included the plot and were deleted because it was replaced long-term and they couldn't be given new plots. */
+  deletedObservationIds: number[];
+  /** IDs of other upcoming observations that included the plot and were given new plots because it was replaced long-term. */
+  reassignedObservationIds: number[];
   /** IDs of monitoring plots that were removed from the observation. Will usually include the requested plot ID, but may be empty if the replacement request couldn't be satisfied. */
   removedMonitoringPlotIds: number[];
   status: SuccessOrError;
@@ -1295,6 +1316,21 @@ export type ReplaceObservationPlotResponsePayload = {
 export type ReplaceObservationPlotRequestPayload = {
   duration: 'Temporary' | 'LongTerm';
   justification: string;
+};
+export type AffectedUpcomingObservationPayload = {
+  observationId: number;
+  observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
+  /** What would happen to the observation if the plot were replaced. */
+  outcome: 'PlotsReassigned' | 'ObservationDeleted';
+  startDate: string;
+};
+export type PreviewReplaceObservationPlotResponsePayload = {
+  /** Upcoming observations, other than the one whose plot would be replaced, that would be affected by the replacement. Empty if no other observations would be affected. */
+  affectedObservations: AffectedUpcomingObservationPayload[];
+  status: SuccessOrError;
+};
+export type PreviewReplaceObservationPlotRequestPayload = {
+  duration: 'Temporary' | 'LongTerm';
 };
 export type GetObservationResultsResponsePayload = {
   observation: ObservationResultsPayload;
@@ -1336,6 +1372,7 @@ export const {
   useUpdatePlotPhotoMutation,
   useReleaseMonitoringPlotMutation,
   useReplaceObservationPlotMutation,
+  usePreviewReplaceObservationPlotMutation,
   useGetObservationResultsQuery,
   useLazyGetObservationResultsQuery,
 } = injectedRtkApi;
