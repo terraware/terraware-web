@@ -190,6 +190,7 @@ describe('AddPlantingSeasonModal creating a season', () => {
       endDate: '2027-05-31',
       name: 'Spring 2027',
       plantingSiteId: OTHER_SITE_ID,
+      speciesTargets: [],
       startDate: '2027-03-01',
     });
   });
@@ -207,8 +208,7 @@ describe('AddPlantingSeasonModal creating a season', () => {
   });
 
   it('seeds the new season with a zero target for every substratum the site plants a species in', async () => {
-    mockPost(SEASONS_URL, { id: NEW_SEASON_ID });
-    const targetUpserts = captureRequests('put', SEASON_SPECIES_TARGETS_ROUTE);
+    const creates = captureRequests('post', SEASONS_URL, { id: NEW_SEASON_ID });
 
     const { user } = renderModal({
       siteSpeciesTargets: [
@@ -220,18 +220,15 @@ describe('AddPlantingSeasonModal creating a season', () => {
     await fillSeason(user);
     await create(user);
 
-    await waitFor(() => expect(targetUpserts).toHaveLength(3));
-    expect(targetUpserts.map((request) => new URL(request.url).pathname)).toEqual(
-      Array(3).fill(`/api/v1/planting-seasons/${NEW_SEASON_ID}/species-targets`)
-    );
-    const bodies = await Promise.all(targetUpserts.map((request) => request.json()));
-    expect(bodies).toEqual(
-      expect.arrayContaining([
+    await waitFor(() => expect(creates).toHaveLength(1));
+    // Stratum 1 holds substrata 1 and 2, stratum 2 holds substratum 3.
+    expect(await creates[0].json()).toMatchObject({
+      speciesTargets: [
         { quantity: 0, speciesId: 10, substratumId: 1 },
         { quantity: 0, speciesId: 10, substratumId: 2 },
         { quantity: 0, speciesId: 11, substratumId: 3 },
-      ])
-    );
+      ],
+    });
   });
 
   it('opens the new season on its species targets', async () => {
@@ -267,23 +264,6 @@ describe('AddPlantingSeasonModal creating a season', () => {
     // Closing on failure would tell the user the season exists when it does not.
     expect(onClose).not.toHaveBeenCalled();
     expect(screen.getByText(strings.ADD_PLANTING_SEASON)).toBeInTheDocument();
-  });
-
-  it("reports the failure when the new season's species targets cannot be saved", async () => {
-    mockPost(SEASONS_URL, { id: NEW_SEASON_ID });
-    mockError('put', SEASON_SPECIES_TARGETS_ROUTE);
-
-    const { user, store } = renderModal({ siteSpeciesTargets: [{ speciesId: 10, stratumIds: [2] }] });
-
-    await fillSeason(user);
-    await create(user);
-
-    await waitFor(() =>
-      expect(store.getState().snackbar.snackbars.toast).toMatchObject({
-        msg: strings.GENERIC_ERROR,
-        priority: 'critical',
-      })
-    );
   });
 
   it('reports the failure when the site species targets cannot be loaded', async () => {
