@@ -246,18 +246,32 @@ const ObservationStatsDrawer = ({
         });
       }
 
-      if (properties.totalPermanentPlots !== undefined && properties.observedPermanentPlots !== undefined) {
-        drawerRows.push({
-          key: strings.PERMANENT_PLOTS,
-          value: `${properties.observedPermanentPlots} / ${properties.totalPermanentPlots}`,
-        });
-      }
+      if (results?.type === 'Baseline Survey') {
+        if (
+          properties.totalPermanentPlots !== undefined &&
+          properties.observedPermanentPlots !== undefined &&
+          properties.totalTemporaryPlots !== undefined &&
+          properties.observedTemporaryPlots !== undefined
+        ) {
+          drawerRows.push({
+            key: strings.PLOTS,
+            value: `${properties.observedPermanentPlots + properties.observedTemporaryPlots} / ${properties.totalPermanentPlots + properties.totalTemporaryPlots}`,
+          });
+        }
+      } else {
+        if (properties.totalPermanentPlots !== undefined && properties.observedPermanentPlots !== undefined) {
+          drawerRows.push({
+            key: strings.PERMANENT_PLOTS,
+            value: `${properties.observedPermanentPlots} / ${properties.totalPermanentPlots}`,
+          });
+        }
 
-      if (properties.totalTemporaryPlots !== undefined && properties.observedTemporaryPlots !== undefined) {
-        drawerRows.push({
-          key: strings.TEMPORARY_PLOTS,
-          value: `${properties.observedTemporaryPlots} / ${properties.totalTemporaryPlots}`,
-        });
+        if (properties.totalTemporaryPlots !== undefined && properties.observedTemporaryPlots !== undefined) {
+          drawerRows.push({
+            key: strings.TEMPORARY_PLOTS,
+            value: `${properties.observedTemporaryPlots} / ${properties.totalTemporaryPlots}`,
+          });
+        }
       }
 
       drawerRows.push({
@@ -292,7 +306,7 @@ const ObservationStatsDrawer = ({
     }
 
     return drawerRows;
-  }, [isBiomass, properties, strings]);
+  }, [isBiomass, properties, results?.type, strings]);
 
   const stratumHasMonitoringPlots = useMemo(() => {
     if (layerFeatureId.layerId !== 'strata') {
