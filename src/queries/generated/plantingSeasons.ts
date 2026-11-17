@@ -246,6 +246,8 @@ export type CreatePlantingSeasonRequestPayload = {
   fromPlantingSeasonId?: number;
   name: string;
   plantingSiteId: number;
+  /** Initial species targets for the new season. May not be specified if fromPlantingSeasonId is specified. */
+  speciesTargets?: SpeciesTargetPayload[];
   startDate: string;
 };
 export type PlantingSeasonNotificationPayload = {
