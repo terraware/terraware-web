@@ -263,16 +263,20 @@ const ObservationSubstratumSelector = ({
                     onChange={onChangeStratumCheckbox(stratum)}
                     value={isStratumFullySelected(stratum)}
                   />
-                  {!isBaseline && (stratum.latestObservationCompletedTime ? (
-                    <Box flexShrink={0} whiteSpace='nowrap'>
-                      <Pill id={stratum.id} label={strings.LAST_OBSERVATION}
-                        value={getDateDisplayValue(stratum.latestObservationCompletedTime)} />
-                    </Box>
-                  ) : (
-                    <Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
-                      {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
-                    </Typography>
-                  ))}
+                  {!isBaseline &&
+                    (stratum.latestObservationCompletedTime ? (
+                      <Box flexShrink={0} whiteSpace='nowrap'>
+                        <Pill
+                          id={stratum.id}
+                          label={strings.LAST_OBSERVATION}
+                          value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
+                        />
+                      </Box>
+                    ) : (
+                      <Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
+                        {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
+                      </Typography>
+                    ))}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
                   {isBaseline ? numPermanentPlots + numTemporaryPlots : numPermanentPlots}
