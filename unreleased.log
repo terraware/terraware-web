@@ -1,3 +1,7 @@
+d8ca6e02 SW-9367 Remove Baseline Survey from ad-hoc observation types (#7235)
+1a120f1f SW-9364 Remove Baseline stratum summary (#7234)
+9fc86fe8 SW-9361 Pre-select substrata without a Baseline Survey (#7231)
+5b214966 SW-9360 Combine Baseline Survey plot counts (#7225)
 1b559155 SW-9365 Show date errors and current dates when rescheduling (#7229)
 bc592397 SW-9018 Test rescheduling from the scheduled observations menu (#7228)
 809e4c8d SW-9018 Test rescheduling an observation (#7227)
