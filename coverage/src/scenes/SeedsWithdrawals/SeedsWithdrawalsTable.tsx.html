@@ -1111,34 +1111,35 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">251x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1182,7 +1183,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">251x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1673,6 +1673,19 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       enableTopToolbar={true}
       enableBottomToolbar={true}
       initialSorting={sorting}
+      enableColumnActions={true}
+      enableHiding={true}
+      enableColumnDragging={!isMobile}
+      positionGlobalFilter={'right'}
+      renderTopToolbarCustomActions={({ table }) =&gt; (
+        &lt;CurrentView
+          defaultSettings={defaultViewSettings}
+          organizationId={selectedOrganization?.id}
+          table={table}
+          tableDefinition={TABLE}
+        /&gt;
+      )}
+      muiTableBodyCellProps={({ row, column }) =&gt; ({ id: `row${row.index + 1}-${column.id}` })}
       tableOptions={{
         state: {
           pagination,
@@ -1699,19 +1712,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         manualFiltering: true,
         rowCount: totalRowCount,
         enableColumnPinning: true,
-        enableColumnActions: true,
-        enableHiding: true,
         enableGrouping: false,
-        enableColumnDragging: !isMobile,
-        positionGlobalFilter: 'right',
-        renderTopToolbarCustomActions: ({ table }) =&gt; (
-          &lt;CurrentView
-            defaultSettings={defaultViewSettings}
-            organizationId={selectedOrganization?.id}
-            table={table}
-            tableDefinition={TABLE}
-          /&gt;
-        ),
         renderToolbarInternalActions: ({ table }) =&gt; (
           &lt;TableToolbarActions&gt;
             &lt;Tooltip title={strings.EXPORT}&gt;
@@ -1748,7 +1749,6 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
             },
           },
         },
-        muiTableBodyCellProps: ({ row, column }) =&gt; ({ id: `row${row.index + 1}-${column.id}` }),
         muiTableBodyRowProps: {
           sx: {
             '&amp; td': {
@@ -1768,7 +1768,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-17T22:25:39.037Z
+                at 2026-11-17T22:54:37.634Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

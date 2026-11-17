@@ -1043,6 +1043,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">293x</span>
+<span class="cline-any cline-yes">218x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1130,16 +1144,6 @@
 <span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">29x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1150,10 +1154,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">293x</span>
-<span class="cline-any cline-yes">218x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1598,6 +1598,24 @@ export default function AccessionsBySpeciesTable({
         enableColumnFilters={true}
         enableColumnOrdering={true}
         storageKey={TABLE.storageKey}
+        enableColumnActions={true}
+        enableHiding={true}
+        enableColumnDragging={!isMobile}
+        positionGlobalFilter={'right'}
+        renderTopToolbarCustomActions={({ table }) =&gt; (
+          &lt;CurrentView
+            defaultSettings={defaultViewSettings}
+            onPresetChange={handlePresetChange}
+            organizationId={selectedOrganization?.id}
+            presetViews={presetViews}
+            table={table}
+            tableDefinition={TABLE}
+          /&gt;
+        )}
+        muiTableBodyCellProps={({ row, column, table }) =&gt; {
+          const visualIndex = table.getSortedRowModel().rows.findIndex((r) =&gt; r.id === row.id);
+          return { id: `row${visualIndex + 1}-${column.id}` };
+        }}
         tableOptions={{
           enableGlobalFilterRankedResults: false,
           defaultColumn: {
@@ -1625,10 +1643,6 @@ export default function AccessionsBySpeciesTable({
           onShowGlobalFilterChange: setShowGlobalFilter,
           onDensityChange,
           enableColumnPinning: true,
-          enableColumnActions: true,
-          enableHiding: true,
-          enableColumnDragging: !isMobile,
-          positionGlobalFilter: 'right',
           getRowId: (row) =&gt; row.id,
           ...(canWithdraw
             ? {
@@ -1686,16 +1700,6 @@ export default function AccessionsBySpeciesTable({
                 },
               }
             : {}),
-          renderTopToolbarCustomActions: ({ table }) =&gt; (
-            &lt;CurrentView
-              defaultSettings={defaultViewSettings}
-              onPresetChange={handlePresetChange}
-              organizationId={selectedOrganization?.id}
-              presetViews={presetViews}
-              table={table}
-              tableDefinition={TABLE}
-            /&gt;
-          ),
           renderToolbarInternalActions: ({ table }) =&gt; (
             &lt;TableToolbarActions&gt;
               &lt;Tooltip title={strings.EXPORT}&gt;
@@ -1710,10 +1714,6 @@ export default function AccessionsBySpeciesTable({
               &lt;MRT_ToggleFullScreenButton table={table} /&gt;
             &lt;/TableToolbarActions&gt;
           ),
-          muiTableBodyCellProps: ({ row, column, table }) =&gt; {
-            const visualIndex = table.getSortedRowModel().rows.findIndex((r) =&gt; r.id === row.id);
-            return { id: `row${visualIndex + 1}-${column.id}` };
-          },
           muiTableBodyProps: {
             sx: {
               '&amp; tr:nth-of-type(odd) &gt; td': {
@@ -1747,7 +1747,7 @@ export default function AccessionsBySpeciesTable({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-17T22:25:39.037Z
+                at 2026-11-17T22:54:37.634Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

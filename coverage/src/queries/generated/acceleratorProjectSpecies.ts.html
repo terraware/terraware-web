@@ -358,28 +358,10 @@
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
 <a name='L295'></a><a href='#L295'>295</a>
-<a name='L296'></a><a href='#L296'>296</a>
-<a name='L297'></a><a href='#L297'>297</a>
-<a name='L298'></a><a href='#L298'>298</a>
-<a name='L299'></a><a href='#L299'>299</a>
-<a name='L300'></a><a href='#L300'>300</a>
-<a name='L301'></a><a href='#L301'>301</a>
-<a name='L302'></a><a href='#L302'>302</a>
-<a name='L303'></a><a href='#L303'>303</a>
-<a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a>
-<a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a>
-<a name='L314'></a><a href='#L314'>314</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L296'></a><a href='#L296'>296</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">125x</span>
-<span class="cline-any cline-yes">125x</span>
+<span class="cline-any cline-yes">126x</span>
+<span class="cline-any cline-yes">126x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -657,6 +639,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">126x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -669,26 +652,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">125x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">125x</span>
+<span class="cline-any cline-yes">126x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi as api } from '../baseApi';
 &nbsp;
 const injectedRtkApi = api.injectEndpoints({
@@ -798,13 +762,7 @@ export type ParticipantProjectSpeciesPayload = {
   speciesId: number;
   speciesNativeCategory?: 'Native' | 'Non-native';
   submissionStatus:
-    | 'Not Submitted'
-    | 'In Review'
-    | 'Needs Translation'
-    | 'Approved'
-    | 'Rejected'
-    | 'Not Needed'
-    | 'Completed';
+    'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed' | 'Completed';
 };
 export type GetParticipantProjectSpeciesResponsePayload = {
   participantProjectSpecies: ParticipantProjectSpeciesPayload;
@@ -826,13 +784,7 @@ export type UpdateParticipantProjectSpeciesPayload = {
   rationale?: string;
   speciesNativeCategory?: 'Native' | 'Non-native';
   submissionStatus:
-    | 'Not Submitted'
-    | 'In Review'
-    | 'Needs Translation'
-    | 'Approved'
-    | 'Rejected'
-    | 'Not Needed'
-    | 'Completed';
+    'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed' | 'Completed';
 };
 export type ProjectPayload = {
   botanicalCountryCode?: string;
@@ -973,13 +925,7 @@ export type ParticipantProjectForSpeciesPayload = {
   participantProjectSpeciesId: number;
   participantProjectSpeciesNativeCategory?: 'Native' | 'Non-native';
   participantProjectSpeciesSubmissionStatus:
-    | 'Not Submitted'
-    | 'In Review'
-    | 'Needs Translation'
-    | 'Approved'
-    | 'Rejected'
-    | 'Not Needed'
-    | 'Completed';
+    'Not Submitted' | 'In Review' | 'Needs Translation' | 'Approved' | 'Rejected' | 'Not Needed' | 'Completed';
   projectId: number;
   projectName: string;
   speciesId: number;
@@ -1009,7 +955,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-17T22:25:39.037Z
+                at 2026-11-17T22:54:37.634Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
