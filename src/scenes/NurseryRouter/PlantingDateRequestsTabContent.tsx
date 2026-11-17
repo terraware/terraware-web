@@ -2,7 +2,6 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Dropdown, DropdownItem } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -18,8 +17,11 @@ import {
   useLazyListPlantingDateRequestsQuery,
 } from 'src/queries/search/plantingDateRequests';
 import { getMediumDate } from 'src/utils/dateFormatter';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingDateRequestFulfillmentBadge from './PlantingDateRequestFulfillmentBadge';
+import RequestedSpeciesBottomSheet from './RequestedSpeciesBottomSheet';
+import RequestedSpeciesDrawer from './RequestedSpeciesDrawer';
 import RequestedSpeciesModal from './RequestedSpeciesModal';
 import WithdrawFromBatchesModal from './WithdrawFromBatchesModal';
 
@@ -32,6 +34,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { species } = useOrganizationSpecies();
+  const { isMobile, isTablet } = useDeviceInfo();
   const organizationId = selectedOrganization?.id;
 
   const [statusFilter, setStatusFilter] = useState<StatusFilterValue>(ALL_OPEN_FILTER);
@@ -260,14 +263,23 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
         ))
       )}
       {isPreparingWithdraw && <BusySpinner withSkrim />}
-      {quantitiesRequest && (
-        <RequestedSpeciesModal
-          open={true}
-          onClose={() => setQuantitiesRequest(undefined)}
-          onWithdrawClick={() => void handleWithdrawClick(quantitiesRequest)}
-          request={quantitiesRequest}
-        />
-      )}
+      {quantitiesRequest &&
+        (() => {
+          const quantitiesProps = {
+            open: true,
+            onClose: () => setQuantitiesRequest(undefined),
+            onWithdrawClick: () => void handleWithdrawClick(quantitiesRequest),
+            request: quantitiesRequest,
+          };
+          if (isMobile) {
+            return <RequestedSpeciesBottomSheet {...quantitiesProps} />;
+          }
+          return isTablet ? (
+            <RequestedSpeciesDrawer {...quantitiesProps} />
+          ) : (
+            <RequestedSpeciesModal {...quantitiesProps} />
+          );
+        })()}
       {withdrawRequest && (
         <WithdrawFromBatchesModal
           open={true}
@@ -295,13 +307,40 @@ const PlantingDateRequestListItem = ({
   onViewQuantitiesClick,
 }: PlantingDateRequestListItemProps): JSX.Element => {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
-  const [showAllSpecies, setShowAllSpecies] = useState(false);
+  const { isMobile, isTablet } = useDeviceInfo();
   const { strings } = useLocalization();
 
-  const speciesPreviewLimit = 4;
-  const displayedSpecies = showAllSpecies ? row.speciesNames : row.speciesNames.slice(0, speciesPreviewLimit);
-  const hasMore = row.speciesNames.length > speciesPreviewLimit;
+  // How many names fit before "and N more", by breakpoint.
+  const namePreviewLimit = isMobile ? 3 : isTablet ? 4 : 6;
+  const speciesText = useMemo(() => {
+    const names = row.speciesNames.toSorted((a, b) => a.localeCompare(b, activeLocale || undefined));
+    const shown = names.slice(0, namePreviewLimit).join(', ');
+    const remaining = names.length - namePreviewLimit;
+    return remaining > 0 ? strings.formatString(strings.X_AND_N_MORE, shown, `${remaining}`).toString() : shown;
+  }, [activeLocale, namePreviewLimit, row.speciesNames, strings]);
+
+  const statsRow = (
+    <Box
+      display='flex'
+      gap={theme.spacing(isMobile ? 1 : 3)}
+      alignItems='flex-start'
+      width={isMobile ? '100%' : undefined}
+      justifyContent={isMobile ? 'space-between' : undefined}
+    >
+      <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />
+      <NumberColumn label={strings.REQUESTED_PLANTS} value={row.requestedPlants} activeLocale={activeLocale} />
+      <NumberColumn
+        label={strings.WITHDRAWN_PLANTS}
+        value={row.withdrawnPlants}
+        activeLocale={activeLocale}
+        to={
+          row.withdrawnPlants > 0
+            ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`
+            : undefined
+        }
+      />
+    </Box>
+  );
 
   return (
     <Box
@@ -337,54 +376,42 @@ const PlantingDateRequestListItem = ({
           </Box>
         )}
         <Box marginTop={theme.spacing(1)}>
-          <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary} component='span'>
-            {displayedSpecies.join(', ')}
+          <Typography fontSize='16px' fontStyle='italic' color={theme.palette.TwClrTxtSecondary} component='span'>
+            {speciesText}
           </Typography>
-          {hasMore && !showAllSpecies && (
-            <Typography
+          <Box
+            component={isMobile ? 'div' : 'span'}
+            marginLeft={isMobile ? 0 : theme.spacing(1)}
+            display={isMobile ? 'flex' : 'inline'}
+          >
+            <Link
               fontSize='14px'
-              color={theme.palette.TwClrTxtBrand}
-              component='span'
-              sx={{ marginLeft: theme.spacing(1), cursor: 'pointer' }}
-              onClick={() => setShowAllSpecies(true)}
+              onClick={onViewQuantitiesClick}
+              style={
+                isMobile
+                  ? { textDecoration: 'underline', minHeight: '44px', display: 'inline-flex', alignItems: 'center' }
+                  : { textDecoration: 'underline' }
+              }
             >
-              {strings.SEE_MORE}
-            </Typography>
-          )}
-          <Box component='span' marginLeft={theme.spacing(1)}>
-            <Link fontSize='14px' onClick={onViewQuantitiesClick} style={{ textDecoration: 'underline' }}>
               {strings.VIEW_QUANTITIES}
             </Link>
           </Box>
         </Box>
+        {isTablet && <Box marginTop={theme.spacing(2)}>{statsRow}</Box>}
       </Box>
 
       <Box
         display='flex'
-        flexDirection='column'
+        flexDirection={isMobile ? 'column-reverse' : 'column'}
         alignItems={isMobile ? 'flex-start' : 'flex-end'}
         gap={theme.spacing(2)}
+        width={isMobile ? '100%' : undefined}
       >
         <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
           <PlantingDateRequestFulfillmentBadge status={row.status} />
-          {row.status !== 'Fulfilled' && (
-            <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
-          )}
+          <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
         </Box>
-        <Box display='flex' gap={theme.spacing(3)} alignItems='flex-start'>
-          <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />
-          <NumberColumn label={strings.REQUESTED_PLANTS} value={row.requestedPlants} activeLocale={activeLocale} />
-          <NumberColumn
-            label={strings.WITHDRAWN_PLANTS}
-            value={row.withdrawnPlants}
-            activeLocale={activeLocale}
-            to={
-              row.withdrawnPlants > 0
-                ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`
-                : undefined
-            }
-          />
-        </Box>
+        {!isTablet && statsRow}
       </Box>
     </Box>
   );

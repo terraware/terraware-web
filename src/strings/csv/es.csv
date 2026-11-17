@@ -1407,6 +1407,7 @@ NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
 NOT_SET,No establecido,6b047afe
+NOT_STARTED,No iniciado,de481428
 NOT_SUBMITTED,No se ha enviado,e40a2b1d
 NOT_VERIFIED,No verificado,fbd9066a
 NOT_WITHDRAWN_TO_DATE,No retirado hasta la fecha,bbb78c00
@@ -2014,6 +2015,7 @@ REQUEST_UPDATE_ACTION,Solicitar actualización...,790ef713
 REQUEST_UPDATE_REASON,Indique el motivo por el que solicita la actualización.,52430788
 REQUESTED,Solicitado,17e828cc
 REQUESTED_PLANTS,Plantas solicitadas,4c4fac82
+REQUESTED_X,Solicitado {0},d71a2203
 REQUESTS_X,Solicitudes ({0}),b70edf58
 REQUIRED,Obligatorio,ede65856
 REQUIRED_FIELD,Campo obligatorio,4e1802b3
@@ -2940,6 +2942,7 @@ WITHDRAWN_FOR_PLANTING,Retirado para plantación,dd024a58
 WITHDRAWN_PLANTS,Plantas retiradas,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Excede la cantidad restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La cantidad de retiro tiene que ser mayor de 0.,75e6b589
+WITHDRAWN_X,Retirado {0},0bf8078d
 WOOD_DENSITY_LEVEL,Nivel de densidad de la madera,83a6a766
 WOODY_SPECIES,Especies leñosas,362f68d0
 WORDS,Palabras,45f70926
@@ -2951,6 +2954,7 @@ WORKSHOPS,Talleres,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,¿Desea continuar?,9ca4c77f
 X_ACCESSION,{0} Accesión,cfd54196
 X_ACCESSIONS,{0} Accesiones,e8ccdbc4
+X_AND_N_MORE,{0} y {1} más,582a270c
 X_BATCH,{0} lote,9d74cde8
 X_BATCHES,{0} lotes,a7a1d48d
 X_COMPLETED_Y,{0} (completado el {1}),801c7a02
@@ -2969,12 +2973,14 @@ X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plantas,8cb7c65d
 X_PLOT,{0} parcela,69151ad1
 X_PLOTS,{0} parcelas,af2dd663
+X_REQUESTED,{0} solicitados,e7603259
 X_SCHEDULED_Y,{0} (programado para el {1}),ee2e9f83
 X_SPECIES,{0} especies,42e62955
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 X_STILL_IN_THIS_STAGE,{0} aún en esta etapa,6e034985
 X_TARGET,Meta {0},d8170b6e
 X_THIS_QUARTER,{0} este trimestre,6391f6a0
+X_WITHDRAWN,{0} retirados,d3f3ea43
 YEARLY_CUMULATIVE,Acumulativo anual,ed9a120d
 YES,Sí,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Aceptaste los términos el {0}.,b2a20246

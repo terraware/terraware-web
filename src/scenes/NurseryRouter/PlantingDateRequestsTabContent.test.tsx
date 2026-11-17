@@ -9,11 +9,15 @@ import PlantingDateRequestsTabContent from 'src/scenes/NurseryRouter/PlantingDat
 import strings from 'src/strings';
 import { dialogTitled, mockGet, renderWithProviders, selectDropdownOption, server } from 'src/test-utils';
 
-/** Only the dialog reads this; the tab content gets its own device info from the component library. */
-let isDesktop: boolean;
+/** Which layout the tab renders: the dialog on desktop and tablet, the bottom sheet on mobile. */
+let device: 'desktop' | 'tablet' | 'mobile';
 rstest.mock('src/utils/useDeviceInfo', () => ({
   __esModule: true,
-  default: () => ({ isDesktop, isTablet: !isDesktop, isMobile: false }),
+  default: () => ({
+    isDesktop: device === 'desktop',
+    isTablet: device === 'tablet',
+    isMobile: device === 'mobile',
+  }),
 }));
 
 const buildRequest = (overrides: Record<string, unknown> = {}) => ({
@@ -84,8 +88,11 @@ const speciesRow = (dialog: HTMLElement, scientificName: string): HTMLElement =>
  */
 const columnsOf = (row: HTMLElement): (string | null)[] => Array.from(row.children).map((cell) => cell.textContent);
 
+/** Where an element sits in document order, for asserting which block of the card it landed in. */
+const domOrder = (element: Element): number => Array.from(document.querySelectorAll('*')).indexOf(element);
+
 beforeEach(() => {
-  isDesktop = true;
+  device = 'desktop';
   searchRequests = [];
   searchResults = [buildRequest()];
 
@@ -140,7 +147,7 @@ describe('PlantingDateRequestsTabContent', () => {
     expect(screen.getByText(strings.FULFILLED)).toBeInTheDocument();
   });
 
-  it('offers Withdraw on open requests but not on fulfilled ones', async () => {
+  it('offers Withdraw on every request, fulfilled ones included', async () => {
     searchResults = [
       buildRequest({ status: 'Pending' }),
       buildRequest({ date: '2026-06-11', status: 'Partial' }),
@@ -150,7 +157,40 @@ describe('PlantingDateRequestsTabContent', () => {
     renderWithProviders(<PlantingDateRequestsTabContent />);
 
     await screen.findByText(strings.FULFILLED);
-    expect(screen.getAllByRole('button', { name: strings.WITHDRAW })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: strings.WITHDRAW })).toHaveLength(3);
+  });
+
+  it('lists the species alphabetically, trimmed to what the width fits', async () => {
+    const names = ['Sophora chrysophylla', 'Acacia koa', 'Metrosideros polymorpha', 'Dodonaea viscosa'];
+    searchResults = [
+      buildRequest({
+        plantingDateRequestSpecies: names.map((name, index) => buildRequestedSpecies(`${index + 1}`, name, 10)),
+      }),
+    ];
+
+    renderWithProviders(<PlantingDateRequestsTabContent />);
+
+    // Six names fit on a desktop, so all four show and nothing is held back.
+    expect(await screen.findByText(names.toSorted((a, b) => a.localeCompare(b)).join(', '))).toBeInTheDocument();
+  });
+
+  it('holds the overflowing names behind a count once the width runs out', async () => {
+    const names = ['Sophora chrysophylla', 'Acacia koa', 'Metrosideros polymorpha', 'Dodonaea viscosa'];
+    device = 'mobile';
+    searchResults = [
+      buildRequest({
+        plantingDateRequestSpecies: names.map((name, index) => buildRequestedSpecies(`${index + 1}`, name, 10)),
+      }),
+    ];
+
+    renderWithProviders(<PlantingDateRequestsTabContent />);
+
+    // Three names fit below 768px, leaving one behind.
+    expect(
+      await screen.findByText(
+        String(strings.formatString(strings.X_AND_N_MORE, 'Acacia koa, Dodonaea viscosa, Metrosideros polymorpha', '1'))
+      )
+    ).toBeInTheDocument();
   });
 
   it('tells the user which empty list they are looking at', async () => {
@@ -201,7 +241,7 @@ describe('PlantingDateRequestsTabContent', () => {
         'Metrosideros polymorpha',
         '2,500',
         '600',
-        strings.PARTIALLY_FULFILLED,
+        `${String(strings.formatString(strings.X_LEFT, '1,900'))}${strings.PARTIALLY_FULFILLED}`,
       ]);
       expect(columnsOf(speciesRow(dialog, 'Zanthoxylum dipetalum'))).toEqual([
         'Zanthoxylum dipetalum',
@@ -243,17 +283,31 @@ describe('PlantingDateRequestsTabContent', () => {
       expect(within(total).getByText(strings.formatString(strings.X_LEFT, '100') as string)).toBeInTheDocument();
     });
 
-    it('drops the remaining count on narrower viewports, where it would crowd the status', async () => {
-      isDesktop = false;
-
+    it('closes on Escape, leaving focus back on the link that opened it', async () => {
       const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
 
+      const viewQuantities = await screen.findByRole('button', { name: strings.VIEW_QUANTITIES });
       const dialog = await openQuantities(user);
-      const total = within(dialog).getByText(strings.TOTAL).parentElement as HTMLElement;
 
-      expect(within(total).queryByText(/left/)).not.toBeInTheDocument();
-      expect(within(total).getByText('1,400')).toBeInTheDocument();
-      expect(within(total).getByText(strings.PARTIALLY_FULFILLED)).toBeInTheDocument();
+      // Focus has to actually be inside the dialog, or the assertion below proves nothing.
+      within(dialog).getByRole('button', { name: strings.WITHDRAW }).focus();
+      expect(viewQuantities).not.toHaveFocus();
+
+      await user.keyboard('{Escape}');
+
+      await waitFor(() =>
+        expect(screen.queryByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).not.toBeInTheDocument()
+      );
+      expect(viewQuantities).toHaveFocus();
+    });
+
+    it('keeps the stats in the right-hand block, after the status and Withdraw', async () => {
+      renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const stats = await screen.findByText(strings.REQUESTED_PLANTS);
+      const withdraw = screen.getByRole('button', { name: strings.WITHDRAW });
+
+      expect(domOrder(stats)).toBeGreaterThan(domOrder(withdraw));
     });
 
     it('offers a withdrawal for a request that is still open', async () => {
@@ -264,7 +318,7 @@ describe('PlantingDateRequestsTabContent', () => {
       expect(within(dialog).getByRole('button', { name: strings.WITHDRAW })).toBeInTheDocument();
     });
 
-    it('offers no withdrawal and leaves nothing outstanding for a fulfilled request', async () => {
+    it('leaves nothing outstanding on a fulfilled request, but still offers a withdrawal', async () => {
       searchResults = [
         buildPartiallyWithdrawnRequest({
           status: 'Fulfilled',
@@ -277,10 +331,163 @@ describe('PlantingDateRequestsTabContent', () => {
       const dialog = await openQuantities(user);
       const total = within(dialog).getByText(strings.TOTAL).parentElement as HTMLElement;
 
-      expect(within(dialog).queryByRole('button', { name: strings.WITHDRAW })).not.toBeInTheDocument();
-      expect(within(dialog).getByRole('button', { name: strings.CLOSE })).toBeInTheDocument();
-      expect(within(total).queryByText(strings.formatString(strings.X_LEFT, '0') as string)).not.toBeInTheDocument();
+      expect(within(dialog).queryByText(/left/)).not.toBeInTheDocument();
       expect(within(total).getByText(strings.FULFILLED)).toBeInTheDocument();
+      expect(within(dialog).getByRole('button', { name: strings.WITHDRAW })).toBeInTheDocument();
+      expect(within(dialog).getByRole('button', { name: strings.CLOSE })).toBeInTheDocument();
+    });
+  });
+
+  describe('requested species drawer on tablet', () => {
+    beforeEach(() => {
+      device = 'tablet';
+      searchResults = [buildPartiallyWithdrawnRequest()];
+    });
+
+    const openDrawer = async (user: UserEvent): Promise<HTMLElement> => {
+      await user.click(await screen.findByRole('button', { name: strings.VIEW_QUANTITIES }));
+      return (await screen.findByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).closest(
+        '.MuiDrawer-paper'
+      ) as HTMLElement;
+    };
+
+    it('puts the stats under the species list, leaving the status and Withdraw above them', async () => {
+      renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const viewQuantities = await screen.findByRole('button', { name: strings.VIEW_QUANTITIES });
+      const stats = screen.getByText(strings.REQUESTED_PLANTS);
+      const withdraw = screen.getByRole('button', { name: strings.WITHDRAW });
+
+      // The stats moved out of the block the status and Withdraw sit in, into the one holding the
+      // species list, so they now follow the link and precede the Withdraw instead of trailing it.
+      expect(domOrder(stats)).toBeGreaterThan(domOrder(viewQuantities));
+      expect(domOrder(stats)).toBeLessThan(domOrder(withdraw));
+    });
+
+    it('opens as a drawer keeping the dialog table, and says which request it is for', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const drawer = await openDrawer(user);
+
+      expect(
+        within(drawer).getByText(
+          `${String(strings.formatString(strings.X_SPECIES, '3'))} · Jun 8, 2026 · Winter · Abrewatia Hills`
+        )
+      ).toBeInTheDocument();
+      expect(columnsOf(speciesRow(drawer, 'Metrosideros polymorpha'))).toEqual([
+        'Metrosideros polymorpha',
+        '2,500',
+        '600',
+        strings.PARTIALLY_FULFILLED,
+      ]);
+    });
+
+    it('drops the remaining count, which would crowd the narrower status column', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const drawer = await openDrawer(user);
+      const total = within(drawer).getByText(strings.TOTAL).parentElement as HTMLElement;
+
+      expect(within(total).queryByText(/left/)).not.toBeInTheDocument();
+      expect(within(total).getByText('4,500')).toBeInTheDocument();
+      expect(within(total).getByText('1,400')).toBeInTheDocument();
+      expect(within(total).getByText(strings.PARTIALLY_FULFILLED)).toBeInTheDocument();
+    });
+
+    it('closes or withdraws from the foot of the drawer', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const drawer = await openDrawer(user);
+
+      expect(within(drawer).getByRole('button', { name: strings.WITHDRAW })).toBeInTheDocument();
+
+      // The header's X carries the same accessible name, so reach the footer button by its label.
+      await user.click(within(drawer).getByText(strings.CLOSE));
+
+      await waitFor(() =>
+        expect(screen.queryByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).not.toBeInTheDocument()
+      );
+    });
+  });
+
+  describe('requested species bottom sheet on mobile', () => {
+    beforeEach(() => {
+      device = 'mobile';
+      searchResults = [buildPartiallyWithdrawnRequest()];
+    });
+
+    const openSheet = async (user: UserEvent): Promise<HTMLElement> => {
+      await user.click(await screen.findByRole('button', { name: strings.VIEW_QUANTITIES }));
+      return (await screen.findByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).closest(
+        '.MuiDrawer-paper'
+      ) as HTMLElement;
+    };
+
+    /** The sheet's two-line entry for a species: the name's row and the quantities beneath it. */
+    const speciesEntry = (sheet: HTMLElement, scientificName: string): HTMLElement =>
+      within(sheet).getByText(scientificName).parentElement?.parentElement as HTMLElement;
+
+    it('opens as a sheet, headed by the same subtitle as the dialog', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const sheet = await openSheet(user);
+
+      expect(
+        within(sheet).getByText(
+          `${String(strings.formatString(strings.X_SPECIES, '3'))} · Jun 8, 2026 · Winter · Abrewatia Hills`
+        )
+      ).toBeInTheDocument();
+    });
+
+    it('gives each species two lines, with the dialog pills and the count still owed', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const sheet = await openSheet(user);
+
+      expect(within(speciesEntry(sheet, 'Acacia koa')).getByText(strings.NEW)).toBeInTheDocument();
+      expect(within(speciesEntry(sheet, 'Zanthoxylum dipetalum')).getByText(strings.FULFILLED)).toBeInTheDocument();
+
+      const partial = speciesEntry(sheet, 'Metrosideros polymorpha');
+      expect(within(partial).getByText(strings.PARTIALLY_FULFILLED)).toBeInTheDocument();
+      expect(within(partial).getByText('2,500').parentElement?.textContent).toBe(
+        String(strings.formatString(strings.REQUESTED_X, '2,500'))
+      );
+      expect(within(partial).getByText('600').parentElement?.textContent).toBe(
+        String(strings.formatString(strings.WITHDRAWN_X, '600'))
+      );
+      expect(within(partial).getByText(String(strings.formatString(strings.X_LEFT, '1,900')))).toBeInTheDocument();
+    });
+
+    it('totals the request along the foot of the sheet, with the count still owed', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const sheet = await openSheet(user);
+      const footer = within(sheet).getByRole('button', { name: strings.WITHDRAW }).parentElement as HTMLElement;
+
+      expect(footer.textContent).toBe(
+        [
+          String(strings.formatString(strings.X_REQUESTED, '4,500')),
+          String(strings.formatString(strings.X_WITHDRAWN, '1,400')),
+          String(strings.formatString(strings.X_LEFT, '3,100')),
+        ].join(' · ') + strings.WITHDRAW
+      );
+    });
+
+    it('still offers a withdrawal from the sheet for a fulfilled request', async () => {
+      searchResults = [
+        buildPartiallyWithdrawnRequest({
+          status: 'Fulfilled',
+          withdrawals: [buildWithdrawal('7', 1200), buildWithdrawal('8', 2500), buildWithdrawal('9', 800)],
+        }),
+      ];
+
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const sheet = await openSheet(user);
+
+      expect(within(sheet).getByRole('button', { name: strings.WITHDRAW })).toBeInTheDocument();
+      expect(within(sheet).getAllByText(strings.FULFILLED)).toHaveLength(3);
+      expect(within(sheet).queryByText(/left/)).not.toBeInTheDocument();
     });
   });
 });
