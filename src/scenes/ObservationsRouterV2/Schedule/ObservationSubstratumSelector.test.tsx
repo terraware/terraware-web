@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { rstest } from '@rstest/core';
+import { act, screen, waitFor } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
+import { api } from 'src/queries/generated/plantingSites';
 import ObservationSubstratumSelector from 'src/scenes/ObservationsRouterV2/Schedule/ObservationSubstratumSelector';
 import { MonitoringType } from 'src/scenes/ObservationsRouterV2/Schedule/monitoringTypes';
 import strings from 'src/strings';
@@ -76,6 +78,213 @@ const plotsAssigned = (total: number, temporary: number, permanent: number) => {
 };
 
 describe('ObservationSubstratumSelector', () => {
+  it.each(['Baseline Survey', 'Monitoring', 'Biomass Measurements'] as const)(
+    'keeps Select All in sync with individual and stratum selections for %s',
+    async (monitoringType) => {
+      mockGet(SITE_URL, { site });
+      mockGet('/api/v1/tracking/sites/reportedPlants', { sites: [] });
+      const { user } = renderWithProviders(
+        <ObservationSubstratumSelector
+          monitoringType={monitoringType}
+          plantingSiteId={1}
+          onChangeSelectedSubstrata={() => undefined}
+          preselectBaselineSubstrata
+        />
+      );
+      await screen.findByLabelText('Ewe Highlands');
+      const selectAll = screen.getByLabelText(strings.SELECT_ALL);
+      await waitFor(() => expect(selectAll).toBeChecked());
+      for (const checkbox of [screen.getAllByLabelText('North')[0], screen.getByLabelText('Ewe Highlands')]) {
+        expect(selectAll).toBeChecked();
+        await user.click(checkbox);
+        expect(selectAll).not.toBeChecked();
+        await user.click(checkbox);
+        expect(selectAll).toBeChecked();
+        await user.click(checkbox);
+        await user.click(selectAll);
+        expect(selectAll).toBeChecked();
+        expect(checkbox).toBeChecked();
+        expect(screen.getAllByLabelText('South')[0]).toBeChecked();
+      }
+      await user.click(selectAll);
+      expect(selectAll).not.toBeChecked();
+      expect(screen.getByLabelText('Ewe Highlands')).not.toBeChecked();
+    }
+  );
+
+  it('starts Baseline reschedules with all substrata selected even when Baselines exist', async () => {
+    renderSelector(
+      'Baseline Survey',
+      buildPlantingSite({
+        strata: [
+          buildStratum({
+            substrata: [
+              buildSubstratum({ name: 'Covered', latestBaselineSurveyStatus: 'Completed' }),
+              buildSubstratum({ id: 2, name: 'Uncovered' }),
+            ],
+          }),
+        ],
+      })
+    );
+    expect(await screen.findByLabelText('Covered')).toBeChecked();
+    expect(screen.getByLabelText('Uncovered')).toBeChecked();
+    expect(screen.getByLabelText(strings.SELECT_ALL)).toBeChecked();
+  });
+
+  it('preselects only uncovered Baseline substrata on type changes and preserves manual edits and refreshes', async () => {
+    const baselineSite = {
+      ...buildPlantingSite(),
+      strata: [
+        {
+          ...buildStratum(),
+          substrata: [
+            { ...buildSubstratum({ id: 11, name: 'Uncovered' }), latestBaselineSurveyStatus: null },
+            buildSubstratum({ id: 12, name: 'Absent' }),
+            ...(['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned'] as const).map((status, index) =>
+              buildSubstratum({ id: index + 20, name: status, latestBaselineSurveyStatus: status })
+            ),
+          ],
+        },
+      ],
+    };
+    mockGet(SITE_URL, { site: baselineSite });
+    mockGet('/api/v1/tracking/sites/reportedPlants', { sites: [] });
+    const onChange = rstest.fn();
+    const selector = (type: MonitoringType) => (
+      <ObservationSubstratumSelector
+        monitoringType={type}
+        onChangeSelectedSubstrata={onChange}
+        plantingSiteId={1}
+        preselectBaselineSubstrata
+      />
+    );
+    const { rerender, user, store } = renderWithProviders(selector('Monitoring'));
+    expect(await screen.findByLabelText('Uncovered')).toBeChecked();
+    await user.click(screen.getByLabelText('Completed'));
+    rerender(selector('Baseline Survey'));
+    await waitFor(() => expect(screen.getByLabelText('Uncovered')).toBeChecked());
+    expect(screen.getByLabelText('Absent')).toBeChecked();
+    for (const status of ['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned']) {
+      expect(screen.getByLabelText(status)).not.toBeChecked();
+    }
+    expect(onChange).toHaveBeenLastCalledWith([11, 12]);
+    await user.click(screen.getByLabelText('Uncovered'));
+    await user.click(screen.getByLabelText('Completed'));
+    act(() => {
+      store.dispatch(
+        api.util.updateQueryData('getPlantingSite', { id: 1, includeZones: false }, (data) => {
+          data.site.name = 'Refreshed';
+        })
+      );
+    });
+    expect(screen.getByLabelText('Uncovered')).not.toBeChecked();
+    expect(screen.getByLabelText('Completed')).toBeChecked();
+    for (const type of ['Monitoring', 'Biomass Measurements'] as const) {
+      rerender(selector(type));
+      expect(screen.getByLabelText('Uncovered')).not.toBeChecked();
+      expect(screen.getByLabelText('Completed')).toBeChecked();
+    }
+    rerender(selector('Baseline Survey'));
+    await waitFor(() => expect(screen.getByLabelText('Uncovered')).toBeChecked());
+    expect(screen.getByLabelText('Completed')).not.toBeChecked();
+  });
+
+  it('waits for site data and reapplies Baseline defaults when the site changes', async () => {
+    let finishLoading: () => void = () => undefined;
+    const pending = new Promise<void>((resolve) => {
+      finishLoading = resolve;
+    });
+    mockGet(SITE_URL, { site });
+    mockGet('/api/v1/tracking/sites/reportedPlants', { sites: [] });
+    server.use(
+      http.get('/api/v1/tracking/sites/2', async () => {
+        await pending;
+        return HttpResponse.json({
+          status: 'ok',
+          site: buildPlantingSite({
+            id: 2,
+            strata: [
+              buildStratum({
+                substrata: [
+                  buildSubstratum({ id: 31, name: 'New uncovered' }),
+                  buildSubstratum({ id: 32, name: 'New covered', latestBaselineSurveyStatus: 'Completed' }),
+                ],
+              }),
+            ],
+          }),
+        });
+      })
+    );
+    const selector = (id: number) => (
+      <ObservationSubstratumSelector
+        monitoringType='Baseline Survey'
+        onChangeSelectedSubstrata={() => undefined}
+        plantingSiteId={id}
+        preselectBaselineSubstrata
+      />
+    );
+    const { rerender, user } = renderWithProviders(selector(1));
+    await waitFor(() => expect(screen.getByLabelText(strings.SELECT_ALL)).toBeChecked());
+    await user.click(screen.getByLabelText(strings.SELECT_ALL));
+    rerender(selector(2));
+    expect(screen.queryByLabelText('New uncovered')).not.toBeInTheDocument();
+    finishLoading();
+    await waitFor(() => expect(screen.getByLabelText('New uncovered')).toBeChecked());
+    expect(screen.getByLabelText('New covered')).not.toBeChecked();
+    await user.click(screen.getByLabelText(strings.SELECT_ALL));
+    expect(screen.getByLabelText('New covered')).toBeChecked();
+    await user.click(screen.getByLabelText(strings.SELECT_ALL));
+    expect(screen.getByLabelText('New uncovered')).not.toBeChecked();
+    rerender(selector(1));
+    await waitFor(() => expect(screen.getByLabelText(strings.SELECT_ALL)).toBeChecked());
+  });
+
+  it('leaves every substratum unchecked when all Baselines already exist', async () => {
+    mockGet(SITE_URL, {
+      site: buildPlantingSite({
+        strata: [
+          buildStratum({ substrata: [buildSubstratum({ name: 'Covered', latestBaselineSurveyStatus: 'Abandoned' })] }),
+        ],
+      }),
+    });
+    mockGet('/api/v1/tracking/sites/reportedPlants', { sites: [] });
+    const onChange = rstest.fn();
+    renderWithProviders(
+      <ObservationSubstratumSelector
+        monitoringType='Baseline Survey'
+        plantingSiteId={1}
+        onChangeSelectedSubstrata={onChange}
+        preselectBaselineSubstrata
+      />
+    );
+    expect(await screen.findByLabelText('Covered')).not.toBeChecked();
+    expect(screen.getByLabelText(strings.SELECT_ALL)).not.toBeChecked();
+    expect(onChange).toHaveBeenLastCalledWith([]);
+  });
+
+  it('does not preselect substrata when the planting site request fails', async () => {
+    let requested = false;
+    server.use(
+      http.get(SITE_URL, () => {
+        requested = true;
+        return HttpResponse.json({ status: 'error' }, { status: 500 });
+      })
+    );
+    mockGet('/api/v1/tracking/sites/reportedPlants', { sites: [] });
+    const onChange = rstest.fn();
+    renderWithProviders(
+      <ObservationSubstratumSelector
+        monitoringType='Baseline Survey'
+        plantingSiteId={1}
+        onChangeSelectedSubstrata={onChange}
+        preselectBaselineSubstrata
+      />
+    );
+    await waitFor(() => expect(requested).toBe(true));
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    expect(onChange).toHaveBeenLastCalledWith([]);
+  });
+
   it.each(['loading', 'failed'])('omits planting coverage while reported plantings are %s', async (state) => {
     mockGet(SITE_URL, { site });
     let finishLoading: () => void = () => undefined;

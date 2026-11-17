@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Badge, Checkbox, Icon, Pill } from '@terraware/web-components';
@@ -23,6 +23,7 @@ interface ObservationSubstratumSelectorProps {
   monitoringType: MonitoringType;
   onChangeSelectedSubstrata: (requestedSubstratumIds: number[]) => void;
   plantingSiteId: number;
+  preselectBaselineSubstrata?: boolean;
 }
 
 const ObservationSubstratumSelector = ({
@@ -30,6 +31,7 @@ const ObservationSubstratumSelector = ({
   monitoringType,
   onChangeSelectedSubstrata,
   plantingSiteId,
+  preselectBaselineSubstrata = false,
 }: ObservationSubstratumSelectorProps) => {
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -55,6 +57,24 @@ const ObservationSubstratumSelector = ({
 
   const [selectAll, setSelectAll] = useState<boolean>(true);
   const [selectedSubstrata, setSelectedSubstrata] = useState<number[]>([]);
+  const baselineSelectionInitialized = useRef(false);
+  const previousPlantingSite = useRef<typeof plantingSite>(undefined);
+  const shouldPreselectBaseline = isBaseline && preselectBaselineSubstrata;
+  const substratumIds =
+    plantingSite?.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [];
+  const allSubstrataSelected = substratumIds.length > 0 && substratumIds.every((id) => selectedSubstrata.includes(id));
+
+  const onChangeSelectAll = useCallback(
+    (value: boolean) => {
+      setSelectAll(value);
+      setSelectedSubstrata(
+        value
+          ? (plantingSite?.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [])
+          : []
+      );
+    },
+    [plantingSite]
+  );
 
   const plotCountsFor = useCallback(
     (stratum: Stratum) =>
@@ -117,13 +137,26 @@ const ObservationSubstratumSelector = ({
   );
 
   useEffect(() => {
-    if (plantingSite) {
-      // Initialize all substratum selections
-      const initialSelectedSubstrata =
-        plantingSite.strata?.flatMap((stratum) => stratum.substrata.map((substratum) => substratum.id)) ?? [];
-      setSelectedSubstrata(selectAll ? initialSelectedSubstrata : []);
+    baselineSelectionInitialized.current = false;
+  }, [plantingSiteId, shouldPreselectBaseline]);
+
+  useEffect(() => {
+    if (!plantingSite || plantingSite.id !== plantingSiteId) {
+      return;
     }
-  }, [plantingSite, selectAll]);
+    const substrata = plantingSite.strata?.flatMap((stratum) => stratum.substrata) ?? [];
+    if (shouldPreselectBaseline) {
+      if (!baselineSelectionInitialized.current) {
+        baselineSelectionInitialized.current = true;
+        const selected = substrata.filter((substratum) => !substratum.latestBaselineSurveyStatus);
+        setSelectedSubstrata(selected.map((substratum) => substratum.id));
+        setSelectAll(selected.length > 0 && selected.length === substrata.length);
+      }
+    } else if (previousPlantingSite.current !== plantingSite) {
+      setSelectedSubstrata(selectAll ? substrata.map((substratum) => substratum.id) : []);
+    }
+    previousPlantingSite.current = plantingSite;
+  }, [plantingSite, plantingSiteId, selectAll, shouldPreselectBaseline]);
 
   useEffect(() => {
     onChangeSelectedSubstrata(selectedSubstrata);
@@ -189,8 +222,8 @@ const ObservationSubstratumSelector = ({
                 id='selectAll'
                 name='SelectAll'
                 label={strings.SELECT_ALL}
-                value={selectAll}
-                onChange={setSelectAll}
+                value={allSubstrataSelected}
+                onChange={onChangeSelectAll}
               />
             </Box>
             <Typography

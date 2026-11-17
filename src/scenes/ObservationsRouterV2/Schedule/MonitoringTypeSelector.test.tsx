@@ -206,6 +206,7 @@ describe('baseline scheduling form', () => {
       );
       expect(radioFor(strings.MEASURE_MY_SITE_BEFORE_PLANTING)).toBeChecked();
       expect(screen.getByRole('button', { name: strings.SAVE })).toBeEnabled();
+      await waitFor(() => expect(screen.getByLabelText(strings.SELECT_ALL)).toBeChecked());
 
       await user.click(screen.getByRole('button', { name: strings.SAVE }));
       expect(screen.getAllByText(strings.REQUIRED_FIELD).length).toBeGreaterThan(0);
@@ -264,9 +265,8 @@ describe('baseline scheduling form', () => {
     await user.click(
       await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
     );
-    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
-    await user.click(screen.getByLabelText('A'));
-    await user.click(screen.getByLabelText('C'));
+    await user.click(await screen.findByLabelText('A'));
+    expect(screen.getByLabelText('C')).toBeChecked();
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.getAllByText(strings.REQUIRED_FIELD).length).toBeGreaterThan(0);
     expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
@@ -303,7 +303,7 @@ describe('baseline scheduling form', () => {
       endDate,
       observationType: 'Baseline Survey',
       plantingSiteId: 1,
-      requestedSubstratumIds: [11, 13],
+      requestedSubstratumIds: [13, 11],
       startDate,
     });
   });
@@ -348,7 +348,7 @@ describe('baseline scheduling form', () => {
     await user.click(
       await screen.findByRole('radio', { name: (name) => name.includes(strings.MEASURE_MY_SITE_BEFORE_PLANTING) })
     );
-    expect(await screen.findByLabelText(strings.SELECT_ALL)).toBeChecked();
+    await user.click(await screen.findByLabelText(strings.SELECT_ALL));
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.queryByText(strings.OBSERVATION_SMALL_SITE_WARNING)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
