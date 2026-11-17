@@ -28,8 +28,9 @@ it.each(['targets', 'settings', 'matrix'] as const)(
     mockGet(`${path}/configs`, { configs: [] });
     mockGet('/api/v1/accelerator/reports/commonIndicators', { indicators: [] });
     mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', { indicators: [] });
-    for (const kind of ['project', 'common', 'autoCalculated'])
+    for (const kind of ['project', 'common', 'autoCalculated']) {
       mockGet(`${path}/${kind}IndicatorTargets`, { targets: [] });
+    }
     mockGet('/api/v1/users/me/savedTableViews', { views: [] });
     mockGet('/api/v1/document-producer/variables', { variables: [] });
     mockPost('/api/v1/search', { results: [] });
