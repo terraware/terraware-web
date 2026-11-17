@@ -121,9 +121,7 @@ describe('Reschedule observation page', () => {
     expect(screen.getByTestId('location')).toHaveTextContent(`/observations/schedule/${OBSERVATION_ID}`);
   });
 
-  // The reschedule form validates its dates but never shows the errors, so Save does nothing and
-  // the user is not told why.
-  it.skip('explains why the dates are refused', async () => {
+  it('explains why the dates are refused', async () => {
     const { user } = renderReschedulePage();
 
     await waitForObservation();
@@ -133,9 +131,7 @@ describe('Reschedule observation page', () => {
     expect(await screen.findByText(strings.INVALID_DATE)).toBeInTheDocument();
   });
 
-  // The form starts with empty dates instead of the observation's current ones, unlike the inline
-  // reschedule form in the scheduled observations menu.
-  it.skip("starts from the observation's current dates", async () => {
+  it("starts from the observation's current dates", async () => {
     const requests = captureRequests('put', OBSERVATION_URL);
     const { user } = renderReschedulePage();
 

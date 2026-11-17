@@ -106,6 +106,13 @@ export default function ScheduleObservationForm({
   const [requestedSubstratumIds, setRequestedSubstratumIds] = useState<number[]>();
   const [monitoringType, setMonitoringType] = useState<MonitoringType>('Monitoring');
 
+  const [loadedObservationId, setLoadedObservationId] = useState<number>();
+  if (targetObservation && targetObservation.id !== loadedObservationId) {
+    setLoadedObservationId(targetObservation.id);
+    setStartDate((current) => current ?? targetObservation.startDate);
+    setEndDate((current) => current ?? targetObservation.endDate);
+  }
+
   const upcomingObservationStartDates = useMemo(
     () => selectedSite?.upcomingObservationStartDates ?? {},
     [selectedSite?.upcomingObservationStartDates]
@@ -175,13 +182,14 @@ export default function ScheduleObservationForm({
     );
     let _substratumError: string = '';
 
+    setStartDateError(_startDateError);
+    setEndDateError(_endDateError);
+
     if (observationId === undefined) {
       if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
         _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
       }
 
-      setStartDateError(_startDateError);
-      setEndDateError(_endDateError);
       setSubstratumError(_substratumError);
       return _startDateError || _endDateError || _substratumError;
     } else {
