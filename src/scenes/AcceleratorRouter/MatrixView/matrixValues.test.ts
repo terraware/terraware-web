@@ -85,4 +85,5 @@ it('preserves numeric zero and keeps empty or hidden list values blank', () => {
   expect(buildMatrixValue('Number', '0')).toEqual({ type: 'Number', numberValue: 0 });
   expect(getMatrixValue({ ...row, variables: [{ ...row.variables[0], values: [] }] }, 'v')).toBe('');
   expect(getMatrixValue({ ...row, variables: [{ ...row.variables[0], isList: true }] }, 'v')).toBe('');
+  expect(getMatrixOptionIds({ ...row, variables: [{ ...row.variables[0], isList: true }] }, 'v')).toEqual([]);
 });
