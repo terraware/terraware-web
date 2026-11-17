@@ -18,7 +18,6 @@ import {
   useCreatePlantingSeasonMutation,
   useGetSpeciesTargetsQuery,
   useLazyListPlantingSeasonsQuery,
-  useUpsertSpeciesTargetMutation,
 } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSiteSpeciesTargetsQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
@@ -44,7 +43,6 @@ const AddPlantingSeasonModal = ({
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const snackbar = useSnackbar();
   const [createPlantingSeason] = useCreatePlantingSeasonMutation();
-  const [upsertSpeciesTarget] = useUpsertSpeciesTargetMutation();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const markSubmitted = useTrackModalAbandonment('planting_season_add', true);
   const navigate = useSyncNavigate();
@@ -199,23 +197,9 @@ const AddPlantingSeasonModal = ({
         fromPlantingSeasonId: selectedSourceSeasonId,
         name: name.trim(),
         plantingSiteId,
+        speciesTargets: selectedSourceSeasonId ? undefined : defaultSpeciesTargets,
         startDate,
       }).unwrap();
-
-      if (response.id && !selectedSourceSeasonId) {
-        try {
-          await Promise.all(
-            defaultSpeciesTargets.map((target) =>
-              upsertSpeciesTarget({
-                plantingSeasonId: response.id,
-                upsertPlantingSeasonSpeciesTargetRequestPayload: target,
-              }).unwrap()
-            )
-          );
-        } catch (e) {
-          snackbar.toastError();
-        }
-      }
 
       markSubmitted();
       onClose();
