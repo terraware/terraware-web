@@ -1,4 +1,4 @@
-import { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useState } from 'react';
 
 import { DatePicker as WebComponentsDatePicker } from '@terraware/web-components';
 import type { Props } from '@terraware/web-components/components/DatePicker/DatePicker';
@@ -26,5 +26,5 @@ export default function DatePicker(props: Props): JSX.Element {
     }
   }, [activeLocale, props, setPropsWithLocale]);
 
-  return WebComponentsDatePicker(propsWithLocale);
+  return <WebComponentsDatePicker {...propsWithLocale} />;
 }
