@@ -39,13 +39,13 @@ const RequestedSpeciesBottomSheet = ({
       PaperProps={{
         sx: {
           borderRadius: theme.spacing(1.5, 1.5, 0, 0),
-          maxHeight: '82vh',
+          maxHeight: ['82vh', '82dvh'],
           display: 'flex',
           flexDirection: 'column',
         },
       }}
     >
-      <Box display='flex' justifyContent='center' paddingTop={theme.spacing(1)}>
+      <Box display='flex' justifyContent='center' paddingTop={theme.spacing(1)} flexShrink={0}>
         <Box width='40px' height='4px' borderRadius='2px' sx={{ backgroundColor: theme.palette.TwClrBrdrSecondary }} />
       </Box>
 
@@ -55,11 +55,12 @@ const RequestedSpeciesBottomSheet = ({
         justifyContent='space-between'
         gap={theme.spacing(1)}
         padding={theme.spacing(1, 2, 2)}
+        flexShrink={0}
         sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
       >
         <Box>
           <Typography fontSize='20px' fontWeight={600}>
-            {strings.VIEW_REQUESTED_SPECIES_QUANTITIES}
+            {strings.VIEW_SPECIES_QUANTITIES}
           </Typography>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {subtitle}
@@ -70,7 +71,7 @@ const RequestedSpeciesBottomSheet = ({
         </IconButton>
       </Box>
 
-      <Box flex={1} sx={{ overflowY: 'auto' }}>
+      <Box flex={1} minHeight={0} sx={{ overflowY: 'auto' }}>
         {species.map((speciesDetail) => (
           <SpeciesEntry key={speciesDetail.speciesId} species={speciesDetail} />
         ))}
@@ -82,6 +83,7 @@ const RequestedSpeciesBottomSheet = ({
         justifyContent='space-between'
         gap={theme.spacing(2)}
         padding={theme.spacing(2)}
+        flexShrink={0}
         sx={{
           backgroundColor: theme.palette.TwClrBgSecondary,
           borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,

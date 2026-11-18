@@ -75,7 +75,7 @@ const statusesOf = (body: Record<string, any>): string[] =>
 
 const openQuantities = async (user: UserEvent): Promise<HTMLElement> => {
   await user.click(await screen.findByRole('button', { name: strings.VIEW_QUANTITIES }));
-  return dialogTitled(strings.VIEW_REQUESTED_SPECIES_QUANTITIES);
+  return dialogTitled(strings.VIEW_SPECIES_QUANTITIES);
 };
 
 /** The dialog row for a species, which is the only place its quantities are unambiguous. */
@@ -214,7 +214,7 @@ describe('PlantingDateRequestsTabContent', () => {
       const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
 
       await screen.findByRole('button', { name: strings.VIEW_QUANTITIES });
-      expect(screen.queryByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).not.toBeInTheDocument();
+      expect(screen.queryByText(strings.VIEW_SPECIES_QUANTITIES)).not.toBeInTheDocument();
 
       const dialog = await openQuantities(user);
 
@@ -295,9 +295,7 @@ describe('PlantingDateRequestsTabContent', () => {
 
       await user.keyboard('{Escape}');
 
-      await waitFor(() =>
-        expect(screen.queryByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).not.toBeInTheDocument()
-      );
+      await waitFor(() => expect(screen.queryByText(strings.VIEW_SPECIES_QUANTITIES)).not.toBeInTheDocument());
       expect(viewQuantities).toHaveFocus();
     });
 
@@ -346,9 +344,7 @@ describe('PlantingDateRequestsTabContent', () => {
 
     const openDrawer = async (user: UserEvent): Promise<HTMLElement> => {
       await user.click(await screen.findByRole('button', { name: strings.VIEW_QUANTITIES }));
-      return (await screen.findByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).closest(
-        '.MuiDrawer-paper'
-      ) as HTMLElement;
+      return (await screen.findByText(strings.VIEW_SPECIES_QUANTITIES)).closest('.MuiDrawer-paper') as HTMLElement;
     };
 
     it('puts the stats under the species list, leaving the status and Withdraw above them', async () => {
@@ -404,9 +400,7 @@ describe('PlantingDateRequestsTabContent', () => {
       // The header's X carries the same accessible name, so reach the footer button by its label.
       await user.click(within(drawer).getByText(strings.CLOSE));
 
-      await waitFor(() =>
-        expect(screen.queryByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).not.toBeInTheDocument()
-      );
+      await waitFor(() => expect(screen.queryByText(strings.VIEW_SPECIES_QUANTITIES)).not.toBeInTheDocument());
     });
   });
 
@@ -418,9 +412,7 @@ describe('PlantingDateRequestsTabContent', () => {
 
     const openSheet = async (user: UserEvent): Promise<HTMLElement> => {
       await user.click(await screen.findByRole('button', { name: strings.VIEW_QUANTITIES }));
-      return (await screen.findByText(strings.VIEW_REQUESTED_SPECIES_QUANTITIES)).closest(
-        '.MuiDrawer-paper'
-      ) as HTMLElement;
+      return (await screen.findByText(strings.VIEW_SPECIES_QUANTITIES)).closest('.MuiDrawer-paper') as HTMLElement;
     };
 
     /** The sheet's two-line entry for a species: the name's row and the quantities beneath it. */
