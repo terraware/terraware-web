@@ -47,6 +47,27 @@ export const matchesMatrixSelection = (
   return selectedNames.some((name) => options.some((option) => option.name === name));
 };
 
+export const matchesMatrixRange = (row: MatrixRow | { original: MatrixRow }, stableId: string, range: unknown) => {
+  const [min, max] = Array.isArray(range) ? range : [];
+  const absent = (bound: unknown) => bound === null || bound === undefined || bound === '';
+  if (absent(min) && absent(max)) {
+    return true;
+  }
+  const value = getMatrixValue('original' in row ? row.original : row, stableId);
+  const date = value instanceof Date;
+  const numeric = Number(value);
+  const normalize = (bound: unknown) => (date ? Date.parse(String(bound)) : Number(bound));
+  return (
+    value !== '' &&
+    Number.isFinite(numeric) &&
+    (absent(min) || numeric >= normalize(min)) &&
+    (absent(max) ||
+      (date && typeof max === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(max)
+        ? numeric < normalize(max) + 24 * 60 * 60 * 1000
+        : numeric <= normalize(max)))
+  );
+};
+
 export const buildMatrixValueOperation = (
   variable: MatrixVariable,
   value: NewNonSectionValuePayloadUnion

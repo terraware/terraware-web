@@ -5,6 +5,7 @@ import {
   buildMatrixValueOperation,
   getMatrixOptionIds,
   getMatrixValue,
+  matchesMatrixRange,
   matchesMatrixSelection,
 } from './matrixValues';
 
@@ -86,4 +87,25 @@ it('preserves numeric zero and keeps empty or hidden list values blank', () => {
   expect(getMatrixValue({ ...row, variables: [{ ...row.variables[0], values: [] }] }, 'v')).toBe('');
   expect(getMatrixValue({ ...row, variables: [{ ...row.variables[0], isList: true }] }, 'v')).toBe('');
   expect(getMatrixOptionIds({ ...row, variables: [{ ...row.variables[0], isList: true }] }, 'v')).toEqual([]);
+});
+
+it('round-trips open numeric and calendar-date ranges without losing zero or same-day timestamps', () => {
+  const numeric: MatrixRow = {
+    ...row,
+    variables: [{ ...row.variables[0], type: 'Number', values: [{ variableValueId: '3', 'numberValue(raw)': 0 }] }],
+  };
+  const dated: MatrixRow = {
+    ...row,
+    variables: [
+      { ...row.variables[0], type: 'Date', values: [{ variableValueId: '3', dateValue: '2026-01-01T12:00:00Z' }] },
+    ],
+  };
+  expect(matchesMatrixRange(numeric, 'v', JSON.parse(JSON.stringify([0, undefined])))).toBe(true);
+  expect(matchesMatrixRange({ original: numeric }, 'v', [null, 0])).toBe(true);
+  expect(matchesMatrixRange(numeric, 'v', [1, null])).toBe(false);
+  expect(matchesMatrixRange(dated, 'v', JSON.parse(JSON.stringify(['2026-01-01', undefined])))).toBe(true);
+  expect(matchesMatrixRange(dated, 'v', [null, '2026-01-01'])).toBe(true);
+  expect(matchesMatrixRange(dated, 'v', [null, '2026-01-01T00:00:00Z'])).toBe(false);
+  expect(matchesMatrixRange(dated, 'missing', [0, null])).toBe(false);
+  expect(matchesMatrixRange(dated, 'missing', [null, null])).toBe(true);
 });
