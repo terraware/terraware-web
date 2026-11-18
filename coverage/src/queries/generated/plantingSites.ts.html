@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.19% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/21</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.22% </span>
+                <span class="strong">88.88% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>13/18</span>
+                <span class='fraction'>16/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">76.19% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/21</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -786,8 +786,8 @@
 <a name='L721'></a><a href='#L721'>721</a>
 <a name='L722'></a><a href='#L722'>722</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">130x</span>
-<span class="cline-any cline-yes">130x</span>
+<span class="cline-any cline-yes">141x</span>
+<span class="cline-any cline-yes">141x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">179x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -819,19 +819,19 @@
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">104x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">118x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -859,7 +859,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1478,7 +1478,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">130x</span>
+<span class="cline-any cline-yes">141x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1504,7 +1504,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">130x</span>
+<span class="cline-any cline-yes">141x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { baseApi as api } from '../baseApi';
 &nbsp;
 const injectedRtkApi = api.injectEndpoints({
@@ -1540,7 +1540,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) =&gt; ({ url: `/api/v1/tracking/sites/validate`, method: 'POST', body: queryArg }),
     }),
     deletePlantingSite: build.mutation&lt;DeletePlantingSiteApiResponse, DeletePlantingSiteApiArg&gt;({
-      query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({ url: `/api/v1/tracking/sites/${queryArg}`, method: 'DELETE' }),</span></span>
+      query: (queryArg) =&gt; ({ url: `/api/v1/tracking/sites/${queryArg}`, method: 'DELETE' }),
     }),
     getPlantingSite: build.query&lt;GetPlantingSiteApiResponse, GetPlantingSiteApiArg&gt;({
       query: (queryArg) =&gt; ({
@@ -1552,7 +1552,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     updatePlantingSite: build.mutation&lt;UpdatePlantingSiteApiResponse, UpdatePlantingSiteApiArg&gt;({
-      query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+      query: (queryArg) =&gt; ({
         url: `/api/v1/tracking/sites/${queryArg.id}`,
         method: 'PUT',
         body: queryArg.updatePlantingSiteRequestPayload,
@@ -1580,7 +1580,7 @@ const injectedRtkApi = api.injectEndpoints({
       ListPlantingSiteHistoryEventsApiResponse,
       ListPlantingSiteHistoryEventsApiArg
     &gt;({
-      query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({ url: `/api/v1/tracking/sites/${queryArg}/history` }),</span></span>
+      query: (queryArg) =&gt; ({ url: `/api/v1/tracking/sites/${queryArg}/history` }),
     }),
     getPlantingSiteHistory: build.query&lt;GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg&gt;({
       query: <span class="fstat-no" title="function not covered" >(queryArg) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
@@ -2233,7 +2233,7 @@ export const {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T18:53:58.823Z
+                at 2026-11-18T19:52:01.182Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

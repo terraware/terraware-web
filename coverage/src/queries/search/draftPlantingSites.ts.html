@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.71% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/14</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.66% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/12</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.77% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/9</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.9% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -198,8 +198,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -219,7 +219,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -266,12 +266,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">48x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -316,9 +316,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { getUserDisplayName } from 'src/utils/user';
 &nbsp;
 import { baseApi as api } from '../baseApi';
@@ -395,18 +395,18 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       providesTags: (results) =&gt; [
-        ...(results?.map(<span class="fstat-no" title="function not covered" >(result) =&gt; <span class="cstat-no" title="statement not covered" >({ type: QueryTagTypes.DraftPlantingSites, id: result.id }))</span></span> ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>,
+        ...(results?.map((result) =&gt; ({ type: QueryTagTypes.DraftPlantingSites, id: result.id })) ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>,
         { type: QueryTagTypes.DraftPlantingSites, id: 'LIST' },
       ],
       transformResponse: (results: ListDraftPlantingSiteSummariesApiResponse) =&gt;
-        results.results.map(<span class="fstat-no" title="function not covered" >(result) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+        results.results.map((result) =&gt; ({
           createdByName: getUserDisplayName(result.createdBy),
           createdTime: result.createdTime,
           description: result.description,
           id: Number(result.id),
           name: result.name,
-          numStrata: result.numStrata ? Number(result.numStrata) : 0,
-          numSubstrata: result.numSubstrata ? Number(result.numSubstrata) : 0,
+          numStrata: result.numStrata ? <span class="branch-0 cbranch-no" title="branch not covered" >Number(result.numStrata) </span>: 0,
+          numSubstrata: result.numSubstrata ? <span class="branch-0 cbranch-no" title="branch not covered" >Number(result.numSubstrata) </span>: 0,
           projectId: Number(result.project_id),
           projectName: result.project_name,
           timeZoneId: result.timeZone,
@@ -454,7 +454,7 @@ export const { useLazyCountDraftPlantingSitesQuery, useLazySearchDraftPlantingSi
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T18:53:58.823Z
+                at 2026-11-18T19:52:01.182Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

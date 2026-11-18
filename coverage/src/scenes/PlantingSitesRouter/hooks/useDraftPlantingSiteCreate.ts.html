@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -124,28 +124,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useMemo } from 'react';
 &nbsp;
@@ -165,29 +165,29 @@ export type Response = {
 /**
  * Hook to create a draft planting site and continue its setup in the site editor.
  */
-export default function <span class="fstat-no" title="function not covered" >useDraftPlantingSiteCreate(</span>): Response {
-  const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
-  const snackbar = <span class="cstat-no" title="statement not covered" >useSnackbar();</span>
+export default function useDraftPlantingSiteCreate(): Response {
+  const navigate = useSyncNavigate();
+  const snackbar = useSnackbar();
 &nbsp;
-  const [createDraftPlantingSite, { isLoading: isCreating }] = <span class="cstat-no" title="statement not covered" >useCreateDraftPlantingSiteMutation();</span>
+  const [createDraftPlantingSite, { isLoading: isCreating }] = useCreateDraftPlantingSiteMutation();
 &nbsp;
-  const createDraft = <span class="cstat-no" title="statement not covered" >useCallback(</span>
-<span class="fstat-no" title="function not covered" >    (draft: DraftPlantingSite) =&gt; {</span>
-      const create = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async () =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >        try {</span>
-          const { id } = <span class="cstat-no" title="statement not covered" >await createDraftPlantingSite(fromDraft(draft)).unwrap();</span>
-<span class="cstat-no" title="statement not covered" >          navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`));</span>
+  const createDraft = useCallback(
+    (draft: DraftPlantingSite) =&gt; {
+      const create = async () =&gt; {
+        try {
+          const { id } = await createDraftPlantingSite(fromDraft(draft)).unwrap();
+          navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`));
         } catch {
-<span class="cstat-no" title="statement not covered" >          snackbar.toastError(strings.GENERIC_ERROR);</span>
+          snackbar.toastError(strings.GENERIC_ERROR);
         }
       };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      void create();</span>
+      void create();
     },
     [createDraftPlantingSite, navigate, snackbar]
   );
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return useMemo&lt;Response&gt;(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >({ createDraft, isCreating }),</span></span> [createDraft, isCreating]);</span>
+  return useMemo&lt;Response&gt;(() =&gt; ({ createDraft, isCreating }), [createDraft, isCreating]);
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -196,7 +196,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T18:53:58.823Z
+                at 2026-11-18T19:52:01.182Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

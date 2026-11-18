@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.72% </span>
+                <span class="strong">79.31% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/29</span>
+                <span class='fraction'>23/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.88% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/18</span>
+                <span class='fraction'>12/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/15</span>
+                <span class='fraction'>10/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">88% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/25</span>
+                <span class='fraction'>22/25</span>
             </div>
         
             
@@ -175,19 +175,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
-<span class="cline-any cline-yes">87x</span>
+<span class="cline-any cline-yes">665x</span>
+<span class="cline-any cline-yes">665x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">47x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
+<span class="cline-any cline-yes">665x</span>
+<span class="cline-any cline-yes">418x</span>
+<span class="cline-any cline-yes">665x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">665x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -210,24 +210,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">87x</span>
+<span class="cline-any cline-yes">665x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">665x</span>
+<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">665x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -239,7 +236,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,12 +271,12 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
   const { onTimeZoneSelected, selectedTimeZone, countryCode, disabled, label, tooltip, errorText } = props;
   const timeZones = useTimeZones();
 &nbsp;
-  const tzToDropdownItem = <span class="fstat-no" title="function not covered" >(tz?: TimeZoneDescription) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >    tz ? { label: tz.longName, value: tz.id } : { label: '', value: '' };</span>
+  const tzToDropdownItem = (tz?: TimeZoneDescription) =&gt;
+    tz ? { label: tz.longName, value: tz.id } : <span class="branch-1 cbranch-no" title="branch not covered" >{ label: '', value: '' };</span>
 &nbsp;
   const tzNameToDropdownItem = (tz?: string) =&gt; {
-    const foundTimeZone = timeZones.find(<span class="fstat-no" title="function not covered" >(iTtimeZone) =&gt; <span class="cstat-no" title="statement not covered" >iTtimeZone.id.toString() === tz?.toString())</span></span>;
-    return foundTimeZone ? <span class="branch-0 cbranch-no" title="branch not covered" >{ label: foundTimeZone.longName, value: foundTimeZone.id } </span>: { label: '', value: '' };
+    const foundTimeZone = timeZones.find((iTtimeZone) =&gt; iTtimeZone.id.toString() === tz?.toString());
+    return foundTimeZone ? { label: foundTimeZone.longName, value: foundTimeZone.id } : { label: '', value: '' };
   };
 &nbsp;
   const tzOptions: any[] = useMemo(() =&gt; {
@@ -303,26 +303,26 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
         // invalid country code
       }
     }
-    return timeZones.map(<span class="fstat-no" title="function not covered" >(tz) =&gt; <span class="cstat-no" title="statement not covered" >tzToDropdownItem(tz))</span></span>;
+    return timeZones.map((tz) =&gt; tzToDropdownItem(tz));
   }, [countryCode, timeZones]);
 &nbsp;
-  const onChangeTimeZone = <span class="fstat-no" title="function not covered" >(timeZone: any) =&gt; {</span>
-    const foundTimeZone = timeZones.find(<span class="fstat-no" title="function not covered" >(iTtimeZone) =&gt; <span class="cstat-no" title="statement not covered" >iTtimeZone.id.toString() === timeZone.value?.toString())</span></span>;
-<span class="cstat-no" title="statement not covered" >    if (foundTimeZone) {</span>
-<span class="cstat-no" title="statement not covered" >      onTimeZoneSelected(foundTimeZone);</span>
+  const onChangeTimeZone = (timeZone: any) =&gt; {
+    const foundTimeZone = timeZones.find((iTtimeZone) =&gt; iTtimeZone.id.toString() === timeZone.value?.toString());
+    <span class="missing-if-branch" title="else path not taken" >E</span>if (foundTimeZone) {
+      onTimeZoneSelected(foundTimeZone);
     }
   };
 &nbsp;
-  const isEqual = <span class="fstat-no" title="function not covered" >(optionA: any, optionB: any) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    return optionA?.value === optionB?.value;</span>
+  const isEqual = (optionA: any, optionB: any) =&gt; {
+    return optionA?.value === optionB?.value;
   };
 &nbsp;
-  return disabled ? <span class="branch-0 cbranch-no" title="branch not covered" >(</span>
+  return disabled ? (
     &lt;Textfield
       id='time-zone-selector-disabled'
       value={tzNameToDropdownItem(selectedTimeZone).label}
       type='text'
-      label={label || ''}
+      label={label || <span class="branch-1 cbranch-no" title="branch not covered" >''}</span>
       display={true}
       tooltipTitle={tooltip}
     /&gt;
@@ -332,7 +332,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       placeholder={strings.SELECT}
       selected={tzNameToDropdownItem(selectedTimeZone)}
       options={tzOptions}
-      onChange={<span class="fstat-no" title="function not covered" >(value) =&gt; <span class="cstat-no" title="statement not covered" >onChangeTimeZone(value)}</span></span>
+      onChange={(value) =&gt; onChangeTimeZone(value)}
       isEqual={isEqual}
       freeSolo={false}
       hideClearIcon={true}
@@ -349,7 +349,7 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T18:53:58.823Z
+                at 2026-11-18T19:52:01.182Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
