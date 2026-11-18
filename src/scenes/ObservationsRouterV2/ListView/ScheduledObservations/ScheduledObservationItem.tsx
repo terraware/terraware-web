@@ -48,9 +48,11 @@ const ScheduledObservationItem = ({
 
   const { dateRange, tag } = useMemo(() => {
     const locale = activeLocale || 'en-US';
-    const today = DateTime.now().setZone(timeZoneId).startOf('day').setLocale(locale);
-    const start = DateTime.fromISO(observation.startDate, { zone: timeZoneId }).setLocale(locale);
-    const end = DateTime.fromISO(observation.endDate, { zone: timeZoneId }).setLocale(locale);
+    // Compare calendar dates in UTC so days skipped or shortened by DST in the user's zone count as whole days.
+    const toCalendarDate = (isoDate: string) => DateTime.fromISO(isoDate, { zone: 'utc' }).setLocale(locale);
+    const today = toCalendarDate(DateTime.now().setZone(timeZoneId).toISODate()!);
+    const start = toCalendarDate(observation.startDate);
+    const end = toCalendarDate(observation.endDate);
 
     const daysOrMonths = (from: DateTime, to: DateTime): string => {
       const days = Math.max(Math.round(to.diff(from, 'days').days), 1);
