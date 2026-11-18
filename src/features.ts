@@ -4,13 +4,13 @@ import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName =
-  | 'Editable Table V2'
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Scheduled Biomass Monitoring Observations'
   | 'Baseline Survey'
   | 'Assign Plots When Scheduling'
-  | 'Nursery Batch Time Per Stage';
+  | 'Nursery Batch Time Per Stage'
+  | 'Editable Table V2';
 
 export type Feature = {
   name: FeatureName;
@@ -30,15 +30,6 @@ export type Feature = {
 
 // list of feature names and associated properties
 export const OPT_IN_FEATURES: Feature[] = [
-  {
-    name: 'Editable Table V2',
-    preferenceName: 'editableTableV2',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Use the new TanStack-based editable table component.'],
-    disclosure: ['This is a WIP'],
-  },
   {
     name: 'Show Production View',
     preferenceName: 'showProductionUIView',
@@ -96,6 +87,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Track how long nursery batches spend in each stage.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Editable Table V2',
+    preferenceName: 'editableTableV2',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Use the new TanStack-based editable table component.'],
     disclosure: ['This is a WIP'],
   },
 ];
