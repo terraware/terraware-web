@@ -48,7 +48,7 @@ test.describe('ObservationsTests', () => {
     await page.locator('button[aria-expanded]', { hasText: 'Overdue' }).click();
 
     // click reschedule on the first overdue observation
-    await page.getByText('Reschedule', { exact: true }).first().click();
+    await page.locator('#scheduled-observations-overdue').getByText('Reschedule', { exact: true }).first().click();
 
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Save' })).toBeVisible();

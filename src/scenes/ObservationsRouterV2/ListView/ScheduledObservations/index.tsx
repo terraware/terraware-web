@@ -1,4 +1,4 @@
-import React, { type JSX, type Ref, useCallback, useImperativeHandle, useMemo, useState } from 'react';
+import React, { type JSX, type Ref, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
@@ -85,8 +85,10 @@ const ScheduledObservationsMenu = ({
     setFlyoutOpen(false);
     setReschedulingId(undefined);
   }, [setFlyoutOpen]);
+  const panelSectionRef = useRef<ScheduledObservationSection>(undefined);
   const openPanel = useCallback(
     (section: ScheduledObservationSection) => {
+      panelSectionRef.current = section;
       setFlyoutOpen(false);
       setExpandedSections((current) => new Set(current).add(section));
       setPanelOpen(true);
@@ -98,15 +100,28 @@ const ScheduledObservationsMenu = ({
     setReschedulingId(undefined);
   }, []);
 
-  const toggleSection = useCallback((section: ScheduledObservationSection) => {
-    setExpandedSections((current) => {
-      const next = new Set(current);
-      if (!next.delete(section)) {
-        next.add(section);
-      }
-      return next;
-    });
+  const scrollToPanelSection = useCallback((node: HTMLElement) => {
+    node.querySelector(`[data-section="${panelSectionRef.current}"]`)?.scrollIntoView?.({ block: 'start' });
   }, []);
+
+  const toggleSection = useCallback(
+    (section: ScheduledObservationSection) => {
+      if (
+        expandedSections.has(section) &&
+        scheduledObservations[section].some((observation) => observation.id === reschedulingId)
+      ) {
+        setReschedulingId(undefined);
+      }
+      setExpandedSections((current) => {
+        const next = new Set(current);
+        if (!next.delete(section)) {
+          next.add(section);
+        }
+        return next;
+      });
+    },
+    [expandedSections, reschedulingId, scheduledObservations]
+  );
 
   const renderObservation = useCallback(
     (observation: ObservationPayload) => (
@@ -187,6 +202,7 @@ const ScheduledObservationsMenu = ({
         onClose={closePanel}
         open={panelOpen}
         PaperProps={{ sx: { maxWidth: '100vw', overflow: 'hidden', width: { sm: '480px', xs: '100%' } } }}
+        SlideProps={{ onEntered: scrollToPanelSection }}
       >
         <Box flexShrink={0} padding={theme.spacing(3, 3, 2)}>
           {header(closePanel)}

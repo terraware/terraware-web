@@ -58,6 +58,7 @@ const ScheduledObservationSections = ({
             <ButtonBase
               aria-controls={isExpanded ? bodyId : undefined}
               aria-expanded={isExpanded}
+              data-section={section}
               onClick={() => onToggle(section)}
               sx={{
                 alignItems: 'center',

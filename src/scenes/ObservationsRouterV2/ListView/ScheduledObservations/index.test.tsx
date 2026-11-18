@@ -333,6 +333,29 @@ describe('ScheduledObservationsMenu sections', () => {
     expect(await requests[0].json()).toEqual({ endDate: isoDaysFromNow(20), startDate: isoDaysFromNow(5) });
   });
 
+  it('cancels rescheduling when the section holding the observation is collapsed', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.UPCOMING));
+    await user.click(section(strings.IN_PROGRESS));
+    await startRescheduling(user);
+    await user.click(section(strings.IN_PROGRESS));
+    await user.click(section(strings.IN_PROGRESS));
+
+    expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
+  });
+
+  it('keeps rescheduling when another section is toggled', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await startRescheduling(user);
+    await user.click(section(strings.OVERDUE));
+
+    expect(screen.getByLabelText(strings.START_DATE)).toHaveValue(FIRST.startDate);
+  });
+
   it('does not offer rescheduling once plots have been observed', async () => {
     const { user } = renderMenu(true, [FIRST, IN_PROGRESS, PARTLY_OBSERVED]);
 
