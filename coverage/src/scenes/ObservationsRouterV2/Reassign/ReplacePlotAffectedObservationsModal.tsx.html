@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/12</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -137,20 +137,8 @@
 <a name='L72'></a><a href='#L72'>72</a>
 <a name='L73'></a><a href='#L73'>73</a>
 <a name='L74'></a><a href='#L74'>74</a>
-<a name='L75'></a><a href='#L75'>75</a>
-<a name='L76'></a><a href='#L76'>76</a>
-<a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a>
-<a name='L79'></a><a href='#L79'>79</a>
-<a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a>
-<a name='L82'></a><a href='#L82'>82</a>
-<a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a>
-<a name='L85'></a><a href='#L85'>85</a>
-<a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a>
-<a name='L88'></a><a href='#L88'>88</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L75'></a><a href='#L75'>75</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,20 +158,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -244,6 +218,7 @@ import { Button, DialogBox } from '@terraware/web-components';
 &nbsp;
 import { useLocalization } from 'src/providers/hooks';
 import { AffectedUpcomingObservationPayload } from 'src/queries/generated/observations';
+import { getObservationTypeLabel } from 'src/types/Observations';
 &nbsp;
 export type ReplacePlotAffectedObservationsModalProps = {
   affectedObservations: AffectedUpcomingObservationPayload[];
@@ -258,20 +233,6 @@ const ReplacePlotAffectedObservationsModal = ({
 }: ReplacePlotAffectedObservationsModalProps): JSX.Element =&gt; {
   const { strings } = useLocalization();
 &nbsp;
-  const observationTypeLabel = useCallback(
-    (observationType: AffectedUpcomingObservationPayload['observationType']): string =&gt; {
-      switch (observationType) {
-        case 'Baseline Survey':
-          return strings.BASELINE_SURVEY;
-        case 'Biomass Measurements':
-          return strings.BIOMASS_MONITORING;
-        case 'Monitoring':
-          return strings.PLANT_MONITORING;
-      }
-    },
-    [strings]
-  );
-&nbsp;
   const affectedObservationText = useCallback(
     (observation: AffectedUpcomingObservationPayload): string =&gt; {
       const template =
@@ -281,11 +242,11 @@ const ReplacePlotAffectedObservationsModal = ({
 &nbsp;
       return strings.formatString(
         template,
-        observationTypeLabel(observation.observationType),
+        getObservationTypeLabel(observation.observationType, strings),
         observation.startDate
       ) as string;
     },
-    [observationTypeLabel, strings]
+    [strings]
   );
 &nbsp;
   return (
@@ -331,7 +292,7 @@ export default ReplacePlotAffectedObservationsModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T17:03:46.474Z
+                at 2026-11-18T17:41:42.108Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
