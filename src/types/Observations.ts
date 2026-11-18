@@ -22,7 +22,7 @@ type Observation = ObservationPayload;
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
-// "Monitoring" | "Biomass Measurements"
+// "Monitoring" | "Biomass Measurements" | "Baseline Survey"
 export type ObservationType = Observation['type'];
 
 // plot replacement
@@ -108,6 +108,17 @@ export const getStatus = (state: ObservationState, strings: typeof defaultString
       return strings.COMPLETED_ENDED;
     default:
       return strings.UPCOMING;
+  }
+};
+
+export const getObservationTypeLabel = (type: ObservationType, strings: typeof defaultStrings): string => {
+  switch (type) {
+    case 'Baseline Survey':
+      return strings.BASELINE_SURVEY;
+    case 'Biomass Measurements':
+      return strings.BIOMASS_MONITORING;
+    case 'Monitoring':
+      return strings.PLANT_MONITORING;
   }
 };
 

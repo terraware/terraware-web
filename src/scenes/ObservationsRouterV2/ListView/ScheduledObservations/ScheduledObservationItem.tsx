@@ -7,6 +7,7 @@ import Link from 'src/components/common/Link';
 import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
+import { getObservationTypeLabel } from 'src/types/Observations';
 
 import InlineRescheduleForm from './InlineRescheduleForm';
 
@@ -84,14 +85,7 @@ const ScheduledObservationItem = ({
     };
   }, [activeLocale, observation.endDate, observation.startDate, observation.state, strings]);
 
-  const monitoringType = useMemo((): string => {
-    const labels: Record<ObservationPayload['type'], string> = {
-      'Baseline Survey': strings.BASELINE_SURVEY,
-      'Biomass Measurements': strings.BIOMASS_MONITORING,
-      Monitoring: strings.PLANT_MONITORING,
-    };
-    return labels[observation.type];
-  }, [observation.type, strings]);
+  const monitoringType = useMemo(() => getObservationTypeLabel(observation.type, strings), [observation.type, strings]);
 
   const tagColors = useMemo(
     (): Record<ObservationTag['tone'], { backgroundColor?: string; color?: string }> => ({
