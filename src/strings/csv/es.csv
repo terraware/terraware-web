@@ -2870,10 +2870,10 @@ VIEW_PUBLISHED_FUNDER_REPORT,Ver el informe de financiación publicado,8dbc3bb4
 VIEW_QUANTITIES,Ver cantidades,0de612b2
 VIEW_QUARTERLY_HIGHLIGHTS,Ver Resumen Trimestral,1be47dfc
 VIEW_REPORTS,Ver informes,7fc5e229
-VIEW_REQUESTED_SPECIES_QUANTITIES,Ver cantidades solicitadas por especie,a5ae86c4
 VIEW_SESSION,Ver sesión,7f126865
 VIEW_SITES_STRATA_SUBSTRATA,"Ver Sitios, Estratos y Subestratos en un mapa.",f4d62997
 VIEW_SPECIES_LIST,Ver lista de especies,ff94b19b
+VIEW_SPECIES_QUANTITIES,Ver cantidades de especies,635d8fe3
 VIEW_SUMMARY_BASE_VIEW,Vista base: {0},2401d6ab
 VIEW_SUMMARY_COLUMNS,Columnas: {0},a4325100
 VIEW_SUMMARY_FILTER,{0}: {1},aa9a8fac

@@ -5,6 +5,7 @@ import { Button, DialogBox } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers/hooks';
 import { AffectedUpcomingObservationPayload } from 'src/queries/generated/observations';
+import { getObservationTypeLabel } from 'src/types/Observations';
 
 export type ReplacePlotAffectedObservationsModalProps = {
   affectedObservations: AffectedUpcomingObservationPayload[];
@@ -19,20 +20,6 @@ const ReplacePlotAffectedObservationsModal = ({
 }: ReplacePlotAffectedObservationsModalProps): JSX.Element => {
   const { strings } = useLocalization();
 
-  const observationTypeLabel = useCallback(
-    (observationType: AffectedUpcomingObservationPayload['observationType']): string => {
-      switch (observationType) {
-        case 'Baseline Survey':
-          return strings.BASELINE_SURVEY;
-        case 'Biomass Measurements':
-          return strings.BIOMASS_MONITORING;
-        case 'Monitoring':
-          return strings.PLANT_MONITORING;
-      }
-    },
-    [strings]
-  );
-
   const affectedObservationText = useCallback(
     (observation: AffectedUpcomingObservationPayload): string => {
       const template =
@@ -42,11 +29,11 @@ const ReplacePlotAffectedObservationsModal = ({
 
       return strings.formatString(
         template,
-        observationTypeLabel(observation.observationType),
+        getObservationTypeLabel(observation.observationType, strings),
         observation.startDate
       ) as string;
     },
-    [observationTypeLabel, strings]
+    [strings]
   );
 
   return (

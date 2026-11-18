@@ -50,8 +50,8 @@ const RequestedSpeciesModal = ({
     <DialogBox
       onClose={onClose}
       open={open}
-      title={strings.VIEW_REQUESTED_SPECIES_QUANTITIES}
-      size='large'
+      title={strings.VIEW_SPECIES_QUANTITIES}
+      size='x-large'
       scrolled={true}
       skrim={true}
       middleButtons={[

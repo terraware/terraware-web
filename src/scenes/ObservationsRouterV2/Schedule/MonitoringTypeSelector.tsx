@@ -4,6 +4,7 @@ import { Box, FormControlLabel, Radio, RadioGroup, Typography, useTheme } from '
 
 import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
+import { getObservationTypeLabel } from 'src/types/Observations';
 import { getRgbaFromHex } from 'src/utils/color';
 
 import { MONITORING_TYPES, MonitoringType } from './monitoringTypes';
@@ -32,17 +33,17 @@ const MonitoringTypeSelector = ({
   const optionsContent = useMemo(
     (): Record<MonitoringType, { badge: string; description: string; title: string }> => ({
       'Baseline Survey': {
-        badge: strings.BASELINE_SURVEY,
+        badge: getObservationTypeLabel('Baseline Survey', strings),
         description: strings.RECORD_PLOT_CONDITIONS_AND_PLANTS_ALREADY_THERE,
         title: strings.MEASURE_MY_SITE_BEFORE_PLANTING,
       },
       Monitoring: {
-        badge: strings.PLANT_MONITORING,
+        badge: getObservationTypeLabel('Monitoring', strings),
         description: strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_DESCRIPTION,
         title: strings.SCHEDULE_OBSERVATION_PLANT_MONITORING_TITLE,
       },
       'Biomass Measurements': {
-        badge: strings.BIOMASS_MONITORING,
+        badge: getObservationTypeLabel('Biomass Measurements', strings),
         description: strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_DESCRIPTION,
         title: strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE,
       },

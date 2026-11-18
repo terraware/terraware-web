@@ -28,6 +28,10 @@ const WithdrawalAccessionsRenderer = (props: RendererProps<TableRowType>): JSX.E
     );
   }
 
+  if (column.alignment === 'right') {
+    return <CellRenderer {...props} sx={{ '& > p': { maxWidth: 'none' } }} />;
+  }
+
   return <CellRenderer {...props} />;
 };
 

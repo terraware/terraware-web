@@ -18,6 +18,28 @@ import { MonitoringType } from './monitoringTypes';
 
 const PLOT_COUNT_COLUMN_WIDTH = '64px';
 
+interface StatusPillProps {
+  id: number;
+  label?: string;
+  value: string;
+  wrap?: boolean;
+}
+
+const StatusPill = ({ id, label, value, wrap }: StatusPillProps) => {
+  const theme = useTheme();
+
+  return (
+    <Box
+      flexShrink={wrap ? 1 : 0}
+      maxWidth='100%'
+      whiteSpace={wrap ? 'normal' : 'nowrap'}
+      sx={{ '& .pill': { background: theme.palette.TwClrBgSecondary } }}
+    >
+      <Pill id={id} label={label} value={value} />
+    </Box>
+  );
+};
+
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
   monitoringType: MonitoringType;
@@ -265,17 +287,13 @@ const ObservationSubstratumSelector = ({
                   />
                   {!isBaseline &&
                     (stratum.latestObservationCompletedTime ? (
-                      <Box flexShrink={0} whiteSpace='nowrap'>
-                        <Pill
-                          id={stratum.id}
-                          label={strings.LAST_OBSERVATION}
-                          value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
-                        />
-                      </Box>
+                      <StatusPill
+                        id={stratum.id}
+                        label={strings.LAST_OBSERVATION}
+                        value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
+                      />
                     ) : (
-                      <Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
-                        {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
-                      </Typography>
+                      <StatusPill id={stratum.id} value={strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED} wrap />
                     ))}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
@@ -372,13 +390,11 @@ const ObservationSubstratumSelector = ({
                           </Box>
                         )}
                         {!isBaseline && substratum.latestObservationCompletedTime && (
-                          <Box flexShrink={0} whiteSpace='nowrap'>
-                            <Pill
-                              id={substratum.id}
-                              label={strings.LAST_OBSERVATION}
-                              value={getDateDisplayValue(substratum.latestObservationCompletedTime)}
-                            />
-                          </Box>
+                          <StatusPill
+                            id={substratum.id}
+                            label={strings.LAST_OBSERVATION}
+                            value={getDateDisplayValue(substratum.latestObservationCompletedTime)}
+                          />
                         )}
                       </Box>
                       <Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>

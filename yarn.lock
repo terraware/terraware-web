@@ -3820,10 +3820,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@5.2.7":
-  version "5.2.7"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.2.7.tgz#26f9f3442f40db2395a8d5fffd133a936aba7105"
-  integrity sha512-3vvS4Sc/JmNfbXjFNfLmwI/daYWh6fIVKXtwuGt0r9P+q9RBp6Qqp3tWM2oYHLDirODpGzLtz74+OteEAuBESQ==
+"@terraware/web-components@5.2.10":
+  version "5.2.10"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.2.10.tgz#817ce8c4d0415e5f39f767d63467648b33a865ec"
+  integrity sha512-L7fT3W9DoBnl2wMeN6+xUX6e5VpEsrLsRdACpykTuNLmOqYdRBt1fmFBjWFzoWxVzVap6vOg60DHc1u/fS1r8Q==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
@@ -3834,13 +3834,13 @@
     embla-carousel-react "^8.6.0"
     geojson "^0.5.0"
     luxon "^3.3.0"
-    marked "^18.1.1"
+    marked "^18.2.1"
     material-react-table "^3.2.1"
-    playcanvas "2.23.3"
-    prettier "^3.8.1"
+    playcanvas "2.24.1"
+    prettier "^3.10.1"
     react-intersection-observer "^11.0.0"
     react-responsive "^10.0.0"
-    sass "^1.75.0"
+    sass "^1.108.2"
     tinycolor2 "^1.6.0"
 
 "@testing-library/dom@^10.4.1":
@@ -8585,10 +8585,10 @@ mapbox-gl@*, mapbox-gl@^3.34.2:
   resolved "https://registry.yarnpkg.com/mapbox-gl/-/mapbox-gl-3.34.2.tgz#2075dbc2737d6c0949edad384c088835a1769567"
   integrity sha512-SfuzpqjokSjv4C9/JEjxAfqVHY37B7Kky/AOFpc+9D0Sx0KuIoV3keSlvvuHuM/jxw84iQ/Nh7yIK1VxuDBBHA==
 
-marked@^18.1.1:
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-18.1.1.tgz#dd6288f8217971f7b0beefcabc52c92a6519b3e3"
-  integrity sha512-zEGgrtUG8crk+TrMacJSVABU4DYDDkS8uqgU3ohrn/2fW9C2AEfUrO3m6IhpIpQpl7YcVpiXXC9cSMWDANT3dg==
+marked@^18.2.1:
+  version "18.2.1"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-18.2.1.tgz#636e42a4418333a26356285033dec8b344487f48"
+  integrity sha512-ii4bxCTCqqwpT86XZWgJNs+ZnAIZksmLGYMViWA7PDIXYIeNo1x6cDdX3JOip9NM/cI6p8z57FxliACboTruMA==
 
 matchmediaquery@^0.4.2:
   version "0.4.2"
@@ -9466,10 +9466,10 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
-playcanvas@2.23.3:
-  version "2.23.3"
-  resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.23.3.tgz#44beec550c19b1767d0a41b9212c9f90f65c30f9"
-  integrity sha512-hjDdo5yFtVr/WmDh59pRrT1LC+Rfpq4VXB8Xt3AMB8GfWXj9JzOMq3x+3FTmq/2L2gN37q9V1LMZaLuYshzMXQ==
+playcanvas@2.24.1:
+  version "2.24.1"
+  resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.24.1.tgz#1513e20ff4cb10a0c8fe8d2066feda7039eda469"
+  integrity sha512-tWZDt1evgPdS9tTjqOTH+YP6UY78KcXzpnhGAapsiCXpT8uciw/+ogZLcSt3xLjcbSvZmniTStQldZhkylsoXA==
   dependencies:
     "@types/webxr" "^0.5.24"
     "@webgpu/types" "^0.1.70"
@@ -9525,7 +9525,7 @@ prettier@^3.10.1:
   resolved "https://registry.npmjs.org/prettier/-/prettier-3.10.1.tgz#00b1c1872f9650ec22093d5bdafdca0fe6760f77"
   integrity sha512-70vp3ZUYoPlFbF9uiTdXHUUCGEIp7d4+6p+8DYbkm2jP7x/3i/paXVF6dopSI3zd/CEitrZN1rc4i85xWmmXlg==
 
-prettier@^3.2.5, prettier@^3.8.1:
+prettier@^3.2.5:
   version "3.9.10"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.9.10.tgz#ac378e432f1a7381518f2e080816bbaefa38d585"
   integrity sha512-skGHTH1Yb9QvaTC4hWnRTzEYtCpApF0UMBPz+t/0ZPzP8ihefo/btKd+QA7pUE0fEwA1SbS/NmhyEcstdXOIdA==
@@ -10261,17 +10261,6 @@ sass@^1.108.2:
   version "1.108.2"
   resolved "https://registry.yarnpkg.com/sass/-/sass-1.108.2.tgz#ff9c74eba53c53cf30b248fd042dda543ed909f7"
   integrity sha512-kugK8djotnG9HQRPTOf36asKYlxg8rWWsNLYHOgWDIVOiZQqlRfKBgF4XXM6kfw146kIDMvm57B4GIkvDSyTzA==
-  dependencies:
-    chokidar "^5.0.0"
-    immutable "^5.1.5"
-    source-map-js ">=0.6.2 <2.0.0"
-  optionalDependencies:
-    "@parcel/watcher" "^2.4.1"
-
-sass@^1.75.0:
-  version "1.108.1"
-  resolved "https://registry.yarnpkg.com/sass/-/sass-1.108.1.tgz#169e456df9ad50bac4593435a207106a59b645a1"
-  integrity sha512-sIYgSvOPeD9wABwDS/ofNjHASSck+7h3jLkk7wG1NPFL3XeS6vOQjBlAFSmRV09kZr1yt/Tuayt6kKtBbLjHNQ==
   dependencies:
     chokidar "^5.0.0"
     immutable "^5.1.5"
