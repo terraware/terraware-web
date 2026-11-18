@@ -97,7 +97,7 @@ it('matches selections in every list entry without changing blank list rendering
         isList: true,
         values: [
           { variableValueId: '1' },
-          ...row.variables[0].values,
+          ...(row.variables[0].values ?? []),
           { variableValueId: '4', options: [{ id: '8', name: 'Desert', position: '1' }] },
         ],
       },
