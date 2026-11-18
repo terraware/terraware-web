@@ -2,8 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { useTheme } from '@mui/material';
-import { Badge, EditableTableColumn } from '@terraware/web-components';
-import { MRT_Cell } from 'material-react-table';
+import { Badge, EditableTableCellContext, EditableTableColumn } from '@terraware/web-components';
 
 import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import EditableTable from 'src/components/common/EditableTable';
@@ -399,8 +398,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const theme = useTheme();
 
   const CategoryCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
-      const category = cell.getValue<string>();
+    ({ cell }: EditableTableCellContext<RowIndicator>) => {
+      const category = cell.getValue() as string;
       const isGreen = category === 'Biodiversity' || category === 'Climate' || category === 'Project Objectives';
       return (
         <Badge
@@ -415,14 +414,14 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   );
 
   const ClassIdCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => (
-      <>{indicatorClassLabel(cell.getValue<IndicatorClass | undefined>(), strings)}</>
+    ({ cell }: EditableTableCellContext<RowIndicator>) => (
+      <>{indicatorClassLabel(cell.getValue() as IndicatorClass | undefined, strings)}</>
     ),
     [strings]
   );
 
-  const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
-    const raw = cell.getValue<number | string | undefined>();
+  const NumericCell = useCallback(({ cell, row }: EditableTableCellContext<RowIndicator>) => {
+    const raw = cell.getValue();
     if (raw === undefined || raw === null || raw === '') {
       return null;
     }
@@ -430,7 +429,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     if (isNaN(value)) {
       return null;
     }
-    const precision = cell.row.original.precision ?? 0;
+    const precision = row.original.precision ?? 0;
     return <>{formatPrecision(value, precision)}</>;
   }, []);
 
@@ -529,6 +528,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
   return (
     <EditableTable
+      supportsV2
       clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={tableColumns}
       data={allIndicatorRows}
@@ -543,11 +543,11 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       enableColumnActions={false}
       enableHiding={false}
       enableColumnDragging={false}
+      enableColumnOrdering={false}
       containerProps={{
         sx: { maxHeight: 'none', overflowX: 'auto' },
       }}
       tableOptions={{
-        enableColumnOrdering: false,
         state: {
           columnOrder,
         },
