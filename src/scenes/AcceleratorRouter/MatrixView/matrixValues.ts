@@ -43,7 +43,10 @@ export const matchesMatrixSelection = (
     return true;
   }
   const data = 'original' in row ? row.original : row;
-  const options = data.variables?.find((variable) => variable.stableId === stableId)?.values?.[0]?.options ?? [];
+  const options =
+    data.variables
+      ?.find((variable) => variable.stableId === stableId)
+      ?.values?.flatMap((value) => value.options ?? []) ?? [];
   return selectedNames.some((name) => options.some((option) => option.name === name));
 };
 

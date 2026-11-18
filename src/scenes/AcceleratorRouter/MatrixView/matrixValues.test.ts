@@ -109,3 +109,26 @@ it('round-trips open numeric and calendar-date ranges without losing zero or sam
   expect(matchesMatrixRange(dated, 'missing', [0, null])).toBe(false);
   expect(matchesMatrixRange(dated, 'missing', [null, null])).toBe(true);
 });
+
+it('matches selections in every list entry without changing blank list rendering', () => {
+  const listRow: MatrixRow = {
+    ...row,
+    variables: [
+      {
+        ...row.variables[0],
+        isList: true,
+        values: [
+          { variableValueId: '1' },
+          ...(row.variables[0].values ?? []),
+          { variableValueId: '4', options: [{ id: '8', name: 'Desert', position: '1' }] },
+        ],
+      },
+    ],
+  };
+  expect(getMatrixValue(listRow, 'v')).toBe('');
+  expect(matchesMatrixSelection(listRow, 'v', ['Forest, coastal'])).toBe(true);
+  expect(matchesMatrixSelection({ original: listRow }, 'v', ['Desert'])).toBe(true);
+  expect(matchesMatrixSelection(listRow, 'v', ['Ocean'])).toBe(false);
+  expect(matchesMatrixSelection(listRow, 'v', [])).toBe(true);
+  expect(matchesMatrixSelection({ ...listRow, variables: [] }, 'v', ['Desert'])).toBe(false);
+});
