@@ -19,6 +19,7 @@ import {
 } from 'src/queries/generated/organizationUsers';
 import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
 import {
+  OrganizationUserSearchResult,
   useLazySearchOrganizationUsersQuery,
   useLazySearchProjectInternalUserRolesQuery,
 } from 'src/queries/search/organizationUsers';
@@ -46,7 +47,7 @@ export default function PeopleListView(): JSX.Element {
   const navigate = useSyncNavigate();
   const location = useLocation();
   const [addPersonModalOpened, setAddPersonModalOpened] = useState(false);
-  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
+  const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUserSearchResult[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
   const [assignNewOwnerModalOpened, setAssignNewOwnerModalOpened] = useState(false);
@@ -55,9 +56,9 @@ export default function PeopleListView(): JSX.Element {
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [results, setResults] = useState<OrganizationUser[]>();
+  const [results, setResults] = useState<OrganizationUserSearchResult[]>();
   const [projectRestorationLeads, setProjectRestorationLeads] = useState<ProjectInternalUserRoles>({});
-  const [resultsWithLeadRoles, setResultsWithLeadRoles] = useState<OrganizationUser[]>([]);
+  const [resultsWithLeadRoles, setResultsWithLeadRoles] = useState<OrganizationUserSearchResult[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
   const [listOrganizationRoles] = useLazyListOrganizationRolesQuery();
@@ -128,7 +129,7 @@ export default function PeopleListView(): JSX.Element {
       }
       const users = await searchOrganizationUsers({ organizationId: selectedOrganization.id, searchTerm })
         .unwrap()
-        .catch((): OrganizationUser[] => []);
+        .catch((): OrganizationUserSearchResult[] => []);
       return skipTfContact ? users.filter((result) => !isTfContact(result.role)) : users;
     },
     [searchOrganizationUsers, selectedOrganization]
@@ -181,7 +182,7 @@ export default function PeopleListView(): JSX.Element {
       if (removableUsers.length === totalUsers) {
         setCannotRemovePeopleModalOpened(true);
       } else {
-        const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
+        const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.rawRole === 'Owner');
         if (selectedOwners.length > 0 && selectedOrganization) {
           const organizationRoles = await listOrganizationRoles(selectedOrganization.id, true);
           const totalOwners = organizationRoles.data?.roles.find((role) => role.role === 'Owner');
@@ -246,7 +247,7 @@ export default function PeopleListView(): JSX.Element {
   const deleteOrgHandler = async () => {
     if (user && selectedOrganization) {
       let allRemoved = true;
-      const keepOneOwnerId = selectedPeopleRows.filter((person) => person.role === 'Owner')[0].id.toString();
+      const keepOneOwnerId = selectedPeopleRows.find((person) => person.rawRole === 'Owner')?.id.toString();
       const otherUsers = selectedPeopleRows.filter(
         (person) =>
           person.id.toString() !== user.id.toString() &&

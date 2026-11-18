@@ -73,7 +73,10 @@ const TF_CONTACT = buildPersonSearchResult({
  * Returns the prefixes requested so far, so a test can wait for the mount searches to settle before
  * touching the table.
  */
-const mockSearches = (people: PersonSearchResult[], projectInternalUsers: Record<string, string>[] = []) => {
+const mockSearches = (
+  people: (PersonSearchResult & { 'roleName(raw)'?: string })[],
+  projectInternalUsers: Record<string, string>[] = []
+) => {
   const prefixes: string[] = [];
 
   server.use(
@@ -82,7 +85,10 @@ const mockSearches = (people: PersonSearchResult[], projectInternalUsers: Record
       prefixes.push(body.prefix);
       return HttpResponse.json({
         status: 'ok',
-        results: body.prefix === 'projectInternalUsers' ? projectInternalUsers : people,
+        results:
+          body.prefix === 'projectInternalUsers'
+            ? projectInternalUsers
+            : people.map((person) => ({ 'roleName(raw)': person.roleName, ...person })),
       });
     })
   );
@@ -256,12 +262,17 @@ describe('PeopleListView', () => {
       expect(deletes).toHaveLength(0);
     });
 
-    it('removes everyone but one owner, then deletes the organization', async () => {
-      const prefixes = mockSearches([OWNER, CONTRIBUTOR]);
+    it.each([
+      { locale: 'en', ownerRole: 'Owner', rawRole: 'Owner' },
+      { locale: 'fr', ownerRole: 'Propriétaire', rawRole: 'Owner' },
+      { locale: 'fr', ownerRole: 'Contributeur', rawRole: 'Contributor' },
+    ])('deletes the organization with role $ownerRole in $locale', async ({ locale, ownerRole, rawRole }) => {
+      const prefixes = mockSearches([{ ...OWNER, roleName: ownerRole, 'roleName(raw)': rawRole }, CONTRIBUTOR]);
       const userDeletes = captureRequests('delete', ORG_USER_URL);
       const orgDeletes = captureRequests('delete', ORG_URL);
 
       const { user, store } = renderWithProviders(<PeopleListView />, {
+        localization: { activeLocale: locale, selectedLocale: locale },
         currentUser: { user: buildUser({ id: CURRENT_USER_ID }) },
         organization: { selectedOrganization: buildOrganization({ role: 'Owner', name: 'Kona Reforest' }) },
       });
@@ -273,9 +284,11 @@ describe('PeopleListView', () => {
       await user.click(within(rowFor(CONTRIBUTOR.user_email)).getByRole('checkbox'));
       await user.click(topBarRemoveButton());
 
-      await screen.findByText(strings.CANNOT_REMOVE_MSG);
+      await screen.findByText(strings.CANNOT_REMOVE_MSG.replace(/\s+/g, ' '));
       await user.click(within(dialogTitled(strings.CANNOT_REMOVE)).getByRole('button', { name: strings.DELETE }));
-      await screen.findByText(strings.formatString(strings.DELETE_ORGANIZATION_MSG, 'Kona Reforest') as string);
+      await screen.findByText(
+        (strings.formatString(strings.DELETE_ORGANIZATION_MSG, 'Kona Reforest') as string).replace(/\s+/g, ' ')
+      );
       await user.click(within(dialogTitled(strings.DELETE_ORGANIZATION)).getByRole('button', { name: strings.DELETE }));
 
       await waitFor(() => expect(orgDeletes).toHaveLength(1));
@@ -291,22 +304,25 @@ describe('PeopleListView', () => {
   });
 
   describe('removing the last owner', () => {
-    it('requires a new owner before it will confirm the removal', async () => {
-      const prefixes = mockSearches([OWNER, ADMIN, CONTRIBUTOR]);
+    it.each(['en', 'fr'])('requires a new owner before confirming removal in %s', async (locale) => {
+      const ownerRole = locale === 'fr' ? 'Propriétaire' : 'Owner';
+      const prefixes = mockSearches([{ ...OWNER, roleName: ownerRole, 'roleName(raw)': 'Owner' }, ADMIN, CONTRIBUTOR]);
       mockGet(ORG_ROLES_URL, { roles: [{ role: 'Owner', totalUsers: 1 }] });
       const deletes = captureRequests('delete', ORG_USER_URL);
 
       const { user } = renderWithProviders(<PeopleListView />, {
+        localization: { activeLocale: locale, selectedLocale: locale },
         organization: { selectedOrganization: buildOrganization({ role: 'Owner' }) },
       });
 
       expect(await screen.findByText(ADMIN.user_email)).toBeInTheDocument();
+      expect(within(rowFor(OWNER.user_email)).getAllByText(ownerRole).length).toBeGreaterThan(0);
       await waitForPeople(prefixes);
 
       await user.click(within(rowFor(OWNER.user_email)).getByRole('checkbox'));
       await user.click(topBarRemoveButton());
 
-      expect(await screen.findByText(strings.ASSIGN_NEW_OWNER_DESC)).toBeInTheDocument();
+      expect(await screen.findByText(strings.ASSIGN_NEW_OWNER_DESC.replace(/\s+/g, ' '))).toBeInTheDocument();
       expect(
         screen.queryByText(strings.formatString(strings.REMOVE_PERSON_DESC, OWNER.user_firstName) as string)
       ).not.toBeInTheDocument();

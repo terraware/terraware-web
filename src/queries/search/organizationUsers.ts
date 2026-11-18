@@ -5,6 +5,8 @@ import { parseSearchTerm } from 'src/utils/search';
 
 import { baseApi as api } from '../baseApi';
 
+export type OrganizationUserSearchResult = OrganizationUser & { rawRole: OrganizationRole };
+
 export type ProjectInternalUserRoleSearchResult = {
   project_name: string;
   role: string;
@@ -44,25 +46,34 @@ const buildOrganizationUserSearch = ({ organizationId, searchTerm }: SearchOrgan
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    searchOrganizationUsers: build.query<OrganizationUser[], SearchOrganizationUsersApiArg>({
+    searchOrganizationUsers: build.query<OrganizationUserSearchResult[], SearchOrganizationUsersApiArg>({
       query: (arg) => ({
         url: '/api/v1/search',
         method: 'POST',
         body: {
           prefix: 'organizationUsers',
-          fields: ['user_id', 'user_firstName', 'user_lastName', 'user_email', 'roleName', 'createdTime'],
+          fields: [
+            'user_id',
+            'user_firstName',
+            'user_lastName',
+            'user_email',
+            'roleName',
+            'roleName(raw)',
+            'createdTime',
+          ],
           search: buildOrganizationUserSearch(arg),
           sortOrder: [{ field: 'user_email' }],
           count: 0,
         },
       }),
-      transformResponse: (response: { results: SearchResponseElement[] }): OrganizationUser[] =>
+      transformResponse: (response: { results: SearchResponseElement[] }): OrganizationUserSearchResult[] =>
         response.results.map((result) => ({
           firstName: result.user_firstName as string,
           lastName: result.user_lastName as string,
           email: result.user_email as string,
           id: result.user_id as number,
           role: result.roleName as OrganizationRole,
+          rawRole: result['roleName(raw)'] as OrganizationRole,
           addedTime: result.createdTime as string,
         })),
     }),
