@@ -8,6 +8,7 @@ import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
 import { getObservationTypeLabel } from 'src/types/Observations';
+import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import InlineRescheduleForm from './InlineRescheduleForm';
 
@@ -44,12 +45,15 @@ const ScheduledObservationItem = ({
   const theme = useTheme();
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const reschedulable = isReschedulable(observation);
+  const timeZoneId = useUserTimeZone()?.id;
 
   const { dateRange, tag } = useMemo(() => {
     const locale = activeLocale || 'en-US';
-    const today = DateTime.now().startOf('day').setLocale(locale);
-    const start = DateTime.fromISO(observation.startDate).setLocale(locale);
-    const end = DateTime.fromISO(observation.endDate).setLocale(locale);
+    // Compare calendar dates in UTC so days skipped or shortened by DST in the user's zone count as whole days.
+    const toCalendarDate = (isoDate: string) => DateTime.fromISO(isoDate, { zone: 'utc' }).setLocale(locale);
+    const today = toCalendarDate(DateTime.now().setZone(timeZoneId).toISODate()!);
+    const start = toCalendarDate(observation.startDate);
+    const end = toCalendarDate(observation.endDate);
 
     const daysOrMonths = (from: DateTime, to: DateTime): string => {
       const days = Math.max(Math.round(to.diff(from, 'days').days), 1);
@@ -83,7 +87,7 @@ const ScheduledObservationItem = ({
       dateRange: Interval.fromDateTimes(start, end).toLocaleString(DateTime.DATE_MED),
       tag: getTag(),
     };
-  }, [activeLocale, observation.endDate, observation.startDate, observation.state, strings]);
+  }, [activeLocale, observation.endDate, observation.startDate, observation.state, strings, timeZoneId]);
 
   const monitoringType = useMemo(() => getObservationTypeLabel(observation.type, strings), [observation.type, strings]);
 

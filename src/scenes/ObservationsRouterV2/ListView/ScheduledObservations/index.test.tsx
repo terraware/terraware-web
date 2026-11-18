@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useState } from 'react';
 
 import { act, screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
-import { DateTime, Settings } from 'luxon';
+import { DateTime } from 'luxon';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import ScheduledObservationsMenu, {
@@ -11,9 +11,6 @@ import ScheduledObservationsMenu, {
 } from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
 import strings from 'src/strings';
 import { buildObservation, buildUser, captureRequests, mockError, mockGet, renderWithProviders } from 'src/test-utils';
-
-// DatePicker sets Luxon's default zone to UTC when it renders, so fixture dates must use that zone too.
-Settings.defaultZone = 'Etc/UTC';
 
 const isoDaysFromNow = (days: number) => DateTime.now().plus({ days }).toISODate()!;
 
@@ -275,6 +272,33 @@ describe('ScheduledObservationsMenu sections', () => {
 
   it('tells how soon in-progress observations end', async () => {
     const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.IN_PROGRESS));
+
+    expect(screen.getByText(strings.formatString(strings.ENDS_IN_X, '3 days') as string)).toBeInTheDocument();
+  });
+
+  it("counts days from today in the user's profile time zone", async () => {
+    const timeZone = 'Pacific/Kiritimati';
+    const endingSoon = buildObservation({
+      endDate: DateTime.now().setZone(timeZone).plus({ days: 3 }).toISODate()!,
+      id: 13,
+      plantingSiteName: 'Line Islands Site',
+      startDate: isoDaysFromNow(-10),
+      state: 'InProgress',
+    });
+    const profile = buildUser({ timeZone });
+    mockGet('/api/v1/users/me/preferences', { preferences: {} });
+    mockGet('/api/v1/users/me', { user: profile });
+    mockGet('/api/v1/tracking/observations', { observations: [FIRST, endingSoon] });
+    const { user } = renderWithProviders(
+      <MenuWithButton canReschedule menuRef={createRef<ScheduledObservationsMenuHandle>()} />,
+      {
+        currentUser: { user: profile },
+        localization: { supportedTimeZones: [{ id: timeZone, longName: 'Line Islands Time' }] },
+      }
+    );
 
     await openFlyout(user);
     await user.click(section(strings.IN_PROGRESS));

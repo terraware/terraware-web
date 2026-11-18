@@ -16,12 +16,12 @@ const getObservationDateErrors = (startDate?: string, endDate?: string): Observa
   }
 
   const today = DateTime.now().startOf('day');
-  const start = new Date(startDate).getTime();
-  const end = new Date(endDate).getTime();
-  if (start < today.toMillis() || start > today.plus({ years: 1 }).toMillis()) {
+  const start = DateTime.fromISO(startDate);
+  const end = DateTime.fromISO(endDate);
+  if (start < today || start > today.plus({ years: 1 })) {
     return { startDateError: strings.INVALID_DATE };
   }
-  if (end <= start || end > DateTime.fromMillis(start).plus({ months: 2 }).toMillis()) {
+  if (end <= start || end > start.plus({ months: 2 })) {
     return { endDateError: strings.INVALID_DATE };
   }
   return {};
