@@ -51,10 +51,6 @@ const ObservationListViewContent = (): JSX.Element => {
   const showAllSitesOption = plantingSites.length > 1;
 
   const scheduledObservationsMenuRef = useRef<ScheduledObservationsMenuHandle>(null);
-  const openReschedule = useCallback(
-    (observationId: number) => scheduledObservationsMenuRef.current?.openToObservation(observationId),
-    []
-  );
   const openScheduledObservations = useCallback(() => scheduledObservationsMenuRef.current?.open(), []);
   const [scheduledFlyoutOpen, setScheduledFlyoutOpen] = useState(false);
 
@@ -308,7 +304,7 @@ const ObservationListViewContent = (): JSX.Element => {
         (plotType === 'adHoc' ? (
           <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
         ) : (
-          <PlantMonitoringList onReschedule={openReschedule} plantingSiteId={selectedPlantingSiteId} />
+          <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} />
         ))}
       {mobileAppCard}
       <ScheduledObservationsMenu

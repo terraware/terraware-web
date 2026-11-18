@@ -43,17 +43,12 @@ test.describe('ObservationsTests', () => {
   test('Reschedule Observation', async ({ page }, testInfo) => {
     await openNavItem(page, 'Plantings', 'Observations');
 
-    // show only overdue observations
-    await page.locator('#toggle-observation-filters').click();
-    await page.locator('#status-filter').click();
-    await page.locator('li.select-value', { hasText: 'Overdue' }).click();
-    await waitFor(page, '#row1');
+    // open the scheduled observations flyout and its overdue section
+    await page.locator('#scheduled-observations').click();
+    await page.locator('button[aria-expanded]', { hasText: 'Overdue' }).click();
 
-    // open action menu
-    await page.locator('#row1').getByLabel('More Options').getByRole('button').click();
-
-    // click reschedule, which opens the observation in the scheduled observations flyout
-    await page.getByRole('menuitem', { name: 'Reschedule' }).click();
+    // click reschedule on the first overdue observation
+    await page.getByText('Reschedule', { exact: true }).first().click();
 
     await expect(page.getByRole('button', { name: 'Cancel' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Save' })).toBeVisible();

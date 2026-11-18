@@ -9,10 +9,10 @@ import { ObservationPayload } from 'src/queries/generated/observations';
 
 import { type ScheduledObservationSection, type ScheduledObservations } from './useScheduledObservations';
 
-export const SECTIONS: ScheduledObservationSection[] = ['upcoming', 'inProgress', 'overdue'];
+const SECTIONS: ScheduledObservationSection[] = ['upcoming', 'inProgress', 'overdue'];
 
 type ScheduledObservationSectionsProps = {
-  expandedSection?: ScheduledObservationSection;
+  expandedSections: ReadonlySet<ScheduledObservationSection>;
   limit?: number;
   observations: ScheduledObservations;
   onToggle: (section: ScheduledObservationSection) => void;
@@ -22,7 +22,7 @@ type ScheduledObservationSectionsProps = {
 };
 
 const ScheduledObservationSections = ({
-  expandedSection,
+  expandedSections,
   limit,
   observations,
   onToggle,
@@ -45,10 +45,10 @@ const ScheduledObservationSections = ({
   };
 
   return (
-    <Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', minHeight: 0 }}>
+    <Box sx={{ flex: '1 1 auto', minHeight: 0, overflowY: 'auto' }}>
       {SECTIONS.map((section) => {
         const sectionObservations = observations[section];
-        const isExpanded = expandedSection === section;
+        const isExpanded = expandedSections.has(section);
         const isOverdue = section === 'overdue';
         const visibleObservations = limit === undefined ? sectionObservations : sectionObservations.slice(0, limit);
         const bodyId = `scheduled-observations-${section}`;
@@ -64,7 +64,6 @@ const ScheduledObservationSections = ({
                 backgroundColor: theme.palette.TwClrBgSecondary,
                 borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                 display: 'flex',
-                flexShrink: 0,
                 gap: theme.spacing(1),
                 padding: theme.spacing(1.5, paddingX),
                 textAlign: 'left',
@@ -96,7 +95,7 @@ const ScheduledObservationSections = ({
               </Box>
             </ButtonBase>
             {isExpanded && (
-              <Box id={bodyId} sx={{ flex: '0 1 auto', minHeight: 0, overflowY: 'auto' }}>
+              <Box id={bodyId}>
                 {sectionObservations.length === 0 && (
                   <>
                     <Divider />

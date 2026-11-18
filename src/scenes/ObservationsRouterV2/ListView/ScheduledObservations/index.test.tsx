@@ -1,6 +1,6 @@
 import React, { createRef, useCallback, useState } from 'react';
 
-import { act, screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { DateTime, Settings } from 'luxon';
 
@@ -95,16 +95,14 @@ const MenuWithButton = ({ canReschedule, menuRef }: MenuWithButtonProps) => {
   );
 };
 
-const renderMenu = (
-  canReschedule = true,
-  observations = [SECOND, FIRST],
-  ref = createRef<ScheduledObservationsMenuHandle>()
-) => {
+const renderMenu = (canReschedule = true, observations = [SECOND, FIRST]) => {
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
   mockGet('/api/v1/users/me', { user: buildUser() });
   mockGet('/api/v1/tracking/observations', { observations });
 
-  return renderWithProviders(<MenuWithButton canReschedule={canReschedule} menuRef={ref} />);
+  return renderWithProviders(
+    <MenuWithButton canReschedule={canReschedule} menuRef={createRef<ScheduledObservationsMenuHandle>()} />
+  );
 };
 
 const openFlyout = async (user: UserEvent) => {
@@ -257,20 +255,33 @@ describe('ScheduledObservationsMenu sections', () => {
     expect(section(strings.OVERDUE)).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('keeps only one section open at a time', async () => {
+  it('lets several sections be open at once', async () => {
     const { user } = renderMenu(true, ALL);
 
     await openFlyout(user);
     await user.click(section(strings.IN_PROGRESS));
-
-    expect(screen.getByText(IN_PROGRESS.plantingSiteName)).toBeInTheDocument();
-    expect(screen.queryByText('Mahogany Ridge')).not.toBeInTheDocument();
-
     await user.click(section(strings.OVERDUE));
 
+    expect(screen.getByText('Mahogany Ridge')).toBeInTheDocument();
+    expect(screen.getByText(IN_PROGRESS.plantingSiteName)).toBeInTheDocument();
     expect(screen.getByText(OVERDUE_DAYS.plantingSiteName)).toBeInTheDocument();
-    expect(screen.queryByText(IN_PROGRESS.plantingSiteName)).not.toBeInTheDocument();
-    expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'false');
+
+    await user.click(section(strings.UPCOMING));
+
+    expect(screen.queryByText('Mahogany Ridge')).not.toBeInTheDocument();
+    expect(screen.getByText(IN_PROGRESS.plantingSiteName)).toBeInTheDocument();
+  });
+
+  it('reopens with only the upcoming observations showing', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.OVERDUE));
+    await user.keyboard('{Escape}');
+    await openFlyout(user);
+
+    expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'true');
+    expect(section(strings.OVERDUE)).toHaveAttribute('aria-expanded', 'false');
   });
 
   it('tells how soon in-progress observations end', async () => {
@@ -311,6 +322,7 @@ describe('ScheduledObservationsMenu sections', () => {
     const { user } = renderMenu(true, ALL);
 
     await openFlyout(user);
+    await user.click(section(strings.UPCOMING));
     await user.click(section(strings.OVERDUE));
     await startRescheduling(user);
     await enterDate(user, strings.START_DATE, isoDaysFromNow(5));
@@ -325,54 +337,10 @@ describe('ScheduledObservationsMenu sections', () => {
     const { user } = renderMenu(true, [FIRST, IN_PROGRESS, PARTLY_OBSERVED]);
 
     await openFlyout(user);
+    await user.click(section(strings.UPCOMING));
     await user.click(section(strings.IN_PROGRESS));
 
     expect(screen.getByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
     expect(screen.getAllByText(strings.RESCHEDULE)).toHaveLength(1);
-  });
-
-  describe('when opened to an observation', () => {
-    const openTo = async (id: number, observations = ALL) => {
-      const ref = createRef<ScheduledObservationsMenuHandle>();
-      renderMenu(true, observations, ref);
-      await waitFor(() =>
-        expect(document.querySelector('.MuiBadge-badge')).toHaveTextContent(observations.length.toString())
-      );
-      act(() => ref.current!.openToObservation(id));
-    };
-
-    it("shows the observation's reschedule form", async () => {
-      await openTo(IN_PROGRESS.id);
-
-      expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(IN_PROGRESS.startDate);
-      expect(screen.getByLabelText(strings.END_DATE)).toHaveValue(IN_PROGRESS.endDate);
-      expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'true');
-      expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'false');
-    });
-
-    it('shows the whole section when the observation is past the first few', async () => {
-      const [lastOverdue, otherOverdue] = MORE_OVERDUE;
-      await openTo(lastOverdue.id);
-
-      expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(lastOverdue.startDate);
-      expect(screen.getByText(lastOverdue.plantingSiteName)).toBeInTheDocument();
-      expect(screen.getByText(otherOverdue.plantingSiteName)).toBeInTheDocument();
-    });
-
-    it('shows, without a form, an observation that can no longer be rescheduled', async () => {
-      await openTo(PARTLY_OBSERVED.id, [FIRST, PARTLY_OBSERVED]);
-
-      expect(await screen.findByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
-      expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'true');
-      expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
-    });
-
-    it('opens to the upcoming observations when the observation is not scheduled', async () => {
-      await openTo(999);
-
-      expect(await screen.findByText(FIRST.plantingSiteName)).toBeInTheDocument();
-      expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'true');
-      expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
-    });
   });
 });
