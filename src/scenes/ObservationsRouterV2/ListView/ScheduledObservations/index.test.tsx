@@ -2,7 +2,7 @@ import React, { createRef, useCallback, useState } from 'react';
 
 import { act, screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
-import { DateTime } from 'luxon';
+import { DateTime, Settings } from 'luxon';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import ScheduledObservationsMenu, {
@@ -11,6 +11,9 @@ import ScheduledObservationsMenu, {
 } from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
 import strings from 'src/strings';
 import { buildObservation, buildUser, captureRequests, mockError, mockGet, renderWithProviders } from 'src/test-utils';
+
+// DatePicker sets Luxon's default zone to UTC when it renders, so fixture dates must use that zone too.
+Settings.defaultZone = 'Etc/UTC';
 
 const isoDaysFromNow = (days: number) => DateTime.now().plus({ days }).toISODate()!;
 
