@@ -105,7 +105,14 @@ it('round-trips open numeric and calendar-date ranges without losing zero or sam
   expect(matchesMatrixRange(numeric, 'v', [1, null])).toBe(false);
   expect(matchesMatrixRange(dated, 'v', JSON.parse(JSON.stringify(['2026-01-01', undefined])))).toBe(true);
   expect(matchesMatrixRange(dated, 'v', [null, '2026-01-01'])).toBe(true);
-  expect(matchesMatrixRange(dated, 'v', [null, '2026-01-01T00:00:00Z'])).toBe(false);
+  expect(matchesMatrixRange(dated, 'v', [null, '2026-01-01T00:00:00Z'])).toBe(true);
+  const persisted = JSON.parse(JSON.stringify(['2026-01-01T00:00:00-10:00', '2026-01-01T00:00:00+14:00']));
+  expect(matchesMatrixRange(dated, 'v', persisted)).toBe(true);
+  const localDay = { format: () => '2026-01-01', isValid: () => true };
+  expect(matchesMatrixRange({ original: dated }, 'v', [localDay, localDay])).toBe(true);
+  expect(matchesMatrixRange(dated, 'v', ['2026-01-02T00:00:00-10:00', null])).toBe(false);
+  expect(matchesMatrixRange(dated, 'v', [null, '2025-12-31T00:00:00+14:00'])).toBe(false);
+  expect(matchesMatrixRange(dated, 'v', ['invalid', null])).toBe(false);
   expect(matchesMatrixRange(dated, 'missing', [0, null])).toBe(false);
   expect(matchesMatrixRange(dated, 'missing', [null, null])).toBe(true);
 });
