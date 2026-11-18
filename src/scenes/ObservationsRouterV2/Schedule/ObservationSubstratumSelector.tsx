@@ -22,13 +22,19 @@ interface StatusPillProps {
   id: number;
   label?: string;
   value: string;
+  wrap?: boolean;
 }
 
-const StatusPill = ({ id, label, value }: StatusPillProps) => {
+const StatusPill = ({ id, label, value, wrap }: StatusPillProps) => {
   const theme = useTheme();
 
   return (
-    <Box flexShrink={0} whiteSpace='nowrap' sx={{ '& .pill': { background: theme.palette.TwClrBgSecondary } }}>
+    <Box
+      flexShrink={wrap ? 1 : 0}
+      maxWidth='100%'
+      whiteSpace={wrap ? 'normal' : 'nowrap'}
+      sx={{ '& .pill': { background: theme.palette.TwClrBgSecondary } }}
+    >
       <Pill id={id} label={label} value={value} />
     </Box>
   );
@@ -287,7 +293,7 @@ const ObservationSubstratumSelector = ({
                         value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
                       />
                     ) : (
-                      <StatusPill id={stratum.id} value={strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED} />
+                      <StatusPill id={stratum.id} value={strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED} wrap />
                     ))}
                 </Box>
                 <Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}>
