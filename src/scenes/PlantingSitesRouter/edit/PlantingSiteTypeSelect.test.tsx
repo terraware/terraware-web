@@ -41,14 +41,14 @@ const renderTypeSelect = () => {
   mockGet(PROJECTS_URL, { projects: [] });
 
   const onClose = rstest.fn();
-  const ui = (
+  const buildUi = () => (
     <>
       <PlantingSiteTypeSelect onClose={onClose} />
       <LocationProbe />
     </>
   );
 
-  return { onClose, ui, ...renderWithProviders(ui) };
+  return { onClose, buildUi, ...renderWithProviders(buildUi()) };
 };
 
 /**
@@ -135,12 +135,12 @@ describe('PlantingSiteTypeSelect when the site editor is unavailable', () => {
 
   // Rotating a tablet to portrait part way through would otherwise throw away the details entered.
   it('carries on with the flow once it has started', async () => {
-    const { rerender, ui, user } = renderTypeSelect();
+    const { buildUi, rerender, user } = renderTypeSelect();
 
     await fillInNewSite(user);
 
     device.isDesktop = false;
-    rerender(ui);
+    rerender(buildUi());
 
     expect(nameField()).toHaveValue('Kaupulehu');
     expect(screen.queryByText(strings.FEATURE_NOT_AVAILABLE_AT_SCREEN_SIZE)).not.toBeInTheDocument();
