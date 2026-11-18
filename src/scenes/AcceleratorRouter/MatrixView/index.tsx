@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 
-import { Box, Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
+import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import {
   BusySpinner,
   EditableTableCellContext,
@@ -9,7 +9,6 @@ import {
   EditableTableEditContext,
   EditableTableToolbarContext,
   Icon,
-  isMrtTable,
 } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -819,7 +818,7 @@ const MatrixView = () => {
       | 'positionGlobalFilter'
       | 'enableColumnDragging'
       | 'renderTopToolbarCustomActions'
-      | 'renderMrtToolbarInternalActions'
+      | 'renderToolbarInternalActions'
       | 'muiTableHeadCellProps'
       | 'muiTableBodyCellProps'
     >
@@ -827,34 +826,24 @@ const MatrixView = () => {
     () => ({
       positionGlobalFilter: 'right',
       enableColumnDragging: !isMobile,
-      renderMrtToolbarInternalActions: (context) => (
+      renderToolbarInternalActions: (context) => (
         <EditableTableToolbar {...context} showColumnFiltersButton showDensityButton showFullScreenButton>
           {renderManageColumns(context)}
         </EditableTableToolbar>
       ),
-      renderTopToolbarCustomActions: ({ table }) => {
-        const currentViewControl = (
-          <CurrentView
-            defaultPreset={currentView}
-            defaultSettings={defaultViewSettings}
-            onPresetChange={onCurrentViewChange}
-            presetViews={[
-              { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
-              { label: strings.APPLICANTS, value: 'applicants' },
-            ]}
-            table={table}
-            tableDefinition={TABLES.matrixView}
-          />
-        );
-        return isMrtTable(table) ? (
-          currentViewControl
-        ) : (
-          <Box display='flex' alignItems='center' gap={1}>
-            {currentViewControl}
-            {renderManageColumns({ table })}
-          </Box>
-        );
-      },
+      renderTopToolbarCustomActions: ({ table }) => (
+        <CurrentView
+          defaultPreset={currentView}
+          defaultSettings={defaultViewSettings}
+          onPresetChange={onCurrentViewChange}
+          presetViews={[
+            { label: strings.ACCELERATOR_PROJECTS, value: 'acceleratorProjects' },
+            { label: strings.APPLICANTS, value: 'applicants' },
+          ]}
+          table={table}
+          tableDefinition={TABLES.matrixView}
+        />
+      ),
       muiTableBodyCellProps: ({ cell, column }) => ({
         sx: {
           '&[data-pinned="true"]:before': {
