@@ -3789,7 +3789,7 @@
   resolved "https://registry.yarnpkg.com/@swc/helpers/-/helpers-0.5.24.tgz#b1a41a35fcfb1413564981be1bab04b46168961b"
   integrity sha512-6tcXo4kA8HgGO7AVmawB57RYi/piBPYVHVcO6dXjX+SZw8GoHmi262sp4v2Ha2kNP9Cx84qei27yT+fjS1lxgg==
 
-"@tanstack/match-sorter-utils@8.19.4":
+"@tanstack/match-sorter-utils@8.19.4", "@tanstack/match-sorter-utils@^8.19.4":
   version "8.19.4"
   resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.19.4.tgz#dacf772b5d94f4684f10dbeb2518cf72dccab8a5"
   integrity sha512-Wo1iKt2b9OT7d+YGhvEPD3DXvPv2etTusIMhMUoG7fbhmxcXCtIjJDEygy91Y2JFlwGyjqiBPRozme7UD8hoqg==
@@ -3848,20 +3848,22 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@5.2.9-rc.0":
-  version "5.2.9-rc.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.2.9-rc.0.tgz#c120006d7fa97739b4312df796c0c674cb856270"
-  integrity sha512-RjCeR0II2+5f8cdXv+6SwCADDoY6be+XK8+aoJfGHgT6Ys0qvmqt4myBLuxBz5EJKT+SLpXsBtFDwWXHJvJ1XQ==
+"@terraware/web-components@5.2.9-rc.1":
+  version "5.2.9-rc.1"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.2.9-rc.1.tgz#90656478b7c0ecaaa5d60787d622c1b4d2df7f98"
+  integrity sha512-uxA5ZOmH17oKQOd1p1XAYtsRoyCrT/yDmszUHsxmNBlrAc3c7kDQ4G7FOmQhpRAsxZrgvJYtiLVloZr329NluQ==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
     "@mui/lab" "^7.0.1-beta.25"
     "@playcanvas/react" "0.11.7"
+    "@tanstack/match-sorter-utils" "^8.19.4"
     "@tanstack/react-table" "^9.3.1"
     classnames "^2.3.2"
     csv-parse "^7.0.0"
     embla-carousel-react "^8.6.0"
     geojson "^0.5.0"
+    highlight-words "2.0.0"
     luxon "^3.3.0"
     marked "^18.1.1"
     material-react-table "^3.2.1"
