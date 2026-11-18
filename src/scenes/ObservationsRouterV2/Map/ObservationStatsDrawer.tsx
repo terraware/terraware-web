@@ -199,7 +199,7 @@ const ObservationStatsDrawer = ({
     const drawerRows: MapDrawerTableRow[] = [];
 
     if (properties) {
-      if (properties.plotType) {
+      if (properties.plotType && results?.type !== 'Baseline Survey') {
         const value =
           properties.plotType === 'adHoc'
             ? strings.AD_HOC

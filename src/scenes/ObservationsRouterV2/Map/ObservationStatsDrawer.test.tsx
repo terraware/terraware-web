@@ -14,6 +14,10 @@ const regions = [
 ];
 
 const completedTime = '2026-06-02T12:00:00Z';
+const plotFeatures = [
+  { layerId: 'permanentPlots', featureId: '1', plotType: strings.PERMANENT },
+  { layerId: 'temporaryPlots', featureId: '2', plotType: strings.TEMPORARY },
+];
 const plot = (monitoringPlotId: number, isPermanent: boolean, completed: boolean) => ({
   monitoringPlotId,
   monitoringPlotNumber: monitoringPlotId,
@@ -87,11 +91,17 @@ describe('ObservationStatsDrawer plot counts', () => {
       expect(screen.getByRole('row', { name: `${strings.TEMPORARY_PLOTS} ${region.temporary}` })).toBeVisible();
       expect(screen.queryByText(strings.PLOTS)).not.toBeInTheDocument();
     });
+
+    it.each(plotFeatures)('keeps the plot type row for $layerId', async (feature) => {
+      renderDrawer(type, feature);
+      expect(await screen.findByRole('row', { name: `${strings.PLOT_TYPE} ${feature.plotType}` })).toBeVisible();
+    });
   });
 
-  it('does not add a combined count to an individual Baseline plot drawer', async () => {
-    renderDrawer('Baseline Survey', { layerId: 'temporaryPlots', featureId: '2' });
-    expect(await screen.findByRole('row', { name: `${strings.PLOT_TYPE} ${strings.TEMPORARY}` })).toBeVisible();
+  it.each(plotFeatures)('hides plot type and counts for an individual Baseline $layerId drawer', async (feature) => {
+    renderDrawer('Baseline Survey', feature);
+    expect(await screen.findByRole('row', { name: `${strings.STATUS} ${strings.COMPLETED}` })).toBeVisible();
+    expect(screen.queryByText(strings.PLOT_TYPE)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.PLOTS)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.PERMANENT_PLOTS)).not.toBeInTheDocument();
     expect(screen.queryByText(strings.TEMPORARY_PLOTS)).not.toBeInTheDocument();
