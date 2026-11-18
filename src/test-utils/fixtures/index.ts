@@ -1,4 +1,5 @@
 export { buildAccession, buildViabilityTest } from './accession';
+export { buildAcceleratorReport, buildReportIndicator } from './acceleratorReport';
 export { buildBatch, buildBatchSearchRow } from './batch';
 export { buildAcceleratorAdmin, buildFunderUser, buildUser } from './user';
 export { buildFacility, buildOrganization, buildSeedBank } from './organization';
