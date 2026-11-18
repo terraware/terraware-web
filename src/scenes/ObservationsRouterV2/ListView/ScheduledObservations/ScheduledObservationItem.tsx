@@ -7,6 +7,7 @@ import Link from 'src/components/common/Link';
 import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
+import { useUserTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import InlineRescheduleForm from './InlineRescheduleForm';
 
@@ -43,12 +44,13 @@ const ScheduledObservationItem = ({
   const theme = useTheme();
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
   const reschedulable = isReschedulable(observation);
+  const timeZoneId = useUserTimeZone()?.id;
 
   const { dateRange, tag } = useMemo(() => {
     const locale = activeLocale || 'en-US';
-    const today = DateTime.now().startOf('day').setLocale(locale);
-    const start = DateTime.fromISO(observation.startDate).setLocale(locale);
-    const end = DateTime.fromISO(observation.endDate).setLocale(locale);
+    const today = DateTime.now().setZone(timeZoneId).startOf('day').setLocale(locale);
+    const start = DateTime.fromISO(observation.startDate, { zone: timeZoneId }).setLocale(locale);
+    const end = DateTime.fromISO(observation.endDate, { zone: timeZoneId }).setLocale(locale);
 
     const daysOrMonths = (from: DateTime, to: DateTime): string => {
       const days = Math.max(Math.round(to.diff(from, 'days').days), 1);
@@ -82,7 +84,7 @@ const ScheduledObservationItem = ({
       dateRange: Interval.fromDateTimes(start, end).toLocaleString(DateTime.DATE_MED),
       tag: getTag(),
     };
-  }, [activeLocale, observation.endDate, observation.startDate, observation.state, strings]);
+  }, [activeLocale, observation.endDate, observation.startDate, observation.state, strings, timeZoneId]);
 
   const monitoringType = useMemo((): string => {
     const labels: Record<ObservationPayload['type'], string> = {
