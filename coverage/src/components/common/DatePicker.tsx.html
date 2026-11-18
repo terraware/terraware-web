@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -93,15 +93,7 @@
 <a name='L28'></a><a href='#L28'>28</a>
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a>
-<a name='L37'></a><a href='#L37'>37</a>
-<a name='L38'></a><a href='#L38'>38</a>
-<a name='L39'></a><a href='#L39'>39</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L31'></a><a href='#L31'>31</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -117,33 +109,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7194x</span>
+<span class="cline-any cline-yes">7194x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7397x</span>
-<span class="cline-any cline-yes">7397x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7194x</span>
+<span class="cline-any cline-yes">4124x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7397x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7397x</span>
-<span class="cline-any cline-yes">4126x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4126x</span>
-<span class="cline-any cline-yes">4126x</span>
+<span class="cline-any cline-yes">4124x</span>
+<span class="cline-any cline-yes">4124x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7397x</span>
+<span class="cline-any cline-yes">7194x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { type JSX, useEffect, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useEffect, useState } from 'react';
 &nbsp;
 import { DatePicker as WebComponentsDatePicker } from '@terraware/web-components';
 import type { Props } from '@terraware/web-components/components/DatePicker/DatePicker';
-import { Settings } from 'luxon';
 &nbsp;
 import { useLocalization } from 'src/providers';
 &nbsp;
@@ -158,13 +141,6 @@ import { useLocalization } from 'src/providers';
 export default function DatePicker(props: Props): JSX.Element {
   const { activeLocale } = useLocalization();
   const [propsWithLocale, setPropsWithLocale] = useState(props);
-  /**
-   * Luxon settings override needs to be set in the active codebase.
-   * This setting is also overridden in web-components but luxon seems to
-   * have sandboxed that, which makes sense, so default settings in app aren't affected by
-   * third party libraries.
-   */
-  Settings.defaultZone = props.defaultTimeZone || 'Etc/UTC';
 &nbsp;
   useEffect(() =&gt; {
     <span class="missing-if-branch" title="else path not taken" >E</span>if (activeLocale) {
@@ -175,7 +151,7 @@ export default function DatePicker(props: Props): JSX.Element {
     }
   }, [activeLocale, props, setPropsWithLocale]);
 &nbsp;
-  return WebComponentsDatePicker(propsWithLocale);
+  return &lt;WebComponentsDatePicker {...propsWithLocale} /&gt;;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -184,7 +160,7 @@ export default function DatePicker(props: Props): JSX.Element {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T19:52:01.182Z
+                at 2026-11-18T20:11:57.556Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
