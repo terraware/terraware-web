@@ -9,6 +9,7 @@ import {
   buildAcceleratorReport,
   buildReportIndicator,
   captureRequests,
+  mockError,
   mockGet,
   renderWithProviders,
 } from 'src/test-utils';
@@ -126,5 +127,48 @@ describe('AcceleratorReportEditV2', () => {
     expect(await screen.findByText(strings.TEXT_REQUIRED_BOTH_FIELDS)).toBeVisible();
     expect(screen.getByRole('status', { name: 'Location' })).toHaveTextContent(`/reports/${REPORT_ID}/edit`);
     expect(requests).toHaveLength(0);
+  });
+
+  it.each(['Submitted', 'Approved', 'Not Needed'] as const)(
+    'leaves the editor when the report is %s',
+    async (status) => {
+      mockGet(REPORT_URL, { report: buildAcceleratorReport({ id: REPORT_ID, status }) });
+
+      renderEdit();
+
+      await waitFor(() =>
+        expect(screen.getByRole('status', { name: 'Location' })).toHaveTextContent(
+          new RegExp(`^/reports/${REPORT_ID}$`)
+        )
+      );
+    }
+  );
+
+  it('stays in the editor when the report needs an update', async () => {
+    mockGet(REPORT_URL, {
+      report: buildAcceleratorReport({ highlights: 'Needs more detail', id: REPORT_ID, status: 'Needs Update' }),
+    });
+
+    renderEdit();
+
+    expect(await screen.findByDisplayValue('Needs more detail')).toBeVisible();
+    expect(screen.getByRole('status', { name: 'Location' })).toHaveTextContent(`/reports/${REPORT_ID}/edit`);
+  });
+
+  it('keeps the edits and shows an error when saving fails', async () => {
+    mockGet(REPORT_URL, { report: buildAcceleratorReport({ highlights: 'Old highlights', id: REPORT_ID }) });
+    mockError('post', REPORT_URL);
+
+    const { store, user } = renderEdit();
+
+    const highlights = await screen.findByDisplayValue('Old highlights');
+    await user.clear(highlights);
+    await user.type(highlights, 'Unsaved highlights');
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(screen.getByRole('status', { name: 'Location' })).toHaveTextContent(`/reports/${REPORT_ID}/edit`);
+    expect(screen.getByDisplayValue('Unsaved highlights')).toBeVisible();
+    expect(screen.getByRole('button', { name: strings.SAVE })).toBeEnabled();
   });
 });

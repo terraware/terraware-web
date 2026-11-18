@@ -10,6 +10,7 @@ import {
   buildAcceleratorReport,
   buildReportIndicator,
   captureRequests,
+  mockError,
   mockGet,
   renderWithProviders,
 } from 'src/test-utils';
@@ -87,5 +88,29 @@ describe('ReportEditV2', () => {
       priority: 'success',
       msg: strings.CHANGES_SAVED,
     });
+  });
+
+  it('stays in the editor and shows an error when saving the indicator entries fails', async () => {
+    mockGet(REPORT_URL, {
+      report: buildAcceleratorReport({
+        highlights: 'Old highlights',
+        id: REPORT_ID,
+        projectId: PROJECT_ID,
+        status: 'Submitted',
+      }),
+    });
+    const reviews = captureRequests('post', `${REPORT_URL}/review`);
+    mockError('post', `${REPORT_URL}/indicators/review`);
+
+    const { store, user } = renderEdit();
+
+    await screen.findByDisplayValue('Old highlights');
+    await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(reviews).toHaveLength(1);
+    expect(screen.getByRole('status', { name: 'Location' })).toHaveTextContent(
+      `/accelerator/projects/${PROJECT_ID}/reports/${REPORT_ID}/edit`
+    );
   });
 });
