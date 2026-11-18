@@ -69,8 +69,8 @@ describe('ReportSubmitButton', () => {
       mockGet(REPORT_URL, { report: buildAcceleratorReport({ id: REPORT_ID, status }) });
       renderButton();
 
-      await screen.findByRole('button', { name: strings.SUBMIT_FOR_APPROVAL });
-      await waitFor(() => expect(submitButton()).toBeDisabled());
+      await waitFor(() => expect(screen.getByRole('status', { name: 'Loaded status' })).toHaveTextContent(status));
+      expect(submitButton()).toBeDisabled();
     }
   );
 
