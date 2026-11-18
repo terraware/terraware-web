@@ -12,7 +12,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import PlantingDateRequestFulfillmentBadge from './PlantingDateRequestFulfillmentBadge';
 
-export const requestedSpeciesColumns = '2fr 1fr 1fr 2fr';
+export const requestedSpeciesColumns = 'minmax(0, 2fr) auto auto auto';
 
 export const speciesStatus = (requestedQuantity: number, withdrawnQuantity: number): PlantingDateRequestStatus => {
   if (withdrawnQuantity <= 0) {
@@ -65,13 +65,13 @@ export const RequestedSpeciesTableHeader = (): JSX.Element => {
       <Typography fontSize='14px' fontWeight={600}>
         {strings.SPECIES}
       </Typography>
-      <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+      <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
         {strings.REQUESTED}
       </Typography>
-      <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+      <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
         {strings.WITHDRAWN}
       </Typography>
-      <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+      <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
         {strings.STATUS}
       </Typography>
     </Box>
@@ -103,15 +103,15 @@ export const RequestedSpeciesTableRow = ({ species, showRemaining }: RequestedSp
       <Typography fontSize='16px' fontStyle='italic'>
         {species.scientificName}
       </Typography>
-      <Typography fontSize='16px' textAlign='right'>
+      <Typography fontSize='16px' textAlign='right' whiteSpace='nowrap'>
         {format(species.requestedQuantity)}
       </Typography>
-      <Typography fontSize='16px' textAlign='right'>
+      <Typography fontSize='16px' textAlign='right' whiteSpace='nowrap'>
         {format(species.withdrawnQuantity)}
       </Typography>
-      <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)}>
+      <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)} whiteSpace='nowrap'>
         {showRemaining && remaining > 0 && species.withdrawnQuantity > 0 && (
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} noWrap>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} whiteSpace='nowrap'>
             {strings.formatString(strings.X_LEFT, format(remaining))}
           </Typography>
         )}
@@ -155,15 +155,15 @@ export const RequestedSpeciesTableTotal = ({
       <Typography fontSize='16px' fontWeight={600}>
         {strings.TOTAL}
       </Typography>
-      <Typography fontSize='16px' fontWeight={600} textAlign='right'>
+      <Typography fontSize='16px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
         {format(requestedPlants)}
       </Typography>
-      <Typography fontSize='16px' fontWeight={600} textAlign='right'>
+      <Typography fontSize='16px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
         {format(withdrawnPlants)}
       </Typography>
-      <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)}>
+      <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)} whiteSpace='nowrap'>
         {remainingPlants !== undefined && remainingPlants > 0 && (
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} noWrap>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} whiteSpace='nowrap'>
             {strings.formatString(strings.X_LEFT, format(remainingPlants))}
           </Typography>
         )}

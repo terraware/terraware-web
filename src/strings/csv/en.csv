@@ -2870,10 +2870,10 @@ VIEW_PUBLISHED_FUNDER_REPORT,View Published Funder Report,
 VIEW_QUANTITIES,View quantities,
 VIEW_QUARTERLY_HIGHLIGHTS,View Quarterly Highlights,
 VIEW_REPORTS,View Reports,
-VIEW_REQUESTED_SPECIES_QUANTITIES,View Requested Species Quantities,
 VIEW_SESSION,View Session,Button label to view the video recording of an informational session
 VIEW_SITES_STRATA_SUBSTRATA,"View Sites, Strata, and Substrata on a map.",
 VIEW_SPECIES_LIST,View Species List,
+VIEW_SPECIES_QUANTITIES,View Species Quantities,
 VIEW_SUMMARY_BASE_VIEW,Base View: {0},Save view summary entry: {0} is the preset view the saved view is based on
 VIEW_SUMMARY_COLUMNS,Columns: {0},Save view summary entry: {0} is the comma-separated list of visible columns in order
 VIEW_SUMMARY_FILTER,{0}: {1},Save view summary entry: {0} is a column name and {1} is the value it's filtered by

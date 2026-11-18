@@ -61,7 +61,7 @@ const RequestedSpeciesDrawer = ({
       >
         <Box>
           <Typography fontSize='20px' fontWeight={600}>
-            {strings.VIEW_REQUESTED_SPECIES_QUANTITIES}
+            {strings.VIEW_SPECIES_QUANTITIES}
           </Typography>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {subtitle}
