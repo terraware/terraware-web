@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.87% </span>
+                <span class="strong">98.91% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>88/89</span>
+                <span class='fraction'>91/92</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.22% </span>
+                <span class="strong">85.86% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>75/88</span>
+                <span class='fraction'>79/92</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>44/44</span>
+                <span class='fraction'>45/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.75% </span>
+                <span class="strong">98.79% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>79/80</span>
+                <span class='fraction'>82/83</span>
             </div>
         
             
@@ -484,7 +484,23 @@
 <a name='L419'></a><a href='#L419'>419</a>
 <a name='L420'></a><a href='#L420'>420</a>
 <a name='L421'></a><a href='#L421'>421</a>
-<a name='L422'></a><a href='#L422'>422</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a>
+<a name='L424'></a><a href='#L424'>424</a>
+<a name='L425'></a><a href='#L425'>425</a>
+<a name='L426'></a><a href='#L426'>426</a>
+<a name='L427'></a><a href='#L427'>427</a>
+<a name='L428'></a><a href='#L428'>428</a>
+<a name='L429'></a><a href='#L429'>429</a>
+<a name='L430'></a><a href='#L430'>430</a>
+<a name='L431'></a><a href='#L431'>431</a>
+<a name='L432'></a><a href='#L432'>432</a>
+<a name='L433'></a><a href='#L433'>433</a>
+<a name='L434'></a><a href='#L434'>434</a>
+<a name='L435'></a><a href='#L435'>435</a>
+<a name='L436'></a><a href='#L436'>436</a>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -503,6 +519,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">643x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">643x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -899,12 +937,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 &nbsp;
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
@@ -924,6 +956,28 @@ import getSubstratumPlotEstimates, { PlotCounts } from './getSubstratumPlotEstim
 import { MonitoringType } from './monitoringTypes';
 &nbsp;
 const PLOT_COUNT_COLUMN_WIDTH = '64px';
+&nbsp;
+interface StatusPillProps {
+  id: number;
+  label?: string;
+  value: string;
+  wrap?: boolean;
+}
+&nbsp;
+const StatusPill = ({ id, label, value, wrap }: StatusPillProps) =&gt; {
+  const theme = useTheme();
+&nbsp;
+  return (
+    &lt;Box
+      flexShrink={wrap ? 1 : 0}
+      maxWidth='100%'
+      whiteSpace={wrap ? 'normal' : 'nowrap'}
+      sx={{ '&amp; .pill': { background: theme.palette.TwClrBgSecondary } }}
+    &gt;
+      &lt;Pill id={id} label={label} value={value} /&gt;
+    &lt;/Box&gt;
+  );
+};
 &nbsp;
 interface ObservationSubstratumSelectorProps {
   errorText?: string;
@@ -1172,17 +1226,13 @@ const ObservationSubstratumSelector = ({
                   /&gt;
                   {!isBaseline &amp;&amp;
                     (stratum.latestObservationCompletedTime ? (
-                      &lt;Box flexShrink={0} whiteSpace='nowrap'&gt;
-                        &lt;Pill
-                          id={stratum.id}
-                          label={strings.LAST_OBSERVATION}
-                          value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
-                        /&gt;
-                      &lt;/Box&gt;
+                      &lt;StatusPill
+                        id={stratum.id}
+                        label={strings.LAST_OBSERVATION}
+                        value={getDateDisplayValue(stratum.latestObservationCompletedTime)}
+                      /&gt;
                     ) : (
-                      &lt;Typography fontWeight={500} color={theme.palette.TwClrTxtSecondary}&gt;
-                        {strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED}
-                      &lt;/Typography&gt;
+                      &lt;StatusPill id={stratum.id} value={strings.NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED} wrap /&gt;
                     ))}
                 &lt;/Box&gt;
                 &lt;Typography textAlign='right' fontWeight={500} width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}&gt;
@@ -1279,13 +1329,11 @@ const ObservationSubstratumSelector = ({
                           &lt;/Box&gt;
                         )}
                         {!isBaseline &amp;&amp; substratum.latestObservationCompletedTime &amp;&amp; (
-                          &lt;Box flexShrink={0} whiteSpace='nowrap'&gt;
-                            &lt;Pill
-                              id={substratum.id}
-                              label={strings.LAST_OBSERVATION}
-                              value={getDateDisplayValue(substratum.latestObservationCompletedTime)}
-                            /&gt;
-                          &lt;/Box&gt;
+                          &lt;StatusPill
+                            id={substratum.id}
+                            label={strings.LAST_OBSERVATION}
+                            value={getDateDisplayValue(substratum.latestObservationCompletedTime)}
+                          /&gt;
                         )}
                       &lt;/Box&gt;
                       &lt;Typography textAlign='right' width={PLOT_COUNT_COLUMN_WIDTH} flexShrink={0}&gt;
@@ -1333,7 +1381,7 @@ export default ObservationSubstratumSelector;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-18T13:25:28.287Z
+                at 2026-11-18T17:03:46.474Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

@@ -1,3 +1,6 @@
+8aed27d1 SW-8877 Preview of Planting Dates - Improve styles (#7265)
+15bc1b50 SW-9363 Fix no observation tag styling (#7264)
+de5e873b SW-9237 Fix table alignment (#7263)
 baecb7c5 SW-9005 Planting and inventory planning species targets component tests (#7241)
 938f65d5 Fix time-zone-dependent Scheduled Observations tests (#7260)
 261a8400 SW-9003 Use generated API types and absolute imports in report E2E tests (#7251)
