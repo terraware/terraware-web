@@ -720,6 +720,8 @@ END_OBSERVATION_MODAL_MESSAGE,Ending an observation when there are no observed o
 END_OBSERVATION_MODAL_QUESTION,Are you sure you want to end the {0} observation early?,
 END_OF_PROJECT_TARGET,End of Project Target,
 END_TIME,End Time,
+ENDS_IN_X,ends in {0},"Shown on an in-progress observation; {0} is a duration such as ""3 days"" or ""2 months"""
+ENDS_TODAY,ends today,Shown on an in-progress observation that ends today
 ENTER_LOCATION,Enter Location,
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Enter Subset Weight and Count ratio to determine approximate seed count when withdrawing by weight from a count quantity. (Conversely, the ratio will determine approximate remaining quantity when withdrawing by count from a weight quantity.) These fields are useful when counting tiny seeds is not practical and only required if you intend to withdraw from this accession to a nursery.",
 ENTRIES,Entries,
@@ -2850,7 +2852,9 @@ VIDEO_UPLOAD_FAILED,Video Upload Failed,
 VIDEO_UPLOAD_FAILED_DESCRIPTION,Your video failed to upload. {0}. Find out why your video may have failed by visiting the {1}.,
 VIEW,View,
 VIEW_3D_MODEL,View 3D Model,
-VIEW_ALL_SCHEDULED_OBSERVATIONS,View all {0} scheduled observations,
+VIEW_ALL_X_IN_PROGRESS,View all {0} in progress,{0} is the number of in-progress observations
+VIEW_ALL_X_OVERDUE,View all {0} overdue,{0} is the number of overdue observations
+VIEW_ALL_X_UPCOMING,View all {0} upcoming,{0} is the number of upcoming observations
 VIEW_APPLICATION,View Application,
 VIEW_DOCUMENTS,View document(s),
 VIEW_FULL_DASHBOARD,View Full Dashboard,
@@ -2972,6 +2976,7 @@ X_HECTARES_HA,{0} Hectares (ha),
 X_LEFT,{0} left,
 X_OF_YEAR_CUMULATIVE_TARGET,{0} of Year Cumulative Target,
 X_OF_YEAR_TARGET,{0} of Year Target,
+X_OVERDUE,{0} overdue,"{0} is a duration such as ""17 days"" or ""3 months"""
 X_OVERDUE_Y,{0} (overdue {1}),{0} is a substratum name and {1} is a date
 X_PER_HA,{0}/ha,
 X_PLANTS,{0} plants,

@@ -720,6 +720,8 @@ END_OBSERVATION_MODAL_MESSAGE,Finalizar una observación cuando no hay parcelas 
 END_OBSERVATION_MODAL_QUESTION,¿Estás seguro de que quieres terminar la observación {0} anticipadamente?,5b3a4dde
 END_OF_PROJECT_TARGET,Meta al final del proyecto,02dc9d31
 END_TIME,Hora de finalización,7c0eb9ca
+ENDS_IN_X,termina en {0},0627f086
+ENDS_TODAY,termina hoy,9a86e192
 ENTER_LOCATION,Introducir ubicación,dfde68fa
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Introduzca el peso del subconjunto y la proporción de recuento para determinar el recuento de semillas aproximado al extraer por peso de una cantidad de recuento. (Inversamente, la proporción determinará la cantidad restante aproximada cuando se extraiga por recuento de una cantidad en peso). Estos campos son útiles cuando contar semillas muy pequeñas no es práctico y solo se requieren si planea extraer de esta accesión a un vivero.",c02303ee
 ENTRIES,Entradas,065e7c3e
@@ -2850,7 +2852,9 @@ VIDEO_UPLOAD_FAILED,Error al cargar el video,2406bea0
 VIDEO_UPLOAD_FAILED_DESCRIPTION,No se pudo cargar su video. {0}. Descubra por qué su video pudo haber fallado visitando el {1}.,839af7da
 VIEW,Ver,02cff17a
 VIEW_3D_MODEL,Ver modelo 3D,fc2e2960
-VIEW_ALL_SCHEDULED_OBSERVATIONS,Ver las {0} observaciones programadas,55cbbf44
+VIEW_ALL_X_IN_PROGRESS,Ver los {0} en curso,5a05903a
+VIEW_ALL_X_OVERDUE,Ver los {0} atrasados,848a6810
+VIEW_ALL_X_UPCOMING,Ver los {0} próximos,447bf67d
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_DOCUMENTS,Ver documento(s),3925fe9c
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
@@ -2972,6 +2976,7 @@ X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
 X_LEFT,Quedan {0},d5d2cf6b
 X_OF_YEAR_CUMULATIVE_TARGET,{0} del objetivo acumulativo anual,6658988a
 X_OF_YEAR_TARGET,{0} del objetivo anual,c57dbf7a
+X_OVERDUE,{0} de retraso,350cb4bd
 X_OVERDUE_Y,{0} (vencido el {1}),11c7edeb
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plantas,8cb7c65d

@@ -25,12 +25,52 @@ const SECOND = buildObservation({
   startDate: isoDaysFromNow(30),
 });
 
+const IN_PROGRESS = buildObservation({
+  endDate: isoDaysFromNow(3),
+  id: 7,
+  plantingSiteName: 'Hilo Watershed',
+  startDate: isoDaysFromNow(-10),
+  state: 'InProgress',
+});
+const OVERDUE_DAYS = buildObservation({
+  endDate: isoDaysFromNow(-48),
+  id: 8,
+  plantingSiteName: 'Kau Forest Reserve',
+  startDate: isoDaysFromNow(-70),
+  state: 'Overdue',
+});
+const OVERDUE_MONTHS = buildObservation({
+  endDate: DateTime.now().minus({ months: 3 }).toISODate()!,
+  id: 9,
+  plantingSiteName: 'Mauna Kea South',
+  startDate: DateTime.now().minus({ months: 4 }).toISODate()!,
+  state: 'Overdue',
+});
+const PARTLY_OBSERVED = buildObservation({
+  endDate: isoDaysFromNow(5),
+  id: 12,
+  numIncompletePlots: 2,
+  numPlots: 3,
+  plantingSiteName: 'Partly Observed Site',
+  startDate: isoDaysFromNow(-5),
+  state: 'InProgress',
+});
+const MORE_OVERDUE = [10, 11].map((id) =>
+  buildObservation({
+    endDate: isoDaysFromNow(-id),
+    id,
+    plantingSiteName: `Overdue Site ${id}`,
+    startDate: isoDaysFromNow(-id - 20),
+    state: 'Overdue',
+  })
+);
+
 const rescheduleUrl = (id: number) => `/api/v1/tracking/observations/${id}`;
 
-const renderMenu = (canReschedule = true) => {
+const renderMenu = (canReschedule = true, observations = [SECOND, FIRST]) => {
   mockGet('/api/v1/users/me/preferences', { preferences: {} });
   mockGet('/api/v1/users/me', { user: buildUser() });
-  mockGet('/api/v1/tracking/observations', { observations: [SECOND, FIRST] });
+  mockGet('/api/v1/tracking/observations', { observations });
 
   return renderWithProviders(
     <ScheduledObservationsMenu canReschedule={canReschedule} plantingSiteId={ALL_PLANTING_SITES} />
@@ -51,6 +91,8 @@ const enterDate = async (user: UserEvent, label: string, date: string) => {
   await user.keyboard('{Control>}a{/Control}');
   await user.paste(date);
 };
+
+const section = (name: string) => screen.getByRole('button', { name: new RegExp(`^${name}`) });
 
 const save = (user: UserEvent) => user.click(screen.getByRole('button', { name: strings.SAVE }));
 
@@ -166,5 +208,96 @@ describe('ScheduledObservationsMenu rescheduling', () => {
     await openFlyout(user);
 
     expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
+  });
+});
+
+describe('ScheduledObservationsMenu sections', () => {
+  const ALL = [SECOND, FIRST, IN_PROGRESS, OVERDUE_DAYS, OVERDUE_MONTHS, ...MORE_OVERDUE];
+
+  it('opens with only the upcoming observations showing', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+
+    expect(screen.getByText('Ceiba Grove')).toBeInTheDocument();
+    expect(screen.queryByText(IN_PROGRESS.plantingSiteName)).not.toBeInTheDocument();
+    expect(screen.queryByText(OVERDUE_DAYS.plantingSiteName)).not.toBeInTheDocument();
+    expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'true');
+    expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'false');
+    expect(section(strings.OVERDUE)).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('keeps only one section open at a time', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.IN_PROGRESS));
+
+    expect(screen.getByText(IN_PROGRESS.plantingSiteName)).toBeInTheDocument();
+    expect(screen.queryByText('Mahogany Ridge')).not.toBeInTheDocument();
+
+    await user.click(section(strings.OVERDUE));
+
+    expect(screen.getByText(OVERDUE_DAYS.plantingSiteName)).toBeInTheDocument();
+    expect(screen.queryByText(IN_PROGRESS.plantingSiteName)).not.toBeInTheDocument();
+    expect(section(strings.IN_PROGRESS)).toHaveAttribute('aria-expanded', 'false');
+  });
+
+  it('tells how soon in-progress observations end', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.IN_PROGRESS));
+
+    expect(screen.getByText(strings.formatString(strings.ENDS_IN_X, '3 days') as string)).toBeInTheDocument();
+  });
+
+  it('tells how long observations have been overdue in days, then months', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.OVERDUE));
+
+    expect(screen.getByText(strings.formatString(strings.X_OVERDUE, '3 months') as string)).toBeInTheDocument();
+    expect(screen.getByText(strings.formatString(strings.X_OVERDUE, '48 days') as string)).toBeInTheDocument();
+  });
+
+  it('lists every observation in a section when the user asks to view them all', async () => {
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.OVERDUE));
+    expect(screen.queryByText('Overdue Site 10')).not.toBeInTheDocument();
+
+    await user.click(screen.getByText(strings.formatString(strings.VIEW_ALL_X_OVERDUE, 4) as string));
+
+    expect(await screen.findByText('Overdue Site 10')).toBeInTheDocument();
+    expect(screen.getByText('Overdue Site 11')).toBeInTheDocument();
+    expect(screen.getByText(OVERDUE_DAYS.plantingSiteName)).toBeInTheDocument();
+  });
+
+  it('reschedules an overdue observation', async () => {
+    const requests = captureRequests('put', rescheduleUrl(OVERDUE_MONTHS.id));
+    const { user } = renderMenu(true, ALL);
+
+    await openFlyout(user);
+    await user.click(section(strings.OVERDUE));
+    await startRescheduling(user);
+    await enterDate(user, strings.START_DATE, isoDaysFromNow(5));
+    await enterDate(user, strings.END_DATE, isoDaysFromNow(20));
+    await save(user);
+
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(await requests[0].json()).toEqual({ endDate: isoDaysFromNow(20), startDate: isoDaysFromNow(5) });
+  });
+
+  it('does not offer rescheduling once plots have been observed', async () => {
+    const { user } = renderMenu(true, [FIRST, IN_PROGRESS, PARTLY_OBSERVED]);
+
+    await openFlyout(user);
+    await user.click(section(strings.IN_PROGRESS));
+
+    expect(screen.getByText(PARTLY_OBSERVED.plantingSiteName)).toBeInTheDocument();
+    expect(screen.getAllByText(strings.RESCHEDULE)).toHaveLength(1);
   });
 });
