@@ -3,12 +3,14 @@ import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
+import { EventLogEntryPayload } from 'src/queries/generated/events';
 import { PlantingSeasonPayload } from 'src/queries/generated/plantingSeasons';
 import { InventoryPlanningSeasonSearch } from 'src/queries/search/inventoryPlanning';
 import InventoryPlanningView from 'src/scenes/InventoryPlanningRouter/InventoryPlanningView';
 import strings from 'src/strings';
 import { mockError, mockGet, mockPost, renderWithProviders, selectDropdownOption, server } from 'src/test-utils';
 
+const ORGANIZATION_ID = 1;
 const KOA_ID = 1;
 const OHIA_ID = 2;
 const NORTH_SITE_ID = 1;
@@ -372,6 +374,21 @@ describe('InventoryPlanningView editing an allocation', () => {
     expect(saves).toHaveLength(0);
   });
 
+  it('saves the quantity when the field loses focus', async () => {
+    const saves = acceptAllocationSaves();
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await expandKoa(user);
+
+    await user.click(editAllocation(SPRING));
+    await user.clear(allocationField());
+    await user.type(allocationField(), '500');
+    await user.tab();
+
+    await waitFor(() => expect(saves).toHaveLength(1));
+    expect(await saves[0].json()).toEqual({ quantity: 500, speciesId: KOA_ID });
+  });
+
   it('warns when the quantity is more than the inventory on hand', async () => {
     acceptAllocationSaves();
 
@@ -385,5 +402,290 @@ describe('InventoryPlanningView editing an allocation', () => {
     expect(
       screen.getByText(strings.formatString(strings.EXCEEDS_AVAILABLE_X, KOA_AVAILABLE).toString())
     ).toBeInTheDocument();
+  });
+});
+
+/** The summary row for a species, scoped the same way as `seasonRow` and for the same reason. */
+const speciesRow = (scientificName: string): HTMLElement => {
+  const row = screen.getByText(scientificName).closest('div')?.parentElement;
+  if (!row) {
+    throw new Error(`No species row for "${scientificName}"`);
+  }
+  return row;
+};
+
+const EVENT_USER = 'Nursery Manager';
+
+type AllocationEventOptions = {
+  action: EventLogEntryPayload['action'];
+  plantingSeasonId: number;
+  plantingSiteId: number;
+  scientificName: string;
+  speciesId: number;
+  userName?: string;
+};
+
+/**
+ * An allocation change as the event log endpoint returns it. `shortText` and `fullText` are only
+ * the server's fallback names, so they are deliberately not the real season and site names: the
+ * view is expected to resolve those from the planting seasons and sites it already has.
+ */
+const allocationEvent = ({
+  action,
+  plantingSeasonId,
+  plantingSiteId,
+  scientificName,
+  speciesId,
+  userName = EVENT_USER,
+}: AllocationEventOptions): EventLogEntryPayload => ({
+  action,
+  subject: {
+    type: 'PlantingSeasonAllocatedSpecies',
+    fullText: 'unnamed planting site',
+    shortText: 'unnamed planting season',
+    plantingSeasonId,
+    plantingSiteId,
+    scientificName,
+    speciesId,
+  },
+  timestamp: '2026-02-01T12:00:00Z',
+  userId: 1,
+  userName,
+});
+
+const koaAllocationCreated = (): EventLogEntryPayload =>
+  allocationEvent({
+    action: { type: 'Created', fields: [{ fieldName: 'quantity', value: ['300'] }] },
+    plantingSeasonId: SPRING_ID,
+    plantingSiteId: NORTH_SITE_ID,
+    scientificName: KOA,
+    speciesId: KOA_ID,
+  });
+
+const ohiaAllocationChanged = (): EventLogEntryPayload =>
+  allocationEvent({
+    action: { type: 'FieldUpdated', fieldName: 'quantity', changedFrom: ['100'], changedTo: ['250'] },
+    plantingSeasonId: AUTUMN_ID,
+    plantingSiteId: SOUTH_SITE_ID,
+    scientificName: OHIA,
+    speciesId: OHIA_ID,
+  });
+
+const koaAllocationCreatedText = (): string =>
+  strings
+    .formatString(strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE, '300', KOA, SPRING, NORTH_SITE)
+    .toString();
+
+const ohiaAllocationChangedText = (): string =>
+  strings
+    .formatString(
+      strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,
+      OHIA,
+      AUTUMN,
+      SOUTH_SITE,
+      '100',
+      '250'
+    )
+    .toString();
+
+/**
+ * A change log entry, found by the sentence it reads as once the link and the highlighted
+ * quantities are put back together.
+ */
+const changeLogEntry = (text: string): HTMLElement | null =>
+  screen.queryByText(
+    (_content, element) =>
+      element?.textContent === text && Array.from(element.children).every((child) => child.textContent !== text)
+  );
+
+type EventsRequestBody = {
+  organizationId: number;
+  plantingSeasonId?: number;
+  plantingSiteId?: number;
+  subjects?: string[];
+};
+
+/**
+ * Answers the event log the way the server would, applying the filters the request asked for, so a
+ * filter the view forgets to send shows up as an entry that should not be there. Returns the
+ * request bodies the view sent.
+ */
+const serveAllocationEvents = (events: EventLogEntryPayload[]): EventsRequestBody[] => {
+  const bodies: EventsRequestBody[] = [];
+
+  server.use(
+    http.post('/api/v1/events/list', async ({ request }) => {
+      const body = (await request.json()) as EventsRequestBody;
+      bodies.push(body);
+
+      return HttpResponse.json({
+        status: 'ok',
+        events: events.filter(
+          (event) =>
+            event.subject.type === 'PlantingSeasonAllocatedSpecies' &&
+            (body.plantingSeasonId === undefined || event.subject.plantingSeasonId === body.plantingSeasonId) &&
+            (body.plantingSiteId === undefined || event.subject.plantingSiteId === body.plantingSiteId)
+        ),
+      });
+    })
+  );
+
+  return bodies;
+};
+
+const showChangeHistory = async (user: ReturnType<typeof renderWithProviders>['user']) => {
+  await user.click(await screen.findByRole('button', { name: strings.CHANGE_HISTORY }));
+};
+
+describe('InventoryPlanningView change log', () => {
+  it('asks only for the allocation changes of the organization', async () => {
+    const requests = serveAllocationEvents([koaAllocationCreated()]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    expect(requests[requests.length - 1]).toEqual({
+      organizationId: ORGANIZATION_ID,
+      subjects: ['PlantingSeasonAllocatedSpecies'],
+    });
+  });
+
+  it('spells out the quantity, species, planting season and site of each allocation change', async () => {
+    serveAllocationEvents([koaAllocationCreated(), ohiaAllocationChanged()]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    expect(changeLogEntry(koaAllocationCreatedText())).toBeInTheDocument();
+    expect(changeLogEntry(ohiaAllocationChangedText())).toBeInTheDocument();
+  });
+
+  it('links a change log entry to the planting season it changed', async () => {
+    serveAllocationEvents([koaAllocationCreated()]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    expect(screen.getByRole('link', { name: SPRING })).toHaveAttribute('href', `/plants/planting-seasons/${SPRING_ID}`);
+  });
+
+  it('limits the change log to the selected planting site', async () => {
+    const requests = serveAllocationEvents([koaAllocationCreated(), ohiaAllocationChanged()]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    await selectDropdownOption(user, 'filter-planting-site', SOUTH_SITE);
+
+    await waitFor(() => expect(changeLogEntry(koaAllocationCreatedText())).not.toBeInTheDocument());
+    expect(changeLogEntry(ohiaAllocationChangedText())).toBeInTheDocument();
+    expect(requests[requests.length - 1]).toEqual({
+      organizationId: ORGANIZATION_ID,
+      plantingSiteId: SOUTH_SITE_ID,
+      subjects: ['PlantingSeasonAllocatedSpecies'],
+    });
+  });
+
+  it('limits the change log to the selected planting season', async () => {
+    const requests = serveAllocationEvents([koaAllocationCreated(), ohiaAllocationChanged()]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    await selectDropdownOption(user, 'filter-planting-season', AUTUMN);
+
+    await waitFor(() => expect(changeLogEntry(koaAllocationCreatedText())).not.toBeInTheDocument());
+    expect(changeLogEntry(ohiaAllocationChangedText())).toBeInTheDocument();
+    expect(requests[requests.length - 1]).toEqual({
+      organizationId: ORGANIZATION_ID,
+      plantingSeasonId: AUTUMN_ID,
+      subjects: ['PlantingSeasonAllocatedSpecies'],
+    });
+  });
+
+  it('limits the change log to the selected species, which the endpoint cannot filter on', async () => {
+    const requests = serveAllocationEvents([koaAllocationCreated(), ohiaAllocationChanged()]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    await selectDropdownOption(user, 'filter-species', KOA);
+
+    await waitFor(() => expect(changeLogEntry(ohiaAllocationChangedText())).not.toBeInTheDocument());
+    expect(changeLogEntry(koaAllocationCreatedText())).toBeInTheDocument();
+    // The species has to be filtered out of the response, so asking the server for it would be dropped.
+    expect(requests.every((request) => !('speciesId' in request))).toBe(true);
+  });
+
+  it('leaves allocations that were removed out of the change log', async () => {
+    const removedBy = 'Site Manager';
+    serveAllocationEvents([
+      koaAllocationCreated(),
+      allocationEvent({
+        action: { type: 'Deleted' },
+        plantingSeasonId: SPRING_ID,
+        plantingSiteId: NORTH_SITE_ID,
+        scientificName: KOA,
+        speciesId: KOA_ID,
+        userName: removedBy,
+      }),
+    ]);
+
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+    await showChangeHistory(user);
+
+    // A removal has no description to render, so keeping it would show an entry with no text at all.
+    expect(changeLogEntry(koaAllocationCreatedText())).toBeInTheDocument();
+    expect(screen.queryAllByText(new RegExp(removedBy))).toHaveLength(0);
+  });
+
+  it('shows no change log when no allocation has been changed yet', async () => {
+    const requests = serveAllocationEvents([]);
+
+    renderWithProviders(<InventoryPlanningView />);
+
+    expect(await screen.findByText(KOA)).toBeInTheDocument();
+    await waitFor(() => expect(requests).toHaveLength(1));
+    expect(screen.queryByRole('button', { name: strings.CHANGE_HISTORY })).not.toBeInTheDocument();
+  });
+});
+
+describe('InventoryPlanningView allocation progress', () => {
+  it('shows how much of a species target has been allocated', async () => {
+    renderWithProviders(<InventoryPlanningView />);
+
+    expect(await screen.findByText(KOA)).toBeInTheDocument();
+    expect(within(speciesRow(KOA)).getByText('25%')).toBeInTheDocument();
+  });
+
+  it('never reports more than the whole target as allocated', async () => {
+    seasonSearchResults = [
+      springSearchResult(),
+      { ...autumnSearchResult(), allocatedSpecies: [{ species_id: `${OHIA_ID}`, 'quantity(raw)': '900' }] },
+    ];
+
+    renderWithProviders(<InventoryPlanningView />);
+
+    expect(await screen.findByText(OHIA)).toBeInTheDocument();
+    expect(within(speciesRow(OHIA)).getByText('100%')).toBeInTheDocument();
+  });
+
+  it('shows a dash rather than a zero for a species nothing has been allocated to', async () => {
+    renderWithProviders(<InventoryPlanningView />);
+
+    expect(await screen.findByText(OHIA)).toBeInTheDocument();
+    expect(within(speciesRow(OHIA)).getByText('-')).toBeInTheDocument();
+  });
+
+  it('explains what the available column counts', async () => {
+    const { user } = renderWithProviders(<InventoryPlanningView />);
+
+    expect(await screen.findByText(KOA)).toBeInTheDocument();
+    // The tooltip hangs off an icon with no accessible name and no way to reach it from the
+    // keyboard, so there is nothing to query it by; a label would let this use a role.
+    const infoIcon = screen.getByText(strings.AVAILABLE_TITLE).parentElement?.querySelector('svg');
+    await user.hover(infoIcon as Element);
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.INVENTORY_PLANNING_AVAILABLE_TOOLTIP);
   });
 });
