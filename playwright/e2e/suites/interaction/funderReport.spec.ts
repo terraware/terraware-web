@@ -1,8 +1,7 @@
 import { Page, expect, test } from '@playwright/test';
-
-import { selectDropdownOption } from '../../utils/activityUtils';
-import { navigateToFunderProjectTab } from '../../utils/navigation';
-import { publishProjectProfileViaApi } from '../../utils/projectProfile';
+import { selectDropdownOption } from 'playwright/e2e/utils/activityUtils';
+import { navigateToFunderProjectTab } from 'playwright/e2e/utils/navigation';
+import { publishProjectProfileViaApi } from 'playwright/e2e/utils/projectProfile';
 import {
   ReportContent,
   ReportQuarter,
@@ -10,9 +9,9 @@ import {
   ensureYearlyReportConfig,
   getQuarterlyReport,
   publishReport,
-} from '../../utils/reportUtils';
-import { changeToFunderUser, changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions } from '../../utils/utils';
+} from 'playwright/e2e/utils/reportUtils';
+import { changeToFunderUser, changeToSuperAdmin } from 'playwright/e2e/utils/userUtils';
+import { exactOptions } from 'playwright/e2e/utils/utils';
 
 // The only project wired to the funder user's funding entity in the dump.
 const PHASE_1_PROJECT_ID = 3;
