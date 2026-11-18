@@ -27,6 +27,10 @@ type ScheduledObservationItemProps = {
   showSiteName: boolean;
 };
 
+// The server only reschedules in-progress and overdue observations before any of their plots are observed.
+export const isReschedulable = (observation: ObservationPayload): boolean =>
+  observation.state === 'Upcoming' || observation.numIncompletePlots === observation.numPlots;
+
 const ScheduledObservationItem = ({
   canReschedule,
   isRescheduling,
@@ -38,7 +42,7 @@ const ScheduledObservationItem = ({
   const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
   const biomassSchedulingEnabled = useFeatureEnabled('Scheduled Biomass Monitoring Observations');
-  const hasObservedPlots = observation.state !== 'Upcoming' && observation.numIncompletePlots < observation.numPlots;
+  const reschedulable = isReschedulable(observation);
 
   const { dateRange, tag } = useMemo(() => {
     const locale = activeLocale || 'en-US';
@@ -127,13 +131,13 @@ const ScheduledObservationItem = ({
           {monitoringType}
         </Typography>
       )}
-      {isRescheduling && <InlineRescheduleForm observation={observation} onClose={onRescheduleEnd} />}
+      {isRescheduling && reschedulable && <InlineRescheduleForm observation={observation} onClose={onRescheduleEnd} />}
       {showSiteName && !isRescheduling && (
         <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' lineHeight='20px'>
           {dateRange}
         </Typography>
       )}
-      {canReschedule && !hasObservedPlots && !isRescheduling && (
+      {canReschedule && reschedulable && !isRescheduling && (
         <Box marginTop={theme.spacing(0.5)}>
           <Link fontSize='14px' onClick={() => onRescheduleStart(observation.id)}>
             {strings.RESCHEDULE}

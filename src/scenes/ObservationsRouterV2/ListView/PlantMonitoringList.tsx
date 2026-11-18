@@ -27,7 +27,6 @@ import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useListObservationsQuery } from 'src/queries/generated/observations';
@@ -89,7 +88,12 @@ const toLocalDate = (dateStr?: string) => {
   return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null;
 };
 
-const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
+type PlantMonitoringActionsMenuContentProps = {
+  onReschedule?: (observationId: number) => void;
+  row: PlantMonitoringRow;
+};
+
+const PlantMonitoringActionsMenuContent = ({ onReschedule, row }: PlantMonitoringActionsMenuContentProps) => {
   const { strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
   const {
@@ -98,11 +102,10 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
     downloadObservationGpx,
     downloadObservationResults,
   } = useObservationExports();
-  const navigate = useSyncNavigate();
 
   const { hasData, hasPlots, observationId, observationState, observationType } = row;
   const exportLocationsDisabled = observationState === 'Upcoming' && !hasPlots;
-  const rescheduleDisabled = observationState === 'Completed' || observationState === 'Abandoned';
+  const isFinished = observationState === 'Completed' || observationState === 'Abandoned';
 
   return (
     <TableRowPopupMenu
@@ -133,14 +136,14 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
           },
         },
         {
-          disabled: rescheduleDisabled,
+          disabled: isFinished,
           label: strings.RESCHEDULE,
           onClick: () => {
-            navigate(APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observationId.toString()));
+            onReschedule?.(observationId);
           },
         },
         {
-          disabled: observationState === 'Completed' || observationState === 'Abandoned',
+          disabled: isFinished,
           label: strings.END_OBSERVATION,
           onClick: () => {
             openAbandonObservationModal(observationId);
@@ -152,10 +155,11 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
 };
 
 type PlantMonitoringListProps = {
+  onReschedule?: (observationId: number) => void;
   plantingSiteId?: PlantingSiteId;
 };
 
-const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
+const PlantMonitoringList = ({ onReschedule, plantingSiteId }: PlantMonitoringListProps) => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
@@ -297,8 +301,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   }, []);
 
   const ActionsMenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => <PlantMonitoringActionsMenuContent row={cell.row.original} />,
-    []
+    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => (
+      <PlantMonitoringActionsMenuContent onReschedule={onReschedule} row={cell.row.original} />
+    ),
+    [onReschedule]
   );
 
   const columns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {

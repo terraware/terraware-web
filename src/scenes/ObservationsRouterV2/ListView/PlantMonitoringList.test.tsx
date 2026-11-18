@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import { rstest } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -21,6 +21,7 @@ import downloadZipFile from 'src/utils/downloadZipFile';
 import ObservationFiltersProvider, { ObservationTypeFilter } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import PlantMonitoringList from './PlantMonitoringList';
+import ScheduledObservationsMenu, { type ScheduledObservationsMenuHandle } from './ScheduledObservations';
 import ObservationListView from './index';
 
 rstest.mock('src/utils/downloadZipFile', () => ({ default: rstest.fn() }));
@@ -74,6 +75,7 @@ type RenderListOptions = {
   observations?: ObservationResultsPayload[];
   observationType?: ObservationTypeFilter;
   showFilterPanel?: boolean;
+  showScheduledObservations?: boolean;
 };
 
 const toObservationPayload = (results: ObservationResultsPayload, numPlots: number): ObservationPayload => ({
@@ -90,6 +92,18 @@ const toObservationPayload = (results: ObservationResultsPayload, numPlots: numb
   type: results.type,
 });
 
+const ListWithScheduledObservations = () => {
+  const menuRef = useRef<ScheduledObservationsMenuHandle>(null);
+  const openReschedule = useCallback((id: number) => menuRef.current?.openToObservation(id), []);
+
+  return (
+    <>
+      <ScheduledObservationsMenu canReschedule plantingSiteId={ALL_PLANTING_SITES} ref={menuRef} />
+      <PlantMonitoringList onReschedule={openReschedule} plantingSiteId={ALL_PLANTING_SITES} />
+    </>
+  );
+};
+
 /**
  * Renders the list, by default with scheduled observations of each type. The returned requests are
  * the ones that carry the feature flags, so a test can tell "the flag said no" apart from "the flag
@@ -103,6 +117,7 @@ const renderList = (
     observations = [PLANT_OBSERVATION, BIOMASS_OBSERVATION, BASELINE_OBSERVATION],
     observationType,
     showFilterPanel = false,
+    showScheduledObservations = false,
   }: RenderListOptions = {}
 ) => {
   if (observationType !== undefined) {
@@ -123,7 +138,11 @@ const renderList = (
   const result = renderWithProviders(
     <ObservationFiltersProvider>
       {showFilterPanel && <ObservationFilterPanel plantingSiteId={ALL_PLANTING_SITES} />}
-      <PlantMonitoringList plantingSiteId={ALL_PLANTING_SITES} />
+      {showScheduledObservations ? (
+        <ListWithScheduledObservations />
+      ) : (
+        <PlantMonitoringList plantingSiteId={ALL_PLANTING_SITES} />
+      )}
     </ObservationFiltersProvider>,
     { localization }
   );
@@ -404,6 +423,15 @@ describe('PlantMonitoringList', () => {
       'aria-disabled',
       'true'
     );
+  });
+
+  it("opens the observation's reschedule form in the Scheduled Observations menu", async () => {
+    const { user } = renderList({}, { showScheduledObservations: true });
+
+    const menu = await openRowMenu(user, PLANT_ROW);
+    await user.click(within(menu).getByRole('menuitem', { name: strings.RESCHEDULE }));
+
+    expect(await screen.findByLabelText(strings.START_DATE)).toHaveValue(PLANT_OBSERVATION.startDate);
   });
 
   it('keeps location exports disabled for upcoming observations that have no plots yet', async () => {

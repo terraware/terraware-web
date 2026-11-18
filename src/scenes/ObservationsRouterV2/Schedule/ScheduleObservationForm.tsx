@@ -13,12 +13,7 @@ import TfMain from 'src/components/common/TfMain';
 import { useFeatureEnabled } from 'src/features';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import {
-  RescheduleObservationRequestPayload,
-  ScheduleObservationRequestPayload,
-  useLazyGetObservationQuery,
-} from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { ScheduleObservationRequestPayload } from 'src/queries/generated/observations';
 import SmallSiteWarningDialog from 'src/scenes/ObservationsRouterV2/Schedule/SmallSiteWarningDialog';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -33,19 +28,13 @@ const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
 export type ScheduleObservationFormProps = {
   title: string;
   onCancel: () => void;
-  onSchedule?: (formData: ScheduleObservationRequestPayload) => void;
-  onReschedule?: (formData: RescheduleObservationRequestPayload) => void;
-
-  // If observation ID is specified, it will be a reschedule
-  observationId?: number;
+  onSchedule: (formData: ScheduleObservationRequestPayload) => void;
 };
 
 export default function ScheduleObservationForm({
   title,
   onCancel,
   onSchedule,
-  onReschedule,
-  observationId,
 }: ScheduleObservationFormProps): JSX.Element {
   const { activeLocale, strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
@@ -55,8 +44,6 @@ export default function ScheduleObservationForm({
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
   const { plantingSite: selectedSiteDetails } = usePlantingSite(selectedPlantingSiteId);
-  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const [getObservation, getObservationResponse] = useLazyGetObservationQuery();
 
   const observableSites = useObservablePlantingSites();
   const [searchParams] = useSearchParams();
@@ -64,34 +51,13 @@ export default function ScheduleObservationForm({
 
   const todayISO = useMemo(() => DateTime.now().startOf('day').toISODate(), []);
 
-  const targetObservation = useMemo(
-    () => getObservationResponse.currentData?.observation,
-    [getObservationResponse.currentData?.observation]
-  );
-
-  const plantingSite = useMemo(
-    () => getPlantingSiteResponse.currentData?.site,
-    [getPlantingSiteResponse.currentData?.site]
-  );
   const selectedSite = useMemo(
     () => observableSites.find((site) => site.id === selectedPlantingSiteId),
     [observableSites, selectedPlantingSiteId]
   );
 
   useEffect(() => {
-    if (observationId) {
-      void getObservation(observationId, true);
-    }
-  }, [getObservation, observationId]);
-
-  useEffect(() => {
-    if (targetObservation) {
-      void getPlantingSite({ id: targetObservation.plantingSiteId, includeZones: false }, true);
-    }
-  }, [getPlantingSite, targetObservation]);
-
-  useEffect(() => {
-    if (plantingSite || selectedPlantingSiteId !== undefined) {
+    if (selectedPlantingSiteId !== undefined) {
       return;
     }
     if (observableSites.length === 1) {
@@ -99,19 +65,12 @@ export default function ScheduleObservationForm({
     } else if (observableSites.some((site) => site.id === requestedPlantingSiteId)) {
       setSelectedPlantingSiteId(requestedPlantingSiteId);
     }
-  }, [observableSites, plantingSite, requestedPlantingSiteId, selectedPlantingSiteId]);
+  }, [observableSites, requestedPlantingSiteId, selectedPlantingSiteId]);
 
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [requestedSubstratumIds, setRequestedSubstratumIds] = useState<number[]>();
   const [monitoringType, setMonitoringType] = useState<MonitoringType>('Monitoring');
-
-  const [loadedObservationId, setLoadedObservationId] = useState<number>();
-  if (targetObservation && targetObservation.id !== loadedObservationId) {
-    setLoadedObservationId(targetObservation.id);
-    setStartDate((current) => current ?? targetObservation.startDate);
-    setEndDate((current) => current ?? targetObservation.endDate);
-  }
 
   const upcomingObservationStartDates = useMemo(
     () => selectedSite?.upcomingObservationStartDates ?? {},
@@ -119,8 +78,7 @@ export default function ScheduleObservationForm({
   );
   const hasPlantings = selectedSite?.hasPlantings === true;
 
-  const showMonitoringTypeSelector =
-    biomassSchedulingEnabled && observationId === undefined && !!selectedPlantingSiteId;
+  const showMonitoringTypeSelector = biomassSchedulingEnabled && !!selectedPlantingSiteId;
   const selectedMonitoringTypeUnavailable =
     showMonitoringTypeSelector &&
     !(baselineSurveyEnabled && monitoringType === 'Baseline Survey') &&
@@ -145,33 +103,26 @@ export default function ScheduleObservationForm({
 
   const baselineOverlaps = useMemo(
     () =>
-      observationId === undefined && monitoringType === 'Baseline Survey'
+      monitoringType === 'Baseline Survey'
         ? (selectedSiteDetails?.strata
             ?.flatMap((stratum) => stratum.substrata)
             .filter(
               (substratum) => requestedSubstratumIds?.includes(substratum.id) && substratum.latestBaselineSurveyStatus
             ) ?? [])
         : [],
-    [monitoringType, observationId, requestedSubstratumIds, selectedSiteDetails]
+    [monitoringType, requestedSubstratumIds, selectedSiteDetails]
   );
 
-  const siteOptions = useMemo((): DropdownItem[] => {
-    if (plantingSite) {
-      return [
-        {
-          label: plantingSite.name,
-          value: plantingSite.id,
-        },
-      ];
-    } else {
-      return observableSites
+  const siteOptions = useMemo(
+    (): DropdownItem[] =>
+      observableSites
         .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
         .map((site) => ({
           label: site.name,
           value: site.id,
-        }));
-    }
-  }, [activeLocale, plantingSite, observableSites]);
+        })),
+    [activeLocale, observableSites]
+  );
 
   const selectedSiteAreaHa = selectedSite?.areaHa;
 
@@ -185,24 +136,16 @@ export default function ScheduleObservationForm({
     setStartDateError(_startDateError);
     setEndDateError(_endDateError);
 
-    if (observationId === undefined) {
-      if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
-        _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
-      }
-
-      setSubstratumError(_substratumError);
-      return _startDateError || _endDateError || _substratumError;
-    } else {
-      return _startDateError || _endDateError || _substratumError;
+    if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
+      _substratumError = strings.SELECT_AT_LEAST_ONE_SUBSTRATUM;
     }
-  }, [startDate, endDate, observationId, strings.SELECT_AT_LEAST_ONE_SUBSTRATUM, requestedSubstratumIds]);
+
+    setSubstratumError(_substratumError);
+    return _startDateError || _endDateError || _substratumError;
+  }, [startDate, endDate, strings.SELECT_AT_LEAST_ONE_SUBSTRATUM, requestedSubstratumIds]);
 
   const doSave = useCallback(() => {
-    if (onReschedule && startDate && endDate) {
-      onReschedule({ startDate, endDate });
-    }
-
-    if (onSchedule && startDate && endDate && requestedSubstratumIds && selectedSite) {
+    if (startDate && endDate && requestedSubstratumIds && selectedSite) {
       onSchedule({
         startDate,
         endDate,
@@ -214,16 +157,7 @@ export default function ScheduleObservationForm({
 
     setShowSmallSiteWarning(false);
     setShowBaselineWarning(false);
-  }, [
-    biomassSchedulingEnabled,
-    endDate,
-    monitoringType,
-    onReschedule,
-    onSchedule,
-    requestedSubstratumIds,
-    selectedSite,
-    startDate,
-  ]);
+  }, [biomassSchedulingEnabled, endDate, monitoringType, onSchedule, requestedSubstratumIds, selectedSite, startDate]);
 
   const saveWithBaselineWarning = useCallback(() => {
     setShowSmallSiteWarning(false);
@@ -239,17 +173,13 @@ export default function ScheduleObservationForm({
   const onSubmit = useCallback(() => {
     setValidate(true);
     if (!findErrors()) {
-      if (
-        observationId === undefined &&
-        selectedSiteAreaHa !== undefined &&
-        selectedSiteAreaHa < WARN_IF_SITE_LESS_THAN_HECTARES
-      ) {
+      if (selectedSiteAreaHa !== undefined && selectedSiteAreaHa < WARN_IF_SITE_LESS_THAN_HECTARES) {
         setShowSmallSiteWarning(true);
       } else {
         saveWithBaselineWarning();
       }
     }
-  }, [findErrors, observationId, saveWithBaselineWarning, selectedSiteAreaHa]);
+  }, [findErrors, saveWithBaselineWarning, selectedSiteAreaHa]);
 
   const setStartDateCallback = useCallback(
     (value: DateTime<boolean> | undefined) => setStartDate(value?.toISODate() || undefined),
@@ -284,9 +214,8 @@ export default function ScheduleObservationForm({
                 label={strings.PLANTING_SITE}
                 onChange={(value) => setSelectedPlantingSiteId(Number(value))}
                 options={siteOptions}
-                selectedValue={plantingSite?.id ?? selectedPlantingSiteId}
-                disabled={!!plantingSite}
-                errorText={validate && !(plantingSite?.id ?? selectedPlantingSiteId) ? strings.REQUIRED_FIELD : ''}
+                selectedValue={selectedPlantingSiteId}
+                errorText={validate && !selectedPlantingSiteId ? strings.REQUIRED_FIELD : ''}
                 fullWidth
               />
             </Grid>
@@ -311,7 +240,7 @@ export default function ScheduleObservationForm({
                       monitoringType={monitoringType}
                       onChangeSelectedSubstrata={setRequestedSubstratumIds}
                       plantingSiteId={selectedPlantingSiteId}
-                      preselectBaselineSubstrata={observationId === undefined}
+                      preselectBaselineSubstrata
                     />
                   </Grid>
                 )}
