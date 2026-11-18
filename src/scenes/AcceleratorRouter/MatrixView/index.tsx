@@ -466,7 +466,9 @@ const MatrixView = () => {
             );
 
             const handleSave = () => {
-              void save(selectedValue);
+              if (!isSaving) {
+                void save(selectedValue);
+              }
             };
 
             return (
@@ -512,7 +514,9 @@ const MatrixView = () => {
           const [value, setValue] = useState(() => String(cell.getValue() ?? ''));
 
           const handleSave = () => {
-            void save(value);
+            if (!isSaving) {
+              void save(value);
+            }
           };
 
           return (
@@ -546,7 +550,9 @@ const MatrixView = () => {
           const [value, setValue] = useState((cell.getValue() as string) || '');
 
           const handleSave = () => {
-            void save(value);
+            if (!isSaving) {
+              void save(value);
+            }
           };
 
           return (
