@@ -1,3 +1,7 @@
+073f6d37 SW-8877 Fix column alignment (#7276)
+d9bec05e SW-9017: Add report status-dependent edit and save failure component tests (#7273)
+b46f31e5 Add report submit and approve component tests (#7272)
+68bdfa27 Add report field and indicator editing component tests (#7271)
 94e95d96 Update screenshots (#7275)
 e3641c90 Update web-components to 5.2.11 (#7270)
 6d213001 Count Scheduled Observations days in the user's time zone (#7261)

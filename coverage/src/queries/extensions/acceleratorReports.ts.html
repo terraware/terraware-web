@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.64% </span>
+                <span class="strong">30.76% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/39</span>
+                <span class='fraction'>12/39</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.68% </span>
+                <span class="strong">28.94% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/38</span>
+                <span class='fraction'>11/38</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.64% </span>
+                <span class="strong">30.76% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/39</span>
+                <span class='fraction'>12/39</span>
             </div>
         
             
@@ -272,7 +272,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">141x</span>
+<span class="cline-any cline-yes">145x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -287,7 +287,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">55x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -372,7 +372,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -396,7 +396,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -405,13 +405,13 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -604,13 +604,13 @@ api.enhanceEndpoints({
       invalidatesTags: <span class="fstat-no" title="function not covered" >(_results, _error, args) =&gt; <span class="cstat-no" title="statement not covered" >[acceleratorReportTag(args.reportId)],</span></span>
     },
     reviewOneAcceleratorReport: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_results, _error, args) =&gt; <span class="cstat-no" title="statement not covered" >[acceleratorReportTag(args.reportId)],</span></span>
+      invalidatesTags: (_results, _error, args) =&gt; [acceleratorReportTag(args.reportId)],
     },
     submitAcceleratorReport: {
       invalidatesTags: <span class="fstat-no" title="function not covered" >(_results, _error, args) =&gt; <span class="cstat-no" title="statement not covered" >[acceleratorReportTag(args.reportId)],</span></span>
     },
     submitOneAcceleratorReport: {
-      invalidatesTags: <span class="fstat-no" title="function not covered" >(_results, _error, reportId) =&gt; <span class="cstat-no" title="statement not covered" >[acceleratorReportTag(reportId)],</span></span>
+      invalidatesTags: (_results, _error, reportId) =&gt; [acceleratorReportTag(reportId)],
     },
 &nbsp;
     publishAcceleratorReport: {
@@ -667,7 +667,7 @@ api.enhanceEndpoints({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-19T17:43:12.197Z
+                at 2026-11-19T18:21:45.541Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
