@@ -1,3 +1,5 @@
+aa3ab5ea SW-9369 Let Scheduled Observations sections open together; remove table Reschedule (#7269)
+b35c6920 SW-9368 Hide plot type in Baseline Survey plot drawer (#7268)
 073f6d37 SW-8877 Fix column alignment (#7276)
 d9bec05e SW-9017: Add report status-dependent edit and save failure component tests (#7273)
 b46f31e5 Add report submit and approve component tests (#7272)

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/15</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
@@ -235,36 +235,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">59x</span>
-<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">69x</span>
+<span class="cline-any cline-yes">69x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">59x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">69x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">59x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">177x</span>
-<span class="cline-any cline-yes">177x</span>
-<span class="cline-any cline-yes">177x</span>
-<span class="cline-any cline-yes">177x</span>
-<span class="cline-any cline-yes">177x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">177x</span>
+<span class="cline-any cline-yes">69x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">69x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">207x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -354,10 +354,10 @@ import { ObservationPayload } from 'src/queries/generated/observations';
 &nbsp;
 import { type ScheduledObservationSection, type ScheduledObservations } from './useScheduledObservations';
 &nbsp;
-export const SECTIONS: ScheduledObservationSection[] = ['upcoming', 'inProgress', 'overdue'];
+const SECTIONS: ScheduledObservationSection[] = ['upcoming', 'inProgress', 'overdue'];
 &nbsp;
 type ScheduledObservationSectionsProps = {
-  expandedSection?: ScheduledObservationSection;
+  expandedSections: ReadonlySet&lt;ScheduledObservationSection&gt;;
   limit?: number;
   observations: ScheduledObservations;
   onToggle: (section: ScheduledObservationSection) =&gt; void;
@@ -367,7 +367,7 @@ type ScheduledObservationSectionsProps = {
 };
 &nbsp;
 const ScheduledObservationSections = ({
-  expandedSection,
+  expandedSections,
   limit,
   observations,
   onToggle,
@@ -390,10 +390,10 @@ const ScheduledObservationSections = ({
   };
 &nbsp;
   return (
-    &lt;Box sx={{ display: 'flex', flex: '1 1 auto', flexDirection: 'column', minHeight: 0 }}&gt;
+    &lt;Box sx={{ flex: '1 1 auto', minHeight: 0, overflowY: 'auto' }}&gt;
       {SECTIONS.map((section) =&gt; {
         const sectionObservations = observations[section];
-        const isExpanded = expandedSection === section;
+        const isExpanded = expandedSections.has(section);
         const isOverdue = section === 'overdue';
         const visibleObservations = limit === undefined ? sectionObservations : sectionObservations.slice(0, limit);
         const bodyId = `scheduled-observations-${section}`;
@@ -403,13 +403,13 @@ const ScheduledObservationSections = ({
             &lt;ButtonBase
               aria-controls={isExpanded ? bodyId : undefined}
               aria-expanded={isExpanded}
+              data-section={section}
               onClick={() =&gt; onToggle(section)}
               sx={{
                 alignItems: 'center',
                 backgroundColor: theme.palette.TwClrBgSecondary,
                 borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                 display: 'flex',
-                flexShrink: 0,
                 gap: theme.spacing(1),
                 padding: theme.spacing(1.5, paddingX),
                 textAlign: 'left',
@@ -441,7 +441,7 @@ const ScheduledObservationSections = ({
               &lt;/Box&gt;
             &lt;/ButtonBase&gt;
             {isExpanded &amp;&amp; (
-              &lt;Box id={bodyId} sx={{ flex: '0 1 auto', minHeight: 0, overflowY: 'auto' }}&gt;
+              &lt;Box id={bodyId}&gt;
                 {sectionObservations.length === 0 &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >(</span>
                   &lt;&gt;
                     &lt;Divider /&gt;
@@ -490,7 +490,7 @@ export default ScheduledObservationSections;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-19T18:21:45.541Z
+                at 2026-11-19T18:46:36.158Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
