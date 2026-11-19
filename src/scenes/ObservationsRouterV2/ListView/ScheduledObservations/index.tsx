@@ -1,4 +1,4 @@
-import React, { type JSX, type Ref, useCallback, useEffect, useImperativeHandle, useMemo, useState } from 'react';
+import React, { type JSX, type Ref, useCallback, useImperativeHandle, useMemo, useRef, useState } from 'react';
 
 import { Badge, Box, Drawer, IconButton, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Tooltip } from '@terraware/web-components';
@@ -7,16 +7,16 @@ import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
 
-import ScheduledObservationItem, { isReschedulable } from './ScheduledObservationItem';
-import ScheduledObservationSections, { SECTIONS } from './ScheduledObservationSections';
+import ScheduledObservationItem from './ScheduledObservationItem';
+import ScheduledObservationSections from './ScheduledObservationSections';
 import useScheduledObservations, { type ScheduledObservationSection } from './useScheduledObservations';
 
 const FLYOUT_LIMIT = 3;
 const BUTTON_ID = 'scheduled-observations';
+const DEFAULT_EXPANDED_SECTIONS: ReadonlySet<ScheduledObservationSection> = new Set(['upcoming']);
 
 export type ScheduledObservationsMenuHandle = {
   open: () => void;
-  openToObservation: (observationId: number) => void;
 };
 
 type ScheduledObservationsMenuProps = {
@@ -49,46 +49,20 @@ const ScheduledObservationsMenu = ({
     [onFlyoutOpenChange]
   );
   const [panelOpen, setPanelOpen] = useState(false);
-  const [expandedSection, setExpandedSection] = useState<ScheduledObservationSection | undefined>('upcoming');
+  const [expandedSections, setExpandedSections] = useState(DEFAULT_EXPANDED_SECTIONS);
   const [reschedulingId, setReschedulingId] = useState<number>();
   const endReschedule = useCallback(() => setReschedulingId(undefined), []);
-  const [focusedId, setFocusedId] = useState<number>();
 
   useImperativeHandle(
     ref,
     () => ({
       open: () => {
         setFlyoutOpen(true);
-        setExpandedSection('upcoming');
-      },
-      openToObservation: (id: number) => {
-        const section = SECTIONS.find((key) => scheduledObservations[key].some((observation) => observation.id === id));
-        const index = section ? scheduledObservations[section].findIndex((observation) => observation.id === id) : -1;
-        // The header holding the flyout's button is unmounted while the title bar is hidden.
-        const showInPanel = index >= FLYOUT_LIMIT || !document.getElementById(BUTTON_ID);
-
-        setExpandedSection(section ?? 'upcoming');
-        setReschedulingId(
-          section && canReschedule && isReschedulable(scheduledObservations[section][index]) ? id : undefined
-        );
-        setFocusedId(section ? id : undefined);
-        setFlyoutOpen(!showInPanel);
-        setPanelOpen(showInPanel);
+        setExpandedSections(DEFAULT_EXPANDED_SECTIONS);
       },
     }),
-    [canReschedule, scheduledObservations, setFlyoutOpen]
+    [setFlyoutOpen]
   );
-
-  useEffect(() => {
-    if (focusedId === undefined) {
-      return;
-    }
-    const frame = requestAnimationFrame(() => {
-      document.getElementById(`scheduled-observation-${focusedId}`)?.scrollIntoView?.({ block: 'nearest' });
-      setFocusedId(undefined);
-    });
-    return () => cancelAnimationFrame(frame);
-  }, [focusedId]);
 
   const siteNames = useMemo(
     () => [...new Set(observations.map((observation) => observation.plantingSiteName))],
@@ -111,10 +85,12 @@ const ScheduledObservationsMenu = ({
     setFlyoutOpen(false);
     setReschedulingId(undefined);
   }, [setFlyoutOpen]);
+  const panelSectionRef = useRef<ScheduledObservationSection>(undefined);
   const openPanel = useCallback(
     (section: ScheduledObservationSection) => {
+      panelSectionRef.current = section;
       setFlyoutOpen(false);
-      setExpandedSection(section);
+      setExpandedSections((current) => new Set(current).add(section));
       setPanelOpen(true);
     },
     [setFlyoutOpen]
@@ -124,10 +100,28 @@ const ScheduledObservationsMenu = ({
     setReschedulingId(undefined);
   }, []);
 
-  const toggleSection = useCallback((section: ScheduledObservationSection) => {
-    setExpandedSection((current) => (current === section ? undefined : section));
-    setReschedulingId(undefined);
+  const scrollToPanelSection = useCallback((node: HTMLElement) => {
+    node.querySelector(`[data-section="${panelSectionRef.current}"]`)?.scrollIntoView?.({ block: 'start' });
   }, []);
+
+  const toggleSection = useCallback(
+    (section: ScheduledObservationSection) => {
+      if (
+        expandedSections.has(section) &&
+        scheduledObservations[section].some((observation) => observation.id === reschedulingId)
+      ) {
+        setReschedulingId(undefined);
+      }
+      setExpandedSections((current) => {
+        const next = new Set(current);
+        if (!next.delete(section)) {
+          next.add(section);
+        }
+        return next;
+      });
+    },
+    [expandedSections, reschedulingId, scheduledObservations]
+  );
 
   const renderObservation = useCallback(
     (observation: ObservationPayload) => (
@@ -146,7 +140,7 @@ const ScheduledObservationsMenu = ({
   const sections = (paddingX: number, limit?: number) =>
     observations.length > 0 && (
       <ScheduledObservationSections
-        expandedSection={expandedSection}
+        expandedSections={expandedSections}
         limit={limit}
         observations={scheduledObservations}
         onToggle={toggleSection}
@@ -208,6 +202,7 @@ const ScheduledObservationsMenu = ({
         onClose={closePanel}
         open={panelOpen}
         PaperProps={{ sx: { maxWidth: '100vw', overflow: 'hidden', width: { sm: '480px', xs: '100%' } } }}
+        SlideProps={{ onEntered: scrollToPanelSection }}
       >
         <Box flexShrink={0} padding={theme.spacing(3, 3, 2)}>
           {header(closePanel)}
