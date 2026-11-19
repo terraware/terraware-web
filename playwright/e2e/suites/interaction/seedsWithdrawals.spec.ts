@@ -160,6 +160,8 @@ type Fixture = {
   viabilityTestId: number;
 };
 
+let seededOrganizationId: number | undefined;
+
 const seedFixture = async (page: Page): Promise<Fixture> => {
   const request = page.request;
 
@@ -172,6 +174,8 @@ const seedFixture = async (page: Page): Promise<Fixture> => {
       { scientificName: 'Withdrawalia testis' },
     ],
   });
+  seededOrganizationId = organization.id;
+
   const [nurserySpecies, alphaSpecies, betaSpecies, testedSpecies] = organization.species;
 
   const seedBankId = await seedSeedBank(request, { organizationId: organization.id, name: SEED_BANK_NAME });
@@ -225,22 +229,19 @@ const accessionRow = (page: Page, accessionNumber: string): Locator =>
   page.getByRole('row').filter({ has: page.getByRole('link', { name: accessionNumber, ...exactOptions }) });
 
 test.describe('SeedsWithdrawalsTests', () => {
-  let organizationId: number | undefined;
-
   test.beforeEach(async ({ context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
   });
 
   test.afterEach(async ({ page }) => {
-    if (organizationId !== undefined) {
-      await deleteOrganization(page.request, organizationId);
-      organizationId = undefined;
+    if (seededOrganizationId !== undefined) {
+      await deleteOrganization(page.request, seededOrganizationId);
+      seededOrganizationId = undefined;
     }
   });
 
   test('Logs a nursery withdrawal and opens its details with the batch it filled', async ({ page }) => {
     const { organization, nurseryAccession, batch } = await seedFixture(page);
-    organizationId = organization.id;
 
     await openWithdrawalsLog(page, organization);
 
@@ -279,7 +280,6 @@ test.describe('SeedsWithdrawalsTests', () => {
 
   test('Keeps a row per accession for a withdrawal that emptied several of them', async ({ page }) => {
     const { organization, bulkAlpha, bulkBeta, nurseryAccession } = await seedFixture(page);
-    organizationId = organization.id;
 
     await openWithdrawalsLog(page, organization);
 
@@ -316,7 +316,6 @@ test.describe('SeedsWithdrawalsTests', () => {
 
   test('Keeps a viability testing withdrawal on its own and links to the test', async ({ page }) => {
     const { organization, viabilityAccession, viabilityTestId, bulkAlpha } = await seedFixture(page);
-    organizationId = organization.id;
 
     await openWithdrawalsLog(page, organization);
 
