@@ -67,7 +67,7 @@ const RequestedSpeciesDrawer = ({
         </IconButton>
       </Box>
 
-      <Box flex='0 1 auto' minHeight={0} padding={theme.spacing(0, 3)} sx={{ overflowY: 'auto' }}>
+      <Box flex={1} minHeight={0} padding={theme.spacing(0, 3)} sx={{ overflowY: 'auto' }}>
         <RequestedSpeciesTable
           species={species}
           requestedPlants={request.requestedPlants}
