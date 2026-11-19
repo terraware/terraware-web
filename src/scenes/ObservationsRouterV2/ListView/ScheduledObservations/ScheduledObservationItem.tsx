@@ -30,7 +30,7 @@ type ScheduledObservationItemProps = {
 };
 
 // The server only reschedules in-progress and overdue observations before any of their plots are observed.
-export const isReschedulable = (observation: ObservationPayload): boolean =>
+const isReschedulable = (observation: ObservationPayload): boolean =>
   observation.state === 'Upcoming' || observation.numIncompletePlots === observation.numPlots;
 
 const ScheduledObservationItem = ({

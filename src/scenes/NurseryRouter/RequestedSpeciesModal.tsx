@@ -7,12 +7,7 @@ import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests';
 
-import {
-  RequestedSpeciesTableHeader,
-  RequestedSpeciesTableRow,
-  RequestedSpeciesTableTotal,
-  useRequestedSpecies,
-} from './RequestedSpeciesTable';
+import { RequestedSpeciesTable, useRequestedSpecies } from './RequestedSpeciesTable';
 import { useRequestedSpeciesSubtitle } from './requestedSpeciesSubtitle';
 
 type RequestedSpeciesModalProps = {
@@ -79,19 +74,14 @@ const RequestedSpeciesModal = ({
         </Typography>
 
         <Box marginTop={theme.spacing(2)}>
-          <RequestedSpeciesTableHeader />
+          <RequestedSpeciesTable
+            species={species}
+            requestedPlants={request.requestedPlants}
+            withdrawnPlants={request.withdrawnPlants}
+            remainingPlants={remainingPlants}
+            status={request.status}
+          />
         </Box>
-
-        {species.map((speciesDetail) => (
-          <RequestedSpeciesTableRow key={speciesDetail.speciesId} species={speciesDetail} showRemaining />
-        ))}
-
-        <RequestedSpeciesTableTotal
-          requestedPlants={request.requestedPlants}
-          withdrawnPlants={request.withdrawnPlants}
-          remainingPlants={remainingPlants}
-          status={request.status}
-        />
       </Box>
     </DialogBox>
   );

@@ -1,6 +1,6 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, type ReactNode, useMemo } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, type SxProps, type Theme, Typography, useTheme } from '@mui/material';
 
 import { useLocalization } from 'src/providers';
 import {
@@ -12,7 +12,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import PlantingDateRequestFulfillmentBadge from './PlantingDateRequestFulfillmentBadge';
 
-export const requestedSpeciesColumns = 'minmax(0, 2fr) auto auto auto';
+const requestedSpeciesColumns = 'minmax(0, 2fr) auto auto auto';
 
 export const speciesStatus = (requestedQuantity: number, withdrawnQuantity: number): PlantingDateRequestStatus => {
   if (withdrawnQuantity <= 0) {
@@ -45,71 +45,132 @@ export const useRequestedSpecies = (
   return useMemo(() => ({ species, remainingPlants }), [species, remainingPlants]);
 };
 
+type RequestedSpeciesTableProps = {
+  species: PlantingDateRequestSpeciesDetail[];
+  requestedPlants: number;
+  withdrawnPlants: number;
+  status: string;
+  /** Left off where the status column is too tight to hold it alongside the badge. */
+  remainingPlants?: number;
+};
+
 /**
- * The quantities a planting date request asks for, laid out as the table the dialog and the drawer
- * share. Each surface supplies its own scrolling, so the header, the rows and the total are
- * separate pieces rather than one component.
+ * The quantities a planting date request asks for, as the table the dialog and the drawer share.
  */
-export const RequestedSpeciesTableHeader = (): JSX.Element => {
+export const RequestedSpeciesTable = ({
+  species,
+  requestedPlants,
+  withdrawnPlants,
+  status,
+  remainingPlants,
+}: RequestedSpeciesTableProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { format } = useNumberFormatter();
+
+  const headerCell: SxProps<Theme> = {
+    position: 'sticky',
+    top: 0,
+    zIndex: 1,
+    backgroundColor: theme.palette.TwClrBg,
+    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+    padding: theme.spacing(1),
+  };
+
+  const totalCell: SxProps<Theme> = {
+    position: 'sticky',
+    bottom: 0,
+    zIndex: 1,
+    backgroundColor: theme.palette.TwClrBgSecondary,
+    padding: theme.spacing(1.5, 1),
+  };
 
   return (
     <Box
       display='grid'
       gridTemplateColumns={requestedSpeciesColumns}
-      gap={theme.spacing(1)}
-      padding={theme.spacing(1, 0)}
-      sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+      marginLeft={theme.spacing(-1)}
+      marginRight={theme.spacing(-1)}
     >
-      <Typography fontSize='14px' fontWeight={600}>
-        {strings.SPECIES}
-      </Typography>
-      <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
-        {strings.REQUESTED}
-      </Typography>
-      <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
-        {strings.WITHDRAWN}
-      </Typography>
-      <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
-        {strings.STATUS}
-      </Typography>
+      <Row>
+        <Typography fontSize='14px' fontWeight={600} sx={headerCell}>
+          {strings.SPECIES}
+        </Typography>
+        <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap' sx={headerCell}>
+          {strings.REQUESTED}
+        </Typography>
+        <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap' sx={headerCell}>
+          {strings.WITHDRAWN}
+        </Typography>
+        <Typography fontSize='14px' fontWeight={600} textAlign='right' whiteSpace='nowrap' sx={headerCell}>
+          {strings.STATUS}
+        </Typography>
+      </Row>
+
+      {species.map((speciesDetail) => (
+        <SpeciesRow
+          key={speciesDetail.speciesId}
+          species={speciesDetail}
+          showRemaining={remainingPlants !== undefined}
+        />
+      ))}
+
+      <Row>
+        <Typography fontSize='16px' fontWeight={600} sx={totalCell}>
+          {strings.TOTAL}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={600} textAlign='right' whiteSpace='nowrap' sx={totalCell}>
+          {format(requestedPlants)}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={600} textAlign='right' whiteSpace='nowrap' sx={totalCell}>
+          {format(withdrawnPlants)}
+        </Typography>
+        <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)} sx={totalCell}>
+          {remainingPlants !== undefined && remainingPlants > 0 && (
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} whiteSpace='nowrap'>
+              {strings.formatString(strings.X_LEFT, format(remainingPlants))}
+            </Typography>
+          )}
+          <PlantingDateRequestFulfillmentBadge status={status} />
+        </Box>
+      </Row>
     </Box>
   );
 };
 
-type RequestedSpeciesTableRowProps = {
-  species: PlantingDateRequestSpeciesDetail;
-  /** Left off where the status column is too tight to hold it alongside the badge. */
-  showRemaining?: boolean;
-};
+const Row = ({ children }: { children: ReactNode }): JSX.Element => <Box display='contents'>{children}</Box>;
 
-export const RequestedSpeciesTableRow = ({ species, showRemaining }: RequestedSpeciesTableRowProps): JSX.Element => {
+const SpeciesRow = ({
+  species,
+  showRemaining,
+}: {
+  species: PlantingDateRequestSpeciesDetail;
+  showRemaining: boolean;
+}): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const { format } = useNumberFormatter();
 
   const remaining = Math.max(0, species.requestedQuantity - species.withdrawnQuantity);
+  const cell: SxProps<Theme> = {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(1.5, 1),
+    borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+  };
 
   return (
-    <Box
-      display='grid'
-      gridTemplateColumns={requestedSpeciesColumns}
-      gap={theme.spacing(1)}
-      alignItems='center'
-      padding={theme.spacing(1.5, 0)}
-      sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
-    >
-      <Typography fontSize='16px' fontStyle='italic'>
+    <Row>
+      <Typography fontSize='16px' fontStyle='italic' sx={cell}>
         {species.scientificName}
       </Typography>
-      <Typography fontSize='16px' textAlign='right' whiteSpace='nowrap'>
+      <Typography fontSize='16px' whiteSpace='nowrap' sx={{ ...cell, justifyContent: 'flex-end' }}>
         {format(species.requestedQuantity)}
       </Typography>
-      <Typography fontSize='16px' textAlign='right' whiteSpace='nowrap'>
+      <Typography fontSize='16px' whiteSpace='nowrap' sx={{ ...cell, justifyContent: 'flex-end' }}>
         {format(species.withdrawnQuantity)}
       </Typography>
-      <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)} whiteSpace='nowrap'>
+      <Box sx={{ ...cell, justifyContent: 'flex-end', gap: theme.spacing(1) }}>
         {showRemaining && remaining > 0 && species.withdrawnQuantity > 0 && (
           <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} whiteSpace='nowrap'>
             {strings.formatString(strings.X_LEFT, format(remaining))}
@@ -119,56 +180,6 @@ export const RequestedSpeciesTableRow = ({ species, showRemaining }: RequestedSp
           status={speciesStatus(species.requestedQuantity, species.withdrawnQuantity)}
         />
       </Box>
-    </Box>
-  );
-};
-
-type RequestedSpeciesTableTotalProps = {
-  requestedPlants: number;
-  withdrawnPlants: number;
-  status: string;
-  /** Left off where the status column is too tight to hold it alongside the badge. */
-  remainingPlants?: number;
-};
-
-export const RequestedSpeciesTableTotal = ({
-  requestedPlants,
-  withdrawnPlants,
-  status,
-  remainingPlants,
-}: RequestedSpeciesTableTotalProps): JSX.Element => {
-  const theme = useTheme();
-  const { strings } = useLocalization();
-  const { format } = useNumberFormatter();
-
-  return (
-    <Box
-      display='grid'
-      gridTemplateColumns={requestedSpeciesColumns}
-      gap={theme.spacing(1)}
-      alignItems='center'
-      padding={theme.spacing(1.5, 1)}
-      marginLeft={theme.spacing(-1)}
-      marginRight={theme.spacing(-1)}
-      sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}
-    >
-      <Typography fontSize='16px' fontWeight={600}>
-        {strings.TOTAL}
-      </Typography>
-      <Typography fontSize='16px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
-        {format(requestedPlants)}
-      </Typography>
-      <Typography fontSize='16px' fontWeight={600} textAlign='right' whiteSpace='nowrap'>
-        {format(withdrawnPlants)}
-      </Typography>
-      <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)} whiteSpace='nowrap'>
-        {remainingPlants !== undefined && remainingPlants > 0 && (
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtWarning} whiteSpace='nowrap'>
-            {strings.formatString(strings.X_LEFT, format(remainingPlants))}
-          </Typography>
-        )}
-        <PlantingDateRequestFulfillmentBadge status={status} />
-      </Box>
-    </Box>
+    </Row>
   );
 };

@@ -7,12 +7,7 @@ import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests';
 
-import {
-  RequestedSpeciesTableHeader,
-  RequestedSpeciesTableRow,
-  RequestedSpeciesTableTotal,
-  useRequestedSpecies,
-} from './RequestedSpeciesTable';
+import { RequestedSpeciesTable, useRequestedSpecies } from './RequestedSpeciesTable';
 import { useRequestedSpeciesSubtitle } from './requestedSpeciesSubtitle';
 
 type RequestedSpeciesDrawerProps = {
@@ -72,14 +67,9 @@ const RequestedSpeciesDrawer = ({
         </IconButton>
       </Box>
 
-      <Box flex={1} minHeight={0} display='flex' flexDirection='column' padding={theme.spacing(0, 3)}>
-        <RequestedSpeciesTableHeader />
-        <Box flex={1} sx={{ overflowY: 'auto' }}>
-          {species.map((speciesDetail) => (
-            <RequestedSpeciesTableRow key={speciesDetail.speciesId} species={speciesDetail} />
-          ))}
-        </Box>
-        <RequestedSpeciesTableTotal
+      <Box flex={1} minHeight={0} padding={theme.spacing(0, 3)} sx={{ overflowY: 'auto' }}>
+        <RequestedSpeciesTable
+          species={species}
           requestedPlants={request.requestedPlants}
           withdrawnPlants={request.withdrawnPlants}
           status={request.status}
