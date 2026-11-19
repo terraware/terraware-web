@@ -1,16 +1,21 @@
 import React, { createRef, useCallback, useState } from 'react';
 
+import { rs } from '@rstest/core';
 import { act, screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { DateTime } from 'luxon';
 
 import { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import ScheduledObservationsMenu, {
   ScheduledObservationsButton,
   type ScheduledObservationsMenuHandle,
 } from 'src/scenes/ObservationsRouterV2/ListView/ScheduledObservations';
 import strings from 'src/strings';
 import { buildObservation, buildUser, captureRequests, mockError, mockGet, renderWithProviders } from 'src/test-utils';
+
+const { trackEvent } = rs.hoisted(() => ({ trackEvent: rs.fn() }));
+rs.mock('src/hooks/useTrackEvent', () => ({ useTrackEvent: () => trackEvent }));
 
 const isoDaysFromNow = (days: number) => DateTime.now().plus({ days }).toISODate()!;
 
@@ -122,6 +127,10 @@ const enterDate = async (user: UserEvent, label: string, date: string) => {
 const section = (name: string) => screen.getByRole('button', { name: new RegExp(`^${name}`) });
 
 const save = (user: UserEvent) => user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+beforeEach(() => {
+  trackEvent.mockClear();
+});
 
 describe('ScheduledObservationsMenu rescheduling', () => {
   it('offers rescheduling only to users who can reschedule', async () => {
@@ -398,5 +407,71 @@ describe('ScheduledObservationsMenu sections', () => {
       expect(section(strings.UPCOMING)).toHaveAttribute('aria-expanded', 'true');
       expect(screen.queryByLabelText(strings.START_DATE)).not.toBeInTheDocument();
     });
+  });
+});
+
+describe('ScheduledObservationsMenu analytics', () => {
+  const rescheduledEvents = () =>
+    trackEvent.mock.calls
+      .filter(([name]) => name === MIXPANEL_EVENTS.OBSERVATION_RESCHEDULED)
+      .map(([, properties]) => properties);
+
+  it('reports moving an observation earlier as a negative change in its start date', async () => {
+    captureRequests('put', rescheduleUrl(FIRST.id));
+    const { user } = renderMenu();
+
+    await openFlyout(user);
+    await startRescheduling(user);
+    await enterDate(user, strings.START_DATE, isoDaysFromNow(3));
+    await enterDate(user, strings.END_DATE, isoDaysFromNow(20));
+    await save(user);
+
+    await waitFor(() =>
+      expect(rescheduledEvents()).toEqual([
+        {
+          duration_days: 17,
+          monitoring_type: 'Plant Monitoring',
+          observation_id: FIRST.id,
+          planting_site_id: FIRST.plantingSiteId,
+          start_date_change_days: -7,
+        },
+      ])
+    );
+  });
+
+  it("reports the rescheduled observation's monitoring type", async () => {
+    const biomass = buildObservation({ ...FIRST, id: 14, type: 'Biomass Measurements' });
+    captureRequests('put', rescheduleUrl(biomass.id));
+    const { user } = renderMenu(true, [biomass]);
+
+    await openFlyout(user);
+    await startRescheduling(user);
+    await enterDate(user, strings.END_DATE, isoDaysFromNow(45));
+    await save(user);
+
+    await waitFor(() =>
+      expect(rescheduledEvents()).toEqual([
+        {
+          duration_days: 35,
+          monitoring_type: 'Biomass Monitoring',
+          observation_id: biomass.id,
+          planting_site_id: biomass.plantingSiteId,
+          start_date_change_days: 0,
+        },
+      ])
+    );
+  });
+
+  it('reports nothing when the server rejects the reschedule', async () => {
+    mockError('put', rescheduleUrl(FIRST.id));
+    const { store, user } = renderMenu();
+
+    await openFlyout(user);
+    await startRescheduling(user);
+    await enterDate(user, strings.END_DATE, isoDaysFromNow(45));
+    await save(user);
+
+    await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+    expect(rescheduledEvents()).toEqual([]);
   });
 });

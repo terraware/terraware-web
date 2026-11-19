@@ -25,4 +25,10 @@ export const isAfter = (dateString1: string | undefined, dateString2: string | u
   return undefined;
 };
 
+/** Whole days from one date to another, negative when the second date is the earlier one. */
+export const daysBetween = (fromDate: string, toDate: string): number | undefined => {
+  const { days } = DateTime.fromISO(toDate).diff(DateTime.fromISO(fromDate), 'days');
+  return Number.isFinite(days) ? Math.round(days) : undefined;
+};
+
 export const today = DateTime.now().toUTC().startOf('day');

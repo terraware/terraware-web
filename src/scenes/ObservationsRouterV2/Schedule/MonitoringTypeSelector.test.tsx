@@ -232,13 +232,16 @@ describe('baseline scheduling form', () => {
       await user.click(screen.getByLabelText(strings.SELECT_ALL));
       await user.click(screen.getByRole('button', { name: strings.SAVE }));
       expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
-      expect(onSchedule).toHaveBeenCalledWith({
-        endDate,
-        observationType: 'Baseline Survey',
-        plantingSiteId: 1,
-        requestedSubstratumIds: [1],
-        startDate,
-      });
+      expect(onSchedule).toHaveBeenCalledWith(
+        {
+          endDate,
+          observationType: 'Baseline Survey',
+          plantingSiteId: 1,
+          requestedSubstratumIds: [1],
+          startDate,
+        },
+        { defaultTypeChanged: true, includesSurveyedStrata: false, siteHasPlantings: hasPlantings }
+      );
     }
   );
 
@@ -303,13 +306,16 @@ describe('baseline scheduling form', () => {
 
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     await user.click(await screen.findByRole('button', { name: strings.SCHEDULE_ANYWAY }));
-    expect(onSchedule).toHaveBeenCalledWith({
-      endDate,
-      observationType: 'Baseline Survey',
-      plantingSiteId: 1,
-      requestedSubstratumIds: [13, 11],
-      startDate,
-    });
+    expect(onSchedule).toHaveBeenCalledWith(
+      {
+        endDate,
+        observationType: 'Baseline Survey',
+        plantingSiteId: 1,
+        requestedSubstratumIds: [13, 11],
+        startDate,
+      },
+      { defaultTypeChanged: true, includesSurveyedStrata: status === 'Completed', siteHasPlantings: false }
+    );
   });
 
   it.each([
@@ -332,13 +338,20 @@ describe('baseline scheduling form', () => {
 
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
     expect(screen.queryByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).not.toBeInTheDocument();
-    expect(onSchedule).toHaveBeenCalledWith({
-      endDate,
-      observationType: type,
-      plantingSiteId: 1,
-      requestedSubstratumIds: [1],
-      startDate,
-    });
+    expect(onSchedule).toHaveBeenCalledWith(
+      {
+        endDate,
+        observationType: type,
+        plantingSiteId: 1,
+        requestedSubstratumIds: [1],
+        startDate,
+      },
+      {
+        defaultTypeChanged: type !== 'Monitoring',
+        includesSurveyedStrata: true,
+        siteHasPlantings: true,
+      }
+    );
   });
 
   it('requires the baseline confirmation after the small-site warning', async () => {
@@ -371,13 +384,16 @@ describe('baseline scheduling form', () => {
     expect(await screen.findByText(strings.SOME_SUBSTRATA_ALREADY_HAVE_A_BASELINE)).toBeVisible();
     expect(onSchedule).not.toHaveBeenCalled();
     await user.click(screen.getByRole('button', { name: strings.SCHEDULE_ANYWAY }));
-    expect(onSchedule).toHaveBeenCalledWith({
-      endDate,
-      observationType: 'Baseline Survey',
-      plantingSiteId: 1,
-      requestedSubstratumIds: [1],
-      startDate,
-    });
+    expect(onSchedule).toHaveBeenCalledWith(
+      {
+        endDate,
+        observationType: 'Baseline Survey',
+        plantingSiteId: 1,
+        requestedSubstratumIds: [1],
+        startDate,
+      },
+      { defaultTypeChanged: true, includesSurveyedStrata: true, siteHasPlantings: false }
+    );
   });
 
   it.each([false, true])(

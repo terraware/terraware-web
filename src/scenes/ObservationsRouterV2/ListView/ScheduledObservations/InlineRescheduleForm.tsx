@@ -5,11 +5,14 @@ import { Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS, MONITORING_TYPE_LABELS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload, useRescheduleObservationMutation } from 'src/queries/generated/observations';
 import getObservationDateErrors, {
   type ObservationDateErrors,
 } from 'src/scenes/ObservationsRouterV2/Schedule/getObservationDateErrors';
+import { daysBetween } from 'src/utils/dateUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 type InlineRescheduleFormProps = {
@@ -21,6 +24,7 @@ const InlineRescheduleForm = ({ observation, onClose }: InlineRescheduleFormProp
   const { strings } = useLocalization();
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
 
   const [startDate, setStartDate] = useState<string | undefined>(observation.startDate);
   const [endDate, setEndDate] = useState<string | undefined>(observation.endDate);
@@ -32,10 +36,29 @@ const InlineRescheduleForm = ({ observation, onClose }: InlineRescheduleFormProp
     if (rescheduleResponse.isError) {
       snackbar.toastError();
     } else if (rescheduleResponse.isSuccess) {
+      const payload = rescheduleResponse.originalArgs?.rescheduleObservationRequestPayload;
+      if (payload) {
+        trackEvent(MIXPANEL_EVENTS.OBSERVATION_RESCHEDULED, {
+          duration_days: daysBetween(payload.startDate, payload.endDate),
+          monitoring_type: MONITORING_TYPE_LABELS[observation.type],
+          observation_id: observation.id,
+          planting_site_id: observation.plantingSiteId,
+          start_date_change_days: daysBetween(observation.startDate, payload.startDate),
+        });
+      }
       snackbar.toastSuccess(strings.OBSERVATION_RESCHEDULED);
       onClose();
     }
-  }, [onClose, rescheduleResponse.isError, rescheduleResponse.isSuccess, snackbar, strings.OBSERVATION_RESCHEDULED]);
+  }, [
+    observation,
+    onClose,
+    rescheduleResponse.isError,
+    rescheduleResponse.isSuccess,
+    rescheduleResponse.originalArgs,
+    snackbar,
+    strings.OBSERVATION_RESCHEDULED,
+    trackEvent,
+  ]);
 
   const onStartDateChange = useCallback((value?: DateTime) => setStartDate(value?.toISODate() || undefined), []);
   const onEndDateChange = useCallback((value?: DateTime) => setEndDate(value?.toISODate() || undefined), []);

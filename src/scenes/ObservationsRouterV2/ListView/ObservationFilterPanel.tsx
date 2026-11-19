@@ -8,6 +8,8 @@ import DatePicker from 'src/components/common/DatePicker';
 import { useFeatureEnabled } from 'src/features';
 import { useListObservationResults } from 'src/hooks/observations';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS, MONITORING_TYPE_LABELS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationState, getObservationTypeLabel, getStatus } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -69,8 +71,10 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
     setStratumFilter,
     statusFilter,
     stratumFilter,
+    viewMode,
   } = useObservationFilters();
   const { selectedOrganization } = useOrganization();
+  const trackEvent = useTrackEvent();
 
   const observationResultsResponse = useListObservationResults({
     depth: 'Stratum',
@@ -107,8 +111,16 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   );
 
   const onObservationTypeChange = useCallback(
-    (value: string) => setObservationType((value || 'All') as ObservationTypeFilter),
-    [setObservationType]
+    (value: string) => {
+      const nextObservationType = (value || 'All') as ObservationTypeFilter;
+      setObservationType(nextObservationType);
+      trackEvent(MIXPANEL_EVENTS.OBSERVATIONS_FILTER_APPLIED, {
+        filter: 'monitoring_type',
+        value: nextObservationType === 'All' ? 'All' : MONITORING_TYPE_LABELS[nextObservationType],
+        view: viewMode,
+      });
+    },
+    [setObservationType, trackEvent, viewMode]
   );
 
   const onPlotNumberChange = useCallback(
