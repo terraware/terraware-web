@@ -89,11 +89,10 @@ const toLocalDate = (dateStr?: string) => {
 };
 
 type PlantMonitoringActionsMenuContentProps = {
-  onReschedule?: (observationId: number) => void;
   row: PlantMonitoringRow;
 };
 
-const PlantMonitoringActionsMenuContent = ({ onReschedule, row }: PlantMonitoringActionsMenuContentProps) => {
+const PlantMonitoringActionsMenuContent = ({ row }: PlantMonitoringActionsMenuContentProps) => {
   const { strings } = useLocalization();
   const { openAbandonObservationModal } = useAbandonObservationModal();
   const {
@@ -137,13 +136,6 @@ const PlantMonitoringActionsMenuContent = ({ onReschedule, row }: PlantMonitorin
         },
         {
           disabled: isFinished,
-          label: strings.RESCHEDULE,
-          onClick: () => {
-            onReschedule?.(observationId);
-          },
-        },
-        {
-          disabled: isFinished,
           label: strings.END_OBSERVATION,
           onClick: () => {
             openAbandonObservationModal(observationId);
@@ -155,11 +147,10 @@ const PlantMonitoringActionsMenuContent = ({ onReschedule, row }: PlantMonitorin
 };
 
 type PlantMonitoringListProps = {
-  onReschedule?: (observationId: number) => void;
   plantingSiteId?: PlantingSiteId;
 };
 
-const PlantMonitoringList = ({ onReschedule, plantingSiteId }: PlantMonitoringListProps) => {
+const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
@@ -296,10 +287,8 @@ const PlantMonitoringList = ({ onReschedule, plantingSiteId }: PlantMonitoringLi
   }, []);
 
   const ActionsMenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => (
-      <PlantMonitoringActionsMenuContent onReschedule={onReschedule} row={cell.row.original} />
-    ),
-    [onReschedule]
+    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => <PlantMonitoringActionsMenuContent row={cell.row.original} />,
+    []
   );
 
   const columns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
