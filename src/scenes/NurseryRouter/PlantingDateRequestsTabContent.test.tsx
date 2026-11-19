@@ -299,6 +299,24 @@ describe('PlantingDateRequestsTabContent', () => {
       expect(viewQuantities).toHaveFocus();
     });
 
+    it('lays every row out in one grid, so a column is as wide as the whole table needs', async () => {
+      const { user } = renderWithProviders(<PlantingDateRequestsTabContent />);
+
+      const dialog = await openQuantities(user);
+      const headings = within(dialog).getByText(strings.SPECIES).parentElement as HTMLElement;
+      const species = speciesRow(dialog, 'Acacia koa');
+      const total = within(dialog).getByText(strings.TOTAL).parentElement as HTMLElement;
+
+      [headings, species, total].forEach((row) => {
+        expect(getComputedStyle(row).display).toBe('contents');
+        expect(row.parentElement).toBe(headings.parentElement);
+      });
+      const grid = headings.parentElement as HTMLElement;
+      expect(getComputedStyle(grid).display).toBe('grid');
+
+      expect(getComputedStyle(grid).columnGap).toBe('normal');
+    });
+
     it('keeps the stats in the right-hand block, after the status and Withdraw', async () => {
       renderWithProviders(<PlantingDateRequestsTabContent />);
 
