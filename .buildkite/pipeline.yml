@@ -211,6 +211,8 @@ steps:
 
   - label: ':amazon-ecs: Deploy to ECS'
     key: 'deploy'
+    concurrency: 1
+    concurrency_group: 'terraware-web/deploy'
     depends_on:
       - step: 'promote-caches'
         allow_failure: true
