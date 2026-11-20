@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
@@ -25,10 +25,16 @@ import useObservablePlantingSites from './useObservablePlantingSites';
 
 const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
 
+export type ScheduleObservationContext = {
+  defaultTypeChanged: boolean;
+  includesSurveyedStrata: boolean;
+  siteHasPlantings: boolean;
+};
+
 export type ScheduleObservationFormProps = {
   title: string;
   onCancel: () => void;
-  onSchedule: (formData: ScheduleObservationRequestPayload) => void;
+  onSchedule: (formData: ScheduleObservationRequestPayload, context: ScheduleObservationContext) => void;
 };
 
 export default function ScheduleObservationForm({
@@ -84,12 +90,15 @@ export default function ScheduleObservationForm({
     !(baselineSurveyEnabled && monitoringType === 'Baseline Survey') &&
     (!hasPlantings || upcomingObservationStartDates[monitoringType] !== undefined);
 
+  const defaultMonitoringType = useRef<MonitoringType>('Monitoring');
+
   useEffect(() => {
     if (monitoringType === 'Baseline Survey' || upcomingObservationStartDates[monitoringType] === undefined) {
       return;
     }
     const schedulableType = MONITORING_TYPES.find((type) => upcomingObservationStartDates[type] === undefined);
     if (schedulableType) {
+      defaultMonitoringType.current = schedulableType;
       setMonitoringType(schedulableType);
     }
   }, [monitoringType, upcomingObservationStartDates]);
@@ -111,6 +120,17 @@ export default function ScheduleObservationForm({
             ) ?? [])
         : [],
     [monitoringType, requestedSubstratumIds, selectedSiteDetails]
+  );
+
+  const includesSurveyedStrata = useMemo(
+    () =>
+      selectedSiteDetails?.strata?.some((stratum) =>
+        stratum.substrata.some(
+          (substratum) =>
+            requestedSubstratumIds?.includes(substratum.id) && substratum.latestBaselineSurveyStatus === 'Completed'
+        )
+      ) ?? false,
+    [requestedSubstratumIds, selectedSiteDetails]
   );
 
   const siteOptions = useMemo(
@@ -146,18 +166,35 @@ export default function ScheduleObservationForm({
 
   const doSave = useCallback(() => {
     if (startDate && endDate && requestedSubstratumIds && selectedSite) {
-      onSchedule({
-        startDate,
-        endDate,
-        requestedSubstratumIds,
-        plantingSiteId: selectedSite.id,
-        observationType: biomassSchedulingEnabled ? monitoringType : undefined,
-      });
+      onSchedule(
+        {
+          startDate,
+          endDate,
+          requestedSubstratumIds,
+          plantingSiteId: selectedSite.id,
+          observationType: biomassSchedulingEnabled ? monitoringType : undefined,
+        },
+        {
+          defaultTypeChanged: monitoringType !== defaultMonitoringType.current,
+          includesSurveyedStrata,
+          siteHasPlantings: hasPlantings,
+        }
+      );
     }
 
     setShowSmallSiteWarning(false);
     setShowBaselineWarning(false);
-  }, [biomassSchedulingEnabled, endDate, monitoringType, onSchedule, requestedSubstratumIds, selectedSite, startDate]);
+  }, [
+    biomassSchedulingEnabled,
+    endDate,
+    hasPlantings,
+    includesSurveyedStrata,
+    monitoringType,
+    onSchedule,
+    requestedSubstratumIds,
+    selectedSite,
+    startDate,
+  ]);
 
   const saveWithBaselineWarning = useCallback(() => {
     setShowSmallSiteWarning(false);

@@ -1,4 +1,5 @@
 import { GetEmailNotificationSettingsResponsePayload } from 'src/queries/generated/emailNotificationSettings';
+import { ObservationType } from 'src/types/Observations';
 import { BoundarySource } from 'src/types/PlantingSite';
 import { User } from 'src/types/User';
 
@@ -28,6 +29,8 @@ export enum MIXPANEL_EVENTS {
 
   // --- Observations ---
   OBSERVATION_SCHEDULED = 'Observation Scheduled',
+  OBSERVATION_RESCHEDULED = 'Observation Rescheduled',
+  OBSERVATIONS_FILTER_APPLIED = 'Observations Filter Applied',
   SPECIES_MERGED = 'Species Merged',
 
   // --- Organization & people ---
@@ -88,6 +91,16 @@ export enum MIXPANEL_EVENTS {
 }
 
 export type BoundaryFileFormat = 'geojson' | 'kml' | 'kmz' | 'shapefile';
+
+export type MonitoringTypeLabel = 'Plant Monitoring' | 'Biomass Monitoring' | 'Baseline Survey';
+
+export const MONITORING_TYPE_LABELS: Record<ObservationType, MonitoringTypeLabel> = {
+  'Baseline Survey': 'Baseline Survey',
+  'Biomass Measurements': 'Biomass Monitoring',
+  Monitoring: 'Plant Monitoring',
+};
+
+export type ObservationsViewMode = 'map' | 'split' | 'list';
 
 export type TableViewEventContext = {
   table: string;
@@ -172,6 +185,25 @@ export type MixpanelEventPropertyMap = {
   };
   [MIXPANEL_EVENTS.OBSERVATION_SCHEDULED]: {
     duration_days?: number;
+    monitoring_type: MonitoringTypeLabel;
+    observation_id?: number;
+    planting_site_id: number;
+    substrata_count: number;
+    site_has_plantings: boolean;
+    default_type_changed: boolean;
+    includes_surveyed_strata: boolean;
+  };
+  [MIXPANEL_EVENTS.OBSERVATION_RESCHEDULED]: {
+    monitoring_type: MonitoringTypeLabel;
+    observation_id: number;
+    planting_site_id: number;
+    duration_days?: number;
+    start_date_change_days?: number;
+  };
+  [MIXPANEL_EVENTS.OBSERVATIONS_FILTER_APPLIED]: {
+    filter: 'monitoring_type';
+    value: 'All' | MonitoringTypeLabel;
+    view: ObservationsViewMode;
   };
   [MIXPANEL_EVENTS.SPECIES_MERGED]: {
     count: number;

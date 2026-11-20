@@ -1,10 +1,12 @@
 import React from 'react';
 import { Route, Routes, useLocation } from 'react-router';
 
+import { rs } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { DateTime } from 'luxon';
 
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import ObservationScheduleRouter from 'src/scenes/ObservationsRouterV2/Schedule';
 import strings from 'src/strings';
@@ -20,6 +22,9 @@ import {
   renderWithProviders,
   selectDropdownOption,
 } from 'src/test-utils';
+
+const { trackEvent } = rs.hoisted(() => ({ trackEvent: rs.fn() }));
+rs.mock('src/hooks/useTrackEvent', () => ({ useTrackEvent: () => trackEvent }));
 
 const OBSERVATIONS_URL = '/api/v1/tracking/observations';
 
@@ -103,6 +108,10 @@ const siteOptions = async (user: UserEvent) => {
     .getAllByRole('listitem')
     .map((option) => option.textContent);
 };
+
+beforeEach(() => {
+  trackEvent.mockClear();
+});
 
 describe('Schedule observation page', () => {
   it('schedules the chosen substrata of the chosen site and returns to observations', async () => {
@@ -361,6 +370,82 @@ describe('Schedule observation page', () => {
       expect(screen.queryByText(strings.OBSERVATION_SMALL_SITE_WARNING)).not.toBeInTheDocument();
       expect(screen.getByTestId('location')).toHaveTextContent('/observations/schedule');
       expect(requests).toHaveLength(0);
+    });
+  });
+
+  describe('analytics', () => {
+    const scheduledEvents = () =>
+      trackEvent.mock.calls
+        .filter(([name]) => name === MIXPANEL_EVENTS.OBSERVATION_SCHEDULED)
+        .map(([, properties]) => properties);
+
+    it('reports what was scheduled once the server has accepted it', async () => {
+      mockSites([{ site: RIDGE }]);
+      captureRequests('post', OBSERVATIONS_URL, { id: 100 });
+      const { user } = renderSchedulePage();
+
+      await screen.findByLabelText(strings.SELECT_ALL);
+      await user.click(screen.getByLabelText('North'));
+      await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
+      await save(user);
+
+      await waitFor(() =>
+        expect(scheduledEvents()).toEqual([
+          {
+            default_type_changed: false,
+            duration_days: 23,
+            includes_surveyed_strata: false,
+            monitoring_type: 'Plant Monitoring',
+            observation_id: 100,
+            planting_site_id: RIDGE.id,
+            site_has_plantings: true,
+            substrata_count: 1,
+          },
+        ])
+      );
+    });
+
+    it('reports the monitoring type the user picked instead of the default one', async () => {
+      mockSites([{ site: RIDGE }]);
+      captureRequests('post', OBSERVATIONS_URL, { id: 101 });
+      const { user } = renderSchedulePage({ biomassEnabled: true });
+
+      await user.click(
+        await screen.findByRole('radio', {
+          name: (name) => name.includes(strings.SCHEDULE_OBSERVATION_BIOMASS_MONITORING_TITLE),
+        })
+      );
+      await screen.findByLabelText(strings.SELECT_ALL);
+      await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
+      await save(user);
+
+      await waitFor(() =>
+        expect(scheduledEvents()).toEqual([
+          {
+            default_type_changed: true,
+            duration_days: 23,
+            includes_surveyed_strata: false,
+            monitoring_type: 'Biomass Monitoring',
+            observation_id: 101,
+            planting_site_id: RIDGE.id,
+            site_has_plantings: true,
+            substrata_count: 2,
+          },
+        ])
+      );
+    });
+
+    it('reports nothing when the server rejects the schedule', async () => {
+      mockSites([{ site: RIDGE }]);
+      mockError('post', OBSERVATIONS_URL);
+      const { store, user } = renderSchedulePage();
+
+      await screen.findByLabelText(strings.SELECT_ALL);
+      await enterDates(user, isoDaysFromNow(7), isoDaysFromNow(30));
+      await save(user);
+
+      await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
+      expect(scheduledEvents()).toEqual([]);
     });
   });
 });
