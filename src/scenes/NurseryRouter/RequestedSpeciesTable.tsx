@@ -12,7 +12,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import PlantingDateRequestFulfillmentBadge from './PlantingDateRequestFulfillmentBadge';
 
-const requestedSpeciesColumns = 'minmax(0, 2fr) auto auto auto';
+const requestedSpeciesColumns = 'minmax(0, 1fr) auto auto minmax(max-content, 1fr)';
 
 export const speciesStatus = (requestedQuantity: number, withdrawnQuantity: number): PlantingDateRequestStatus => {
   if (withdrawnQuantity <= 0) {
