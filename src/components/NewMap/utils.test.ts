@@ -1,7 +1,13 @@
-import { MultiPolygon } from 'geojson';
+import { MultiPolygon, Position } from 'geojson';
 
 import { MapBounds } from './types';
-import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints, getBoundsZoomLevel, isBoundsValid } from './utils';
+import {
+  getBoundingBoxFromMultiPolygons,
+  getBoundingBoxFromPoints,
+  getBoundsZoomLevel,
+  getLabelPlacement,
+  isBoundsValid,
+} from './utils';
 
 describe('isBoundsValid', () => {
   test.each([
@@ -417,5 +423,179 @@ describe('getBoundingBoxFromMultiPolygons', () => {
       minLng: Infinity,
       maxLng: -Infinity,
     });
+  });
+});
+
+const isInsidePolygon = (lng: number, lat: number, rings: Position[][]): boolean => {
+  let inside = false;
+  for (const ring of rings) {
+    for (let i = 0, previous = ring.length - 1; i < ring.length; previous = i++) {
+      const current = ring[i];
+      const last = ring[previous];
+      if (
+        current[1] > lat !== last[1] > lat &&
+        lng < ((last[0] - current[0]) * (lat - current[1])) / (last[1] - current[1]) + current[0]
+      ) {
+        inside = !inside;
+      }
+    }
+  }
+  return inside;
+};
+
+describe('getLabelPlacement', () => {
+  const square = (minLng: number, minLat: number, size: number): Position[][] => [
+    [
+      [minLng, minLat],
+      [minLng + size, minLat],
+      [minLng + size, minLat + size],
+      [minLng, minLat + size],
+      [minLng, minLat],
+    ],
+  ];
+
+  test('places the label at the center of a square', () => {
+    const placement = getLabelPlacement([square(0, 0, 2)]);
+
+    expect(placement?.lng).toBeCloseTo(1, 1);
+    expect(placement?.lat).toBeCloseTo(1, 1);
+    expect(placement?.area).toBeGreaterThan(0);
+  });
+
+  test('places the label inside the largest part of a multipolygon', () => {
+    const placement = getLabelPlacement([square(0, 0, 0.1), square(10, 0, 2), square(20, 0, 0.5)]);
+
+    expect(placement?.lng).toBeCloseTo(11, 1);
+    expect(placement?.lat).toBeCloseTo(1, 1);
+  });
+
+  test('keeps the label inside a concave polygon rather than in its notch', () => {
+    // A "C" shape whose centroid falls in the opening on the right.
+    const rings: Position[][] = [
+      [
+        [0, 0],
+        [3, 0],
+        [3, 1],
+        [1, 1],
+        [1, 2],
+        [3, 2],
+        [3, 3],
+        [0, 3],
+        [0, 0],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
+
+    expect(placement).toBeDefined();
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
+  });
+
+  test('keeps the label out of a hole', () => {
+    const rings: Position[][] = [
+      [
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+        [0, 0],
+      ],
+      [
+        [2, 2],
+        [8, 2],
+        [8, 8],
+        [2, 8],
+        [2, 2],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
+
+    expect(placement).toBeDefined();
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
+  });
+
+  test('places a label on an extremely thin sliver without exhausting the grid', () => {
+    const start = Date.now();
+    const placement = getLabelPlacement([
+      [
+        [
+          [0, 0],
+          [1, 0],
+          [1, 0.000001],
+          [0, 0.000001],
+          [0, 0],
+        ],
+      ],
+    ]);
+
+    expect(placement).toBeDefined();
+    expect(placement!.lat).toBeGreaterThan(0);
+    expect(placement!.lat).toBeLessThan(0.000001);
+    expect(Date.now() - start).toBeLessThan(1000);
+    expect(placement!.area).toBeGreaterThan(0);
+  });
+
+  test('stays inside a boundary whose arms are thinner than the search can resolve', () => {
+    // A C of 0.0001-wide arms across a 0.1 extent: every cell the search can afford to look at
+    // straddles an edge, so without an interior starting point it answers with the closest point
+    // it found outside -- a label sitting in the opening, on land the stratum excludes.
+    const rings: Position[][] = [
+      [
+        [0, 0],
+        [0.1, 0],
+        [0.1, 0.0001],
+        [0.0001, 0.0001],
+        [0.0001, 0.0999],
+        [0.1, 0.0999],
+        [0.1, 0.1],
+        [0, 0.1],
+        [0, 0],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
+
+    expect(placement).toBeDefined();
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
+  });
+
+  test('stays inside the thin frame left by a hole that fills most of the boundary', () => {
+    const rings: Position[][] = [
+      [
+        [0, 0],
+        [0.1, 0],
+        [0.1, 0.1],
+        [0, 0.1],
+        [0, 0],
+      ],
+      [
+        [0.00005, 0.00005],
+        [0.09995, 0.00005],
+        [0.09995, 0.09995],
+        [0.00005, 0.09995],
+        [0.00005, 0.00005],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
+
+    expect(placement).toBeDefined();
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
+  });
+
+  test('returns undefined when there is no usable geometry', () => {
+    expect(getLabelPlacement([])).toBeUndefined();
+    expect(getLabelPlacement([[]])).toBeUndefined();
+    expect(
+      getLabelPlacement([
+        [
+          [
+            [0, 0],
+            [1, 1],
+          ],
+        ],
+      ])
+    ).toBeUndefined();
   });
 });

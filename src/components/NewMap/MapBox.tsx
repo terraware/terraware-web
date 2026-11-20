@@ -23,6 +23,7 @@ import MapViewStyleControl from './MapViewStyleControl';
 import {
   MapCursor,
   MapHighlightGroup,
+  MapLabel,
   MapLayer,
   MapMarker,
   MapMarkerCluster,
@@ -33,7 +34,14 @@ import {
   stylesUrl,
 } from './types';
 import { useMaintainLayerOrder } from './useMaintainLayerOrder';
-import { getBoundingBoxFromPoints, isBoundsValid } from './utils';
+import { getBoundingBoxFromPoints, getLabelPlacement, isBoundsValid } from './utils';
+
+// Labels are laid out before they are in the DOM, so their footprint is estimated from the text
+// length at the sizes the two variants are rendered at.
+const LABEL_METRICS = {
+  feature: { charWidth: 7, height: 22, padding: 12 },
+  name: { charWidth: 9, height: 40, padding: 32 },
+};
 
 type MapBoxProps = {
   additionalComponent?: React.ReactNode;
@@ -141,9 +149,12 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         onMapLoad?.();
 
         const mbMap = map.getMap();
+        // Seed the zoom so labels and marker clusters, which are laid out in screen space, can be
+        // placed on the first paint instead of only once the map settles.
+        setZoom(mbMap.getZoom());
+
         mbMap.on('idle', () => {
           map.getContainer().setAttribute('data-map-idle', 'true');
-          // Seed/refresh the zoom so markers cluster on initial load and after the view settles.
           setZoom(mbMap.getZoom());
         });
 
@@ -240,7 +251,6 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
             id: feature.featureId,
             clickable: feature.onClick !== undefined,
             dashedBorder: feature.dashedBorder ?? false,
-            label: feature.label,
             layerFeatureId: `${group.layerId}/${feature.featureId}`,
             layerId: group.layerId,
             priority: feature.priority ?? 0,
@@ -263,7 +273,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       : undefined;
   }, [featureGroups]);
 
-  const { borderLayers, fillLayers, textLayers } = useMemo(() => {
+  const { borderLayers, fillLayers } = useMemo(() => {
     // line-dasharray takes no data expression, so dashed borders need their own filtered layer.
     const _borderLayers = featureGroups?.flatMap((group) => {
       const groupFilter: FilterSpecification = ['==', ['get', 'layerId'], group.layerId];
@@ -421,39 +431,9 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       ];
     });
 
-    const _textLayers = featureGroups?.map((group) => {
-      const groupFilter: FilterSpecification = ['==', ['get', 'layerId'], group.layerId];
-      const labelFilter: FilterSpecification = ['has', 'label'];
-
-      return (
-        <Layer
-          key={`${group.layerId}-label`}
-          id={`${group.layerId}-label`}
-          source={'mapData'}
-          type={'symbol'}
-          layout={{
-            'text-allow-overlap': false,
-            'text-anchor': 'center',
-            'text-field': ['get', 'label'],
-            'text-font': ['Open Sans Bold', 'Arial Unicode MS Regular'],
-            'text-ignore-placement': false,
-            'text-justify': 'center',
-            'text-size': 14,
-          }}
-          paint={{
-            'text-color': '#ffffff',
-            'text-halo-color': '#000000',
-            'text-halo-width': 1,
-          }}
-          filter={['all', groupFilter, labelFilter]}
-        />
-      );
-    });
-
     return {
       borderLayers: _borderLayers ?? [],
       fillLayers: _fillLayers ?? [],
-      textLayers: _textLayers ?? [],
     };
   }, [featureGroups, hoverFeatureId]);
 
@@ -605,40 +585,110 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
     /* eslint-enable react-hooks/refs */
   }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme, zoom]);
 
-  const nameTagMarkers = useMemo(() => {
-    if (nameTags?.length) {
-      return nameTags.map((nameTag, i) => {
-        return (
-          <Marker
-            key={`map-name-tag-${i}`}
-            longitude={nameTag.longitude}
-            latitude={nameTag.latitude}
-            anchor='center'
-            style={{ cursor: nameTag.onClick ? 'pointer' : 'auto' }}
-            onClick={nameTag.onClick}
-          >
-            <div
-              style={{
-                background: 'rgba(255, 255, 255, 0.6)',
-                padding: '8px 16px',
-                borderRadius: '8px',
-              }}
-            >
-              <Typography
-                fontSize={'16px'}
-                fontWeight={400}
-                lineHeight={'24px'}
-                color={theme.palette.TwClrBaseBlack}
-                whiteSpace={'nowrap'}
-              >
-                {nameTag.label}
-              </Typography>
-            </div>
-          </Marker>
-        );
-      });
+  // One label per feature rather than one per polygon part: a feature whose boundary is split into
+  // many pieces used to repeat its name on each of them, which made a site look like it had far
+  // more strata than it does.
+  const labels = useMemo((): MapLabel[] => {
+    const featureLabels =
+      featureGroups
+        ?.filter((group) => group.visible)
+        .flatMap((group) =>
+          group.features.flatMap((feature): MapLabel[] => {
+            if (!feature.label) {
+              return [];
+            }
+            const placement = getLabelPlacement(feature.geometry.coordinates);
+            if (!placement) {
+              return [];
+            }
+            return [
+              {
+                area: placement.area,
+                id: `${group.layerId}/${feature.featureId}`,
+                label: feature.label,
+                latitude: placement.lat,
+                longitude: placement.lng,
+                variant: 'feature',
+              },
+            ];
+          })
+        ) ?? [];
+
+    const siteLabels =
+      nameTags?.map((nameTag, index): MapLabel => ({
+        area: Infinity,
+        id: `name-tag-${index}`,
+        label: nameTag.label,
+        latitude: nameTag.latitude,
+        longitude: nameTag.longitude,
+        onClick: nameTag.onClick,
+        variant: 'name',
+      })) ?? [];
+
+    // Site names win any contest for space, then the labels of the largest features.
+    return [...siteLabels, ...featureLabels.sort((a, b) => b.area - a.area)];
+  }, [featureGroups, nameTags]);
+
+  const labelMarkers = useMemo(() => {
+    /* eslint-disable react-hooks/refs */
+    const map = mapRef.current;
+    // `zoom` is read here so labels are laid out again whenever the map is zoomed: panning moves
+    // every label by the same amount, so it cannot change which of them overlap.
+    if (!map || zoom === undefined) {
+      return [];
     }
-  }, [nameTags, theme]);
+
+    const placed: { bottom: number; left: number; right: number; top: number }[] = [];
+
+    return labels.flatMap((mapLabel) => {
+      const { charWidth, height, padding } = LABEL_METRICS[mapLabel.variant];
+      const { x, y } = map.project({ lat: mapLabel.latitude, lon: mapLabel.longitude });
+      const halfWidth = (mapLabel.label.length * charWidth + padding) / 2;
+      const halfHeight = height / 2;
+      const box = { bottom: y + halfHeight, left: x - halfWidth, right: x + halfWidth, top: y - halfHeight };
+
+      const overlaps = placed.some(
+        (other) => box.left < other.right && box.right > other.left && box.top < other.bottom && box.bottom > other.top
+      );
+      if (overlaps) {
+        return [];
+      }
+      placed.push(box);
+
+      const isName = mapLabel.variant === 'name';
+
+      return [
+        <Marker
+          key={`map-label-${mapLabel.id}`}
+          longitude={mapLabel.longitude}
+          latitude={mapLabel.latitude}
+          anchor='center'
+          // Labels that do nothing let clicks through to the feature they sit on.
+          style={{ cursor: mapLabel.onClick ? 'pointer' : 'auto', pointerEvents: mapLabel.onClick ? 'auto' : 'none' }}
+          onClick={mapLabel.onClick}
+        >
+          <div
+            style={{
+              background: isName ? 'rgba(255, 255, 255, 0.6)' : 'rgba(255, 255, 255, 0.75)',
+              padding: isName ? '8px 16px' : '2px 6px',
+              borderRadius: isName ? '8px' : '4px',
+            }}
+          >
+            <Typography
+              fontSize={isName ? '16px' : '12px'}
+              fontWeight={isName ? 400 : 600}
+              lineHeight={isName ? '24px' : '16px'}
+              color={theme.palette.TwClrBaseBlack}
+              whiteSpace={'nowrap'}
+            >
+              {mapLabel.label}
+            </Typography>
+          </div>
+        </Marker>,
+      ];
+    });
+    /* eslint-enable react-hooks/refs */
+  }, [labels, mapRef, theme, zoom]);
 
   const onMouseMoveCallback = useCallback(
     (event: MapMouseEvent) => {
@@ -805,9 +855,8 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       ...fillLayers.map((layer) => layer.props.id),
       ...highlightLayers.map((layer) => layer.props.id),
       ...borderLayers.map((layer) => layer.props.id),
-      ...textLayers.map((layer) => layer.props.id),
     ] as string[];
-  }, [borderLayers, fillLayers, highlightLayers, textLayers]);
+  }, [borderLayers, fillLayers, highlightLayers]);
 
   useMaintainLayerOrder(mapRef, orderedLayerIds);
 
@@ -909,11 +958,10 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
           {fillLayers}
           {highlightLayers}
           {borderLayers}
-          {textLayers}
         </Source>
       )}
       {markersComponents}
-      {nameTagMarkers}
+      {labelMarkers}
       {additionalComponent}
     </Map>
   );
