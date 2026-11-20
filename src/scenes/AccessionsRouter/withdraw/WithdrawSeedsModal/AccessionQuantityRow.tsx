@@ -57,7 +57,17 @@ const AccessionQuantityRow = ({
     [accession, units, value, withdrawByWeight]
   );
 
-  const hasSubsetData = !!accession.subsetWeight?.quantity && !!accession.subsetCount;
+  const { subsetWeight, subsetCount } = accession;
+  const hasSubsetData = !!subsetWeight?.quantity && !!subsetCount;
+  const estimatedWeight =
+    !withdrawByWeight && value && Number.isInteger(value) && value > 0 && hasSubsetData
+      ? Number(((value * subsetWeight.quantity) / subsetCount).toPrecision(6))
+      : undefined;
+  const estimatedQuantityLabel = withdrawByWeight
+    ? `${strings.APPROX_SYMBOL}${estimatedCount}${strings.CT}`
+    : estimatedWeight !== undefined && subsetWeight
+      ? `${strings.APPROX_SYMBOL}${estimatedWeight} ${unitAbbv()[subsetWeight.units]}`
+      : '';
 
   const subsetWeightNeeded = withdrawByWeight && remainingWeightOf(accession)?.quantity === undefined;
 
@@ -129,35 +139,31 @@ const AccessionQuantityRow = ({
           )}
         </Box>
       </TableCell>
-      {withdrawByWeight && (
-        <>
-          <TableCell>
-            <Typography fontSize='14px'>{`${strings.APPROX_SYMBOL}${estimatedCount}${strings.CT}`}</Typography>
-          </TableCell>
-          <TableCell>
-            {hasSubsetData ? (
-              <Box
-                sx={{
-                  backgroundColor: theme.palette.TwClrBgSecondary,
-                  borderRadius: '4px',
-                  padding: theme.spacing(0.5, 1),
-                  display: 'inline-block',
-                }}
-              >
-                <Typography fontSize='14px'>
-                  {`${accession.subsetWeight?.quantity} ${unitAbbv()[accession.subsetWeight?.units as UnitType]} ${strings.TO} ${accession.subsetCount} ${strings.CT}`}
-                </Typography>
-              </Box>
-            ) : (
-              subsetWeightNeeded && (
-                <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-                  {strings.NOT_SET}
-                </Typography>
-              )
-            )}
-          </TableCell>
-        </>
-      )}
+      <TableCell>
+        <Typography fontSize='14px'>{estimatedQuantityLabel}</Typography>
+      </TableCell>
+      <TableCell>
+        {hasSubsetData ? (
+          <Box
+            sx={{
+              backgroundColor: theme.palette.TwClrBgSecondary,
+              borderRadius: '4px',
+              padding: theme.spacing(0.5, 1),
+              display: 'inline-block',
+            }}
+          >
+            <Typography fontSize='14px'>
+              {`${subsetWeight.quantity} ${unitAbbv()[subsetWeight.units]} = ${subsetCount} ${strings.CT}`}
+            </Typography>
+          </Box>
+        ) : (
+          subsetWeightNeeded && (
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.NOT_SET}
+            </Typography>
+          )
+        )}
+      </TableCell>
     </TableRow>
   );
 };

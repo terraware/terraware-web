@@ -734,6 +734,7 @@ ERROR_SUPPORT_NOTIFIED,Se produjo un error: Nuestro equipo de asistencia técnic
 EST_COUNT,Cant. Estimada,87d4a3f4
 EST_READY_DATE,Fecha estimada de disponibilidad,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Total estimado de plantas (Densidad de plantación x Área),311a283f
+EST_WEIGHT,Peso estimado,a250b71d
 ESTIMATED_BUDGET,Presupuesto estimado,23c1c02a
 ESTIMATED_READY_DATE,Fecha estimada de finalización,d37bedd1
 ESTIMATED_READY_DATE_AFTER,Fecha estimada de disponibilidad (después de),cdad8d70
@@ -2456,7 +2457,7 @@ SUBSET_COUNT,Recuento de subconjuntos,8f4d7c8b
 SUBSET_COUNT_POSITIVE,El recuento de subconjuntos debe ser un número positivo,f3cb9f62
 SUBSET_WEIGHT,Peso del subconjunto,6c11760f
 SUBSET_WEIGHT_COUNT,Peso/Cantidad del Subconjunto,9dacedca
-SUBSET_WEIGHT_COUNT_TOOLTIP,Debe proporcionar el Peso del Subconjunto para que la Cantidad de Accesión pueda retirarse por peso. El Conteo Estimado de Semillas se determina por el Peso y el Conteo del Subconjunto.,ed2686ec
+SUBSET_WEIGHT_COUNT_TOOLTIP,El peso y la cantidad del subconjunto determinan el peso o la cantidad estimados de semillas para un retiro.,8d42d920
 SUBSET_WEIGHT_POSITIVE,El peso del subconjunto tiene que ser un número positivo,8f1b1fed
 SUBSHRUB,Subarbusto,f13ec462
 SUBSTRATA,Subestratos,6dda38f7

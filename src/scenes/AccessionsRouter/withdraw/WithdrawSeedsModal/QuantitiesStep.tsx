@@ -105,21 +105,17 @@ const QuantitiesStep = ({
             <TableCell>{strings.ACCESSION}</TableCell>
             <TableCell>{strings.REMAINING}</TableCell>
             <TableCell sx={{ width: '232px' }}>{strings.WITHDRAW}</TableCell>
-            {withdrawByWeight && (
-              <>
-                <TableCell>{strings.EST_COUNT}</TableCell>
-                <TableCell>
-                  <Box display='flex' alignItems='center' gap={0.5}>
-                    {strings.SUBSET_WEIGHT_COUNT}
-                    <Tooltip title={strings.SUBSET_WEIGHT_COUNT_TOOLTIP}>
-                      <Box display='flex' alignItems='center'>
-                        <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-                      </Box>
-                    </Tooltip>
+            <TableCell>{withdrawByWeight ? strings.EST_COUNT : strings.EST_WEIGHT}</TableCell>
+            <TableCell>
+              <Box display='flex' alignItems='center' gap={0.5}>
+                {strings.SUBSET_WEIGHT_COUNT}
+                <Tooltip title={strings.SUBSET_WEIGHT_COUNT_TOOLTIP}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
                   </Box>
-                </TableCell>
-              </>
-            )}
+                </Tooltip>
+              </Box>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>

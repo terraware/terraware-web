@@ -515,16 +515,26 @@ describe('WithdrawSeedsForm', () => {
 
     it('clears entered amounts when switching between seed count and weight', async () => {
       const requests = captureRequests('post', WITHDRAWAL_URL);
-      const { user } = renderForm([buildWithdrawInfo()]);
+      const { user } = renderForm([
+        buildWithdrawInfo({ subsetWeight: { quantity: 125, units: 'Milligrams' }, subsetCount: 100 }),
+      ]);
+      const subsetRatio = `125 ${strings.MG} = 100 ${strings.CT}`;
+      const estimatedWeight = `${strings.APPROX_SYMBOL}12.5 ${strings.MG}`;
       await user.click(await screen.findByRole('radio', { name: strings.PLANTING }));
       await user.click(screen.getByRole('button', { name: strings.NEXT }));
+      expect(screen.getByRole('columnheader', { name: strings.EST_WEIGHT })).toBeInTheDocument();
+      expect(screen.getByText(subsetRatio)).toBeInTheDocument();
       await user.type(screen.getByRole('spinbutton'), '10');
+      expect(screen.getByText(estimatedWeight)).toBeInTheDocument();
       await user.click(screen.getByRole('radio', { name: strings.SEED_WEIGHT }));
+      expect(screen.getByRole('columnheader', { name: strings.EST_COUNT })).toBeInTheDocument();
+      expect(screen.getByText(subsetRatio)).toBeInTheDocument();
       expect(screen.getByRole('spinbutton')).toHaveValue(null);
       expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
       await user.type(screen.getByRole('spinbutton'), '5');
       await user.click(screen.getByRole('radio', { name: strings.SEED_COUNT }));
       expect(screen.getByRole('spinbutton')).toHaveValue(null);
+      expect(screen.queryByText(estimatedWeight)).not.toBeInTheDocument();
       expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
       expect(requests).toHaveLength(0);
     });
