@@ -319,6 +319,7 @@ const ObservationSubstratumSelector = ({
                       <Link
                         target='_blank'
                         fontSize={'16px'}
+                        style={{ whiteSpace: 'nowrap' }}
                         to={APP_PATHS.PLANTING_SITES_VIEW.replace(':plantingSiteId', plantingSite.id.toString())}
                       >
                         {strings.VIEW_MAP}
