@@ -733,6 +733,7 @@ ERROR_SUPPORT_NOTIFIED,Une erreur s’est produite : notre équipe d’assistanc
 EST_COUNT,Nb estimé,87d4a3f4
 EST_READY_DATE,Date estimée de disponibilité,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. total de plantes (densité de plantation × surface),311a283f
+EST_WEIGHT,Poids estimé,a250b71d
 ESTIMATED_BUDGET,Budget prévisionnel,23c1c02a
 ESTIMATED_READY_DATE,Date estimée de disponibilité,d37bedd1
 ESTIMATED_READY_DATE_AFTER,Date estimée de disponibilité (après),cdad8d70
@@ -2455,7 +2456,7 @@ SUBSET_COUNT,Nombre de sous-ensembles,8f4d7c8b
 SUBSET_COUNT_POSITIVE,Le nombre de sous-ensembles doit être un nombre positif.,f3cb9f62
 SUBSET_WEIGHT,Poids du sous-ensemble,6c11760f
 SUBSET_WEIGHT_COUNT,Poids/Nb du sous-ensemble,9dacedca
-SUBSET_WEIGHT_COUNT_TOOLTIP,Le poids du sous-ensemble doit être indiqué pour que la quantité d'accession puisse être retirée par poids. Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble.,ed2686ec
+SUBSET_WEIGHT_COUNT_TOOLTIP,Le poids et le nombre du sous-ensemble déterminent le poids ou le nombre estimé de semences pour un retrait.,8d42d920
 SUBSET_WEIGHT_POSITIVE,Le poids du sous-ensemble doit être un nombre positif,8f1b1fed
 SUBSHRUB,Sous-arbrisseau,f13ec462
 SUBSTRATA,Sous-strates,6dda38f7
