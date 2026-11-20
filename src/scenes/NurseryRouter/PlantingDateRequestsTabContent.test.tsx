@@ -193,6 +193,42 @@ describe('PlantingDateRequestsTabContent', () => {
     ).toBeInTheDocument();
   });
 
+  it('sets the status beside the heading, before the Withdraw', async () => {
+    searchResults = [buildRequest({ status: 'Partial' })];
+
+    renderWithProviders(<PlantingDateRequestsTabContent />);
+
+    const status = await screen.findByText(strings.PARTIALLY_FULFILLED);
+    const site = screen.getByText('Abrewatia Hills');
+    const withdraw = screen.getByRole('button', { name: strings.WITHDRAW });
+
+    // The badge nests a span inside a span, so compare containment rather than the direct parent.
+    expect(site.parentElement?.contains(status)).toBe(true);
+    expect(domOrder(status)).toBeGreaterThan(domOrder(site));
+    expect(domOrder(status)).toBeLessThan(domOrder(withdraw));
+  });
+
+  it('stacks the heading and widens the Withdraw on a phone', async () => {
+    device = 'mobile';
+    searchResults = [buildRequest({ status: 'Partial' })];
+
+    renderWithProviders(<PlantingDateRequestsTabContent />);
+
+    const status = await screen.findByText(strings.PARTIALLY_FULFILLED);
+    const season = screen.getByRole('link', { name: 'Winter' });
+    const site = screen.getByText('Abrewatia Hills');
+
+    // The status gets its own line between the season and the site, rather than trailing the site.
+    expect(site.parentElement?.contains(status)).toBe(false);
+    expect(domOrder(status)).toBeGreaterThan(domOrder(season));
+    expect(domOrder(status)).toBeLessThan(domOrder(site));
+
+    expect(screen.getByRole('button', { name: strings.WITHDRAW }).style.width).toBe('100%');
+    expect(getComputedStyle(screen.getByText(strings.REQUESTED_PLANTS).parentElement as HTMLElement).textAlign).toBe(
+      'left'
+    );
+  });
+
   it('tells the user which empty list they are looking at', async () => {
     searchResults = [];
 

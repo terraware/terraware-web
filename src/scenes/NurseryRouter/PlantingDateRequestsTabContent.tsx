@@ -319,6 +319,28 @@ const PlantingDateRequestListItem = ({
     return remaining > 0 ? strings.formatString(strings.X_AND_N_MORE, shown, `${remaining}`).toString() : shown;
   }, [activeLocale, namePreviewLimit, row.speciesNames, strings]);
 
+  const dateAndSeason = (
+    <>
+      <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
+        {getMediumDate(row.date, activeLocale)}
+      </Typography>
+      <Link
+        fontSize='16px'
+        to={APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(row.plantingSeasonId))}
+      >
+        {row.plantingSeasonName}
+      </Link>
+    </>
+  );
+
+  const siteName = (
+    <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
+      {row.plantingSiteName}
+    </Typography>
+  );
+
+  const statusBadge = <PlantingDateRequestFulfillmentBadge status={row.status} />;
+
   const statsRow = (
     <Box
       display='flex'
@@ -327,12 +349,23 @@ const PlantingDateRequestListItem = ({
       width={isMobile ? '100%' : undefined}
       justifyContent={isMobile ? 'space-between' : undefined}
     >
-      <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />
-      <NumberColumn label={strings.REQUESTED_PLANTS} value={row.requestedPlants} activeLocale={activeLocale} />
+      <NumberColumn
+        label={strings.SPECIES}
+        value={row.speciesCount}
+        activeLocale={activeLocale}
+        align={isMobile ? 'left' : 'right'}
+      />
+      <NumberColumn
+        label={strings.REQUESTED_PLANTS}
+        value={row.requestedPlants}
+        activeLocale={activeLocale}
+        align={isMobile ? 'left' : 'right'}
+      />
       <NumberColumn
         label={strings.WITHDRAWN_PLANTS}
         value={row.withdrawnPlants}
         activeLocale={activeLocale}
+        align={isMobile ? 'left' : 'right'}
         to={
           row.withdrawnPlants > 0
             ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`
@@ -351,20 +384,22 @@ const PlantingDateRequestListItem = ({
       sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
     >
       <Box flex={1}>
-        <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
-          <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
-            {getMediumDate(row.date, activeLocale)}
-          </Typography>
-          <Link
-            fontSize='16px'
-            to={APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(row.plantingSeasonId))}
-          >
-            {row.plantingSeasonName}
-          </Link>
-          <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
-            {row.plantingSiteName}
-          </Typography>
-        </Box>
+        {isMobile ? (
+          // The narrow layout breaks the heading up, with the status between the season and the site.
+          <>
+            <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
+              {dateAndSeason}
+            </Box>
+            <Box marginTop={theme.spacing(1)}>{statusBadge}</Box>
+            <Box marginTop={theme.spacing(1)}>{siteName}</Box>
+          </>
+        ) : (
+          <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
+            {dateAndSeason}
+            {siteName}
+            {statusBadge}
+          </Box>
+        )}
         {row.notes && (
           <Box marginTop={theme.spacing(1)} display='flex' gap={theme.spacing(1)}>
             <Typography fontSize='14px' fontWeight={600}>
@@ -407,9 +442,14 @@ const PlantingDateRequestListItem = ({
         gap={theme.spacing(2)}
         width={isMobile ? '100%' : undefined}
       >
-        <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
-          <PlantingDateRequestFulfillmentBadge status={row.status} />
-          <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
+        <Box display='flex' alignItems='center' gap={theme.spacing(1)} width={isMobile ? '100%' : undefined}>
+          <Button
+            label={strings.WITHDRAW}
+            onClick={onWithdrawClick}
+            priority='secondary'
+            type='productive'
+            style={isMobile ? { width: '100%' } : undefined}
+          />
         </Box>
         {!isTablet && statsRow}
       </Box>
@@ -421,17 +461,19 @@ const NumberColumn = ({
   label,
   value,
   activeLocale,
+  align,
   to,
 }: {
   label: string;
   value: number;
   activeLocale: string | null;
+  align: 'left' | 'right';
   to?: string;
 }): JSX.Element => {
   const theme = useTheme();
   const formattedValue = value.toLocaleString(activeLocale || undefined);
   return (
-    <Box textAlign='right' minWidth='110px'>
+    <Box textAlign={align} minWidth='110px'>
       <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
         {label}
       </Typography>
