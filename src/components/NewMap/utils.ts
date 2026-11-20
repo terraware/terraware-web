@@ -182,6 +182,47 @@ const getPointToPolygonDistance = (x: number, y: number, rings: Position[][]): n
 };
 
 const MAX_LABEL_CELLS_PER_AXIS = 32;
+const MAX_LABEL_SCANLINES = 64;
+
+const getInteriorPoint = (rings: Position[][]): MapPoint | undefined => {
+  const latitudes = Array.from(new Set(rings.flat().map(([, latitude]) => latitude)))
+    .filter((latitude) => Number.isFinite(latitude))
+    .sort((a, b) => a - b);
+
+  if (latitudes.length < 2) {
+    return undefined;
+  }
+
+  const step = Math.max(1, Math.floor((latitudes.length - 1) / MAX_LABEL_SCANLINES));
+  let widest = 0;
+  let point: MapPoint | undefined;
+
+  for (let index = 0; index + 1 < latitudes.length; index += step) {
+    const latitude = (latitudes[index] + latitudes[index + 1]) / 2;
+    const crossings: number[] = [];
+
+    for (const ring of rings) {
+      for (let i = 0, previous = ring.length - 1; i < ring.length; previous = i++) {
+        const current = ring[i];
+        const last = ring[previous];
+        if (current[1] > latitude !== last[1] > latitude) {
+          crossings.push(((last[0] - current[0]) * (latitude - current[1])) / (last[1] - current[1]) + current[0]);
+        }
+      }
+    }
+
+    crossings.sort((a, b) => a - b);
+    for (let i = 0; i + 1 < crossings.length; i += 2) {
+      const width = crossings[i + 1] - crossings[i];
+      if (width > widest) {
+        widest = width;
+        point = { lat: latitude, lng: (crossings[i] + crossings[i + 1]) / 2 };
+      }
+    }
+  }
+
+  return point;
+};
 
 type LabelCell = { x: number; y: number; halfSize: number; distance: number; maxDistance: number };
 
@@ -235,7 +276,10 @@ const getPoleOfInaccessibility = (rings: Position[][]): MapPoint | undefined => 
     }
   }
 
-  let best = createLabelCell(centerX, centerY, 0, rings);
+  const interiorPoint = getInteriorPoint(rings);
+  let best = interiorPoint
+    ? createLabelCell(interiorPoint.lng, interiorPoint.lat, 0, rings)
+    : createLabelCell(centerX, centerY, 0, rings);
   // Stop refining once no cell can beat the best point by more than half a percent of the extent;
   // finer than that makes no visible difference to where a label sits.
   const precision = Math.max(width, height) / 200;

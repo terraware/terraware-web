@@ -426,6 +426,23 @@ describe('getBoundingBoxFromMultiPolygons', () => {
   });
 });
 
+const isInsidePolygon = (lng: number, lat: number, rings: Position[][]): boolean => {
+  let inside = false;
+  for (const ring of rings) {
+    for (let i = 0, previous = ring.length - 1; i < ring.length; previous = i++) {
+      const current = ring[i];
+      const last = ring[previous];
+      if (
+        current[1] > lat !== last[1] > lat &&
+        lng < ((last[0] - current[0]) * (lat - current[1])) / (last[1] - current[1]) + current[0]
+      ) {
+        inside = !inside;
+      }
+    }
+  }
+  return inside;
+};
+
 describe('getLabelPlacement', () => {
   const square = (minLng: number, minLat: number, size: number): Position[][] => [
     [
@@ -454,49 +471,48 @@ describe('getLabelPlacement', () => {
 
   test('keeps the label inside a concave polygon rather than in its notch', () => {
     // A "C" shape whose centroid falls in the opening on the right.
-    const placement = getLabelPlacement([
+    const rings: Position[][] = [
       [
-        [
-          [0, 0],
-          [3, 0],
-          [3, 1],
-          [1, 1],
-          [1, 2],
-          [3, 2],
-          [3, 3],
-          [0, 3],
-          [0, 0],
-        ],
+        [0, 0],
+        [3, 0],
+        [3, 1],
+        [1, 1],
+        [1, 2],
+        [3, 2],
+        [3, 3],
+        [0, 3],
+        [0, 0],
       ],
-    ]);
+    ];
+
+    const placement = getLabelPlacement([rings]);
 
     expect(placement).toBeDefined();
-    expect(placement!.lng).toBeLessThan(1);
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
   });
 
   test('keeps the label out of a hole', () => {
-    const placement = getLabelPlacement([
+    const rings: Position[][] = [
       [
-        [
-          [0, 0],
-          [10, 0],
-          [10, 10],
-          [0, 10],
-          [0, 0],
-        ],
-        [
-          [2, 2],
-          [8, 2],
-          [8, 8],
-          [2, 8],
-          [2, 2],
-        ],
+        [0, 0],
+        [10, 0],
+        [10, 10],
+        [0, 10],
+        [0, 0],
       ],
-    ]);
+      [
+        [2, 2],
+        [8, 2],
+        [8, 8],
+        [2, 8],
+        [2, 2],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
 
     expect(placement).toBeDefined();
-    const insideHole = placement!.lng > 2 && placement!.lng < 8 && placement!.lat > 2 && placement!.lat < 8;
-    expect(insideHole).toBe(false);
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
   });
 
   test('places a label on an extremely thin sliver without exhausting the grid', () => {
@@ -517,6 +533,55 @@ describe('getLabelPlacement', () => {
     expect(placement!.lat).toBeGreaterThan(0);
     expect(placement!.lat).toBeLessThan(0.000001);
     expect(Date.now() - start).toBeLessThan(1000);
+    expect(placement!.area).toBeGreaterThan(0);
+  });
+
+  test('stays inside a boundary whose arms are thinner than the search can resolve', () => {
+    // A C of 0.0001-wide arms across a 0.1 extent: every cell the search can afford to look at
+    // straddles an edge, so without an interior starting point it answers with the closest point
+    // it found outside -- a label sitting in the opening, on land the stratum excludes.
+    const rings: Position[][] = [
+      [
+        [0, 0],
+        [0.1, 0],
+        [0.1, 0.0001],
+        [0.0001, 0.0001],
+        [0.0001, 0.0999],
+        [0.1, 0.0999],
+        [0.1, 0.1],
+        [0, 0.1],
+        [0, 0],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
+
+    expect(placement).toBeDefined();
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
+  });
+
+  test('stays inside the thin frame left by a hole that fills most of the boundary', () => {
+    const rings: Position[][] = [
+      [
+        [0, 0],
+        [0.1, 0],
+        [0.1, 0.1],
+        [0, 0.1],
+        [0, 0],
+      ],
+      [
+        [0.00005, 0.00005],
+        [0.09995, 0.00005],
+        [0.09995, 0.09995],
+        [0.00005, 0.09995],
+        [0.00005, 0.00005],
+      ],
+    ];
+
+    const placement = getLabelPlacement([rings]);
+
+    expect(placement).toBeDefined();
+    expect(isInsidePolygon(placement!.lng, placement!.lat, rings)).toBe(true);
   });
 
   test('returns undefined when there is no usable geometry', () => {
