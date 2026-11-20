@@ -1,7 +1,13 @@
-import { MultiPolygon } from 'geojson';
+import { MultiPolygon, Position } from 'geojson';
 
 import { MapBounds } from './types';
-import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints, getBoundsZoomLevel, isBoundsValid } from './utils';
+import {
+  getBoundingBoxFromMultiPolygons,
+  getBoundingBoxFromPoints,
+  getBoundsZoomLevel,
+  getLabelPlacement,
+  isBoundsValid,
+} from './utils';
 
 describe('isBoundsValid', () => {
   test.each([
@@ -417,5 +423,114 @@ describe('getBoundingBoxFromMultiPolygons', () => {
       minLng: Infinity,
       maxLng: -Infinity,
     });
+  });
+});
+
+describe('getLabelPlacement', () => {
+  const square = (minLng: number, minLat: number, size: number): Position[][] => [
+    [
+      [minLng, minLat],
+      [minLng + size, minLat],
+      [minLng + size, minLat + size],
+      [minLng, minLat + size],
+      [minLng, minLat],
+    ],
+  ];
+
+  test('places the label at the center of a square', () => {
+    const placement = getLabelPlacement([square(0, 0, 2)]);
+
+    expect(placement?.lng).toBeCloseTo(1, 1);
+    expect(placement?.lat).toBeCloseTo(1, 1);
+    expect(placement?.area).toBeGreaterThan(0);
+  });
+
+  test('places the label inside the largest part of a multipolygon', () => {
+    const placement = getLabelPlacement([square(0, 0, 0.1), square(10, 0, 2), square(20, 0, 0.5)]);
+
+    expect(placement?.lng).toBeCloseTo(11, 1);
+    expect(placement?.lat).toBeCloseTo(1, 1);
+  });
+
+  test('keeps the label inside a concave polygon rather than in its notch', () => {
+    // A "C" shape whose centroid falls in the opening on the right.
+    const placement = getLabelPlacement([
+      [
+        [
+          [0, 0],
+          [3, 0],
+          [3, 1],
+          [1, 1],
+          [1, 2],
+          [3, 2],
+          [3, 3],
+          [0, 3],
+          [0, 0],
+        ],
+      ],
+    ]);
+
+    expect(placement).toBeDefined();
+    expect(placement!.lng).toBeLessThan(1);
+  });
+
+  test('keeps the label out of a hole', () => {
+    const placement = getLabelPlacement([
+      [
+        [
+          [0, 0],
+          [10, 0],
+          [10, 10],
+          [0, 10],
+          [0, 0],
+        ],
+        [
+          [2, 2],
+          [8, 2],
+          [8, 8],
+          [2, 8],
+          [2, 2],
+        ],
+      ],
+    ]);
+
+    expect(placement).toBeDefined();
+    const insideHole = placement!.lng > 2 && placement!.lng < 8 && placement!.lat > 2 && placement!.lat < 8;
+    expect(insideHole).toBe(false);
+  });
+
+  test('places a label on an extremely thin sliver without exhausting the grid', () => {
+    const start = Date.now();
+    const placement = getLabelPlacement([
+      [
+        [
+          [0, 0],
+          [1, 0],
+          [1, 0.000001],
+          [0, 0.000001],
+          [0, 0],
+        ],
+      ],
+    ]);
+
+    expect(placement).toBeDefined();
+    expect(placement!.lat).toBeGreaterThan(0);
+    expect(placement!.lat).toBeLessThan(0.000001);
+    expect(Date.now() - start).toBeLessThan(1000);
+  });
+
+  test('returns undefined when there is no usable geometry', () => {
+    expect(getLabelPlacement([])).toBeUndefined();
+    expect(getLabelPlacement([[]])).toBeUndefined();
+    expect(
+      getLabelPlacement([
+        [
+          [
+            [0, 0],
+            [1, 1],
+          ],
+        ],
+      ])
+    ).toBeUndefined();
   });
 });

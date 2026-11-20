@@ -8,6 +8,9 @@ export type MapPoint = { lat: number; lng: number };
 
 export type MapViewState = { latitude: number; longitude: number; zoom: number };
 
+// A point to anchor a label at, plus the area of the polygon part it was derived from.
+export type MapLabelPlacement = MapPoint & { area: number };
+
 /**
  * Properties class for GeoJson, with a few reserved object defined.
  */
@@ -105,6 +108,18 @@ export type MapNameTag = {
   longitude: number;
   latitude: number;
   onClick?: () => void;
+};
+
+// A single label placed on the map. 'name' tags are the prominent site names; 'feature' labels
+// name an individual stratum, substratum or monitoring plot.
+export type MapLabel = {
+  area: number;
+  id: string;
+  label: string;
+  latitude: number;
+  longitude: number;
+  onClick?: () => void;
+  variant: 'feature' | 'name';
 };
 
 export type MapViewStyle = 'Outdoors' | 'Satellite' | 'Light' | 'Dark' | 'Streets';

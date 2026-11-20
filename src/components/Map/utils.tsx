@@ -147,6 +147,8 @@ export const getMapDrawingLayer = (source: MapSourceRenderProperties, sourceId: 
           type: 'symbol',
           paint: {
             'text-color': source.annotation.textColor,
+            'text-halo-color': '#000000',
+            'text-halo-width': 1,
           },
           layout: {
             'text-allow-overlap': false,

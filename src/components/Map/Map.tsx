@@ -31,6 +31,7 @@ import {
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useMaintainLayerOrder } from '../NewMap/useMaintainLayerOrder';
+import { getLabelPlacement } from '../NewMap/utils';
 import MapBanner from './MapBanner';
 import MapViewStyleControl, { useMapViewStyle } from './MapViewStyleControl';
 import { getMapDrawingLayer } from './utils';
@@ -367,8 +368,31 @@ export default function Map(props: MapProps): JSX.Element {
           .filter((f) => f)
           .flatMap((f) => f);
 
+        // Annotations are drawn from their own collection of one point per entity. Drawing them
+        // from the polygons above would repeat an entity's name on every part of its boundary.
+        const labelFeatures = source.annotation
+          ? source.entities.flatMap((entity) => {
+              const placement = getLabelPlacement(MapService.getMapEntityGeometry(entity));
+              if (!placement) {
+                return [];
+              }
+              return [
+                {
+                  type: 'Feature',
+                  geometry: {
+                    type: 'Point',
+                    coordinates: [placement.lng, placement.lat],
+                  },
+                  properties: entity.properties,
+                  id: entity.id,
+                },
+              ];
+            })
+          : [];
+
         return {
           data: { type: 'FeatureCollection', features },
+          labelData: { type: 'FeatureCollection', features: labelFeatures },
           ...getMapDrawingLayer(source, source.id),
         };
       })
@@ -398,18 +422,23 @@ export default function Map(props: MapProps): JSX.Element {
     const sources = layersToUse.map((geo: any) => (
       <Source type='geojson' key={geo.id} data={geo.data} id={geo.id}>
         {geo.layer && <Layer {...geo.layer} />}
-        {geo.patternFill && (
-          <Layer {...geo.patternFill} beforeId={geo.textAnnotation ? geo.textAnnotation.id : undefined} />
-        )}
-        {geo.textAnnotation &&
-          (!showSiteMarker || (showSiteMarker && geo.textAnnotation.id !== 'sites-annotation')) && (
-            <Layer {...geo.textAnnotation} beforeId={geo.layerOutline.id} />
-          )}
+        {geo.patternFill && <Layer {...geo.patternFill} />}
         {geo.layerOutline && <Layer {...geo.layerOutline} />}
       </Source>
     ));
 
-    return sources;
+    const labelSources = layersToUse
+      .filter(
+        (geo: any) =>
+          geo.textAnnotation && (!showSiteMarker || (showSiteMarker && geo.textAnnotation.id !== 'sites-annotation'))
+      )
+      .map((geo: any) => (
+        <Source type='geojson' key={`${geo.id}-labels`} data={geo.labelData} id={`${geo.id}-labels`}>
+          <Layer {...geo.textAnnotation} />
+        </Source>
+      ));
+
+    return [...sources, ...labelSources];
   }, [mapImages, geoData, loadImages, showSiteMarker]);
 
   const annotationMarker = useMemo(() => {
