@@ -9474,6 +9474,14 @@ playcanvas@2.24.1:
     "@types/webxr" "^0.5.24"
     "@webgpu/types" "^0.1.70"
 
+playcanvas@2.24.2:
+  version "2.24.2"
+  resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.24.2.tgz#174cfdd5303e82139dcefa5410c2aa15ad82fe9a"
+  integrity sha512-kkd+Ru3pGfYAQ72dP+jogR3wZlA9etFb4u4z+f56hsPrwDLi1SepwOL//1ikoJhqlWS49gW7aUi5Un7C+alI0g==
+  dependencies:
+    "@types/webxr" "^0.5.24"
+    "@webgpu/types" "^0.1.70"
+
 player.style@^0.3.0:
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/player.style/-/player.style-0.3.5.tgz#a89c9a0887cf05be25d3f588133d19086861c66b"
