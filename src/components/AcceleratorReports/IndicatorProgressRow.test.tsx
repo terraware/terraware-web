@@ -301,4 +301,20 @@ describe('IndicatorProgressRow', () => {
     expect(screen.getByText('85')).toBeVisible();
     expect(screen.queryByText('84.7')).not.toBeInTheDocument();
   });
+
+  it('gives a row with no reference id the same scroll anchor when viewing and editing', () => {
+    const unreferencedIndicator: ProgressIndicator = { ...indicator, id: 7, refId: undefined, type: 'project' };
+
+    const { container, unmount } = renderWithProviders(<IndicatorProgressRow indicator={unreferencedIndicator} />);
+    const viewAnchor = container.querySelector('[data-scroll-anchor]')?.getAttribute('data-scroll-anchor');
+    unmount();
+
+    const { container: editContainer } = renderWithProviders(
+      <IndicatorProgressRow editing indicator={unreferencedIndicator} />
+    );
+    const editAnchor = editContainer.querySelector('[data-scroll-anchor]')?.getAttribute('data-scroll-anchor');
+
+    expect(viewAnchor).toBe('project-7');
+    expect(editAnchor).toBe('project-7');
+  });
 });
