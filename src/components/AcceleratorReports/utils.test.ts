@@ -132,14 +132,20 @@ describe('getProgressIndicators', () => {
     expect(getProgressIndicators(report)[0].value).toBe(40);
   });
 
-  test('orders by reference id numerically, whichever array an indicator came from', () => {
+  test('orders by reference id numerically, whichever array an indicator came from, with unreferenced ones last in arrival order', () => {
     const report = acceleratorReport({
       autoCalculatedIndicators: [{ indicator: 'Auto', refId: '2.1' }],
-      commonIndicators: [{ name: 'Standard', refId: '11.10' }],
-      projectIndicators: [{ name: 'Project', refId: '11.2' }],
+      commonIndicators: [{ name: 'Unreferenced standard' }, { name: 'Standard', refId: '11.10' }],
+      projectIndicators: [{ name: 'Project', refId: '11.2' }, { name: 'Unreferenced project' }],
     } as unknown as Partial<AcceleratorReportPayload>);
 
-    expect(getProgressIndicators(report).map(({ refId }) => refId)).toEqual(['2.1', '11.2', '11.10']);
+    expect(getProgressIndicators(report).map(({ name }) => name)).toEqual([
+      'Auto',
+      'Project',
+      'Standard',
+      'Unreferenced standard',
+      'Unreferenced project',
+    ]);
   });
 
   test('returns nothing for a report that has not loaded', () => {
@@ -162,14 +168,20 @@ describe('getPublishedProgressIndicators', () => {
     ]);
   });
 
-  test('orders by reference id numerically, whichever array an indicator came from', () => {
+  test('orders by reference id numerically, whichever array an indicator came from, with unreferenced ones last in arrival order', () => {
     const report = publishedReport({
       autoCalculatedIndicators: [{ name: 'Auto', refId: '2.1' }],
-      commonIndicators: [{ name: 'Standard', refId: '11.10' }],
-      projectIndicators: [{ name: 'Project', refId: '11.2' }],
+      commonIndicators: [{ name: 'Unreferenced standard' }, { name: 'Standard', refId: '11.10' }],
+      projectIndicators: [{ name: 'Project', refId: '11.2' }, { name: 'Unreferenced project' }],
     } as unknown as Partial<PublishedReportPayload>);
 
-    expect(getPublishedProgressIndicators(report).map(({ refId }) => refId)).toEqual(['2.1', '11.2', '11.10']);
+    expect(getPublishedProgressIndicators(report).map(({ name }) => name)).toEqual([
+      'Auto',
+      'Project',
+      'Standard',
+      'Unreferenced standard',
+      'Unreferenced project',
+    ]);
   });
 
   test('returns nothing for a report that has not loaded', () => {

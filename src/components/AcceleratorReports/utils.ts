@@ -39,7 +39,7 @@ export type ProgressIndicator = {
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
-  refId: string;
+  refId?: string;
   status?: ReportIndicatorStatus;
   supportingDocumentUrl?: string;
   target?: number;
@@ -48,8 +48,17 @@ export type ProgressIndicator = {
 };
 
 // Reference ids read like 11.2.3, so compare them segment by segment as numbers rather than as text,
-// which would order 11.10 before 11.2.
-export const compareRefIds = (a: string, b: string) => {
+// which would order 11.10 before 11.2. Missing ids sort last.
+export const compareRefIds = (a: string | undefined, b: string | undefined) => {
+  if (a === undefined && b === undefined) {
+    return 0;
+  }
+  if (a === undefined) {
+    return 1;
+  }
+  if (b === undefined) {
+    return -1;
+  }
   const aSegments = a.split('.');
   const bSegments = b.split('.');
 
