@@ -87,7 +87,7 @@ export type ExistingProjectIndicatorPayload = {
   precision: number;
   primaryDataSource?: string;
   projectId: number;
-  refId: string;
+  refId?: string;
   tfOwner?: string;
   unit?: string;
 };
@@ -111,7 +111,7 @@ export type NewIndicatorPayload = {
   notes?: string;
   precision: number;
   primaryDataSource?: string;
-  refId: string;
+  refId?: string;
   tfOwner?: string;
   unit?: string;
 };
@@ -141,7 +141,7 @@ export type AutoCalculatedIndicatorPayload = {
   notes?: string;
   precision: number;
   primaryDataSource?: string;
-  refId: string;
+  refId?: string;
   tfOwner?: string;
   unit?: string;
 };
@@ -162,7 +162,7 @@ export type ExistingCommonIndicatorPayload = {
   notes?: string;
   precision: number;
   primaryDataSource?: string;
-  refId: string;
+  refId?: string;
   tfOwner?: string;
   unit?: string;
 };

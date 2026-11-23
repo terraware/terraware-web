@@ -130,6 +130,8 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             type='text'
             onChange={onChangeCallback('refId')}
             value={record.refId}
+            required
+            errorText={validate && !record.refId ? strings.REQUIRED_FIELD : ''}
           />
         </Grid>
         <Grid size={12}>

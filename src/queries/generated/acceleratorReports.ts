@@ -578,7 +578,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
-  refId: string;
+  refId?: string;
   status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   systemTime?: string;
@@ -607,7 +607,7 @@ export type ReportCommonIndicatorPayload = {
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
-  refId: string;
+  refId?: string;
   status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;
@@ -639,7 +639,7 @@ export type ReportProjectIndicatorPayload = {
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
   projectsComments?: string;
-  refId: string;
+  refId?: string;
   status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;

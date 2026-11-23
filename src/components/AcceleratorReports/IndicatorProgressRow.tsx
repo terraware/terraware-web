@@ -251,7 +251,7 @@ const IndicatorProgressRow = ({
       borderTop={`1px solid ${theme.palette.TwClrBgTertiary}`}
       className={printMode ? 'print-section' : undefined}
       padding={theme.spacing(2, 0)}
-      {...{ [SCROLL_ANCHOR]: indicator.refId }}
+      {...{ [SCROLL_ANCHOR]: fieldKey }}
     >
       <Box display='flex'>
         <Box flexShrink={0} paddingRight={theme.spacing(2)} width={`${TITLE_COLUMN_WIDTH}px`}>

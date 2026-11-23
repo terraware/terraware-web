@@ -103,7 +103,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
     unit?: string;
     description?: string;
     isCommon: boolean;
-    reference: string;
+    reference?: string;
     category: string;
     classId?: IndicatorClass;
     level: string;
