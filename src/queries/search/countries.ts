@@ -15,10 +15,11 @@ type ListCountriesApiResponse = {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listCountries: build.query<Country[], void>({
-      query: () => ({
+    listCountries: build.query<Country[], { locale: string } | void>({
+      query: (arg) => ({
         url: '/api/v1/search',
         method: 'POST',
+        headers: arg ? { 'Accept-Language': arg.locale } : undefined,
         body: {
           prefix: 'countries',
           fields: ['code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
