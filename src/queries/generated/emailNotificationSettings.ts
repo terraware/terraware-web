@@ -39,7 +39,7 @@ export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;
 };
 export type UpdateEmailNotificationSettingsRequestPayload = {
-  /** Categories to opt into or out of. Categories that aren't included here are left as-is. */
+  /** Categories to opt into or out of. Categories that aren't included here are left as-is. Category settings are ignored for funders. */
   categories: EmailNotificationCategorySettingPayload[];
   /** If present, turns email notifications on or off regardless of category opt-ins. If absent, leaves the current setting as-is. */
   emailNotificationsEnabled?: boolean;
