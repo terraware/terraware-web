@@ -4,7 +4,7 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
-import { useListCountriesQuery } from 'src/queries/search/countries';
+import { useListCountryCanonicalNamesQuery } from 'src/queries/search/countries';
 import { Region, getRegionValue } from 'src/types/AcceleratorProject';
 
 import { ProjectFieldEditProps } from '.';
@@ -18,20 +18,23 @@ type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
 
 const CountrySelect = ({ allowedCountryNames, id, label, onChange, region, value, md, height }: Props) => {
   const { countries: localizedCountries } = useLocalization();
-  const { currentData: englishCountries } = useListCountriesQuery(allowedCountryNames ? { locale: 'en' } : skipToken);
+  const { currentData: canonicalNames } = useListCountryCanonicalNamesQuery(
+    allowedCountryNames ? undefined : skipToken
+  );
 
-  // Allowed names are English, so match them against English country names and show localized ones.
   const countries = useMemo(() => {
     if (!allowedCountryNames) {
       return localizedCountries;
     }
-    if (!englishCountries) {
+    if (!canonicalNames) {
       return [];
     }
     const allowedNames = new Set(allowedCountryNames);
-    const allowedCodes = new Set(englishCountries.filter(({ name }) => allowedNames.has(name)).map(({ code }) => code));
+    const allowedCodes = new Set(
+      canonicalNames.filter(({ canonicalName }) => allowedNames.has(canonicalName)).map(({ code }) => code)
+    );
     return localizedCountries.filter(({ code }) => allowedCodes.has(code));
-  }, [allowedCountryNames, englishCountries, localizedCountries]);
+  }, [allowedCountryNames, canonicalNames, localizedCountries]);
 
   const handleChange = useCallback(
     (_: string, country: string) => {

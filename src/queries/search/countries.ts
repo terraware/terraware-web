@@ -13,13 +13,21 @@ type ListCountriesApiResponse = {
   results: CountrySearchResult[];
 };
 
+type CountryCanonicalNameSearchResult = {
+  canonicalName: string;
+  code: string;
+};
+
+type ListCountryCanonicalNamesApiResponse = {
+  results: CountryCanonicalNameSearchResult[];
+};
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listCountries: build.query<Country[], { locale: string } | void>({
-      query: (arg) => ({
+    listCountries: build.query<Country[], void>({
+      query: () => ({
         url: '/api/v1/search',
         method: 'POST',
-        headers: arg ? { 'Accept-Language': arg.locale } : undefined,
         body: {
           prefix: 'countries',
           fields: ['code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
@@ -37,7 +45,20 @@ const injectedRtkApi = api.injectEndpoints({
           subdivisions: result.subdivisions,
         })),
     }),
+    listCountryCanonicalNames: build.query<CountryCanonicalNameSearchResult[], void>({
+      query: () => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'countries',
+          fields: ['code', 'canonicalName'],
+          count: 1000,
+        },
+      }),
+      keepUnusedDataFor: Infinity,
+      transformResponse: (response: ListCountryCanonicalNamesApiResponse) => response.results,
+    }),
   }),
 });
 
-export const { useListCountriesQuery } = injectedRtkApi;
+export const { useListCountriesQuery, useListCountryCanonicalNamesQuery } = injectedRtkApi;
