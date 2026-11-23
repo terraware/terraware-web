@@ -1,10 +1,8 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { skipToken } from '@reduxjs/toolkit/query';
 import { DropdownItem } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
-import { useListCountryCanonicalNamesQuery } from 'src/queries/search/countries';
 import { Region, getRegionValue } from 'src/types/AcceleratorProject';
 
 import { ProjectFieldEditProps } from '.';
@@ -18,23 +16,14 @@ type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
 
 const CountrySelect = ({ allowedCountryNames, id, label, onChange, region, value, md, height }: Props) => {
   const { countries: localizedCountries } = useLocalization();
-  const { currentData: canonicalNames } = useListCountryCanonicalNamesQuery(
-    allowedCountryNames ? undefined : skipToken
-  );
 
   const countries = useMemo(() => {
     if (!allowedCountryNames) {
       return localizedCountries;
     }
-    if (!canonicalNames) {
-      return [];
-    }
     const allowedNames = new Set(allowedCountryNames);
-    const allowedCodes = new Set(
-      canonicalNames.filter(({ canonicalName }) => allowedNames.has(canonicalName)).map(({ code }) => code)
-    );
-    return localizedCountries.filter(({ code }) => allowedCodes.has(code));
-  }, [allowedCountryNames, canonicalNames, localizedCountries]);
+    return localizedCountries.filter(({ canonicalName }) => allowedNames.has(canonicalName));
+  }, [allowedCountryNames, localizedCountries]);
 
   const handleChange = useCallback(
     (_: string, country: string) => {

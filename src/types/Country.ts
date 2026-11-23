@@ -1,4 +1,5 @@
 export type Country = {
+  canonicalName: string;
   code: string;
   name: string;
   region?: string;
