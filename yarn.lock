@@ -1091,12 +1091,7 @@
     "@babel/plugin-transform-modules-commonjs" "^8.0.1"
     "@babel/plugin-transform-typescript" "^8.0.6"
 
-"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.28.4", "@babel/runtime@^7.28.6", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7":
-  version "7.29.10"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.29.10.tgz#fe9920782f7ee34029165ac6f272984917a1641b"
-  integrity sha512-NpugTzbKgGrNe45Ui32cN8vCFFMxVtP/9rtfwv0nP5FRDAjvYBxJcLVpYA9mr1jxP6cnIT7x9LUzuDTbWYYNRA==
-
-"@babel/runtime@^7.9.2":
+"@babel/runtime@^7.12.5", "@babel/runtime@^7.18.3", "@babel/runtime@^7.28.4", "@babel/runtime@^7.28.6", "@babel/runtime@^7.5.5", "@babel/runtime@^7.8.7", "@babel/runtime@^7.9.2":
   version "7.29.10"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.29.10.tgz#fe9920782f7ee34029165ac6f272984917a1641b"
   integrity sha512-NpugTzbKgGrNe45Ui32cN8vCFFMxVtP/9rtfwv0nP5FRDAjvYBxJcLVpYA9mr1jxP6cnIT7x9LUzuDTbWYYNRA==
@@ -9589,6 +9584,14 @@ playcanvas@2.24.1:
   version "2.24.1"
   resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.24.1.tgz#1513e20ff4cb10a0c8fe8d2066feda7039eda469"
   integrity sha512-tWZDt1evgPdS9tTjqOTH+YP6UY78KcXzpnhGAapsiCXpT8uciw/+ogZLcSt3xLjcbSvZmniTStQldZhkylsoXA==
+  dependencies:
+    "@types/webxr" "^0.5.24"
+    "@webgpu/types" "^0.1.70"
+
+playcanvas@2.24.2:
+  version "2.24.2"
+  resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.24.2.tgz#174cfdd5303e82139dcefa5410c2aa15ad82fe9a"
+  integrity sha512-kkd+Ru3pGfYAQ72dP+jogR3wZlA9etFb4u4z+f56hsPrwDLi1SepwOL//1ikoJhqlWS49gW7aUi5Un7C+alI0g==
   dependencies:
     "@types/webxr" "^0.5.24"
     "@webgpu/types" "^0.1.70"
