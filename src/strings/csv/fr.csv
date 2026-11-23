@@ -151,7 +151,6 @@ AGE_VALUE_LESS_THAN_1_MONTH,<1 mois,1526ec10
 AGE_VALUE_MONTHS,{0} mois,61fd27f1
 AGE_YEARS,Âge (an),20890365
 AGROFORESTRY,Agroforesterie,0bd9987c
-ALL,Tout,832a8cf5
 ALL_ACCESSIONS_CHECKED_IN,Toutes les accessions ont été enregistrées avec succès !,cbdf5c0a
 ALL_COLLECTION_SITES,Tous les sites de collecte,4f727338
 ALL_COLLECTORS,Tous les collecteurs,c64a275f
@@ -820,8 +819,6 @@ FILE_SIZE_BYTES,{0} octets,50b8f9d6
 FILE_SIZE_KB,{0} Ko,7b93b3f8
 FILE_SIZE_MB,{0} Mo,2895b026
 FILE_TOO_LARGE,Le fichier {0} est trop volumineux. La taille maximale est de {1} Mo.,73c962ea
-FILTER,Filtre,51b390ee
-FILTERED,filtré,4ab1a8a2
 FILTERS,Filtres,c3d13364
 FINAL_QTY,Qté finale,47530c05
 FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
@@ -1218,7 +1215,6 @@ MARKED_AS_PLANTING_COMPLETE,Marqués comme ayant terminé la plantation (%),aee9
 MATCH_SPECIES,Associez les espèces,8dc1bd1d
 MATCH_SPECIES_MODAL_DESCRIPTION,"Sélectionnez les correspondances pour les espèces non reconnues. Une fois la correspondance des espèces établie, il n'est plus possible de la modifier ou de l'annuler.",788bcc85
 MATCH_UNRECOGNIZED_SPECIES,Associez les espèces non reconnues,e8523786
-MAX,Max,7b696111
 MEASURE_MY_SITE_BEFORE_PLANTING,Mesurer mon site avant la plantation,c4c0c233
 MEASUREMENT_TIME,Heure de mesure,002a568f
 MEDIA_MIX,Mix média,699d2d86
@@ -1230,7 +1226,6 @@ METRIC_G_KG_MG,"Métrique (g, kg, mg)",0efae160
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (milligrammes),1eb6e72c
 MILLIGRAMS,Milligrammes,23d587ba
-MIN,Min,145ecf8a
 MIN_MAX_CARBON_ACCUMULATION,Accumulation de carbone min-max,8997b45d
 MIN_MAX_CARBON_ACCUMULATION_UNITS,Accumulation de carbone min/max (tCO2/ha/an),4833b69d
 MIN_PROJECT_AREA,Zone minimum du projet,9ab0d5c8
@@ -1501,7 +1496,6 @@ OPTIONAL_GPS_COORDINATES_OF_PLOT,Optionnel : coordonnées GPS de la parcelle,c15
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS du coin sud-ouest si la zone observée ne correspond pas à l’emplacement initial de la parcelle.,d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Optionnel : Latitude de la parcelle,9de4497b
 OPTIONAL_LONGITUDE_OF_PLOT,Optionnel : Longitude de la parcelle,124fa9fb
-OR,OU,38d8953d
 ORG_NOTIFICATION_ACTION,"Pour modifier les préférences, rendez-vous [Paramètres > Organisation]",5cbf22d7
 ORGANIZATION,Organisation,b1115ab0
 ORGANIZATION_CREATE_FAILED,Impossible de créer une organisation.,969a54ff
@@ -2129,7 +2123,6 @@ SDG_15,15. La vie sur terre,773d6151
 SDG_16,"16. Paix, justice et institutions fortes.",e0e9a0ba
 SDG_17,17. Partenariats pour les objectifs,3b9b74f8
 SE_CORNER,Coin SE,3e70b5c7
-SEARCH,Recherche,9f30c236
 SEARCH_OR_SELECT,Rechercher ou sélectionner...,cbd7f4ed
 SEARCH_SPECIES,Rechercher une espèce,5167bc5e
 SEARCH_VARIABLES,Rechercher des variables,401e4c5d
