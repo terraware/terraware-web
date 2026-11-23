@@ -26,9 +26,14 @@ export type CreatedActionPayload = {
 export type DeletedActionPayload = {
   type: 'Deleted';
 } & EventActionPayloadBase;
+export type CalculatedValuePayload = {
+  fieldName: string;
+  value: string[];
+};
 export type FieldUpdatedActionPayload = {
   type: 'FieldUpdated';
 } & EventActionPayloadBase & {
+    calculatedValues?: CalculatedValuePayload[];
     changedFrom?: string[];
     changedTo?: string[];
     fieldName: string;
@@ -250,6 +255,17 @@ export type RecordedTreeSubjectPayload = {
     treeNumber: number;
     trunkNumber: number;
   };
+export type StratumPlotSelectionSettingsSubjectPayload = {
+  type: 'StratumPlotSelectionSettings';
+} & EventSubjectPayloadBase & {
+    measuredVariability?: number;
+    observationId?: number;
+    observationType: 'Monitoring' | 'Biomass Measurements' | 'Baseline Survey';
+    plantingSiteId: number;
+    source: 'UserEdit' | 'AcceptedRecommendation' | 'Terraformation';
+    stratumId: number;
+    stratumName: string;
+  };
 export type StratumT0DensitySubjectPayload = {
   type: 'StratumT0Density';
 } & EventSubjectPayloadBase & {
@@ -301,6 +317,7 @@ export type EventLogEntryPayload = {
     | PlotT0ObservationSubjectPayload
     | ProjectSubjectPayload
     | RecordedTreeSubjectPayload
+    | StratumPlotSelectionSettingsSubjectPayload
     | StratumT0DensitySubjectPayload
     | ViabilityTestSubjectPayload
     | WithdrawalSubjectPayload;
@@ -323,6 +340,7 @@ export type ListEventLogEntriesRequestPayload = {
   plantingSeasonId?: number;
   plantingSiteId?: number;
   projectId?: number;
+  stratumId?: number;
   /** If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
   subjects?: (
     | 'Accession'
@@ -350,6 +368,7 @@ export type ListEventLogEntriesRequestPayload = {
     | 'PlotT0Observation'
     | 'Project'
     | 'RecordedTree'
+    | 'StratumPlotSelectionSettings'
     | 'StratumT0Density'
     | 'ViabilityTest'
     | 'Withdrawal'
