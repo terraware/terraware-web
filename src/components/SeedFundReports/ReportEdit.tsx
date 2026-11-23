@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, FormButton } from '@terraware/web-components';
-import produce from 'immer';
+import { produce } from 'immer';
 
 import CannotEditReportDialog from 'src/components/SeedFundReports/InvalidUserModal';
 import {
