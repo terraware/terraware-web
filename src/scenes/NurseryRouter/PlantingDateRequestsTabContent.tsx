@@ -345,27 +345,16 @@ const PlantingDateRequestListItem = ({
     <Box
       display='flex'
       gap={theme.spacing(isMobile ? 1 : 3)}
-      alignItems='flex-start'
+      alignItems='stretch'
       width={isMobile ? '100%' : undefined}
       justifyContent={isMobile ? 'space-between' : undefined}
     >
-      <NumberColumn
-        label={strings.SPECIES}
-        value={row.speciesCount}
-        activeLocale={activeLocale}
-        align={isMobile ? 'left' : 'right'}
-      />
-      <NumberColumn
-        label={strings.REQUESTED_PLANTS}
-        value={row.requestedPlants}
-        activeLocale={activeLocale}
-        align={isMobile ? 'left' : 'right'}
-      />
+      <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />
+      <NumberColumn label={strings.REQUESTED_PLANTS} value={row.requestedPlants} activeLocale={activeLocale} />
       <NumberColumn
         label={strings.WITHDRAWN_PLANTS}
         value={row.withdrawnPlants}
         activeLocale={activeLocale}
-        align={isMobile ? 'left' : 'right'}
         to={
           row.withdrawnPlants > 0
             ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`
@@ -457,32 +446,46 @@ const PlantingDateRequestListItem = ({
   );
 };
 
+const VALUE_LINE_HEIGHT = '30px';
+
 const NumberColumn = ({
   label,
   value,
   activeLocale,
-  align,
   to,
 }: {
   label: string;
   value: number;
   activeLocale: string | null;
-  align: 'left' | 'right';
   to?: string;
 }): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const formattedValue = value.toLocaleString(activeLocale || undefined);
   return (
-    <Box textAlign={align} minWidth='110px'>
+    <Box
+      textAlign='right'
+      width={isMobile ? 'min-content' : undefined}
+      minWidth={isMobile ? undefined : '110px'}
+      display='flex'
+      flexDirection='column'
+      justifyContent='space-between'
+    >
       <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
         {label}
       </Typography>
       {to ? (
-        <Link fontSize='20px' fontWeight={600} to={to} style={{ textDecoration: 'underline' }}>
+        <Link
+          fontSize='20px'
+          fontWeight={600}
+          lineHeight={VALUE_LINE_HEIGHT}
+          to={to}
+          style={{ textDecoration: 'underline' }}
+        >
           {formattedValue}
         </Link>
       ) : (
-        <Typography fontSize='20px' fontWeight={600}>
+        <Typography fontSize='20px' fontWeight={600} lineHeight={VALUE_LINE_HEIGHT}>
           {formattedValue}
         </Typography>
       )}
