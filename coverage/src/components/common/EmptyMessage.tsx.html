@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">73.68% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/19</span>
+                <span class='fraction'>14/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -233,18 +233,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -254,9 +252,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -277,7 +275,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -364,19 +364,19 @@ type EmptyMessageProps = {
   sx?: SxProps;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >EmptyMessage(</span>props: EmptyMessageProps): JSX.Element {
-  const { title, text, buttonText, onClick, className, rowItems, sx } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const { isMobile } = <span class="cstat-no" title="statement not covered" >useDeviceInfo();</span>
+export default function EmptyMessage(props: EmptyMessageProps): JSX.Element {
+  const { title, text, buttonText, onClick, className, rowItems, sx } = props;
+  const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 &nbsp;
-  const rowItemInfoStyles = <span class="cstat-no" title="statement not covered" >{</span>
+  const rowItemInfoStyles = {
     textAlign: 'left',
-    marginBottom: isMobile ? theme.spacing(2) : 0,
+    marginBottom: isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >theme.spacing(2) </span>: 0,
   };
 &nbsp;
-  const rowItemGroupStyles = <span class="cstat-no" title="statement not covered" >{</span>
+  const rowItemGroupStyles = {
     display: 'flex',
-    flexDirection: isMobile ? 'column' : 'row',
+    flexDirection: isMobile ? <span class="branch-0 cbranch-no" title="branch not covered" >'column' </span>: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flexGrow: 1,
@@ -386,7 +386,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
     },
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Box
       className={`${className ?? ''}`}
       sx={[
@@ -396,7 +396,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
           borderRadius: '24px',
           textAlign: 'center',
         },
-        ...(Array.isArray(sx) ? sx : [sx]),
+        ...(Array.isArray(sx) ? <span class="branch-0 cbranch-no" title="branch not covered" >sx </span>: [sx]),
       ]}
     &gt;
       {title &amp;&amp; &lt;h3 style={{ fontSize: '20px' }}&gt;{title}&lt;/h3&gt;}
@@ -409,7 +409,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
             marginTop: theme.spacing(5),
           }}
         &gt;
-          {rowItems.map(<span class="fstat-no" title="function not covered" >(rowItem, index) =&gt; <span class="cstat-no" title="statement not covered" >(</span></span>
+          {rowItems.map((rowItem, index) =&gt; (
             &lt;Box
               key={index}
               sx={{
@@ -455,7 +455,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
           ))}
         &lt;/Box&gt;
       )}
-      {onClick &amp;&amp; buttonText &amp;&amp; &lt;Button label={buttonText} onClick={onClick} /&gt;}
+      {onClick &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >buttonText </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >&lt;Button label={buttonText} onClick={onClick} /&gt;}</span>
     &lt;/Box&gt;
   );
 }
@@ -466,7 +466,7 @@ export default function <span class="fstat-no" title="function not covered" >Emp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-24T18:06:06.256Z
+                at 2026-11-24T21:24:11.214Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

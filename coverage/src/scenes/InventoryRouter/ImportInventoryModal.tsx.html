@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">58.82% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>10/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>4/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">58.82% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/17</span>
+                <span class='fraction'>10/17</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -151,34 +151,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -221,22 +221,22 @@ export type ImportInventoryModalProps = {
   onClose: (saved: boolean, snackbarMessage?: string) =&gt; void;
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >ImportInventoryModal(</span>props: ImportInventoryModalProps): JSX.Element {
-  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
-  const { open, onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const { getInventoryTemplate, uploadInventory, getInventoryUploadStatus } = <span class="cstat-no" title="statement not covered" >useInventoryImport();</span>
-  const [record, setRecord] = <span class="cstat-no" title="statement not covered" >useForm({ facilityId: -1 });</span>
-  const [validate, setValidate] = <span class="cstat-no" title="statement not covered" >useState&lt;boolean&gt;(false);</span>
+export default function ImportInventoryModal(props: ImportInventoryModalProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
+  const { open, onClose } = props;
+  const { getInventoryTemplate, uploadInventory, getInventoryUploadStatus } = useInventoryImport();
+  const [record, setRecord] = useForm({ facilityId: -1 });
+  const [validate, setValidate] = useState&lt;boolean&gt;(false);
 &nbsp;
   const selectedFacility = useMemo&lt;Facility | undefined&gt;(
-<span class="fstat-no" title="function not covered" >    () =&gt;</span>
-<span class="cstat-no" title="statement not covered" >      record &amp;&amp; record.facilityId &amp;&amp; selectedOrganization</span>
-        ? selectedOrganization.facilities?.find(<span class="fstat-no" title="function not covered" >(fac) =&gt; <span class="cstat-no" title="statement not covered" >fac.id.toString() === record.facilityId.toString())</span></span>
-        : undefined,
+    () =&gt;
+      record &amp;&amp; record.facilityId &amp;&amp; selectedOrganization
+        ? selectedOrganization.facilities?.find((fac) =&gt; fac.id.toString() === record.facilityId.toString())
+        : <span class="branch-1 cbranch-no" title="branch not covered" >undefined,</span>
     [record, selectedOrganization]
   );
 &nbsp;
-  const isValid = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
+  const isValid = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValidate(true);</span>
 <span class="cstat-no" title="statement not covered" >    if (!selectedFacility) {</span>
 <span class="cstat-no" title="statement not covered" >      return false;</span>
@@ -244,12 +244,12 @@ export default function <span class="fstat-no" title="function not covered" >Imp
 <span class="cstat-no" title="statement not covered" >    return true;</span>
   };
 &nbsp;
-  const onCloseHandler = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(saved: boolean, snackbarMessage?: string) =&gt; {</span></span>
+  const onCloseHandler = <span class="fstat-no" title="function not covered" >(saved: boolean, snackbarMessage?: string) =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >    setValidate(false);</span>
 <span class="cstat-no" title="statement not covered" >    onClose(saved, snackbarMessage);</span>
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;ImportModal
       facility={selectedFacility}
       onClose={onCloseHandler}
@@ -283,7 +283,7 @@ export default function <span class="fstat-no" title="function not covered" >Imp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-24T18:06:06.256Z
+                at 2026-11-24T21:24:11.214Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

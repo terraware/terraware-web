@@ -1,3 +1,4 @@
+f0295b95 SW-9310 Convert Inventory list page to Page component (#7296)
 33312d48 SW-9382 Fix mobile display (#7293)
 ce35506c SW-9406 Remove feature flag for nursery time per phase for both batch and species level (#7294)
 9d9b1124 SW-9388 Drop shadow on page form headers (#7295)
