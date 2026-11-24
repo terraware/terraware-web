@@ -4,14 +4,13 @@ import { createPortal } from 'react-dom';
 import { Card, Checkbox, Chip, IconButton, MenuItem, TextField, Tooltip, useTheme } from '@mui/material';
 import {
   BusySpinner,
+  EditableTableCellContext,
   EditableTableColumn,
   EditableTableEditContext,
   EditableTableProps,
   Icon,
 } from '@terraware/web-components';
 import {
-  MRT_Cell,
-  MRT_Row,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
@@ -42,7 +41,15 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ColumnsModal, { baseColumns } from './ColumnsModal';
-import { MatrixValue, MatrixVariable, buildMatrixValue, buildMatrixValueOperation } from './matrixValues';
+import {
+  MatrixValue,
+  MatrixVariable,
+  buildMatrixValue,
+  buildMatrixValueOperation,
+  getMatrixOptionIds,
+  getMatrixValue,
+  matchesMatrixSelection,
+} from './matrixValues';
 
 const DEFAULT_COLUMN_PINNING = { left: ['projectName'], right: [] };
 
@@ -160,13 +167,7 @@ const MatrixView = () => {
         id: 'projectName',
         enableEditing: false,
         enableHiding: false,
-        Cell: ({
-          cell,
-          row,
-        }: {
-          cell: MRT_Cell<ProjectsWithVariablesSearchResult>;
-          row: MRT_Row<ProjectsWithVariablesSearchResult>;
-        }) => {
+        Cell: ({ cell, row }: EditableTableCellContext<ProjectsWithVariablesSearchResult>) => {
           const projectName = cell.getValue() as string;
           const projectId = row.original.id;
           return (
@@ -193,9 +194,9 @@ const MatrixView = () => {
         enableEditing: false,
         filterVariant: 'range',
         filterFn: 'between',
-        Cell: ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
+        Cell: ({ cell }: EditableTableCellContext<ProjectsWithVariablesSearchResult>) => {
           if (cell.getValue() !== undefined) {
-            return <FormattedNumber value={cell.getValue<number>()} />;
+            return <FormattedNumber value={cell.getValue() as number} />;
           }
           return null;
         },
@@ -225,15 +226,15 @@ const MatrixView = () => {
     const variableColumns: MatrixColumn[] = uniqueVariableIds.map((variableId) => {
       const selectedVariable = allVariables?.find((va) => va.stableId === variableId);
       const correspondingVariable = projects?.flatMap((p) => p.variables || []).find((v) => v.stableId === variableId);
-      const correspondingValue = correspondingVariable?.values?.[0];
+      const variableType = selectedVariable?.type ?? correspondingVariable?.type;
       let Edit: CustomEditComponent;
       let Cell: MatrixColumn['Cell'];
-      let filterFunction: 'between' | 'fuzzy' | 'arrIncludesSome' = 'fuzzy';
+      let filterFunction: MatrixColumn['filterFn'] = 'fuzzy';
       let filterVariant: 'text' | 'multi-select' | 'range' | 'date-range' = 'text';
 
       let filterSelectOptions: string[] = [];
 
-      if (correspondingValue?.dateValue) {
+      if (variableType === 'Date') {
         filterVariant = 'date-range';
         filterFunction = 'between';
         // eslint-disable-next-line react/display-name
@@ -260,11 +261,9 @@ const MatrixView = () => {
           );
         };
         // eslint-disable-next-line react/display-name
-        Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-          if (cell.getValue() && cell.getValue() instanceof Date) {
-            return <>{cell.getValue<Date>().toLocaleDateString(dateLocale)}</>;
-          }
-          return null;
+        Cell = ({ cell }: EditableTableCellContext<ProjectsWithVariablesSearchResult>) => {
+          const value = cell.getValue();
+          return value instanceof Date ? value.toLocaleDateString(dateLocale) : null;
         };
       }
 
@@ -281,21 +280,13 @@ const MatrixView = () => {
           return [];
         };
 
-        filterSelectOptions = getSelectOptions().map((opt) => opt.label || '');
-        filterFunction = 'arrIncludesSome';
+        filterSelectOptions = selectedVariable.options.map((option) => option.name);
+        filterFunction = (row, _columnId, selectedNames) => matchesMatrixSelection(row, variableId, selectedNames);
 
         if (selectedVariable && 'isMultiple' in selectedVariable && selectedVariable.isMultiple) {
           // eslint-disable-next-line react/display-name
-          Edit = ({ cell, save, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
-            const [selectedLabels] = React.useState<string[]>(
-              (cell.getValue() as string)
-                ? (cell.getValue() as string)
-                    .trim()
-                    ?.split(',')
-                    .map((item) => item.trim())
-                : []
-            );
-            const [selections, setSelections] = React.useState<string[]>([]);
+          Edit = ({ row, save, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
+            const [selections, setSelections] = useState<string[]>(() => getMatrixOptionIds(row.original, variableId));
             const [isOpen, setIsOpen] = useState(false);
             const [position, setPosition] = useState({ top: 0, left: 0 });
             const triggerRef = useRef<HTMLDivElement>(null);
@@ -310,14 +301,6 @@ const MatrixView = () => {
                 ),
               []
             );
-
-            useEffect(() => {
-              if (selectedLabels) {
-                setSelections(
-                  selectedLabels.map((sl) => getSelectOptions().find((opt) => opt.label === sl)?.value || '')
-                );
-              }
-            }, [optionsMap, selectedLabels]);
 
             const handleSave = useCallback(() => {
               void save(selections);
@@ -383,6 +366,16 @@ const MatrixView = () => {
               <>
                 <div
                   ref={triggerRef}
+                  role='combobox'
+                  aria-label={strings.SELECT_OPTIONS}
+                  aria-expanded={isOpen}
+                  tabIndex={isSaving ? -1 : 0}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter' || event.key === ' ') {
+                      event.preventDefault();
+                      handleOpen();
+                    }
+                  }}
                   onClick={isSaving ? undefined : handleOpen}
                   style={{
                     border: '1px solid #ccc',
@@ -454,7 +447,12 @@ const MatrixView = () => {
                             (e.currentTarget as HTMLElement).style.backgroundColor = 'white';
                           }}
                         >
-                          <Checkbox checked={selections.includes(value)} size='small' style={{ marginRight: '8px' }} />
+                          <Checkbox
+                            checked={selections.includes(value)}
+                            size='small'
+                            style={{ marginRight: '8px' }}
+                            slotProps={{ input: { 'aria-label': label } }}
+                          />
                           {label}
                         </div>
                       ))}
@@ -466,12 +464,12 @@ const MatrixView = () => {
           };
         } else {
           // eslint-disable-next-line react/display-name
-          Edit = ({ cell, save, cancel, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
-            const currentDisplayValue = (cell.getValue() as string) || '';
+          Edit = ({ row, save, cancel, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
             const options = getSelectOptions();
 
-            const currentOption = options.find((opt) => opt.label === currentDisplayValue);
-            const [selectedValue, setSelectedValue] = useState(currentOption?.value || '');
+            const [selectedValue, setSelectedValue] = useState(
+              () => getMatrixOptionIds(row.original, variableId)[0] ?? ''
+            );
 
             const handleSave = () => {
               void save(selectedValue);
@@ -506,17 +504,18 @@ const MatrixView = () => {
           };
         }
       }
-      if (correspondingValue?.['numberValue(raw)'] !== undefined) {
+      if (variableType === 'Number') {
         // eslint-disable-next-line react/display-name
-        Cell = ({ cell }: { cell: MRT_Cell<ProjectsWithVariablesSearchResult> }) => {
-          return <FormattedNumber value={cell.getValue<number>()} />;
+        Cell = ({ cell }: EditableTableCellContext<ProjectsWithVariablesSearchResult>) => {
+          const value = cell.getValue();
+          return value === '' ? null : <FormattedNumber value={value as number} />;
         };
         filterVariant = 'range';
         filterFunction = 'between';
         // Number input
         // eslint-disable-next-line react/display-name
         Edit = ({ cell, save, cancel, isSaving }: EditableTableEditContext<ProjectsWithVariablesSearchResult>) => {
-          const [value, setValue] = useState<string>(((cell.getValue() as string) || 0).toString());
+          const [value, setValue] = useState(() => String(cell.getValue() ?? ''));
 
           const handleSave = () => {
             void save(value);
@@ -545,7 +544,7 @@ const MatrixView = () => {
           );
         };
       }
-      if (correspondingValue?.linkUrl) {
+      if (variableType === 'Link') {
         Cell = undefined;
         // URL input
         // eslint-disable-next-line react/display-name
@@ -597,32 +596,7 @@ const MatrixView = () => {
         filterVariant,
         filterSelectOptions,
         filterFn: filterFunction,
-        accessorFn: (row) => {
-          const variable = row.variables?.find((_variable) => _variable.stableId === variableId);
-          const variableValue = variable?.values?.[0];
-
-          if (!variableValue || variable?.isList?.toString() === 'true') {
-            return '';
-          }
-
-          if (variableValue['numberValue(raw)']) {
-            return variableValue['numberValue(raw)'];
-          }
-          if (variableValue.textValue) {
-            return variableValue.textValue;
-          }
-          if (variableValue.dateValue) {
-            return new Date(variableValue.dateValue);
-          }
-          if (variableValue.options) {
-            return variableValue.options.map((option) => option.name).join(', ');
-          }
-          if (variableValue.linkUrl) {
-            return variableValue.linkUrl;
-          }
-
-          return '';
-        },
+        accessorFn: (row) => getMatrixValue(row, variableId),
         Cell,
       };
     });

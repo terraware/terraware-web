@@ -27,16 +27,26 @@ export const getMatrixValue = (row: MatrixRow, stableId: string) => {
   return value.linkUrl ?? '';
 };
 
-export const getMatrixOptionIds = (row: MatrixRow, stableId: string) =>
-  row.variables
-    .find((variable) => variable.stableId === stableId)
-    ?.values?.[0]?.options?.map((option) => String(option.id)) ?? [];
+export const getMatrixOptionIds = (row: MatrixRow, stableId: string) => {
+  const variable = row.variables?.find((candidate) => candidate.stableId === stableId);
+  return variable?.isList?.toString() === 'true'
+    ? []
+    : (variable?.values?.[0]?.options?.map((option) => String(option.id)) ?? []);
+};
 
-export const matchesMatrixSelection = (row: MatrixRow, stableId: string, selectedNames: unknown) => {
+export const matchesMatrixSelection = (
+  row: MatrixRow | { original: MatrixRow },
+  stableId: string,
+  selectedNames: unknown
+) => {
   if (!Array.isArray(selectedNames) || selectedNames.length === 0) {
     return true;
   }
-  const options = row.variables.find((variable) => variable.stableId === stableId)?.values?.[0]?.options ?? [];
+  const data = 'original' in row ? row.original : row;
+  const options =
+    data.variables
+      ?.find((variable) => variable.stableId === stableId)
+      ?.values?.flatMap((value) => value.options ?? []) ?? [];
   return selectedNames.some((name) => options.some((option) => option.name === name));
 };
 
