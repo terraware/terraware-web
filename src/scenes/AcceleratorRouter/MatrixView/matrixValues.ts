@@ -50,6 +50,31 @@ export const matchesMatrixSelection = (
   return selectedNames.some((name) => options.some((option) => option.name === name));
 };
 
+export const matchesMatrixRange = (row: MatrixRow | { original: MatrixRow }, stableId: string, range: unknown) => {
+  const [min, max] = Array.isArray(range) ? range : [];
+  const absent = (bound: unknown) => bound === null || bound === undefined || bound === '';
+  if (absent(min) && absent(max)) {
+    return true;
+  }
+  const value = getMatrixValue('original' in row ? row.original : row, stableId);
+  const date = value instanceof Date;
+  const numeric = Number(value);
+  const normalize = (bound: unknown) => {
+    if (!date) {
+      return Number(bound);
+    }
+    const dayjsLike = bound as { format?: (pattern: string) => string } | null;
+    const text = typeof dayjsLike?.format === 'function' ? dayjsLike.format('YYYY-MM-DD') : String(bound);
+    return Date.parse(/^\d{4}-\d{2}-\d{2}/.test(text) ? text.substring(0, 10) : text);
+  };
+  return (
+    value !== '' &&
+    Number.isFinite(numeric) &&
+    (absent(min) || numeric >= normalize(min)) &&
+    (absent(max) || (date ? numeric < normalize(max) + 24 * 60 * 60 * 1000 : numeric <= normalize(max)))
+  );
+};
+
 export const buildMatrixValueOperation = (
   variable: MatrixVariable,
   value: NewNonSectionValuePayloadUnion
