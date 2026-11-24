@@ -272,7 +272,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     <Page
       title={strings.INVENTORY}
       rightComponent={isOnboarded ? actions : undefined}
-      contentStyle={{ display: 'block' }}
+      contentStyle={{ display: 'contents' }}
     >
       <ImportInventoryModal open={importInventoryModalOpen} onClose={onCloseImportInventoryModal} />
       <Box
