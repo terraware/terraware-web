@@ -3,6 +3,9 @@ import React, { ReactNode, useCallback } from 'react';
 import {
   EditableTableOptionsV2,
   EditableTablePropsV2,
+  EditableTableToggleDensePaddingButtonV2,
+  EditableTableToggleFiltersButtonV2,
+  EditableTableToggleFullScreenButtonV2,
   EditableTableToolbarContext,
   EditableTableV2,
   EditableTable as WebEditableTable,
@@ -72,15 +75,29 @@ export const EditableTableToolbar = <TData extends MRT_RowData>({
   showColumnFiltersButton?: boolean;
   showDensityButton?: boolean;
   showFullScreenButton?: boolean;
-}) =>
-  isMrtTable(table) ? (
-    <TableToolbarActions>
-      {showColumnFiltersButton && <MRT_ToggleFiltersButton table={table} />}
-      {children}
-      {showDensityButton && <MRT_ToggleDensePaddingButton table={table} />}
-      {showFullScreenButton && <MRT_ToggleFullScreenButton table={table} />}
-    </TableToolbarActions>
-  ) : null;
+}) => (
+  <TableToolbarActions>
+    {showColumnFiltersButton &&
+      (isMrtTable(table) ? (
+        <MRT_ToggleFiltersButton table={table} />
+      ) : (
+        <EditableTableToggleFiltersButtonV2 table={table} />
+      ))}
+    {children}
+    {showDensityButton &&
+      (isMrtTable(table) ? (
+        <MRT_ToggleDensePaddingButton table={table} />
+      ) : (
+        <EditableTableToggleDensePaddingButtonV2 table={table} />
+      ))}
+    {showFullScreenButton &&
+      (isMrtTable(table) ? (
+        <MRT_ToggleFullScreenButton table={table} />
+      ) : (
+        <EditableTableToggleFullScreenButtonV2 table={table} />
+      ))}
+  </TableToolbarActions>
+);
 
 const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
   const useV2 = useFeatureEnabled('Editable Table V2');

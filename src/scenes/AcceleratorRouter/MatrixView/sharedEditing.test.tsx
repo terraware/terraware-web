@@ -4,7 +4,7 @@ import { rs } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import strings from 'src/strings';
-import { buildUser, captureRequests, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
+import { buildUser, captureRequests, dialogTitled, mockGet, mockPost, renderWithProviders } from 'src/test-utils';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 
 import MatrixView from './index';
@@ -43,8 +43,8 @@ const project: MatrixRow = {
   ],
 };
 
-describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
-  const setup = (definition: VariableUnion = variable, row = project, filter?: string | unknown[]) => {
+describe.each([false, true])('shared Matrix editing (V2: %s)', (enabled) => {
+  const setup = (definition: VariableUnion = variable, row = project, filter?: string | unknown[], canEdit = true) => {
     localStorage.clear();
     featureEnabled.mockReturnValue(enabled);
     localStorage.setItem('matrixView-columnVisibility', JSON.stringify({ v: true }));
@@ -54,11 +54,17 @@ describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
         JSON.stringify([{ id: 'v', value: Array.isArray(filter) ? filter : [filter] }])
       );
     }
-    const currentUser = buildUser({ globalRoles: ['Super-Admin'] });
+    const currentUser = buildUser({ globalRoles: canEdit ? ['Super-Admin'] : [] });
     mockGet('/api/v1/users/me', { user: currentUser });
     mockGet('/api/v1/users/me/preferences', { preferences: {} });
     mockGet('/api/v1/users/me/savedTableViews', { views: [] });
     mockGet('/api/v1/document-producer/variables', { variables: [definition] });
+    const controlValue =
+      definition.type === 'Number'
+        ? { 'numberValue(raw)': 10 }
+        : definition.type === 'Date'
+          ? { dateValue: '2027-01-01' }
+          : { options: [{ id: '8', name: 'Forest', position: '1' }] };
     const control = {
       ...project,
       id: 2,
@@ -67,11 +73,12 @@ describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
       variables: [
         {
           ...project.variables[0],
-          values: [{ variableValueId: '4', options: [{ id: '8', name: 'Forest', position: '1' }] }],
+          type: definition.type,
+          values: [{ variableValueId: '4', ...controlValue }],
         },
       ],
     };
-    mockPost('/api/v1/search', { results: typeof filter === 'string' ? [row, control] : [row] });
+    mockPost('/api/v1/search', { results: [row, control] });
     const requests = captureRequests('post', '/api/v1/document-producer/projects/1/values');
     return { ...renderWithProviders(<MatrixView />, { currentUser: { user: currentUser } }), requests };
   };
@@ -90,6 +97,27 @@ describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
       ],
       updateStatuses: false,
     });
+  });
+
+  it('does not open an editor without Matrix-update permission', async () => {
+    const { user } = setup(variable, project, undefined, false);
+    const cell = await screen.findByRole('cell', { name: 'Forest, coastal' });
+    await user.dblClick(cell);
+    expect(within(cell).queryByRole('combobox')).not.toBeInTheDocument();
+  });
+
+  it('applies shared column visibility through the Matrix column manager', async () => {
+    mockGet('/api/v1/accelerator/deliverables', { deliverables: [] });
+    const { user } = setup();
+    await screen.findByRole('cell', { name: 'Forest, coastal' });
+    await user.click(screen.getByRole('button', { name: strings.MANAGE_COLUMNS }));
+    const checkbox = await screen.findByRole('checkbox', { name: 'Habitat' });
+    expect(checkbox).toBeChecked();
+    await user.click(checkbox);
+    const modal = await waitFor(() => dialogTitled(strings.MANAGE_COLUMNS));
+    await user.click(within(modal).getByRole('button', { name: strings.APPLY }));
+    await waitFor(() => expect(screen.queryByRole('columnheader', { name: /Habitat/ })).not.toBeInTheDocument());
+    expect(JSON.parse(localStorage.getItem('matrixView-columnVisibility')!).v).toBe(false);
   });
 
   it.each([true, false])('saves single-select IDs with an existing value: %s', async (existing) => {
@@ -182,5 +210,6 @@ describe.each([false])('shared Matrix editing (V2: %s)', (enabled) => {
       type === 'Number' ? [null, 0] : ['2026-01-01', '2026-01-01']
     );
     expect(await screen.findByRole('cell', { name: 'Project' })).toBeVisible();
+    expect(screen.queryByRole('cell', { name: 'Control' })).not.toBeInTheDocument();
   });
 });
