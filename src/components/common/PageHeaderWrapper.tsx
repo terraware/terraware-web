@@ -199,7 +199,6 @@ export default function PageHeaderWrapper({
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}FF,` +
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`
       : undefined,
-    boxShadow: elevated ? `0px 4px 8px ${theme.palette.TwClrBaseGray300}66` : 'none',
     paddingRight: pinned && !alwaysVisible ? theme.spacing(4) : undefined,
     paddingTop: stickyChrome ? theme.spacing(4) : undefined,
     position: pinned ? 'fixed' : undefined,
