@@ -23,6 +23,9 @@ but not everything is ready yet.
 
 ## Requirements
 
+- Node.js 26 (use `nvm install` to install and select the version pinned in `.nvmrc`)
+- Yarn Classic (version pinned in `package.json`; if Yarn is unavailable, install standalone Corepack and run
+  `corepack enable yarn`)
 - Docker Desktop version `4.32.0` or later
 
 ## How to Run the App in Development Mode
