@@ -224,9 +224,10 @@ describe('PlantingDateRequestsTabContent', () => {
     expect(domOrder(status)).toBeLessThan(domOrder(site));
 
     expect(screen.getByRole('button', { name: strings.WITHDRAW }).style.width).toBe('100%');
-    expect(getComputedStyle(screen.getByText(strings.REQUESTED_PLANTS).parentElement as HTMLElement).textAlign).toBe(
-      'left'
-    );
+
+    const speciesColumn = screen.getByText(strings.SPECIES).parentElement as HTMLElement;
+    expect(getComputedStyle(speciesColumn).width).toBe('min-content');
+    expect(getComputedStyle(speciesColumn).minWidth).toBe('auto');
   });
 
   it('tells the user which empty list they are looking at', async () => {
