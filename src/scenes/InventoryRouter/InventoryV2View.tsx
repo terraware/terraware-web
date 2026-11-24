@@ -1,14 +1,13 @@
-import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 
-import PageSnackbar from 'src/components/PageSnackbar';
+import Page from 'src/components/Page';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useInventoryImport } from 'src/hooks/batches/useInventoryImport';
@@ -147,7 +146,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { getInventoryTemplate } = useInventoryImport();
   const { hasNurseries, hasSpecies, speciesLoading } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
-  const contentRef = useRef(null);
 
   const messageStyles = {
     margin: '0 auto',
@@ -253,46 +251,31 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
     );
   }
 
+  const actions = isMobile ? (
+    <Button id='new-inventory' icon='plus' onClick={navigateToInventoryCreateView} size='medium' />
+  ) : (
+    <>
+      <Box sx={{ display: 'inline', paddingLeft: 1 }}>
+        <Button
+          id='new-inventory'
+          icon='plus'
+          label={strings.ADD_INVENTORY}
+          onClick={navigateToInventoryCreateView}
+          size='medium'
+        />
+      </Box>
+      <OptionsMenu onOptionItemClick={onOptionItemClick} optionItems={[{ label: strings.IMPORT, value: 'import' }]} />
+    </>
+  );
+
   return (
-    <TfMain>
+    <Page
+      title={strings.INVENTORY}
+      rightComponent={isOnboarded ? actions : undefined}
+      contentStyle={{ display: 'contents' }}
+    >
       <ImportInventoryModal open={importInventoryModalOpen} onClose={onCloseImportInventoryModal} />
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box sx={{ paddingBottom: theme.spacing(2), paddingLeft: isMobile ? 0 : theme.spacing(3) }}>
-          <Grid container>
-            <Grid size={6}>
-              <Typography fontSize='24px' fontWeight={600}>
-                {strings.INVENTORY}
-              </Typography>
-            </Grid>
-            {isOnboarded ? (
-              <Grid sx={{ textAlign: 'right' }} size={6}>
-                {isMobile ? (
-                  <Button id='new-inventory' icon='plus' onClick={navigateToInventoryCreateView} size='medium' />
-                ) : (
-                  <>
-                    <Box sx={{ display: 'inline', paddingLeft: 1 }}>
-                      <Button
-                        id='new-inventory'
-                        icon='plus'
-                        label={strings.ADD_INVENTORY}
-                        onClick={navigateToInventoryCreateView}
-                        size='medium'
-                      />
-                    </Box>
-                    <OptionsMenu
-                      onOptionItemClick={onOptionItemClick}
-                      optionItems={[{ label: strings.IMPORT, value: 'import' }]}
-                    />
-                  </>
-                )}
-              </Grid>
-            ) : null}
-          </Grid>
-        </Box>
-      </PageHeaderWrapper>
-      <PageSnackbar />
       <Box
-        ref={contentRef}
         display='flex'
         flexDirection='column'
         flexGrow={1}
@@ -329,6 +312,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
           </Container>
         )}
       </Box>
-    </TfMain>
+    </Page>
   );
 }
