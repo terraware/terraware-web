@@ -3,6 +3,7 @@ import { Country, Subdivision } from 'src/types/Country';
 import { baseApi as api } from '../baseApi';
 
 type CountrySearchResult = {
+  canonicalName: string;
   code: string;
   name: string;
   region?: string;
@@ -21,7 +22,7 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'countries',
-          fields: ['code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
+          fields: ['canonicalName', 'code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
           sortOrder: [{ field: 'name' }, { field: 'subdivisions.name' }],
           count: 1000,
         },
@@ -30,6 +31,7 @@ const injectedRtkApi = api.injectEndpoints({
       keepUnusedDataFor: Infinity,
       transformResponse: (response: ListCountriesApiResponse) =>
         response.results.map((result): Country => ({
+          canonicalName: result.canonicalName,
           code: result.code,
           name: result.name,
           region: result.region,

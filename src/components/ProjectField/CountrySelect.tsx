@@ -9,12 +9,21 @@ import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';
 
 type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
+  allowedCountryNames?: string[];
   onChange: (countryCode?: string, region?: string) => void;
   region?: Region;
 };
 
-const CountrySelect = ({ id, label, onChange, region, value, md, height }: Props) => {
-  const { countries } = useLocalization();
+const CountrySelect = ({ allowedCountryNames, id, label, onChange, region, value, md, height }: Props) => {
+  const { countries: localizedCountries } = useLocalization();
+
+  const countries = useMemo(() => {
+    if (!allowedCountryNames) {
+      return localizedCountries;
+    }
+    const allowedNames = new Set(allowedCountryNames);
+    return localizedCountries.filter(({ canonicalName }) => allowedNames.has(canonicalName));
+  }, [allowedCountryNames, localizedCountries]);
 
   const handleChange = useCallback(
     (_: string, country: string) => {

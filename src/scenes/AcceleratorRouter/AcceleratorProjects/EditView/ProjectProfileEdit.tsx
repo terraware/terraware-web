@@ -46,12 +46,14 @@ type InternalUserItem = Omit<InternalUserPayload, 'userId'> & {
   userId?: number;
 };
 
+const countryStableId = '1';
 const HighlightPhotoStableId = '551';
 const ProjectZoneFigureStableId = '525';
 const standardStableId = '350';
 const methodologyNumberStableId = '351';
 const carbonCertificationsStableId = '552';
 const variableStableIds = [
+  countryStableId,
   HighlightPhotoStableId,
   ProjectZoneFigureStableId,
   standardStableId,
@@ -108,6 +110,10 @@ const ProjectProfileEdit = () => {
           }, {})
         : undefined,
     [variableValues]
+  );
+  const countryOptionNames = useMemo(
+    () => (stableToVariable?.[countryStableId] as SelectVariable | undefined)?.options.map(({ name }) => name),
+    [stableToVariable]
   );
   const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
@@ -592,6 +598,7 @@ const ProjectProfileEdit = () => {
             >
               <Box width={'100%'}>
                 <CountrySelect
+                  allowedCountryNames={countryOptionNames}
                   id={'countryCode'}
                   md={12}
                   label={strings.COUNTRY}
