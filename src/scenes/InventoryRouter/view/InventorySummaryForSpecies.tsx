@@ -3,7 +3,6 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useFeatureEnabled } from 'src/features';
 import { useOrganization } from 'src/providers';
 import { useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
 import { useLazyListSpeciesProjectNamesQuery } from 'src/queries/search/speciesProjects';
@@ -24,7 +23,6 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const numberFormatter = useNumberFormatter();
-  const isTimePerStageEnabled = useFeatureEnabled('Nursery Batch Time Per Stage');
 
   const [getSpeciesSummary, { currentData: speciesSummary, isError: summaryError }] = useLazyGetSpeciesSummaryQuery();
   const [listSpeciesProjectNames, { currentData: speciesProjectNames, isError: speciesProjectNamesError }] =
@@ -129,9 +127,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
   return (
     <Grid container spacing={3}>
-      {isTimePerStageEnabled && summary?.averageTimeInStage && (
-        <SpeciesTimeInStage averageTimeInStage={summary.averageTimeInStage} />
-      )}
+      {summary?.averageTimeInStage && <SpeciesTimeInStage averageTimeInStage={summary.averageTimeInStage} />}
       {getData().map((datum) => (
         <Grid key={datum.label} size={datum.gridColumns}>
           <OverviewItemCard

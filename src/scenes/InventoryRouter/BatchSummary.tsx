@@ -6,7 +6,6 @@ import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import { useUpdateBatchMutation } from 'src/queries/generated/nurseryBatches';
 import BatchTimeInStage from 'src/scenes/InventoryRouter/BatchTimeInStage';
 import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
@@ -27,7 +26,6 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const [updateBatch] = useUpdateBatchMutation();
-  const isTimePerStageEnabled = useFeatureEnabled('Nursery Batch Time Per Stage');
 
   const accessionLinks = useMemo(() => getBatchAccessions(batch), [batch]);
 
@@ -76,7 +74,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   return (
     <>
       <Grid container spacing={3} marginBottom={theme.spacing(4)}>
-        {isTimePerStageEnabled && <BatchTimeInStage batch={batch} />}
+        <BatchTimeInStage batch={batch} />
         <Grid flexBasis={overviewGridFlexBasis} flexGrow={1}>
           <OverviewItemCardSubLocations batch={batch} />
         </Grid>
