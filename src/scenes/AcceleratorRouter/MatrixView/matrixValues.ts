@@ -2,8 +2,43 @@ import { ProjectsWithVariablesSearchResult } from 'src/queries/search/projectsWi
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 import { NewNonSectionValuePayloadUnion, Operation } from 'src/types/documentProducer/VariableValue';
 
-export type MatrixVariable = ProjectsWithVariablesSearchResult['variables'][number] | VariableUnion;
+export type MatrixRow = ProjectsWithVariablesSearchResult;
+export type MatrixVariable = MatrixRow['variables'][number] | VariableUnion;
 export type MatrixValue = string | number | string[];
+
+export const getMatrixValue = (row: MatrixRow, stableId: string) => {
+  const variable = row.variables?.find((candidate) => candidate.stableId === stableId);
+  const value = variable?.values?.[0];
+  if (!value || variable?.isList?.toString() === 'true') {
+    return '';
+  }
+  if (value['numberValue(raw)'] !== undefined) {
+    return value['numberValue(raw)'];
+  }
+  if (value.textValue) {
+    return value.textValue;
+  }
+  if (value.dateValue) {
+    return new Date(value.dateValue);
+  }
+  if (value.options) {
+    return value.options.map((option) => option.name).join(', ');
+  }
+  return value.linkUrl ?? '';
+};
+
+export const getMatrixOptionIds = (row: MatrixRow, stableId: string) =>
+  row.variables
+    .find((variable) => variable.stableId === stableId)
+    ?.values?.[0]?.options?.map((option) => String(option.id)) ?? [];
+
+export const matchesMatrixSelection = (row: MatrixRow, stableId: string, selectedNames: unknown) => {
+  if (!Array.isArray(selectedNames) || selectedNames.length === 0) {
+    return true;
+  }
+  const options = row.variables.find((variable) => variable.stableId === stableId)?.values?.[0]?.options ?? [];
+  return selectedNames.some((name) => options.some((option) => option.name === name));
+};
 
 export const buildMatrixValueOperation = (
   variable: MatrixVariable,
