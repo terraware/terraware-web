@@ -19,6 +19,14 @@ install_node() {
     fi
     if ! command -v yarn &>/dev/null; then
         if ! command -v corepack &>/dev/null; then
+            local npm_bin shim
+            npm_bin="$(sudo npm prefix --global)/bin"
+            for shim in corepack yarn yarnpkg pnpm pnpx; do
+                if [[ -L "$npm_bin/$shim" && ! -e "$npm_bin/$shim" &&
+                    "$(readlink "$npm_bin/$shim")" == */corepack/dist/"$shim.js" ]]; then
+                    sudo rm -- "$npm_bin/$shim"
+                fi
+            done
             sudo npm install --global corepack@0.36.0
         fi
         sudo corepack enable yarn
