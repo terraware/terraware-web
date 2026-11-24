@@ -1,3 +1,4 @@
+ed7cbc3e SW-6910 Limit Edit Project countries to Country variable options (#7290)
 c4f82148 Wait for the planting site draft error redirect (#7291)
 09ee8262 SW-9387 Handle indicators without ref IDs (#7285)
 6f41b58c Update compatible frontend dependencies (#7288)
