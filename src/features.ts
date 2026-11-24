@@ -8,8 +8,7 @@ export type FeatureName =
   | 'Virtual Monitoring Plots'
   | 'Scheduled Biomass Monitoring Observations'
   | 'Baseline Survey'
-  | 'Assign Plots When Scheduling'
-  | 'Nursery Batch Time Per Stage';
+  | 'Assign Plots When Scheduling';
 
 export type Feature = {
   name: FeatureName;
@@ -77,15 +76,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Assign monitoring plots when an observation is scheduled instead of when it starts.'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Nursery Batch Time Per Stage',
-    preferenceName: 'nurseryBatchTimePerStage',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Track how long nursery batches spend in each stage.'],
     disclosure: ['This is a WIP'],
   },
 ];
