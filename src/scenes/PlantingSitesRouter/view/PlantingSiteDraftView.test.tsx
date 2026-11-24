@@ -146,7 +146,7 @@ describe('PlantingSiteDraftView', () => {
     renderView();
 
     expect(await screen.findByText(strings.GENERIC_ERROR)).toBeInTheDocument();
-    expect(screen.getByTestId('location').textContent).toBe(APP_PATHS.PLANTING_SITES);
+    await waitFor(() => expect(screen.getByTestId('location').textContent).toBe(APP_PATHS.PLANTING_SITES));
   });
 
   it('returns to the planting sites list rather than asking for a draft that cannot exist', async () => {
