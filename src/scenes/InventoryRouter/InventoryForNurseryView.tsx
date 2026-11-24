@@ -1,13 +1,10 @@
-import React, { type JSX, useRef } from 'react';
+import React, { type JSX, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
-import PageSnackbar from 'src/components/PageSnackbar';
-import BackToLink from 'src/components/common/BackToLink';
+import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
@@ -25,7 +22,6 @@ export default function InventoryForNurseryView(): JSX.Element {
   const location = useStateLocation();
   const pathParams = useParams<{ nurseryId: string }>();
   const { selectedOrganization } = useOrganization();
-  const contentRef = useRef(null);
   const theme = useTheme();
 
   const nurseryId = Number(pathParams.nurseryId);
@@ -40,49 +36,37 @@ export default function InventoryForNurseryView(): JSX.Element {
     navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
-  return (
-    <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <BackToLink
-          id='back'
-          name={strings.INVENTORY}
-          to={`${APP_PATHS.INVENTORY}?tab=batches_by_nursery&${query.toString()}`}
-        />
-        <Grid container>
-          <Typography
-            sx={{
-              marginTop: theme.spacing(3),
-              marginBottom: theme.spacing(2),
-              paddingLeft: theme.spacing(3),
-              fontSize: '20px',
-              fontWeight: 600,
-              fontStyle: 'bold',
-            }}
-          >
-            {strings.formatString(
-              strings.BATCHES_AT,
-              selectedOrganization ? getNurseryName(nurseryId, selectedOrganization) : ''
-            )}
-          </Typography>
-          <Grid size={12}>
-            <PageSnackbar />
-          </Grid>
-        </Grid>
-      </PageHeaderWrapper>
-      <Grid container ref={contentRef}>
-        <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
-          <InventorySummaryForNursery nurseryId={nurseryId} />
+  const crumbs = useMemo(
+    () => [
+      {
+        name: strings.INVENTORY,
+        to: `${APP_PATHS.INVENTORY}?tab=batches_by_nursery&${query.toString()}`,
+      },
+    ],
+    [query]
+  );
 
-          <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
-            <InventorySeedlingsTableForNursery
-              nurseryId={nurseryId}
-              onUpdateOpenBatch={setBatchNumber}
-              openBatchNumber={openBatchNumber}
-              origin={'Nursery'}
-            />
-          </Card>
-        </Grid>
+  return (
+    <Page
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      title={strings
+        .formatString(strings.BATCHES_AT, selectedOrganization ? getNurseryName(nurseryId, selectedOrganization) : '')
+        .toString()}
+      titleStyle={{ fontSize: '20px', marginTop: theme.spacing(3), paddingLeft: theme.spacing(1) }}
+    >
+      <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
+        <InventorySummaryForNursery nurseryId={nurseryId} />
+
+        <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
+          <InventorySeedlingsTableForNursery
+            nurseryId={nurseryId}
+            onUpdateOpenBatch={setBatchNumber}
+            openBatchNumber={openBatchNumber}
+            origin={'Nursery'}
+          />
+        </Card>
       </Grid>
-    </TfMain>
+    </Page>
   );
 }
