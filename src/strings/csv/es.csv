@@ -151,7 +151,6 @@ AGE_VALUE_LESS_THAN_1_MONTH,<1 Mes,1526ec10
 AGE_VALUE_MONTHS,{0} Meses,61fd27f1
 AGE_YEARS,Edad (año),20890365
 AGROFORESTRY,Agrosilvicultura,0bd9987c
-ALL,Todo,832a8cf5
 ALL_ACCESSIONS_CHECKED_IN,¡Todas las accesiones se ingresaron correctamente!,cbdf5c0a
 ALL_COLLECTION_SITES,Todos los sitios de recolección,4f727338
 ALL_COLLECTORS,Todos los recolectores,c64a275f
@@ -821,8 +820,7 @@ FILE_SIZE_BYTES,{0} bytes,50b8f9d6
 FILE_SIZE_KB,{0} KB,7b93b3f8
 FILE_SIZE_MB,{0} MB,2895b026
 FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.,73c962ea
-FILTER,Filtrar,51b390ee
-FILTERED,filtrado,4ab1a8a2
+FILTERED_LOWERCASE,filtrado,4ab1a8a2
 FILTERS,Filtros,c3d13364
 FINAL_QTY,Cantidad final,47530c05
 FINANCIAL_SUMMARIES,Resúmenes financieros,d26c4f56
@@ -1219,7 +1217,6 @@ MARKED_AS_PLANTING_COMPLETE,Marcadas como plantación completa (%),aee9023f
 MATCH_SPECIES,Verificar coincidencias,8dc1bd1d
 MATCH_SPECIES_MODAL_DESCRIPTION,"Seleccionar coincidencias para las especies no reconocidas. Una vez realizado, no podrá modificarla ni deshacerla.",788bcc85
 MATCH_UNRECOGNIZED_SPECIES,Verificar especies no reconocidas,e8523786
-MAX,Máximo,7b696111
 MEASURE_MY_SITE_BEFORE_PLANTING,Medir mi sitio antes de plantar,c4c0c233
 MEASUREMENT_TIME,Tiempo de medición,002a568f
 MEDIA_MIX,Mezcla de vivero,699d2d86
@@ -1231,7 +1228,6 @@ METRIC_G_KG_MG,"Métrico (g, kg, mg)",0efae160
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (miligramos),1eb6e72c
 MILLIGRAMS,Miligramos,23d587ba
-MIN,Mínimo,145ecf8a
 MIN_MAX_CARBON_ACCUMULATION,Acumulación de carbono mín-máx,8997b45d
 MIN_MAX_CARBON_ACCUMULATION_UNITS,Acumulación de carbono mín/máx (tCO2/ha/año),4833b69d
 MIN_PROJECT_AREA,Zona mínima de proyecto,9ab0d5c8
@@ -1502,8 +1498,8 @@ OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f131
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b
 OPTIONAL_LONGITUDE_OF_PLOT,Opcional: Longitud de la parcela,124fa9fb
-OR,O,38d8953d
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
+OR_UPPERCASE,O,38d8953d
 ORGANIZATION,Organización,b1115ab0
 ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,969a54ff
 ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,60a57d86
@@ -2130,7 +2126,6 @@ SDG_15,15. Vida en la tierra,773d6151
 SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
 SE_CORNER,Esquina SE,3e70b5c7
-SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
 SEARCH_SPECIES,Buscar especie,5167bc5e
 SEARCH_VARIABLES,Buscar variables,401e4c5d

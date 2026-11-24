@@ -1,6 +1,6 @@
-import { getTableColumns } from '@terraware/web-components';
+import { EditableTableInstance, getTableColumns } from '@terraware/web-components';
 import { isEqual } from 'lodash';
-import { MRT_ColumnOrderState, MRT_RowData, MRT_TableInstance } from 'material-react-table';
+import { MRT_ColumnOrderState, MRT_RowData } from 'material-react-table';
 
 import { OrganizationRole } from 'src/types/Organization';
 import { User } from 'src/types/User';
@@ -17,7 +17,7 @@ export const getTableViewUserRole = (
   isConsole ? GLOBAL_ROLE_PRIORITY.find((role) => user?.globalRoles.includes(role)) : organizationRole;
 
 const isColumnOrderChanged = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   columnOrder: MRT_ColumnOrderState,
   defaultColumnOrder: MRT_ColumnOrderState
 ) => {
@@ -32,7 +32,7 @@ const isColumnOrderChanged = <TData extends MRT_RowData>(
 };
 
 export const getSavedViewAnalytics = <TData extends MRT_RowData>(
-  table: MRT_TableInstance<TData>,
+  table: EditableTableInstance<TData>,
   settings: TableSettings,
   defaults: TableSettings
 ) => {

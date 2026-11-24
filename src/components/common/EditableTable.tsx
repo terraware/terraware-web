@@ -1,15 +1,44 @@
 import React from 'react';
 
-import { EditableTable as WebEditableTable } from '@terraware/web-components';
+import {
+  EditableTableOptionsV2,
+  EditableTablePropsV2,
+  EditableTableV2,
+  EditableTable as WebEditableTable,
+} from '@terraware/web-components';
 import { EditableTableProps } from '@terraware/web-components/components/EditableTable';
 import { MRT_RowData } from 'material-react-table';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
 import { MRT_Localization_FR } from 'material-react-table/locales/fr';
 
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers';
 
-const EditableTable = <TData extends MRT_RowData>(props: EditableTableProps<TData>) => {
+type SharedOptions<TData extends MRT_RowData> = Pick<
+  EditableTableOptionsV2<TData> & NonNullable<EditableTableProps<TData>['tableOptions']>,
+  | 'state'
+  | 'initialState'
+  | 'onColumnFiltersChange'
+  | 'onColumnOrderChange'
+  | 'onColumnPinningChange'
+  | 'onColumnVisibilityChange'
+  | 'onGlobalFilterChange'
+  | 'onSortingChange'
+>;
+
+type SharedCallbacks<TData extends MRT_RowData> = Pick<
+  EditableTablePropsV2<TData>,
+  'renderToolbarInternalActions' | 'renderTopToolbarCustomActions' | 'muiTableHeadCellProps' | 'muiTableBodyCellProps'
+>;
+
+type Props<TData extends MRT_RowData> =
+  | (EditableTableProps<TData> & { supportsV2?: false })
+  | (Omit<EditableTableProps<TData>, 'tableOptions' | keyof SharedCallbacks<TData>> &
+      SharedCallbacks<TData> & { supportsV2: true; tableOptions?: SharedOptions<TData> });
+
+const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
+  const useV2 = useFeatureEnabled('Editable Table V2');
   const { activeLocale } = useLocalization();
   const language = activeLocale?.replace(/[-_].*/, '');
   const localization =
@@ -19,12 +48,16 @@ const EditableTable = <TData extends MRT_RowData>(props: EditableTableProps<TDat
         ? MRT_Localization_FR
         : MRT_Localization_EN;
 
+  if (props.supportsV2 && useV2) {
+    return <EditableTableV2 {...props} />;
+  }
+
   return (
     <WebEditableTable
       {...props}
       tableOptions={{
         ...props.tableOptions,
-        localization: { ...localization, ...props.tableOptions?.localization },
+        localization: { ...localization, ...(!props.supportsV2 ? props.tableOptions?.localization : undefined) },
       }}
     />
   );

@@ -25,12 +25,12 @@ import {
 import {
   Button,
   DialogBox,
+  EditableTableInstance,
   applyTableSettings,
   getTableColumns,
   getTableSettings,
   isDataColumnId,
 } from '@terraware/web-components';
-import { MRT_TableInstance } from 'material-react-table';
 
 import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
 import { useLocalization } from 'src/providers';
@@ -42,7 +42,7 @@ type ColumnsModalProps = {
   onClose: () => void;
   onSave: (columns: string[]) => void;
   allVariables: VariableUnion[];
-  table: MRT_TableInstance<ProjectsWithVariablesSearchResult>;
+  table: EditableTableInstance<ProjectsWithVariablesSearchResult>;
 };
 
 export function baseColumns() {

@@ -81,7 +81,7 @@ export const exportSeedWithdrawals = async ({
   seedWithdrawals: SearchSeedWithdrawalPayload[];
 }) => {
   const today = DateTime.now().toFormat('yyyy-MM-dd');
-  const filteredSuffix = isFiltered ? `_${strings.FILTERED}` : '';
+  const filteredSuffix = isFiltered ? `_${strings.FILTERED_LOWERCASE}` : '';
   const filename = `${strings.SEEDS_WITHDRAWALS}_${today}${filteredSuffix}`;
   const fileBlob = makeSeedWithdrawalsCsv(seedWithdrawals);
   const fileContent = await fileBlob.text();

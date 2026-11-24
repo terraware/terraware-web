@@ -8,7 +8,8 @@ export type FeatureName =
   | 'Virtual Monitoring Plots'
   | 'Scheduled Biomass Monitoring Observations'
   | 'Baseline Survey'
-  | 'Assign Plots When Scheduling';
+  | 'Assign Plots When Scheduling'
+  | 'Editable Table V2';
 
 export type Feature = {
   name: FeatureName;
@@ -76,6 +77,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Assign monitoring plots when an observation is scheduled instead of when it starts.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Editable Table V2',
+    preferenceName: 'editableTableV2',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Use the new TanStack-based editable table component.'],
     disclosure: ['This is a WIP'],
   },
 ];
