@@ -94,8 +94,12 @@ const getEventPathname = (properties: Record<string, unknown>): string | undefin
 };
 
 // Mixpanel `before_send_events` hook. Batched events are sent after the user may have navigated away, so the area is
-// derived from the URL recorded on the event itself rather than from the current location.
+// derived from the URL recorded on the event itself rather than from the current location. An explicit product_area
+// set at track time wins, for events whose URL is no longer the page they describe.
 export const addProductAreaToEvent = (event: MixpanelEventPayload): MixpanelEventPayload => {
+  if (typeof event.properties?.product_area === 'string') {
+    return event;
+  }
   const pathname = event.properties ? getEventPathname(event.properties) : undefined;
   if (!event.properties || pathname === undefined) {
     return event;

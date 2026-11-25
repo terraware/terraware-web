@@ -3,6 +3,7 @@ import { useMixpanel } from 'react-mixpanel-browser';
 
 import { MIXPANEL_EVENTS, MixpanelEventPropertyMap } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers';
+import { getProductArea } from 'src/utils/productArea';
 
 // For events listed in MixpanelEventPropertyMap, properties are required and
 // type-checked against the event's declared shape. For events not listed there
@@ -30,6 +31,9 @@ export const useTrackEvent = (): TrackEventFn => {
       mixpanel?.track(event, {
         organization_id: selectedOrganization?.id,
         organization_role: selectedOrganization?.role,
+        // Set at track time because the SDK skips before_send_events for queued events it recovers after a page
+        // reload. Callers can override it (e.g. an abandonment fired after navigating away).
+        product_area: getProductArea(window.location.pathname),
         ...properties,
       });
     },

@@ -39,7 +39,8 @@ interface EditStateModalFormProps {
 function EditStateModalForm({ accession, open, onClose }: EditStateModalFormProps): JSX.Element {
   const [record, setRecord, onChange] = useForm(accession);
   const [editUsedUpStatus] = useState<boolean>(accession.state === 'Used Up');
-  const markSubmitted = useTrackModalAbandonment('accession_edit_state', open);
+  // A Used Up accession shows QuantityModal instead of this form, and QuantityModal tracks itself.
+  const markSubmitted = useTrackModalAbandonment('accession_edit_state', open && !editUsedUpStatus);
   const snackbar = useSnackbar();
   const [updateAccession] = useUpdateAccessionMutation();
 

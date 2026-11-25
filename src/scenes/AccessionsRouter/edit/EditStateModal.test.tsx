@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { rs } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import strings from 'src/strings';
 import {
   buildAccession,
@@ -14,6 +16,12 @@ import {
 import { AccessionState, stateName } from 'src/types/Accession';
 
 import EditStateModal from './EditStateModal';
+
+const { track } = rs.hoisted(() => ({ track: rs.fn() }));
+rs.mock('react-mixpanel-browser', () => ({ useMixpanel: () => ({ track }) }));
+
+const trackedModals = (event: MIXPANEL_EVENTS) =>
+  track.mock.calls.filter(([name]) => name === event).map(([, properties]) => properties.modal_name);
 
 const URL = '/api/v2/seedbank/accessions/42';
 const renderModal = (state: AccessionState = 'In Storage') => {
@@ -115,5 +123,36 @@ describe('EditStateModal', () => {
     await waitFor(() => expect(store.getState().snackbar.snackbars.toast).toMatchObject({ priority: 'critical' }));
     expect(result.closed).toBe(false);
     expect(screen.getByDisplayValue(stateName('Drying'))).toBeVisible();
+  });
+
+  describe('analytics', () => {
+    beforeEach(() => {
+      track.mockClear();
+    });
+
+    afterEach(() => {
+      rs.restoreAllMocks();
+    });
+
+    it('reports a used-up accession as the quantity modal, not the status modal', async () => {
+      renderModal('Used Up');
+      await screen.findByRole('dialog', { name: strings.EDIT_STATUS });
+      expect(trackedModals(MIXPANEL_EVENTS.MODAL_OPENED)).toEqual(['accession_edit_quantity']);
+    });
+
+    it('reports an accession in storage as the status modal', async () => {
+      renderModal('In Storage');
+      await screen.findByRole('dialog', { name: strings.EDIT_STATUS });
+      expect(trackedModals(MIXPANEL_EVENTS.MODAL_OPENED)).toEqual(['accession_edit_state']);
+    });
+
+    it('reports a single abandonment when a used-up accession is closed without saving', async () => {
+      const now = rs.spyOn(Date, 'now');
+      const { unmount } = renderModal('Used Up');
+      await screen.findByRole('dialog', { name: strings.EDIT_STATUS });
+      now.mockReturnValue(Date.now() + 5000);
+      unmount();
+      expect(trackedModals(MIXPANEL_EVENTS.MODAL_ABANDONED)).toEqual(['accession_edit_quantity']);
+    });
   });
 });

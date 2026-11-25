@@ -2,6 +2,7 @@ import { GetEmailNotificationSettingsResponsePayload } from 'src/queries/generat
 import { ObservationType } from 'src/types/Observations';
 import { BoundarySource } from 'src/types/PlantingSite';
 import { User } from 'src/types/User';
+import { ProductArea } from 'src/utils/productArea';
 
 // Event names follow the convention "<Domain> <Object> <Past-tense Verb>"
 // (e.g. "Accession Created", "Batch Withdrawn"). Past-tense encodes that the
@@ -243,6 +244,7 @@ export type MixpanelEventPropertyMap = {
   [MIXPANEL_EVENTS.MODAL_ABANDONED]: {
     modal_name: string;
     time_open_seconds: number;
+    product_area?: ProductArea;
   };
   [MIXPANEL_EVENTS.TABLE_VIEW_SELECTED]: TableViewEventContext & {
     view_type: 'default' | 'preset' | 'my_view';

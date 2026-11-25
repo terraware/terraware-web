@@ -63,6 +63,19 @@ describe('addProductAreaToEvent', () => {
     expect(addProductAreaToEvent(event)).toBe(event);
   });
 
+  it('should keep an explicit string product_area even when the URL points to a different area', () => {
+    const event = { properties: { product_area: 'Species', current_url_path: '/home' } };
+    const result = addProductAreaToEvent(event);
+
+    expect(result).toBe(event);
+    expect(result.properties?.product_area).toBe('Species');
+  });
+
+  it('should compute product_area from the URL when the existing value is not a string', () => {
+    const event = { properties: { product_area: undefined, current_url_path: '/accessions/1' } };
+    expect(addProductAreaToEvent(event).properties?.product_area).toBe('Seed Bank');
+  });
+
   it('should not mutate the input event and should keep other properties', () => {
     const event = { event: 'Clicked', properties: { current_url_path: '/home', foo: 'bar' } };
     const result = addProductAreaToEvent(event);
