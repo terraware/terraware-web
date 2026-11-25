@@ -22,6 +22,7 @@ const REPLACE_RESPONSE = {
   reassignedObservationIds: [201],
   deletedObservationIds: [202],
   observationDeleted: false,
+  observationCompleted: false,
 };
 
 const OpenOnMount = () => {
@@ -175,6 +176,7 @@ describe('ReplaceObservationPlotModal', () => {
       reassignedObservationIds: [],
       deletedObservationIds: [],
       observationDeleted: true,
+      observationCompleted: false,
     });
 
     const { user, store } = renderModal();

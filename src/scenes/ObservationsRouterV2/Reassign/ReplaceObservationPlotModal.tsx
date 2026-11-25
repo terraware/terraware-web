@@ -114,7 +114,8 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
       removedPlotIds: number[],
       reassignedObservationIds: number[],
       deletedObservationIds: number[],
-      observationDeleted: boolean
+      observationDeleted: boolean,
+      observationCompleted: boolean
     ) => {
       const modifiedPlots = [...addedPlotIds, ...removedPlotIds];
       const plots = modifiedPlots.length ? await searchMonitoringPlots(modifiedPlots).unwrap() : [];
@@ -196,6 +197,9 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
             observationDeleted
               ? [<br key='observation-deleted' />, strings.REASSIGNMENT_REQUEST_OBSERVATION_DELETED]
               : [],
+            observationCompleted
+              ? [<br key='observation-completed' />, strings.REASSIGNMENT_REQUEST_OBSERVATION_COMPLETED]
+              : [],
             upcomingObservationLineItems
           ),
           strings.REASSIGNMENT_REQUEST_STATUS,
@@ -242,13 +246,15 @@ export default function ReplaceObservationPlotModal(): JSX.Element {
         reassignedObservationIds,
         deletedObservationIds,
         observationDeleted,
+        observationCompleted,
       } = replacePlotResults.data;
       void onSuccess(
         addedMonitoringPlotIds,
         removedMonitoringPlotIds,
         reassignedObservationIds,
         deletedObservationIds,
-        observationDeleted
+        observationDeleted,
+        observationCompleted
       );
     }
   }, [
