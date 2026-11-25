@@ -141,7 +141,7 @@ export type AutoCalculatedIndicatorPayload = {
   notes?: string;
   precision: number;
   primaryDataSource?: string;
-  refId?: string;
+  refId: string;
   tfOwner?: string;
   unit?: string;
 };
