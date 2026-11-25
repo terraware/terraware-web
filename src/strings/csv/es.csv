@@ -395,7 +395,6 @@ COLLECTORS_COLUMN,Recolector(es),0b8e6f94
 COLOR,Color,e96df902
 COMMENTS,Comentarios,5a6f1269
 COMMON,Común,69695656
-COMMON_INDICATOR,Indicador Común,78d9c492
 COMMON_INDICATOR_PROJECT_DEFAULTS_MESSAGE,"Cada proyecto comienza con los campos predeterminados a nivel de proyecto: Activo = Sí, Publicar en el Portal de Financiadores = No, ID de referencia = ""-"", y sin Fuente de datos principal ni Notas. Configure estos campos para cada proyecto después de agregarlo.",451260df
 COMMON_INDICATOR_SAVED,Indicador Común Guardado,6e09bf56
 COMMON_INDICATORS,Indicadores comunes,892fa739
