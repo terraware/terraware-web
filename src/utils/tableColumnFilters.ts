@@ -25,6 +25,16 @@ export const normalizeDateFilterBounds =
         : filter
     );
 
+export const removeEmptyRangeFilters =
+  (...columnIds: string[]) =>
+  (filters: MRT_ColumnFiltersState): MRT_ColumnFiltersState =>
+    filters.filter(
+      ({ id, value }) =>
+        !columnIds.includes(id) ||
+        !Array.isArray(value) ||
+        value.some((bound) => bound !== null && bound !== undefined && bound !== '')
+    );
+
 /**
  * Repairs column filters read back from localStorage.
  *

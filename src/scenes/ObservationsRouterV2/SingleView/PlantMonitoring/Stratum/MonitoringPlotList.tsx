@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { Typography, useTheme } from '@mui/material';
 import { EditableTableColumn } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
-import { MRT_Cell } from 'material-react-table';
+import { MRT_Cell, MRT_ColumnFiltersState } from 'material-react-table';
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
@@ -23,12 +23,21 @@ import { ObservationState, getPlotStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { getBiomassPlotTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
-import { normalizeDateFilterBounds } from 'src/utils/tableColumnFilters';
+import { normalizeDateFilterBounds, removeEmptyRangeFilters } from 'src/utils/tableColumnFilters';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-const normalizeColumnFilters = normalizeDateFilterBounds('completedDate');
+const normalizeDateBounds = normalizeDateFilterBounds('completedDate');
+const removeEmptyRanges = removeEmptyRangeFilters(
+  'plantingDensity',
+  'survivalRate',
+  'monitoringPlotNumber',
+  'totalLive',
+  'totalPlants',
+  'totalSpecies'
+);
+const normalizeColumnFilters = (filters: MRT_ColumnFiltersState) => removeEmptyRanges(normalizeDateBounds(filters));
 
 type MonitoringPlotRow = {
   observationId: number;
