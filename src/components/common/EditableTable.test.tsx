@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { rs } from '@rstest/core';
 import { EditableTableColumn, EditableTableToolbarContext, getStrings, isMrtTable } from '@terraware/web-components';
@@ -13,7 +13,7 @@ import { useLocalization } from 'src/providers';
 import { LocalizationContext } from 'src/providers/contexts';
 import { renderWithProviders } from 'src/test-utils';
 
-import EditableTable from './EditableTable';
+import EditableTable, { EditableTableToolbar } from './EditableTable';
 
 rs.mock('src/features', () => ({ useFeatureEnabled: rs.fn() }));
 
@@ -138,4 +138,86 @@ it.each([false, true])('hides only the show-all column action (V2: %s)', async (
       name: (flag ? labels.TABLE_HIDE_COLUMN : MRT_Localization_EN.hideColumn).replace('{column}', 'Name'),
     })
   ).toBeVisible();
+});
+
+it.each([false, true])('opens and closes an initially hidden search (V2: %s)', async (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const ControlledSearch = () => {
+    const [showGlobalFilter, onShowGlobalFilterChange] = useState(false);
+    return (
+      <EditableTable
+        supportsV2
+        columns={columns}
+        data={data}
+        clearAllFiltersLabel='Clear filters'
+        enableGlobalFilter
+        tableOptions={{ state: { showGlobalFilter }, onShowGlobalFilterChange }}
+        renderToolbarInternalActions={(context) => <EditableTableToolbar {...context} showGlobalFilterButton />}
+      />
+    );
+  };
+  const { user } = renderWithProviders(<ControlledSearch />);
+  const toggle = screen.getByRole('button', { name: /show\/hide search/i });
+  expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  await user.click(toggle);
+  expect(await screen.findByRole('textbox')).toBeVisible();
+  await user.click(toggle);
+  await waitFor(() => expect(screen.queryByRole('textbox')).not.toBeInTheDocument());
+});
+
+it.each([false, true])('restores accent and acronym matches from search state (V2: %s)', (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const props = {
+    supportsV2: true as const,
+    columns,
+    data: [{ name: 'Café' }, { name: 'Pacific Coast' }, { name: 'River' }],
+    clearAllFiltersLabel: 'Clear filters',
+    enableGlobalFilter: true,
+  };
+  const { rerender } = renderWithProviders(
+    <EditableTable {...props} tableOptions={{ state: { globalFilter: 'cafe' } }} />
+  );
+  expect(screen.getByRole('cell', { name: 'Café' })).toBeVisible();
+  expect(screen.queryByRole('cell', { name: 'Pacific Coast' })).not.toBeInTheDocument();
+
+  rerender(<EditableTable {...props} tableOptions={{ state: { globalFilter: 'PC' } }} />);
+  expect(screen.getByRole('cell', { name: 'Pacific Coast' })).toBeVisible();
+  expect(screen.queryByRole('cell', { name: 'Café' })).not.toBeInTheDocument();
+});
+
+it('does not match blank cells as the strings undefined or null in V2 search', () => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(true);
+  const searchColumns: EditableTableColumn<{ name?: string | null }>[] = [
+    { id: 'name', accessorKey: 'name', header: 'Name' },
+  ];
+  const props = {
+    supportsV2: true as const,
+    columns: searchColumns,
+    data: [{ name: 'Delta' }, { name: 'Nursery' }, {}, { name: null }],
+    clearAllFiltersLabel: 'Clear filters',
+    enableGlobalFilter: true,
+  };
+  const { rerender } = renderWithProviders(
+    <EditableTable {...props} tableOptions={{ state: { globalFilter: 'de' } }} />
+  );
+  expect(screen.getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['Delta']);
+
+  rerender(<EditableTable {...props} tableOptions={{ state: { globalFilter: 'nu' } }} />);
+  expect(screen.getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['Nursery']);
+});
+
+it.each([false, true])('uses the nested empty fallback unless a top-level fallback is provided (V2: %s)', (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const props = {
+    supportsV2: true as const,
+    columns,
+    data: [],
+    clearAllFiltersLabel: 'Clear filters',
+    tableOptions: { renderEmptyRowsFallback: () => 'Nested empty message' },
+  };
+  const { rerender } = renderWithProviders(<EditableTable {...props} />);
+  expect(screen.getByText('Nested empty message')).toBeVisible();
+  rerender(<EditableTable {...props} renderEmptyRowsFallback={() => 'Top-level empty message'} />);
+  expect(screen.getByText('Top-level empty message')).toBeVisible();
+  expect(screen.queryByText('Nested empty message')).not.toBeInTheDocument();
 });

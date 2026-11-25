@@ -4,21 +4,13 @@ import { useSearchParams } from 'react-router';
 import { Box, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
 import { Confirm, EditableTableColumn } from '@terraware/web-components';
-import {
-  MRT_Cell,
-  MRT_ShowHideColumnsButton,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
-} from 'material-react-table';
+import { MRT_Cell } from 'material-react-table';
 
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import ThumbnailImage from 'src/components/common/ThumbnailImage';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { API_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
@@ -357,6 +349,7 @@ export default function VirtualWalkthroughsTable({
   return (
     <>
       <EditableTable
+        supportsV2
         columns={columns}
         data={mediaFiles}
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
@@ -364,19 +357,21 @@ export default function VirtualWalkthroughsTable({
         enableSorting={true}
         enableGlobalFilter={true}
         enableColumnFilters={true}
+        enableFilterByColumnMenuItem
         enableColumnOrdering={false}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
         storageKey={TABLE.storageKey}
-        renderToolbarInternalActions={({ table }) => (
-          <TableToolbarActions>
-            <MRT_ToggleGlobalFilterButton table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-            <MRT_ShowHideColumnsButton table={table} />
-            <MRT_ToggleDensePaddingButton table={table} />
-            <MRT_ToggleFullScreenButton table={table} />
-          </TableToolbarActions>
+        renderToolbarInternalActions={(context) => (
+          <EditableTableToolbar
+            {...context}
+            showGlobalFilterButton
+            showColumnFiltersButton
+            showColumnsButton
+            showDensityButton
+            showFullScreenButton
+          />
         )}
         renderTopToolbarCustomActions={({ table }) => (
           <CurrentView organizationId={organizationId} table={table} tableDefinition={TABLE} />
