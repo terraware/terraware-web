@@ -1,3 +1,4 @@
+df4cf995 Add product area and modal opens to Mixpanel events (#7301)
 68ce37a5 SW-9244 Localize table export filenames (#7302)
 499381cb SW-9314 Convert Inventory Create page to Page component (#7300)
 a14bbe2d SW-9313 Convert Inventory Batch details page to Page component (#7299)
