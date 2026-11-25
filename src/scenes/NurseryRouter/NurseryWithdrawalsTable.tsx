@@ -9,19 +9,13 @@ import {
   MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
   MRT_PaginationState,
-  MRT_ShowHideColumnsButton,
   MRT_SortingState,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
   MRT_VisibilityState,
 } from 'material-react-table';
 
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import TextTruncated from 'src/components/common/TextTruncated';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
@@ -50,6 +44,7 @@ import {
 import { Project } from 'src/types/Project';
 import { TABLES } from 'src/types/Tables';
 import { getMediumDate } from 'src/utils/dateFormatter';
+import { normalizeDateFilterBounds } from 'src/utils/tableColumnFilters';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -65,6 +60,7 @@ const PLANTING_SEASON_ID_QUERY_PARAM = 'plantingSeasonId';
 const PLANTING_DATE_QUERY_PARAM = 'plantingDate';
 const PURPOSE_QUERY_PARAM = 'purpose';
 const MENU_COLUMN_ID = 'menu';
+const normalizeColumnFilters = normalizeDateFilterBounds('withdrawnDate', PLANTING_DATE_COLUMN_ID);
 const HIDDEN_BY_DEFAULT_COLUMN_IDS = [PLANTING_SEASON_COLUMN_ID, PLANTING_DATE_COLUMN_ID];
 const DEFAULT_COLUMN_VISIBILITY: MRT_VisibilityState = {
   [PLANTING_SEASON_COLUMN_ID]: false,
@@ -223,6 +219,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   } = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
+    normalizeColumnFilters,
     persistedMultiSelectColumnIds: [
       'destinationName',
       'projectNames',
@@ -846,6 +843,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         <ReassignSeedlingsModal deliveryId={reassignDeliveryId} onClose={() => setReassignDeliveryId(undefined)} />
       )}
       <EditableTable
+        supportsV2
         key='nursery-withdrawals-table'
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={columns}
@@ -854,6 +852,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableSorting={true}
         enableGlobalFilter={true}
         enableColumnFilters={true}
+        enableFilterByColumnMenuItem
         enableColumnOrdering={true}
         storageKey={TABLE.storageKey}
         enablePagination={true}
@@ -864,6 +863,23 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableHiding={true}
         enableColumnDragging={!isMobile}
         positionGlobalFilter={'right'}
+        renderToolbarInternalActions={(context) => (
+          <EditableTableToolbar
+            {...context}
+            showGlobalFilterButton
+            showColumnFiltersButton
+            showColumnsButton
+            showDensityButton
+            showFullScreenButton
+            leadingActions={
+              <Tooltip title={strings.EXPORT}>
+                <IconButton onClick={() => void onExport()}>
+                  <Icon name='iconExport' size='medium' />
+                </IconButton>
+              </Tooltip>
+            }
+          />
+        )}
         renderTopToolbarCustomActions={({ table }) => (
           <CurrentView
             defaultSettings={defaultViewSettings}
@@ -903,20 +919,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           rowCount: totalRowCount || 0,
           enableColumnPinning: true,
           enableGrouping: false,
-          renderToolbarInternalActions: ({ table }) => (
-            <TableToolbarActions>
-              <Tooltip title={strings.EXPORT}>
-                <IconButton onClick={() => void onExport()}>
-                  <Icon name='iconExport' size='medium' />
-                </IconButton>
-              </Tooltip>
-              <MRT_ToggleGlobalFilterButton table={table} />
-              <MRT_ToggleFiltersButton table={table} />
-              <MRT_ShowHideColumnsButton table={table} />
-              <MRT_ToggleDensePaddingButton table={table} />
-              <MRT_ToggleFullScreenButton table={table} />
-            </TableToolbarActions>
-          ),
           muiTableBodyProps: {
             sx: {
               '& tr:nth-of-type(odd) > td': {
