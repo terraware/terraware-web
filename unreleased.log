@@ -1,3 +1,5 @@
+16739cc1 Auto-select sole stratum and substratum in withdrawals (#7311)
+3aeabc40 SW-9400 Seedling Inventory: Increase size of Withdraw from Batches Dialog (#7303)
 df4cf995 Add product area and modal opens to Mixpanel events (#7301)
 68ce37a5 SW-9244 Localize table export filenames (#7302)
 499381cb SW-9314 Convert Inventory Create page to Page component (#7300)
