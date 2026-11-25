@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
 import { QueryStatus } from '@reduxjs/toolkit/query';
+import { rs } from '@rstest/core';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw/http';
 
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { PlantingSeasonPayload } from 'src/queries/generated/plantingSeasons';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { NurseryBatchesSearchResponseElement } from 'src/queries/search/batches';
@@ -26,6 +28,18 @@ import {
   server,
 } from 'src/test-utils';
 import { Organization } from 'src/types/Organization';
+
+// A stable instance, as the real provider gives, so the modal's tracking callbacks keep their identity.
+const { track, mixpanel } = rs.hoisted(() => {
+  const trackFn = rs.fn();
+  return { track: trackFn, mixpanel: { track: trackFn } };
+});
+rs.mock('react-mixpanel-browser', () => ({ useMixpanel: () => mixpanel }));
+
+const tracked = (event: MIXPANEL_EVENTS) =>
+  track.mock.calls.filter(([name]) => name === event).map(([, properties]) => properties);
+
+beforeEach(() => track.mockClear());
 
 const WITHDRAWALS_URL = '/api/v1/nursery/withdrawals';
 const PHOTOS_URL = '/api/v1/nursery/withdrawals/:withdrawalId/photos';
@@ -188,6 +202,15 @@ const chooseOutplantDestination = async (user: UserEvent) => {
 };
 
 describe('BatchWithdrawModal submitting a withdrawal', () => {
+  it('reports the withdraw modal as opened', async () => {
+    mockModalData();
+    renderModal();
+
+    await waitForDialog();
+
+    expect(tracked(MIXPANEL_EVENTS.MODAL_OPENED)).toEqual([expect.objectContaining({ modal_name: 'batch_withdraw' })]);
+  });
+
   it('sends every phase quantity, the nursery, date and notes for a dead withdrawal, with no destination', async () => {
     mockModalData();
     const withdrawals = captureWithdrawals();
@@ -284,6 +307,15 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
         .formatString(strings.BATCH_WITHDRAW_SUCCESS, '1', strings.BATCHES_SINGULAR, '5', strings.SEEDLINGS_PLURAL)
         .toString(),
     });
+    expect(tracked(MIXPANEL_EVENTS.BATCH_WITHDRAWN)).toEqual([
+      expect.objectContaining({
+        source: 'inventory',
+        purpose: 'Dead',
+        batch_count: 1,
+        seedling_count: 5,
+        has_photos: false,
+      }),
+    ]);
   });
 
   it('tells the user a batch is now empty before closing when they withdraw all of it today', async () => {
@@ -324,6 +356,7 @@ describe('BatchWithdrawModal submitting a withdrawal', () => {
     expect(state.closeCount).toBe(0);
     expect(screen.getByRole('dialog', { name: strings.WITHDRAW_FROM_BATCHES })).toBeInTheDocument();
     expect(uploads).toHaveLength(0);
+    expect(tracked(MIXPANEL_EVENTS.BATCH_WITHDRAWN)).toEqual([]);
   });
 
   it('uploads attached photos to the withdrawal that was just created', async () => {

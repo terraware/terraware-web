@@ -18,6 +18,9 @@ export enum MIXPANEL_EVENTS {
 
   // --- Nursery / inventory ---
   BATCH_CREATED = 'Batch Created',
+  // Started and Step Reached only fire from the old /batch/withdraw page, which nothing has linked to
+  // since the Planting Seasons flag was removed (July 2026). The withdrawal modals report opens and
+  // abandons through MODAL_OPENED / MODAL_ABANDONED instead.
   BATCH_WITHDRAWAL_STARTED = 'Batch Withdrawal Started',
   BATCH_WITHDRAWAL_STEP_REACHED = 'Batch Withdrawal Step Reached',
   BATCH_WITHDRAWN = 'Batch Withdrawn',
@@ -91,6 +94,10 @@ export enum MIXPANEL_EVENTS {
   SPECIES_AUTOFILL_FIELD_EDITED = 'Species Autofill Field Edited',
   SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED = 'Species Intelligence Source Attribution Hovered',
 }
+
+// Which UI recorded a batch withdrawal: the inventory withdraw modal, a planting-date request, or the old
+// /batch/withdraw page.
+export type BatchWithdrawalSource = 'inventory' | 'planting_date_request' | 'bulk_withdraw_page';
 
 export type BoundaryFileFormat = 'geojson' | 'kml' | 'kmz' | 'shapefile';
 
@@ -166,6 +173,8 @@ export type MixpanelEventPropertyMap = {
     purpose: string;
     batch_count: number;
     has_photos: boolean;
+    seedling_count?: number;
+    source: BatchWithdrawalSource;
   };
   [MIXPANEL_EVENTS.PLANTING_SITE_CREATED]: {
     num_strata?: number;

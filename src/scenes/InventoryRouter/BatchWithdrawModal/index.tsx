@@ -9,6 +9,9 @@ import EmptyBatchesInfoModal from 'src/components/BatchWithdrawFlow/EmptyBatches
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   useCreateBatchWithdrawalMutation,
@@ -69,6 +72,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
+  const markSubmitted = useTrackModalAbandonment('batch_withdraw', open);
 
   const [step, setStep] = useState<FlowStep>(0);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
@@ -441,6 +446,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         notes: draft.notes ? draft.notes : undefined,
         withdrawnDate: draft.withdrawnDate,
       }).unwrap();
+      markSubmitted();
       // Before the photo uploads: the withdrawal refetches the batches, and one it emptied must not
       // look like an empty selection while the uploads are still running.
       setHasWithdrawn(true);
@@ -463,6 +469,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           bw.germinatingQuantityWithdrawn,
         0
       );
+      trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWN, {
+        purpose: draft.purpose,
+        batch_count: numBatches,
+        has_photos: draft.photos.length > 0,
+        seedling_count: totalWithdrawn,
+        source: 'inventory',
+      });
       snackbar.toastSuccess(
         strings.formatString(
           strings.BATCH_WITHDRAW_SUCCESS,
@@ -502,9 +515,11 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     draft,
     handleClose,
     isNurseryTransfer,
+    markSubmitted,
     quantityStepBatches,
     snackbar,
     strings,
+    trackEvent,
     uploadWithdrawalPhoto,
   ]);
 

@@ -161,6 +161,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         purpose: record.purpose,
         batch_count: record.batchWithdrawals.length,
         has_photos: photos.length > 0,
+        source: 'bulk_withdraw_page',
       });
       if (photos.length) {
         const uploadPhotoPromises = photos.map((photo) =>
