@@ -239,7 +239,8 @@ describe('SeedsWithdrawalsTable', () => {
     });
   });
 
-  it('returns to the first page when the search term changes', async () => {
+  it.each([false, true])('returns to page one and keeps active search visible (V2: %s)', async (editableTableV2) => {
+    mockGet('/api/v1/users/me/preferences', { preferences: { editableTableV2 } });
     mockGet('/api/v1/projects', { projects: [] });
     mockPost('/api/v1/search/count', { count: 250 });
     mockPost('/api/v1/search/values', {
@@ -251,19 +252,23 @@ describe('SeedsWithdrawalsTable', () => {
     });
     const requests = captureRequests('post', '/api/v1/search', { results: [buildSearchResult()] });
 
-    renderWithProviders(<SeedsWithdrawalsTable />, {
+    const { user } = renderWithProviders(<SeedsWithdrawalsTable />, {
       organization: { selectedOrganization: buildOrganization({ id: ORG_ID }) },
     });
 
+    const nextPageLabel = editableTableV2 ? 'Next page' : 'Go to next page';
+    await waitFor(() => expect(screen.getByRole('button', { name: nextPageLabel })).toBeEnabled());
     expect(await screen.findByRole('cell', { name: 'Acacia koa' })).toBeVisible();
 
-    await userEvent.click(screen.getByRole('button', { name: /go to next page/i }));
+    await user.click(screen.getByRole('button', { name: nextPageLabel }));
     await waitFor(async () => expect(await cursorsFor(requests, '')).toContain('100'), {
       timeout: WAIT_FOR_REQUEST_MS,
     });
 
-    await userEvent.click(screen.getByRole('button', { name: /show.*hide search/i }));
-    await userEvent.type(screen.getByPlaceholderText('Search'), 'koa');
+    const searchToggle = screen.getByRole('button', { name: /show.*hide search/i });
+    await user.click(searchToggle);
+    const search = screen.getByPlaceholderText('Search');
+    await user.type(search, 'koa');
 
     await waitFor(
       async () => {
@@ -273,6 +278,8 @@ describe('SeedsWithdrawalsTable', () => {
       },
       { timeout: WAIT_FOR_REQUEST_MS }
     );
+    expect(searchToggle).toBeDisabled();
+    expect(search).toBeVisible();
   });
   it('follows the response cursor so a capped export still gets every row', async () => {
     // The search service caps the export at one row per request and hands back a cursor.

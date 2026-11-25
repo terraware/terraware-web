@@ -1,8 +1,13 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router';
 
-import { IconButton, Tooltip, useTheme } from '@mui/material';
-import { EditableTableColumn, Icon } from '@terraware/web-components';
+import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
+import {
+  EditableTableColumn,
+  EditableTableToggleGlobalFilterButtonV2,
+  Icon,
+  isMrtTable,
+} from '@terraware/web-components';
 import { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
@@ -483,17 +488,28 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       renderToolbarInternalActions={(context) => (
         <EditableTableToolbar
           {...context}
-          showGlobalFilterButton
+          showGlobalFilterButton={isMrtTable(context.table)}
           showColumnFiltersButton
           showColumnsButton
           showDensityButton
           showFullScreenButton
           leadingActions={
-            <Tooltip title={strings.EXPORT}>
-              <IconButton onClick={() => void onExport()}>
-                <Icon name='iconExport' size='medium' />
-              </IconButton>
-            </Tooltip>
+            <>
+              <Tooltip title={strings.EXPORT}>
+                <IconButton onClick={() => void onExport()}>
+                  <Icon name='iconExport' size='medium' />
+                </IconButton>
+              </Tooltip>
+              {!isMrtTable(context.table) && (
+                <Box
+                  component='fieldset'
+                  disabled={showGlobalFilter && !!searchValue}
+                  sx={{ display: 'contents', '& button:disabled': { color: 'action.disabled' } }}
+                >
+                  <EditableTableToggleGlobalFilterButtonV2 table={context.table} />
+                </Box>
+              )}
+            </>
           }
         />
       )}
