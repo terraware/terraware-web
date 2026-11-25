@@ -283,7 +283,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
       ];
 
-      downloadCsv(strings.INVENTORY_BY_SPECIES_FILENAME, csvLines.join('\n'));
+      downloadCsv(strings.INVENTORY_BY_BATCH_FILENAME, csvLines.join('\n'));
     },
     [strings]
   );
