@@ -30,6 +30,8 @@ ACCESSION_ID,ID de accesión,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!,b78da03c
 ACCESSION_WITHDRAW_SUCCESS,Semillas retiradas con éxito.,ed889590
 ACCESSIONS,Accesiones,5f4f92e5
+ACCESSIONS_BY_ACCESSION_FILENAME,Tabla de accesiones - Por accesión,cfb1c01e
+ACCESSIONS_BY_SPECIES_FILENAME,Tabla de accesiones - Por especie,aae88c25
 ACCESSIONS_CARD_DESCRIPTION,"Después de recolectar sus semillas, registre y visualice sus accesiones. Las accesiones de semillas se pueden ver y analizar por banco de semillas.",04e1a86a
 ACCESSIONS_IMPORT_COMPLETE,¡Se ha completado la importación de datos de accesiones!,445187fe
 ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Definir los lugares de almacenamiento asignados a las accesiones de semillas,0a48e95f
@@ -1012,6 +1014,9 @@ INVASIVE,Invasiva,6d785c90
 INVASIVE_AND_THREATENED_SPECIES_INSTRUCTIONS,Haga clic en un valor de las tablas para editarlo. Vaya a Fotos y Videos para editar los pies de foto.,580915bd
 INVENTORY,Inventario,001c6bdb
 INVENTORY_BATCH,Lote de inventario,7f5a4622
+INVENTORY_BY_BATCH_FILENAME,Tabla de inventario - Por lote,9452402a
+INVENTORY_BY_NURSERY_FILENAME,Tabla de inventario - Por vivero,59801c28
+INVENTORY_BY_SPECIES_FILENAME,Tabla de inventario - Por especie,ed64c7ea
 INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas,bafd0703
@@ -1498,8 +1503,8 @@ OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f131
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b
 OPTIONAL_LONGITUDE_OF_PLOT,Opcional: Longitud de la parcela,124fa9fb
-ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
 OR_UPPERCASE,O,38d8953d
+ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
 ORGANIZATION,Organización,b1115ab0
 ORGANIZATION_CREATE_FAILED,No se puede crear la organización.,969a54ff
 ORGANIZATION_CREATED_MSG,Puede acceder a las organizaciones en las que se encuentra dando clic en el menú de perfil de usuario en la esquina superior derecha.,60a57d86
@@ -2352,6 +2357,7 @@ SPECIES_CHECK_UPDATE_HINT,Se aplicarán las sugerencias de nombre marcadas. Desm
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"No ha ingresado valores de densidad de plantas para todas las especies en todas las estratas. Si no ingresa valores de densidad de plantas para todas las especies en una estrata, no se establecerán las densidades de plantas para esa estrata y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una estrata.",685a0c64
+SPECIES_FILENAME,Tabla de especies,557bd2d4
 SPECIES_FROM_T0_OBSERVATION,Especies de la Observación t0,08a77070
 SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Las especies de la Observación t0 fueron observadas en la Observación seleccionada para usar como datos t0.,ee679aa8
 SPECIES_IMPORT_COMPLETE,¡Se completó la importación de los datos de especies!,74b00dc5

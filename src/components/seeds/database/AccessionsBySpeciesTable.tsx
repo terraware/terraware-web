@@ -353,31 +353,34 @@ export default function AccessionsBySpeciesTable({
     ];
   }, [activeLocale, strings, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
 
-  const downloadReportHandler = useCallback((table: MRT_TableInstance<SpeciesRow>) => {
-    const filteredRows = table.getSortedRowModel().rows;
-    const visibleColumns = table
-      .getVisibleLeafColumns()
-      .filter((col) => !col.id.startsWith('mrt-') && typeof col.columnDef.header === 'string');
-    const csvColumns = visibleColumns.map((col) => ({
-      key: col.id,
-      displayLabel: col.columnDef.header as string,
-    }));
-    const csvData = filteredRows.map((row) => {
-      const rowData: Record<string, string> = {};
-      visibleColumns.forEach((col) => {
-        const value = row.getValue(col.id);
-        rowData[col.id] = value !== null && value !== undefined ? String(value) : '';
+  const downloadReportHandler = useCallback(
+    (table: MRT_TableInstance<SpeciesRow>) => {
+      const filteredRows = table.getSortedRowModel().rows;
+      const visibleColumns = table
+        .getVisibleLeafColumns()
+        .filter((col) => !col.id.startsWith('mrt-') && typeof col.columnDef.header === 'string');
+      const csvColumns = visibleColumns.map((col) => ({
+        key: col.id,
+        displayLabel: col.columnDef.header as string,
+      }));
+      const csvData = filteredRows.map((row) => {
+        const rowData: Record<string, string> = {};
+        visibleColumns.forEach((col) => {
+          const value = row.getValue(col.id);
+          rowData[col.id] = value !== null && value !== undefined ? String(value) : '';
+        });
+        return rowData;
       });
-      return rowData;
-    });
-    const blob = makeCsv(csvColumns, csvData);
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.setAttribute('href', url);
-    link.setAttribute('download', 'accessions-by-species.csv');
-    link.click();
-    URL.revokeObjectURL(url);
-  }, []);
+      const blob = makeCsv(csvColumns, csvData);
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${strings.ACCESSIONS_BY_SPECIES_FILENAME}.csv`);
+      link.click();
+      URL.revokeObjectURL(url);
+    },
+    [strings]
+  );
 
   if (searchResults === undefined) {
     return (

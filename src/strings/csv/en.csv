@@ -30,6 +30,8 @@ ACCESSION_ID,Accession ID,
 ACCESSION_NUMBER_CHECKED_IN,Accession {0} was successfully checked in!,
 ACCESSION_WITHDRAW_SUCCESS,Seeds withdrawn successfully.,
 ACCESSIONS,Accessions,
+ACCESSIONS_BY_ACCESSION_FILENAME,Accessions table - By Accession,Filename (minus extension) used for exporting the accessions table with one line item per accession
+ACCESSIONS_BY_SPECIES_FILENAME,Accessions table - By Species,Filename (minus extension) used for exporting the accessions table with one line item per species
 ACCESSIONS_CARD_DESCRIPTION,Collect seeds and then record and view your accessions. Seed accessions can be viewed and analyzed by seed bank.,
 ACCESSIONS_IMPORT_COMPLETE,Accessions data import complete!,
 ACCESSIONS_ONBOARDING_SEEDBANKS_MSG,Define storage locations assigned to seed accessions,
@@ -1012,6 +1014,9 @@ INVASIVE,Invasive,
 INVASIVE_AND_THREATENED_SPECIES_INSTRUCTIONS,Click on a value in the tables to edit it. Go to Photos & Videos to edit photo captions.,
 INVENTORY,Inventory,
 INVENTORY_BATCH,Inventory Batch,
+INVENTORY_BY_BATCH_FILENAME,Inventory table - By Batch,Filename (minus extension) used for exporting the nursery inventory table with one line item per batch
+INVENTORY_BY_NURSERY_FILENAME,Inventory table - By Nursery,Filename (minus extension) used for exporting the nursery inventory table with one line item per nursery
+INVENTORY_BY_SPECIES_FILENAME,Inventory table - By Species,Filename (minus extension) used for exporting the nursery inventory table with one line item per species
 INVENTORY_IMPORT_COMPLETE,Inventory data import complete!,
 INVENTORY_ONBOARDING_NURSERIES_MSG,Define nurseries assigned to seedlings inventory,
 INVENTORY_ONBOARDING_SPECIES_MSG,Define a list of species used in your seedlings inventory,
@@ -2352,6 +2357,7 @@ SPECIES_CHECK_UPDATE_HINT,Checked name suggestions will be applied. Uncheck a sp
 SPECIES_CLASSIFICATION,Species Classification,
 SPECIES_DENSITY_WARNING_MESSAGE,"You have not entered plant density values for all species. If you do not enter plant density values for all species, the plant densities for this plot will not be set and no survival rate will be calculated for that species. Enter 0 for any species that were not planted in a plot.",
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"You have not entered plant density values for all species in all strata. If you do not enter plant density values for all species in a stratum, the plant densities for the stratum will not be set and no survival rate will be calculated for that species. Enter 0 for any species that were not planted in a stratum.",
+SPECIES_FILENAME,Species table,Filename (minus extension) used for exporting the species table to a file
 SPECIES_FROM_T0_OBSERVATION,Species from t0 Observation,
 SPECIES_FROM_T0_OBSERVATION_TOOLTIP,Species from t0 Observation were observed in the Observation selected to be used for t0 data.,
 SPECIES_IMPORT_COMPLETE,Species data import complete!,

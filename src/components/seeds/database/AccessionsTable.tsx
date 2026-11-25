@@ -722,7 +722,7 @@ export default function AccessionsTable({
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', 'accessions.csv');
+    link.setAttribute('download', `${strings.ACCESSIONS_BY_ACCESSION_FILENAME}.csv`);
     link.click();
     URL.revokeObjectURL(url);
   }, []);
