@@ -60,6 +60,8 @@ describe('makeDateRangeFilterFn', () => {
   test('accepts plain YYYY-MM-DD strings as filter bounds', () => {
     expect(filterFn(makeRow({ date: '2024-03-15' }), 'date', ['2024-03-01', '2024-03-31'])).toBe(true);
     expect(filterFn(makeRow({ date: '2024-04-01' }), 'date', ['2024-03-01', '2024-03-31'])).toBe(false);
+    expect(filterFn({ date: '2024-03-15' }, 'date', ['2024-03-01', '2024-03-31'])).toBe(true);
+    expect(filterFn({ date: '2024-04-01' }, 'date', [null, '2024-03-31'])).toBe(false);
   });
 
   test('invalid dayjs object is treated as no bound', () => {

@@ -4,21 +4,12 @@ import { useParams } from 'react-router';
 import { useTheme } from '@mui/material';
 import { EditableTableColumn } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
-import {
-  MRT_Cell,
-  MRT_Row,
-  MRT_ShowHideColumnsButton,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
-} from 'material-react-table';
+import { MRT_Cell } from 'material-react-table';
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
@@ -200,6 +191,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
 
   return (
     <EditableTable
+      supportsV2
       key='observation-site-stratum-table'
       clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={columns}
@@ -207,20 +199,22 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
       enableSorting={true}
       enableGlobalFilter={true}
       enableColumnFilters={true}
+      enableFilterByColumnMenuItem
       enableColumnOrdering={true}
       storageKey={tableDefinition.storageKey}
       enablePagination={false}
       enableTopToolbar={true}
       enableBottomToolbar={false}
       initialSorting={[{ id: 'stratumName', desc: false }]}
-      renderToolbarInternalActions={({ table }) => (
-        <TableToolbarActions>
-          <MRT_ToggleGlobalFilterButton table={table} />
-          <MRT_ToggleFiltersButton table={table} />
-          <MRT_ShowHideColumnsButton table={table} />
-          <MRT_ToggleDensePaddingButton table={table} />
-          <MRT_ToggleFullScreenButton table={table} />
-        </TableToolbarActions>
+      renderToolbarInternalActions={(context) => (
+        <EditableTableToolbar
+          {...context}
+          showGlobalFilterButton
+          showColumnFiltersButton
+          showColumnsButton
+          showDensityButton
+          showFullScreenButton
+        />
       )}
       renderTopToolbarCustomActions={({ table }) => (
         <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
@@ -252,7 +246,7 @@ export default function StratumList({ isBiomass = false }: StratumListProps): JS
         onShowGlobalFilterChange: setShowGlobalFilter,
         enableColumnPinning: true,
         enableGrouping: false,
-        muiTableBodyRowProps: ({ row }: { row: MRT_Row<StratumRow> }) => ({
+        muiTableBodyRowProps: ({ row }) => ({
           id: `row${row.index + 1}`,
           sx: {
             '& td': { borderBottom: 'none' },

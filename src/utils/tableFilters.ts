@@ -1,8 +1,7 @@
 /**
  * Returns a date-range filter function for use with EditableTable columns.
  *
- * MRT passes dayjs objects as filter values when using the date-range filter variant.
- * At runtime the `row` argument is an MRT Row wrapper, so row data is accessed via `.original`.
+ * MRT passes a wrapped row and Dayjs bounds; V2 passes the original record and string bounds.
  *
  * @param field - Key of the row object whose value holds an ISO date string (YYYY-MM-DD prefix).
  */
@@ -31,8 +30,7 @@ const makeDateRangeFilterFn =
       return true;
     }
 
-    // row is an MRT Row wrapper at runtime; access original data via .original
-    const original = (row as unknown as { original: T }).original;
+    const original = (row as { original?: T }).original ?? row;
     const dateStr = original[field] as string | undefined;
     if (!dateStr) {
       return false;
