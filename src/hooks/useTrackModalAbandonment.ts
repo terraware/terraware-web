@@ -1,9 +1,13 @@
 import { useCallback, useEffect, useRef } from 'react';
 
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { ProductArea, getProductArea } from 'src/utils/productArea';
 
 import { useTrackEvent } from './useTrackEvent';
 
+// Fires MODAL_OPENED each time the modal becomes visible, so abandonment can be
+// read as a rate (abandoned / opened) per modal_name.
+//
 // Fires MODAL_ABANDONED when the modal was actually visible to the user and
 // then closed (or unmounted while open) without markSubmitted() being called
 // first. Call markSubmitted() inside any successful-save path so a successful
@@ -32,14 +36,19 @@ export const useTrackModalAbandonment = (modalName: string, isOpen: boolean): ((
   // null = modal is not currently open; number = timestamp of when isOpen became true.
   const openedAtRef = useRef<number | null>(null);
   const wasSubmittedRef = useRef(false);
+  // Captured at open time: when the user navigates away with the modal open, the
+  // abandonment fires after the URL has already changed to the next page.
+  const openedProductAreaRef = useRef<ProductArea | null>(null);
 
   // Fires the abandonment event if the modal was open and not submitted.
   // Always clears the session state regardless.
   const fireAbandonment = useCallback(() => {
     const openedAt = openedAtRef.current;
     const wasSubmitted = wasSubmittedRef.current;
+    const openedProductArea = openedProductAreaRef.current;
     openedAtRef.current = null;
     wasSubmittedRef.current = false;
+    openedProductAreaRef.current = null;
     if (openedAt === null || wasSubmitted) {
       return;
     }
@@ -50,6 +59,7 @@ export const useTrackModalAbandonment = (modalName: string, isOpen: boolean): ((
     trackEventRef.current(MIXPANEL_EVENTS.MODAL_ABANDONED, {
       modal_name: modalNameRef.current,
       time_open_seconds: timeOpenSeconds,
+      ...(openedProductArea ? { product_area: openedProductArea } : {}),
     });
   }, []);
 
@@ -59,6 +69,8 @@ export const useTrackModalAbandonment = (modalName: string, isOpen: boolean): ((
     if (isOpen && openedAtRef.current === null) {
       openedAtRef.current = Date.now();
       wasSubmittedRef.current = false;
+      openedProductAreaRef.current = getProductArea(window.location.pathname);
+      trackEventRef.current(MIXPANEL_EVENTS.MODAL_OPENED, { modal_name: modalNameRef.current });
     } else if (!isOpen && openedAtRef.current !== null) {
       fireAbandonment();
     }

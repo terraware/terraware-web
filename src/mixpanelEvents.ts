@@ -2,6 +2,7 @@ import { GetEmailNotificationSettingsResponsePayload } from 'src/queries/generat
 import { ObservationType } from 'src/types/Observations';
 import { BoundarySource } from 'src/types/PlantingSite';
 import { User } from 'src/types/User';
+import { ProductArea } from 'src/utils/productArea';
 
 // Event names follow the convention "<Domain> <Object> <Past-tense Verb>"
 // (e.g. "Accession Created", "Batch Withdrawn"). Past-tense encodes that the
@@ -73,6 +74,7 @@ export enum MIXPANEL_EVENTS {
   // --- Friction / failure (Phase 2) ---
   FORM_VALIDATION_FAILED = 'Form Validation Failed',
   SAVE_FAILED = 'Save Failed',
+  MODAL_OPENED = 'Modal Opened',
   MODAL_ABANDONED = 'Modal Abandoned',
 
   // --- Species Intelligence ---
@@ -236,9 +238,13 @@ export type MixpanelEventPropertyMap = {
     entity_type: string;
     error_details?: string;
   };
+  [MIXPANEL_EVENTS.MODAL_OPENED]: {
+    modal_name: string;
+  };
   [MIXPANEL_EVENTS.MODAL_ABANDONED]: {
     modal_name: string;
     time_open_seconds: number;
+    product_area?: ProductArea;
   };
   [MIXPANEL_EVENTS.TABLE_VIEW_SELECTED]: TableViewEventContext & {
     view_type: 'default' | 'preset' | 'my_view';

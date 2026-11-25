@@ -20,6 +20,7 @@ import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
 import FunderRouter from 'src/scenes/FunderRouter';
 import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import { getRgbaFromHex } from 'src/utils/color';
+import { addProductAreaToEvent } from 'src/utils/productArea';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import DisclaimerContainer from './components/Disclaimer/DisclaimerContainer';
@@ -33,11 +34,16 @@ import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
 // SPA route changes; the first pageview after consent is captured by an explicit
 // track_pageview() call once we opt in (the auto-pageview that fired during
 // init itself was dropped because we were still opted out at the time).
+// The before_send_events hook tags every event with the product area of the page
+// it was tracked on.
 const MIXPANEL_TOKEN = import.meta.env.PUBLIC_MIXPANEL_TOKEN;
 const MIXPANEL_CONFIG = {
   opt_out_persistence_by_default: true,
   opt_out_tracking_by_default: true,
   track_pageview: 'url-with-path',
+  hooks: {
+    before_send_events: addProductAreaToEvent,
+  },
 };
 
 function AppContent() {

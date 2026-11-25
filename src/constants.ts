@@ -21,6 +21,8 @@ export const LOGIN_LINK = '/api/v1/login';
 export const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
+// When adding a path with a new first segment, also map it to a product area in AREA_BY_FIRST_SEGMENT
+// (src/utils/productArea.ts) so its Mixpanel events aren't reported as "Other".
 export enum APP_PATHS {
   ACCELERATOR = '/accelerator',
   ACCELERATOR_ACTIVITY_LOG = '/accelerator/activity-log',
