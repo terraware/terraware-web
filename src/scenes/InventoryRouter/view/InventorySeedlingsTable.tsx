@@ -261,29 +261,32 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return undefined;
   }, [isSelectionBulkWithdrawable, selectedRows, strings, totalSelectedQuantity]);
 
-  const handleExport = useCallback((table: MRT_TableInstance<SearchResponseElement>) => {
-    const visibleColumns = table
-      .getVisibleLeafColumns()
-      .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu' && col.id !== 'withdraw');
-    const filteredRows = table.getSortedRowModel().rows;
+  const handleExport = useCallback(
+    (table: MRT_TableInstance<SearchResponseElement>) => {
+      const visibleColumns = table
+        .getVisibleLeafColumns()
+        .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'quantitiesMenu' && col.id !== 'withdraw');
+      const filteredRows = table.getSortedRowModel().rows;
 
-    const escape = (val: unknown): string => {
-      const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
-      return `"${s.replace(/"/g, '""')}"`;
-    };
+      const escape = (val: unknown): string => {
+        const s = val === null || val === undefined ? '' : String(val).replace(/\r/g, ', ');
+        return `"${s.replace(/"/g, '""')}"`;
+      };
 
-    const headers = visibleColumns.map((col) => {
-      const h = col.columnDef.header;
-      return escape(typeof h === 'string' ? h : col.id);
-    });
+      const headers = visibleColumns.map((col) => {
+        const h = col.columnDef.header;
+        return escape(typeof h === 'string' ? h : col.id);
+      });
 
-    const csvLines = [
-      headers.join(','),
-      ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
-    ];
+      const csvLines = [
+        headers.join(','),
+        ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
+      ];
 
-    downloadCsv('inventory-species', csvLines.join('\n'));
-  }, []);
+      downloadCsv(strings.INVENTORY_BY_BATCH_FILENAME, csvLines.join('\n'));
+    },
+    [strings]
+  );
 
   // Cell renderers
   const BatchNumberCell = useCallback(

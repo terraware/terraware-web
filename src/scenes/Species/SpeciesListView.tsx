@@ -468,7 +468,7 @@ export default function SpeciesListView(): JSX.Element {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.setAttribute('href', url);
-    link.setAttribute('download', 'species.csv');
+    link.setAttribute('download', `${strings.SPECIES_FILENAME}.csv`);
     link.click();
     URL.revokeObjectURL(url);
   };

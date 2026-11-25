@@ -629,9 +629,15 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
         ...filteredRows.map((row) => visibleColumns.map((col) => escape(row.getValue(col.id))).join(',')),
       ];
 
-      downloadCsv(`inventory-${origin.toLowerCase()}`, csvLines.join('\n'));
+      const filename = {
+        Batches: strings.INVENTORY_BY_BATCH_FILENAME,
+        Nursery: strings.INVENTORY_BY_NURSERY_FILENAME,
+        Species: strings.INVENTORY_BY_SPECIES_FILENAME,
+      }[origin];
+
+      downloadCsv(filename, csvLines.join('\n'));
     },
-    [origin]
+    [origin, strings]
   );
 
   return (
