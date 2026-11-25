@@ -208,40 +208,44 @@ describe('SpeciesListView localization', () => {
     expect(screen.getByRole('link', { name: 'Unknown species' })).toBeVisible();
   });
 
-  it('restores valid filters from a saved view and discards invalid ones', async () => {
-    const view = {
-      id: 42,
-      name: 'Trees in mangroves',
-      baseView: 'default',
-      tableName: 'species',
-      settings: {
-        columnFilters: [
-          { id: 'growthForms', value: ['Tree'] },
-          { id: 'seedStorageBehavior', value: 'Orthodox' },
-          { id: 'ecosystemTypes', value: ['Mangroves'] },
-          { id: 'conservationCategory', value: 'En danger (EN)' },
-          { id: 'rare', value: 'Sí' },
-        ],
-      },
-    };
-    localStorage.setItem('species-list-table-currentView', JSON.stringify({ savedViewId: '42' }));
-    mockGet('/api/v1/users/me/savedTableViews', { views: [view] });
-    renderWithProviders(<SpeciesListView />, {
-      localization: { activeLocale: 'fr', selectedLocale: 'fr' },
-    });
+  it.each([false, true])(
+    'restores valid filters from a saved view and discards invalid ones (V2: %s)',
+    async (flag) => {
+      mockGet('/api/v1/users/me/preferences', { preferences: { editableTableV2: flag } });
+      const view = {
+        id: 42,
+        name: 'Trees in mangroves',
+        baseView: 'default',
+        tableName: 'species',
+        settings: {
+          columnFilters: [
+            { id: 'growthForms', value: ['Tree'] },
+            { id: 'seedStorageBehavior', value: 'Orthodox' },
+            { id: 'ecosystemTypes', value: ['Mangroves'] },
+            { id: 'conservationCategory', value: 'En danger (EN)' },
+            { id: 'rare', value: 'Sí' },
+          ],
+        },
+      };
+      localStorage.setItem('species-list-table-currentView', JSON.stringify({ savedViewId: '42' }));
+      mockGet('/api/v1/users/me/savedTableViews', { views: [view] });
+      renderWithProviders(<SpeciesListView />, {
+        localization: { activeLocale: 'fr', selectedLocale: 'fr' },
+      });
 
-    await waitFor(() => {
-      expect(screen.getByRole('combobox', { name: new RegExp(strings.CURRENT_VIEW) })).toHaveTextContent(view.name);
-      expect(screen.getByRole('link', { name: 'Acacia koa' })).toBeVisible();
-      expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
-      expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
-    });
-    expect(JSON.parse(localStorage.getItem('species-list-table_columnFilters') ?? '[]')).toEqual([
-      { id: 'growthForms', value: ['Tree'] },
-      { id: 'seedStorageBehavior', value: 'Orthodox' },
-      { id: 'ecosystemTypes', value: ['Mangroves'] },
-    ]);
-  });
+      await waitFor(() => {
+        expect(screen.getByRole('combobox', { name: new RegExp(strings.CURRENT_VIEW) })).toHaveTextContent(view.name);
+        expect(screen.getByRole('link', { name: 'Acacia koa' })).toBeVisible();
+        expect(screen.queryByRole('link', { name: 'Dryopteris filix-mas' })).not.toBeInTheDocument();
+        expect(screen.queryByRole('link', { name: 'Unknown species' })).not.toBeInTheDocument();
+      });
+      expect(JSON.parse(localStorage.getItem('species-list-table_columnFilters') ?? '[]')).toEqual([
+        { id: 'growthForms', value: ['Tree'] },
+        { id: 'seedStorageBehavior', value: 'Orthodox' },
+        { id: 'ecosystemTypes', value: ['Mangroves'] },
+      ]);
+    }
+  );
 
   it('keeps missing seed storage behavior after populated values when sorted ascending', async () => {
     const { user } = renderWithProviders(<SpeciesListView />);
@@ -275,7 +279,8 @@ describe('SpeciesListView localization', () => {
     ).toBeVisible();
   });
 
-  it('exports translated species field values to CSV', async () => {
+  it.each([false, true])('exports translated species field values to CSV (V2: %s)', async (flag) => {
+    mockGet('/api/v1/users/me/preferences', { preferences: { editableTableV2: flag } });
     const download = rstest.spyOn(URL, 'createObjectURL');
     const click = rstest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
     try {

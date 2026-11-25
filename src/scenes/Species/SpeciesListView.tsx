@@ -3,30 +3,20 @@ import { useSearchParams } from 'react-router';
 
 import { Box, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Badge, DropdownItem, Message } from '@terraware/web-components';
-import { EditableTableColumn, Icon } from '@terraware/web-components';
-import {
-  MRT_Cell,
-  MRT_Row,
-  MRT_ShowHideColumnsButton,
-  MRT_TableInstance,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
-} from 'material-react-table';
+import { EditableTableColumn, EditableTableInstance, Icon } from '@terraware/web-components';
+import { MRT_Cell, MRT_Row } from 'material-react-table';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
@@ -65,6 +55,10 @@ import { SpeciesSearchResultRow } from './types';
 
 const TABLE = TABLES.species;
 const EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID: Record<number, string[]> = {};
+
+type SpeciesFilterRow = MRT_Row<SpeciesSearchResultRow> | SpeciesSearchResultRow;
+
+const originalSpecies = (row: SpeciesFilterRow): SpeciesSearchResultRow => ('original' in row ? row.original : row);
 
 const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
   element?.overriddenNativity ?? element?.calculatedNativity;
@@ -442,7 +436,7 @@ export default function SpeciesListView(): JSX.Element {
     navigate(APP_PATHS.SPECIES_NEW);
   };
 
-  const downloadReportHandler = (table: MRT_TableInstance<SpeciesSearchResultRow>) => {
+  const downloadReportHandler = (table: EditableTableInstance<SpeciesSearchResultRow>) => {
     const filteredRows = table.getSortedRowModel().rows;
     trackEvent(MIXPANEL_EVENTS.REPORT_DOWNLOADED, {
       report_type: 'species_list',
@@ -674,8 +668,8 @@ export default function SpeciesListView(): JSX.Element {
                 ...NATIVITY_VALUES.map((value) => ({ value, label: getNativityLabel(value) })),
                 { value: 'Not Set', label: strings.NOT_SET },
               ],
-              filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string) => {
-                const nativities = statusBySpeciesId.get(row.original.id) ?? [];
+              filterFn: (row: SpeciesFilterRow, _columnId: string, filterValue: string) => {
+                const nativities = statusBySpeciesId.get(originalSpecies(row).id) ?? [];
                 return nativities.length ? nativities.includes(filterValue as Nativity) : filterValue === 'Not Set';
               },
               sortUndefined: 'last' as const,
@@ -692,11 +686,11 @@ export default function SpeciesListView(): JSX.Element {
               enableEditing: false,
               filterVariant: 'multi-select',
               filterSelectOptions: availableProjectNames,
-              filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string[]) => {
+              filterFn: (row: SpeciesFilterRow, _columnId: string, filterValue: string[]) => {
                 if (!filterValue?.length) {
                   return true;
                 }
-                const names = projectNamesBySpeciesId.get(row.original.id) ?? [];
+                const names = projectNamesBySpeciesId.get(originalSpecies(row).id) ?? [];
                 return filterValue.some((value) => names.includes(value));
               },
               sortUndefined: 'last',
@@ -713,6 +707,10 @@ export default function SpeciesListView(): JSX.Element {
               enableEditing: false,
               filterVariant: 'multi-select' as const,
               filterSelectOptions: uniqueAcceleratorProjects,
+              filterFn: (row: SpeciesFilterRow, _columnId: string, values: string[]) => {
+                const names = (originalSpecies(row).acceleratorProjects ?? []).join(', ');
+                return !values.length || values.some((name) => names.includes(name));
+              },
               sortUndefined: 'last' as const,
               Cell: AcceleratorProjectsCell,
             },
@@ -725,8 +723,8 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniqueConservationCategories,
-        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, value: string) =>
-          row.original.conservationCategory === value,
+        filterFn: (row: SpeciesFilterRow, _columnId: string, value: string) =>
+          originalSpecies(row).conservationCategory === value,
         sortUndefined: 'last',
       },
       {
@@ -739,8 +737,8 @@ export default function SpeciesListView(): JSX.Element {
           { value: 'Yes', label: strings.YES },
           { value: 'No', label: strings.NO },
         ],
-        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, value: string) =>
-          Boolean(row.original.rare) === (value === 'Yes'),
+        filterFn: (row: SpeciesFilterRow, _columnId: string, value: string) =>
+          Boolean(originalSpecies(row).rare) === (value === 'Yes'),
         sortUndefined: 'last',
       },
       {
@@ -750,10 +748,10 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueGrowthForms,
-        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, values: string[]) =>
+        filterFn: (row: SpeciesFilterRow, _columnId: string, values: string[]) =>
           values.length === 0 ||
           values.some((value) =>
-            row.original.growthForms?.includes(
+            originalSpecies(row).growthForms?.includes(
               uniqueGrowthForms.find((option) => option.value === value)?.label ?? value
             )
           ),
@@ -767,8 +765,8 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: uniqueSeedStorageBehaviors,
-        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, columnId: string, value: string) =>
-          row.getValue(columnId) ===
+        filterFn: (row: SpeciesFilterRow, _columnId: string, value: string) =>
+          originalSpecies(row).seedStorageBehavior ===
           (uniqueSeedStorageBehaviors.find((option) => option.value === value)?.label ?? value),
         sortUndefined: 'last',
       },
@@ -779,10 +777,10 @@ export default function SpeciesListView(): JSX.Element {
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueEcosystemTypes,
-        filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, values: string[]) =>
+        filterFn: (row: SpeciesFilterRow, _columnId: string, values: string[]) =>
           values.length === 0 ||
           values.some((value) =>
-            row.original.ecosystemTypes?.includes(
+            originalSpecies(row).ecosystemTypes?.includes(
               uniqueEcosystemTypes.find((option) => option.value === value)?.label ?? value
             )
           ),
@@ -935,6 +933,7 @@ export default function SpeciesListView(): JSX.Element {
       </Box>
       <Card flushMobile>
         <EditableTable
+          supportsV2
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
           columns={editableColumns}
           data={results}
@@ -942,6 +941,7 @@ export default function SpeciesListView(): JSX.Element {
           enableSorting={true}
           enableGlobalFilter={true}
           enableColumnFilters={true}
+          enableFilterByColumnMenuItem
           enableColumnOrdering={true}
           storageKey={TABLE.storageKey}
           enablePagination={true}
@@ -951,6 +951,23 @@ export default function SpeciesListView(): JSX.Element {
           enableHiding={true}
           enableColumnDragging={!isMobile}
           positionGlobalFilter={'right'}
+          renderToolbarInternalActions={(context) => (
+            <EditableTableToolbar
+              {...context}
+              showGlobalFilterButton
+              showColumnFiltersButton
+              showColumnsButton
+              showDensityButton
+              showFullScreenButton
+              leadingActions={
+                <Tooltip title={strings.EXPORT}>
+                  <IconButton onClick={() => downloadReportHandler(context.table)}>
+                    <Icon name='iconExport' size='medium' />
+                  </IconButton>
+                </Tooltip>
+              }
+            />
+          )}
           renderTopToolbarCustomActions={({ table }) => (
             <CurrentView
               defaultSettings={defaultViewSettings}
@@ -989,20 +1006,6 @@ export default function SpeciesListView(): JSX.Element {
             onDensityChange,
             enableColumnPinning: true,
             getRowId: (row) => String(row.id),
-            renderToolbarInternalActions: ({ table }) => (
-              <TableToolbarActions>
-                <Tooltip title={strings.EXPORT}>
-                  <IconButton onClick={() => downloadReportHandler(table)}>
-                    <Icon name='iconExport' size='medium' />
-                  </IconButton>
-                </Tooltip>
-                <MRT_ToggleGlobalFilterButton table={table} />
-                <MRT_ToggleFiltersButton table={table} />
-                <MRT_ShowHideColumnsButton table={table} />
-                <MRT_ToggleDensePaddingButton table={table} />
-                <MRT_ToggleFullScreenButton table={table} />
-              </TableToolbarActions>
-            ),
             muiTableBodyProps: {
               sx: {
                 '& tr:nth-of-type(odd) > td': {
