@@ -2,8 +2,8 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import Page from 'src/components/Page';
 import PageForm from 'src/components/common/PageForm';
-import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { SavableBatch, useSaveBatch } from 'src/hooks/batches/useSaveBatch';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -96,7 +96,12 @@ export default function InventoryCreateView(): JSX.Element {
   }, []);
 
   return (
-    <TfMain>
+    <Page
+      title={strings.ADD_INVENTORY}
+      titleContainerStyle={{ paddingX: 3 }}
+      titleStyle={{ paddingLeft: 0 }}
+      contentStyle={{ display: 'contents' }}
+    >
       <PageForm
         busy={busy}
         cancelID='cancelAddInventory'
@@ -105,10 +110,6 @@ export default function InventoryCreateView(): JSX.Element {
         onSave={onSaveBatch}
         saveButtonText={strings.SAVE}
       >
-        <Typography sx={{ paddingLeft: theme.spacing(3), fontWeight: 600, fontSize: '24px' }}>
-          {strings.ADD_INVENTORY}
-        </Typography>
-
         <Box
           display='flex'
           flexDirection='column'
@@ -133,6 +134,6 @@ export default function InventoryCreateView(): JSX.Element {
           </Box>
         </Box>
       </PageForm>
-    </TfMain>
+    </Page>
   );
 }
