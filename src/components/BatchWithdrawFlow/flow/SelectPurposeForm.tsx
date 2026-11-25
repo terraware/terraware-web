@@ -140,21 +140,21 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     updatePurpose(value);
   };
 
-  const onChangePlantingSite = (value: string) => {
-    updateField('substratumId', undefined); // clear substratum id when there's a new planting site id
-    updateField('plantingSiteId', value);
-    setSelectedStratum(undefined);
-    setSelectedSubstratum(undefined);
-    const plantingSite = plantingSites ? plantingSites.find((site) => site.id.toString() === value.toString()) : null;
-    setStrata(plantingSite?.strata || []);
-    setStratumId(undefined);
+  const onChangeStratum = (value?: StratumInfo) => {
+    const onlySubstratum = value?.substrata?.length === 1 ? value.substrata[0] : undefined;
+    setSelectedStratum(value);
+    setSelectedSubstratum(onlySubstratum);
+    setStratumId(value ? Number(value.id) : undefined);
+    updateField('substratumId', onlySubstratum?.id);
   };
 
-  const onChangeStratum = (value: any) => {
-    setSelectedStratum(value);
-    setSelectedSubstratum(undefined);
-    setStratumId(value?.id);
-    updateField('substratumId', undefined); // clear substratum id when there's a new stratum id
+  const onChangePlantingSite = (value: string) => {
+    updateField('plantingSiteId', value);
+    const plantingSite = plantingSites ? plantingSites.find((site) => site.id.toString() === value.toString()) : null;
+    const siteStrata = plantingSite?.strata || [];
+    setStrata(siteStrata);
+    const selectableStrata = siteStrata.filter((stratum) => stratum.substrata);
+    onChangeStratum(selectableStrata.length === 1 ? selectableStrata[0] : undefined);
   };
 
   const onChangeSubstratum = (value: any) => {

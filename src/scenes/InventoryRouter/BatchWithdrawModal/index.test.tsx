@@ -51,6 +51,35 @@ const PLANTING_SITE = buildPlantingSite({
   ],
 });
 
+const SITE_WITH_TWO_SUBSTRATA = buildPlantingSite({
+  id: PLANTING_SITE_ID,
+  name: 'Riverbank',
+  strata: [
+    buildStratum({
+      id: 41,
+      name: 'Lower Stratum',
+      substrata: [buildSubstratum({ id: 51, name: 'Lower West' }), buildSubstratum({ id: 52, name: 'Lower East' })],
+    }),
+  ],
+});
+
+const SITE_WITH_TWO_STRATA = buildPlantingSite({
+  id: PLANTING_SITE_ID,
+  name: 'Ridge',
+  strata: [
+    buildStratum({
+      id: STRATUM_ID,
+      name: 'Upper Stratum',
+      substrata: [buildSubstratum({ id: SUBSTRATUM_ID, name: 'Upper Substratum' })],
+    }),
+    buildStratum({
+      id: 41,
+      name: 'Lower Stratum',
+      substrata: [buildSubstratum({ id: 51, name: 'Lower West' }), buildSubstratum({ id: 52, name: 'Lower East' })],
+    }),
+  ],
+});
+
 const PLANTING_SEASON: PlantingSeasonPayload = {
   id: PLANTING_SEASON_ID,
   name: 'Wet Season',
@@ -177,6 +206,17 @@ const advanceToPhotosWithOneSeedling = async (user: UserEvent) => {
   await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 1);
   await clickNextWhenEnabled(user);
 };
+
+const choosePlantingSite = async (user: UserEvent, siteName: string) => {
+  await user.click(await findPlantingRadio());
+  await waitFor(() => expect(document.querySelector('#to-planting-site input')).not.toBeNull());
+  await selectDropdownOption(user, 'to-planting-site', siteName);
+};
+
+// The stratum and substratum labels point at the dropdown's wrapper rather than its input, so the
+// displayed selection is read through the wrapper's id.
+const selectedStratum = () => document.querySelector<HTMLInputElement>('#stratum input')?.value;
+const selectedSubstratum = () => document.querySelector<HTMLInputElement>('#substratum input')?.value;
 
 const chooseOutplantDestination = async (user: UserEvent) => {
   await user.click(await findPlantingRadio());
@@ -435,17 +475,14 @@ describe('BatchWithdrawModal purposes and validation', () => {
   });
 
   it('requires a substratum before an out-plant withdrawal can continue', async () => {
-    mockModalData({ sites: [PLANTING_SITE] });
+    mockModalData({ sites: [SITE_WITH_TWO_SUBSTRATA] });
     const { user } = renderModal();
 
-    await user.click(await findPlantingRadio());
-    await waitFor(() => expect(document.querySelector('#to-planting-site input')).not.toBeNull());
-    await selectDropdownOption(user, 'to-planting-site', PLANTING_SITE.name);
-    await selectDropdownOption(user, 'stratum', 'Upper Stratum');
+    await choosePlantingSite(user, SITE_WITH_TWO_SUBSTRATA.name);
 
     expect(nextButton()).toBeDisabled();
 
-    await selectDropdownOption(user, 'substratum', 'Upper Substratum');
+    await selectDropdownOption(user, 'substratum', 'Lower East');
 
     expect(nextButton()).toBeEnabled();
   });
@@ -549,6 +586,67 @@ describe('BatchWithdrawModal purposes and validation', () => {
 
       expect(phaseInput(1, 'readyQuantityWithdrawn')).toHaveValue(null);
       expect(nextButton()).toBeDisabled();
+    });
+  });
+});
+
+describe('BatchWithdrawModal stratum and substratum auto-selection', () => {
+  it('fills in the only stratum and its only substratum so the user can continue', async () => {
+    mockModalData({ sites: [PLANTING_SITE] });
+    const { user } = renderModal();
+
+    await choosePlantingSite(user, PLANTING_SITE.name);
+
+    await waitFor(() => expect(selectedSubstratum()).toBe('Upper Substratum'));
+    expect(selectedStratum()).toBe('Upper Stratum');
+    expect(nextButton()).toBeEnabled();
+  });
+
+  it('fills in the only stratum but leaves a choice of substrata to the user', async () => {
+    mockModalData({ sites: [SITE_WITH_TWO_SUBSTRATA] });
+    const { user } = renderModal();
+
+    await choosePlantingSite(user, SITE_WITH_TWO_SUBSTRATA.name);
+
+    await waitFor(() => expect(selectedStratum()).toBe('Lower Stratum'));
+    expect(selectedSubstratum()).toBe('');
+    expect(nextButton()).toBeDisabled();
+  });
+
+  it('fills in nothing when the site has several strata', async () => {
+    mockModalData({ sites: [SITE_WITH_TWO_STRATA] });
+    const { user } = renderModal();
+
+    await choosePlantingSite(user, SITE_WITH_TWO_STRATA.name);
+
+    expect(selectedStratum()).toBe('');
+    expect(selectedSubstratum()).toBe('');
+    expect(nextButton()).toBeDisabled();
+  });
+
+  it('fills in the stratum and substratum the selected planting season leaves as the only choice', async () => {
+    mockModalData({ sites: [SITE_WITH_TWO_STRATA], seasons: [PLANTING_SEASON] });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await choosePlantingSite(user, SITE_WITH_TWO_STRATA.name);
+    expect(selectedStratum()).toBe('');
+
+    await selectDropdownOption(user, 'planting-season', PLANTING_SEASON.name);
+
+    await waitFor(() => expect(selectedSubstratum()).toBe('Upper Substratum'));
+    expect(selectedStratum()).toBe('Upper Stratum');
+
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, outplantInput(1), 6);
+    await clickNextWhenEnabled(user);
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    expect(await withdrawals[0].json()).toMatchObject({
+      plantingSiteId: PLANTING_SITE_ID,
+      plantingSeasonId: PLANTING_SEASON_ID,
+      substratumId: SUBSTRATUM_ID,
     });
   });
 });

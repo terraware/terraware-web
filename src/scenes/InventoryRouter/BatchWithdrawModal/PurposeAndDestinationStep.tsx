@@ -207,6 +207,19 @@ const PurposeAndDestinationStep = ({
     };
   }, [selectedPlantingDate, selectedPlantingSite, selectedSeason, draft.stratumId]);
 
+  useEffect(() => {
+    if (!isPlanting) {
+      return;
+    }
+    if (draft.stratumId === undefined) {
+      if (stratumOptions.length === 1) {
+        onChange({ stratumId: Number(stratumOptions[0].value) });
+      }
+    } else if (draft.substratumId === undefined && substratumOptions.length === 1) {
+      onChange({ substratumId: Number(substratumOptions[0].value) });
+    }
+  }, [draft.stratumId, draft.substratumId, isPlanting, onChange, stratumOptions, substratumOptions]);
+
   // Default From: Nursery to the batches' nursery if they all share one.
   useEffect(() => {
     if (draft.fromFacilityId === undefined && eligibleBatchesForFromNursery.length > 0) {
