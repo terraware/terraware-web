@@ -3,21 +3,26 @@ import React, { ReactNode, useCallback } from 'react';
 import {
   EditableTableOptionsV2,
   EditableTablePropsV2,
+  EditableTableShowHideColumnsButtonV2,
   EditableTableToggleDensePaddingButtonV2,
   EditableTableToggleFiltersButtonV2,
   EditableTableToggleFullScreenButtonV2,
+  EditableTableToggleGlobalFilterButtonV2,
   EditableTableToolbarContext,
   EditableTableV2,
   EditableTable as WebEditableTable,
   isMrtTable,
 } from '@terraware/web-components';
 import { EditableTableProps } from '@terraware/web-components/components/EditableTable';
+import { omit } from 'lodash';
 import {
   MRT_RowData,
+  MRT_ShowHideColumnsButton,
   MRT_TableOptions,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
+  MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 import { MRT_Localization_EN } from 'material-react-table/locales/en';
 import { MRT_Localization_ES } from 'material-react-table/locales/es';
@@ -38,11 +43,28 @@ type SharedOptions<TData extends MRT_RowData> = Pick<
   | 'onColumnVisibilityChange'
   | 'onGlobalFilterChange'
   | 'onSortingChange'
+  | 'onPaginationChange'
+  | 'manualPagination'
+  | 'manualSorting'
+  | 'manualFiltering'
+  | 'rowCount'
+  | 'autoResetPageIndex'
+  | 'getRowId'
+  | 'enableColumnPinning'
 > &
   Pick<
     NonNullable<EditableTableProps<TData>['tableOptions']>,
-    'enableGlobalFilterRankedResults' | 'muiTopToolbarProps' | 'muiTableBodyRowProps' | 'muiTableProps'
-  >;
+    | 'defaultColumn'
+    | 'enableGlobalFilterRankedResults'
+    | 'enableGrouping'
+    | 'muiTablePaperProps'
+    | 'muiTableProps'
+    | 'onShowColumnFiltersChange'
+    | 'onShowGlobalFilterChange'
+    | 'onDensityChange'
+    | 'renderEmptyRowsFallback'
+  > &
+  Pick<EditableTablePropsV2<TData>, 'muiTopToolbarProps' | 'muiTableBodyProps' | 'muiTableBodyRowProps'>;
 
 export type SharedEditableTableProps<TData extends MRT_RowData> = Omit<
   EditableTableProps<TData>,
@@ -52,8 +74,10 @@ export type SharedEditableTableProps<TData extends MRT_RowData> = Omit<
     supportsV2: true;
     tableOptions?: SharedOptions<TData>;
     renderMrtToolbarInternalActions?: (context: EditableTableToolbarContext<TData>) => React.ReactNode;
+    enableFilterByColumnMenuItem?: boolean;
     enableShowAllColumnsMenuItem?: boolean;
     showColumnFiltersButton?: boolean;
+    renderEmptyRowsFallback?: EditableTablePropsV2<TData>['renderEmptyRowsFallback'];
   };
 
 type SharedCallbacks<TData extends MRT_RowData> = Pick<
@@ -67,21 +91,40 @@ type Props<TData extends MRT_RowData> =
 export const EditableTableToolbar = <TData extends MRT_RowData>({
   table,
   children,
+  leadingActions,
+  showGlobalFilterButton,
   showColumnFiltersButton,
+  showColumnsButton,
   showDensityButton,
   showFullScreenButton,
 }: EditableTableToolbarContext<TData> & {
   children?: ReactNode;
+  leadingActions?: ReactNode;
+  showGlobalFilterButton?: boolean;
   showColumnFiltersButton?: boolean;
+  showColumnsButton?: boolean;
   showDensityButton?: boolean;
   showFullScreenButton?: boolean;
 }) => (
   <TableToolbarActions>
+    {leadingActions}
+    {showGlobalFilterButton &&
+      (isMrtTable(table) ? (
+        <MRT_ToggleGlobalFilterButton table={table} />
+      ) : (
+        <EditableTableToggleGlobalFilterButtonV2 table={table} />
+      ))}
     {showColumnFiltersButton &&
       (isMrtTable(table) ? (
         <MRT_ToggleFiltersButton table={table} />
       ) : (
         <EditableTableToggleFiltersButtonV2 table={table} />
+      ))}
+    {showColumnsButton &&
+      (isMrtTable(table) ? (
+        <MRT_ShowHideColumnsButton table={table} />
+      ) : (
+        <EditableTableShowHideColumnsButtonV2 table={table} />
       ))}
     {children}
     {showDensityButton &&
@@ -146,7 +189,49 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
         : MRT_Localization_EN;
 
   if (props.supportsV2 && useV2) {
-    return <EditableTableV2 {...props} showColumnFiltersButton={showFilters} />;
+    const {
+      state,
+      initialState,
+      enableColumnPinning,
+      muiTopToolbarProps,
+      muiTableBodyProps,
+      muiTableBodyRowProps,
+      onShowColumnFiltersChange,
+      onShowGlobalFilterChange,
+      onDensityChange,
+      ...options
+    } = props.tableOptions ?? {};
+    return (
+      <EditableTableV2
+        {...props}
+        showColumnFiltersButton={showFilters}
+        showColumnFilters={state?.showColumnFilters}
+        onShowColumnFiltersChange={onShowColumnFiltersChange}
+        showGlobalFilter={state?.showGlobalFilter}
+        onShowGlobalFilterChange={onShowGlobalFilterChange}
+        density={state?.density}
+        onDensityChange={onDensityChange}
+        isLoading={state?.isLoading}
+        showLoadingProgress={state?.showProgressBars}
+        enableHeaderColumnDragging={props.enableColumnDragging}
+        enableColumnPinning={enableColumnPinning ?? props.enableColumnPinning}
+        muiTopToolbarProps={muiTopToolbarProps}
+        muiTableBodyProps={muiTableBodyProps}
+        muiTableBodyRowProps={muiTableBodyRowProps}
+        tableOptions={{
+          ...omit(options, [
+            'defaultColumn',
+            'enableGlobalFilterRankedResults',
+            'enableGrouping',
+            'muiTablePaperProps',
+            'muiTableProps',
+            'renderEmptyRowsFallback',
+          ]),
+          state,
+          initialState,
+        }}
+      />
+    );
   }
 
   return (
@@ -159,6 +244,9 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
       }
       tableOptions={{
         ...props.tableOptions,
+        ...(props.supportsV2 && props.renderEmptyRowsFallback
+          ? { renderEmptyRowsFallback: props.renderEmptyRowsFallback }
+          : {}),
         ...(hideShowAllColumns && { renderColumnActionsMenuItems }),
         localization: { ...localization, ...(!props.supportsV2 ? props.tableOptions?.localization : undefined) },
       }}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { rs } from '@rstest/core';
 import { EditableTableColumn, EditableTableToolbarContext, getStrings, isMrtTable } from '@terraware/web-components';
@@ -13,7 +13,7 @@ import { useLocalization } from 'src/providers';
 import { LocalizationContext } from 'src/providers/contexts';
 import { renderWithProviders } from 'src/test-utils';
 
-import EditableTable from './EditableTable';
+import EditableTable, { EditableTableToolbar } from './EditableTable';
 
 rs.mock('src/features', () => ({ useFeatureEnabled: rs.fn() }));
 
@@ -138,4 +138,29 @@ it.each([false, true])('hides only the show-all column action (V2: %s)', async (
       name: (flag ? labels.TABLE_HIDE_COLUMN : MRT_Localization_EN.hideColumn).replace('{column}', 'Name'),
     })
   ).toBeVisible();
+});
+
+it.each([false, true])('opens and closes an initially hidden search (V2: %s)', async (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const ControlledSearch = () => {
+    const [showGlobalFilter, onShowGlobalFilterChange] = useState(false);
+    return (
+      <EditableTable
+        supportsV2
+        columns={columns}
+        data={data}
+        clearAllFiltersLabel='Clear filters'
+        enableGlobalFilter
+        tableOptions={{ state: { showGlobalFilter }, onShowGlobalFilterChange }}
+        renderToolbarInternalActions={(context) => <EditableTableToolbar {...context} showGlobalFilterButton />}
+      />
+    );
+  };
+  const { user } = renderWithProviders(<ControlledSearch />);
+  const toggle = screen.getByRole('button', { name: /show\/hide search/i });
+  expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  await user.click(toggle);
+  expect(await screen.findByRole('textbox')).toBeVisible();
+  await user.click(toggle);
+  await waitFor(() => expect(screen.queryByRole('textbox')).not.toBeInTheDocument());
 });
