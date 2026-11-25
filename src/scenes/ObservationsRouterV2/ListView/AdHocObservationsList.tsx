@@ -1,23 +1,15 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
-import { EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTableColumn, Icon, getTableSettings } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
-import {
-  MRT_Cell,
-  MRT_Row,
-  MRT_ShowHideColumnsButton,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
-} from 'material-react-table';
+import { MRT_Cell } from 'material-react-table';
 
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -320,6 +312,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       <EditableTable<AdHocRow>
+        supportsV2
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={columns}
         data={rows}
@@ -338,6 +331,41 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         enableColumnDragging={!isMobile}
         enableHiding={true}
         positionGlobalFilter={'right' as const}
+        renderEmptyRowsFallback={() =>
+          emptyMessage ? (
+            <Typography padding={theme.spacing(4)} textAlign='center'>
+              {emptyMessage}
+            </Typography>
+          ) : null
+        }
+        renderToolbarInternalActions={({ table }) => (
+          <EditableTableToolbar
+            table={table}
+            showGlobalFilterButton
+            showColumnsButton
+            showDensityButton
+            showFullScreenButton
+            leadingActions={
+              plantingSitesLoaded &&
+              rows.length > 0 && (
+                <Tooltip title={strings.EXPORT}>
+                  <IconButton
+                    disabled={table.getFilteredRowModel().rows.length === 0}
+                    onClick={() => {
+                      const { columnFilters, globalFilter } = getTableSettings(table);
+                      void onExport(
+                        table.getFilteredRowModel().rows.map((row) => row.original),
+                        columnFilters.length > 0 || Boolean(globalFilter)
+                      );
+                    }}
+                  >
+                    <Icon name='iconExport' size='medium' />
+                  </IconButton>
+                </Tooltip>
+              )
+            }
+          />
+        )}
         renderTopToolbarCustomActions={({ table }) => (
           <CurrentView
             defaultSettings={tableState.defaultViewSettings}
@@ -358,7 +386,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
               },
             },
           },
-          muiTableBodyRowProps: ({ row }: { row: MRT_Row<AdHocRow> }) => ({
+          muiTableBodyRowProps: ({ row }) => ({
             id: `row${row.index + 1}`,
             sx: {
               '& td': {
@@ -368,12 +396,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           }),
           muiTablePaperProps: { elevation: 0 },
           muiTopToolbarProps: { sx: mobileTopToolbarSx },
-          renderEmptyRowsFallback: () =>
-            emptyMessage ? (
-              <Typography padding={theme.spacing(4)} textAlign='center'>
-                {emptyMessage}
-              </Typography>
-            ) : null,
           state: {
             columnOrder: tableState.columnOrder,
             columnVisibility: tableState.columnVisibility,
@@ -385,29 +407,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
-          renderToolbarInternalActions: ({ table }) => (
-            <TableToolbarActions>
-              {plantingSitesLoaded && rows.length > 0 && (
-                <Tooltip title={strings.EXPORT}>
-                  <IconButton
-                    disabled={table.getFilteredRowModel().rows.length === 0}
-                    onClick={() =>
-                      void onExport(
-                        table.getFilteredRowModel().rows.map((row) => row.original),
-                        table.getState().columnFilters.length > 0 || Boolean(table.getState().globalFilter)
-                      )
-                    }
-                  >
-                    <Icon name='iconExport' size='medium' />
-                  </IconButton>
-                </Tooltip>
-              )}
-              <MRT_ToggleGlobalFilterButton table={table} />
-              <MRT_ShowHideColumnsButton table={table} />
-              <MRT_ToggleDensePaddingButton table={table} />
-              <MRT_ToggleFullScreenButton table={table} />
-            </TableToolbarActions>
-          ),
         }}
       />
     </Card>
