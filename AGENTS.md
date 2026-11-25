@@ -76,6 +76,16 @@ Check whether the current repo is using Jujutsu (jj) rather than plain git; if s
   - Run `yarn alphabetize-strings`
   - Run `yarn translate`
 
+## Analytics (Mixpanel)
+
+- Every Mixpanel event is tagged with a `product_area` derived from the first segment of the page's URL path, using
+  `AREA_BY_FIRST_SEGMENT` in `src/utils/productArea.ts`
+- When adding a route to `APP_PATHS` in `src/constants.ts` whose first path segment isn't already in
+  `AREA_BY_FIRST_SEGMENT`, add it there, plus a case in `src/utils/productArea.test.ts`. Otherwise events on that page are
+  reported as `Other`.
+- Map it to an existing `ProductArea` when one fits. Add a new area only for a genuinely new part of the product, since
+  renaming or splitting areas breaks historical comparisons in Mixpanel reports.
+
 ## Pull Requests
 
 PR descriptions should focus on why the change was needed and what changed at a high level. Don't talk about choices that were considered and ruled out, and don't go into detail about the actual implementation; people can read the code diff to see low-level details.
