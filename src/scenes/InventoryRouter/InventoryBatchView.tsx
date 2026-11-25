@@ -1,13 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Tabs } from '@terraware/web-components';
 
-import PageSnackbar from 'src/components/PageSnackbar';
-import BackToLink from 'src/components/common/BackToLink';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TfMain from 'src/components/common/TfMain';
+import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { useGetBatchQuery } from 'src/queries/generated/nurseryBatches';
@@ -32,7 +29,6 @@ type InventoryBatchProps = {
 };
 
 export default function InventoryBatchView({ origin, species }: InventoryBatchProps) {
-  const contentRef = useRef(null);
   const theme = useTheme();
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
@@ -84,7 +80,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
     }
   }, [nurseryId, batch, selectedOrganization]);
 
-  const getSpeciesLabel = () => {
+  const speciesLabel = useMemo(() => {
     const { scientificName, commonName } = inventorySpecies || {};
 
     if (!scientificName && !commonName) {
@@ -94,11 +90,9 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
     } else {
       return `${scientificName} (${commonName})`;
     }
-  };
+  }, [inventorySpecies]);
 
-  const getNurseryLabel = () => {
-    return inventoryNursery?.name || '';
-  };
+  const nurseryLabel = inventoryNursery?.name || '';
 
   const tabs = useMemo(() => {
     if (!batch) {
@@ -131,74 +125,67 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
     viewIdentifier: 'inventory-batch-details',
   });
 
+  // A single crumb renders as the back link to wherever this batch was opened from.
+  const crumbs = useMemo(
+    () => [
+      {
+        name: `${strings.INVENTORY}${
+          origin !== 'Batches'
+            ? ` / ${
+                origin === 'Species'
+                  ? (strings.formatString(strings.BATCHES_OF, speciesLabel) as string)
+                  : (strings.formatString(strings.BATCHES_AT, nurseryLabel) as string)
+              }`
+            : ''
+        }`,
+        to:
+          origin === 'Species'
+            ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId || '')
+            : origin === 'Nursery'
+              ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId || '')
+              : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`,
+      },
+    ],
+    [origin, speciesId, nurseryId, speciesLabel, nurseryLabel]
+  );
+
+  const title = (
+    <Box>
+      <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>{batch?.batchNumber}</Typography>
+      <Typography sx={{ fontSize: '20px', fontWeight: 600 }}>{speciesLabel}</Typography>
+      <Typography sx={{ fontSize: '14px', fontWeight: 400 }}>{nurseryLabel}</Typography>
+    </Box>
+  );
+
   return (
-    <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <BackToLink
-          id='back'
-          name={`${strings.INVENTORY}${
-            origin !== 'Batches'
-              ? ` / ${
-                  origin === 'Species'
-                    ? (strings.formatString(strings.BATCHES_OF, getSpeciesLabel()) as string)
-                    : (strings.formatString(strings.BATCHES_AT, getNurseryLabel()) as string)
-                }`
-              : ''
-          }`}
-          to={
-            origin === 'Species'
-              ? APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', speciesId || '')
-              : origin === 'Nursery'
-                ? APP_PATHS.INVENTORY_ITEM_FOR_NURSERY.replace(':nurseryId', nurseryId || '')
-                : `${APP_PATHS.INVENTORY}?tab=batches_by_batch`
-          }
-        />
-        <Grid
-          container
-          marginTop={theme.spacing(3)}
-          marginBottom={theme.spacing(2)}
-          justifyContent='space-between'
-          alignItems='center'
-        >
-          <Box>
-            <Typography
-              sx={{
-                paddingLeft: theme.spacing(3),
-                fontSize: '14px',
-                fontWeight: 400,
-              }}
-            >
-              {batch?.batchNumber}
-            </Typography>
-            <Typography
-              sx={{
-                paddingLeft: theme.spacing(3),
-                fontSize: '20px',
-                fontWeight: 600,
-              }}
-            >
-              {getSpeciesLabel()}
-            </Typography>
-            <Typography
-              sx={{
-                paddingLeft: theme.spacing(3),
-                fontSize: '14px',
-                fontWeight: 400,
-              }}
-            >
-              {getNurseryLabel()}
-            </Typography>
+    <Page
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      title={title}
+      // Page's own left inset differs by breakpoint, putting the heading 16px in on a desktop and
+      // flush left on a phone; setting it here pins it to the 24px the three heading lines had
+      // before. The right stays at 0, as the original row had no padding there, so the Withdraw
+      // button reaches the same edge the content below it lines up with.
+      titleContainerStyle={{ paddingLeft: 3, paddingRight: 0, marginTop: theme.spacing(3) }}
+      // Without both sizes Page caps a non-string title at 8 of 12 columns on a phone, which would
+      // wrap the species name earlier than before. There is no leftComponent, hence the 0.
+      leftComponentGridSize={0}
+      rightComponentGridSize={4}
+      rightComponent={
+        isWithdrawable && batchId ? (
+          // Page right-aligns its action slot with text-align, which does not move a flex child, so
+          // the button keeps itself at the end of the row as the old space-between layout did.
+          <Box
+            margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0}
+            display='flex'
+            justifyContent='flex-end'
+            flexGrow={isMobile ? 1 : 0}
+          >
+            <Button label={strings.WITHDRAW} onClick={openWithdraw} style={isMobile ? { width: '100%' } : {}} />
           </Box>
-          {isWithdrawable && batchId && (
-            <Box margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0} display='flex' flexGrow={isMobile ? 1 : 0}>
-              <Button label={strings.WITHDRAW} onClick={openWithdraw} style={isMobile ? { width: '100%' } : {}} />
-            </Box>
-          )}
-          <Grid size={12}>
-            <PageSnackbar />
-          </Grid>
-        </Grid>
-      </PageHeaderWrapper>
+        ) : undefined
+      }
+    >
       {batchId && (
         <BatchWithdrawModal
           open={withdrawModalOpen}
@@ -206,35 +193,33 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
           batchIds={withdrawBatchIds}
         />
       )}
-      <Grid container ref={contentRef}>
-        {batch && (
-          <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
-            <BatchSummary batch={batch} />
-            <Box
-              display='flex'
-              flexDirection='column'
-              flexGrow={1}
-              sx={{
-                '& .MuiTabPanel-root[hidden]': {
-                  flexGrow: 0,
-                },
-                '& .MuiTabPanel-root': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                },
-                '& >.MuiBox-root': {
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flexGrow: 1,
-                },
-              }}
-            >
-              <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
-            </Box>
-          </Grid>
-        )}
-      </Grid>
-    </TfMain>
+      {batch && (
+        <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
+          <BatchSummary batch={batch} />
+          <Box
+            display='flex'
+            flexDirection='column'
+            flexGrow={1}
+            sx={{
+              '& .MuiTabPanel-root[hidden]': {
+                flexGrow: 0,
+              },
+              '& .MuiTabPanel-root': {
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              },
+              '& >.MuiBox-root': {
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1,
+              },
+            }}
+          >
+            <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+          </Box>
+        </Grid>
+      )}
+    </Page>
   );
 }
