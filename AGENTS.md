@@ -78,6 +78,27 @@ Check whether the current repo is using Jujutsu (jj) rather than plain git; if s
 
 ## Analytics (Mixpanel)
 
+### Keeping events up to date
+
+Product dashboards in Mixpanel depend on these events, and a missing event looks like users stopped doing something
+rather than like a bug.
+
+- The event catalog is `MIXPANEL_EVENTS` in `src/mixpanelEvents.ts`. Track events with `useTrackEvent`, and give every
+  new event a property shape in `MixpanelEventPropertyMap`
+- Before deleting, replacing or redesigning a screen, modal or flow, search it for `trackEvent`,
+  `useTrackModalAbandonment` and `MIXPANEL_EVENTS`. Carry the same events, with the same names and properties, over to
+  whatever replaces it. This includes removing a feature flag that switches users from an old flow to a new one.
+- When a new screen or modal lets users complete an action that already has an event elsewhere (e.g. a second place to
+  create a withdrawal), fire the same event from it, with a property saying which UI it came from, rather than
+  inventing a new event name
+- Modals that save something should use `useTrackModalAbandonment` and call its `markSubmitted()` on a successful save
+- Keep event names and property names stable. Renaming either breaks every report built on it; add a new property
+  instead of changing the meaning of an existing one.
+- If an event can no longer fire, say so in a comment next to it in `MIXPANEL_EVENTS` rather than silently leaving it
+- Call out added, changed or removed events in the PR description so whoever maintains the dashboards can update them
+
+### Product areas
+
 - Every Mixpanel event is tagged with a `product_area` derived from the first segment of the page's URL path, using
   `AREA_BY_FIRST_SEGMENT` in `src/utils/productArea.ts`
 - When adding a route to `APP_PATHS` in `src/constants.ts` whose first path segment isn't already in
