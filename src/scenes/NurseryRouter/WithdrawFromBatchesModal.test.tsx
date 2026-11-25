@@ -1,8 +1,10 @@
 import React from 'react';
 
+import { rs } from '@rstest/core';
 import { screen, waitFor, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw/http';
 
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { ScheduledDatePayload } from 'src/queries/generated/plantingSeasons';
 import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests';
 import WithdrawFromBatchesModal from 'src/scenes/NurseryRouter/WithdrawFromBatchesModal';
@@ -18,6 +20,16 @@ import {
   renderWithProviders,
   server,
 } from 'src/test-utils';
+
+// A stable instance, as the real provider gives, so the modal's tracking callbacks keep their identity.
+const { track, mixpanel } = rs.hoisted(() => {
+  const trackFn = rs.fn();
+  return { track: trackFn, mixpanel: { track: trackFn } };
+});
+rs.mock('react-mixpanel-browser', () => ({ useMixpanel: () => mixpanel }));
+
+const trackedWithdrawals = () =>
+  track.mock.calls.filter(([name]) => name === MIXPANEL_EVENTS.BATCH_WITHDRAWN).map(([, properties]) => properties);
 
 const PLANTING_SITE_ID = 2;
 const PLANTING_SEASON_ID = 1;
@@ -129,6 +141,7 @@ const buildScheduledDate = (overrides: Partial<ScheduledDatePayload> = {}): Sche
 const createdWithdrawal = { withdrawal: { id: WITHDRAWAL_ID } };
 
 beforeEach(() => {
+  track.mockClear();
   const batches = [BATCH_A, BATCH_B, BATCH_WITH_NOTHING_READY, BATCH_OF_OTHER_SPECIES].map(buildBatchForWithdrawResult);
 
   mockGet('/api/v1/projects', { projects: [] });
@@ -324,6 +337,15 @@ describe('WithdrawFromBatchesModal', () => {
         .toString(),
     });
     expect(uploads).toHaveLength(0);
+    expect(trackedWithdrawals()).toEqual([
+      expect.objectContaining({
+        source: 'planting_date_request',
+        purpose: 'Out Plant',
+        batch_count: 1,
+        seedling_count: 20,
+        has_photos: false,
+      }),
+    ]);
   });
 
   it('only sends the unsaved substrata when retrying after part of the withdrawal fails', async () => {
@@ -355,6 +377,7 @@ describe('WithdrawFromBatchesModal', () => {
       })
     );
     expect(closed).toBe(false);
+    expect(trackedWithdrawals()).toEqual([]);
 
     await user.click(button(strings.WITHDRAW));
 
@@ -369,6 +392,10 @@ describe('WithdrawFromBatchesModal', () => {
         .formatString(strings.BATCH_WITHDRAW_SUCCESS, '2', strings.BATCHES_PLURAL, '25', strings.SEEDLINGS_PLURAL)
         .toString(),
     });
+    // Counted once for the whole request, covering the substratum saved before the failure.
+    expect(trackedWithdrawals()).toEqual([
+      expect.objectContaining({ source: 'planting_date_request', batch_count: 2, seedling_count: 25 }),
+    ]);
   });
 
   it('attaches photos to the first saved withdrawal when a retry saves the rest', async () => {
@@ -435,6 +462,7 @@ describe('WithdrawFromBatchesModal', () => {
     // Closing would tell the user the plants were withdrawn when they were not.
     expect(closed).toBe(false);
     expect(button(strings.WITHDRAW)).toBeInTheDocument();
+    expect(trackedWithdrawals()).toEqual([]);
   });
 
   it('attaches the added photos to the withdrawal that was created', async () => {

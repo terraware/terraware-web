@@ -10,6 +10,9 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import Button from 'src/components/common/button/Button';
 import { useProjects } from 'src/hooks/useProjects';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   useCreateBatchWithdrawalMutation,
@@ -51,6 +54,8 @@ const WithdrawFromBatchesModal = ({
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
+  const markSubmitted = useTrackModalAbandonment('planting_date_withdraw', open);
   const { selectedOrganization } = useOrganization();
   const { availableProjects: projects } = useProjects();
 
@@ -251,6 +256,7 @@ const WithdrawFromBatchesModal = ({
           withdrawnDate: withdrawDate,
         }).unwrap();
         savedRef.current.firstWithdrawalId ??= response?.withdrawal?.id;
+        markSubmitted();
 
         // Saved, so a retry after a later substratum fails must not send these again.
         entries.forEach((e) => {
@@ -280,6 +286,13 @@ const WithdrawFromBatchesModal = ({
 
       const numBatches = savedRef.current.batchIds.size;
       const { total } = savedRef.current;
+      trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWN, {
+        purpose: 'Out Plant',
+        batch_count: numBatches,
+        has_photos: photoFiles.length > 0,
+        seedling_count: total,
+        source: 'planting_date_request',
+      });
       snackbar.toastSuccess(
         strings
           .formatString(
@@ -303,11 +316,13 @@ const WithdrawFromBatchesModal = ({
     createBatchWithdrawal,
     facilityId,
     handleClose,
+    markSubmitted,
     photoFiles,
     plantingSeasonId,
     plantingSiteId,
     scheduledPlantingDateId,
     snackbar,
+    trackEvent,
     uploadWithdrawalPhotos,
     withdrawByBatchSubstratum,
     withdrawDate,
