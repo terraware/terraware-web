@@ -164,3 +164,39 @@ it.each([false, true])('opens and closes an initially hidden search (V2: %s)', a
   await user.click(toggle);
   await waitFor(() => expect(screen.queryByRole('textbox')).not.toBeInTheDocument());
 });
+
+it.each([false, true])('restores accent and acronym matches from search state (V2: %s)', (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const props = {
+    supportsV2: true as const,
+    columns,
+    data: [{ name: 'Café' }, { name: 'Pacific Coast' }, { name: 'River' }],
+    clearAllFiltersLabel: 'Clear filters',
+    enableGlobalFilter: true,
+  };
+  const { rerender } = renderWithProviders(
+    <EditableTable {...props} tableOptions={{ state: { globalFilter: 'cafe' } }} />
+  );
+  expect(screen.getByRole('cell', { name: 'Café' })).toBeVisible();
+  expect(screen.queryByRole('cell', { name: 'Pacific Coast' })).not.toBeInTheDocument();
+
+  rerender(<EditableTable {...props} tableOptions={{ state: { globalFilter: 'PC' } }} />);
+  expect(screen.getByRole('cell', { name: 'Pacific Coast' })).toBeVisible();
+  expect(screen.queryByRole('cell', { name: 'Café' })).not.toBeInTheDocument();
+});
+
+it.each([false, true])('uses the nested empty fallback unless a top-level fallback is provided (V2: %s)', (flag) => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(flag);
+  const props = {
+    supportsV2: true as const,
+    columns,
+    data: [],
+    clearAllFiltersLabel: 'Clear filters',
+    tableOptions: { renderEmptyRowsFallback: () => 'Nested empty message' },
+  };
+  const { rerender } = renderWithProviders(<EditableTable {...props} />);
+  expect(screen.getByText('Nested empty message')).toBeVisible();
+  rerender(<EditableTable {...props} renderEmptyRowsFallback={() => 'Top-level empty message'} />);
+  expect(screen.getByText('Top-level empty message')).toBeVisible();
+  expect(screen.queryByText('Nested empty message')).not.toBeInTheDocument();
+});

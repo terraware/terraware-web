@@ -16,6 +16,7 @@ import {
 import { EditableTableProps } from '@terraware/web-components/components/EditableTable';
 import { omit } from 'lodash';
 import {
+  MRT_FilterFns,
   MRT_RowData,
   MRT_ShowHideColumnsButton,
   MRT_TableOptions,
@@ -62,9 +63,11 @@ type SharedOptions<TData extends MRT_RowData> = Pick<
     | 'onShowColumnFiltersChange'
     | 'onShowGlobalFilterChange'
     | 'onDensityChange'
-    | 'renderEmptyRowsFallback'
   > &
-  Pick<EditableTablePropsV2<TData>, 'muiTopToolbarProps' | 'muiTableBodyProps' | 'muiTableBodyRowProps'>;
+  Pick<
+    EditableTablePropsV2<TData>,
+    'muiTopToolbarProps' | 'muiTableBodyProps' | 'muiTableBodyRowProps' | 'renderEmptyRowsFallback'
+  >;
 
 export type SharedEditableTableProps<TData extends MRT_RowData> = Omit<
   EditableTableProps<TData>,
@@ -196,6 +199,7 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
       muiTopToolbarProps,
       muiTableBodyProps,
       muiTableBodyRowProps,
+      renderEmptyRowsFallback,
       onShowColumnFiltersChange,
       onShowGlobalFilterChange,
       onDensityChange,
@@ -218,6 +222,7 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
         muiTopToolbarProps={muiTopToolbarProps}
         muiTableBodyProps={muiTableBodyProps}
         muiTableBodyRowProps={muiTableBodyRowProps}
+        renderEmptyRowsFallback={props.renderEmptyRowsFallback ?? renderEmptyRowsFallback}
         tableOptions={{
           ...omit(options, [
             'defaultColumn',
@@ -225,8 +230,11 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
             'enableGrouping',
             'muiTablePaperProps',
             'muiTableProps',
-            'renderEmptyRowsFallback',
           ]),
+          globalFilterFn: (row, columnId, value, addMeta) =>
+            MRT_FilterFns.fuzzy(row as unknown as Parameters<typeof MRT_FilterFns.fuzzy>[0], columnId, value, (meta) =>
+              addMeta?.(meta)
+            ),
           state,
           initialState,
         }}
