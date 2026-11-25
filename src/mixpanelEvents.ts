@@ -73,6 +73,7 @@ export enum MIXPANEL_EVENTS {
   // --- Friction / failure (Phase 2) ---
   FORM_VALIDATION_FAILED = 'Form Validation Failed',
   SAVE_FAILED = 'Save Failed',
+  MODAL_OPENED = 'Modal Opened',
   MODAL_ABANDONED = 'Modal Abandoned',
 
   // --- Species Intelligence ---
@@ -235,6 +236,9 @@ export type MixpanelEventPropertyMap = {
   [MIXPANEL_EVENTS.SAVE_FAILED]: {
     entity_type: string;
     error_details?: string;
+  };
+  [MIXPANEL_EVENTS.MODAL_OPENED]: {
+    modal_name: string;
   };
   [MIXPANEL_EVENTS.MODAL_ABANDONED]: {
     modal_name: string;
