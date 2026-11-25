@@ -1309,6 +1309,8 @@ export type ReplaceObservationPlotResponsePayload = {
   deletedObservationIds: number[];
   /** IDs of other upcoming observations that included the plot and were given new plots because it was replaced long-term. */
   reassignedObservationIds: number[];
+  /** True if the observation was completed because the plot was its last incomplete plot and no replacement plot could be found. */
+  observationCompleted: boolean;
   /** True if the observation was deleted because the plot was its only plot and no replacement plot could be found. */
   observationDeleted: boolean;
   /** IDs of monitoring plots that were removed from the observation. Will usually include the requested plot ID, but may be empty if the replacement request couldn't be satisfied. */

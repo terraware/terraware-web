@@ -1889,6 +1889,7 @@ REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,No se añadirán parcelas: no hay parcelas disponibles para reasignación.,4f5db53d
+REASSIGNMENT_REQUEST_OBSERVATION_COMPLETED,Esta observación se completó porque todas las parcelas restantes han sido observadas.,6ebad5ac
 REASSIGNMENT_REQUEST_OBSERVATION_DELETED,Esta observación fue eliminada porque no había una parcela de reemplazo disponible para su única parcela.,79a79562
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED,La parcela permanente {0} se agregó de forma permanente.,1ff9fe21
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,La parcela permanente {0} fue eliminada de forma permanente.,d83a86a5

@@ -1888,6 +1888,7 @@ REASSIGNMENT,Réaffectation,79a8c3fe
 REASSIGNMENT_DURATION,Durée de la réaffectation,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,Aucune parcelle ne sera ajoutée.,ebf0fa62
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,Aucune parcelle ne sera ajoutée : aucune parcelle disponible pour la réaffectation.,4f5db53d
+REASSIGNMENT_REQUEST_OBSERVATION_COMPLETED,Cette observation a été terminée car toutes les parcelles restantes ont été observées.,6ebad5ac
 REASSIGNMENT_REQUEST_OBSERVATION_DELETED,Cette observation a été supprimée car aucune parcelle de remplacement n’était disponible pour son unique parcelle.,79a79562
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED,La parcelle permanente {0} a été ajoutée de façon permanente.,1ff9fe21
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,La parcelle permanente {0} a été supprimée de façon permanente.,d83a86a5
