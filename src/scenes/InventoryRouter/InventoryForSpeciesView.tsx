@@ -1,13 +1,10 @@
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid, Typography, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
-import PageSnackbar from 'src/components/PageSnackbar';
-import BackToLink from 'src/components/common/BackToLink';
+import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import InventorySeedlingsTableForSpecies from 'src/scenes/InventoryRouter/view/InventorySeedlingsTableForSpecies';
@@ -29,7 +26,6 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
   const { species } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
-  const contentRef = useRef(null);
   const theme = useTheme();
 
   useEffect(() => {
@@ -57,44 +53,37 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
     navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
   };
 
-  return (
-    <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <BackToLink id='back' name={strings.INVENTORY} to={`${APP_PATHS.INVENTORY}?${query.toString()}`} />
-        <Grid container>
-          <Typography
-            sx={{
-              marginTop: theme.spacing(3),
-              marginBottom: theme.spacing(2),
-              paddingLeft: theme.spacing(3),
-              fontSize: '20px',
-              fontWeight: 600,
-              fontStyle: 'italic',
-            }}
-          >
-            {getSpeciesLabel()}
-          </Typography>
-          <Grid size={12}>
-            <PageSnackbar />
-          </Grid>
-        </Grid>
-      </PageHeaderWrapper>
-      {speciesId && (
-        <Grid container ref={contentRef}>
-          <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
-            <InventorySummaryForSpecies speciesId={Number(speciesId)} />
+  // A single crumb renders as the back link to the inventory list.
+  const crumbs = useMemo(
+    () => [{ name: strings.INVENTORY, to: `${APP_PATHS.INVENTORY}?${query.toString()}` }],
+    [query]
+  );
 
-            <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
-              <InventorySeedlingsTableForSpecies
-                speciesId={Number(speciesId)}
-                openBatchNumber={openBatchNumber}
-                onUpdateOpenBatch={setBatchNumber}
-                origin={'Species'}
-              />
-            </Card>
-          </Grid>
+  return (
+    <Page
+      crumbs={crumbs}
+      hierarchicalCrumbs={false}
+      title={getSpeciesLabel()}
+      // Page's own insets differ by breakpoint, putting the title 40px in on a desktop and flush
+      // left on a phone. Setting the whole inset on the container instead pins it to the 24px it
+      // had before this view used Page, at every width, and lines it up with the cards below.
+      titleContainerStyle={{ paddingX: 3 }}
+      titleStyle={{ fontSize: '20px', fontStyle: 'italic', marginTop: theme.spacing(3), paddingLeft: 0 }}
+    >
+      {speciesId && (
+        <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
+          <InventorySummaryForSpecies speciesId={Number(speciesId)} />
+
+          <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
+            <InventorySeedlingsTableForSpecies
+              speciesId={Number(speciesId)}
+              openBatchNumber={openBatchNumber}
+              onUpdateOpenBatch={setBatchNumber}
+              origin={'Species'}
+            />
+          </Card>
         </Grid>
       )}
-    </TfMain>
+    </Page>
   );
 }
