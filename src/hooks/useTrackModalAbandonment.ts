@@ -4,9 +4,6 @@ import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 
 import { useTrackEvent } from './useTrackEvent';
 
-// Fires MODAL_OPENED each time the modal becomes visible, so abandonment can be
-// read as a rate (abandoned / opened) per modal_name.
-//
 // Fires MODAL_ABANDONED when the modal was actually visible to the user and
 // then closed (or unmounted while open) without markSubmitted() being called
 // first. Call markSubmitted() inside any successful-save path so a successful
@@ -62,7 +59,6 @@ export const useTrackModalAbandonment = (modalName: string, isOpen: boolean): ((
     if (isOpen && openedAtRef.current === null) {
       openedAtRef.current = Date.now();
       wasSubmittedRef.current = false;
-      trackEventRef.current(MIXPANEL_EVENTS.MODAL_OPENED, { modal_name: modalNameRef.current });
     } else if (!isOpen && openedAtRef.current !== null) {
       fireAbandonment();
     }
