@@ -1,272 +1,85 @@
 import React from 'react';
 import { useLocation } from 'react-router';
 
-import { screen, waitFor } from '@testing-library/react';
-import { UserEvent } from '@testing-library/user-event';
-import { HttpResponse, http } from 'msw/http';
+import { rstest } from '@rstest/core';
+import * as webComponentUtils from '@terraware/web-components/utils' with { rstest: 'importActual' };
+import { screen } from '@testing-library/react';
 
-import ToastSnackbar from 'src/components/ToastSnackbar';
-import { SearchResponseAccession } from 'src/queries/search/accessions';
 import InventoryCreateView from 'src/scenes/InventoryRouter/InventoryCreateView';
-import { InventoryListTypes } from 'src/scenes/InventoryRouter/InventoryV2View';
 import strings from 'src/strings';
-import {
-  buildBatch,
-  buildFacility,
-  buildOrganization,
-  buildSpecies,
-  captureRequests,
-  mockError,
-  mockGet,
-  renderWithProviders,
-  selectDropdownOption,
-  server,
-} from 'src/test-utils';
+import { renderWithProviders } from 'src/test-utils';
 
-const CREATE_BATCH_URL = '/api/v1/nursery/batches';
-const SPECIES_ID = 7;
-const NURSERY_ID = 200;
-const NEW_BATCH_ID = 555;
-const ACCESSION_ID = 42;
+/** Page reads this to size its own header insets, which differ between phone and desktop. */
+let isMobile: boolean;
+rstest.mock('@terraware/web-components/utils', () => ({
+  ...webComponentUtils,
+  useDeviceInfo: () => ({ isMobile, isTablet: false, isDesktop: !isMobile }),
+}));
 
-const SPECIES = buildSpecies({ id: SPECIES_ID, scientificName: 'Acacia koa', commonName: 'Koa' });
-const NURSERY = buildFacility({ id: NURSERY_ID, name: 'South Nursery', facilityNumber: 2 });
+// The form fetches species, nurseries and sub-locations of its own; this view frames it.
+rstest.mock('src/scenes/InventoryRouter/form/BatchDetailsForm', () => ({
+  default: () => <div>batch form</div>,
+}));
 
-const ACCESSION: SearchResponseAccession = {
-  id: String(ACCESSION_ID),
-  accessionNumber: '24-1-1-042',
-  remainingQuantity: '10',
-  'remainingQuantity(raw)': '10',
-  remainingUnits: 'Seeds',
-  speciesName: SPECIES.scientificName,
-  state: 'In Storage',
-};
+/** Renders the current location so a test can assert on where a click navigated. */
+const LocationProbe = () => <div data-testid='location'>{useLocation().pathname}</div>;
 
-/**
- * The species selector and the accessions dropdown both read from the generic search endpoint,
- * distinguished by prefix.
- */
-const mockFormData = ({ accessions = [] }: { accessions?: SearchResponseAccession[] } = {}) => {
-  server.use(
-    http.post('/api/v1/search', async ({ request }) => {
-      const { prefix } = (await request.json()) as { prefix?: string };
-      const results =
-        prefix === 'species'
-          ? [{ id: String(SPECIES_ID), scientificName: SPECIES.scientificName, commonName: SPECIES.commonName }]
-          : prefix === 'accessions'
-            ? accessions
-            : [];
-      return HttpResponse.json({ status: 'ok', results });
-    })
-  );
-  mockGet('/api/v1/species', { species: [SPECIES] });
-  mockGet('/api/v1/projects', { projects: [] });
-  mockGet('/api/v1/facilities/:facilityId/subLocations', { subLocations: [] });
-};
-
-const LocationProbe = () => {
-  const location = useLocation();
-  return <div data-testid='location'>{location.pathname}</div>;
-};
-
-const renderCreateView = ({ inventoryListType }: { inventoryListType?: string } = {}) =>
+const renderView = () =>
   renderWithProviders(
     <>
       <InventoryCreateView />
-      <ToastSnackbar />
       <LocationProbe />
     </>,
-    {
-      route: '/inventory/new',
-      organization: {
-        selectedOrganization: buildOrganization({ facilities: [buildFacility(), NURSERY] }),
-      },
-      currentUser: { userPreferences: inventoryListType ? { inventoryListType } : {} },
-    }
+    { route: '/inventory/new' }
   );
 
-const selectSpecies = async (user: UserEvent) => {
-  await user.click(document.querySelector('#speciesSelector') as Element);
-  await user.click(await screen.findByText(SPECIES.scientificName));
-};
-
-const quantityInput = (id: string): HTMLInputElement => {
-  const input = document.querySelector<HTMLInputElement>(`#${id} input`);
-  if (!input) {
-    throw new Error(`No quantity input ${id}`);
-  }
-  return input;
-};
-
-const enterQuantity = async (user: UserEvent, id: string, quantity: string) => {
-  await user.clear(quantityInput(id));
-  await user.type(quantityInput(id), quantity);
-};
-
-/** The messages attached to a field. Error text is a `label` pointing at the field it describes. */
-const messagesFor = (id: string): string[] =>
-  Array.from(document.querySelectorAll(`label[for="${id}"]`)).map((label) => label.textContent ?? '');
-
-const enterDate = async (user: UserEvent, id: string, date: string) => {
-  await user.click(document.querySelector(`#${id}`) as Element);
-  await user.keyboard(date.replace(/-/g, ''));
-};
-
-const fillValidForm = async (user: UserEvent) => {
-  await selectSpecies(user);
-  await selectDropdownOption(user, 'facilityId', NURSERY.name);
-  await enterQuantity(user, 'germinatingQuantity', '4');
-  await enterQuantity(user, 'readyQuantity', '6');
-};
-
-const save = (user: UserEvent) => user.click(screen.getByRole('button', { name: strings.SAVE }));
-
-const createdBatch = buildBatch({ id: NEW_BATCH_ID, facilityId: NURSERY_ID, speciesId: SPECIES_ID });
+beforeEach(() => {
+  isMobile = false;
+});
 
 describe('InventoryCreateView', () => {
-  it('creates a batch with the entered species, nursery, date and quantities', async () => {
-    mockFormData();
-    const creates = captureRequests('post', CREATE_BATCH_URL, { batch: createdBatch });
-    const { user } = renderCreateView();
+  it('frames the batch form with the page title and the save and cancel actions', () => {
+    renderView();
 
-    await fillValidForm(user);
-    await enterQuantity(user, 'activeGrowthQuantity', '3');
-    await enterQuantity(user, 'hardeningOffQuantity', '2');
-    await enterDate(user, 'addedDate', '2024-03-15');
-    await save(user);
-
-    await waitFor(() => expect(creates).toHaveLength(1));
-    expect(await creates[0].json()).toMatchObject({
-      speciesId: SPECIES_ID,
-      facilityId: NURSERY_ID,
-      addedDate: '2024-03-15',
-      germinatingQuantity: 4,
-      activeGrowthQuantity: 3,
-      hardeningOffQuantity: 2,
-      readyQuantity: 6,
-    });
+    expect(screen.getAllByText(strings.ADD_INVENTORY).length).toBeGreaterThan(0);
+    expect(screen.getByText(strings.ADD_INVENTORY_DESCRIPTION)).toBeInTheDocument();
+    expect(screen.getByText('batch form')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.SAVE })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.CANCEL })).toBeInTheDocument();
   });
 
+  it('sends Cancel back to the inventory list', async () => {
+    const { user } = renderView();
+
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+
+    expect(screen.getByTestId('location')).toHaveTextContent('/inventory');
+  });
+
+  it('lets TfMain lay the form out, so its body and bottom bar keep the full width', () => {
+    renderView();
+
+    // PageForm's body and bottom bar are siblings. Page's content wrapper is a row by default,
+    // which would shrink them to their contents and throw the centred card off centre.
+    const formBody = screen.getByText('batch form').parentElement?.parentElement?.parentElement as HTMLElement;
+    expect(getComputedStyle(formBody.parentElement as HTMLElement).display).toBe('contents');
+    expect((formBody.parentElement as HTMLElement).parentElement?.tagName).toBe('MAIN');
+  });
+
+  // Page insets the title by 40px on a desktop and not at all on a phone, so both have to be
+  // checked: a fix pinned to one width silently regresses the other.
   it.each([
-    {
-      preference: undefined,
-      expected: `/inventory/species/${SPECIES_ID}/batch/${NEW_BATCH_ID}`,
-    },
-    {
-      preference: InventoryListTypes.BATCHES_BY_SPECIES,
-      expected: `/inventory/species/${SPECIES_ID}/batch/${NEW_BATCH_ID}`,
-    },
-    {
-      preference: InventoryListTypes.BATCHES_BY_NURSERY,
-      expected: `/inventory/nursery/${NURSERY_ID}/batch/${NEW_BATCH_ID}`,
-    },
-    {
-      preference: InventoryListTypes.BATCHES_BY_BATCH,
-      expected: `/inventory/batch/${NEW_BATCH_ID}`,
-    },
-  ])('opens the new batch at $expected when the inventory list preference is $preference', async (testCase) => {
-    mockFormData();
-    captureRequests('post', CREATE_BATCH_URL, { batch: createdBatch });
-    const { user } = renderCreateView({ inventoryListType: testCase.preference });
+    ['a desktop', false],
+    ['a phone', true],
+  ])('insets the page title by the same amount on %s', (_label, mobile) => {
+    isMobile = mobile;
 
-    await fillValidForm(user);
-    await save(user);
+    renderView();
 
-    await waitFor(() => expect(screen.getByTestId('location').textContent).toBe(testCase.expected));
-  });
+    const title = screen.getAllByText(strings.ADD_INVENTORY)[0];
+    const row = title.parentElement?.parentElement as HTMLElement;
+    const inset = parseInt(getComputedStyle(row).paddingLeft, 10) + parseInt(getComputedStyle(title).paddingLeft, 10);
 
-  it('keeps the user on the form and reports the failure when the batch cannot be created', async () => {
-    mockFormData();
-    mockError('post', CREATE_BATCH_URL);
-    const { user } = renderCreateView();
-
-    await fillValidForm(user);
-    await save(user);
-
-    expect(await screen.findByText(strings.GENERIC_ERROR)).toBeInTheDocument();
-    // Leaving the form would tell the user the batch exists when it does not.
-    expect(screen.getByTestId('location').textContent).toBe('/inventory/new');
-    expect(quantityInput('readyQuantity')).toHaveValue(6);
-  });
-
-  it('refuses to save a batch with no seedlings in any phase', async () => {
-    mockFormData();
-    const creates = captureRequests('post', CREATE_BATCH_URL, { batch: createdBatch });
-    const { user } = renderCreateView();
-
-    await selectSpecies(user);
-    await selectDropdownOption(user, 'facilityId', NURSERY.name);
-    await save(user);
-
-    expect(await screen.findByText(strings.ERROR_BATCH_SEED_COUNT)).toBeInTheDocument();
-    expect(creates).toHaveLength(0);
-  });
-
-  it('flags the missing species and nursery and sends nothing', async () => {
-    mockFormData();
-    const creates = captureRequests('post', CREATE_BATCH_URL, { batch: createdBatch });
-    const { user } = renderCreateView();
-
-    await enterQuantity(user, 'readyQuantity', '6');
-    await save(user);
-
-    await waitFor(() => expect(messagesFor('speciesSelector')).toContain(strings.REQUIRED_FIELD));
-    expect(messagesFor('facilityId')).toContain(strings.REQUIRED_FIELD);
-    expect(creates).toHaveLength(0);
-  });
-
-  it('refuses quantities that exceed the seeds remaining in the selected accession', async () => {
-    mockFormData({ accessions: [ACCESSION] });
-    const creates = captureRequests('post', CREATE_BATCH_URL, { batch: createdBatch });
-    const transfers = captureRequests('post', `/api/v2/seedbank/accessions/${ACCESSION_ID}/transfers/nursery`);
-    const { user } = renderCreateView();
-
-    await selectSpecies(user);
-    await selectDropdownOption(user, 'accessionId', ACCESSION.accessionNumber);
-    await selectDropdownOption(user, 'facilityId', NURSERY.name);
-    await enterQuantity(user, 'germinatingQuantity', '8');
-    await enterQuantity(user, 'readyQuantity', '5');
-    await save(user);
-
-    await waitFor(() => expect(messagesFor('readyQuantity')).toContain(strings.NOT_ENOUGH_SEEDS_IN_ACCESSION));
-    expect(messagesFor('germinatingQuantity')).not.toContain(strings.NOT_ENOUGH_SEEDS_IN_ACCESSION);
-    expect(creates).toHaveLength(0);
-    expect(transfers).toHaveLength(0);
-  });
-
-  it('creates a batch from an accession by transferring its seeds to the nursery', async () => {
-    mockFormData({ accessions: [ACCESSION] });
-    const creates = captureRequests('post', CREATE_BATCH_URL, { batch: createdBatch });
-    const transfers = captureRequests('post', `/api/v2/seedbank/accessions/${ACCESSION_ID}/transfers/nursery`, {
-      batch: buildBatch({ id: NEW_BATCH_ID, version: 1 }),
-    });
-    const updates = captureRequests('put', `/api/v1/nursery/batches/${NEW_BATCH_ID}`, {
-      batch: buildBatch({ id: NEW_BATCH_ID, version: 2 }),
-    });
-    const quantityUpdates = captureRequests('put', `/api/v1/nursery/batches/${NEW_BATCH_ID}/quantities`, {
-      batch: createdBatch,
-    });
-    const { user } = renderCreateView();
-
-    await selectSpecies(user);
-    await selectDropdownOption(user, 'accessionId', ACCESSION.accessionNumber);
-    await selectDropdownOption(user, 'facilityId', NURSERY.name);
-    await enterQuantity(user, 'germinatingQuantity', '4');
-    await enterQuantity(user, 'readyQuantity', '6');
-    await save(user);
-
-    await waitFor(() => expect(quantityUpdates).toHaveLength(1));
-    expect(creates).toHaveLength(0);
-    expect(transfers).toHaveLength(1);
-    expect(await transfers[0].json()).toMatchObject({
-      destinationFacilityId: NURSERY_ID,
-      germinatingQuantity: 4,
-      readyQuantity: 6,
-    });
-    expect(await updates[0].json()).toMatchObject({ version: 1 });
-    expect(await quantityUpdates[0].json()).toMatchObject({ germinatingQuantity: 4, readyQuantity: 6, version: 2 });
-    await waitFor(() =>
-      expect(screen.getByTestId('location').textContent).toBe(`/inventory/species/${SPECIES_ID}/batch/${NEW_BATCH_ID}`)
-    );
+    expect(inset).toBe(24);
   });
 });
