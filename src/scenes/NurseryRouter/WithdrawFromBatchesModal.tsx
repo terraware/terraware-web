@@ -374,7 +374,7 @@ const WithdrawFromBatchesModal = ({
       open={open}
       onClose={handleClose}
       title={strings.WITHDRAW_FROM_BATCHES}
-      size='large'
+      size='x-large'
       skrim
       middleButtons={middleButtons}
       scrolled
