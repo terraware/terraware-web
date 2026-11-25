@@ -4,23 +4,14 @@ import { useParams } from 'react-router';
 import { Typography, useTheme } from '@mui/material';
 import { EditableTableColumn } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
-import {
-  MRT_Cell,
-  MRT_Row,
-  MRT_ShowHideColumnsButton,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
-} from 'material-react-table';
+import { MRT_Cell, MRT_ColumnFiltersState } from 'material-react-table';
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
@@ -32,9 +23,21 @@ import { ObservationState, getPlotStatus } from 'src/types/Observations';
 import { TABLES } from 'src/types/Tables';
 import { getBiomassPlotTotals, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
+import { normalizeDateFilterBounds, removeEmptyRangeFilters } from 'src/utils/tableColumnFilters';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+const normalizeDateBounds = normalizeDateFilterBounds('completedDate');
+const removeEmptyRanges = removeEmptyRangeFilters(
+  'plantingDensity',
+  'survivalRate',
+  'monitoringPlotNumber',
+  'totalLive',
+  'totalPlants',
+  'totalSpecies'
+);
+const normalizeColumnFilters = (filters: MRT_ColumnFiltersState) => removeEmptyRanges(normalizeDateBounds(filters));
 
 type MonitoringPlotRow = {
   observationId: number;
@@ -105,7 +108,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(tableDefinition, { persistFilters: true });
+  } = useTableState(tableDefinition, { normalizeColumnFilters, persistFilters: true });
 
   const { data: observationResultsResponse, isLoading } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
@@ -351,6 +354,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       <EditableTable
+        supportsV2
         key='observation-stratum-monitoring-plot-table'
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={columns}
@@ -358,20 +362,22 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
         enableSorting={true}
         enableGlobalFilter={true}
         enableColumnFilters={true}
+        enableFilterByColumnMenuItem
         enableColumnOrdering={true}
         storageKey={tableDefinition.storageKey}
         enablePagination={false}
         enableTopToolbar={true}
         enableBottomToolbar={false}
         initialSorting={[{ id: 'monitoringPlotNumber', desc: false }]}
-        renderToolbarInternalActions={({ table }) => (
-          <TableToolbarActions>
-            <MRT_ToggleGlobalFilterButton table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-            <MRT_ShowHideColumnsButton table={table} />
-            <MRT_ToggleDensePaddingButton table={table} />
-            <MRT_ToggleFullScreenButton table={table} />
-          </TableToolbarActions>
+        renderToolbarInternalActions={(context) => (
+          <EditableTableToolbar
+            {...context}
+            showGlobalFilterButton
+            showColumnFiltersButton
+            showColumnsButton
+            showDensityButton
+            showFullScreenButton
+          />
         )}
         renderTopToolbarCustomActions={({ table }) => (
           <CurrentView organizationId={selectedOrganization?.id} table={table} tableDefinition={tableDefinition} />
@@ -406,7 +412,7 @@ export default function MonitoringPlotList({ isBiomass = false }: MonitoringPlot
           onShowGlobalFilterChange: setShowGlobalFilter,
           enableColumnPinning: true,
           enableGrouping: false,
-          muiTableBodyRowProps: ({ row }: { row: MRT_Row<MonitoringPlotRow> }) => ({
+          muiTableBodyRowProps: ({ row }) => ({
             id: `row${row.index + 1}`,
             sx: {
               '& td': { borderBottom: 'none' },

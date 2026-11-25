@@ -11,6 +11,30 @@ const normalizeEntry = (entry: unknown) => {
   return entry === null ? '' : entry;
 };
 
+export const normalizeDateFilterBounds =
+  (...columnIds: string[]) =>
+  (filters: MRT_ColumnFiltersState): MRT_ColumnFiltersState =>
+    filters.map((filter) =>
+      columnIds.includes(filter.id) && Array.isArray(filter.value)
+        ? {
+            ...filter,
+            value: (filter.value as unknown[]).map((value) =>
+              typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? dayjs(value) : value
+            ),
+          }
+        : filter
+    );
+
+export const removeEmptyRangeFilters =
+  (...columnIds: string[]) =>
+  (filters: MRT_ColumnFiltersState): MRT_ColumnFiltersState =>
+    filters.filter(
+      ({ id, value }) =>
+        !columnIds.includes(id) ||
+        !Array.isArray(value) ||
+        value.some((bound) => bound !== null && bound !== undefined && bound !== '')
+    );
+
 /**
  * Repairs column filters read back from localStorage.
  *

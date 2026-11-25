@@ -1,7 +1,38 @@
 import dayjs from 'dayjs';
 import { MRT_ColumnFiltersState } from 'material-react-table';
 
-import normalizePersistedColumnFilters from './tableColumnFilters';
+import normalizePersistedColumnFilters, {
+  normalizeDateFilterBounds,
+  removeEmptyRangeFilters,
+} from './tableColumnFilters';
+
+it('drops restored cleared numeric ranges without dropping a zero bound or unrelated filters', () => {
+  const normalize = removeEmptyRangeFilters('totalLive', 'totalPlants', 'plantingDensity', 'survivalRate');
+  const partial = { id: 'survivalRate', value: [0, ''] };
+  const unrelated = { id: 'stratumName', value: ['Coast'] };
+  expect(
+    normalize(
+      normalizePersistedColumnFilters([
+        { id: 'totalLive', value: [null, null] },
+        { id: 'totalPlants', value: ['', ''] },
+        { id: 'plantingDensity', value: [undefined, undefined] },
+        partial,
+        unrelated,
+      ])
+    )
+  ).toEqual([partial, unrelated]);
+});
+
+it('restores a V2 date bound for MRT without converting date-like select values', () => {
+  const filters = [
+    { id: 'completedDate', value: ['', '2024-06-30'] },
+    { id: 'name', value: ['2024-06-30'] },
+  ];
+  expect(normalizeDateFilterBounds('completedDate')(filters)).toEqual([
+    { id: 'completedDate', value: ['', dayjs('2024-06-30')] },
+    filters[1],
+  ]);
+});
 
 describe('normalizePersistedColumnFilters', () => {
   it('returns an empty list for an empty filter list', () => {
