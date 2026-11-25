@@ -8,18 +8,12 @@ import {
   MRT_Cell,
   MRT_ColumnOrderState,
   MRT_PaginationState,
-  MRT_ShowHideColumnsButton,
   MRT_SortingState,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
   MRT_VisibilityState,
 } from 'material-react-table';
 
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
@@ -41,6 +35,7 @@ import {
 import { SeedWithdrawalPurpose } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { TABLES } from 'src/types/Tables';
+import { normalizeDateFilterBounds } from 'src/utils/tableColumnFilters';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -84,6 +79,8 @@ const getAccessionLocation = (accessionId: number): string =>
 
 const getWithdrawalDetailsLocation = (withdrawalId: number): string =>
   APP_PATHS.SEEDS_WITHDRAWALS_DETAILS.replace(':withdrawalId', String(withdrawalId));
+
+const normalizeColumnFilters = normalizeDateFilterBounds('date');
 
 const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDate?: string } | undefined => {
   if (!dateFilterValue || !Array.isArray(dateFilterValue)) {
@@ -140,6 +137,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
   } = useTableState(TABLE, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
+    normalizeColumnFilters,
     persistedMultiSelectColumnIds: ['destination', PROJECT_COLUMN_ID, 'purpose', 'speciesName'],
     persistFilters: true,
   });
@@ -462,6 +460,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
 
   return (
     <EditableTable
+      supportsV2
       key='seeds-withdrawals-table'
       clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
       columns={columns}
@@ -470,6 +469,7 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       enableSorting={true}
       enableGlobalFilter={true}
       enableColumnFilters={true}
+      enableFilterByColumnMenuItem
       enableColumnOrdering={true}
       storageKey={TABLE.storageKey}
       enablePagination={true}
@@ -480,6 +480,23 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
       enableHiding={true}
       enableColumnDragging={!isMobile}
       positionGlobalFilter={'right'}
+      renderToolbarInternalActions={(context) => (
+        <EditableTableToolbar
+          {...context}
+          showGlobalFilterButton
+          showColumnFiltersButton
+          showColumnsButton
+          showDensityButton
+          showFullScreenButton
+          leadingActions={
+            <Tooltip title={strings.EXPORT}>
+              <IconButton onClick={() => void onExport()}>
+                <Icon name='iconExport' size='medium' />
+              </IconButton>
+            </Tooltip>
+          }
+        />
+      )}
       renderTopToolbarCustomActions={({ table }) => (
         <CurrentView
           defaultSettings={defaultViewSettings}
@@ -516,20 +533,6 @@ export default function SeedsWithdrawalsTable(): JSX.Element {
         rowCount: totalRowCount,
         enableColumnPinning: true,
         enableGrouping: false,
-        renderToolbarInternalActions: ({ table }) => (
-          <TableToolbarActions>
-            <Tooltip title={strings.EXPORT}>
-              <IconButton onClick={() => void onExport()}>
-                <Icon name='iconExport' size='medium' />
-              </IconButton>
-            </Tooltip>
-            <MRT_ToggleGlobalFilterButton table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-            <MRT_ShowHideColumnsButton table={table} />
-            <MRT_ToggleDensePaddingButton table={table} />
-            <MRT_ToggleFullScreenButton table={table} />
-          </TableToolbarActions>
-        ),
         muiTableBodyProps: {
           sx: {
             '& tr:nth-of-type(odd) > td': {

@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { screen, waitFor, within } from '@testing-library/react';
+import { getStrings } from '@terraware/web-components';
+import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw/http';
 
@@ -213,6 +214,31 @@ describe('SeedsWithdrawalsTable', () => {
 
     expect(screen.queryByPlaceholderText(new RegExp(strings.QUANTITY, 'i'))).not.toBeInTheDocument();
   });
+
+  it('sends an open-ended server date range from the V2 filter', async () => {
+    mockGet('/api/v1/users/me/preferences', { preferences: { editableTableV2: true } });
+    const results = [buildSearchResult()];
+    const { user } = renderTable(results);
+    await screen.findByRole('cell', { name: 'Acacia koa' });
+    await user.click(screen.getByRole('button', { name: /show.*hide filters/i }));
+    const { FILTER, MIN } = getStrings();
+    const input = await screen.findByLabelText(`${FILTER}: ${strings.DATE} ${MIN}`);
+    const requests = captureRequests('post', '/api/v1/search', { results });
+    fireEvent.change(input, { target: { value: '2025-02-01' } });
+    await waitFor(async () => {
+      const bodies = await Promise.all(requests.map((request) => request.clone().json()));
+      expect(bodies).toContainEqual(
+        expect.objectContaining({
+          search: expect.objectContaining({
+            children: expect.arrayContaining([
+              { operation: 'field', field: 'date', type: 'Range', values: ['2025-02-01', '9999-12-31'] },
+            ]),
+          }),
+        })
+      );
+    });
+  });
+
   it('returns to the first page when the search term changes', async () => {
     mockGet('/api/v1/projects', { projects: [] });
     mockPost('/api/v1/search/count', { count: 250 });
