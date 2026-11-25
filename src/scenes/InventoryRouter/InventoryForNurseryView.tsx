@@ -53,7 +53,8 @@ export default function InventoryForNurseryView(): JSX.Element {
       title={strings
         .formatString(strings.BATCHES_AT, selectedOrganization ? getNurseryName(nurseryId, selectedOrganization) : '')
         .toString()}
-      titleStyle={{ fontSize: '20px', marginTop: theme.spacing(3), paddingLeft: theme.spacing(1) }}
+      titleContainerStyle={{ paddingX: 3 }}
+      titleStyle={{ fontSize: '20px', marginTop: theme.spacing(3), paddingLeft: 0 }}
     >
       <Grid sx={{ display: 'flex', flexDirection: 'column' }} size={12}>
         <InventorySummaryForNursery nurseryId={nurseryId} />
