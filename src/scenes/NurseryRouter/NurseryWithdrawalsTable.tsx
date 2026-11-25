@@ -730,10 +730,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }
   }, [pagination.pageIndex, pagination.pageSize, searchArgs, searchNurseryWithdrawals]);
 
-  // Reset to page 0 when filters change
   useEffect(() => {
-    setPagination((prev) => ({ ...prev, pageIndex: 0 }));
-  }, [columnFilters]);
+    setPagination((prev) => (prev.pageIndex === 0 ? prev : { ...prev, pageIndex: 0 }));
+  }, [columnFilters, debouncedSearchTerm]);
 
   // Apply URL params as column filters once on mount, then strip them from the URL.
   useEffect(() => {
