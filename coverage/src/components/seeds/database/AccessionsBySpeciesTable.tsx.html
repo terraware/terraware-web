@@ -622,7 +622,10 @@
 <a name='L557'></a><a href='#L557'>557</a>
 <a name='L558'></a><a href='#L558'>558</a>
 <a name='L559'></a><a href='#L559'>559</a>
-<a name='L560'></a><a href='#L560'>560</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L560'></a><a href='#L560'>560</a>
+<a name='L561'></a><a href='#L561'>561</a>
+<a name='L562'></a><a href='#L562'>562</a>
+<a name='L563'></a><a href='#L563'>563</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -978,6 +981,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -985,22 +989,24 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
@@ -1536,31 +1542,34 @@ export default function AccessionsBySpeciesTable({
     ];
   }, [activeLocale, strings, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
 &nbsp;
-  const downloadReportHandler = useCallback(<span class="fstat-no" title="function not covered" >(table: MRT_TableInstance&lt;SpeciesRow&gt;) =&gt; {</span>
-    const filteredRows = <span class="cstat-no" title="statement not covered" >table.getSortedRowModel().rows;</span>
-    const visibleColumns = table
-      .getVisibleLeafColumns()
-      .filter(<span class="fstat-no" title="function not covered" >(col) =&gt; <span class="cstat-no" title="statement not covered" >!col.id.startsWith('mrt-') &amp;&amp; typeof col.columnDef.header === 'string')</span></span>;
-    const csvColumns = visibleColumns.map(<span class="fstat-no" title="function not covered" >(col) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
-      key: col.id,
-      displayLabel: col.columnDef.header as string,
-    }));
-    const csvData = <span class="cstat-no" title="statement not covered" >filteredRows.map(<span class="fstat-no" title="function not covered" >(row) =&gt; {</span></span>
-      const rowData: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
-<span class="cstat-no" title="statement not covered" >      visibleColumns.forEach(<span class="fstat-no" title="function not covered" >(col) =&gt; {</span></span>
-        const value = <span class="cstat-no" title="statement not covered" >row.getValue(col.id);</span>
-<span class="cstat-no" title="statement not covered" >        rowData[col.id] = value !== null &amp;&amp; value !== undefined ? String(value) : '';</span>
+  const downloadReportHandler = useCallback(
+<span class="fstat-no" title="function not covered" >    (table: MRT_TableInstance&lt;SpeciesRow&gt;) =&gt; {</span>
+      const filteredRows = <span class="cstat-no" title="statement not covered" >table.getSortedRowModel().rows;</span>
+      const visibleColumns = table
+        .getVisibleLeafColumns()
+        .filter(<span class="fstat-no" title="function not covered" >(col) =&gt; <span class="cstat-no" title="statement not covered" >!col.id.startsWith('mrt-') &amp;&amp; typeof col.columnDef.header === 'string')</span></span>;
+      const csvColumns = visibleColumns.map(<span class="fstat-no" title="function not covered" >(col) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+        key: col.id,
+        displayLabel: col.columnDef.header as string,
+      }));
+      const csvData = <span class="cstat-no" title="statement not covered" >filteredRows.map(<span class="fstat-no" title="function not covered" >(row) =&gt; {</span></span>
+        const rowData: Record&lt;string, string&gt; = <span class="cstat-no" title="statement not covered" >{};</span>
+<span class="cstat-no" title="statement not covered" >        visibleColumns.forEach(<span class="fstat-no" title="function not covered" >(col) =&gt; {</span></span>
+          const value = <span class="cstat-no" title="statement not covered" >row.getValue(col.id);</span>
+<span class="cstat-no" title="statement not covered" >          rowData[col.id] = value !== null &amp;&amp; value !== undefined ? String(value) : '';</span>
+        });
+<span class="cstat-no" title="statement not covered" >        return rowData;</span>
       });
-<span class="cstat-no" title="statement not covered" >      return rowData;</span>
-    });
-    const blob = <span class="cstat-no" title="statement not covered" >makeCsv(csvColumns, csvData);</span>
-    const url = <span class="cstat-no" title="statement not covered" >URL.createObjectURL(blob);</span>
-    const link = <span class="cstat-no" title="statement not covered" >document.createElement('a');</span>
-<span class="cstat-no" title="statement not covered" >    link.setAttribute('href', url);</span>
-<span class="cstat-no" title="statement not covered" >    link.setAttribute('download', 'accessions-by-species.csv');</span>
-<span class="cstat-no" title="statement not covered" >    link.click();</span>
-<span class="cstat-no" title="statement not covered" >    URL.revokeObjectURL(url);</span>
-  }, []);
+      const blob = <span class="cstat-no" title="statement not covered" >makeCsv(csvColumns, csvData);</span>
+      const url = <span class="cstat-no" title="statement not covered" >URL.createObjectURL(blob);</span>
+      const link = <span class="cstat-no" title="statement not covered" >document.createElement('a');</span>
+<span class="cstat-no" title="statement not covered" >      link.setAttribute('href', url);</span>
+<span class="cstat-no" title="statement not covered" >      link.setAttribute('download', `${strings.ACCESSIONS_BY_SPECIES_FILENAME}.csv`);</span>
+<span class="cstat-no" title="statement not covered" >      link.click();</span>
+<span class="cstat-no" title="statement not covered" >      URL.revokeObjectURL(url);</span>
+    },
+    [strings]
+  );
 &nbsp;
   <span class="missing-if-branch" title="if path not taken" >I</span>if (searchResults === undefined) {
 <span class="cstat-no" title="statement not covered" >    return (</span>
@@ -1747,7 +1756,7 @@ export default function AccessionsBySpeciesTable({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-24T23:24:40.911Z
+                at 2026-11-25T18:11:09.564Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

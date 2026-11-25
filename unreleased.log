@@ -1,3 +1,10 @@
+68ce37a5 SW-9244 Localize table export filenames (#7302)
+499381cb SW-9314 Convert Inventory Create page to Page component (#7300)
+a14bbe2d SW-9313 Convert Inventory Batch details page to Page component (#7299)
+9b75ceca SW-9312 Convert Inventory for Species page to Page component (#7298)
+f934a0fb SW-9311 Convert Inventory for Nursery page to Page component (#7297)
+5784e36a Revert "Add product area to mixpanel events"
+14ae2116 Add product area to mixpanel events
 938edcbf SW-9290 Opt Matrix into one portable table configuration (#7258)
 2780b68b SW-9290 Preserve persisted numeric and date ranges in shared Matrix filters (#7257)
 b5a724c0 SW-9290 Fix shared Matrix filters and typed cell editors (#7256)

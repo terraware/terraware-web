@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>4/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>3/5</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -131,24 +131,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">245x</span>
-<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-yes">53x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">245x</span>
+<span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -192,18 +192,18 @@ function AccessionsDropdown&lt;T extends { accessionId?: number; speciesId?: num
       id='accessionId'
       label={strings.ACCESSION}
       selectedValue={record?.accessionId}
-      options={(availableAccessions || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>.map((accession) =&gt; ({
+      options={(availableAccessions || <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>.map(<span class="fstat-no" title="function not covered" >(accession) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
         label: `${accession.accessionNumber}`,
         value: Number(accession.id),
       }))}
-      onChange={(accessionId: string) =&gt;
-        setRecord((previousValue) =&gt; ({
+      onChange={<span class="fstat-no" title="function not covered" >(accessionId: string) =&gt;</span>
+<span class="cstat-no" title="statement not covered" >        setRecord(<span class="fstat-no" title="function not covered" >(previousValue) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span></span>
           ...previousValue,
           accessionId: Number(accessionId),
         }))
       }
       tooltipTitle={strings.TOOLTIP_INVENTORY_ADD_ACCESSION_ID}
-      disabled={(availableAccessions &amp;&amp; availableAccessions.length === 0) || (record &amp;&amp; record.speciesId === undefined)}
+      disabled={(availableAccessions &amp;&amp; availableAccessions.length === 0) || (<span class="branch-2 cbranch-no" title="branch not covered" >record </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >record.speciesId === undefined)</span>}
       fullWidth
     /&gt;
   );
@@ -217,7 +217,7 @@ export default AccessionsDropdown;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-11-24T23:24:40.911Z
+                at 2026-11-25T18:11:09.564Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
