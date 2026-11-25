@@ -185,6 +185,27 @@ it.each([false, true])('restores accent and acronym matches from search state (V
   expect(screen.queryByRole('cell', { name: 'Café' })).not.toBeInTheDocument();
 });
 
+it('does not match blank cells as the strings undefined or null in V2 search', () => {
+  rs.mocked(useFeatureEnabled).mockReturnValue(true);
+  const searchColumns: EditableTableColumn<{ name?: string | null }>[] = [
+    { id: 'name', accessorKey: 'name', header: 'Name' },
+  ];
+  const props = {
+    supportsV2: true as const,
+    columns: searchColumns,
+    data: [{ name: 'Delta' }, { name: 'Nursery' }, {}, { name: null }],
+    clearAllFiltersLabel: 'Clear filters',
+    enableGlobalFilter: true,
+  };
+  const { rerender } = renderWithProviders(
+    <EditableTable {...props} tableOptions={{ state: { globalFilter: 'de' } }} />
+  );
+  expect(screen.getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['Delta']);
+
+  rerender(<EditableTable {...props} tableOptions={{ state: { globalFilter: 'nu' } }} />);
+  expect(screen.getAllByRole('cell').map((cell) => cell.textContent)).toEqual(['Nursery']);
+});
+
 it.each([false, true])('uses the nested empty fallback unless a top-level fallback is provided (V2: %s)', (flag) => {
   rs.mocked(useFeatureEnabled).mockReturnValue(flag);
   const props = {

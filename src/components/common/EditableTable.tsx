@@ -231,10 +231,18 @@ const EditableTable = <TData extends MRT_RowData>(props: Props<TData>) => {
             'muiTablePaperProps',
             'muiTableProps',
           ]),
-          globalFilterFn: (row, columnId, value, addMeta) =>
-            MRT_FilterFns.fuzzy(row as unknown as Parameters<typeof MRT_FilterFns.fuzzy>[0], columnId, value, (meta) =>
-              addMeta?.(meta)
-            ),
+          globalFilterFn: (row, columnId, value, addMeta) => {
+            const cellValue = row.getValue(columnId);
+            if (cellValue === null || cellValue === undefined) {
+              return false;
+            }
+            return MRT_FilterFns.fuzzy(
+              row as unknown as Parameters<typeof MRT_FilterFns.fuzzy>[0],
+              columnId,
+              value,
+              (meta) => addMeta?.(meta)
+            );
+          },
           state,
           initialState,
         }}
