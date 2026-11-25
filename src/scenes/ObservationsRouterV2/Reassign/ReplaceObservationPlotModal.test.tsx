@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
+import { useLocation } from 'react-router';
 
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
 
+import { APP_PATHS } from 'src/constants';
 import ReassignPlotModalProvider, { useReassignPlotModal } from 'src/scenes/ObservationsRouterV2/Reassign';
 import strings from 'src/strings';
 import { captureRequests, dialogTitled, mockPost, renderWithProviders, selectDropdownOption } from 'src/test-utils';
@@ -19,6 +21,7 @@ const REPLACE_RESPONSE = {
   removedMonitoringPlotIds: [PLOT_ID],
   reassignedObservationIds: [201],
   deletedObservationIds: [202],
+  observationDeleted: false,
 };
 
 const OpenOnMount = () => {
@@ -26,6 +29,8 @@ const OpenOnMount = () => {
   useEffect(() => openReassignPlotModal(OBSERVATION_ID, PLOT_ID, true), [openReassignPlotModal]);
   return null;
 };
+
+const LocationDisplay = () => <div data-testid='location'>{useLocation().pathname}</div>;
 
 const renderModal = () => {
   mockPost('/api/v1/search', {
@@ -38,6 +43,7 @@ const renderModal = () => {
   return renderWithProviders(
     <ReassignPlotModalProvider>
       <OpenOnMount />
+      <LocationDisplay />
     </ReassignPlotModalProvider>
   );
 };
@@ -74,6 +80,7 @@ describe('ReplaceObservationPlotModal', () => {
           outcome: 'ObservationDeleted',
         },
       ],
+      mayDeleteObservation: false,
     });
     const replaces = captureRequests('post', REPLACE_URL, REPLACE_RESPONSE);
 
@@ -124,6 +131,7 @@ describe('ReplaceObservationPlotModal', () => {
       affectedObservations: [
         { observationId: 201, observationType: 'Baseline Survey', startDate: '2027-03-01', outcome: 'PlotsReassigned' },
       ],
+      mayDeleteObservation: false,
     });
     const replaces = captureRequests('post', REPLACE_URL, REPLACE_RESPONSE);
 
@@ -144,7 +152,7 @@ describe('ReplaceObservationPlotModal', () => {
   });
 
   it('replaces the plot without asking for confirmation when no other observations are affected', async () => {
-    mockPost(PREVIEW_URL, { affectedObservations: [] });
+    mockPost(PREVIEW_URL, { affectedObservations: [], mayDeleteObservation: false });
     const replaces = captureRequests('post', REPLACE_URL, {
       ...REPLACE_RESPONSE,
       reassignedObservationIds: [],
@@ -159,19 +167,31 @@ describe('ReplaceObservationPlotModal', () => {
     expect(screen.queryByText(strings.REPLACE_PLOT_AFFECTED_OBSERVATIONS_TITLE)).not.toBeInTheDocument();
   });
 
-  it('does not preview a temporary replacement', async () => {
-    const previews = captureRequests('post', PREVIEW_URL, { affectedObservations: [] });
+  it('warns that replacing the only plot may delete the observation, and leaves its page if it is deleted', async () => {
+    const previews = captureRequests('post', PREVIEW_URL, { affectedObservations: [], mayDeleteObservation: true });
     const replaces = captureRequests('post', REPLACE_URL, {
-      ...REPLACE_RESPONSE,
+      addedMonitoringPlotIds: [],
+      removedMonitoringPlotIds: [PLOT_ID],
       reassignedObservationIds: [],
       deletedObservationIds: [],
+      observationDeleted: true,
     });
 
-    const { user } = renderModal();
+    const { user, store } = renderModal();
     await fillInAndSend(user, strings.TEMPORARY);
 
+    await screen.findByText(strings.REPLACE_PLOT_CONFIRM_TITLE);
+    const dialog = dialogTitled(strings.REPLACE_PLOT_CONFIRM_TITLE);
+    expect(within(dialog).getByText(strings.REPLACE_PLOT_ONLY_PLOT_WARNING)).toBeInTheDocument();
+    expect(await previews[0].json()).toEqual({ duration: 'Temporary' });
+    expect(replaces).toHaveLength(0);
+
+    await user.click(within(dialog).getByRole('button', { name: strings.CONFIRM }));
+
     await waitFor(() => expect(replaces).toHaveLength(1));
-    expect(await replaces[0].json()).toEqual({ justification: JUSTIFICATION, duration: 'Temporary' });
-    expect(previews).toHaveLength(0);
+    await waitFor(() => expect(screen.getByTestId('location')).toHaveTextContent(APP_PATHS.OBSERVATIONS));
+    expect(store.getState().snackbar.snackbars.page?.msg).toEqual(
+      expect.arrayContaining([strings.REASSIGNMENT_REQUEST_OBSERVATION_DELETED])
+    );
   });
 });

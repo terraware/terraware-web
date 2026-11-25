@@ -1889,6 +1889,7 @@ REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,No se añadirán parcelas: no hay parcelas disponibles para reasignación.,4f5db53d
+REASSIGNMENT_REQUEST_OBSERVATION_DELETED,Esta observación fue eliminada porque no había una parcela de reemplazo disponible para su única parcela.,79a79562
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED,La parcela permanente {0} se agregó de forma permanente.,1ff9fe21
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,La parcela permanente {0} fue eliminada de forma permanente.,d83a86a5
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_TEMPORARY,La parcela permanente {0} fue eliminada solo para esta observación.,5fe6197f
@@ -1964,6 +1965,8 @@ REPLACE,Reemplazar,f6e3faed
 REPLACE_BOUNDARY,Cambiar lindero,f20d140b
 REPLACE_PLOT_AFFECTED_OBSERVATIONS_MESSAGE,Reemplazar esta parcela a largo plazo también modificará las siguientes observaciones próximas que la incluyen.,94b1dfa8
 REPLACE_PLOT_AFFECTED_OBSERVATIONS_TITLE,Otras observaciones afectadas,c74f35fb
+REPLACE_PLOT_CONFIRM_TITLE,Confirmar reemplazo de parcela,89fad077
+REPLACE_PLOT_ONLY_PLOT_WARNING,"Esta es la única parcela en esta observación. Si no se encuentra una parcela de reemplazo, la observación será eliminada.",9d0e1dc9
 REPLACE_PLOT_UPCOMING_OBSERVATION_DELETED,La observación de {0} que comienza el {1} se eliminará porque no hay otras parcelas disponibles para ella.,037d3a75
 REPLACE_PLOT_UPCOMING_OBSERVATION_PLOTS_REASSIGNED,La observación de {0} que comienza el {1} recibirá nuevas ubicaciones de parcelas.,a9428a69
 REPORT,Informe,5de259d3

@@ -1888,6 +1888,7 @@ REASSIGNMENT,Réaffectation,79a8c3fe
 REASSIGNMENT_DURATION,Durée de la réaffectation,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,Aucune parcelle ne sera ajoutée.,ebf0fa62
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED_WARNING,Aucune parcelle ne sera ajoutée : aucune parcelle disponible pour la réaffectation.,4f5db53d
+REASSIGNMENT_REQUEST_OBSERVATION_DELETED,Cette observation a été supprimée car aucune parcelle de remplacement n’était disponible pour son unique parcelle.,79a79562
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_ADDED,La parcelle permanente {0} a été ajoutée de façon permanente.,1ff9fe21
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_LONG_TERM,La parcelle permanente {0} a été supprimée de façon permanente.,d83a86a5
 REASSIGNMENT_REQUEST_PERMANENT_PLOT_REMOVED_TEMPORARY,La parcelle permanente {0} a été supprimée uniquement pour cette observation.,5fe6197f
@@ -1963,6 +1964,8 @@ REPLACE,Remplacer,f6e3faed
 REPLACE_BOUNDARY,Remplacer les limites,f20d140b
 REPLACE_PLOT_AFFECTED_OBSERVATIONS_MESSAGE,Le remplacement à long terme de ce site modifiera également les observations à venir qui l’incluent.,94b1dfa8
 REPLACE_PLOT_AFFECTED_OBSERVATIONS_TITLE,Autres observations concernées,c74f35fb
+REPLACE_PLOT_CONFIRM_TITLE,Confirmer le remplacement de la parcelle,89fad077
+REPLACE_PLOT_ONLY_PLOT_WARNING,"Il s’agit de la seule parcelle de cette observation. Si aucune parcelle de remplacement n’est trouvée, l’observation sera supprimée.",9d0e1dc9
 REPLACE_PLOT_UPCOMING_OBSERVATION_DELETED,L’observation {0} commençant le {1} sera supprimée car aucun autre site n’est disponible pour elle.,037d3a75
 REPLACE_PLOT_UPCOMING_OBSERVATION_PLOTS_REASSIGNED,L’observation {0} commençant le {1} recevra de nouveaux emplacements de site.,a9428a69
 REPORT,Rapport,5de259d3

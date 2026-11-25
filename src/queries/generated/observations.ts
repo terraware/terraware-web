@@ -1309,6 +1309,8 @@ export type ReplaceObservationPlotResponsePayload = {
   deletedObservationIds: number[];
   /** IDs of other upcoming observations that included the plot and were given new plots because it was replaced long-term. */
   reassignedObservationIds: number[];
+  /** True if the observation was deleted because the plot was its only plot and no replacement plot could be found. */
+  observationDeleted: boolean;
   /** IDs of monitoring plots that were removed from the observation. Will usually include the requested plot ID, but may be empty if the replacement request couldn't be satisfied. */
   removedMonitoringPlotIds: number[];
   status: SuccessOrError;
@@ -1327,6 +1329,8 @@ export type AffectedUpcomingObservationPayload = {
 export type PreviewReplaceObservationPlotResponsePayload = {
   /** Upcoming observations, other than the one whose plot would be replaced, that would be affected by the replacement. Empty if no other observations would be affected. */
   affectedObservations: AffectedUpcomingObservationPayload[];
+  /** True if the observation will be deleted if no replacement plot can be found. This is the case if the plot is the only plot in an observation that has started. Upcoming observations are not deleted; they are given new plots when they start. */
+  mayDeleteObservation: boolean;
   status: SuccessOrError;
 };
 export type PreviewReplaceObservationPlotRequestPayload = {

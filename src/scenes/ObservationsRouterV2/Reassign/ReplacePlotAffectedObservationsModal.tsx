@@ -9,12 +9,14 @@ import { getObservationTypeLabel } from 'src/types/Observations';
 
 export type ReplacePlotAffectedObservationsModalProps = {
   affectedObservations: AffectedUpcomingObservationPayload[];
+  mayDeleteObservation: boolean;
   onBack: () => void;
   onConfirm: () => void;
 };
 
 const ReplacePlotAffectedObservationsModal = ({
   affectedObservations,
+  mayDeleteObservation,
   onBack,
   onConfirm,
 }: ReplacePlotAffectedObservationsModalProps): JSX.Element => {
@@ -40,9 +42,13 @@ const ReplacePlotAffectedObservationsModal = ({
     <DialogBox
       onClose={onBack}
       open={true}
-      title={strings.REPLACE_PLOT_AFFECTED_OBSERVATIONS_TITLE}
+      title={
+        affectedObservations.length
+          ? strings.REPLACE_PLOT_AFFECTED_OBSERVATIONS_TITLE
+          : strings.REPLACE_PLOT_CONFIRM_TITLE
+      }
       size='medium'
-      message={strings.REPLACE_PLOT_AFFECTED_OBSERVATIONS_MESSAGE}
+      message={affectedObservations.length ? strings.REPLACE_PLOT_AFFECTED_OBSERVATIONS_MESSAGE : undefined}
       middleButtons={[
         <Button
           id='back-replace-plot-affected-observations'
@@ -60,13 +66,16 @@ const ReplacePlotAffectedObservationsModal = ({
         />,
       ]}
     >
-      <Box component='ul' textAlign='left' marginBottom={0} marginTop={2}>
-        {affectedObservations.map((observation) => (
-          <Typography component='li' key={observation.observationId}>
-            {affectedObservationText(observation)}
-          </Typography>
-        ))}
-      </Box>
+      {affectedObservations.length > 0 && (
+        <Box component='ul' textAlign='left' marginBottom={0} marginTop={2}>
+          {affectedObservations.map((observation) => (
+            <Typography component='li' key={observation.observationId}>
+              {affectedObservationText(observation)}
+            </Typography>
+          ))}
+        </Box>
+      )}
+      {mayDeleteObservation && <Typography marginTop={2}>{strings.REPLACE_PLOT_ONLY_PLOT_WARNING}</Typography>}
     </DialogBox>
   );
 };
