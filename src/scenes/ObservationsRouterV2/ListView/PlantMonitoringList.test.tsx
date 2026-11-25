@@ -65,6 +65,7 @@ const BASELINE_ROW = /April 2026/;
 type ListPreferences = {
   assignPlotsWhenScheduling?: boolean;
   baselineSurveyObservations?: boolean;
+  editableTableV2?: boolean;
   scheduledBiomassMonitoringObservations?: boolean;
 };
 
@@ -359,11 +360,12 @@ describe('PlantMonitoringList', () => {
   it.each([
     { observations: [PLANT_OBSERVATION], message: () => strings.NO_OBSERVATIONS_MATCH_FILTERS },
     { observations: [], message: () => strings.NO_ASSIGNED_PLOT_OBSERVATIONS_RECORDED },
+    { observations: [PLANT_OBSERVATION], message: () => strings.NO_OBSERVATIONS_MATCH_FILTERS, v2: true },
   ])(
-    'shows the appropriate empty message for a baseline filter ($observations.length observations)',
-    async ({ observations, message }) => {
+    'shows the appropriate empty message for a baseline filter ($observations.length observations, V2: $v2)',
+    async ({ observations, message, v2 }) => {
       renderList(
-        { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: true },
+        { baselineSurveyObservations: true, scheduledBiomassMonitoringObservations: true, editableTableV2: v2 },
         { observationType: 'Baseline Survey', observations }
       );
       expect(await screen.findByText(message())).toBeVisible();

@@ -3,24 +3,16 @@ import React, { useCallback, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { EditableTableColumn } from '@terraware/web-components';
-import {
-  MRT_Cell,
-  MRT_Row,
-  MRT_ShowHideColumnsButton,
-  MRT_ToggleDensePaddingButton,
-  MRT_ToggleFullScreenButton,
-  MRT_ToggleGlobalFilterButton,
-} from 'material-react-table';
+import { MRT_Cell } from 'material-react-table';
 
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import CurrentView from 'src/components/common/CurrentView';
-import EditableTable from 'src/components/common/EditableTable';
+import EditableTable, { EditableTableToolbar } from 'src/components/common/EditableTable';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
-import TableToolbarActions from 'src/components/common/table/TableToolbarActions';
 import { mobileTopToolbarSx } from 'src/components/common/table/mobileTopToolbarSx';
 import { APP_PATHS } from 'src/constants';
 import { useFeatureEnabled } from 'src/features';
@@ -348,12 +340,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   const commonTableOptions = useMemo(
     () => ({
-      renderEmptyRowsFallback: () =>
-        emptyMessage ? (
-          <Typography padding={theme.spacing(4)} textAlign='center'>
-            {emptyMessage}
-          </Typography>
-        ) : null,
       defaultColumn: { enableEditing: false },
       enableColumnPinning: true,
       enableGrouping: false,
@@ -379,7 +365,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           },
         },
       },
-      muiTableBodyRowProps: ({ row }: { row: MRT_Row<PlantMonitoringRow> }) => ({
+      muiTableBodyRowProps: ({ row }: { row: { index: number } }) => ({
         id: `row${row.index + 1}`,
         sx: {
           '& td': {
@@ -388,12 +374,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         },
       }),
     }),
-    [emptyMessage, theme]
+    [theme]
   );
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       <EditableTable
+        supportsV2
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={columns}
         data={rows}
@@ -411,6 +398,22 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         enableHiding={true}
         enableColumnDragging={!isMobile}
         positionGlobalFilter='right'
+        renderEmptyRowsFallback={() =>
+          emptyMessage ? (
+            <Typography padding={theme.spacing(4)} textAlign='center'>
+              {emptyMessage}
+            </Typography>
+          ) : null
+        }
+        renderToolbarInternalActions={(context) => (
+          <EditableTableToolbar
+            {...context}
+            showGlobalFilterButton
+            showColumnsButton
+            showDensityButton
+            showFullScreenButton
+          />
+        )}
         muiTableHeadCellProps={({ column }) =>
           column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {}
         }
@@ -436,14 +439,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           onColumnVisibilityChange: tableState.setColumnVisibility,
           onDensityChange: tableState.onDensityChange,
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
-          renderToolbarInternalActions: ({ table }) => (
-            <TableToolbarActions>
-              <MRT_ToggleGlobalFilterButton table={table} />
-              <MRT_ShowHideColumnsButton table={table} />
-              <MRT_ToggleDensePaddingButton table={table} />
-              <MRT_ToggleFullScreenButton table={table} />
-            </TableToolbarActions>
-          ),
         }}
         sx={{ padding: 0 }}
       />
