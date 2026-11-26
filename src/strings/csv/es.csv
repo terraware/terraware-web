@@ -652,6 +652,7 @@ EDIT_DOCUMENT_DETAILS,Editar detalles del documento,92155983
 EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Editar la entidad financiadora y los proyectos asociados.,779189ac
+EDIT_INDICATOR,Editar indicador,22e08ac3
 EDIT_LOCATION,Editar ubicación,f120fad8
 EDIT_MODULES,Editar módulos,43c229be
 EDIT_NOTES,Editar notas,f02400ad
@@ -983,6 +984,7 @@ INDICATOR_LEVEL,Nivel del indicador,b128c992
 INDICATOR_NAME,Nombre del indicador,0d8b0613
 INDICATOR_NOT_VISIBLE_TO_FUNDER,Indicador no visible para el financiador,d8aea360
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
+INDICATOR_SAVED,Indicador guardado,b554ba41
 INDICATOR_TYPE,Tipo de indicador,d5e75bf1
 INDICATOR_TYPE_GOAL,Meta,cb34c06e
 INDICATOR_TYPE_OUTCOME,Consecuencia,27a08fef
@@ -1814,6 +1816,8 @@ PROJECT_INTERNAL_USER_ROLE_REGIONAL_EXPERT,Experto regional,f75cdb69
 PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD,Responsable de restauración,62691aa4
 PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD,Responsable social,87aa1342
 PROJECT_LEAD,Jefe de proyecto,abaeba3a
+PROJECT_LEVEL_FIELDS,Campos a nivel de proyecto,c11e4b28
+PROJECT_LEVEL_FIELDS_DESCRIPTION,Estos solo se aplican a {0}. Los demás proyectos no se ven afectados.,5fb28509
 PROJECT_LINKS,Enlaces del proyecto,b34cdb0e
 PROJECT_NAME,Nombre del proyecto,17451aa2
 PROJECT_NAME_IN_USE,"""{0}"" ya está en uso. Por favor, proporcione un nuevo nombre.",4f57826b
@@ -2224,6 +2228,8 @@ SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
 SETTINGS_FOR,Configuración para {0},da07c7b6
 SETUP_REMAINING,Configuración pendiente,368418af
+SHARED_FIELDS_ACROSS_ALL_PROJECTS,Campos compartidos en todos los proyectos,fd26510b
+SHARED_FIELDS_CALCULATED_BY_TERRAWARE,Calculado por Terraware. Estos campos no se pueden editar.,0d4b0ee4
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_FILTERS,Mostrar filtros,d4143c37

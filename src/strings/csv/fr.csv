@@ -651,6 +651,7 @@ EDIT_DOCUMENT_DETAILS,Modifier les détails du document,92155983
 EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
 EDIT_FUNDING_ENTITY,Modifier l'organisme de financement,f21be0e0
 EDIT_FUNDING_ENTITY_DESC,Modifier l'entité de financement et les projets associés,779189ac
+EDIT_INDICATOR,Modifier l’indicateur,22e08ac3
 EDIT_LOCATION,Modifier l'emplacement,f120fad8
 EDIT_MODULES,Modifier les modules,43c229be
 EDIT_NOTES,Modifier les notes,f02400ad
@@ -982,6 +983,7 @@ INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
 INDICATOR_NOT_VISIBLE_TO_FUNDER,Indicateur non visible par le financeur,d8aea360
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Remplacé – valeur d'origine : {0},c504c96d
+INDICATOR_SAVED,Indicateur enregistré,b554ba41
 INDICATOR_TYPE,Type d’indicateur,d5e75bf1
 INDICATOR_TYPE_GOAL,Objectif,cb34c06e
 INDICATOR_TYPE_OUTCOME,Résultats,27a08fef
@@ -1813,6 +1815,8 @@ PROJECT_INTERNAL_USER_ROLE_REGIONAL_EXPERT,Expert régional,f75cdb69
 PROJECT_INTERNAL_USER_ROLE_RESTORATION_LEAD,Responsable de la restauration,62691aa4
 PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD,Responsable social,87aa1342
 PROJECT_LEAD,Responsable de projet,abaeba3a
+PROJECT_LEVEL_FIELDS,Champs au niveau du projet,c11e4b28
+PROJECT_LEVEL_FIELDS_DESCRIPTION,Ces champs s’appliquent uniquement à {0}. Les autres projets ne sont pas modifiés.,5fb28509
 PROJECT_LINKS,Liens du projet,b34cdb0e
 PROJECT_NAME,Nom du projet,17451aa2
 PROJECT_NAME_IN_USE,« {0} » est déjà utilisé. Veuillez choisir un nouveau nom.,4f57826b
@@ -2223,6 +2227,8 @@ SET_UP_SEED_BANK,Créer une banque de semences,6f047a89
 SETTINGS,Paramètres,38560978
 SETTINGS_FOR,Paramètres pour {0},da07c7b6
 SETUP_REMAINING,Configuration restante,368418af
+SHARED_FIELDS_ACROSS_ALL_PROJECTS,Champs partagés entre tous les projets,fd26510b
+SHARED_FIELDS_CALCULATED_BY_TERRAWARE,Calculé par Terraware. Ces champs ne peuvent pas être modifiés.,0d4b0ee4
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_FILTERS,Afficher les filtres,d4143c37

@@ -22,6 +22,7 @@ import {
   useListProjectSpecificIndicatorsQuery,
 } from 'src/queries/generated/indicators';
 
+import EditAutoCalculatedIndicatorModal from './EditAutoCalculatedIndicatorModal';
 import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditProjectIndicatorModal from './EditProjectIndicatorModal';
 
@@ -43,6 +44,7 @@ type IndicatorRow = {
   indicatorType: 'project' | 'common' | 'autoCalculated';
   originalProjectIndicator?: ExistingProjectIndicatorPayload;
   originalCommonIndicator?: ExistingCommonIndicatorPayload;
+  originalAutoCalculatedIndicator?: ProjectAutoCalculatedIndicatorPayload;
 };
 
 type SortableRow = { getValue: (columnId: string) => unknown };
@@ -71,10 +73,18 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   const { goToAcceleratorEditReportSettings, goToNewIndicator } = useNavigateTo();
   const [selectedProjectIndicator, setSelectedProjectIndicator] = useState<ExistingProjectIndicatorPayload>();
   const [selectedCommonIndicator, setSelectedCommonIndicator] = useState<ExistingCommonIndicatorPayload>();
+  const [selectedAutoCalculatedIndicator, setSelectedAutoCalculatedIndicator] =
+    useState<ProjectAutoCalculatedIndicatorPayload>();
   const [editProjectIndicatorModalOpened, , openEditProjectIndicatorModal, closeEditProjectIndicatorModal] =
     useBoolean(false);
   const [editCommonIndicatorModalOpened, , openEditCommonIndicatorModal, closeEditCommonIndicatorModal] =
     useBoolean(false);
+  const [
+    editAutoCalculatedIndicatorModalOpened,
+    ,
+    openEditAutoCalculatedIndicatorModal,
+    closeEditAutoCalculatedIndicatorModal,
+  ] = useBoolean(false);
   const { isAllowed } = useUser();
 
   const listProjectReportConfigResponse = useListAcceleratorReportConfigQuery(projectId);
@@ -183,6 +193,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       tfOwnerReviewer: ind.tfOwner,
       notes: ind.notes,
       indicatorType: 'autoCalculated',
+      originalAutoCalculatedIndicator: ind,
     }));
 
     return [...autoRows, ...commonRows, ...projectRows];
@@ -196,14 +207,17 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       } else if (row.originalCommonIndicator) {
         setSelectedCommonIndicator(row.originalCommonIndicator);
         openEditCommonIndicatorModal();
+      } else if (row.originalAutoCalculatedIndicator) {
+        setSelectedAutoCalculatedIndicator(row.originalAutoCalculatedIndicator);
+        openEditAutoCalculatedIndicatorModal();
       }
     },
-    [openEditProjectIndicatorModal, openEditCommonIndicatorModal]
+    [openEditProjectIndicatorModal, openEditCommonIndicatorModal, openEditAutoCalculatedIndicatorModal]
   );
 
   const NameCell = useCallback(
     ({ row: { original: row } }: EditableTableCellContext<IndicatorRow>) => {
-      if (row.indicatorType !== 'autoCalculated' && isAllowed('UPDATE_REPORTS_SETTINGS')) {
+      if (isAllowed('UPDATE_REPORTS_SETTINGS')) {
         return (
           <Link fontSize='16px' onClick={() => onClickIndicatorRow(row)} style={{ textAlign: 'left' }}>
             {row.name}
@@ -408,6 +422,12 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       )}
       {editCommonIndicatorModalOpened && selectedCommonIndicator && (
         <EditCommonIndicatorModal onClose={closeEditCommonIndicatorModal} commonIndicator={selectedCommonIndicator} />
+      )}
+      {editAutoCalculatedIndicatorModalOpened && selectedAutoCalculatedIndicator && (
+        <EditAutoCalculatedIndicatorModal
+          onClose={closeEditAutoCalculatedIndicatorModal}
+          autoCalculatedIndicator={selectedAutoCalculatedIndicator}
+        />
       )}
       <Card
         style={{ display: 'flex', flexDirection: 'column' }}

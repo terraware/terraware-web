@@ -5,6 +5,7 @@ import {
   ReviewAcceleratorReportIndicatorsRequestPayload,
   UpdateAcceleratorReportValuesRequestPayload,
 } from 'src/queries/generated/acceleratorReports';
+import { ExistingCommonIndicatorPayload } from 'src/queries/generated/indicators';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { ILocalizedStrings } from 'src/strings';
 import { AcceleratorReportStatus, IndicatorType, ReportIndicatorStatus } from 'src/types/AcceleratorReport';
@@ -20,6 +21,7 @@ export const reportExportPrefix = (inConsole: boolean, funderFacing: boolean): s
 export type IndicatorClass = ReportCommonIndicatorPayload['classId'];
 export type IndicatorCategory = ReportCommonIndicatorPayload['category'];
 export type IndicatorLevel = ReportCommonIndicatorPayload['level'];
+export type IndicatorFrequency = NonNullable<ExistingCommonIndicatorPayload['frequency']>;
 
 export type ProgressIndicator = {
   baseline?: number;
@@ -229,6 +231,24 @@ export const indicatorLevelLabel = (level: IndicatorLevel | undefined, strings: 
       return strings.INDICATOR_TYPE_OUTPUT;
     case 'Process':
       return strings.INDICATOR_TYPE_PROCESS;
+    default:
+      return '';
+  }
+};
+
+export const indicatorFrequencyLabel = (
+  frequency: IndicatorFrequency | undefined,
+  strings: ILocalizedStrings
+): string => {
+  switch (frequency) {
+    case 'Annual':
+      return strings.ANNUAL;
+    case 'Bi-Annual':
+      return strings.BI_ANNUAL;
+    case 'MRV Cycle':
+      return strings.MRV_CYCLE;
+    case 'Quarterly':
+      return strings.QUARTERLY;
     default:
       return '';
   }
