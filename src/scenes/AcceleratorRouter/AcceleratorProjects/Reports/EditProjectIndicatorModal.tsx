@@ -10,8 +10,8 @@ import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import {
   ExistingProjectIndicatorPayload,
-  useUpdateProjectIndicatorMutation,
-} from 'src/queries/generated/acceleratorReportIndicators';
+  useUpdateProjectSpecificIndicatorMutation,
+} from 'src/queries/generated/indicators';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -36,7 +36,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
   const projectId = Number(pathParams.projectId);
   const [validate, setValidate] = useState(false);
 
-  const [updateProjectIndicator, updateProjectIndicatorResponse] = useUpdateProjectIndicatorMutation();
+  const [updateProjectIndicator, updateProjectIndicatorResponse] = useUpdateProjectSpecificIndicatorMutation();
   const [record, , , onChangeCallback] = useForm<ExistingProjectIndicatorPayload>(projectIndicator);
 
   useEffect(() => {

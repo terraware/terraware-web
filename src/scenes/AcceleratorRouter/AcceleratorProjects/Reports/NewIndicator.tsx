@@ -14,8 +14,8 @@ import { useLocalization } from 'src/providers';
 import {
   NewIndicatorPayload,
   useCreateCommonIndicatorMutation,
-  useCreateProjectIndicatorMutation,
 } from 'src/queries/generated/acceleratorReportIndicators';
+import { useCreateProjectSpecificIndicatorMutation } from 'src/queries/generated/indicators';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -43,7 +43,7 @@ export default function NewIndicator(): JSX.Element {
   const goToProjectReports = useCallback(() => exitReportsEdit('indicators'), [exitReportsEdit]);
 
   const [createCommonIndicator, createCommonIndicatorResponse] = useCreateCommonIndicatorMutation();
-  const [createProjectIndicator, createProjectIndicatorResponse] = useCreateProjectIndicatorMutation();
+  const [createProjectIndicator, createProjectIndicatorResponse] = useCreateProjectSpecificIndicatorMutation();
 
   useEffect(() => {
     if (createCommonIndicatorResponse.isError || createProjectIndicatorResponse.isError) {

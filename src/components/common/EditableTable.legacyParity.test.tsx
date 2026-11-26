@@ -25,7 +25,7 @@ it.each([
     rs.mocked(useFeatureEnabled).mockReturnValue(flag);
     const path = '/api/v1/accelerator/projects/1/reports';
     mockGet(`${path}/years`, { years: { startYear: 2025, endYear: 2025 } });
-    mockGet(`${path}/indicators`, { indicators: [] });
+    mockGet('/api/v1/indicators/projects/1/project', { indicators: [] });
     mockGet(`${path}/configs`, { configs: [] });
     mockGet('/api/v1/accelerator/reports/commonIndicators', { indicators: [] });
     mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', { indicators: [] });

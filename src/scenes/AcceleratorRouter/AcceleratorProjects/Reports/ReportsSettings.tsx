@@ -15,12 +15,14 @@ import { useLocalization, useUser } from 'src/providers';
 import {
   AutoCalculatedIndicatorPayload,
   ExistingCommonIndicatorPayload,
-  ExistingProjectIndicatorPayload,
   useListAutoCalculatedIndicatorsQuery,
   useListCommonIndicatorsQuery,
-  useListProjectIndicatorsQuery,
 } from 'src/queries/generated/acceleratorReportIndicators';
 import { useListAcceleratorReportConfigQuery } from 'src/queries/generated/acceleratorReports';
+import {
+  ExistingProjectIndicatorPayload,
+  useListProjectSpecificIndicatorsQuery,
+} from 'src/queries/generated/indicators';
 
 import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditProjectIndicatorModal from './EditProjectIndicatorModal';
@@ -51,7 +53,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
     [listProjectReportConfigResponse.data?.configs]
   );
 
-  const { data: projectIndicatorsResponse } = useListProjectIndicatorsQuery(projectId);
+  const { data: projectIndicatorsResponse } = useListProjectSpecificIndicatorsQuery(projectId);
   const projectIndicators = useMemo(
     () => projectIndicatorsResponse?.indicators ?? [],
     [projectIndicatorsResponse?.indicators]
