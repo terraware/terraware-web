@@ -38,6 +38,7 @@ const renderModal = (commonIndicator = seededIndicator) => {
   mockGet('/build-version.txt');
   mockGet('/api/v1/users/me');
   mockGet('/api/v1/users/me/preferences');
+  mockGet(`/api/v1/projects/${PROJECT_ID}`, { project: { id: PROJECT_ID, name: 'Brazil Biodiversity' } });
   return renderWithProviders(<EditCommonIndicatorModal commonIndicator={commonIndicator} onClose={() => undefined} />, {
     route: `/accelerator/projects/${PROJECT_ID}/reports`,
     path: '/accelerator/projects/:projectId/*',
