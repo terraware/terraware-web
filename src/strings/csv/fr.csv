@@ -2228,6 +2228,7 @@ SETTINGS,Paramètres,38560978
 SETTINGS_FOR,Paramètres pour {0},da07c7b6
 SETUP_REMAINING,Configuration restante,368418af
 SHARED_FIELDS_ACROSS_ALL_PROJECTS,Champs partagés entre tous les projets,fd26510b
+SHARED_FIELDS_APPLY_TO_ALL_PROJECTS,La modification de ces éléments les applique à tous les projets.,9bf17514
 SHARED_FIELDS_CALCULATED_BY_TERRAWARE,Calculé par Terraware. Ces champs ne peuvent pas être modifiés.,0d4b0ee4
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52

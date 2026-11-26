@@ -2229,6 +2229,7 @@ SETTINGS,Ajustes,38560978
 SETTINGS_FOR,Configuración para {0},da07c7b6
 SETUP_REMAINING,Configuración pendiente,368418af
 SHARED_FIELDS_ACROSS_ALL_PROJECTS,Campos compartidos en todos los proyectos,fd26510b
+SHARED_FIELDS_APPLY_TO_ALL_PROJECTS,Editar estos cambios los aplicará a todos los proyectos.,9bf17514
 SHARED_FIELDS_CALCULATED_BY_TERRAWARE,Calculado por Terraware. Estos campos no se pueden editar.,0d4b0ee4
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52

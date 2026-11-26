@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid } from '@mui/material';
+import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -13,6 +13,7 @@ import {
   ExistingCommonIndicatorPayload,
   useUpdateProjectCommonIndicatorMutation,
 } from 'src/queries/generated/indicators';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -62,8 +63,12 @@ export default function EditCommonIndicatorModal({
   commonIndicator,
 }: EditCommonIndicatorModalProps): JSX.Element {
   const snackbar = useSnackbar();
+  const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
+
+  const { data: projectResponse } = useGetProjectQuery(projectId);
+  const projectName = projectResponse?.project.name ?? '';
 
   const [record, , , onChangeCallback] = useForm<ExistingCommonIndicatorPayload>(commonIndicator);
   const [validate, setValidate] = useState(false);
@@ -115,8 +120,8 @@ export default function EditCommonIndicatorModal({
       ]}
       onClose={onClose}
       open={true}
-      size='medium'
-      title={strings.COMMON_INDICATOR}
+      size='x-large'
+      title={strings.EDIT_INDICATOR}
       scrolled
     >
       <Confirm
@@ -129,145 +134,175 @@ export default function EditCommonIndicatorModal({
         open={confirmDialogOpen}
         title={strings.EDIT_COMMON_INDICATOR}
       />
-      <Grid container spacing={2} textAlign='left'>
-        <Grid size={12}>
-          <TextField
-            errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
-            id='name'
-            label={strings.NAME}
-            onChange={onChangeCallback('name')}
-            required
-            type='text'
-            value={record.name}
-          />
+      <Box
+        borderRadius={theme.spacing(1)}
+        marginBottom={theme.spacing(3)}
+        padding={theme.spacing(3)}
+        sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}
+        textAlign='left'
+      >
+        <Typography fontSize='20px' fontWeight={600}>
+          {strings.PROJECT_LEVEL_FIELDS}
+        </Typography>
+        <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingBottom={theme.spacing(2)}>
+          {strings.formatString(strings.PROJECT_LEVEL_FIELDS_DESCRIPTION, <b>{projectName}</b>)}
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid size={6}>
+            <TextField
+              id='refId'
+              label={strings.REF_ID}
+              onChange={onChangeCallback('refId')}
+              type='text'
+              value={record.refId}
+            />
+          </Grid>
+          <Grid size={6}>
+            <TextField
+              id='primaryDataSource'
+              label={strings.PRIMARY_DATA_SOURCE}
+              onChange={onChangeCallback('primaryDataSource')}
+              type='text'
+              value={record.primaryDataSource}
+            />
+          </Grid>
+          <Grid size={6}>
+            <Checkbox
+              id='active'
+              label={strings.ACTIVE}
+              name='active'
+              onChange={onChangeCallback('active')}
+              value={record.active}
+            />
+          </Grid>
+          <Grid size={6}>
+            <Checkbox
+              id='isPublishable'
+              label={strings.PUBLISH_TO_FUNDER_PORTAL}
+              name='isPublishable'
+              onChange={onChangeCallback('isPublishable')}
+              value={record.isPublishable}
+            />
+          </Grid>
+          <Grid size={12}>
+            <TextField
+              id='notes'
+              label={strings.NOTES}
+              onChange={onChangeCallback('notes')}
+              type='textarea'
+              value={record.notes}
+            />
+          </Grid>
         </Grid>
-        <Grid size={12}>
-          <TextField
-            id='description'
-            label={strings.DESCRIPTION}
-            onChange={onChangeCallback('description')}
-            type='textarea'
-            value={record.description}
-          />
+      </Box>
+
+      <Box
+        border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+        borderRadius={theme.spacing(1)}
+        padding={theme.spacing(3)}
+        textAlign='left'
+      >
+        <Typography fontSize='20px' fontWeight={600}>
+          {strings.SHARED_FIELDS_ACROSS_ALL_PROJECTS}
+        </Typography>
+        <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingBottom={theme.spacing(2)}>
+          {strings.SHARED_FIELDS_APPLY_TO_ALL_PROJECTS}
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid size={12}>
+            <TextField
+              errorText={validate && !record.name ? strings.REQUIRED_FIELD : ''}
+              id='name'
+              label={strings.INDICATOR_NAME}
+              onChange={onChangeCallback('name')}
+              required
+              type='text'
+              value={record.name}
+            />
+          </Grid>
+          <Grid size={12}>
+            <TextField
+              id='description'
+              label={strings.DEFINITION}
+              onChange={onChangeCallback('description')}
+              type='textarea'
+              value={record.description}
+            />
+          </Grid>
+          <Grid size={4}>
+            <TextField
+              id='unit'
+              label={strings.UNIT}
+              maxLength={25}
+              onChange={onChangeCallback('unit')}
+              type='text'
+              value={record.unit}
+            />
+          </Grid>
+          <Grid size={4}>
+            <Dropdown
+              fullWidth
+              id='classId'
+              label={strings.IS_CUMULATIVE}
+              onChange={onChangeCallback('classId')}
+              options={classIdOptions()}
+              selectedValue={record.classId}
+            />
+          </Grid>
+          <Grid size={4} alignContent='center'>
+            <Checkbox
+              id='isDecimal'
+              label={strings.IS_DECIMAL}
+              name='isDecimal'
+              onChange={(value) => onChangeCallback('precision')(value ? 2 : 0)}
+              value={record.precision === 2}
+            />
+          </Grid>
+          <Grid size={12}>
+            <Divider />
+          </Grid>
+          <Grid size={4}>
+            <Dropdown
+              fullWidth
+              id='category'
+              label={strings.CATEGORY}
+              onChange={onChangeCallback('category')}
+              options={indicatorComponentOptions()}
+              required
+              selectedValue={record.category}
+            />
+          </Grid>
+          <Grid size={4}>
+            <Dropdown
+              fullWidth
+              id='level'
+              label={strings.INDICATOR_LEVEL}
+              onChange={onChangeCallback('level')}
+              options={indicatorTypeOptions()}
+              selectedValue={record.level}
+            />
+          </Grid>
+          <Grid size={4}>
+            <Dropdown
+              fullWidth
+              id='frequency'
+              label={strings.FREQUENCY_OF_REPORTING}
+              onChange={onChangeCallback('frequency')}
+              options={frequencyOptions()}
+              selectedValue={record.frequency}
+            />
+          </Grid>
+          <Grid size={12}>
+            <TextField
+              id='tfOwner'
+              label={strings.TF_OWNER_REVIEWER}
+              onChange={onChangeCallback('tfOwner')}
+              type='text'
+              value={record.tfOwner}
+            />
+          </Grid>
         </Grid>
-        <Grid size={12}>
-          <Dropdown
-            fullWidth
-            id='level'
-            label={strings.INDICATOR_LEVEL}
-            onChange={onChangeCallback('level')}
-            options={indicatorTypeOptions()}
-            selectedValue={record.level}
-          />
-        </Grid>
-        <Grid size={12}>
-          <TextField
-            id='unit'
-            label={strings.UNIT}
-            maxLength={25}
-            onChange={onChangeCallback('unit')}
-            type='text'
-            value={record.unit}
-          />
-        </Grid>
-        <Grid size={12}>
-          <TextField
-            id='refId'
-            label={strings.REF_ID}
-            onChange={onChangeCallback('refId')}
-            type='text'
-            value={record.refId}
-          />
-        </Grid>
-        <Grid size={12}>
-          <Dropdown
-            fullWidth
-            id='category'
-            label={strings.CATEGORY}
-            onChange={onChangeCallback('category')}
-            options={indicatorComponentOptions()}
-            required
-            selectedValue={record.category}
-          />
-        </Grid>
-        <Grid size={12}>
-          <TextField
-            id='primaryDataSource'
-            label={strings.PRIMARY_DATA_SOURCE}
-            onChange={onChangeCallback('primaryDataSource')}
-            type='text'
-            value={record.primaryDataSource}
-          />
-        </Grid>
-        <Grid size={12}>
-          <TextField
-            id='tfOwner'
-            label={strings.TF_OWNER_REVIEWER}
-            onChange={onChangeCallback('tfOwner')}
-            type='text'
-            value={record.tfOwner}
-          />
-        </Grid>
-        <Grid size={12}>
-          <Dropdown
-            fullWidth
-            id='classId'
-            label={strings.IS_CUMULATIVE}
-            onChange={onChangeCallback('classId')}
-            options={classIdOptions()}
-            selectedValue={record.classId}
-          />
-        </Grid>
-        <Grid size={12}>
-          <TextField
-            id='notes'
-            label={strings.NOTES}
-            onChange={onChangeCallback('notes')}
-            type='textarea'
-            value={record.notes}
-          />
-        </Grid>
-        <Grid size={12}>
-          <Dropdown
-            fullWidth
-            id='frequency'
-            label={strings.FREQUENCY_OF_REPORTING}
-            onChange={onChangeCallback('frequency')}
-            options={frequencyOptions()}
-            selectedValue={record.frequency}
-          />
-        </Grid>
-        <Grid size={12}>
-          <Checkbox
-            disabled={false}
-            id='active'
-            label={strings.ACTIVE}
-            name='active'
-            onChange={onChangeCallback('active')}
-            value={record.active}
-          />
-        </Grid>
-        <Grid size={12}>
-          <Checkbox
-            disabled={false}
-            id='isPublishable'
-            label={strings.PUBLISH_TO_FUNDER_PORTAL}
-            name='isPublishable'
-            onChange={onChangeCallback('isPublishable')}
-            value={record.isPublishable}
-          />
-        </Grid>
-        <Grid size={12}>
-          <Checkbox
-            disabled={false}
-            id='isDecimal'
-            label={strings.IS_DECIMAL}
-            name='isDecimal'
-            onChange={(value) => onChangeCallback('precision')(value ? 2 : 0)}
-            value={record.precision === 2}
-          />
-        </Grid>
-      </Grid>
+      </Box>
     </DialogBox>
   );
 }
