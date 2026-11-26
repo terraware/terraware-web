@@ -36,19 +36,18 @@ it.each(['common', 'project', 'error'])('blocks duplicate indicator saves (%s)',
     release = resolve;
   });
   const requests: Request[] = [];
-  const url =
-    kind === 'project'
-      ? '/api/v1/accelerator/projects/7/reports/indicators'
-      : '/api/v1/accelerator/reports/commonIndicators';
+  const respond = async ({ request }: { request: Request }) => {
+    requests.push(request.clone());
+    await pending;
+    return HttpResponse.json(
+      { status: kind === 'error' ? 'error' : 'ok', id: 42 },
+      { status: kind === 'error' ? 500 : 200 }
+    );
+  };
   server.use(
-    http.put(url, async ({ request }) => {
-      requests.push(request.clone());
-      await pending;
-      return HttpResponse.json(
-        { status: kind === 'error' ? 'error' : 'ok', id: 42 },
-        { status: kind === 'error' ? 500 : 200 }
-      );
-    })
+    kind === 'project'
+      ? http.post('/api/v1/indicators/projects/7/project', respond)
+      : http.put('/api/v1/accelerator/reports/commonIndicators', respond)
   );
   const { user, store } = renderWithProviders(
     <>

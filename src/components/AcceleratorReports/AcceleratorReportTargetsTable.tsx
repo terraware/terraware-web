@@ -11,7 +11,6 @@ import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
   AutoCalculatedIndicatorPayload,
-  useLazyListProjectIndicatorsQuery,
   useListAutoCalculatedIndicatorsQuery,
   useListCommonIndicatorsQuery,
 } from 'src/queries/generated/acceleratorReportIndicators';
@@ -27,6 +26,7 @@ import {
   useUpdateProjectIndicatorBaselineTargetMutation,
   useUpdateProjectIndicatorTargetMutation,
 } from 'src/queries/generated/acceleratorReports';
+import { useLazyListProjectSpecificIndicatorsQuery } from 'src/queries/generated/indicators';
 import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -57,7 +57,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const snackbar = useSnackbar();
 
   const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
-  const [listProjectIndicators, listProjectIndicatorsResponse] = useLazyListProjectIndicatorsQuery();
+  const [listProjectIndicators, listProjectIndicatorsResponse] = useLazyListProjectSpecificIndicatorsQuery();
   const listAutoCalculatedIndicatorsResponse = useListAutoCalculatedIndicatorsQuery();
   const listCommonIndicatorsResponse = useListCommonIndicatorsQuery();
 

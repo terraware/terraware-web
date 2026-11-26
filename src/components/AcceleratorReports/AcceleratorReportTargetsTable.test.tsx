@@ -15,7 +15,7 @@ const metadata = { category: 'Climate', level: 'Outcome', classId: 'Lifetime Cum
 beforeEach(() => {
   featureEnabled.mockReturnValue(true);
   mockGet(`${projectPath}/years`, { years: { startYear: 2025, endYear: 2025 } });
-  mockGet(`${projectPath}/indicators`, { indicators: [{ ...metadata, id: 1, name: 'Project indicator' }] });
+  mockGet('/api/v1/indicators/projects/1/project', { indicators: [{ ...metadata, id: 1, name: 'Project indicator' }] });
   mockGet('/api/v1/accelerator/reports/commonIndicators', {
     indicators: [{ ...metadata, id: 2, name: 'Common indicator' }],
   });
