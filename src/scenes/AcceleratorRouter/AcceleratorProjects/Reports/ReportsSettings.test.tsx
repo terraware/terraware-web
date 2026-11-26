@@ -18,7 +18,7 @@ it('shows the common indicators seeded by the first reporting configuration', as
   mockGet('/api/v1/users/me/preferences');
   mockGet(configsPath, { configs: [] });
   mockGet(`${indicatorsPath}/project`, { indicators: [] });
-  mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', { indicators: [] });
+  mockGet(`${indicatorsPath}/autoCalculated`, { indicators: [] });
   // An unconfigured project has no settings rows yet, so this list starts empty.
   const commonRequests = captureRequests('get', `${indicatorsPath}/common`, { indicators: [] });
   mockPut(configsPath, {});

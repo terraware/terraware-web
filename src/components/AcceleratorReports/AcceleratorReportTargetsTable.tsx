@@ -10,10 +10,6 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
-  AutoCalculatedIndicatorPayload,
-  useListAutoCalculatedIndicatorsQuery,
-} from 'src/queries/generated/acceleratorReportIndicators';
-import {
   useLazyGetAcceleratorReportYearsQuery,
   useLazyGetAutoCalculatedIndicatorTargetsQuery,
   useLazyGetCommonIndicatorTargetsQuery,
@@ -26,6 +22,8 @@ import {
   useUpdateProjectIndicatorTargetMutation,
 } from 'src/queries/generated/acceleratorReports';
 import {
+  ProjectAutoCalculatedIndicatorPayload,
+  useLazyListProjectAutoCalculatedIndicatorsQuery,
   useLazyListProjectCommonIndicatorsQuery,
   useLazyListProjectSpecificIndicatorsQuery,
 } from 'src/queries/generated/indicators';
@@ -60,7 +58,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
   const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
   const [listProjectIndicators, listProjectIndicatorsResponse] = useLazyListProjectSpecificIndicatorsQuery();
-  const listAutoCalculatedIndicatorsResponse = useListAutoCalculatedIndicatorsQuery();
+  const [listAutoCalculatedIndicators, listAutoCalculatedIndicatorsResponse] =
+    useLazyListProjectAutoCalculatedIndicatorsQuery();
   const [listCommonIndicators, listCommonIndicatorsResponse] = useLazyListProjectCommonIndicatorsQuery();
 
   const [updateProjectIndicatorTarget] = useUpdateProjectIndicatorTargetMutation();
@@ -201,6 +200,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       void getReportsYears(projectId, true);
       void listProjectIndicators(projectId, true);
       void listCommonIndicators(projectId, true);
+      void listAutoCalculatedIndicators(projectId, true);
       void listProjectIndicatorTargets(projectId, true);
       void listCommonIndicatorTargets(projectId, true);
       void listAutoCalculatedIndicatorTargets(projectId, true);
@@ -208,6 +208,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   }, [
     getReportsYears,
     listAutoCalculatedIndicatorTargets,
+    listAutoCalculatedIndicators,
     listCommonIndicatorTargets,
     listCommonIndicators,
     listProjectIndicatorTargets,
@@ -253,7 +254,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
             await updateAutoCalculatedIndicatorTarget({
               projectId,
               updateAutoCalculatedIndicatorTargetRequestPayload: {
-                indicator: row.indicatorSystemName as AutoCalculatedIndicatorPayload['indicator'],
+                indicator: row.indicatorSystemName as ProjectAutoCalculatedIndicatorPayload['indicator'],
                 target: newTarget,
                 year,
               },
@@ -313,7 +314,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
             await updateAutoCalculatedIndicatorBaselineTarget({
               projectId,
               updateAutoCalculatedIndicatorBaselineTargetRequestPayload: {
-                indicator: row.indicatorSystemName as AutoCalculatedIndicatorPayload['indicator'],
+                indicator: row.indicatorSystemName as ProjectAutoCalculatedIndicatorPayload['indicator'],
                 baseline: newBaseline,
                 endOfProjectTarget: row.endOfProjectTarget,
               },
@@ -375,7 +376,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
             await updateAutoCalculatedIndicatorBaselineTarget({
               projectId,
               updateAutoCalculatedIndicatorBaselineTargetRequestPayload: {
-                indicator: row.indicatorSystemName as AutoCalculatedIndicatorPayload['indicator'],
+                indicator: row.indicatorSystemName as ProjectAutoCalculatedIndicatorPayload['indicator'],
                 baseline: row.baseline,
                 endOfProjectTarget: newEndOfProjectTarget,
               },

@@ -12,14 +12,12 @@ import Link from 'src/components/common/Link';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import {
-  AutoCalculatedIndicatorPayload,
-  useListAutoCalculatedIndicatorsQuery,
-} from 'src/queries/generated/acceleratorReportIndicators';
 import { useListAcceleratorReportConfigQuery } from 'src/queries/generated/acceleratorReports';
 import {
   ExistingCommonIndicatorPayload,
   ExistingProjectIndicatorPayload,
+  ProjectAutoCalculatedIndicatorPayload,
+  useListProjectAutoCalculatedIndicatorsQuery,
   useListProjectCommonIndicatorsQuery,
   useListProjectSpecificIndicatorsQuery,
 } from 'src/queries/generated/indicators';
@@ -91,7 +89,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
     [projectIndicatorsResponse?.indicators]
   );
 
-  const { data: autoCalculatedIndicatorsResponse } = useListAutoCalculatedIndicatorsQuery();
+  const { data: autoCalculatedIndicatorsResponse } = useListProjectAutoCalculatedIndicatorsQuery(projectId);
   const autoCalculatedIndicators = useMemo(
     () => autoCalculatedIndicatorsResponse?.indicators ?? [],
     [autoCalculatedIndicatorsResponse?.indicators]
@@ -169,7 +167,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       originalCommonIndicator: ind,
     }));
 
-    const autoRows: IndicatorRow[] = autoCalculatedIndicators.map((ind: AutoCalculatedIndicatorPayload) => ({
+    const autoRows: IndicatorRow[] = autoCalculatedIndicators.map((ind: ProjectAutoCalculatedIndicatorPayload) => ({
       id: `auto-${ind.indicator}`,
       name: ind.name,
       unit: ind.unit,
@@ -180,7 +178,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       classId: ind.classId,
       level: ind.level,
       active: ind.active,
-      primaryDataSource: strings.TW_DATA,
+      primaryDataSource: ind.primaryDataSource ?? strings.TW_DATA,
       frequencyOfReporting: ind.frequency,
       tfOwnerReviewer: ind.tfOwner,
       notes: ind.notes,

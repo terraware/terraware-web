@@ -18,7 +18,7 @@ beforeEach(() => {
   mockGet(`${projectPath}/years`, { years: { startYear: 2025, endYear: 2025 } });
   mockGet(`${indicatorsPath}/project`, { indicators: [{ ...metadata, id: 1, name: 'Project indicator' }] });
   mockGet(`${indicatorsPath}/common`, { indicators: [{ ...metadata, id: 2, name: 'Common indicator' }] });
-  mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', {
+  mockGet(`${indicatorsPath}/autoCalculated`, {
     indicators: [{ ...metadata, indicator: 'Trees Planted', name: 'Auto indicator' }],
   });
   for (const type of ['project', 'common', 'autoCalculated']) {
