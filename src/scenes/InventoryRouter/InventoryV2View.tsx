@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, Container, Grid, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
@@ -270,8 +270,23 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
 
   return (
     <Page
-      title={strings.INVENTORY}
-      rightComponent={isOnboarded ? actions : undefined}
+      title={
+        <Grid container>
+          <Grid size={6}>
+            <Typography fontSize='24px' fontWeight={600}>
+              {strings.INVENTORY}
+            </Typography>
+          </Grid>
+          {isOnboarded && (
+            <Grid sx={{ textAlign: 'right' }} size={6}>
+              {actions}
+            </Grid>
+          )}
+        </Grid>
+      }
+      leftComponentGridSize={0}
+      rightComponentGridSize={0}
+      titleContainerStyle={{ paddingLeft: isMobile ? 0 : 3, paddingRight: 0 }}
       contentStyle={{ display: 'contents' }}
     >
       <ImportInventoryModal open={importInventoryModalOpen} onClose={onCloseImportInventoryModal} />
