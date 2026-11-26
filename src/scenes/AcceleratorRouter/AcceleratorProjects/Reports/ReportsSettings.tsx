@@ -14,18 +14,50 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import {
   AutoCalculatedIndicatorPayload,
-  ExistingCommonIndicatorPayload,
   useListAutoCalculatedIndicatorsQuery,
-  useListCommonIndicatorsQuery,
 } from 'src/queries/generated/acceleratorReportIndicators';
 import { useListAcceleratorReportConfigQuery } from 'src/queries/generated/acceleratorReports';
 import {
+  ExistingCommonIndicatorPayload,
   ExistingProjectIndicatorPayload,
+  useListProjectCommonIndicatorsQuery,
   useListProjectSpecificIndicatorsQuery,
 } from 'src/queries/generated/indicators';
 
 import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditProjectIndicatorModal from './EditProjectIndicatorModal';
+
+type IndicatorRow = {
+  id: string;
+  name: string;
+  unit?: string;
+  description?: string;
+  isCommon: boolean;
+  reference?: string;
+  category: string;
+  classId?: IndicatorClass;
+  level: string;
+  active: boolean;
+  primaryDataSource?: string;
+  frequencyOfReporting?: string;
+  tfOwnerReviewer?: string;
+  notes?: string;
+  indicatorType: 'project' | 'common' | 'autoCalculated';
+  originalProjectIndicator?: ExistingProjectIndicatorPayload;
+  originalCommonIndicator?: ExistingCommonIndicatorPayload;
+};
+
+type SortableRow = { getValue: (columnId: string) => unknown };
+
+/** Ref IDs are optional per project; rows without one sort after the rest. */
+const refIdSortingFn = (rowA: SortableRow, rowB: SortableRow, columnId: string) => {
+  const a = rowA.getValue(columnId) as string | undefined;
+  const b = rowB.getValue(columnId) as string | undefined;
+  if (!a || !b) {
+    return a ? -1 : b ? 1 : 0;
+  }
+  return a.localeCompare(b);
+};
 
 type ReportsSettingsProps = {
   header?: ReactNode;
@@ -65,7 +97,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
     [autoCalculatedIndicatorsResponse?.indicators]
   );
 
-  const { data: commonIndicatorsResponse } = useListCommonIndicatorsQuery();
+  const { data: commonIndicatorsResponse } = useListProjectCommonIndicatorsQuery(projectId);
   const commonIndicators = useMemo(
     () => commonIndicatorsResponse?.indicators ?? [],
     [commonIndicatorsResponse?.indicators]
@@ -97,26 +129,6 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   const goToAddIndicator = useCallback(() => {
     goToNewIndicator(projectId.toString());
   }, [goToNewIndicator, projectId]);
-
-  type IndicatorRow = {
-    id: string;
-    name: string;
-    unit?: string;
-    description?: string;
-    isCommon: boolean;
-    reference?: string;
-    category: string;
-    classId?: IndicatorClass;
-    level: string;
-    active: boolean;
-    primaryDataSource?: string;
-    frequencyOfReporting?: string;
-    tfOwnerReviewer?: string;
-    notes?: string;
-    indicatorType: 'project' | 'common' | 'autoCalculated';
-    originalProjectIndicator?: ExistingProjectIndicatorPayload;
-    originalCommonIndicator?: ExistingCommonIndicatorPayload;
-  };
 
   const allIndicatorRows = useMemo((): IndicatorRow[] => {
     const projectRows: IndicatorRow[] = projectIndicators.map((ind) => ({
@@ -271,6 +283,10 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
     [strings]
   );
 
+  const ReferenceCell = useCallback(({ cell }: EditableTableCellContext<IndicatorRow>) => {
+    return <>{(cell.getValue() as string | undefined) || '-'}</>;
+  }, []);
+
   const ActiveCell = useCallback(
     ({ cell }: EditableTableCellContext<IndicatorRow>) => {
       const isActive = Boolean(cell.getValue());
@@ -317,6 +333,8 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
         accessorKey: 'reference',
         enableEditing: false,
         size: 100,
+        Cell: ReferenceCell,
+        sortingFn: refIdSortingFn,
       },
       {
         id: 'category',
@@ -379,7 +397,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
         size: 200,
       },
     ],
-    [strings, NameCell, CommonCell, CategoryCell, PrimaryDataSourceCell, ActiveCell, ClassIdCell]
+    [strings, NameCell, CommonCell, CategoryCell, ReferenceCell, PrimaryDataSourceCell, ActiveCell, ClassIdCell]
   );
 
   return (

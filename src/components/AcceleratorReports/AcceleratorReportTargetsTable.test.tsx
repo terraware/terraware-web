@@ -10,15 +10,14 @@ import AcceleratorReportTargetsTable from './AcceleratorReportTargetsTable';
 const { featureEnabled } = rs.hoisted(() => ({ featureEnabled: rs.fn(() => true) }));
 rs.mock('src/features', () => ({ useFeatureEnabled: featureEnabled }));
 const projectPath = '/api/v1/accelerator/projects/1/reports';
+const indicatorsPath = '/api/v1/indicators/projects/1';
 const metadata = { category: 'Climate', level: 'Outcome', classId: 'Lifetime Cumulative', precision: 2 };
 
 beforeEach(() => {
   featureEnabled.mockReturnValue(true);
   mockGet(`${projectPath}/years`, { years: { startYear: 2025, endYear: 2025 } });
-  mockGet('/api/v1/indicators/projects/1/project', { indicators: [{ ...metadata, id: 1, name: 'Project indicator' }] });
-  mockGet('/api/v1/accelerator/reports/commonIndicators', {
-    indicators: [{ ...metadata, id: 2, name: 'Common indicator' }],
-  });
+  mockGet(`${indicatorsPath}/project`, { indicators: [{ ...metadata, id: 1, name: 'Project indicator' }] });
+  mockGet(`${indicatorsPath}/common`, { indicators: [{ ...metadata, id: 2, name: 'Common indicator' }] });
   mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', {
     indicators: [{ ...metadata, indicator: 'Trees Planted', name: 'Auto indicator' }],
   });

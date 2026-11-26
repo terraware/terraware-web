@@ -12,7 +12,6 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import {
   AutoCalculatedIndicatorPayload,
   useListAutoCalculatedIndicatorsQuery,
-  useListCommonIndicatorsQuery,
 } from 'src/queries/generated/acceleratorReportIndicators';
 import {
   useLazyGetAcceleratorReportYearsQuery,
@@ -26,7 +25,10 @@ import {
   useUpdateProjectIndicatorBaselineTargetMutation,
   useUpdateProjectIndicatorTargetMutation,
 } from 'src/queries/generated/acceleratorReports';
-import { useLazyListProjectSpecificIndicatorsQuery } from 'src/queries/generated/indicators';
+import {
+  useLazyListProjectCommonIndicatorsQuery,
+  useLazyListProjectSpecificIndicatorsQuery,
+} from 'src/queries/generated/indicators';
 import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -59,7 +61,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const [getReportsYears, getReportsYearsResponse] = useLazyGetAcceleratorReportYearsQuery();
   const [listProjectIndicators, listProjectIndicatorsResponse] = useLazyListProjectSpecificIndicatorsQuery();
   const listAutoCalculatedIndicatorsResponse = useListAutoCalculatedIndicatorsQuery();
-  const listCommonIndicatorsResponse = useListCommonIndicatorsQuery();
+  const [listCommonIndicators, listCommonIndicatorsResponse] = useLazyListProjectCommonIndicatorsQuery();
 
   const [updateProjectIndicatorTarget] = useUpdateProjectIndicatorTargetMutation();
   const [updateCommonIndicatorTarget] = useUpdateCommonIndicatorTargetMutation();
@@ -198,6 +200,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     if (projectId) {
       void getReportsYears(projectId, true);
       void listProjectIndicators(projectId, true);
+      void listCommonIndicators(projectId, true);
       void listProjectIndicatorTargets(projectId, true);
       void listCommonIndicatorTargets(projectId, true);
       void listAutoCalculatedIndicatorTargets(projectId, true);
@@ -206,6 +209,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     getReportsYears,
     listAutoCalculatedIndicatorTargets,
     listCommonIndicatorTargets,
+    listCommonIndicators,
     listProjectIndicatorTargets,
     listProjectIndicators,
     projectId,

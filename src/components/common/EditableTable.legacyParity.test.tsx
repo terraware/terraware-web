@@ -27,7 +27,7 @@ it.each([
     mockGet(`${path}/years`, { years: { startYear: 2025, endYear: 2025 } });
     mockGet('/api/v1/indicators/projects/1/project', { indicators: [] });
     mockGet(`${path}/configs`, { configs: [] });
-    mockGet('/api/v1/accelerator/reports/commonIndicators', { indicators: [] });
+    mockGet('/api/v1/indicators/projects/1/common', { indicators: [] });
     mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', { indicators: [] });
     for (const kind of ['project', 'common', 'autoCalculated']) {
       mockGet(`${path}/${kind}IndicatorTargets`, { targets: [] });

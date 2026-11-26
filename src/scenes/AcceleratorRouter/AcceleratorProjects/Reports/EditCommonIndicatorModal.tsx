@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
 import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';
@@ -10,8 +11,8 @@ import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import {
   ExistingCommonIndicatorPayload,
-  useUpdateCommonIndicatorMutation,
-} from 'src/queries/generated/acceleratorReportIndicators';
+  useUpdateProjectCommonIndicatorMutation,
+} from 'src/queries/generated/indicators';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -61,13 +62,15 @@ export default function EditCommonIndicatorModal({
   commonIndicator,
 }: EditCommonIndicatorModalProps): JSX.Element {
   const snackbar = useSnackbar();
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = Number(pathParams.projectId);
 
   const [record, , , onChangeCallback] = useForm<ExistingCommonIndicatorPayload>(commonIndicator);
   const [validate, setValidate] = useState(false);
   const [confirmDialogOpen, , openConfirmDialog, closeConfirmDialog] = useBoolean(false);
   const { activeLocale } = useLocalization();
 
-  const [updateCommonIndicator, updateCommonIndicatorResponse] = useUpdateCommonIndicatorMutation();
+  const [updateCommonIndicator, updateCommonIndicatorResponse] = useUpdateProjectCommonIndicatorMutation();
 
   useEffect(() => {
     if (updateCommonIndicatorResponse.isError && activeLocale) {
@@ -89,12 +92,13 @@ export default function EditCommonIndicatorModal({
   const confirmSave = useCallback(() => {
     closeConfirmDialog();
     void updateCommonIndicator({
+      projectId,
       indicatorId: commonIndicator.id,
       updateCommonIndicatorRequestPayload: {
         indicator: record,
       },
     });
-  }, [closeConfirmDialog, updateCommonIndicator, commonIndicator.id, record]);
+  }, [closeConfirmDialog, updateCommonIndicator, projectId, commonIndicator.id, record]);
 
   return (
     <DialogBox
