@@ -1,10 +1,15 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox } from '@terraware/web-components';
 
-import { indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
+import {
+  indicatorCategoryLabel,
+  indicatorClassLabel,
+  indicatorFrequencyLabel,
+  indicatorLevelLabel,
+} from 'src/components/AcceleratorReports/utils';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -32,7 +37,6 @@ export default function EditAutoCalculatedIndicatorModal({
   const snackbar = useSnackbar();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
-  const [validate, setValidate] = useState(false);
 
   const { data: projectResponse } = useGetProjectQuery(projectId);
   const projectName = projectResponse?.project.name ?? '';
@@ -55,15 +59,12 @@ export default function EditAutoCalculatedIndicatorModal({
   }, [updateIndicatorResponse, snackbar, onClose, strings.INDICATOR_SAVED]);
 
   const save = useCallback(() => {
-    if (!record.refId) {
-      setValidate(true);
-      return;
-    }
-
     void updateIndicator({
       projectId,
       indicatorId: autoCalculatedIndicator.indicator,
-      updateProjectAutoCalculatedIndicatorRequestPayload: { indicator: record },
+      updateProjectAutoCalculatedIndicatorRequestPayload: {
+        indicator: { ...record, refId: record.refId || undefined },
+      },
     });
   }, [projectId, autoCalculatedIndicator.indicator, record, updateIndicator]);
 
@@ -107,11 +108,9 @@ export default function EditAutoCalculatedIndicatorModal({
         <Grid container spacing={2}>
           <Grid size={6}>
             <TextField
-              errorText={validate && !record.refId ? strings.REQUIRED_FIELD : ''}
               id='refId'
               label={strings.REF_ID}
               onChange={onChangeCallback('refId')}
-              required
               type='text'
               value={record.refId}
             />
@@ -217,7 +216,7 @@ export default function EditAutoCalculatedIndicatorModal({
               id='category'
               label={strings.CATEGORY}
               type='text'
-              value={autoCalculatedIndicator.category}
+              value={indicatorCategoryLabel(autoCalculatedIndicator.category, strings)}
             />
           </Grid>
           <Grid size={4}>
@@ -226,7 +225,7 @@ export default function EditAutoCalculatedIndicatorModal({
               id='level'
               label={strings.INDICATOR_LEVEL}
               type='text'
-              value={autoCalculatedIndicator.level}
+              value={indicatorLevelLabel(autoCalculatedIndicator.level, strings)}
             />
           </Grid>
           <Grid size={4}>
@@ -235,7 +234,7 @@ export default function EditAutoCalculatedIndicatorModal({
               id='frequency'
               label={strings.FREQUENCY_OF_REPORTING}
               type='text'
-              value={autoCalculatedIndicator.frequency}
+              value={indicatorFrequencyLabel(autoCalculatedIndicator.frequency, strings)}
             />
           </Grid>
           <Grid size={12}>
