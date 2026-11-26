@@ -25,11 +25,9 @@ it.each([
     rs.mocked(useFeatureEnabled).mockReturnValue(flag);
     const path = '/api/v1/accelerator/projects/1/reports';
     mockGet(`${path}/years`, { years: { startYear: 2025, endYear: 2025 } });
-    mockGet('/api/v1/indicators/projects/1/project', { indicators: [] });
     mockGet(`${path}/configs`, { configs: [] });
-    mockGet('/api/v1/indicators/projects/1/common', { indicators: [] });
-    mockGet('/api/v1/accelerator/reports/autoCalculatedIndicators', { indicators: [] });
     for (const kind of ['project', 'common', 'autoCalculated']) {
+      mockGet(`/api/v1/indicators/projects/1/${kind}`, { indicators: [] });
       mockGet(`${path}/${kind}IndicatorTargets`, { targets: [] });
     }
     mockGet('/api/v1/users/me/savedTableViews', { views: [] });
