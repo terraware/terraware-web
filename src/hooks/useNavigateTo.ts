@@ -346,9 +346,6 @@ export default function useNavigateTo() {
 
       goToAcceleratorEditReportSettings: (projectId: string) =>
         navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_EDIT.replace(':projectId', projectId)),
-
-      goToNewIndicator: (projectId: string) =>
-        navigate(APP_PATHS.ACCELERATOR_PROJECT_REPORTS_INDICATORS_NEW.replace(':projectId', projectId)),
     }),
     [navigate]
   );

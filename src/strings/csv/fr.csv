@@ -394,7 +394,6 @@ COLLECTORS_COLUMN,Collecteur(s),0b8e6f94
 COLOR,Couleur,e96df902
 COMMENTS,Commentaires,5a6f1269
 COMMON,Commun,69695656
-COMMON_INDICATOR,Indicateur commun,78d9c492
 COMMON_INDICATOR_PROJECT_DEFAULTS_MESSAGE,"Chaque projet commence avec les champs par défaut au niveau du projet : Actif = Oui, Publier sur le Portail des financeurs = Non, Réf. ID = « - », et aucune source de données principale ni note. Définissez-les pour chaque projet après l’ajout.",451260df
 COMMON_INDICATOR_SAVED,Indicateur commun enregistré,6e09bf56
 COMMON_INDICATORS,Indicateurs communs,892fa739

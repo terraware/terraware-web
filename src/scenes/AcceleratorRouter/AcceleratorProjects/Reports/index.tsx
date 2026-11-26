@@ -6,7 +6,6 @@ import { useUser } from 'src/providers';
 
 import EditSettings from './EditSettings';
 import FunderReportPreviewV2 from './FunderReportPreviewV2';
-import NewIndicator from './NewIndicator';
 import PublishedFunderReportV2 from './PublishedFunderReportV2';
 import ReportEditV2 from './ReportEditV2';
 import ReportsSegmentedView from './ReportsSegmentedView';
@@ -20,7 +19,6 @@ const ReportsRouter = () => {
   return (
     <Routes>
       <Route path='/edit' element={<EditSettings />} />
-      <Route path='/indicators/new' element={<NewIndicator />} />
       <Route path='/indicators' element={<ReportsSegmentedView tab='settings' />} />
       <Route path='/targets' element={<ReportsSegmentedView tab='targets' />} />
       <Route
