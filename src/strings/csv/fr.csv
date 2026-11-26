@@ -132,6 +132,7 @@ ADD_YOUR_FIRST_ACTIVITY,Ajoutez votre première activité,9df0e1e5
 ADDED,Ajouté·e,d441aa1d
 ADDED_SPECIES,Espèces ajoutées,f2342d09
 ADDED_SPECIES_TOOLTIP,Espèces à inclure dans les calculs du taux de survie qui ne proviennent pas des retraits.,cad59bdf
+ADDED_TO_ALL_PROJECTS,Ajouté à tous les projets,f90989f0
 ADDING_STRATUM_BOUNDARIES,Ajout des limites de strate,c58fad17
 ADDING_STRATUM_BOUNDARIES_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l’outil de découpe {0} pour créer des polygones à l’intérieur des limites du site pour les strates.,c53f3647
 ADDING_SUBSTRATUM_BOUNDARIES,Ajout des limites de substrat,45f4c828
@@ -1497,6 +1498,7 @@ ONBOARDING_NON_ADMINS_MESSAGE,"Avant de pouvoir gérer les accessions et l'inven
 ONE_ON_ONE_SESSION,Session 1:1,30dd4c46
 ONE_ON_ONE_SESSIONS,Sessions en tête-à-tête,6b99a693
 ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Une ou plusieurs réponses nécessitent des mises à jour. Consultez-les ci-dessous pour voir les commentaires de chaque réponse.,13444528
+ONLY_FOR_X,Uniquement pour {0},073160d9
 OPPORTUNITIES_INSTRUCTIONS,"Il peut s'agir des possibilités de développement de projet, de nouveaux marchés, de recommandations, de formation d'autres organisations, etc. (un quart de page au maximum.)",98ba6999
 OPPORTUNITIES_REQUIRED,Opportunités *,8d418e65
 OPT_IN,Fonctionnalités Opt-In,cbb9300b

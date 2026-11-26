@@ -22,6 +22,7 @@ import {
   useListProjectSpecificIndicatorsQuery,
 } from 'src/queries/generated/indicators';
 
+import AddIndicatorModal from './AddIndicatorModal';
 import EditAutoCalculatedIndicatorModal from './EditAutoCalculatedIndicatorModal';
 import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditProjectIndicatorModal from './EditProjectIndicatorModal';
@@ -70,7 +71,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
-  const { goToAcceleratorEditReportSettings, goToNewIndicator } = useNavigateTo();
+  const { goToAcceleratorEditReportSettings } = useNavigateTo();
   const [selectedProjectIndicator, setSelectedProjectIndicator] = useState<ExistingProjectIndicatorPayload>();
   const [selectedCommonIndicator, setSelectedCommonIndicator] = useState<ExistingCommonIndicatorPayload>();
   const [selectedAutoCalculatedIndicator, setSelectedAutoCalculatedIndicator] =
@@ -85,6 +86,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
     openEditAutoCalculatedIndicatorModal,
     closeEditAutoCalculatedIndicatorModal,
   ] = useBoolean(false);
+  const [addIndicatorModalOpened, , openAddIndicatorModal, closeAddIndicatorModal] = useBoolean(false);
   const { isAllowed } = useUser();
 
   const listProjectReportConfigResponse = useListAcceleratorReportConfigQuery(projectId);
@@ -133,10 +135,6 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
   const editSettingsButton = isAllowed('UPDATE_REPORTS_SETTINGS') && (
     <Button icon='iconEdit' onClick={goToEditSettings} priority='secondary' label={strings.EDIT_SETTINGS} />
   );
-
-  const goToAddIndicator = useCallback(() => {
-    goToNewIndicator(projectId.toString());
-  }, [goToNewIndicator, projectId]);
 
   const allIndicatorRows = useMemo((): IndicatorRow[] => {
     const projectRows: IndicatorRow[] = projectIndicators.map((ind) => ({
@@ -423,6 +421,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
       {editCommonIndicatorModalOpened && selectedCommonIndicator && (
         <EditCommonIndicatorModal onClose={closeEditCommonIndicatorModal} commonIndicator={selectedCommonIndicator} />
       )}
+      {addIndicatorModalOpened && <AddIndicatorModal onClose={closeAddIndicatorModal} />}
       {editAutoCalculatedIndicatorModalOpened && selectedAutoCalculatedIndicator && (
         <EditAutoCalculatedIndicatorModal
           onClose={closeEditAutoCalculatedIndicatorModal}
@@ -476,7 +475,7 @@ export default function ReportsSettings({ header }: ReportsSettingsProps): JSX.E
         </Grid>
         {isAllowed('UPDATE_REPORTS_SETTINGS') && (
           <Box display='flex' justifyContent='flex-end' marginBottom={theme.spacing(2)}>
-            <Button icon='plus' label={strings.ADD_INDICATOR} onClick={goToAddIndicator} priority='secondary' />
+            <Button icon='plus' label={strings.ADD_INDICATOR} onClick={openAddIndicatorModal} priority='secondary' />
           </Box>
         )}
         <EditableTable
