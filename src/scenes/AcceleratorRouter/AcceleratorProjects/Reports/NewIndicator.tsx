@@ -13,9 +13,9 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import { useLocalization } from 'src/providers';
 import {
   NewIndicatorPayload,
-  useCreateCommonIndicatorMutation,
-} from 'src/queries/generated/acceleratorReportIndicators';
-import { useCreateProjectSpecificIndicatorMutation } from 'src/queries/generated/indicators';
+  useCreateCommonDefinitionMutation,
+  useCreateProjectSpecificIndicatorMutation,
+} from 'src/queries/generated/indicators';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -39,10 +39,11 @@ export default function NewIndicator(): JSX.Element {
   const exitReportsEdit = useExitReportsEdit(projectId);
   const [validate, setValidate] = useState(false);
   const [indicatorKind, setIndicatorKind] = useState<IndicatorKind>('common');
+  const isCommon = indicatorKind === 'common';
 
   const goToProjectReports = useCallback(() => exitReportsEdit('indicators'), [exitReportsEdit]);
 
-  const [createCommonIndicator, createCommonIndicatorResponse] = useCreateCommonIndicatorMutation();
+  const [createCommonDefinition, createCommonIndicatorResponse] = useCreateCommonDefinitionMutation();
   const [createProjectIndicator, createProjectIndicatorResponse] = useCreateProjectSpecificIndicatorMutation();
 
   useEffect(() => {
@@ -83,19 +84,22 @@ export default function NewIndicator(): JSX.Element {
   ];
 
   const save = useCallback(() => {
-    if (!newIndicator.name || !newIndicator.refId) {
+    if (!newIndicator.name || (!isCommon && !newIndicator.refId)) {
       setValidate(true);
       return;
     }
-    if (indicatorKind === 'common') {
-      return createCommonIndicator({ indicator: newIndicator });
-    } else {
-      return createProjectIndicator({
-        projectId,
-        createProjectIndicatorRequestPayload: { indicator: newIndicator },
+    if (isCommon) {
+      // A common indicator only defines the shared fields; each project gets its own settings row.
+      const { category, classId, description, frequency, level, name, precision, tfOwner, unit } = newIndicator;
+      return createCommonDefinition({
+        indicator: { category, classId, description, frequency, level, name, precision, tfOwner, unit },
       });
     }
-  }, [newIndicator, indicatorKind, createCommonIndicator, createProjectIndicator, projectId]);
+    return createProjectIndicator({
+      projectId,
+      createProjectIndicatorRequestPayload: { indicator: newIndicator },
+    });
+  }, [newIndicator, isCommon, createCommonDefinition, createProjectIndicator, projectId]);
 
   return (
     <Page title={strings.REPORTS} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
@@ -168,17 +172,19 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.unit}
                 />
               </Grid>
-              <Grid size={12}>
-                <TextField
-                  errorText={validate && !newIndicator.refId ? strings.REQUIRED_FIELD : ''}
-                  id='refId'
-                  label={strings.REF_ID}
-                  onChange={onChangeCallback('refId')}
-                  required
-                  type='text'
-                  value={newIndicator.refId}
-                />
-              </Grid>
+              {!isCommon && (
+                <Grid size={12}>
+                  <TextField
+                    errorText={validate && !newIndicator.refId ? strings.REQUIRED_FIELD : ''}
+                    id='refId'
+                    label={strings.REF_ID}
+                    onChange={onChangeCallback('refId')}
+                    required
+                    type='text'
+                    value={newIndicator.refId}
+                  />
+                </Grid>
+              )}
               <Grid size={12}>
                 <Dropdown
                   fullWidth
@@ -190,15 +196,17 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.category}
                 />
               </Grid>
-              <Grid size={12}>
-                <TextField
-                  id='primaryDataSource'
-                  label={strings.PRIMARY_DATA_SOURCE}
-                  onChange={onChangeCallback('primaryDataSource')}
-                  type='text'
-                  value={newIndicator.primaryDataSource}
-                />
-              </Grid>
+              {!isCommon && (
+                <Grid size={12}>
+                  <TextField
+                    id='primaryDataSource'
+                    label={strings.PRIMARY_DATA_SOURCE}
+                    onChange={onChangeCallback('primaryDataSource')}
+                    type='text'
+                    value={newIndicator.primaryDataSource}
+                  />
+                </Grid>
+              )}
               <Grid size={12}>
                 <TextField
                   id='tfOwner'
@@ -218,15 +226,17 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.classId}
                 />
               </Grid>
-              <Grid size={12}>
-                <TextField
-                  id='notes'
-                  label={strings.NOTES}
-                  onChange={onChangeCallback('notes')}
-                  type='textarea'
-                  value={newIndicator.notes}
-                />
-              </Grid>
+              {!isCommon && (
+                <Grid size={12}>
+                  <TextField
+                    id='notes'
+                    label={strings.NOTES}
+                    onChange={onChangeCallback('notes')}
+                    type='textarea'
+                    value={newIndicator.notes}
+                  />
+                </Grid>
+              )}
               <Grid size={12}>
                 <Dropdown
                   fullWidth
@@ -237,26 +247,30 @@ export default function NewIndicator(): JSX.Element {
                   selectedValue={newIndicator.frequency}
                 />
               </Grid>
-              <Grid size={12}>
-                <Checkbox
-                  disabled={false}
-                  id='isPublishable'
-                  label={strings.PUBLISH_TO_FUNDER_PORTAL}
-                  name='isPublishable'
-                  onChange={onChangeCallback('isPublishable')}
-                  value={newIndicator.isPublishable}
-                />
-              </Grid>
-              <Grid size={12}>
-                <Checkbox
-                  disabled={false}
-                  id='active'
-                  label={strings.ACTIVE}
-                  name='active'
-                  onChange={onChangeCallback('active')}
-                  value={newIndicator.active}
-                />
-              </Grid>
+              {!isCommon && (
+                <>
+                  <Grid size={12}>
+                    <Checkbox
+                      disabled={false}
+                      id='isPublishable'
+                      label={strings.PUBLISH_TO_FUNDER_PORTAL}
+                      name='isPublishable'
+                      onChange={onChangeCallback('isPublishable')}
+                      value={newIndicator.isPublishable}
+                    />
+                  </Grid>
+                  <Grid size={12}>
+                    <Checkbox
+                      disabled={false}
+                      id='active'
+                      label={strings.ACTIVE}
+                      name='active'
+                      onChange={onChangeCallback('active')}
+                      value={newIndicator.active}
+                    />
+                  </Grid>
+                </>
+              )}
               <Grid size={12}>
                 <Checkbox
                   disabled={false}
@@ -267,6 +281,13 @@ export default function NewIndicator(): JSX.Element {
                   value={newIndicator.precision === 2}
                 />
               </Grid>
+              {isCommon && (
+                <Grid size={12}>
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                    {strings.COMMON_INDICATOR_PROJECT_DEFAULTS_MESSAGE}
+                  </Typography>
+                </Grid>
+              )}
             </Grid>
           </Card>
         </Container>

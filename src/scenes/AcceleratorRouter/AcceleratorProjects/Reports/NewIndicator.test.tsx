@@ -24,7 +24,7 @@ it('keeps an empty indicator editable without sending a request', async () => {
   const { user } = renderWithProviders(<NewIndicator />);
   const save = screen.getByRole('button', { name: strings.SAVE });
   await user.click(save);
-  expect(screen.getAllByText(strings.REQUIRED_FIELD)).toHaveLength(2);
+  expect(screen.getAllByText(strings.REQUIRED_FIELD)).toHaveLength(1);
   expect(save).toBeEnabled();
   expect(screen.getByRole('button', { name: strings.CANCEL })).toBeEnabled();
 });
@@ -47,7 +47,7 @@ it.each(['common', 'project', 'error'])('blocks duplicate indicator saves (%s)',
   server.use(
     kind === 'project'
       ? http.post('/api/v1/indicators/projects/7/project', respond)
-      : http.put('/api/v1/accelerator/reports/commonIndicators', respond)
+      : http.post('/api/v1/indicators/common', respond)
   );
   const { user, store } = renderWithProviders(
     <>
@@ -63,7 +63,9 @@ it.each(['common', 'project', 'error'])('blocks duplicate indicator saves (%s)',
     await selectDropdownOption(user, 'indicatorKind', strings.PROJECT_SPECIFIC);
   }
   await user.type(document.querySelector('#name input') as HTMLInputElement, 'Forest cover');
-  await user.type(document.querySelector('#refId input') as HTMLInputElement, 'BIO-1');
+  if (kind === 'project') {
+    await user.type(document.querySelector('#refId input') as HTMLInputElement, 'BIO-1');
+  }
   const save = screen.getByRole('button', { name: strings.SAVE });
   const cancel = screen.getByRole('button', { name: strings.CANCEL });
   await user.click(save);
@@ -72,7 +74,9 @@ it.each(['common', 'project', 'error'])('blocks duplicate indicator saves (%s)',
   expect(cancel).toBeDisabled();
   save.click();
   expect(requests).toHaveLength(1);
-  expect(await requests[0].json()).toMatchObject({ indicator: { name: 'Forest cover', refId: 'BIO-1' } });
+  expect(await requests[0].json()).toMatchObject({
+    indicator: kind === 'project' ? { name: 'Forest cover', refId: 'BIO-1' } : { name: 'Forest cover' },
+  });
   release();
   await waitFor(() => expect(save).toBeEnabled());
   expect(cancel).toBeEnabled();
