@@ -39,6 +39,10 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, args) => [
         projectAcceleratorReportConfigsTag(args.projectId),
         projectAcceleratorReportTag(args.projectId),
+        // The first configuration is what seeds the project's common and
+        // auto-calculated indicator settings, so those lists are stale now.
+        { type: QueryTagTypes.CommonIndicators, id: args.projectId },
+        { type: QueryTagTypes.AutoCalculatedIndicators, id: args.projectId },
       ],
     },
     updateAcceleratorReportConfig: {

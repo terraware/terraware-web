@@ -82,7 +82,7 @@ export default function EditCommonIndicatorModal({
   }, [updateCommonIndicatorResponse, snackbar, onClose, activeLocale]);
 
   const save = useCallback(() => {
-    if (!record.name || !record.refId) {
+    if (!record.name) {
       setValidate(true);
       return;
     }
@@ -95,7 +95,7 @@ export default function EditCommonIndicatorModal({
       projectId,
       indicatorId: commonIndicator.id,
       updateCommonIndicatorRequestPayload: {
-        indicator: record,
+        indicator: { ...record, refId: record.refId || undefined },
       },
     });
   }, [closeConfirmDialog, updateCommonIndicator, projectId, commonIndicator.id, record]);
@@ -172,11 +172,9 @@ export default function EditCommonIndicatorModal({
         </Grid>
         <Grid size={12}>
           <TextField
-            errorText={validate && !record.refId ? strings.REQUIRED_FIELD : ''}
             id='refId'
             label={strings.REF_ID}
             onChange={onChangeCallback('refId')}
-            required
             type='text'
             value={record.refId}
           />
