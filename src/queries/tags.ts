@@ -12,6 +12,7 @@ export enum QueryTagTypes {
   AcceleratorReport = 'AcceleratorReport',
   AcceleratorReportMedia = 'AcceleratorReportMedia',
   AccessionWithdrawals = 'AccessionWithdrawals',
+  AutoCalculatedIndicators = 'AutoCalculatedIndicators',
   Accessions = 'Accessions',
   Activities = 'Activities',
   ApplicationDeliverables = 'ApplicationDeliverables',
