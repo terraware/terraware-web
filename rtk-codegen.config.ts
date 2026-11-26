@@ -103,6 +103,9 @@ const config: ConfigFile = {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/globalRoles') || operation.path === '/api/v1/users/{userId}/globalRoles',
     },
+    './src/queries/generated/indicators.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/indicators'),
+    },
     './src/queries/generated/mapbox.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/mapbox'),
     },
