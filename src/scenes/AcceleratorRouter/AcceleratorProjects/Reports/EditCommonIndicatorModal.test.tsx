@@ -111,9 +111,35 @@ it('confirms before saving a shared-field edit, naming each changed field', asyn
   const confirmDialog = screen.getByText(strings.THIS_CHANGE_APPLIES_TO_ALL_PROJECTS).closest('.dialog-box');
   expect(confirmDialog).toBeVisible();
   expect(confirmDialog).toHaveClass('dialog-box--large');
+  // A dialog is capped at the viewport height, so the body has to scroll or the buttons
+  // can end up out of reach once several fields are listed.
+  expect(confirmDialog?.querySelector('.dialog-box--body')).toHaveClass('scrolled');
   expect(screen.getByRole('listitem')).toHaveTextContent(strings.UNIT);
   expect(requests).toHaveLength(0);
 
   await user.click(screen.getByRole('button', { name: strings.SAVE_FOR_ALL_PROJECTS }));
+  await waitFor(() => expect(requests).toHaveLength(1));
+});
+
+it('keeps the confirmation usable when every shared field changed', async () => {
+  const requests = captureRequests('put', `/api/v1/indicators/projects/${PROJECT_ID}/common/1`);
+  const { user } = renderModal(seededWithValues);
+
+  await user.clear(document.querySelector('#name input') as HTMLInputElement);
+  await user.type(document.querySelector('#name input') as HTMLInputElement, 'Renamed');
+  await user.clear(document.querySelector('#unit input') as HTMLInputElement);
+  await user.type(document.querySelector('#unit input') as HTMLInputElement, 'people');
+  await user.clear(document.querySelector('#tfOwner input') as HTMLInputElement);
+  await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+  expect(screen.getAllByRole('listitem').map((item) => item.textContent)).toEqual([
+    strings.INDICATOR_NAME,
+    strings.UNIT,
+    strings.TF_OWNER_REVIEWER,
+  ]);
+
+  const confirm = screen.getByRole('button', { name: strings.SAVE_FOR_ALL_PROJECTS });
+  expect(confirm).toBeVisible();
+  await user.click(confirm);
   await waitFor(() => expect(requests).toHaveLength(1));
 });

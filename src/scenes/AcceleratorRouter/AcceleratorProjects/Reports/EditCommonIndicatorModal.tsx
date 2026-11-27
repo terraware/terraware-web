@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Confirm, Dropdown } from '@terraware/web-components';
+import { Checkbox, Dropdown } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -151,11 +151,31 @@ export default function EditCommonIndicatorModal({
       title={strings.EDIT_INDICATOR}
       scrolled
     >
-      <Confirm
-        closeButtonText={strings.CANCEL}
-        confirmButtonDisabled={updateCommonIndicatorResponse.isLoading}
-        confirmButtonText={strings.SAVE_FOR_ALL_PROJECTS}
-        message={
+      {confirmDialogOpen && (
+        <DialogBox
+          middleButtons={[
+            <Button
+              id='confirm-close'
+              key='button-1'
+              label={strings.CANCEL}
+              onClick={closeConfirmDialog}
+              priority='secondary'
+              type='passive'
+            />,
+            <Button
+              disabled={updateCommonIndicatorResponse.isLoading}
+              id='confirm-submit'
+              key='button-2'
+              label={strings.SAVE_FOR_ALL_PROJECTS}
+              onClick={confirmSave}
+            />,
+          ]}
+          onClose={closeConfirmDialog}
+          open={true}
+          scrolled
+          size='large'
+          title={strings.THIS_CHANGE_APPLIES_TO_ALL_PROJECTS}
+        >
           <Box textAlign='left'>
             <Typography>
               {strings.formatString(
@@ -174,13 +194,8 @@ export default function EditCommonIndicatorModal({
             </ul>
             <Typography>{strings.formatString(strings.SAVING_UPDATES_ALL_PROJECTS, projectName)}</Typography>
           </Box>
-        }
-        onClose={closeConfirmDialog}
-        onConfirm={confirmSave}
-        open={confirmDialogOpen}
-        size='large'
-        title={strings.THIS_CHANGE_APPLIES_TO_ALL_PROJECTS}
-      />
+        </DialogBox>
+      )}
       <Box
         borderRadius={theme.spacing(1)}
         marginBottom={theme.spacing(3)}
