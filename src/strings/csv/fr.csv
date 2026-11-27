@@ -209,6 +209,9 @@ APPROVE,Approuver,913a9927
 APPROVE_DELIVERABLE,Approuver le livrable,7efd4b07
 APPROVED,Approuvé,b279ed0b
 APPROX_SYMBOL,~,acb59e95
+ARCHIVE,Archiver,cdad4a2d
+ARCHIVE_CUSTOM_PURPOSE_MESSAGE,« {0} » sera supprimé de vos autres finalités enregistrées. Cela ne modifiera aucune donnée de retrait.,e2bfd928
+ARCHIVE_X,Archiver {0},22987f6a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,Êtes-vous sûr de vouloir supprimer cette date de plantation ?,c9c72b70
@@ -472,6 +475,7 @@ CUMULATIVE_TARGET,Objectif cumulatif,82b48c14
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
 CURRENT_VIEW,Vue actuelle,8b3a3d54
+CUSTOM_PURPOSE_NAME_EXISTS,Une finalité portant ce nom existe déjà.,00c704f7
 CUT_TEST,Test de coupe,4501b398
 DASHBOARD,Tableau de bord,a9d0682e
 DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,Les données d'observation sur ce tableau de bord sont fondées sur un échantillon de {0} parmi les {1} pour ce site de plantation.,bdce81df
@@ -1963,6 +1967,8 @@ REMOVE_TREE_CONFIRMATION,Supprimer l’arbre {0} ?,3c7f7db6
 REMOVE_VIRTUAL_WALKTHROUGH,Supprimer la visite virtuelle,19cd7395
 REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM,Êtes-vous sûr de vouloir supprimer cette visite virtuelle ? Cette action est irréversible.,d5c769f1
 REMOVING_ORG_WARNING,"En vous retirant de {0}, vous n'aurez plus accès aux données de cette organisation. Êtes-vous sûr de vouloir enregistrer vos modifications ?",767a2892
+RENAME,Renommer,f5571e91
+RENAME_X,Renommer {0},bbf25f78
 REPLACE,Remplacer,f6e3faed
 REPLACE_BOUNDARY,Remplacer les limites,f20d140b
 REPLACE_PLOT_AFFECTED_OBSERVATIONS_MESSAGE,Le remplacement à long terme de ce site modifiera également les observations à venir qui l’incluent.,94b1dfa8

@@ -29,6 +29,7 @@ type PurposeAndDestinationStepProps = {
   plantingDates: PlantingDateForWithdrawal[];
   speciesTargets?: SpeciesTargetForSubstratum[];
   onChange: (next: Partial<BatchWithdrawDraft>) => void;
+  onCustomPurposeBusyChange?: (busy: boolean) => void;
 };
 
 const PurposeAndDestinationStep = ({
@@ -38,6 +39,7 @@ const PurposeAndDestinationStep = ({
   plantingDates,
   speciesTargets,
   onChange,
+  onCustomPurposeBusyChange,
 }: PurposeAndDestinationStepProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale, strings } = useLocalization();
@@ -351,6 +353,7 @@ const PurposeAndDestinationStep = ({
             <WithdrawalCustomPurposeSelector
               value={draft.customPurpose}
               onChange={(customPurpose) => onChange({ purpose: NurseryWithdrawalRequestPurposes.OTHER, customPurpose })}
+              onBusyChange={onCustomPurposeBusyChange}
               sx={{ width: '280px', textAlign: 'left' }}
             />
           </Box>
