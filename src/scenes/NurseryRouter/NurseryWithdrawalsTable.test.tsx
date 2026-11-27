@@ -166,6 +166,55 @@ describe('NurseryWithdrawalsTable purpose filter', () => {
   });
 });
 
+describe('NurseryWithdrawalsTable restoring a saved purpose filter', () => {
+  const persistFilter = (values: string[]) =>
+    localStorage.setItem('nursery-withdrawals-table_columnFilters', JSON.stringify([{ id: 'purpose', value: values }]));
+
+  it('keeps searching for a saved custom purpose that this organization still has', async () => {
+    persistFilter([`customPurpose:${SALE.id}`]);
+    const { searches } = mockWithdrawalsPage();
+    renderWithProviders(<NurseryWithdrawalsTable />);
+
+    await screen.findByRole('table');
+
+    await waitFor(() =>
+      expect(purposeCondition(searches)).toEqual({
+        operation: 'or',
+        children: [{ operation: 'field', field: 'customPurpose', type: 'Exact', values: ['Sale'] }],
+      })
+    );
+  });
+
+  // The filter is stored per table, not per organization, and the server rejects a purpose it does
+  // not know: every search and export would fail until the user noticed and cleared the filter.
+  it('drops a saved custom purpose that this organization does not have', async () => {
+    persistFilter(['customPurpose:999']);
+    const { searches } = mockWithdrawalsPage();
+    renderWithProviders(<NurseryWithdrawalsTable />);
+
+    await screen.findByRole('table');
+
+    await waitFor(() => expect(searches.length).toBeGreaterThan(0));
+    await waitFor(() => expect(purposeCondition(searches)).toBeUndefined());
+  });
+
+  // Earlier versions of this page stored the translated label.
+  it('still understands a built-in purpose saved under its label', async () => {
+    persistFilter([strings.DEAD]);
+    const { searches } = mockWithdrawalsPage();
+    renderWithProviders(<NurseryWithdrawalsTable />);
+
+    await screen.findByRole('table');
+
+    await waitFor(() =>
+      expect(purposeCondition(searches)).toEqual({
+        operation: 'or',
+        children: [{ operation: 'field', field: 'purpose(raw)', type: 'Exact', values: ['Dead'] }],
+      })
+    );
+  });
+});
+
 describe('NurseryWithdrawalsTable purpose column', () => {
   it('names an Other withdrawal by the purpose it was given', async () => {
     mockWithdrawalsPage({
