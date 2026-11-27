@@ -396,6 +396,8 @@ COMMENTS,Commentaires,5a6f1269
 COMMON,Commun,69695656
 COMMON_INDICATOR_PROJECT_DEFAULTS_MESSAGE,"Chaque projet commence avec les champs par défaut au niveau du projet : Actif = Oui, Publier sur le Portail des financeurs = Non, Réf. ID = « - », et aucune source de données principale ni note. Définissez-les pour chaque projet après l’ajout.",451260df
 COMMON_INDICATOR_SAVED,Indicateur commun enregistré,6e09bf56
+COMMON_INDICATOR_SHARED_FIELDS_CHANGED,« {0} » est un indicateur commun. Vous avez modifié un champ partagé par tous les projets :,f4589f09
+COMMON_INDICATOR_SHARED_FIELDS_CHANGED_PLURAL,« {0} » est un indicateur commun. Vous avez modifié des champs partagés par tous les projets :,b6ace963
 COMMON_INDICATORS,Indicateurs communs,892fa739
 COMMON_NAME,Nom commun,d7db2e57
 COMMON_QUESTION,Commun ?,68715b60
@@ -645,8 +647,6 @@ EDIT_ACCESSION_DETAIL,Modifier les détails de l'accession,9b3e32a8
 EDIT_ACCOUNT,Modifier le compte,b77ad44d
 EDIT_ACTIVITY,Modifier l’activité,5b6476f3
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
-EDIT_COMMON_INDICATOR,Modifier l’indicateur commun,e14bc686
-EDIT_COMMON_INDICATOR_CONFIRMATION,Les modifications apportées à cet indicateur commun seront appliquées à TOUS les projets. Voulez-vous vraiment que ces mises à jour s’appliquent à tous les projets ?,8a103582
 EDIT_DETAILS,Modifier les détails,9711cdac
 EDIT_DOCUMENT_DETAILS,Modifier les détails du document,92155983
 EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
@@ -1801,7 +1801,6 @@ PROJECT_HEALTH,Santé du projet,721aa8b8
 PROJECT_HIGHLIGHT_IMAGE,Image de mise en évidence du projet,a7d500cb
 PROJECT_IMPACT_INSTRUCTIONS,"Détaillez l'impact de votre projet au cours de la période couverte par le rapport, y compris les principales réalisations et les progrès accomplis en vue d'atteindre les objectifs fixés et les principales étapes. Outre les objectifs forestiers, veuillez indiquer les emplois créés (à temps plein, à temps partiel et saisonniers), en utilisant des chiffres spécifiques ventilés par sexe. (Environ une page.)",57149db5
 PROJECT_IMPACT_REQUIRED,Impact du projet *,d64d1635
-PROJECT_INDICATOR,Indicateur de projet,e893a286
 PROJECT_INDICATOR_SAVED,Indicateur de projet enregistré,a1be5605
 PROJECT_INDICATORS,Indicateurs du projet,2075f3c5
 PROJECT_INFORMATION,Informations sur le projet,20e59559
@@ -2075,6 +2074,7 @@ SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
 SAVE_ANYWAY,Enregistrer quand même,41580823
 SAVE_CHANGES,Enregistrer les modifications,cb5e8c33
+SAVE_FOR_ALL_PROJECTS,Enregistrer pour tous les projets,f592146b
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
@@ -2094,6 +2094,7 @@ SAVED_VIEW_DELETED,{0} supprimée,77fb1505
 SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38
 SAVED_VIEWS_PRIVATE,Vous seul pouvez voir les vues que vous enregistrez.,374179a6
 SAVING,Enregistrement en cours...,d4ce4849
+SAVING_UPDATES_ALL_PROJECTS,"L’enregistrement met à jour cet indicateur dans tous les projets, pas seulement {0}.",3578be83
 SCARIFY,Scarification,b34359c6
 SCHEDULE_ANYWAY,Planifier quand même,051f6f28
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
@@ -2230,7 +2231,7 @@ SETTINGS,Paramètres,38560978
 SETTINGS_FOR,Paramètres pour {0},da07c7b6
 SETUP_REMAINING,Configuration restante,368418af
 SHARED_FIELDS_ACROSS_ALL_PROJECTS,Champs partagés entre tous les projets,fd26510b
-SHARED_FIELDS_APPLY_TO_ALL_PROJECTS,La modification de ces éléments les applique à tous les projets.,9bf17514
+SHARED_FIELDS_APPLY_TO_ALL_PROJECTS,Les modifications s’appliquent à TOUS les projets.,41eb7b0e
 SHARED_FIELDS_CALCULATED_BY_TERRAWARE,Calculé par Terraware. Ces champs ne peuvent pas être modifiés.,0d4b0ee4
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
@@ -2582,6 +2583,7 @@ THERE_ARE_NO_PLANTING_SEASONS,Il n'y a pas de Saisons de plantation.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Aucune espèce n'a encore été ajoutée à ce projet.,02f58d0e
 THESE_SUBSTRATA_ARE_ALREADY_INCLUDED_IN_A_COMPLETED_OR_SCHEDULED_BASELINE_SURVEY,Ces substrats sont déjà inclus dans une enquête de ligne de base terminée ou planifiée :,ac5828de
 THIS_ACTION_IS_NON_REVERSIBLE,Cette action n'est pas réversible.,aecdef3a
+THIS_CHANGE_APPLIES_TO_ALL_PROJECTS,Cette modification s’applique à TOUS les projets.,4230ed72
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Ce livrable a été approuvé. Si le projet téléverse un nouveau document, le statut repassera à « En cours d’examen ».",96ae1308
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Ce livrable a été approuvé. Si le projet soumet à nouveau le questionnaire, le statut repassera à « En cours d’examen ».",89b908e0
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Ce livrable a été approuvé. La liste des espèces et leur statut peuvent changer à mesure que d'autres livrables de liste d'espèces sont soumis.,28fcdf43
