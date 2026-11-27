@@ -27,6 +27,7 @@ import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
+import useWithdrawalCustomPurposes from 'src/hooks/useWithdrawalCustomPurposes';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { SearchSortOrderElement } from 'src/queries/generated/search';
@@ -393,6 +394,24 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [strings]
   );
 
+  // Archived purposes are gone from the withdrawal form but are still on past withdrawals, so the
+  // filter keeps offering them.
+  const { customPurposes } = useWithdrawalCustomPurposes({ includeArchived: true });
+
+  const customPurposeLabelToName = useMemo(
+    () =>
+      new Map(customPurposes.map((customPurpose) => [purposeLabel('Other', customPurpose.name), customPurpose.name])),
+    [customPurposes]
+  );
+
+  const purposeFilterOptions = useMemo(
+    () => [
+      ...NurseryWithdrawalPurposesValues.map((purpose) => purposeLabel(purpose)),
+      ...customPurposeLabelToName.keys(),
+    ],
+    [customPurposeLabelToName]
+  );
+
   // Cell renderer components
   const WithdrawnDateCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
@@ -428,7 +447,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       };
 
       if (!row.undoesWithdrawalId) {
-        return <span>{purposeLabel(value)}</span>;
+        return <span>{purposeLabel(value, row.customPurpose)}</span>;
       } else {
         const undoWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(
           ':withdrawalId',
@@ -514,7 +533,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'purpose',
         enableEditing: false,
         filterVariant: 'multi-select',
-        filterSelectOptions: NurseryWithdrawalPurposesValues.map(purposeLabel),
+        filterSelectOptions: purposeFilterOptions,
         filterFn: () => true,
         Cell: PurposeCell,
       },
@@ -620,6 +639,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       strings,
       WithdrawnDateCell,
       PurposeCell,
+      purposeFilterOptions,
       nurseryNames,
       destinationNames,
       uniqueProjectNames,
@@ -651,10 +671,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const withdrawnDate = getDateFilterValue(dateFilterValue);
     const plantingDate = getDateFilterValue(plantingDateFilterValue);
 
-    const purposes =
+    const selectedPurposeLabels =
       purposeFilterValue && Array.isArray(purposeFilterValue)
-        ? purposeFilterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v))
+        ? purposeFilterValue.filter((value): value is string => typeof value === 'string')
         : undefined;
+    const purposes = selectedPurposeLabels
+      ?.filter((label) => !customPurposeLabelToName.has(label))
+      .map((label) => purposeLabelToValue[label] || label);
+    const customPurposeNames = selectedPurposeLabels
+      ?.map((label) => customPurposeLabelToName.get(label))
+      .filter((name): name is string => name !== undefined);
 
     const totalWithdrawn =
       totalWithdrawnFilterValue && Array.isArray(totalWithdrawnFilterValue)
@@ -693,6 +719,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       withdrawnDate,
       projectNames: projectFilterValue as string[] | undefined,
       purposes: purposes as NurseryWithdrawalPurpose[] | undefined,
+      customPurposes: customPurposeNames,
       nurseryName: nurseryFilterValue as string | undefined,
       destinationNames: destinationFilterValue as string[] | undefined,
       plantingSeasonIds: shouldUseLinkedPlantingSeasonIds ? linkedPlantingSeasonIds : plantingSeasonIdsForFilter,
@@ -705,6 +732,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     };
   }, [
     columnFilters,
+    customPurposeLabelToName,
     debouncedSearchTerm,
     linkedPlantingSeasonIds,
     plantingSeasonFilterValue,
@@ -817,6 +845,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       searchArgs.plantingSeasonIds?.length ||
       searchArgs.projectNames?.length ||
       searchArgs.purposes?.length ||
+      searchArgs.customPurposes?.length ||
       searchArgs.plantingDate?.maxDate ||
       searchArgs.plantingDate?.minDate ||
       searchArgs.stratumNames?.length ||

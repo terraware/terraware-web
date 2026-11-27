@@ -60,7 +60,7 @@ export const NurseryWithdrawalRequestPurposes: { [key: string]: NurseryWithdrawa
   OTHER: 'Other',
 };
 
-export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
+export const purposeLabel = (purpose: NurseryWithdrawalPurpose, customPurpose?: string): string => {
   switch (purpose) {
     case 'Out Plant':
       return strings.PLANTING;
@@ -71,7 +71,7 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
     case 'Undo':
       return strings.UNDO_WITHDRAWAL;
     default:
-      return strings.OTHER;
+      return customPurpose ? (strings.formatString(strings.OTHER_COLON_X, customPurpose) as string) : strings.OTHER;
   }
 };
 

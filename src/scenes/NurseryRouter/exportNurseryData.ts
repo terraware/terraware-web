@@ -94,7 +94,7 @@ const makeNurseryWithdrawalResultsCsv = ({
     withdrawal.species.map((species) => ({
       withdrawalId: withdrawal.withdrawalId,
       withdrawnDate: withdrawal.withdrawnDate,
-      purpose: purposeLabel(withdrawal.purpose),
+      purpose: purposeLabel(withdrawal.purpose, withdrawal.customPurpose),
       nurseryName: withdrawal.nurseryName,
       destinationName: withdrawal.destinationName,
       projectNames: withdrawal.projectNames?.filter((name: string) => !!name).join(', '),

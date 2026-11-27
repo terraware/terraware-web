@@ -87,7 +87,7 @@ export default function WithdrawalOverview({
     },
     {
       title: strings.PURPOSE,
-      data: withdrawal?.purpose ? purposeLabel(withdrawal.purpose) : '',
+      data: withdrawal?.purpose ? purposeLabel(withdrawal.purpose, withdrawal.customPurpose) : '',
     },
     {
       title: strings.QUANTITY,

@@ -118,12 +118,33 @@ const parseSearchNurseryWithdrawalsArgs = (
     });
   }
 
-  if (args.purposes?.length) {
+  if (args.purposes?.length || args.customPurposes?.length) {
+    // The purpose filter offers the saved custom purposes alongside the base purposes, so a
+    // selection can span both. Filtering on Other still returns every custom purpose.
     searchChildren.push({
-      operation: 'field',
-      field: 'purpose(raw)',
-      type: 'Exact',
-      values: args.purposes,
+      operation: 'or',
+      children: [
+        ...(args.purposes?.length
+          ? [
+              {
+                operation: 'field' as const,
+                field: 'purpose(raw)',
+                type: 'Exact' as const,
+                values: args.purposes,
+              },
+            ]
+          : []),
+        ...(args.customPurposes?.length
+          ? [
+              {
+                operation: 'field' as const,
+                field: 'customPurpose',
+                type: 'Exact' as const,
+                values: args.customPurposes,
+              },
+            ]
+          : []),
+      ],
     });
   }
 
@@ -314,6 +335,7 @@ const injectedRtkApi = api.injectEndpoints({
             'delivery_id',
             'withdrawnDate',
             'purpose(raw)',
+            'customPurpose',
             'facility_name',
             'destinationName',
             'stratumNames',
@@ -362,6 +384,7 @@ const injectedRtkApi = api.injectEndpoints({
             deliveryId: result.delivery_id ? Number(result.delivery_id) : undefined,
             withdrawnDate: result.withdrawnDate,
             purpose: result['purpose(raw)'] as NurseryWithdrawalPurpose,
+            customPurpose: result.customPurpose,
             nurseryName: result.facility_name,
             destinationName: result.destinationName,
             stratumName: result.stratumNames,
@@ -493,6 +516,7 @@ export type SearchNurseryWithdrawalsApiArgs = {
   searchTerm?: string;
   withdrawnDate?: { minDate?: string; maxDate?: string };
   purposes?: NurseryWithdrawalPurpose[];
+  customPurposes?: string[];
   projectNames?: string[];
   nurseryName?: string;
   destinationNames?: string[];
@@ -522,6 +546,7 @@ type NurseryWithdrawalApiResult = {
   delivery_id?: string;
   withdrawnDate: string;
   'purpose(raw)': string;
+  customPurpose?: string;
   facility_name: string;
   destinationName?: string;
   stratumNames?: string;
@@ -551,6 +576,7 @@ export type SearchNurseryWithdrawalPayload = {
   deliveryId?: number;
   withdrawnDate: string;
   purpose: NurseryWithdrawalPurpose;
+  customPurpose?: string;
   nurseryName: string;
   destinationName?: string;
   stratumName?: string;

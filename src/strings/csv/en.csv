@@ -1529,6 +1529,7 @@ ORIGINAL_QTY,Original Qty,
 ORTHODOX,Orthodox,
 OTHER,Other,
 OTHER_COLON,Other:,
+OTHER_COLON_X,Other: {0},The name a user gave to an Other withdrawal; {0} is not translated.
 OTHER_CONTACT,Other Contact,
 OTHER_CONTACT_TYPE,Other Contact Type,
 OTHER_CONTACTS,Other Contacts,

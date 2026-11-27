@@ -38,7 +38,7 @@ export const getEventType = (event: BatchHistoryEvent): string => {
       .formatString(
         strings.BATCH_HISTORY_WITHDRAWAL_ON_DATE,
         getDateDisplayValue(event.withdrawnDate),
-        purposeLabel(event.purpose)
+        purposeLabel(event.purpose, event.customPurpose)
       )
       .toString();
   }
