@@ -1289,6 +1289,7 @@ NAME,Nom,e7c2678c
 NAME_CHECK,Vérification du nom,6afa08ed
 NAME_CHECK_NO_SUGGESTIONS,Aucune suggestion pour les noms d'espèces.,1743b138
 NAME_CHECK_NO_SUGGESTIONS_HINT,Les noms individuels des espèces peuvent être modifiés sur l'écran Détails de l'espèce.,1de53c3f
+NAME_MAXIMUM_LENGTH_X,Le nom doit comporter au maximum {0} caractères.,80961ccf
 NAME_REQUIRED,Nom *,9a735f80
 NAME_UNKNOWN,(nom inconnu),526f6e3c
 NAME_USED_BY_PROJECT,Nom utilisé par projet,c2fdff8f

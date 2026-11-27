@@ -6,9 +6,11 @@ import { ValueType } from '@terraware/web-components/components/Autocomplete/Aut
 import Autocomplete from 'src/components/common/Autocomplete';
 import useWithdrawalCustomPurposes from 'src/hooks/useWithdrawalCustomPurposes';
 import { useLocalization } from 'src/providers';
-import { normalizeCustomPurposeName } from 'src/utils/withdrawalCustomPurposes';
-
-const CUSTOM_PURPOSE_MAX_LENGTH = 50;
+import {
+  CUSTOM_PURPOSE_MAX_LENGTH,
+  isCustomPurposeTooLong,
+  normalizeCustomPurposeName,
+} from 'src/utils/withdrawalCustomPurposes';
 
 type WithdrawalCustomPurposeSelectorProps = {
   value: string;
@@ -53,7 +55,14 @@ const WithdrawalCustomPurposeSelector = ({
       options={options}
       selected={value}
       placeholder={strings.ENTER_OR_SELECT}
-      onChange={(newValue) => onChange(String(newValue ?? '').slice(0, CUSTOM_PURPOSE_MAX_LENGTH))}
+      // Truncating here would leave the field showing text the withdrawal wouldn't save, since the
+      // component keeps its own input text once the value it is given stops changing.
+      onChange={(newValue) => onChange(String(newValue ?? ''))}
+      errorText={
+        isCustomPurposeTooLong(value)
+          ? (strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, CUSTOM_PURPOSE_MAX_LENGTH) as string)
+          : undefined
+      }
       filterOptions={filterOptions}
       sx={sx}
     />

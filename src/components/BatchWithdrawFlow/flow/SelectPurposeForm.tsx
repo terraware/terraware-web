@@ -35,6 +35,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
+import { isCustomPurposeTooLong } from 'src/utils/withdrawalCustomPurposes';
 
 type SelectPurposeFormProps = {
   onNext: (withdrawal: NurseryWithdrawalRequest) => void;
@@ -356,6 +357,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   };
 
   const onNextHandler = () => {
+    const customPurposeInvalid =
+      localRecord.purpose === OTHER && isCustomPurposeTooLong(localRecord.customPurpose ?? '');
     const nurseryTransferInvalid = !validateNurseryTransfer();
     const selectedNurseryInvalid = !validateSelectedNursery();
     const withdrawnQuantityInvalid = !validateWithdrawnQuantity();
@@ -363,6 +366,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     const germinatingReadyAndActiveGrowthInvalid = !validateQuantities();
     if (
       fieldsErrors.withdrawnDate ||
+      customPurposeInvalid ||
       nurseryTransferInvalid ||
       selectedNurseryInvalid ||
       withdrawnQuantityInvalid ||

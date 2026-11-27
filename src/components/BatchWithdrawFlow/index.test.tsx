@@ -188,6 +188,26 @@ describe('BatchWithdrawFlow naming an Other withdrawal', () => {
     expect(await withdrawals[0].json()).toMatchObject({ purpose: 'Other', customPurpose: 'Sale' });
   });
 
+  it('stays on the purpose step while the name is longer than the server accepts', async () => {
+    mockFlowDependencies(SAVED_PURPOSES);
+    const withdrawals = captureRequests('post', CREATE_WITHDRAWAL_URL, {
+      withdrawal: { id: WITHDRAWAL_ID, facilityId: 100, purpose: 'Other', withdrawnDate: '2026-01-01' },
+    });
+
+    const { user } = renderWithProviders(<BatchWithdrawFlow batchIds={[10]} />);
+
+    await user.click(await findCustomPurposeField());
+    await user.paste('S'.repeat(51));
+    await user.click(screen.getByRole('button', { name: strings.NEXT }));
+
+    // The name the field shows is the name that would be saved, so the step holds until it fits.
+    expect(
+      await screen.findByText(strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, 50) as string)
+    ).toBeInTheDocument();
+    expect(customPurposeField()).toHaveValue('S'.repeat(51));
+    expect(withdrawals).toHaveLength(0);
+  });
+
   it('drops a name the user typed before switching to another purpose', async () => {
     mockFlowDependencies(SAVED_PURPOSES);
     const withdrawals = captureRequests('post', CREATE_WITHDRAWAL_URL, {

@@ -23,6 +23,7 @@ import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
 import { findScheduledDateForRequest } from 'src/utils/plantingDates';
 import useSnackbar from 'src/utils/useSnackbar';
+import { isCustomPurposeTooLong } from 'src/utils/withdrawalCustomPurposes';
 
 import AddPhotosStep from './AddPhotosStep';
 import PurposeAndDestinationStep from './PurposeAndDestinationStep';
@@ -368,6 +369,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   // Step 1 validation: purpose-specific destination + withdraw date.
   const canGoNextFromStep1 = useMemo(() => {
     if (!draft.withdrawnDate || draft.fromFacilityId === undefined) {
+      return false;
+    }
+    if (draft.purpose === NurseryWithdrawalRequestPurposes.OTHER && isCustomPurposeTooLong(draft.customPurpose)) {
       return false;
     }
     if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT) {

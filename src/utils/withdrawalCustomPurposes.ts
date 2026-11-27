@@ -1,5 +1,8 @@
 import { WithdrawalCustomPurposePayload } from 'src/queries/generated/withdrawalCustomPurposes';
 
+/** The longest name the server accepts, measured after trimming. */
+export const CUSTOM_PURPOSE_MAX_LENGTH = 50;
+
 /**
  * Mirrors how the server matches custom purpose names: trimmed, case-insensitive and
  * accent-insensitive, so "Sale", " sale " and "Sále" all resolve to the same saved purpose.
@@ -20,3 +23,5 @@ export const findCustomPurposeByName = (
     ? undefined
     : customPurposes.find((customPurpose) => normalizeCustomPurposeName(customPurpose.name) === normalized);
 };
+
+export const isCustomPurposeTooLong = (name: string): boolean => name.trim().length > CUSTOM_PURPOSE_MAX_LENGTH;

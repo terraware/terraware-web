@@ -704,13 +704,27 @@ describe('BatchWithdrawModal naming an Other withdrawal', () => {
     expect(body).not.toHaveProperty('customPurpose');
   });
 
-  it('cuts a pasted name down to the length the server accepts', async () => {
+  // Silently shortening the name would save something other than what the field shows, and the
+  // field keeps showing the longer text either way.
+  it('refuses to go on while the name is longer than the server accepts', async () => {
+    mockModalData();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await typeCustomPurpose(user, 'S'.repeat(51));
+
+    await waitFor(() => expect(nextButton()).toBeDisabled());
+    expect(customPurposeField()).toHaveValue('S'.repeat(51));
+    expect(screen.getByText(strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, 50) as string)).toBeInTheDocument();
+  });
+
+  it('sends a name of the greatest length the server accepts', async () => {
     mockModalData();
     const withdrawals = captureWithdrawals();
     const { user } = renderModal();
 
     await waitForDialog();
-    await typeCustomPurpose(user, 'S'.repeat(60));
+    await typeCustomPurpose(user, 'S'.repeat(50));
     await withdrawOneSeedling(user);
 
     await waitFor(() => expect(withdrawals).toHaveLength(1));
