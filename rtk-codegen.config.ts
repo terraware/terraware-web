@@ -234,6 +234,9 @@ const config: ConfigFile = {
     './src/queries/generated/search.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
     },
+    './src/queries/generated/withdrawalCustomPurposes.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/withdrawalCustomPurposes'),
+    },
   },
   prettierConfigFile: '.prettierrc',
   flattenArg: true,

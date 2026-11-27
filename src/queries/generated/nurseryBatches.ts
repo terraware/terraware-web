@@ -315,6 +315,8 @@ export type BatchHistoryIncomingWithdrawalPayload = BatchHistoryPayloadCommonPro
 };
 export type BatchHistoryOutgoingWithdrawalPayload = BatchHistoryPayloadCommonProps & {
   activeGrowthQuantityWithdrawn: number;
+  /** If purpose is Other, an optional custom purpose. */
+  customPurpose?: string;
   germinatingQuantityWithdrawn: number;
   hardeningOffQuantity: number;
   notReadyQuantityWithdrawn: number;

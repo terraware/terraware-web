@@ -83,6 +83,7 @@ export enum QueryTagTypes {
   VariableWorkflowHistory = 'VariableWorkflowHistory',
   Variables = 'Variables',
   ViabilityTests = 'ViabilityTests',
+  WithdrawalCustomPurposes = 'WithdrawalCustomPurposes',
 }
 
 export const QUERY_TAGS = Object.values(QueryTagTypes);

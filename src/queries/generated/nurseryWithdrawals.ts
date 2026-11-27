@@ -149,6 +149,8 @@ export type BatchWithdrawalPayload = {
 };
 export type NurseryWithdrawalPayload = {
   batchWithdrawals: BatchWithdrawalPayload[];
+  /** If purpose is Other, an optional custom purpose. */
+  customPurpose?: string;
   /** If purpose is "Nursery Transfer", the ID of the facility to which the seedlings were transferred. */
   destinationFacilityId?: number;
   facilityId: number;
@@ -179,6 +181,8 @@ export type SimpleErrorResponsePayload = {
 };
 export type CreateNurseryWithdrawalRequestPayload = {
   batchWithdrawals: BatchWithdrawalPayload[];
+  /** A user-defined name for what an Other withdrawal was used for, saved for reuse across the organization. Only allowed for purpose Other. Matched case- and accent-insensitively after trimming whitespace; created if new. */
+  customPurpose?: string;
   /** If purpose is "Nursery Transfer", the ID of the facility to transfer to. Must be in the same organization as the originating facility. Cannot be the same as facilityId. Not allowed for purposes other than "Nursery Transfer". */
   destinationFacilityId?: number;
   facilityId: number;
