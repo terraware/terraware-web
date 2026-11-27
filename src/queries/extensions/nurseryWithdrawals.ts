@@ -21,6 +21,8 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.NurserySpeciesSummary },
         { type: QueryTagTypes.NurseryOrganizationSummary },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
+        // An Other withdrawal with a custom purpose can add that purpose to the organization's list
+        { type: QueryTagTypes.WithdrawalCustomPurposes, id: 'LIST' },
       ],
     },
     getNurseryWithdrawal: {
