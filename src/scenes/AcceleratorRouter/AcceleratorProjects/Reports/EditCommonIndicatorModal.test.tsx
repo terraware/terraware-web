@@ -51,7 +51,6 @@ it('saves an indicator that has no Ref ID yet', async () => {
 
   await user.type(notesInput(), 'Checked with the field team');
   await user.click(screen.getByRole('button', { name: strings.SAVE }));
-  await user.click(screen.getByRole('button', { name: strings.CONFIRM }));
 
   await waitFor(() => expect(requests).toHaveLength(1));
   const { indicator } = (await requests[0].json()) as { indicator: ExistingCommonIndicatorPayload };
@@ -65,7 +64,6 @@ it('sends a cleared Ref ID as absent rather than empty', async () => {
 
   await user.clear(document.querySelector('#refId input') as HTMLInputElement);
   await user.click(screen.getByRole('button', { name: strings.SAVE }));
-  await user.click(screen.getByRole('button', { name: strings.CONFIRM }));
 
   await waitFor(() => expect(requests).toHaveLength(1));
   const { indicator } = (await requests[0].json()) as { indicator: ExistingCommonIndicatorPayload };
@@ -80,4 +78,42 @@ it('still requires a name', async () => {
 
   expect(screen.getByText(strings.REQUIRED_FIELD)).toBeVisible();
   expect(requests).toHaveLength(0);
+});
+
+const seededWithValues: ExistingCommonIndicatorPayload = {
+  ...seededIndicator,
+  description: 'Community development projects funded.',
+  frequency: 'Annual',
+  refId: '1.31',
+  tfOwner: 'Someone',
+  unit: 'projects',
+};
+
+it('saves a project-level-only edit without confirming', async () => {
+  const requests = captureRequests('put', `/api/v1/indicators/projects/${PROJECT_ID}/common/1`);
+  const { user } = renderModal(seededWithValues);
+
+  await user.type(notesInput(), 'Only our project changes');
+  await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+  await waitFor(() => expect(requests).toHaveLength(1));
+  expect(screen.queryByText(strings.THIS_CHANGE_APPLIES_TO_ALL_PROJECTS)).toBeNull();
+});
+
+it('confirms before saving a shared-field edit, naming each changed field', async () => {
+  const requests = captureRequests('put', `/api/v1/indicators/projects/${PROJECT_ID}/common/1`);
+  const { user } = renderModal(seededWithValues);
+
+  await user.clear(document.querySelector('#unit input') as HTMLInputElement);
+  await user.type(document.querySelector('#unit input') as HTMLInputElement, 'people');
+  await user.click(screen.getByRole('button', { name: strings.SAVE }));
+
+  const confirmDialog = screen.getByText(strings.THIS_CHANGE_APPLIES_TO_ALL_PROJECTS).closest('.dialog-box');
+  expect(confirmDialog).toBeVisible();
+  expect(confirmDialog).toHaveClass('dialog-box--large');
+  expect(screen.getByRole('listitem')).toHaveTextContent(strings.UNIT);
+  expect(requests).toHaveLength(0);
+
+  await user.click(screen.getByRole('button', { name: strings.SAVE_FOR_ALL_PROJECTS }));
+  await waitFor(() => expect(requests).toHaveLength(1));
 });

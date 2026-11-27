@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
@@ -14,7 +14,7 @@ import {
   useUpdateProjectCommonIndicatorMutation,
 } from 'src/queries/generated/indicators';
 import { useGetProjectQuery } from 'src/queries/generated/projects';
-import strings from 'src/strings';
+import strings, { ILocalizedStrings } from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -58,6 +58,19 @@ export const frequencyOptions = () => {
   ];
 };
 
+/** The fields a common indicator shares with every project, paired with the label to name them by. */
+const sharedFields: { key: keyof ExistingCommonIndicatorPayload; label: (strings: ILocalizedStrings) => string }[] = [
+  { key: 'name', label: (s) => s.INDICATOR_NAME },
+  { key: 'description', label: (s) => s.DEFINITION },
+  { key: 'unit', label: (s) => s.UNIT },
+  { key: 'classId', label: (s) => s.IS_CUMULATIVE },
+  { key: 'precision', label: (s) => s.IS_DECIMAL },
+  { key: 'category', label: (s) => s.CATEGORY },
+  { key: 'level', label: (s) => s.INDICATOR_LEVEL },
+  { key: 'frequency', label: (s) => s.FREQUENCY_OF_REPORTING },
+  { key: 'tfOwner', label: (s) => s.TF_OWNER_REVIEWER },
+];
+
 export default function EditCommonIndicatorModal({
   onClose,
   commonIndicator,
@@ -86,16 +99,12 @@ export default function EditCommonIndicatorModal({
     }
   }, [updateCommonIndicatorResponse, snackbar, onClose, activeLocale]);
 
-  const save = useCallback(() => {
-    if (!record.name) {
-      setValidate(true);
-      return;
-    }
-    openConfirmDialog();
-  }, [record, openConfirmDialog]);
+  const changedSharedFields = useMemo(
+    () => sharedFields.filter(({ key }) => (record[key] ?? '') !== (commonIndicator[key] ?? '')),
+    [record, commonIndicator]
+  );
 
-  const confirmSave = useCallback(() => {
-    closeConfirmDialog();
+  const submit = useCallback(() => {
     void updateCommonIndicator({
       projectId,
       indicatorId: commonIndicator.id,
@@ -103,7 +112,25 @@ export default function EditCommonIndicatorModal({
         indicator: { ...record, refId: record.refId || undefined },
       },
     });
-  }, [closeConfirmDialog, updateCommonIndicator, projectId, commonIndicator.id, record]);
+  }, [updateCommonIndicator, projectId, commonIndicator.id, record]);
+
+  const save = useCallback(() => {
+    if (!record.name) {
+      setValidate(true);
+      return;
+    }
+    // Project-level edits only touch this project, so they need no warning.
+    if (changedSharedFields.length === 0) {
+      submit();
+      return;
+    }
+    openConfirmDialog();
+  }, [record, changedSharedFields, submit, openConfirmDialog]);
+
+  const confirmSave = useCallback(() => {
+    closeConfirmDialog();
+    submit();
+  }, [closeConfirmDialog, submit]);
 
   return (
     <DialogBox
@@ -127,12 +154,32 @@ export default function EditCommonIndicatorModal({
       <Confirm
         closeButtonText={strings.CANCEL}
         confirmButtonDisabled={updateCommonIndicatorResponse.isLoading}
-        confirmButtonText={strings.CONFIRM}
-        message={strings.EDIT_COMMON_INDICATOR_CONFIRMATION}
+        confirmButtonText={strings.SAVE_FOR_ALL_PROJECTS}
+        message={
+          <Box textAlign='left'>
+            <Typography>
+              {strings.formatString(
+                changedSharedFields.length === 1
+                  ? strings.COMMON_INDICATOR_SHARED_FIELDS_CHANGED
+                  : strings.COMMON_INDICATOR_SHARED_FIELDS_CHANGED_PLURAL,
+                commonIndicator.name
+              )}
+            </Typography>
+            <ul>
+              {changedSharedFields.map(({ key, label }) => (
+                <li key={key}>
+                  <Typography>{label(strings)}</Typography>
+                </li>
+              ))}
+            </ul>
+            <Typography>{strings.formatString(strings.SAVING_UPDATES_ALL_PROJECTS, projectName)}</Typography>
+          </Box>
+        }
         onClose={closeConfirmDialog}
         onConfirm={confirmSave}
         open={confirmDialogOpen}
-        title={strings.EDIT_COMMON_INDICATOR}
+        size='large'
+        title={strings.THIS_CHANGE_APPLIES_TO_ALL_PROJECTS}
       />
       <Box
         borderRadius={theme.spacing(1)}
@@ -292,7 +339,7 @@ export default function EditCommonIndicatorModal({
               selectedValue={record.frequency}
             />
           </Grid>
-          <Grid size={12}>
+          <Grid size={4}>
             <TextField
               id='tfOwner'
               label={strings.TF_OWNER_REVIEWER}

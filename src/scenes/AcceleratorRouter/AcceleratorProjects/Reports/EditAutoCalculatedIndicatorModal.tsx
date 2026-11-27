@@ -98,6 +98,7 @@ export default function EditAutoCalculatedIndicatorModal({
         marginBottom={theme.spacing(3)}
         padding={theme.spacing(3)}
         sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}
+        textAlign='left'
       >
         <Typography fontSize='20px' fontWeight={600}>
           {strings.PROJECT_LEVEL_FIELDS}
@@ -158,6 +159,7 @@ export default function EditAutoCalculatedIndicatorModal({
         border={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         borderRadius={theme.spacing(1)}
         padding={theme.spacing(3)}
+        textAlign='left'
       >
         <Typography fontSize='20px' fontWeight={600}>
           {strings.SHARED_FIELDS_ACROSS_ALL_PROJECTS}
@@ -237,7 +239,7 @@ export default function EditAutoCalculatedIndicatorModal({
               value={indicatorFrequencyLabel(autoCalculatedIndicator.frequency, strings)}
             />
           </Grid>
-          <Grid size={12}>
+          <Grid size={4}>
             <TextField
               display
               id='tfOwner'
