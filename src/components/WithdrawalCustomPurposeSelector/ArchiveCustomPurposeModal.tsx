@@ -1,5 +1,7 @@
 import React, { type JSX } from 'react';
 
+import { Box, Typography, useTheme } from '@mui/material';
+
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
@@ -18,6 +20,7 @@ const ArchiveCustomPurposeModal = ({
   onClose,
   onConfirm,
 }: ArchiveCustomPurposeModalProps): JSX.Element => {
+  const theme = useTheme();
   const { strings } = useLocalization();
 
   return (
@@ -46,12 +49,18 @@ const ArchiveCustomPurposeModal = ({
           type='destructive'
         />,
       ]}
-      message={[
-        strings.formatString(strings.ARCHIVE_CUSTOM_PURPOSE_MESSAGE, customPurpose.name) as string,
-        strings.ARE_YOU_SURE,
-      ]}
       skrim
-    />
+    >
+      {/* Two paragraphs rather than the message prop, which runs an array of lines together. */}
+      <Box display='flex' flexDirection='column' gap={theme.spacing(3)} textAlign='center'>
+        <Typography fontSize='16px' fontWeight={400} lineHeight='24px'>
+          {strings.formatString(strings.ARCHIVE_CUSTOM_PURPOSE_MESSAGE, customPurpose.name)}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={400} lineHeight='24px'>
+          {strings.ARE_YOU_SURE}
+        </Typography>
+      </Box>
+    </DialogBox>
   );
 };
 

@@ -290,6 +290,12 @@ describe('WithdrawalCustomPurposeSelector managing the saved purposes', () => {
     await user.click(archiveButton('Sale'));
 
     const dialog = dialogTitled(strings.formatString(strings.ARCHIVE_X, 'Sale') as string);
+    // The warning and the question are separate paragraphs; as one run of text neither is findable.
+    expect(
+      within(dialog).getByText(strings.formatString(strings.ARCHIVE_CUSTOM_PURPOSE_MESSAGE, 'Sale') as string)
+    ).toBeInTheDocument();
+    expect(within(dialog).getByText(strings.ARE_YOU_SURE)).toBeInTheDocument();
+
     await user.click(within(dialog).getByRole('button', { name: strings.ARCHIVE }));
 
     await waitFor(() => expect(updates).toHaveLength(1));
