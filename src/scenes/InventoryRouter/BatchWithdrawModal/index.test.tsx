@@ -8,6 +8,7 @@ import { HttpResponse, http } from 'msw/http';
 
 import { PlantingSeasonPayload } from 'src/queries/generated/plantingSeasons';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
+import { WithdrawalCustomPurposePayload } from 'src/queries/generated/withdrawalCustomPurposes';
 import { NurseryBatchesSearchResponseElement } from 'src/queries/search/batches';
 import BatchWithdrawModal from 'src/scenes/InventoryRouter/BatchWithdrawModal';
 import strings from 'src/strings';
@@ -115,6 +116,7 @@ type MockOptions = {
   batches?: NurseryBatchesSearchResponseElement[];
   sites?: PlantingSitePayload[];
   seasons?: PlantingSeasonPayload[];
+  customPurposes?: WithdrawalCustomPurposePayload[];
 };
 
 /**
@@ -122,7 +124,12 @@ type MockOptions = {
  * generic search endpoint; any other search (planting date requests, species targets) gets an
  * empty result.
  */
-const mockModalData = ({ batches = [MIXED_BATCH], sites = [], seasons = [] }: MockOptions = {}) => {
+const mockModalData = ({
+  batches = [MIXED_BATCH],
+  sites = [],
+  seasons = [],
+  customPurposes = [],
+}: MockOptions = {}) => {
   server.use(
     http.post('/api/v1/search', async ({ request }) => {
       const body = (await request.json()) as { prefix?: string };
@@ -131,6 +138,7 @@ const mockModalData = ({ batches = [MIXED_BATCH], sites = [], seasons = [] }: Mo
   );
   mockGet('/api/v1/species', { species: [] });
   mockGet('/api/v1/projects', { projects: [] });
+  mockGet('/api/v1/withdrawalCustomPurposes', { customPurposes });
   mockGet('/api/v1/tracking/sites', { sites });
   mockGet('/api/v1/planting-seasons', { seasons });
   mockGet('/api/v1/planting-seasons/:seasonId/scheduled-dates', { scheduledDates: [] });
@@ -587,6 +595,140 @@ describe('BatchWithdrawModal purposes and validation', () => {
       expect(phaseInput(1, 'readyQuantityWithdrawn')).toHaveValue(null);
       expect(nextButton()).toBeDisabled();
     });
+  });
+});
+
+describe('BatchWithdrawModal naming an Other withdrawal', () => {
+  const SAVED_PURPOSES: WithdrawalCustomPurposePayload[] = [
+    { id: 1, name: 'Sale', isArchived: false },
+    { id: 2, name: 'Donation', isArchived: false },
+  ];
+
+  const customPurposeField = () => screen.getByPlaceholderText(strings.ENTER_OR_SELECT);
+  const otherRadio = () => screen.getByRole('radio', { name: strings.OTHER_COLON });
+
+  const typeCustomPurpose = async (user: UserEvent, name: string) => {
+    await user.click(customPurposeField());
+    await user.paste(name);
+  };
+
+  const pickSavedPurpose = async (user: UserEvent, name: string) => {
+    await user.click(customPurposeField());
+    await user.click(await screen.findByRole('option', { name }));
+  };
+
+  /** Withdraw one ready seedling and submit, whatever purpose the test has chosen. */
+  const withdrawOneSeedling = async (user: UserEvent) => {
+    await clickNextWhenEnabled(user);
+    await typeQuantity(user, phaseInput(1, 'readyQuantityWithdrawn'), 1);
+    await clickNextWhenEnabled(user);
+    await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
+  };
+
+  it('sends the saved purpose the user picked for an Other withdrawal', async () => {
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await user.click(otherRadio());
+    await pickSavedPurpose(user, 'Sale');
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    expect(await withdrawals[0].json()).toMatchObject({ purpose: 'Other', customPurpose: 'Sale' });
+  });
+
+  it('treats naming a purpose as choosing Other', async () => {
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await pickSavedPurpose(user, 'Donation');
+
+    expect(otherRadio()).toBeChecked();
+
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    expect(await withdrawals[0].json()).toMatchObject({ purpose: 'Other', customPurpose: 'Donation' });
+  });
+
+  it('sends a name the organization has not saved before as the user typed it', async () => {
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await typeCustomPurpose(user, '  Giveaway  ');
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    // Trimmed, because the server matches " Giveaway " to an existing Giveaway but would save the
+    // padding on a new one.
+    expect(await withdrawals[0].json()).toMatchObject({ purpose: 'Other', customPurpose: 'Giveaway' });
+  });
+
+  it('sends no name when the user leaves the field blank', async () => {
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await user.click(otherRadio());
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    const body = await withdrawals[0].json();
+    expect(body).toMatchObject({ purpose: 'Other' });
+    expect(body).not.toHaveProperty('customPurpose');
+  });
+
+  it('drops a name the user typed before switching to another purpose', async () => {
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await typeCustomPurpose(user, 'Sale');
+    await user.click(screen.getByRole('radio', { name: strings.DEAD }));
+
+    await waitFor(() => expect(customPurposeField()).toHaveValue(''));
+
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    const body = await withdrawals[0].json();
+    expect(body).toMatchObject({ purpose: 'Dead' });
+    expect(body).not.toHaveProperty('customPurpose');
+  });
+
+  // Silently shortening the name would save something other than what the field shows, and the
+  // field keeps showing the longer text either way.
+  it('refuses to go on while the name is longer than the server accepts', async () => {
+    mockModalData();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await typeCustomPurpose(user, 'S'.repeat(51));
+
+    await waitFor(() => expect(nextButton()).toBeDisabled());
+    expect(customPurposeField()).toHaveValue('S'.repeat(51));
+    expect(screen.getByText(strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, 50) as string)).toBeInTheDocument();
+  });
+
+  it('sends a name of the greatest length the server accepts', async () => {
+    mockModalData();
+    const withdrawals = captureWithdrawals();
+    const { user } = renderModal();
+
+    await waitForDialog();
+    await typeCustomPurpose(user, 'S'.repeat(50));
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    expect(await withdrawals[0].json()).toMatchObject({ purpose: 'Other', customPurpose: 'S'.repeat(50) });
   });
 });
 

@@ -5,6 +5,7 @@ import { Dropdown, DropdownItem, Icon, IconTooltip } from '@terraware/web-compon
 import { DateTime } from 'luxon';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
+import WithdrawalCustomPurposeSelector from 'src/components/WithdrawalCustomPurposeSelector';
 import DatePicker from 'src/components/common/DatePicker';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { useProjects } from 'src/hooks/useProjects';
@@ -309,31 +310,50 @@ const PurposeAndDestinationStep = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
-      <Box display='flex' alignItems='center' gap={theme.spacing(2)} flexWrap='wrap'>
-        <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
+      <Box display='flex' alignItems='flex-start' gap={theme.spacing(2)} flexWrap='wrap'>
+        <Typography
+          fontSize='14px'
+          fontWeight={500}
+          color={theme.palette.TwClrTxtSecondary}
+          paddingTop={theme.spacing(1.25)}
+        >
           {strings.PURPOSE_REQUIRED}
         </Typography>
         <RadioGroup
-          row
           value={purpose}
           onChange={(_event, value) => onChange({ purpose: value as NurseryWithdrawalPurpose })}
         >
-          <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
-          {!contributor && (
+          <Box display='flex' alignItems='center' flexWrap='wrap'>
+            <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
+            {!contributor && (
+              <FormControlLabel
+                value={NurseryWithdrawalRequestPurposes.OUTPLANT}
+                control={<Radio />}
+                label={outplantLabel}
+                disabled={outplantDisabled}
+              />
+            )}
             <FormControlLabel
-              value={NurseryWithdrawalRequestPurposes.OUTPLANT}
+              value={NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER}
               control={<Radio />}
-              label={outplantLabel}
-              disabled={outplantDisabled}
+              label={nurseryTransferLabel}
+              disabled={nurseryTransferDisabled}
             />
-          )}
-          <FormControlLabel
-            value={NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER}
-            control={<Radio />}
-            label={nurseryTransferLabel}
-            disabled={nurseryTransferDisabled}
-          />
-          <FormControlLabel value={NurseryWithdrawalRequestPurposes.OTHER} control={<Radio />} label={strings.OTHER} />
+          </Box>
+          {/* Other carries a name, so it gets a line of its own rather than squeezing the field. */}
+          <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
+            <FormControlLabel
+              value={NurseryWithdrawalRequestPurposes.OTHER}
+              control={<Radio />}
+              label={strings.OTHER_COLON}
+              sx={{ marginRight: 0 }}
+            />
+            <WithdrawalCustomPurposeSelector
+              value={draft.customPurpose}
+              onChange={(customPurpose) => onChange({ purpose: NurseryWithdrawalRequestPurposes.OTHER, customPurpose })}
+              sx={{ width: '280px', textAlign: 'left' }}
+            />
+          </Box>
         </RadioGroup>
       </Box>
 

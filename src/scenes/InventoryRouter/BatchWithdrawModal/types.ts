@@ -24,6 +24,8 @@ export type BatchInfo = {
 
 export type BatchWithdrawDraft = {
   purpose: NurseryWithdrawalPurpose;
+  // The organization-wide name for an Other withdrawal; empty for a plain Other withdrawal.
+  customPurpose: string;
   fromFacilityId?: number;
   destinationFacilityId?: number;
   projectId?: number;

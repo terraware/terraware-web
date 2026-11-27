@@ -724,6 +724,7 @@ END_TIME,Hora de finalización,7c0eb9ca
 ENDS_IN_X,termina en {0},0627f086
 ENDS_TODAY,termina hoy,9a86e192
 ENTER_LOCATION,Introducir ubicación,dfde68fa
+ENTER_OR_SELECT,Ingresar o seleccionar...,2a1585fb
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Introduzca el peso del subconjunto y la proporción de recuento para determinar el recuento de semillas aproximado al extraer por peso de una cantidad de recuento. (Inversamente, la proporción determinará la cantidad restante aproximada cuando se extraiga por recuento de una cantidad en peso). Estos campos son útiles cuando contar semillas muy pequeñas no es práctico y solo se requieren si planea extraer de esta accesión a un vivero.",c02303ee
 ENTRIES,Entradas,065e7c3e
 ERROR,Error,a7dc9f4e
@@ -1289,6 +1290,7 @@ NAME,Nombre,e7c2678c
 NAME_CHECK,Verificación de nombre,6afa08ed
 NAME_CHECK_NO_SUGGESTIONS,No hay sugerencias para nombres de especies.,1743b138
 NAME_CHECK_NO_SUGGESTIONS_HINT,Los nombres individuales de especies pueden modificarse en la pantalla de detalles de la especie.,1de53c3f
+NAME_MAXIMUM_LENGTH_X,El nombre debe tener {0} caracteres o menos.,80961ccf
 NAME_REQUIRED,Nombre *,9a735f80
 NAME_UNKNOWN,(nombre desconocido),526f6e3c
 NAME_USED_BY_PROJECT,Nombre usado por proyecto,c2fdff8f
@@ -1526,6 +1528,7 @@ ORIGINAL_PLANTING_SITE,Sitio de Plantación Original,b790c51d
 ORIGINAL_QTY,Cantidad original,636a1ae9
 ORTHODOX,Ortodoxo,b0a5a550
 OTHER,Otro,626335b2
+OTHER_COLON,Otro:,27485d67
 OTHER_CONTACT,Otro contacto,4268b0fb
 OTHER_CONTACT_TYPE,Otro tipo de contacto,ec7c7449
 OTHER_CONTACTS,Otros contactos,18906a13

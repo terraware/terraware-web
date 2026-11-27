@@ -69,6 +69,7 @@ const renderForm = (sites: PlantingSitePayload[]) => {
   mockGet('/api/v1/tracking/sites', { sites });
   mockGet('/api/v1/species', { species: [] });
   mockGet('/api/v1/projects', { projects: [] });
+  mockGet('/api/v1/withdrawalCustomPurposes', { customPurposes: [] });
 
   const onNext = rstest.fn<(withdrawal: NurseryWithdrawalRequest) => void>();
   const result = renderWithProviders(

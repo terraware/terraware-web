@@ -23,6 +23,7 @@ import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
 import { findScheduledDateForRequest } from 'src/utils/plantingDates';
 import useSnackbar from 'src/utils/useSnackbar';
+import { isCustomPurposeTooLong } from 'src/utils/withdrawalCustomPurposes';
 
 import AddPhotosStep from './AddPhotosStep';
 import PurposeAndDestinationStep from './PurposeAndDestinationStep';
@@ -104,6 +105,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const defaultDraft = useCallback(
     (): BatchWithdrawDraft => ({
       purpose: NurseryWithdrawalRequestPurposes.DEAD,
+      customPurpose: '',
       withdrawnDate: todayIso(),
       notes: '',
       withdrawByBatch: {},
@@ -164,6 +166,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           (prev.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT);
       const purposeChangedAwayFromPlanting =
         purposeChanged && nextPurpose !== NurseryWithdrawalRequestPurposes.OUTPLANT;
+      const purposeChangedAwayFromOther = purposeChanged && nextPurpose !== NurseryWithdrawalRequestPurposes.OTHER;
       const resetPlantingTargets = nurseryChanged || purposeChangedAwayFromPlanting;
       const plantingSeasonChanged = 'plantingSeasonId' in next && next.plantingSeasonId !== prev.plantingSeasonId;
       const plantingDateChanged =
@@ -174,6 +177,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         ...next,
         ...(nurseryChanged || projectChanged || plantingModeChanged ? { withdrawByBatch: {} } : {}),
         ...(nurseryChanged ? { destinationFacilityId: undefined, projectId: undefined } : {}),
+        ...(purposeChangedAwayFromOther ? { customPurpose: '' } : {}),
         ...(resetPlantingTargets
           ? {
               plantingSiteId: undefined,
@@ -367,6 +371,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     if (!draft.withdrawnDate || draft.fromFacilityId === undefined) {
       return false;
     }
+    if (draft.purpose === NurseryWithdrawalRequestPurposes.OTHER && isCustomPurposeTooLong(draft.customPurpose)) {
+      return false;
+    }
     if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT) {
       return (
         draft.plantingSiteId !== undefined &&
@@ -404,6 +411,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       return;
     }
     const isOutPlant = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
+    const isOther = draft.purpose === NurseryWithdrawalRequestPurposes.OTHER;
     const allowedBatchIds = new Set(quantityStepBatches.map((b) => b.batchId));
     const batchWithdrawals = Object.entries(draft.withdrawByBatch)
       .filter(([batchIdStr]) => allowedBatchIds.has(Number(batchIdStr)))
@@ -433,6 +441,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         batchWithdrawals,
         facilityId: draft.fromFacilityId,
         purpose: draft.purpose as Exclude<typeof draft.purpose, 'Undo'>,
+        customPurpose: isOther && draft.customPurpose.trim() ? draft.customPurpose.trim() : undefined,
         plantingSiteId: isOutPlant ? draft.plantingSiteId : undefined,
         plantingSeasonId: isOutPlant ? draft.plantingSeasonId : undefined,
         scheduledPlantingDateRequestId: isOutPlant ? draft.scheduledPlantingDateRequestId : undefined,

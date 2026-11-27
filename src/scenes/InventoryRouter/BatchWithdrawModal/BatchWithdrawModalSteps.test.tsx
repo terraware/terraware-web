@@ -37,6 +37,7 @@ const batch = (overrides: Partial<BatchInfo> = {}): BatchInfo => ({
 
 const draft = (overrides: Partial<BatchWithdrawDraft> = {}): BatchWithdrawDraft => ({
   purpose: NurseryWithdrawalRequestPurposes.OUTPLANT,
+  customPurpose: '',
   fromFacilityId: 100,
   plantingSiteId: PLANTING_SITE_ID,
   plantingSeasonId: PLANTING_SEASON_ID,
@@ -84,6 +85,7 @@ const plantingDate = (overrides: Partial<PlantingDateForWithdrawal> = {}): Plant
 
 const mockPlantingDestinations = () => {
   mockGet('/api/v1/projects', { projects: [] });
+  mockGet('/api/v1/withdrawalCustomPurposes', { customPurposes: [] });
   mockGet('/api/v1/tracking/sites', {
     sites: [
       {

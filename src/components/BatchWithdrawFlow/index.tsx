@@ -39,7 +39,7 @@ type BatchWithdrawFlowProps = {
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { batchIds, sourcePage } = props;
-  const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalRequestPurposes;
+  const { OUTPLANT, NURSERY_TRANSFER, OTHER } = NurseryWithdrawalRequestPurposes;
   const locationTimeZone = useLocationTimeZone();
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
@@ -154,7 +154,10 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     }
 
     try {
-      const withdrawalResponse = await createBatchWithdrawal(record).unwrap();
+      const withdrawalResponse = await createBatchWithdrawal({
+        ...record,
+        customPurpose: record.purpose === OTHER ? record.customPurpose?.trim() || undefined : undefined,
+      }).unwrap();
       setHasWithdrawn(true);
       const { withdrawal } = withdrawalResponse;
       trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWN, {
