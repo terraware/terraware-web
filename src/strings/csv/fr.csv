@@ -1372,6 +1372,7 @@ NO_QUANTITY_SET,Pas de quantité définie,5922c859
 NO_REASSIGNMENTS_TEXT,Sélectionnez un substrat et une quantité à réaffecter pour chaque espèce.,ff65d8d2
 NO_REQUESTS_FOR_SELECTED_FILTERS,Aucune demande pour les filtres sélectionnés.,a6a641ac
 NO_ROOM_FOR_MONITORING_PLOTS,Il n'y a pas de place pour des parcelles de suivi sur ce site de plantation.,e28cb2d2
+NO_SAVED_OTHER_PURPOSES,Aucun autre usage n’a encore été enregistré.,4e90c45f
 NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
 NO_SITE_BOUNDARY_YET,Aucune limite de site pour le moment,48cfe15e
@@ -2093,6 +2094,7 @@ SAVE_VERSION_MESSAGE,"Sauvegarder une version équivaut à créer une capture d'
 SAVE_VIEW,Enregistrer la vue,c4a3bd9f
 SAVE_VIEW_BUTTON,Enregistrer la vue,0059102f
 SAVED,Sauvegardé,3324fd4d
+SAVED_OTHER_PURPOSES,Autres usages enregistrés,c66fa867
 SAVED_VIEW_CREATED,{0} a été enregistré dans Mes vues,e8a17db1
 SAVED_VIEW_DELETED,{0} supprimée,77fb1505
 SAVED_VIEW_UPDATED,{0} mis à jour,aa7ecb38

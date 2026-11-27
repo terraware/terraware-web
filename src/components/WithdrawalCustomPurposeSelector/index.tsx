@@ -1,44 +1,55 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, IconButton, SxProps, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { ValueType } from '@terraware/web-components/components/Autocomplete/Autocomplete';
 
 import Autocomplete from 'src/components/common/Autocomplete';
-import Textfield from 'src/components/common/Textfield/Textfield';
 import useWithdrawalCustomPurposes from 'src/hooks/useWithdrawalCustomPurposes';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  WithdrawalCustomPurposePayload,
-  useUpdateCustomPurposeMutation,
-} from 'src/queries/generated/withdrawalCustomPurposes';
+import { WithdrawalCustomPurposePayload } from 'src/queries/generated/withdrawalCustomPurposes';
 import { isAdmin } from 'src/utils/organization';
-import useSnackbar from 'src/utils/useSnackbar';
 import {
   CUSTOM_PURPOSE_MAX_LENGTH,
-  findCustomPurposeByName,
   isCustomPurposeTooLong,
   normalizeCustomPurposeName,
 } from 'src/utils/withdrawalCustomPurposes';
 
 import ArchiveCustomPurposeModal from './ArchiveCustomPurposeModal';
+import CustomPurposeRowContent from './CustomPurposeRowContent';
+import ManageCustomPurposesModal from './ManageCustomPurposesModal';
+import useManageCustomPurposes from './useManageCustomPurposes';
 
 type WithdrawalCustomPurposeSelectorProps = {
   value: string;
   onChange: (value: string) => void;
+  /** Reports a rename or archive that is still in flight, so the form can hold the user on it. */
+  onBusyChange?: (busy: boolean) => void;
   disabled?: boolean;
   id?: string;
   sx?: SxProps;
 };
 
 /**
+ * The shared dialog decides whether a click dismissed it by looking at the class of the element
+ * clicked, not at which dialog the handler belongs to. A dialog opened from inside another one
+ * therefore closes both, so its events stop here.
+ */
+const NestedDialogBoundary = ({ children }: { children: React.ReactNode }): JSX.Element => (
+  <Box onClick={(event) => event.stopPropagation()} onMouseDown={(event) => event.stopPropagation()}>
+    {children}
+  </Box>
+);
+
+/**
  * Names an Other withdrawal, picked from the organization's saved purposes or typed in. A typed
  * name that doesn't match a saved one is added to the organization's list by the withdrawal itself.
- * Admins can also rename and archive the saved purposes from the list.
+ * Admins can also rename and archive the saved purposes.
  */
 const WithdrawalCustomPurposeSelector = ({
   value,
   onChange,
+  onBusyChange,
   disabled,
   id = 'custom-purpose',
   sx,
@@ -46,15 +57,66 @@ const WithdrawalCustomPurposeSelector = ({
   const theme = useTheme();
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const snackbar = useSnackbar();
   const { customPurposes } = useWithdrawalCustomPurposes();
-  const [updateCustomPurpose, { isLoading: isUpdating }] = useUpdateCustomPurposeMutation();
 
   const [open, setOpen] = useState(false);
-  const [editing, setEditing] = useState<{ id: number; name: string }>();
-  const [archiving, setArchiving] = useState<WithdrawalCustomPurposePayload>();
+  const [managing, setManaging] = useState(false);
+  // Set when the inline editor is about to take focus from the combobox, whose blur then asks the
+  // list to close. That one request is the editor's own doing; every other one is the user's.
+  const editorTakingFocus = useRef(false);
 
   const canManage = isAdmin(selectedOrganization);
+
+  const {
+    archive,
+    archiving,
+    cancelRenaming,
+    changeEditingName,
+    editing,
+    isUpdating,
+    saveRename,
+    startArchiving,
+    startRenaming,
+    stopArchiving,
+  } = useManageCustomPurposes({ customPurposes, selectedName: value, onSelectedNameChange: onChange });
+
+  // A rename only reaches the withdrawal once the server answers. Until then the form must not
+  // move on, or it would carry a snapshot of the name the purpose no longer has. Going away
+  // mid-rename has to clear the flag too, or the form it belongs to stays stuck on this step.
+  useEffect(() => {
+    onBusyChange?.(isUpdating);
+    return () => onBusyChange?.(false);
+  }, [isUpdating, onBusyChange]);
+
+  const beginRenaming = useCallback(
+    (customPurpose: WithdrawalCustomPurposePayload) => {
+      editorTakingFocus.current = true;
+      startRenaming(customPurpose);
+    },
+    [startRenaming]
+  );
+
+  const endRenaming = useCallback(() => {
+    editorTakingFocus.current = false;
+    cancelRenaming();
+  }, [cancelRenaming]);
+
+  /**
+   * Nothing closes the list if the user simply looks away mid-rename: the combobox blurred when
+   * the editor took focus, so it has no blur left to report. Decide from where the focus actually
+   * landed, once it has landed.
+   */
+  const handleEditorBlur = useCallback(() => {
+    window.setTimeout(() => {
+      const active = document.activeElement;
+      const stayedInList = active instanceof HTMLElement && active.closest('.MuiAutocomplete-popper') !== null;
+      const returnedToField = active instanceof HTMLElement && active.id === id;
+      if (!stayedInList && !returnedToField) {
+        endRenaming();
+        setOpen(false);
+      }
+    }, 0);
+  }, [endRenaming, id]);
 
   const options = useMemo(() => customPurposes.map((customPurpose) => customPurpose.name), [customPurposes]);
 
@@ -69,57 +131,7 @@ const WithdrawalCustomPurposeSelector = ({
     [value]
   );
 
-  const saveEdit = useCallback(async () => {
-    if (!editing) {
-      return;
-    }
-
-    const name = editing.name.trim();
-    const previous = customPurposes.find((customPurpose) => customPurpose.id === editing.id);
-    if (name === '' || name === previous?.name) {
-      setEditing(undefined);
-      return;
-    }
-
-    const conflict = findCustomPurposeByName(customPurposes, name);
-    if (conflict && conflict.id !== editing.id) {
-      snackbar.toastError(strings.CUSTOM_PURPOSE_NAME_EXISTS);
-      return;
-    }
-
-    try {
-      await updateCustomPurpose({
-        customPurposeId: editing.id,
-        updateWithdrawalCustomPurposeRequestPayload: { name },
-      }).unwrap();
-      // The withdrawal being filled in refers to the purpose by name, not by id.
-      if (previous && normalizeCustomPurposeName(value) === normalizeCustomPurposeName(previous.name)) {
-        onChange(name);
-      }
-      setEditing(undefined);
-    } catch (e) {
-      snackbar.toastError((e as { status?: number })?.status === 409 ? strings.CUSTOM_PURPOSE_NAME_EXISTS : undefined);
-    }
-  }, [customPurposes, editing, onChange, snackbar, strings, updateCustomPurpose, value]);
-
-  const archive = useCallback(async () => {
-    if (!archiving) {
-      return;
-    }
-
-    try {
-      await updateCustomPurpose({
-        customPurposeId: archiving.id,
-        updateWithdrawalCustomPurposeRequestPayload: { isArchived: true },
-      }).unwrap();
-      if (normalizeCustomPurposeName(value) === normalizeCustomPurposeName(archiving.name)) {
-        onChange('');
-      }
-      setArchiving(undefined);
-    } catch (e) {
-      snackbar.toastError();
-    }
-  }, [archiving, onChange, snackbar, updateCustomPurpose, value]);
+  const focusField = useCallback(() => document.getElementById(id)?.focus(), [id]);
 
   const renderOption = useCallback(
     (optionProps: React.HTMLAttributes<HTMLLIElement>, option: ValueType) => {
@@ -127,124 +139,148 @@ const WithdrawalCustomPurposeSelector = ({
       const customPurpose = customPurposes.find((candidate) => candidate.name === name);
       const { key, ...liProps } = optionProps as React.HTMLAttributes<HTMLLIElement> & { key?: React.Key };
 
-      if (editing && customPurpose?.id === editing.id) {
+      if (!customPurpose) {
         return (
-          <Box
-            component='li'
-            key={key ?? name}
-            {...liProps}
-            onClick={(event: React.MouseEvent) => event.stopPropagation()}
-            onKeyDown={(event: React.KeyboardEvent) => {
-              event.stopPropagation();
-              if (event.key === 'Enter') {
-                void saveEdit();
-              } else if (event.key === 'Escape') {
-                setEditing(undefined);
-              }
-            }}
-            sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(1) }}
-          >
-            <Textfield
-              autoFocus
-              id={`${id}-rename-${customPurpose.id}`}
-              label=''
-              maxLength={CUSTOM_PURPOSE_MAX_LENGTH}
-              onChange={(newName) => setEditing({ id: customPurpose.id, name: String(newName ?? '') })}
-              type='text'
-              value={editing.name}
-            />
-            <IconButton
-              aria-label={strings.SAVE}
-              disabled={isUpdating}
-              onClick={() => void saveEdit()}
-              size='small'
-              title={strings.SAVE}
-            >
-              <Icon name='iconEdit' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-            </IconButton>
-          </Box>
+          <li {...liProps} key={key ?? name}>
+            {name}
+          </li>
         );
       }
+
+      const isEditing = editing?.id === customPurpose.id;
 
       return (
         <Box
           component='li'
           key={key ?? name}
           {...liProps}
-          sx={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', gap: theme.spacing(1) }}
+          // While the row is a field rather than an option, clicking it must not pick it.
+          {...(isEditing ? { onClick: (event: React.MouseEvent) => event.stopPropagation() } : {})}
+          sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(1) }}
         >
-          <span>{name}</span>
-          {canManage && customPurpose && (
-            <Box display='flex' gap={theme.spacing(0.5)}>
-              <IconButton
-                aria-label={strings.formatString(strings.RENAME_X, name) as string}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setEditing({ id: customPurpose.id, name: customPurpose.name });
-                }}
-                onMouseDown={(event) => event.preventDefault()}
-                size='small'
-                title={strings.RENAME}
-              >
-                <Icon name='iconEdit' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-              </IconButton>
-              <IconButton
-                aria-label={strings.formatString(strings.ARCHIVE_X, name) as string}
-                onClick={(event) => {
-                  event.stopPropagation();
-                  setArchiving(customPurpose);
-                }}
-                onMouseDown={(event) => event.preventDefault()}
-                size='small'
-                title={strings.ARCHIVE}
-              >
-                <Icon name='iconFolder' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-              </IconButton>
-            </Box>
-          )}
+          <CustomPurposeRowContent
+            busy={isUpdating}
+            canManage={canManage}
+            customPurpose={customPurpose}
+            editingName={isEditing ? editing.name : undefined}
+            idPrefix={id}
+            onArchive={() => startArchiving(customPurpose)}
+            onBlur={handleEditorBlur}
+            onCancelRename={() => {
+              endRenaming();
+              focusField();
+            }}
+            onEditingNameChange={changeEditingName}
+            onSaveRename={() => {
+              editorTakingFocus.current = false;
+              // A name the list or the server rejects leaves the editor open for correction, and
+              // the field beside it belongs to the withdrawal: typing there would edit that.
+              void saveRename().then((finished) => {
+                if (finished) {
+                  focusField();
+                }
+              });
+            }}
+            onStartRename={() => beginRenaming(customPurpose)}
+          />
         </Box>
       );
     },
-    [canManage, customPurposes, editing, id, isUpdating, saveEdit, strings, theme]
+    [
+      beginRenaming,
+      canManage,
+      changeEditingName,
+      customPurposes,
+      editing,
+      endRenaming,
+      focusField,
+      handleEditorBlur,
+      id,
+      isUpdating,
+      saveRename,
+      startArchiving,
+      theme,
+    ]
   );
+
+  const archiveConfirmation = archiving ? (
+    <NestedDialogBoundary>
+      <ArchiveCustomPurposeModal
+        busy={isUpdating}
+        customPurpose={archiving}
+        onClose={stopArchiving}
+        onConfirm={() => void archive()}
+      />
+    </NestedDialogBoundary>
+  ) : null;
 
   return (
     <>
-      <Autocomplete
-        freeSolo
-        disabled={disabled}
-        id={id}
-        options={options}
-        selected={value}
-        placeholder={strings.ENTER_OR_SELECT}
-        // Truncating here would leave the field showing text the withdrawal wouldn't save, since
-        // the component keeps its own input text once the value it is given stops changing.
-        onChange={(newValue) => onChange(String(newValue ?? ''))}
-        errorText={
-          isCustomPurposeTooLong(value)
-            ? (strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, CUSTOM_PURPOSE_MAX_LENGTH) as string)
-            : undefined
-        }
-        filterOptions={filterOptions}
-        open={open}
-        onOpen={() => setOpen(true)}
-        // Renaming happens inside the list, so the list has to outlive the blur it causes.
-        onClose={() => {
-          if (!editing) {
-            setOpen(false);
+      <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
+        <Autocomplete
+          freeSolo
+          disabled={disabled}
+          id={id}
+          options={options}
+          selected={value}
+          placeholder={strings.ENTER_OR_SELECT}
+          // Truncating here would leave the field showing text the withdrawal wouldn't save, since
+          // the component keeps its own input text once the value it is given stops changing.
+          onChange={(newValue) => onChange(String(newValue ?? ''))}
+          errorText={
+            isCustomPurposeTooLong(value)
+              ? (strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, CUSTOM_PURPOSE_MAX_LENGTH) as string)
+              : undefined
           }
-        }}
-        renderOption={renderOption}
-        sx={sx}
-      />
-      {archiving && (
-        <ArchiveCustomPurposeModal
-          busy={isUpdating}
-          customPurpose={archiving}
-          onClose={() => setArchiving(undefined)}
-          onConfirm={() => void archive()}
+          filterOptions={filterOptions}
+          open={open}
+          onOpen={() => setOpen(true)}
+          // The list has to outlive the blur that opening the inline editor causes — but only
+          // that one. Anything else asking it to close, such as picking another suggestion,
+          // means the user is done with the rename.
+          onClose={() => {
+            if (editorTakingFocus.current) {
+              editorTakingFocus.current = false;
+              return;
+            }
+            endRenaming();
+            setOpen(false);
+          }}
+          renderOption={renderOption}
+          sx={sx}
         />
+        {canManage && (
+          <IconButton
+            aria-label={strings.SAVED_OTHER_PURPOSES}
+            disabled={disabled}
+            onClick={() => setManaging(true)}
+            size='small'
+            title={strings.SAVED_OTHER_PURPOSES}
+          >
+            <Icon name='iconSettings' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+          </IconButton>
+        )}
+      </Box>
+      {managing && (
+        <NestedDialogBoundary>
+          <ManageCustomPurposesModal
+            busy={isUpdating}
+            confirmation={archiveConfirmation}
+            customPurposes={customPurposes}
+            editing={editing}
+            onArchive={startArchiving}
+            onCancelRename={cancelRenaming}
+            onClose={() => {
+              cancelRenaming();
+              setManaging(false);
+            }}
+            onEditingNameChange={changeEditingName}
+            onSaveRename={() => void saveRename()}
+            onStartRename={startRenaming}
+          />
+        </NestedDialogBoundary>
       )}
+      {!managing && archiveConfirmation}
     </>
   );
 };

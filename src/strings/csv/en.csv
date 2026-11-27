@@ -1373,6 +1373,7 @@ NO_QUANTITY_SET,No quantity set,
 NO_REASSIGNMENTS_TEXT,Select a substratum and quantity to reassign for each species.,
 NO_REQUESTS_FOR_SELECTED_FILTERS,There are no requests for the selected filters.,
 NO_ROOM_FOR_MONITORING_PLOTS,There is no room for monitoring plots in this planting site.,
+NO_SAVED_OTHER_PURPOSES,No Other purposes have been saved yet.,
 NO_SEASON,No Season,
 NO_SEEDBANKS_NON_ADMIN_MSG,"Before you can add and manage your accessions, you’ll need to have a seed bank and species within Terraware. Only admins can add seed banks; please reach out to yours for assistance.",
 NO_SITE_BOUNDARY_YET,No site boundary yet,
@@ -2094,6 +2095,7 @@ SAVE_VERSION_MESSAGE,Saving a version is the equivalent of creating a screenshot
 SAVE_VIEW,Save View,
 SAVE_VIEW_BUTTON,Save view,
 SAVED,Saved,
+SAVED_OTHER_PURPOSES,Saved Other Purposes,
 SAVED_VIEW_CREATED,{0} saved to My views,Toast shown after saving a table view: {0} is the view name
 SAVED_VIEW_DELETED,{0} deleted,Toast shown after deleting a saved table view: {0} is the view name
 SAVED_VIEW_UPDATED,{0} updated,Toast shown after renaming a saved table view: {0} is the new view name

@@ -115,6 +115,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   );
 
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);
+  const [isCustomPurposeBusy, setIsCustomPurposeBusy] = useState(false);
   const [hasWithdrawn, setHasWithdrawn] = useState(false);
   const { currentData: scheduledDatesData } = useGetScheduledPlantingDatesQuery(draft.plantingSeasonId ?? 0, {
     skip: !open || draft.plantingSeasonId === undefined,
@@ -374,6 +375,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     if (draft.purpose === NurseryWithdrawalRequestPurposes.OTHER && isCustomPurposeTooLong(draft.customPurpose)) {
       return false;
     }
+    // A rename in flight hasn't reached the draft yet; moving on would record the old name.
+    if (isCustomPurposeBusy) {
+      return false;
+    }
     if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT) {
       return (
         draft.plantingSiteId !== undefined &&
@@ -384,7 +389,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       return draft.destinationFacilityId !== undefined;
     }
     return true;
-  }, [draft, requiresSubstratum]);
+  }, [draft, isCustomPurposeBusy, requiresSubstratum]);
 
   const canGoNextFromStep2 = useMemo(() => {
     if (!quantityStepBatches) {
@@ -671,6 +676,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
               plantingDates={plantingDates}
               speciesTargets={visibleSpeciesTargets}
               onChange={updateDraft}
+              onCustomPurposeBusyChange={setIsCustomPurposeBusy}
             />
           )}
           {step === 1 && quantityStepBatches && (

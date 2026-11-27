@@ -66,6 +66,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === OUTPLANT);
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
+  const [isCustomPurposeBusy, setIsCustomPurposeBusy] = useState(false);
   const [localRecord, setLocalRecord] = useState<NurseryWithdrawalRequest>(nurseryWithdrawal);
   const [selectedNursery, setSelectedNursery] = useState<Facility>();
   const [destinationNurseriesOptions, setDestinationNurseriesOptions] = useState<DropdownItem[]>();
@@ -565,6 +566,8 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
       onCancel={onCancel}
       onSave={onNextHandler}
       saveButtonText={saveText}
+      // A rename in flight hasn't reached the record yet; moving on would record the old name.
+      saveDisabled={isCustomPurposeBusy}
     >
       <Container
         maxWidth={false}
@@ -660,6 +663,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                         updatePurpose(OTHER);
                         updateField('customPurpose', customPurpose);
                       }}
+                      onBusyChange={setIsCustomPurposeBusy}
                       sx={{ flex: '0 1 240px', textAlign: 'left' }}
                     />
                   </Grid>

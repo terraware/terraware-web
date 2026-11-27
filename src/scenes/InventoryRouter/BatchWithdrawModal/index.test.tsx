@@ -625,6 +625,71 @@ describe('BatchWithdrawModal naming an Other withdrawal', () => {
     await user.click(screen.getByRole('button', { name: strings.WITHDRAW }));
   };
 
+  const adminOrganization = buildOrganization({ role: 'Admin' });
+
+  /** The element a dialog treats as its backdrop: the container the dialog itself sits in. */
+  const backdropOf = (dialog: HTMLElement) => dialog.parentElement as HTMLElement;
+
+  it('keeps the withdrawal and its draft when the admin backs out of archiving a purpose', async () => {
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const { user, state } = renderModal({ organization: adminOrganization });
+
+    await waitForDialog();
+    await typeCustomPurpose(user, 'Sal');
+    await user.click(screen.getByRole('button', { name: strings.formatString(strings.ARCHIVE_X, 'Sale') as string }));
+
+    const confirmation = await screen.findByRole('dialog', {
+      name: strings.formatString(strings.ARCHIVE_X, 'Sale') as string,
+    });
+    // Both dialogs recognize this backdrop as their own, so without isolating the inner one the
+    // withdrawal is closed too and the draft it was holding is reset.
+    await user.click(backdropOf(confirmation));
+
+    await waitFor(() => expect(screen.queryByText(strings.ARE_YOU_SURE)).not.toBeInTheDocument());
+    expect(state.closeCount).toBe(0);
+    expect(customPurposeField()).toHaveValue('Sal');
+  });
+
+  it('holds the user on the purpose step until a rename has been saved', async () => {
+    let answerRename: () => void = () => undefined;
+    const renameAnswered = new Promise<void>((resolve) => {
+      answerRename = resolve;
+    });
+    mockModalData({ customPurposes: SAVED_PURPOSES });
+    const withdrawals = captureWithdrawals();
+    server.use(
+      http.put('/api/v1/withdrawalCustomPurposes/:customPurposeId', async () => {
+        await renameAnswered;
+        return HttpResponse.json({ status: 'ok' });
+      })
+    );
+    const { user } = renderModal({ organization: adminOrganization });
+
+    await waitForDialog();
+    await pickSavedPurpose(user, 'Sale');
+    // Picking a suggestion closes the list; reopen it to reach the purpose's own actions.
+    await user.click(screen.getByRole('button', { name: 'Open' }));
+    await user.click(screen.getByRole('button', { name: strings.formatString(strings.RENAME_X, 'Sale') as string }));
+    const listbox = await screen.findByRole('listbox');
+    await user.clear(within(listbox).getByRole('textbox'));
+    await user.paste('Resale');
+    await user.keyboard('{Enter}');
+
+    // Advancing now would carry "Sale", which the rename is in the middle of retiring.
+    await waitFor(() => expect(nextButton()).toBeDisabled());
+
+    answerRename();
+    mockGet('/api/v1/withdrawalCustomPurposes', {
+      customPurposes: [{ id: 1, name: 'Resale', isArchived: false }, SAVED_PURPOSES[1]],
+    });
+    await waitFor(() => expect(customPurposeField()).toHaveValue('Resale'));
+
+    await withdrawOneSeedling(user);
+
+    await waitFor(() => expect(withdrawals).toHaveLength(1));
+    expect(await withdrawals[0].json()).toMatchObject({ purpose: 'Other', customPurpose: 'Resale' });
+  });
+
   it('sends the saved purpose the user picked for an Other withdrawal', async () => {
     mockModalData({ customPurposes: SAVED_PURPOSES });
     const withdrawals = captureWithdrawals();

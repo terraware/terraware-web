@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 
 import { screen, waitFor, within } from '@testing-library/react';
 import { UserEvent } from '@testing-library/user-event';
+import { http } from 'msw/http';
 
 import WithdrawalCustomPurposeSelector from 'src/components/WithdrawalCustomPurposeSelector';
 import { WithdrawalCustomPurposePayload } from 'src/queries/generated/withdrawalCustomPurposes';
 import strings from 'src/strings';
-import { buildOrganization, captureRequests, dialogTitled, mockGet, renderWithProviders } from 'src/test-utils';
+import { buildOrganization, captureRequests, dialogTitled, mockGet, renderWithProviders, server } from 'src/test-utils';
 import { OrganizationRole } from 'src/types/Organization';
 
 const CUSTOM_PURPOSES_URL = '/api/v1/withdrawalCustomPurposes';
@@ -82,6 +83,49 @@ describe('WithdrawalCustomPurposeSelector', () => {
     await user.paste('Giveaway');
 
     await waitFor(() => expect(suggestions()).toEqual([]));
+  });
+});
+
+describe('WithdrawalCustomPurposeSelector reporting work in flight', () => {
+  // The form holds the user on the purpose step while this is true, so a selector that goes away
+  // mid-rename has to say so: otherwise the step it belongs to can never be left again.
+  it('reports that nothing is in flight once it goes away mid-rename', async () => {
+    const busy: boolean[] = [];
+    mockGet(CUSTOM_PURPOSES_URL, { customPurposes: SAVED_PURPOSES });
+    server.use(http.put(CUSTOM_PURPOSE_URL, () => new Promise(() => undefined)));
+
+    const Toggle = () => {
+      const [shown, setShown] = useState(true);
+      return (
+        <>
+          <button onClick={() => setShown(false)}>hide</button>
+          {shown && (
+            <WithdrawalCustomPurposeSelector
+              value=''
+              onChange={() => undefined}
+              onBusyChange={(next) => busy.push(next)}
+            />
+          )}
+        </>
+      );
+    };
+
+    const { user } = renderWithProviders(<Toggle />, {
+      organization: { selectedOrganization: buildOrganization({ role: 'Admin' }) },
+    });
+
+    await user.click(screen.getByPlaceholderText(strings.ENTER_OR_SELECT));
+    await user.click(screen.getByRole('button', { name: strings.formatString(strings.RENAME_X, 'Sale') as string }));
+    const listbox = await screen.findByRole('listbox');
+    await user.clear(within(listbox).getByRole('textbox'));
+    await user.paste('Resale');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => expect(busy.at(-1)).toBe(true));
+
+    await user.click(screen.getByRole('button', { name: 'hide' }));
+
+    expect(busy.at(-1)).toBe(false);
   });
 });
 
@@ -178,6 +222,51 @@ describe('WithdrawalCustomPurposeSelector managing the saved purposes', () => {
       })
     );
     expect(updates).toHaveLength(0);
+
+    // The rejected name is still the one being corrected. Handing focus to the field beside it
+    // would quietly turn the correction into a change to the withdrawal's own purpose.
+    const nameBeingCorrected = nameInput(listbox);
+    expect(nameBeingCorrected).toHaveFocus();
+
+    await user.clear(nameBeingCorrected);
+    await user.paste('Resale');
+
+    expect(nameBeingCorrected).toHaveValue('Resale');
+    expect(field()).toHaveValue('');
+  });
+
+  // The combobox blurred when the editor took focus, so it has no blur left to report: without
+  // the editor noticing, the suggestions would hang over the form until the user came back to it.
+  it('puts the list away when the admin looks away mid-rename', async () => {
+    const updates = captureRequests('put', CUSTOM_PURPOSE_URL);
+    mockGet(CUSTOM_PURPOSES_URL, { customPurposes: SAVED_PURPOSES });
+    const { user } = renderWithProviders(
+      <>
+        <Host />
+        <button>somewhere else</button>
+      </>,
+      { organization: { selectedOrganization: buildOrganization({ role: 'Admin' }) } }
+    );
+
+    const listbox = await startRenaming(user, 'Sale');
+    await typeNewName(user, listbox, 'Resale');
+    await user.click(screen.getByRole('button', { name: 'somewhere else' }));
+
+    await waitFor(() => expect(screen.queryByRole('listbox')).not.toBeInTheDocument());
+    expect(updates).toHaveLength(0);
+  });
+
+  it('abandons a rename when the admin picks another suggestion instead', async () => {
+    const updates = captureRequests('put', CUSTOM_PURPOSE_URL);
+    const { user } = renderAs('Admin');
+
+    const listbox = await startRenaming(user, 'Sale');
+    await typeNewName(user, listbox, 'Resale');
+    await user.click(within(listbox).getByRole('option', { name: /Donation/ }));
+
+    await waitFor(() => expect(screen.queryByRole('listbox')).not.toBeInTheDocument());
+    expect(field()).toHaveValue('Donation');
+    expect(updates).toHaveLength(0);
   });
 
   it('abandons a rename on Escape', async () => {
@@ -206,6 +295,89 @@ describe('WithdrawalCustomPurposeSelector managing the saved purposes', () => {
     await waitFor(() => expect(updates).toHaveLength(1));
     expect(new URL(updates[0].url).pathname).toBe(`${CUSTOM_PURPOSES_URL}/3`);
     expect(await updates[0].json()).toEqual({ isArchived: true });
+  });
+
+  // Arrow keys move the combobox's highlight without focusing anything inside the popup, and Tab
+  // leaves the field and dismisses it, so the actions in the list are reachable by pointer only.
+  it('offers the same actions to an admin who never touches the pointer', async () => {
+    const updates = captureRequests('put', CUSTOM_PURPOSE_URL);
+    const { user } = renderAs('Admin');
+
+    await screen.findByPlaceholderText(strings.ENTER_OR_SELECT);
+    await user.tab();
+    await user.tab();
+    expect(screen.getByRole('button', { name: strings.SAVED_OTHER_PURPOSES })).toHaveFocus();
+    await user.keyboard('{Enter}');
+
+    const dialog = dialogTitled(strings.SAVED_OTHER_PURPOSES);
+    await user.click(
+      within(dialog).getByRole('button', { name: strings.formatString(strings.RENAME_X, 'Sale') as string })
+    );
+    await user.clear(within(dialog).getByRole('textbox'));
+    await user.paste('Resale');
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => expect(updates).toHaveLength(1));
+    expect(await updates[0].json()).toEqual({ name: 'Resale' });
+  });
+
+  it('archives a purpose from the keyboard-reachable list', async () => {
+    const updates = captureRequests('put', CUSTOM_PURPOSE_URL);
+    const { user } = renderAs('Admin');
+
+    await screen.findByPlaceholderText(strings.ENTER_OR_SELECT);
+    await user.click(screen.getByRole('button', { name: strings.SAVED_OTHER_PURPOSES }));
+
+    const list = dialogTitled(strings.SAVED_OTHER_PURPOSES);
+    await user.click(
+      within(list).getByRole('button', { name: strings.formatString(strings.ARCHIVE_X, 'Sale') as string })
+    );
+
+    const confirmation = dialogTitled(strings.formatString(strings.ARCHIVE_X, 'Sale') as string);
+    await user.click(within(confirmation).getByRole('button', { name: strings.ARCHIVE }));
+
+    await waitFor(() => expect(updates).toHaveLength(1));
+    expect(await updates[0].json()).toEqual({ isArchived: true });
+  });
+
+  // Each dialog keeps focus inside itself, so a confirmation opened beside the list would be
+  // pulled out of and left unreachable: Tab would never land on Cancel or Archive.
+  it('lets the keyboard reach the confirmation raised from that list, and comes back on cancel', async () => {
+    const { user } = renderAs('Admin');
+
+    await screen.findByPlaceholderText(strings.ENTER_OR_SELECT);
+    await user.click(screen.getByRole('button', { name: strings.SAVED_OTHER_PURPOSES }));
+    const list = dialogTitled(strings.SAVED_OTHER_PURPOSES);
+    const archiveSale = within(list).getByRole('button', {
+      name: strings.formatString(strings.ARCHIVE_X, 'Sale') as string,
+    });
+    archiveSale.focus();
+    await user.keyboard('{Enter}');
+
+    const confirmation = dialogTitled(strings.formatString(strings.ARCHIVE_X, 'Sale') as string);
+    const confirm = within(confirmation).getByRole('button', { name: strings.ARCHIVE });
+    const cancel = within(confirmation).getByRole('button', { name: strings.CANCEL });
+
+    await waitFor(() => expect(confirmation).toContainElement(document.activeElement as HTMLElement));
+    for (let presses = 0; presses < 6 && document.activeElement !== confirm; presses += 1) {
+      await user.tab();
+    }
+    expect(document.activeElement).toBe(confirm);
+
+    cancel.focus();
+    await user.keyboard('{Enter}');
+
+    await waitFor(() => expect(screen.queryByText(strings.ARE_YOU_SURE)).not.toBeInTheDocument());
+    expect(dialogTitled(strings.SAVED_OTHER_PURPOSES)).toContainElement(document.activeElement as HTMLElement);
+  });
+
+  it('keeps the saved purposes to admins in the keyboard-reachable list too', async () => {
+    const { user } = renderAs('Manager');
+
+    await screen.findByPlaceholderText(strings.ENTER_OR_SELECT);
+    await user.tab();
+
+    expect(screen.queryByRole('button', { name: strings.SAVED_OTHER_PURPOSES })).not.toBeInTheDocument();
   });
 
   it('archives nothing when the admin backs out of the confirmation', async () => {
