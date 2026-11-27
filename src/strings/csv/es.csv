@@ -210,6 +210,9 @@ APPROVE,Aprobar,913a9927
 APPROVE_DELIVERABLE,Aprobar el entregable,7efd4b07
 APPROVED,Aprobado,b279ed0b
 APPROX_SYMBOL,~,acb59e95
+ARCHIVE,Archivar,cdad4a2d
+ARCHIVE_CUSTOM_PURPOSE_MESSAGE,“{0}” se eliminará de sus Otros propósitos guardados. Esto no cambiará ningún dato de retiro.,e2bfd928
+ARCHIVE_X,Archivar {0},22987f6a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
@@ -473,6 +476,7 @@ CUMULATIVE_TARGET,Objetivo acumulado,82b48c14
 CURRENT_NEXT_OBSERVATION,Observación actual/siguiente,50735263
 CURRENT_TIMELINE,Cronología actual,2dcbaeeb
 CURRENT_VIEW,Vista actual,8b3a3d54
+CUSTOM_PURPOSE_NAME_EXISTS,Ya existe un propósito con este nombre.,00c704f7
 CUT_TEST,Prueba de corte,4501b398
 DASHBOARD,Panel de control,a9d0682e
 DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,Los datos de observación en este tablero se basan en una muestra de {0} de la/el {1} para este sitio de plantación.,bdce81df
@@ -1964,6 +1968,8 @@ REMOVE_TREE_CONFIRMATION,¿Eliminar árbol {0}?,3c7f7db6
 REMOVE_VIRTUAL_WALKTHROUGH,Eliminar Recorrido Virtual,19cd7395
 REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM,¿Está seguro de que desea eliminar este Recorrido Virtual? Esta acción no se puede deshacer.,d5c769f1
 REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",767a2892
+RENAME,Renombrar,f5571e91
+RENAME_X,Renombrar {0},bbf25f78
 REPLACE,Reemplazar,f6e3faed
 REPLACE_BOUNDARY,Cambiar lindero,f20d140b
 REPLACE_PLOT_AFFECTED_OBSERVATIONS_MESSAGE,Reemplazar esta parcela a largo plazo también modificará las siguientes observaciones próximas que la incluyen.,94b1dfa8
