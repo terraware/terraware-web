@@ -1,4 +1,5 @@
-import { getBatchAccessions } from 'src/types/Batch';
+import strings from 'src/strings';
+import { getBatchAccessions, purposeLabel } from 'src/types/Batch';
 
 describe('getBatchAccessions', () => {
   it('prefers the canonical accessions array', () => {
@@ -45,5 +46,37 @@ describe('getBatchAccessions', () => {
   it('returns an empty array when the batch has no accession', () => {
     expect(getBatchAccessions({})).toEqual([]);
     expect(getBatchAccessions({ accessions: [] })).toEqual([]);
+  });
+});
+
+describe('purposeLabel', () => {
+  it('returns the Other label with the custom purpose name for an Other withdrawal', () => {
+    expect(purposeLabel('Other', 'Sale')).toBe(strings.formatString(strings.OTHER_COLON_X, 'Sale'));
+  });
+
+  it('does not translate the custom purpose name', () => {
+    expect(purposeLabel('Other', 'Donación')).toContain('Donación');
+  });
+
+  it('returns the plain Other label when there is no custom purpose', () => {
+    expect(purposeLabel('Other')).toBe(strings.OTHER);
+  });
+
+  it('returns the plain Other label when the custom purpose is an empty string', () => {
+    expect(purposeLabel('Other', '')).toBe(strings.OTHER);
+  });
+
+  it('labels the other purposes', () => {
+    expect(purposeLabel('Out Plant')).toBe(strings.PLANTING);
+    expect(purposeLabel('Nursery Transfer')).toBe(strings.NURSERY_TRANSFER);
+    expect(purposeLabel('Dead')).toBe(strings.DEAD);
+    expect(purposeLabel('Undo')).toBe(strings.UNDO_WITHDRAWAL);
+  });
+
+  it('ignores the custom purpose for the other purposes', () => {
+    expect(purposeLabel('Out Plant', 'Sale')).toBe(strings.PLANTING);
+    expect(purposeLabel('Nursery Transfer', 'Sale')).toBe(strings.NURSERY_TRANSFER);
+    expect(purposeLabel('Dead', 'Sale')).toBe(strings.DEAD);
+    expect(purposeLabel('Undo', 'Sale')).toBe(strings.UNDO_WITHDRAWAL);
   });
 });

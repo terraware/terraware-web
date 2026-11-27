@@ -1529,6 +1529,7 @@ ORIGINAL_QTY,Cantidad original,636a1ae9
 ORTHODOX,Ortodoxo,b0a5a550
 OTHER,Otro,626335b2
 OTHER_COLON,Otro:,27485d67
+OTHER_COLON_X,Otro: {0},44b1ac08
 OTHER_CONTACT,Otro contacto,4268b0fb
 OTHER_CONTACT_TYPE,Otro tipo de contacto,ec7c7449
 OTHER_CONTACTS,Otros contactos,18906a13

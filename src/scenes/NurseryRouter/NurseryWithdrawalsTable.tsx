@@ -27,6 +27,7 @@ import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
+import useWithdrawalCustomPurposes from 'src/hooks/useWithdrawalCustomPurposes';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { SearchSortOrderElement } from 'src/queries/generated/search';
@@ -133,6 +134,34 @@ const normalizeMenuColumnOrder = (columnOrder: MRT_ColumnOrderState): MRT_Column
     ...missingColumnIds.filter((columnId) => columnId !== MENU_COLUMN_ID),
     MENU_COLUMN_ID,
   ];
+};
+
+const CUSTOM_PURPOSE_FILTER_PREFIX = 'customPurpose:';
+
+const customPurposeFilterValue = (customPurposeId: number): string =>
+  `${CUSTOM_PURPOSE_FILTER_PREFIX}${customPurposeId}`;
+
+const customPurposeIdFromFilterValue = (filterValue: string): number | undefined => {
+  if (!filterValue.startsWith(CUSTOM_PURPOSE_FILTER_PREFIX)) {
+    return undefined;
+  }
+  const customPurposeId = Number(filterValue.slice(CUSTOM_PURPOSE_FILTER_PREFIX.length));
+  return Number.isFinite(customPurposeId) ? customPurposeId : undefined;
+};
+
+/**
+ * The purpose a selected filter stands for, or undefined if it isn't one: a custom purpose, or a
+ * label persisted by an older version of this page in a locale that is no longer active. Anything
+ * unrecognized is left out of the search rather than sent as a purpose the server would reject.
+ */
+const resolveBuiltInPurpose = (
+  filterValue: string,
+  labelToValue: Record<string, NurseryWithdrawalPurpose>
+): NurseryWithdrawalPurpose | undefined => {
+  if (NurseryWithdrawalPurposesValues.includes(filterValue as NurseryWithdrawalPurpose)) {
+    return filterValue as NurseryWithdrawalPurpose;
+  }
+  return labelToValue[filterValue];
 };
 
 const isHiddenByDefaultColumn = (columnId: string): boolean => HIDDEN_BY_DEFAULT_COLUMN_IDS.includes(columnId);
@@ -381,7 +410,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return Array.from(new Set(projectNames)).sort();
   }, [projects]);
 
-  // Create reverse mapping from label to value for filtering
+  // Maps a label saved by an older version of this page, when the filter persisted labels rather
+  // than values, back to the purpose it stood for.
   const purposeLabelToValue = useMemo<Record<string, NurseryWithdrawalPurpose>>(
     () => ({
       [strings.PLANTING]: 'Out Plant',
@@ -392,6 +422,63 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     }),
     [strings]
   );
+
+  // Archived purposes are gone from the withdrawal form but are still on past withdrawals, so the
+  // filter keeps offering them.
+  const { customPurposes, hasLoaded: hasLoadedCustomPurposes } = useWithdrawalCustomPurposes({
+    includeArchived: true,
+  });
+
+  // The selection is persisted across sessions, locales and organizations, so the options carry
+  // stable values and translate only their labels. A custom purpose that the current organization
+  // doesn't have is dropped rather than sent on as a purpose the server doesn't know.
+  const purposeFilterOptions = useMemo<{ label: string; value: string }[]>(
+    () => [
+      ...NurseryWithdrawalPurposesValues.map((purpose) => ({ label: purposeLabel(purpose), value: purpose })),
+      ...customPurposes.map((customPurpose) => ({
+        label: purposeLabel('Other', customPurpose.name),
+        value: customPurposeFilterValue(customPurpose.id),
+      })),
+    ],
+    [customPurposes]
+  );
+
+  const purposeFilterValues = useMemo(
+    () => new Set(purposeFilterOptions.map((option) => option.value)),
+    [purposeFilterOptions]
+  );
+
+  // The stored selection outlives the organization it was made in, and older versions of this page
+  // stored labels rather than values. Rewrite what can still be resolved and drop the rest, so the
+  // filter shown is the filter being searched on.
+  useEffect(() => {
+    if (!hasLoadedCustomPurposes) {
+      return;
+    }
+    const selected = columnFilters.find((column) => column.id === 'purpose')?.value;
+    if (!Array.isArray(selected) || selected.length === 0) {
+      return;
+    }
+    const resolved = Array.from(
+      new Set(
+        selected.flatMap((value) => {
+          const filterValue = String(value);
+          if (purposeFilterValues.has(filterValue)) {
+            return [filterValue];
+          }
+          const builtIn = purposeLabelToValue[filterValue];
+          return builtIn ? [builtIn] : [];
+        })
+      )
+    );
+    if (resolved.length !== selected.length || resolved.some((value, index) => value !== selected[index])) {
+      setColumnFilters((previous) =>
+        previous.flatMap((column) =>
+          column.id === 'purpose' ? (resolved.length > 0 ? [{ ...column, value: resolved }] : []) : [column]
+        )
+      );
+    }
+  }, [columnFilters, hasLoadedCustomPurposes, purposeFilterValues, purposeLabelToValue, setColumnFilters]);
 
   // Cell renderer components
   const WithdrawnDateCell = useCallback(
@@ -428,7 +515,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       };
 
       if (!row.undoesWithdrawalId) {
-        return <span>{purposeLabel(value)}</span>;
+        return <span>{purposeLabel(value, row.customPurpose)}</span>;
       } else {
         const undoWithdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(
           ':withdrawalId',
@@ -514,7 +601,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'purpose',
         enableEditing: false,
         filterVariant: 'multi-select',
-        filterSelectOptions: NurseryWithdrawalPurposesValues.map(purposeLabel),
+        // EditableTable types this as string[] but hands it straight to material-react-table, which
+        // also takes {label, value} pairs. Labelled options are what keep the stored selection
+        // stable across locales.
+        filterSelectOptions: purposeFilterOptions as unknown as string[],
         filterFn: () => true,
         Cell: PurposeCell,
       },
@@ -620,6 +710,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       strings,
       WithdrawnDateCell,
       PurposeCell,
+      purposeFilterOptions,
       nurseryNames,
       destinationNames,
       uniqueProjectNames,
@@ -651,10 +742,21 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const withdrawnDate = getDateFilterValue(dateFilterValue);
     const plantingDate = getDateFilterValue(plantingDateFilterValue);
 
-    const purposes =
+    const selectedPurposes =
       purposeFilterValue && Array.isArray(purposeFilterValue)
-        ? purposeFilterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v))
+        ? purposeFilterValue.filter((value): value is string => typeof value === 'string')
         : undefined;
+    const purposes = selectedPurposes
+      ?.map((selected) => resolveBuiltInPurpose(selected, purposeLabelToValue))
+      .filter((purpose): purpose is NurseryWithdrawalPurpose => purpose !== undefined);
+    const customPurposeNames = selectedPurposes
+      ?.map((selected) => {
+        const customPurposeId = customPurposeIdFromFilterValue(selected);
+        return customPurposeId === undefined
+          ? undefined
+          : customPurposes.find((customPurpose) => customPurpose.id === customPurposeId)?.name;
+      })
+      .filter((name): name is string => name !== undefined);
 
     const totalWithdrawn =
       totalWithdrawnFilterValue && Array.isArray(totalWithdrawnFilterValue)
@@ -692,7 +794,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       searchTerm: debouncedSearchTerm,
       withdrawnDate,
       projectNames: projectFilterValue as string[] | undefined,
-      purposes: purposes as NurseryWithdrawalPurpose[] | undefined,
+      purposes,
+      customPurposes: customPurposeNames,
       nurseryName: nurseryFilterValue as string | undefined,
       destinationNames: destinationFilterValue as string[] | undefined,
       plantingSeasonIds: shouldUseLinkedPlantingSeasonIds ? linkedPlantingSeasonIds : plantingSeasonIdsForFilter,
@@ -705,6 +808,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     };
   }, [
     columnFilters,
+    customPurposes,
     debouncedSearchTerm,
     linkedPlantingSeasonIds,
     plantingSeasonFilterValue,
@@ -771,17 +875,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     if (stratumNames.length > 0) {
       seeded.push({ id: 'stratumName', value: stratumNames });
     }
-    if (purposeValues.length > 0) {
-      const purposeLabels = Array.from(
-        new Set(
-          purposeValues.map((purpose) =>
-            NurseryWithdrawalPurposesValues.includes(purpose as NurseryWithdrawalPurpose)
-              ? purposeLabel(purpose as NurseryWithdrawalPurpose)
-              : purpose
-          )
-        )
-      );
-      seeded.push({ id: 'purpose', value: purposeLabels });
+    const knownPurposeValues = Array.from(
+      new Set(
+        purposeValues.filter((purpose) => NurseryWithdrawalPurposesValues.includes(purpose as NurseryWithdrawalPurpose))
+      )
+    );
+    if (knownPurposeValues.length > 0) {
+      seeded.push({ id: 'purpose', value: knownPurposeValues });
     }
     if (plantingDate) {
       seeded.push({ id: PLANTING_DATE_COLUMN_ID, value: [plantingDate, plantingDate] });
@@ -817,6 +917,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       searchArgs.plantingSeasonIds?.length ||
       searchArgs.projectNames?.length ||
       searchArgs.purposes?.length ||
+      searchArgs.customPurposes?.length ||
       searchArgs.plantingDate?.maxDate ||
       searchArgs.plantingDate?.minDate ||
       searchArgs.stratumNames?.length ||

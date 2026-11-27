@@ -38,6 +38,7 @@ const useWithdrawalCustomPurposes = (props?: UseWithdrawalCustomPurposesProps) =
 
   return {
     customPurposes,
+    hasLoaded: listCustomPurposesResponse.isSuccess,
     isLoading: listCustomPurposesResponse.isFetching,
   };
 };
