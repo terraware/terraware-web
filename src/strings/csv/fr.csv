@@ -723,6 +723,7 @@ END_TIME,Heure de fin,7c0eb9ca
 ENDS_IN_X,se termine dans {0},0627f086
 ENDS_TODAY,se termine aujourd'hui,9a86e192
 ENTER_LOCATION,Saisir l'emplacement,dfde68fa
+ENTER_OR_SELECT,Saisir ou sélectionner...,2a1585fb
 ENTER_SUBSET_WEIGHT_AND_COUNT,"Saisissez le rapport entre le poids et le nombre de sous-ensembles pour déterminer le nombre approximatif de semences lors d'un prélèvement par poids à partir d'une quantité de comptage. (Inversement, le ratio déterminera la quantité restante approximative lors d'un prélèvement par comptage à partir d'une quantité pondérale.) Ces champs sont utiles lorsque le comptage de semences minuscules n'est pas pratique et ne sont nécessaires que si vous avez l'intention de prélever cette accession dans une pépinière.",c02303ee
 ENTRIES,Entrées,065e7c3e
 ERROR,Erreur,a7dc9f4e
@@ -1525,6 +1526,7 @@ ORIGINAL_PLANTING_SITE,Site de plantation d'origine,b790c51d
 ORIGINAL_QTY,Qté d'origine,636a1ae9
 ORTHODOX,Orthodoxe,b0a5a550
 OTHER,Autre,626335b2
+OTHER_COLON,Autre :,27485d67
 OTHER_CONTACT,Autre contact,4268b0fb
 OTHER_CONTACT_TYPE,Autre type de contact,ec7c7449
 OTHER_CONTACTS,Autres contacts,18906a13

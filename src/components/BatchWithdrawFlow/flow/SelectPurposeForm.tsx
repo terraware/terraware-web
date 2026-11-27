@@ -16,6 +16,7 @@ import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@ter
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import SubstratumSelector, { StratumInfo, SubstratumInfo } from 'src/components/SubstratumSelector';
+import WithdrawalCustomPurposeSelector from 'src/components/WithdrawalCustomPurposeSelector';
 import DatePicker from 'src/components/common/DatePicker';
 import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
@@ -126,6 +127,9 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
 
   const updatePurpose = useCallback((value: string) => {
     updateField('purpose', value);
+    if (value !== OTHER) {
+      updateField('customPurpose', undefined);
+    }
     if (value === NURSERY_TRANSFER) {
       setIsNurseryTransfer(true);
     } else {
@@ -644,7 +648,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                     disabled={nurseryTransferDisabled}
                   />
                   <FormControlLabel value={DEAD} control={<Radio />} label={strings.DEAD} />
-                  <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER} />
+                  <Grid display='flex' alignItems='center' gap={theme.spacing(1)}>
+                    <FormControlLabel value={OTHER} control={<Radio />} label={strings.OTHER_COLON} />
+                    <WithdrawalCustomPurposeSelector
+                      value={localRecord.customPurpose ?? ''}
+                      onChange={(customPurpose) => {
+                        updatePurpose(OTHER);
+                        updateField('customPurpose', customPurpose);
+                      }}
+                      sx={{ flex: '0 1 240px', textAlign: 'left' }}
+                    />
+                  </Grid>
                 </RadioGroup>
               </FormControl>
             </Grid>
