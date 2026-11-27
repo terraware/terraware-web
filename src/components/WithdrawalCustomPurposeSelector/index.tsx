@@ -1,7 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, IconButton, SxProps, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Box, SxProps, useTheme } from '@mui/material';
 import { ValueType } from '@terraware/web-components/components/Autocomplete/Autocomplete';
 
 import Autocomplete from 'src/components/common/Autocomplete';
@@ -17,7 +16,6 @@ import {
 
 import ArchiveCustomPurposeModal from './ArchiveCustomPurposeModal';
 import CustomPurposeRowContent from './CustomPurposeRowContent';
-import ManageCustomPurposesModal from './ManageCustomPurposesModal';
 import useManageCustomPurposes from './useManageCustomPurposes';
 
 type WithdrawalCustomPurposeSelectorProps = {
@@ -60,7 +58,6 @@ const WithdrawalCustomPurposeSelector = ({
   const { customPurposes } = useWithdrawalCustomPurposes();
 
   const [open, setOpen] = useState(false);
-  const [managing, setManaging] = useState(false);
   // Set when the inline editor is about to take focus from the combobox, whose blur then asks the
   // list to close. That one request is the editor's own doing; every other one is the user's.
   const editorTakingFocus = useRef(false);
@@ -216,71 +213,39 @@ const WithdrawalCustomPurposeSelector = ({
 
   return (
     <>
-      <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
-        <Autocomplete
-          freeSolo
-          disabled={disabled}
-          id={id}
-          options={options}
-          selected={value}
-          placeholder={strings.ENTER_OR_SELECT}
-          // Truncating here would leave the field showing text the withdrawal wouldn't save, since
-          // the component keeps its own input text once the value it is given stops changing.
-          onChange={(newValue) => onChange(String(newValue ?? ''))}
-          errorText={
-            isCustomPurposeTooLong(value)
-              ? (strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, CUSTOM_PURPOSE_MAX_LENGTH) as string)
-              : undefined
+      <Autocomplete
+        freeSolo
+        disabled={disabled}
+        id={id}
+        options={options}
+        selected={value}
+        placeholder={strings.ENTER_OR_SELECT}
+        // Truncating here would leave the field showing text the withdrawal wouldn't save, since
+        // the component keeps its own input text once the value it is given stops changing.
+        onChange={(newValue) => onChange(String(newValue ?? ''))}
+        errorText={
+          isCustomPurposeTooLong(value)
+            ? (strings.formatString(strings.NAME_MAXIMUM_LENGTH_X, CUSTOM_PURPOSE_MAX_LENGTH) as string)
+            : undefined
+        }
+        filterOptions={filterOptions}
+        open={open}
+        onOpen={() => setOpen(true)}
+        // The list has to outlive the blur that opening the inline editor causes — but only
+        // that one. Anything else asking it to close, such as picking another suggestion,
+        // means the user is done with the rename.
+        onClose={() => {
+          if (editorTakingFocus.current) {
+            editorTakingFocus.current = false;
+            return;
           }
-          filterOptions={filterOptions}
-          open={open}
-          onOpen={() => setOpen(true)}
-          // The list has to outlive the blur that opening the inline editor causes — but only
-          // that one. Anything else asking it to close, such as picking another suggestion,
-          // means the user is done with the rename.
-          onClose={() => {
-            if (editorTakingFocus.current) {
-              editorTakingFocus.current = false;
-              return;
-            }
-            endRenaming();
-            setOpen(false);
-          }}
-          renderOption={renderOption}
-          sx={sx}
-        />
-        {canManage && (
-          <IconButton
-            aria-label={strings.SAVED_OTHER_PURPOSES}
-            disabled={disabled}
-            onClick={() => setManaging(true)}
-            size='small'
-            title={strings.SAVED_OTHER_PURPOSES}
-          >
-            <Icon name='iconSettings' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-          </IconButton>
-        )}
-      </Box>
-      {managing && (
-        <NestedDialogBoundary>
-          <ManageCustomPurposesModal
-            busy={isUpdating}
-            confirmation={archiveConfirmation}
-            customPurposes={customPurposes}
-            editing={editing}
-            onArchive={startArchiving}
-            onCancelRename={cancelRenaming}
-            onClose={() => {
-              cancelRenaming();
-              setManaging(false);
-            }}
-            onEditingNameChange={changeEditingName}
-            onSaveRename={() => void saveRename()}
-            onStartRename={startRenaming}
-          />
-        </NestedDialogBoundary>
-      )}
-      {!managing && archiveConfirmation}
+          endRenaming();
+          setOpen(false);
+        }}
+        renderOption={renderOption}
+        sx={sx}
+      />
+      {archiveConfirmation}
     </>
   );
 };
